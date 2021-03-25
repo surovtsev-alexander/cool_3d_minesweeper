@@ -5,12 +5,14 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
-    var rendererSet = false
+    var _game_renderer: GameRenderer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +38,54 @@ class GameActivity : AppCompatActivity() {
         }
 
         glsv_main.setEGLContextClientVersion(2)
-        glsv_main.setRenderer(GameRenderer(this))
-        rendererSet = true
+        val game_renderer = GameRenderer(this)
+        _game_renderer = game_renderer
+        glsv_main.setRenderer(_game_renderer)
+
+        glsv_main.setOnTouchListener(object: View.OnTouchListener {
+            var previousX = 0f
+            var previousY = 0f
+
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (event == null) {
+                    return false
+                }
+
+                val action = event.action
+
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        previousX = event.x
+                        previousY = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val currX = event.x
+                        val currY = event.y
+
+                        val deltaX = currX - previousX
+                        val deltaY = currY - previousY
+
+                        previousX = currX
+                        previousY = currY
+
+                        glsv_main.queueEvent(object: Runnable {
+                            override fun run() {
+                                game_renderer._touchHandler.handleTouchDrag(
+                                    deltaX, deltaY
+                                )
+                            }
+                        })
+                    }
+                }
+                return true
+            }
+        })
     }
 
     override fun onPause() {
         super.onPause()
 
-        if (rendererSet) {
+        if (_game_renderer != null) {
             glsv_main.onPause()
         }
     }
@@ -51,7 +93,7 @@ class GameActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (rendererSet) {
+        if (_game_renderer != null) {
             glsv_main.onResume()
         }
     }
