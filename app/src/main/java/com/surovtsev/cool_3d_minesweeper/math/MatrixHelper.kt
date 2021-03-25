@@ -29,4 +29,6 @@ object MatrixHelper {
         m[14] = -((2f * f * n) / (f - n))
         m[15] = 0f
     }
+
+    fun matrix_creator() = FloatArray(16) { 0f }
 }
