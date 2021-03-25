@@ -1,10 +1,11 @@
-package com.surovtsev.cool_3d_minesweeper.activities
+package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.activities.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig

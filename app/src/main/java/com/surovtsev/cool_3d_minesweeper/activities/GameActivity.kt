@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
