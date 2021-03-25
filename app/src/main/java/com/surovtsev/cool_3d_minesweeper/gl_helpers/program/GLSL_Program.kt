@@ -15,29 +15,12 @@ class GLSL_Program(val context: Context) {
     private val U_VP_MATRIX = "u_VP_Matrix"
     private val U_M_MATRIX = "u_M_Matrix"
 
-    private val POSITION_COMPONENT_COUNT = 3
-
-    private var _a_position_location = 0
+    var _a_position_location = 0
+        private set
     private var _ebo = 0;
     private var _u_color_location = 0
     private var _u_vp_matrix_location = 0
     private var _u_m_matrix_location = 0
-
-    private val vertexArray: VertexArray
-
-    private val _trianglesCoordinates = floatArrayOf(
-        -1f, -1f, 0f,
-        1f, -1f, 0f,
-        0f, 1f, 0f
-    )
-
-    private val _indexes = intArrayOf(
-        0, 1, 2
-    )
-
-    init {
-        vertexArray = VertexArray(_trianglesCoordinates)
-    }
 
     fun load_program() {
         _programId = ShaderHelper.linkProgram(
@@ -51,9 +34,6 @@ class GLSL_Program(val context: Context) {
 
     fun load_uniforms() {
         _a_position_location = glGetAttribLocation(_programId, A_POSITION)
-
-        vertexArray.setVertexAttribPointer(0, _a_position_location,
-            POSITION_COMPONENT_COUNT, 0)
 
         _u_color_location = glGetUniformLocation(_programId, U_COLOR)
         glUniform4f(_u_color_location, 1f, 0f, 0f, 1f)
@@ -81,11 +61,5 @@ class GLSL_Program(val context: Context) {
 
     fun use_program() {
         glUseProgram(_programId)
-    }
-
-    fun draw() {
-        glDrawArrays(
-            GL_TRIANGLES, 0
-            , _trianglesCoordinates.count() / POSITION_COMPONENT_COUNT)
     }
 }

@@ -10,6 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.Triangle
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -19,6 +20,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     val _touchHandler = TouchHandler()
 
     private val _glsl_program = GLSL_Program(context)
+    private val _triangle = Triangle(_glsl_program)
 
     val _projectionMatrix = MatrixHelper.matrix_creator()
     val _viewMatrix = MatrixHelper.matrix_creator()
@@ -32,6 +34,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         _glsl_program.use_program()
         _glsl_program.load_uniforms()
         _glsl_program.gen_buffers()
+        _triangle.bind_attribs()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -70,7 +73,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             _touchHandler.updateMatrix()
             _glsl_program.set_u_matrix(_touchHandler._matrix)
         }
-        _glsl_program.draw()
+        _triangle.draw()
     }
 
 }
