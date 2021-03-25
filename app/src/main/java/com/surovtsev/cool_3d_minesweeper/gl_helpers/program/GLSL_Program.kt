@@ -17,7 +17,6 @@ class GLSL_Program(val context: Context) {
 
     var _a_position_location = 0
         private set
-    private var _ebo = 0;
     private var _u_color_location = 0
     private var _u_vp_matrix_location = 0
     private var _u_m_matrix_location = 0
@@ -32,7 +31,7 @@ class GLSL_Program(val context: Context) {
         }
     }
 
-    fun load_uniforms() {
+    fun load_locations() {
         _a_position_location = glGetAttribLocation(_programId, A_POSITION)
 
         _u_color_location = glGetUniformLocation(_programId, U_COLOR)
@@ -40,13 +39,6 @@ class GLSL_Program(val context: Context) {
 
         _u_vp_matrix_location = glGetUniformLocation(_programId, U_VP_MATRIX)
         _u_m_matrix_location = glGetUniformLocation(_programId, U_M_MATRIX)
-    }
-
-    fun gen_buffers() {
-        val buffers = intArrayOf(0)
-        glGenBuffers(buffers.count(), buffers, 0)
-        _ebo = buffers[0]
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo)
     }
 
     fun set_vp_matrix(vp_matrix: FloatArray) {

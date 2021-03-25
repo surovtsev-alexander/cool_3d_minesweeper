@@ -6,7 +6,7 @@ import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class IndexBuffer(vertexData: ShortArray) {
+class IndexBuffer(val vertexData: ShortArray) {
     val bufferId: Int
 
     init {
@@ -41,6 +41,7 @@ class IndexBuffer(vertexData: ShortArray) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
     }
 
+    @Deprecated("unused function")
     fun setVertexAttribPointer(
         dataOffset: Int,
         attributeLocation: Int,
