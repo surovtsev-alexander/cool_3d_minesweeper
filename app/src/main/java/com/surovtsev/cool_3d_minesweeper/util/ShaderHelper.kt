@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.util
 
+import android.content.Context
 import android.opengl.GLES20.*
 import android.util.Log
 
@@ -51,6 +52,14 @@ class ShaderHelper {
 
             return shaderObjectId
         }
+
+        fun linkProgram(context: Context, vertexShaderId: Int, fragmentShaderId: Int) =
+            Companion.linkProgram(
+                compileVertextShader(TextResourceReader.readTextFileFromResource(
+                    context, vertexShaderId)),
+                compileFragmentShader(TextResourceReader.readTextFileFromResource(
+                    context, fragmentShaderId))
+            )
 
         fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
             val programObjectId = glCreateProgram()
