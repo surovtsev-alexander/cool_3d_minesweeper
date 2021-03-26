@@ -4,9 +4,9 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 
-class Cubes(val glslProgram: GLSL_Program
-    , val triangleCoordinates: FloatArray
-    , val indexes: ShortArray) {
+class IndexedCubes(val glslProgram: GLSL_Program
+                   , val triangleCoordinates: FloatArray
+                   , val indexes: ShortArray) {
 
     companion object {
         val coordinatesTemplateArray = intArrayOf(
@@ -41,18 +41,18 @@ class Cubes(val glslProgram: GLSL_Program
                             , indexesTemplateArray[it + 1]
                             , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
 
-        fun simpleCube(glslProgram: GLSL_Program): Cubes {
+        fun simpleCube(glslProgram: GLSL_Program): IndexedCubes {
             val trianglesCoordinates = coordinatesTemplateArray.map { it.toFloat() }.toFloatArray()
             val indexes = extendedIndexesTemplateArray.clone()
 
-            return Cubes(glslProgram, trianglesCoordinates, indexes)
+            return IndexedCubes(glslProgram, trianglesCoordinates, indexes)
         }
 
 
         fun cubes(glslProgram: GLSL_Program
                   , counts: Point3d<Short>
                   , dimensions: Point3d<Float>
-                  , gaps: Point3d<Float>): Cubes {
+                  , gaps: Point3d<Float>): IndexedCubes {
             val cubesCount = counts.x * counts.y * counts.z
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = extendedIndexesTemplateArray.size
@@ -120,7 +120,7 @@ class Cubes(val glslProgram: GLSL_Program
                 Log.d("TEST", test_str)
             }
 
-            return Cubes(glslProgram, trianglesCoordinates, indexes)
+            return IndexedCubes(glslProgram, trianglesCoordinates, indexes)
         }
     }
 
