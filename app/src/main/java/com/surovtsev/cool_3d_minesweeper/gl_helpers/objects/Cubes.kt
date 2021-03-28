@@ -1,7 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects
 
 class Cubes(val triangleCoordinates: FloatArray,
-            val trianglesInfo: IntArray) {
+            val trianglesNums: FloatArray,
+            val trianglesTextures: FloatArray) {
     companion object {
         fun cubes(indexedCubes: IndexedCubes): Cubes {
             val compactCoordinates = indexedCubes.trianglesCoordinates
@@ -9,26 +10,25 @@ class Cubes(val triangleCoordinates: FloatArray,
             val pointsCount = indexes.count()
 
             val trianglesCoordinatesCount = 3 * pointsCount
-            val trianglesInfoCount = pointsCount * 2
 
             val trianglesCoordinates = FloatArray(trianglesCoordinatesCount)
-            val trianglesInfo = IntArray(trianglesInfoCount)
+            val trianglesNums = FloatArray(pointsCount)
+            val trianglesTextures = FloatArray(pointsCount)
 
             for (i in 0 until pointsCount) {
                 val pointId = indexes[i]
                 val startCC = pointId * 3
                 val startTC = i * 3
-                val startTI = i * 2
 
                 for (j in 0 until 3) {
                     trianglesCoordinates[startTC + j] = compactCoordinates[startCC + j]
                 }
 
-                trianglesInfo[startTI] = i / 6
-                trianglesInfo[startTI + 1] = i / 3 % 2
+                trianglesNums[i] = (i / 3 % 2).toFloat()
+                trianglesTextures[i] = 0.toFloat()
             }
 
-            return Cubes(trianglesCoordinates, trianglesInfo)
+            return Cubes(trianglesCoordinates, trianglesNums, trianglesTextures)
         }
     }
 }

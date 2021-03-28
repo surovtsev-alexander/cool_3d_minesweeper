@@ -5,6 +5,8 @@ import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import com.surovtsev.cool_3d_minesweeper.activities.TouchHandler
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.Cubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.GLIndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
@@ -18,8 +20,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     val _touchHandler = TouchHandler()
 
     private var _glsl_program: GLSL_Program? = null
+    /*
     private var _cubes: GLIndexedCubes? = null
-
+     */
+    private var _cubes: GLCubes? = null
     val _projectionMatrix = MatrixHelper.matrix_creator()
     val _viewMatrix = MatrixHelper.matrix_creator()
     val _viewProjectionMatrix = MatrixHelper.matrix_creator()
@@ -33,12 +37,13 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         _glsl_program!!.use_program()
         _glsl_program!!.load_locations()
 
-        _cubes = GLIndexedCubes(_glsl_program!!,
-            IndexedCubes.indexedCubes(
-              Point3d(5, 5, 5)
-            , Point3d(3f, 3f, 3f)
-            , Point3d(0.02f, 0.02f, 0.02f)))
-        _cubes!!.indexed_object.bind_attribs()
+        _cubes = GLCubes(_glsl_program!!,
+            Cubes.cubes(
+                IndexedCubes.indexedCubes(
+                    Point3d(5, 5, 5)
+                    , Point3d(3f, 3f, 3f)
+                    , Point3d(0.02f, 0.02f, 0.02f))))
+        _cubes!!.glObject.bind_attribs()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -77,7 +82,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             _touchHandler.updateMatrix()
             _glsl_program!!.set_u_matrix(_touchHandler._matrix)
         }
-        _cubes!!.indexed_object.draw()
+        _cubes!!.glObject.draw()
     }
 
 }
