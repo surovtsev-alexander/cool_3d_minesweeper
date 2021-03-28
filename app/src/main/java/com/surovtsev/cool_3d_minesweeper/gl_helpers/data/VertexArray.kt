@@ -29,6 +29,7 @@ class VertexArray {
         floatBuffer.position(0)
     }
 
+
     fun updateBuffer(vertexData: FloatArray, start: Int, count: Int) {
         floatBuffer.position(start)
         floatBuffer.put(vertexData, start, count)

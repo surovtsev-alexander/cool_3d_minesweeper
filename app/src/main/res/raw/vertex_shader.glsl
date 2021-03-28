@@ -3,6 +3,9 @@ uniform mat4 u_M_Matrix;
 
 attribute vec3 a_Position;
 
+attribute float a_TriangleNum;
+attribute float a_TriangleTexture;
+
 void main()
 {
     /*

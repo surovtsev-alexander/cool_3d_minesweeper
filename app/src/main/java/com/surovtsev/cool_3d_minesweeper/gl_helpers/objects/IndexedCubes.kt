@@ -4,20 +4,18 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 
-class IndexedCubes(val glslProgram: GLSL_Program
-                   , val triangleCoordinates: FloatArray
-                   , val indexes: ShortArray) {
-
+class IndexedCubes(val trianglesCoordinates: FloatArray,
+                   val indexes: ShortArray) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
             -1,  1,  1, // A
             -1,  1, -1, // B
-             1,  1, -1, // C
-             1,  1,  1, // D
+            1,  1, -1, // C
+            1,  1,  1, // D
             -1, -1,  1, // E
             -1, -1, -1, // F
-             1, -1, -1, // G
-             1, -1,  1, // H
+            1, -1, -1, // G
+            1, -1,  1, // H
         )
 
         val indexesTemplateArray = shortArrayOf(
@@ -37,22 +35,23 @@ class IndexedCubes(val glslProgram: GLSL_Program
 
         val extendedIndexesTemplateArray = (0 until indexesTemplateArray.size - 2)
             .flatMap { shortArrayOf(
-                              indexesTemplateArray[it]
-                            , indexesTemplateArray[it + 1]
-                            , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
+                indexesTemplateArray[it]
+                , indexesTemplateArray[it + 1]
+                , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
 
-        fun simpleCube(glslProgram: GLSL_Program): IndexedCubes {
+        fun indexedCube(): IndexedCubes {
             val trianglesCoordinates = coordinatesTemplateArray.map { it.toFloat() }.toFloatArray()
             val indexes = extendedIndexesTemplateArray.clone()
 
-            return IndexedCubes(glslProgram, trianglesCoordinates, indexes)
+            return IndexedCubes(trianglesCoordinates, indexes)
         }
 
 
-        fun cubes(glslProgram: GLSL_Program
-                  , counts: Point3d<Short>
-                  , dimensions: Point3d<Float>
-                  , gaps: Point3d<Float>): IndexedCubes {
+        fun indexedCubes(
+            counts: Point3d<Short>,
+            dimensions: Point3d<Float>,
+            gaps: Point3d<Float>
+        ): IndexedCubes {
             val cubesCount = counts.x * counts.y * counts.z
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = extendedIndexesTemplateArray.size
@@ -120,10 +119,7 @@ class IndexedCubes(val glslProgram: GLSL_Program
                 Log.d("TEST", test_str)
             }
 
-            return IndexedCubes(glslProgram, trianglesCoordinates, indexes)
+            return IndexedCubes(trianglesCoordinates, indexes)
         }
     }
-
-    val indexed_object = IndexedObject(glslProgram
-        , triangleCoordinates, indexes)
 }

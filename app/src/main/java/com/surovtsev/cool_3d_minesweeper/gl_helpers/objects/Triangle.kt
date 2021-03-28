@@ -15,5 +15,5 @@ class Triangle(val glslProgram: GLSL_Program) {
         0, 2, 3
     )
 
-    val indexed_object = IndexedObject(glslProgram, _trianglesCoordinates, _indexes)
+    val indexed_object = GLIndexedObject(glslProgram, _trianglesCoordinates, _indexes)
 }

@@ -5,20 +5,15 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.IndexBuffer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 
-open class IndexedObject(val glslProgram: GLSL_Program
-                         , val coordinates: FloatArray
-                         , val indexes: ShortArray) {
+open class GLIndexedObject(val glslProgram: GLSL_Program
+                           , val coordinates: FloatArray
+                           , val indexes: ShortArray) {
 
     private val POSITION_COMPONENT_COUNT = 3
 
-    private val vertexArray: VertexArray
-    private val indexBuffer: IndexBuffer
+    private val vertexArray = VertexArray(coordinates)
+    private val indexBuffer = IndexBuffer(indexes)
 
-
-    init {
-        vertexArray = VertexArray(coordinates)
-        indexBuffer = IndexBuffer(indexes)
-    }
 
     fun bind_attribs() {
         vertexArray.setVertexAttribPointer(0, glslProgram._a_position_location,
