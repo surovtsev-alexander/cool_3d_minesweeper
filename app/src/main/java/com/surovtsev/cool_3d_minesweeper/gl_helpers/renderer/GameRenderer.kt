@@ -40,7 +40,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         _cubes = GLCubes(_glsl_program!!,
             Cubes.cubes(
                 IndexedCubes.indexedCubes(
-                    Point3d(5, 5, 5)
+                    Point3d(1, 1, 1)
                     , Point3d(3f, 3f, 3f)
                     , Point3d(0.02f, 0.02f, 0.02f))))
         _cubes!!.glObject.bind_attribs()
