@@ -75,7 +75,7 @@ class GameActivity : AppCompatActivity() {
 
                         glsv_main.queueEvent(object: Runnable {
                             override fun run() {
-                                game_renderer._touchHandler.handleTouchDrag(
+                                game_renderer.mCameraInfoHandler!!.mTouchHandler.handleTouchDrag(
                                     deltaX, deltaY
                                 )
                             }
