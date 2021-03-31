@@ -1,12 +1,12 @@
-package com.surovtsev.cool_3d_minesweeper.view.activities
+package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import android.opengl.Matrix
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 
-class TouchHandler {
-    val COEFF = 15f
+class MoveHandler {
+    private val COEFF = 15f
     var mXRotation = 0f
     var mYRotation = 0f
     var mUpdated = true

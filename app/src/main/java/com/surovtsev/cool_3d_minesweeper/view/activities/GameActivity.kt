@@ -80,7 +80,7 @@ class GameActivity : AppCompatActivity() {
 
                         glsv_main.queueEvent(object: Runnable {
                             override fun run() {
-                                game_renderer.mCameraInfoHandler!!.mTouchHandler.handleTouchDrag(
+                                game_renderer.mMoveHandler.handleTouchDrag(
                                     deltaX, deltaY
                                 )
                             }
@@ -93,6 +93,9 @@ class GameActivity : AppCompatActivity() {
                             if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
                                 ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
                             }
+                            val currX = event.x
+                            val currY = event.y
+                            game_renderer.mClickHandler!!.handleClick(currX, currY)
                         }
                     }
                 }
