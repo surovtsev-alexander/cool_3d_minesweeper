@@ -11,6 +11,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
+import glm_.mat4x4.Mat4
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 

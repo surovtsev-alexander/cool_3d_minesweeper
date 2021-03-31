@@ -13,6 +13,7 @@ class ClickHandler(val cameraInfo: CameraInfo) {
             mMessagesComponent.addMessageUI("args: $screenX $screenY")
         }
 
+        /*
         fun normalizedDisplayCoordinates() = run {
             val pp = { p: Float, s: Float -> 2f * p / s - 1.0f}
             val x = pp(screenX, cameraInfo.mDisplayWidthF)
@@ -50,5 +51,6 @@ class ClickHandler(val cameraInfo: CameraInfo) {
         }
 
         val worldRay = toWorldRay()
+         */
     }
 }

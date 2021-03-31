@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.math
 
+import glm_.mat4x4.Mat4
 import kotlin.math.tan
 
 object MatrixHelper {
@@ -30,5 +31,5 @@ object MatrixHelper {
         m[15] = 0f
     }
 
-    fun matrix_creator() = FloatArray(16) { 0f }
+    fun matrix_creator() = Mat4(0f)
 }
