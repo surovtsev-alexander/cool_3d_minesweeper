@@ -1,6 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.view.activities
 
 import android.opengl.Matrix
+import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 
 class TouchHandler {
     val COEFF = 15f
@@ -18,6 +20,10 @@ class TouchHandler {
         _yRotation += deltaY / COEFF
 
         _updated = true
+
+        if (true) {
+            ApplicationController.instance?.messagesComponent?.addMessageUI("$_xRotation\t$_yRotation")
+        }
     }
 
     fun updateMatrix() {

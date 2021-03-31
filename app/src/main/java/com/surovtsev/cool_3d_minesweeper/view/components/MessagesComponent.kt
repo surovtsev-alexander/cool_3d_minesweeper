@@ -2,12 +2,15 @@ package com.surovtsev.cool_3d_minesweeper.view.components
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.surovtsev.cool_3d_minesweeper.R
 import kotlinx.android.synthetic.main.messages_component.view.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MessagesComponent: LinearLayoutCompat {
+    private var mFirstLine = true
+
 
     constructor(context: Context): super(context) {
         initView()
@@ -25,7 +28,21 @@ class MessagesComponent: LinearLayoutCompat {
         inflate(context, R.layout.messages_component, this)
     }
 
-    fun add_message(message: String) {
-        tv_messages.append(message + "\n")
+    fun addMessage(message: String) {
+        val messageToAdd = if (mFirstLine) {
+            mFirstLine = false
+            message
+        } else {
+            "\n" + message
+        }
+        tv_messages.append(messageToAdd)
+    }
+
+    fun addMessageUI(message: String) {
+        doAsync {
+            uiThread {
+                addMessage(message)
+            }
+        }
     }
 }
