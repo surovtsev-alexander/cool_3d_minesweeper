@@ -1,9 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
-import android.opengl.Matrix
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.math.Math
+import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import glm_.glm
+import glm_.mat4x4.Mat4
 
 class MoveHandler {
     private val COEFF = 15f
@@ -12,7 +14,7 @@ class MoveHandler {
     var mUpdated = true
         private set
 
-    fun matrix_creator() = FloatArray(16) { 0f }
+    fun matrix_creator() = MatrixHelper.matrix_creator()
 
     var mMatrix = matrix_creator()
 
@@ -28,9 +30,8 @@ class MoveHandler {
     }
 
     fun updateMatrix() {
-        Matrix.setIdentityM(mMatrix, 0)
-        Matrix.rotateM(mMatrix, 0, mYRotation, 1f, 0f, 0f)
-        Matrix.rotateM(mMatrix, 0, mXRotation, 0f, 1f, 0f)
+        mMatrix = glm.rotate(Mat4(1f), Math.gradToRad(mYRotation), Math.XRay)
+        mMatrix = glm.rotate(mMatrix, Math.gradToRad(mXRotation), Math.YRay)
 
         mUpdated = false
     }

@@ -6,5 +6,6 @@ class LoggerConfig {
         val LOG_GAME_ACTIVITY_ACTIONS = true
         val LOG_TOUCH_HANDLER_DATA = false
         val LOG_CLICK_HANDLER_DATA = true
+        val LOG_CAMERA_INFO_DATA = false
     }
 }
