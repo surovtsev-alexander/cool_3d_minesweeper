@@ -10,10 +10,9 @@ varying float triangleTexture;
 
 void main()
 {
-    /*
-    gl_Position = a_Position;
-    */
     gl_Position = u_VP_Matrix * u_M_Matrix * vec4(a_Position, 1.0);
+    /*
     gl_PointSize = 10.0;
+    */
     triangleTexture = a_TriangleTexture;
 }
