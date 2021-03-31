@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_coll_3d_minesweeper_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cool_3d_minesweeper">
-        <activity android:name=".activities.GameActivity"></activity>
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="com.surovtsev.cool_3d_minesweeper.view.activities.GameActivity"></activity>
+        <activity android:name="com.surovtsev.cool_3d_minesweeper.view.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

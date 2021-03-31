@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.activities
+package com.surovtsev.cool_3d_minesweeper.view.activities
 
 import android.opengl.Matrix
 

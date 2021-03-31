@@ -4,10 +4,9 @@ import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import com.surovtsev.cool_3d_minesweeper.activities.TouchHandler
+import com.surovtsev.cool_3d_minesweeper.view.activities.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.GLCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.GLIndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program

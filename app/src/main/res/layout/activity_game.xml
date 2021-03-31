@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.GameActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".view.activities.GameActivity">
 
     <android.opengl.GLSurfaceView
         android:id="@+id/glsv_main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_weight="2"
         />
 
-</FrameLayout>
+    <com.surovtsev.cool_3d_minesweeper.view.components.MessagesComponent
+        android:id="@+id/mmc_main"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="8"/>
+
+</LinearLayout>
