@@ -39,7 +39,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         if (true) {
             val cubesConfig = IndexedCubes.Companion.CubesConfig(
                 Point3d(3, 3, 3),
-                Point3d(3f, 3f, 3f),
+                Point3d(5f, 5f, 5f),
                 Point3d(0.02f, 0.02f, 0.02f)
             )
             mGLObject = GLCubes(
