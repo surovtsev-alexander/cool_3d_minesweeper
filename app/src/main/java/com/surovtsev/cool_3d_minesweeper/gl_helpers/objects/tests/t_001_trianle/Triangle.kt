@@ -1,5 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects
+package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_001_trianle
 
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.indexed.GLIndexedObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 
 class Triangle(val glslProgram: GLSL_Program) {

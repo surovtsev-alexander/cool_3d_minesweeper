@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects
+package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common
 
 import android.opengl.GLES20
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.GLIntBuffer

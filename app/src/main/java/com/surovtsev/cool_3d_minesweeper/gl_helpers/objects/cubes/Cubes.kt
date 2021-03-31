@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects
+package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
 
@@ -32,15 +32,17 @@ class Cubes(val triangleCoordinates: FloatArray,
 
             if (true) {
                 var test_str = ""
-                if (false) {
+                if (true) {
                     test_str += "trianglesNums:\n"
                     for (i in 0 until trianglesNums.size / 3) {
                         test_str += "${trianglesNums[i * 3]}\t${trianglesNums[i * 3 + 1]}\t${trianglesNums[i * 3 + 2]}\n"
                     }
                 }
-                test_str += "trianglesTextures:\n"
-                for (i in 0 until trianglesTextures.size / 3) {
-                    test_str += "${trianglesTextures[i * 3]}\t${trianglesTextures[i * 3 + 1]}\t${trianglesTextures[i * 3 + 2]}\n"
+                if (true) {
+                    test_str += "trianglesTextures:\n"
+                    for (i in 0 until trianglesTextures.size / 3) {
+                        test_str += "${trianglesTextures[i * 3]}\t${trianglesTextures[i * 3 + 1]}\t${trianglesTextures[i * 3 + 2]}\n"
+                    }
                 }
                 Log.d("TEST", test_str)
             }

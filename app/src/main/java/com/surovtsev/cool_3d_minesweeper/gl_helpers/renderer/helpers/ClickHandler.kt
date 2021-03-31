@@ -16,7 +16,7 @@ class ClickHandler(val cameraInfo: CameraInfo) {
         fun normalizedDisplayCoordinates() = run {
             val pp = { p: Float, s: Float -> 2f * p / s - 1.0f}
             val x = pp(screenX, cameraInfo.mDisplayWidthF)
-            val y = pp(screenY, cameraInfo.mDisplayHeightF) // * -1f
+            val y = pp(screenY, cameraInfo.mDisplayHeightF) * -1f
 
             Vec2(x, y)
         }

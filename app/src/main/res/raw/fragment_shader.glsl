@@ -13,14 +13,14 @@ void main()
     if (tt == 0) {
         gl_FragColor = vec4(0f, 1f, 0f, 1f);
     } else if (tt == 1) {
-        gl_FragColor = vec4(0f, 0f, 0f, 1f);
+        gl_FragColor = vec4(1f, 0f, 0f, 1f);
     } else if (tt == 2) {
-        gl_FragColor = vec4(0f, 0f, 0f, 1f);
+        gl_FragColor = vec4(0f, 0f, 1f, 1f);
     } else if (tt == 3) {
-        gl_FragColor = vec4(0f, 0f, 0f, 1f);
+        gl_FragColor = vec4(0.5f, 1f, 0.5f, 0.1f);
     } else if (tt == 4) {
-        gl_FragColor = vec4(0f, 0f, 0f, 1f);
+        gl_FragColor = vec4(1f, 0.5f, 0.5f, 0.1f);
     } else {
-        gl_FragColor = vec4(0f, 0f, 0f, 1f);
+        gl_FragColor = vec4(0.5f, 0.5f, 1f, 0.1f);
     }
 }
