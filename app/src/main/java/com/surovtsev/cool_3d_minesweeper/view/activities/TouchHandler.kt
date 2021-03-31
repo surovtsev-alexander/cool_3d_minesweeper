@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.view.activities
 import android.opengl.Matrix
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 
 class TouchHandler {
     val COEFF = 15f
@@ -21,7 +22,7 @@ class TouchHandler {
 
         mUpdated = true
 
-        if (true) {
+        if (LoggerConfig.LOG_TOUCH_HANDLER_DATA) {
             ApplicationController.instance?.messagesComponent?.addMessageUI("$mXRotation\t$mYRotation")
         }
     }

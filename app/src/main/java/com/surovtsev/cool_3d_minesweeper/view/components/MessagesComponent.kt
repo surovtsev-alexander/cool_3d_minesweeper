@@ -9,7 +9,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class MessagesComponent: LinearLayoutCompat {
-    private var mFirstLine = true
+    private var mLines: UInt = 0.toUInt()
 
 
     constructor(context: Context): super(context) {
@@ -29,13 +29,13 @@ class MessagesComponent: LinearLayoutCompat {
     }
 
     fun addMessage(message: String) {
-        val messageToAdd = if (mFirstLine) {
-            mFirstLine = false
-            message
+        val lineSeparator = if (mLines == 0u) {
+            ""
         } else {
-            "\n" + message
+            "\n"
         }
-        tv_messages.append(messageToAdd)
+        mLines++
+        tv_messages.append("$lineSeparator\t$mLines: $message")
     }
 
     fun addMessageUI(message: String) {
