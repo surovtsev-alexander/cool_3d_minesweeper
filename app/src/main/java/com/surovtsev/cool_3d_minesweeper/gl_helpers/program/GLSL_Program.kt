@@ -14,9 +14,11 @@ class GLSL_Program(val context: Context) {
     private val A_POSITION = "a_Position"
     private val A_TRIANGLE_NUM = "a_TriangleNum"
     private val A_TRIANGLE_TEXTURE = "a_TriangleTexture"
+    private val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
     private val U_COLOR  = "u_Color"
     private val U_VP_MATRIX = "u_VP_Matrix"
     private val U_M_MATRIX = "u_M_Matrix"
+    private val U_TEXTURE_UNIT = "u_TextureUnit"
 
     var _a_position_location = 0
         private set
@@ -24,9 +26,13 @@ class GLSL_Program(val context: Context) {
         private set
     var _a_triangle_texture = 0
         private set
+    var _a_texture_coordinates = 0
+        private set
     private var _u_color_location = 0
     private var _u_vp_matrix_location = 0
     private var _u_m_matrix_location = 0
+    var _u_texture_location = 0
+        private set
 
     fun load_program() {
         _programId = ShaderHelper.linkProgram(
@@ -42,12 +48,14 @@ class GLSL_Program(val context: Context) {
         _a_position_location = glGetAttribLocation(_programId, A_POSITION)
         _a_triangle_num = glGetAttribLocation(_programId, A_TRIANGLE_NUM)
         _a_triangle_texture = glGetAttribLocation(_programId, A_TRIANGLE_TEXTURE)
+        _a_texture_coordinates = glGetAttribLocation(_programId, A_TEXTURE_COORDINATES)
 
         _u_color_location = glGetUniformLocation(_programId, U_COLOR)
         glUniform4f(_u_color_location, 1f, 0f, 0f, 1f)
 
         _u_vp_matrix_location = glGetUniformLocation(_programId, U_VP_MATRIX)
         _u_m_matrix_location = glGetUniformLocation(_programId, U_M_MATRIX)
+        _u_texture_location = glGetUniformLocation(_programId, U_TEXTURE_UNIT)
     }
 
     private val floatBuffer = FloatBuffer.allocate(16)

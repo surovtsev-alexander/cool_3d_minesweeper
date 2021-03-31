@@ -6,7 +6,11 @@ attribute vec3 a_Position;
 attribute float a_TriangleNum;
 attribute float a_TriangleTexture;
 
+attribute vec2 a_TextureCoordinates;
+
+varying float triangleNum;
 varying float triangleTexture;
+varying vec2 textureCoordinates;
 
 void main()
 {
@@ -14,5 +18,7 @@ void main()
     /*
     gl_PointSize = 10.0;
     */
+    triangleNum = a_TriangleNum;
     triangleTexture = a_TriangleTexture;
+    textureCoordinates = a_TextureCoordinates;
 }

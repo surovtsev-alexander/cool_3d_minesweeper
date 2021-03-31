@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangl
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.GLObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 
-class Triangles(val glslProgram: GLSL_Program) {
+class Triangles(val glslProgram: GLSL_Program, val textureId: Int) {
 
     private val triangleCoordinates = floatArrayOf(
         1f, 1f, 1f,
@@ -22,5 +22,16 @@ class Triangles(val glslProgram: GLSL_Program) {
         1f, 1f, 1f,
     )
 
-    val glslObject = GLObject(glslProgram, triangleCoordinates, triangleNumbers, triangleTextures)
+    private val textureCoordinates = floatArrayOf(
+        0f, 0f,
+        1f, 1f,
+        0f, 1f,
+
+        1f, 0f,
+        1f, 1f,
+        0f, 0f,
+    )
+
+    val glslObject = GLObject(glslProgram, triangleCoordinates, triangleNumbers,
+        triangleTextures, textureCoordinates, textureId)
 }

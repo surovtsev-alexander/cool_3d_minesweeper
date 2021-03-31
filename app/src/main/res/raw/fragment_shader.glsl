@@ -2,7 +2,11 @@ precision mediump float;
 
 uniform vec4 u_Color;
 
+varying float triangleNum;
 varying float triangleTexture;
+varying vec2 textureCoordinates;
+
+uniform sampler2D u_TextureUnit;
 
 void main()
 {

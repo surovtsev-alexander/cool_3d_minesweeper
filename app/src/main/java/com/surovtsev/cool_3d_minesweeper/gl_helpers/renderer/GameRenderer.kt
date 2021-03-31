@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.GLObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
@@ -13,6 +14,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
+import com.surovtsev.cool_3d_minesweeper.util.TextureHelper
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -21,6 +23,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     private var mGLSLProgram: GLSL_Program? = null
 
     private var mGLObject: GLObject? = null
+    private var mTextureId = 0
     val mMoveHandler = MoveHandler()
     var mCameraInfo: CameraInfo? = null
         private set
@@ -36,6 +39,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mGLSLProgram!!.use_program()
         mGLSLProgram!!.load_locations()
 
+        mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_empty)
         if (true) {
             val cubesConfig = IndexedCubes.Companion.CubesConfig(
                 Point3d(3, 3, 3),
@@ -48,10 +52,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     IndexedCubes.indexedCubes(
                         cubesConfig
                     )
-                )
+                ), mTextureId
             ).glObject
         } else {
-            mGLObject = Triangles(mGLSLProgram!!).glslObject
+            mGLObject = Triangles(mGLSLProgram!!, mTextureId).glslObject
         }
         mGLObject!!.bind_attribs()
     }
