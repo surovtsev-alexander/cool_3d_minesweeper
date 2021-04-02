@@ -14,6 +14,7 @@ import com.surovtsev.cool_3d_minesweeper.logic.application_controller.Applicatio
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.util.Timer
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlin.math.abs
 
 class GameActivity : AppCompatActivity() {
     var _game_renderer: GameRenderer? = null
@@ -54,6 +55,8 @@ class GameActivity : AppCompatActivity() {
             var previousY = 0f
             val mTimer = Timer()
             val mMaxClickTimeMs = 100L
+            var mMovingDistance = 0f
+            val mMovindThreshold = 10
 
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (event == null) {
@@ -67,6 +70,7 @@ class GameActivity : AppCompatActivity() {
                         previousX = event.x
                         previousY = event.y
                         mTimer.push()
+                        mMovingDistance = 0f
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val currX = event.x
@@ -85,10 +89,12 @@ class GameActivity : AppCompatActivity() {
                                 )
                             }
                         })
+
+                        mMovingDistance = abs(deltaX) + abs(deltaY)
                     }
                     MotionEvent.ACTION_UP -> {
                         mTimer.push()
-                        val moved = mTimer.diff() >= mMaxClickTimeMs
+                        val moved = mMovingDistance >= mMovindThreshold ||  mTimer.diff() >= mMaxClickTimeMs
                         if (!moved) {
                             if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
                                 ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
