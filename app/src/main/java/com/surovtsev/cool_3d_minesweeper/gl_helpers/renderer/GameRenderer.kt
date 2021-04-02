@@ -58,6 +58,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             mGLObject = Triangles(mGLSLProgram!!, mTextureId).glslObject
         }
         mGLObject!!.bind_attribs()
+        mGLObject!!.set_texture()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {

@@ -15,7 +15,7 @@ void main()
     int tt = int(floor(triangleTexture));
 
     if (tt == 0) {
-        gl_FragColor = vec4(0f, 1f, 0f, 1f);
+        gl_FragColor = texture2D(u_TextureUnit, textureCoordinates);
     } else if (tt == 1) {
         gl_FragColor = vec4(1f, 0f, 0f, 1f);
     } else if (tt == 2) {
