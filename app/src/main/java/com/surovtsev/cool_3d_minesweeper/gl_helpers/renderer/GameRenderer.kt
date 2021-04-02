@@ -39,7 +39,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mGLSLProgram!!.use_program()
         mGLSLProgram!!.load_locations()
 
-        mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_empty)
+        mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
         if (true) {
             val cubesConfig = IndexedCubes.Companion.CubesConfig(
                 Point3d(3, 3, 3),

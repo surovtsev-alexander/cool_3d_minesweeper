@@ -8,13 +8,13 @@ class Cubes(val triangleCoordinates: FloatArray,
             val textureCoordinates: FloatArray) {
     companion object {
         val mTextureCoordinatesTemplate = floatArrayOf(
-            0f, 0f,
-            1f, 1f,
             0f, 1f,
-
             1f, 0f,
-            1f, 1f,
             0f, 0f,
+
+            1f, 1f,
+            1f, 0f,
+            0f, 1f,
         )
 
         fun cubes(indexedCubes: IndexedCubes): Cubes {
