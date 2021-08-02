@@ -11,15 +11,15 @@ class Triangles(val glslProgram: GLSL_Program, val textureId: Int) {
         2f, 1f, 1f,
         0f, -1f, 2f,
         0f, -0f, 2f,
-        -1f,-0f, 2f,
+        -1f,-0f, 2f
     )
     private val triangleNumbers = floatArrayOf(
         0f, 0f, 0f,
-        1f, 1f, 1f,
+        1f, 1f, 1f
     )
     private val triangleTextures = floatArrayOf(
         0f, 0f, 0f,
-        1f, 1f, 1f,
+        1f, 1f, 1f
     )
 
     private val textureCoordinates = floatArrayOf(
@@ -29,7 +29,7 @@ class Triangles(val glslProgram: GLSL_Program, val textureId: Int) {
 
         1f, 0f,
         1f, 1f,
-        0f, 0f,
+        0f, 0f
     )
 
     val glslObject = GLObject(glslProgram, triangleCoordinates, triangleNumbers,

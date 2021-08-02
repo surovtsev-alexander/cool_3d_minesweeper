@@ -1,6 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.math
 
 import glm_.mat4x4.Mat4
+import glm_.vec3.Vec3
+import glm_.vec4.Vec4
 import kotlin.math.tan
 
 object MatrixHelper {
@@ -32,4 +34,10 @@ object MatrixHelper {
     }
 
     fun matrix_creator() = Mat4(0f)
+
+    fun mult_mat4_vec3(mat: Mat4, vec: Vec3): Vec3 {
+        val x = mat * Vec4(vec, 1.0);
+        val res = Vec3(x) / x[3];
+        return res
+    }
 }
