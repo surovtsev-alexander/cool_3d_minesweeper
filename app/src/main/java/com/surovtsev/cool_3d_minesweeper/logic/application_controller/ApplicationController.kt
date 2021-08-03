@@ -7,6 +7,9 @@ import java.lang.Exception
 class ApplicationController: Application {
     companion object {
         var instance: ApplicationController? = null
+
+        fun try_to_add_message_to_component(msg: String) =
+            instance?.messagesComponent?.addMessageUI(msg)
     }
 
     constructor() {

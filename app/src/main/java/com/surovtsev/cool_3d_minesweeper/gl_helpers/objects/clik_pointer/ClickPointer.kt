@@ -5,6 +5,8 @@ import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.IGLObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
+import glm_.set
+import glm_.vec3.Vec3
 
 class ClickPointer(context: Context): IGLObject {
     private val POSITION_COMPONENT_COUNT = 3
@@ -17,11 +19,19 @@ class ClickPointer(context: Context): IGLObject {
     init {
         mGLSLProgram = CLickPointerGLSLProgram(context)
         mGLSLProgram.prepare_program()
+        glLineWidth(mGLSLProgram.mLineWidth)
     }
 
     override fun bind_data() {
         vertexArray.setVertexAttribPointer(0, mGLSLProgram.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
+    }
+
+    fun set_points(near: Vec3, far: Vec3) {
+        val x = floatArrayOf(
+            near[0], near[1], near[2],
+            far[0], far[1], far[2])
+        vertexArray.updateBuffer(x, 0, x.count())
     }
 
     override fun draw() {

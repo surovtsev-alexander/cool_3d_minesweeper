@@ -9,30 +9,37 @@ import glm_.mat4x4.Mat4
 
 class MoveHandler {
     private val COEFF = 15f
-    var mXRotation = 0f
-    var mYRotation = 0f
     var mUpdated = true
         private set
 
-    fun matrix_creator() = MatrixHelper.matrix_creator()
+    fun identity_matrix() = MatrixHelper.identity_matrix()
 
-    var mMatrix = matrix_creator()
+    val I_MATRIX = identity_matrix()
+    var rotMatrix = identity_matrix()
+        private set
+
+    private var x_axis = Math.XRay
+    private var y_axis = Math.YRay
 
     fun handleTouchDrag(deltaX: Float, deltaY: Float) {
-        mXRotation += deltaX / COEFF
-        mYRotation += deltaY / COEFF
+        val dx = deltaX / COEFF
+        val dy = deltaY / COEFF
+
+        rotMatrix = rotMatrix
+            .rotate(Math.gradToRad(dy), x_axis)
+            .rotate(Math.gradToRad(dx), y_axis)
+
+        //x_axis = MatrixHelper.mult_mat4_vec3(rotMatrix, x_axis)
+        //y_axis = MatrixHelper.mult_mat4_vec3(rotMatrix, y_axis)
 
         mUpdated = true
 
         if (LoggerConfig.LOG_TOUCH_HANDLER_DATA) {
-            ApplicationController.instance?.messagesComponent?.addMessageUI("$mXRotation\t$mYRotation")
+            ApplicationController.try_to_add_message_to_component("$rotMatrix")
         }
     }
 
     fun updateMatrix() {
-        mMatrix = glm.rotate(Mat4(1f), Math.gradToRad(mYRotation), Math.XRay)
-        mMatrix = glm.rotate(mMatrix, Math.gradToRad(mXRotation), Math.YRay)
-
         mUpdated = false
     }
 }

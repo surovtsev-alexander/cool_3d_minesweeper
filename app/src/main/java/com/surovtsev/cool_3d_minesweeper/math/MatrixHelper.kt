@@ -33,7 +33,8 @@ object MatrixHelper {
         m[15] = 0f
     }
 
-    fun matrix_creator() = Mat4(0f)
+    fun zero_matrix() = Mat4(0f)
+    fun identity_matrix() = Mat4(1f)
 
     fun mult_mat4_vec3(mat: Mat4, vec: Vec3): Vec3 {
         val x = mat * Vec4(vec, 1.0);

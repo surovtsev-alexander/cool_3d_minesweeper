@@ -21,11 +21,11 @@ void main()
     } else if (tt == 2) {
         frag_color = vec4(0f, 0f, 1f, 1f);
     } else if (tt == 3) {
-        frag_color = vec4(0.5f, 1f, 0.5f, 0.5f);
+        frag_color = vec4(0.5f, 1f, 0.5f, 1f);
     } else if (tt == 4) {
-        frag_color = vec4(1f, 0.5f, 0.5f, 0.5f);
+        frag_color = vec4(1f, 0.5f, 0.5f, 1f);
     } else {
-        frag_color = vec4(0.5f, 0.5f, 1f, 0.5f);
+        frag_color = vec4(0.5f, 0.5f, 1f, 1f);
     }
 
     gl_FragColor = frag_color;

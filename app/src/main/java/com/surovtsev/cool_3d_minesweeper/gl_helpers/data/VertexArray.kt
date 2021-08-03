@@ -7,7 +7,7 @@ import java.nio.ByteOrder
 import java.nio.FloatBuffer
 
 class VertexArray {
-    var floatBuffer: FloatBuffer
+    val floatBuffer: FloatBuffer
 
     constructor(vertexData: FloatArray) {
         floatBuffer = ByteBuffer

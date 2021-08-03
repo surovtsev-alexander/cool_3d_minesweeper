@@ -1,7 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 
 import android.content.Context
+import android.opengl.GLES20
 import android.opengl.GLES20.*
+import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
@@ -11,10 +13,10 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
@@ -32,7 +34,6 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         private set
     var mClickHandler: ClickHandler? = null
 
-    private var mClickPointerModelGLSLProgram: CLickPointerGLSLProgram? = null
     private var mClickPointer: ClickPointer? = null
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
@@ -42,7 +43,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         fun load_model() {
             if (true) {
-                val counts = if (false) {
+                val counts = if (true) {
                     Point3d<Short>(3, 3, 3)
                 } else {
                     Point3d<Short>(1, 1, 1)
@@ -76,7 +77,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
     fun logScene() {
         val vp_matrix = mCameraInfo!!.mViewProjectionMatrix
-        val model_matrix = mMoveHandler.mMatrix
+        val model_matrix = mMoveHandler.rotMatrix
         val mvp_matrix = vp_matrix * model_matrix
         val points = mModelObject!!.trianglesCoordinates
 
@@ -134,19 +135,20 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
-        mCameraInfo = CameraInfo(width, height)
+        mCameraInfo = CameraInfo(width, height, moveHandler = mMoveHandler)
         mClickHandler = ClickHandler(mCameraInfo!!)
 
         mModelObject!!.mModelModelGLSLProgram.use_program()
 
         mModelObject!!.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
-        mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
+        mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
 
         mClickPointer!!.mGLSLProgram.use_program()
-        mClickPointer!!.mGLSLProgram.setVPMatrix(mCameraInfo!!.mViewProjectionMatrix)
+        mClickPointer!!.mGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
     }
 
     override fun onDrawFrame(gl: GL10?) {
+
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
         glEnable (GL_BLEND);
@@ -155,15 +157,38 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mModelObject!!.mModelModelGLSLProgram.use_program()
         mModelObject!!.bind_data()
         if (mMoveHandler.mUpdated) {
-            mMoveHandler.updateMatrix()
-            mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
+            mCameraInfo!!.calculate_matrices()
+            //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
+            mModelObject!!.mModelModelGLSLProgram!!.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
         }
         mModelObject!!.draw()
 
-        if (false && mClickPointer!!.need_to_be_drawn) {
+        do {
+            val updated = mClickHandler!!.isUpdated()
+
+            if (updated) {
+                mClickHandler!!.release()
+                mClickPointer!!.need_to_be_drawn = true
+            }
+
+            if (!mClickPointer!!.need_to_be_drawn) {
+                break
+            }
+
+            if (updated) {
+                mClickPointer!!.set_points(mClickHandler!!.x_near, mClickHandler!!.x_far)
+            }
+
             mClickPointer!!.mGLSLProgram.use_program()
+            if (mMoveHandler.mUpdated) {
+                mClickPointer!!.mGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
+            }
             mClickPointer!!.bind_data()
             mClickPointer!!.draw()
+        } while (false)
+
+        if (mMoveHandler.mUpdated) {
+            mMoveHandler.updateMatrix()
         }
     }
 

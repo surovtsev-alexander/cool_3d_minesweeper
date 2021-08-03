@@ -7,8 +7,31 @@ import glm_.vec2.Vec2
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 
-class ClickHandler(val cameraInfo: CameraInfo) {
+interface IHaveUpdatedStatus {
+    abstract fun isUpdated(): Boolean
+}
+
+open class Updatable(): IHaveUpdatedStatus {
+    var updated = false
+
+    fun update() {
+        updated = true
+    }
+
+    fun release() {
+        updated = false
+    }
+
+    override fun isUpdated()= updated
+}
+
+class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     val mMessagesComponent = ApplicationController.instance!!.messagesComponent!!
+
+    var x_near = Vec3()
+        private set
+    var x_far  = Vec3()
+        private set
 
     fun handleClick(screenX: Float, screenY: Float) {
         fun normalizedDisplayCoordinates() = run {
@@ -27,14 +50,19 @@ class ClickHandler(val cameraInfo: CameraInfo) {
         }
 
         val vpx = normalizedDisplayCoordinates()
-        val x_near = VPX(Vec3(vpx, -1f))
-        val x_far = VPX(Vec3(vpx, 1f))
+        val near = VPX(Vec3(vpx, -1f))
+        val far = VPX(Vec3(vpx, 1f))
 
-        if (false and LoggerConfig.LOG_CLICK_HANDLER_DATA) {
+
+        x_near = near.x
+        x_far = far.x
+        update()
+
+        if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {
             val message = arrayOf<String>(
                 "vpx:$vpx",
-                "x_near:$x_near",
-                "x_far:$x_far"
+                "x_near:$near",
+                "x_far:$far"
             ).reduce {acc, x -> "$acc\n$x"}
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(message)
         }

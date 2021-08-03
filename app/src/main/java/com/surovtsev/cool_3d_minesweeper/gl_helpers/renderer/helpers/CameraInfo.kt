@@ -7,14 +7,14 @@ import glm_.glm;
 import glm_.mat4x4.Mat4
 
 class CameraInfo(val displayWidth: Int, val displayHeight: Int,
-                 val zNear: Float = 2f, val zFar: Float = 20f) {
+                 val zNear: Float = 2f, val zFar: Float = 20f, val moveHandler: MoveHandler) {
 
-    var mProjectionMatrix = MatrixHelper.matrix_creator()
+    var mProjectionMatrix = MatrixHelper.zero_matrix()
         private set
-    var mViewMatrix = MatrixHelper.matrix_creator()
-    val mViewProjectionMatrix = MatrixHelper.matrix_creator()
-    val mInvertedProjectionMatrix = MatrixHelper.matrix_creator()
-    val mInvertedViewMatrix = MatrixHelper.matrix_creator()
+    var mViewMatrix = MatrixHelper.zero_matrix()
+    val mViewProjectionMatrix = MatrixHelper.zero_matrix()
+    val mInvertedProjectionMatrix = MatrixHelper.zero_matrix()
+    val mInvertedViewMatrix = MatrixHelper.zero_matrix()
 
     val mDisplayWidthF = displayWidth.toFloat()
     val mDisplayHeightF = displayHeight.toFloat()
@@ -26,7 +26,13 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             mDisplayWidthF / mDisplayHeightF,
             zNear, zFar
         )
+        calculate_matrices()
+    }
+
+    fun calculate_matrices() {
+
         mViewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
+        mViewMatrix = mViewMatrix * moveHandler.rotMatrix
         Mat4.times(
             mViewProjectionMatrix,
             Mat4(mProjectionMatrix),
@@ -48,4 +54,6 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             )
         }
     }
+
+
 }
