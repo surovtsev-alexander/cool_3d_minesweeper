@@ -16,6 +16,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
+import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
@@ -68,12 +69,12 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         load_model()
         load_click_pointer()
 
-        if (true) {
-            ApplicationController.instance!!.print_test = this::test_test
+        if (LoggerConfig.LOG_SCENE) {
+            ApplicationController.instance!!.logScene = this::logScene
         }
     }
 
-    fun test_test() {
+    fun logScene() {
         val vp_matrix = mCameraInfo!!.mViewProjectionMatrix
         val model_matrix = mMoveHandler.mMatrix
         val mvp_matrix = vp_matrix * model_matrix

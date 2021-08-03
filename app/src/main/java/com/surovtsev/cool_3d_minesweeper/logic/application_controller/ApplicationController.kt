@@ -18,7 +18,7 @@ class ApplicationController: Application {
 
     var messagesComponent: MessagesComponent? = null
 
-    var print_test: TestDelegate? = null
+    var logScene: LogSceneDelegate? = null
 }
 
-typealias TestDelegate = () -> Unit
+typealias LogSceneDelegate = () -> Unit

@@ -78,8 +78,8 @@ class ClickHandler(val cameraInfo: CameraInfo) {
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(messages.reduce { acc, x -> "$acc\n$x" })
         }
 
-        if (false) {
-            ApplicationController.instance!!.print_test?.invoke()
+        if (LoggerConfig.LOG_SCENE) {
+            ApplicationController.instance!!.logScene?.invoke()
         }
     }
 }

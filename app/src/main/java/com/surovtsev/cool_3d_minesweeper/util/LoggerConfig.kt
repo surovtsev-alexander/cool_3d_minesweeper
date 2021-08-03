@@ -8,5 +8,6 @@ class LoggerConfig {
         val LOG_CLICK_HANDLER_DATA = true
         val LOG_CAMERA_INFO_DATA = false
         val LOG_SHADER_FIELDS_LOCATIONS = false
+        val LOG_SCENE = false
     }
 }
