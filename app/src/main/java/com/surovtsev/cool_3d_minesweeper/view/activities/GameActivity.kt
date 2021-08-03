@@ -13,6 +13,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.util.Timer
+import glm_.vec2.Vec2
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
 
@@ -51,8 +52,7 @@ class GameActivity : AppCompatActivity() {
         glsv_main.setRenderer(_game_renderer)
 
         glsv_main.setOnTouchListener(object: View.OnTouchListener {
-            var previousX = 0f
-            var previousY = 0f
+            var prev = Vec2()
             val mTimer = Timer()
             val mMaxClickTimeMs = 100L
             var mMovingDistance = 0f
@@ -63,34 +63,30 @@ class GameActivity : AppCompatActivity() {
                     return false
                 }
 
-                val action = event.action
-
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        previousX = event.x
-                        previousY = event.y
+                        prev = Vec2(event.x, event.y)
                         mTimer.push()
                         mMovingDistance = 0f
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        val currX = event.x
-                        val currY = event.y
+                        var curr = Vec2(event.x, event.y)
 
-                        val deltaX = currX - previousX
-                        val deltaY = currY - previousY
-
-                        previousX = currX
-                        previousY = currY
+                        val delta = curr - prev
 
                         glsv_main.queueEvent(object: Runnable {
+                            val p = prev
+                            val c = curr
                             override fun run() {
                                 game_renderer.mMoveHandler.handleTouchDrag(
-                                    deltaX, deltaY
+                                    p, c
                                 )
                             }
                         })
 
-                        mMovingDistance = abs(deltaX) + abs(deltaY)
+                        mMovingDistance = abs(delta[0]) + abs(delta[1])
+
+                        prev = curr
                     }
                     MotionEvent.ACTION_UP -> {
                         mTimer.push()
