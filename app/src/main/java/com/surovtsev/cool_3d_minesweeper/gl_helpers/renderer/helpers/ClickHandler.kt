@@ -33,28 +33,10 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     var far  = Vec3()
         private set
 
-    fun normalizedDisplayCoordinates(point: Vec2) = run {
-        val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
-        val x = pp(point.x, cameraInfo.mDisplayWidthF)
-        val y = pp(point.y, cameraInfo.mDisplayHeightF) * -1f
-        Vec2(x, y)
-    }
-
-    fun calc_near_by_proj(proj: Vec2) = calc_point_by_proj(-1f)(proj)
-    fun calc_far_by_proj(proj: Vec2) = calc_point_by_proj(1f)(proj)
-
-    fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
-        return fun (proj: Vec2): Vec3 {
-            val vpx = Vec3(proj, z)
-            val vx = mult_mat4_vec3(cameraInfo.mInvertedProjectionMatrix, vpx)
-            return mult_mat4_vec3(cameraInfo.mInvertedViewMatrix, vx)
-        }
-    }
-
     fun handleClick(point: Vec2) {
-        val proj = normalizedDisplayCoordinates(point)
-        near = calc_near_by_proj(proj)
-        far = calc_far_by_proj(proj)
+        val proj = cameraInfo.normalizedDisplayCoordinates(point)
+        near = cameraInfo.calc_near_by_proj(proj)
+        far = cameraInfo.calc_far_by_proj(proj)
 
         update()
 

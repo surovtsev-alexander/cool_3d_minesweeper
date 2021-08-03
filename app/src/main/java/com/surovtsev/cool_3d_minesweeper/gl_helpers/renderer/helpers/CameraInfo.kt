@@ -5,6 +5,8 @@ import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.glm;
 import glm_.mat4x4.Mat4
+import glm_.vec2.Vec2
+import glm_.vec3.Vec3
 
 class CameraInfo(val displayWidth: Int, val displayHeight: Int,
                  val zNear: Float = 2f, val zFar: Float = 20f, val moveHandler: MoveHandler) {
@@ -51,6 +53,24 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(
                 messages.reduce { acc, x -> "$acc\n$x"}
             )
+        }
+    }
+
+    fun normalizedDisplayCoordinates(point: Vec2) = run {
+        val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
+        val x = pp(point.x, mDisplayWidthF)
+        val y = pp(point.y, mDisplayHeightF) * -1f
+        Vec2(x, y)
+    }
+
+    fun calc_near_by_proj(proj: Vec2) = calc_point_by_proj(-1f)(proj)
+    fun calc_far_by_proj(proj: Vec2) = calc_point_by_proj(1f)(proj)
+
+    fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
+        return fun (proj: Vec2): Vec3 {
+            val vpx = Vec3(proj, z)
+            val vx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, vpx)
+            return MatrixHelper.mult_mat4_vec3(mInvertedViewMatrix, vx)
         }
     }
 
