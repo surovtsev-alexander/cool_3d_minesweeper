@@ -26,20 +26,14 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
-    private var mModelObject: ModelObject? = null
-    val mMoveHandler = MoveHandler()
-    var mCameraInfo: CameraInfo? = null
-        private set
-    var mClickHandler: ClickHandler? = null
+    var mModelObjects: ModelObjects? = null
+    var mScene: Scene? = null
 
-    private var mClickPointer: ClickPointer? = null
+    inner class ModelObjects {
+        val mModelObject: ModelObject
+        val mClickPointer: ClickPointer
 
-    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
-
-        fun load_model() {
+        init {
             if (true) {
                 val counts = if (true) {
                     Point3d<Short>(3, 3, 3)
@@ -51,22 +45,90 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     Point3d(5f, 5f, 5f),
                     Point3d(0.02f, 0.02f, 0.02f)
                 )
-                    mModelObject = GLCubes(
+                mModelObject = GLCubes(
                     context,
                     Cubes.cubes(
                         IndexedCubes.indexedCubes(
-                            cubesConfig))).glObject
+                            cubesConfig
+                        )
+                    )
+                ).glObject
             } else {
                 mModelObject = Triangles(context).glslObject
             }
-        }
 
-        fun load_click_pointer() {
             mClickPointer = ClickPointer(context)
         }
+    }
 
-        load_model()
-        load_click_pointer()
+    inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
+        val mMoveHandler = MoveHandler()
+        val mCameraInfo: CameraInfo
+        val mClickHandler: ClickHandler
+
+        init {
+            mCameraInfo = CameraInfo(width, height, moveHandler = mMoveHandler)
+            mClickHandler = ClickHandler(mCameraInfo)
+        }
+
+        fun onSurfaceChanged() {
+            modelObjects.mModelObject.mModelModelGLSLProgram.use_program()
+
+            modelObjects.mModelObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+            modelObjects.mModelObject.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
+
+            modelObjects.mClickPointer.mGLSLProgram.use_program()
+            modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+        }
+
+        fun onDrawFrame() {
+            modelObjects.mModelObject.mModelModelGLSLProgram.use_program()
+            modelObjects.mModelObject.bind_data()
+            if (mMoveHandler.mUpdated) {
+                mCameraInfo.recalculateViewMatrix()
+                //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
+                modelObjects.mModelObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+            }
+            modelObjects.mModelObject.draw()
+
+            do {
+                val updated = mClickHandler.isUpdated()
+
+                if (updated) {
+                    mClickHandler.release()
+                    modelObjects.mClickPointer.need_to_be_drawn = true
+                }
+
+                if (!modelObjects.mClickPointer.need_to_be_drawn) {
+                    break
+                }
+
+                if (updated) {
+                    val n = mClickHandler.near
+                    val f = mClickHandler.far
+                    modelObjects.mClickPointer.set_points(n, f)
+                }
+
+                modelObjects.mClickPointer.mGLSLProgram.use_program()
+                if (mMoveHandler.mUpdated) {
+                    modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                }
+                modelObjects.mClickPointer.bind_data()
+                modelObjects.mClickPointer.draw()
+            } while (false)
+
+            if (mMoveHandler.mUpdated) {
+                mMoveHandler.updateMatrix()
+            }
+        }
+    }
+
+    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
+
+        mModelObjects = ModelObjects()
 
         if (LoggerConfig.LOG_SCENE) {
             ApplicationController.instance!!.logScene = this::logScene
@@ -74,10 +136,11 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     }
 
     fun logScene() {
-        val vp_matrix = mCameraInfo!!.mViewProjectionMatrix
-        val model_matrix = mMoveHandler.rotMatrix
+        val cameraInfo = mScene!!.mCameraInfo
+        val vp_matrix = cameraInfo.mViewProjectionMatrix
+        val model_matrix = mScene!!.mMoveHandler.rotMatrix
         val mvp_matrix = vp_matrix * model_matrix
-        val points = mModelObject!!.trianglesCoordinates
+        val points = mModelObjects!!.mModelObject.trianglesCoordinates
 
         val test_str = StringBuilder()
 
@@ -87,13 +150,13 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
 
         if (true) {
-            test_str.append("width: ${mCameraInfo!!.mDisplayWidthF}\n")
-            test_str.append("height: ${mCameraInfo!!.mDisplayHeightF}\n")
+            test_str.append("width: ${cameraInfo.mDisplayWidthF}\n")
+            test_str.append("height: ${cameraInfo.mDisplayHeightF}\n")
         }
 
         if (true) {
             test_str.append(
-                matrix_to_str("projection_matrix", mCameraInfo!!.mProjectionMatrix)
+                matrix_to_str("projection_matrix", cameraInfo.mProjectionMatrix)
             )
             test_str.append("\n")
         }
@@ -133,16 +196,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
-        mCameraInfo = CameraInfo(width, height, moveHandler = mMoveHandler)
-        mClickHandler = ClickHandler(mCameraInfo!!)
 
-        mModelObject!!.mModelModelGLSLProgram.use_program()
+        mScene = Scene(mModelObjects!!, width, height)
 
-        mModelObject!!.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
-        mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
-
-        mClickPointer!!.mGLSLProgram.use_program()
-        mClickPointer!!.mGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
+        mScene!!.onSurfaceChanged()
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -152,44 +209,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        mModelObject!!.mModelModelGLSLProgram.use_program()
-        mModelObject!!.bind_data()
-        if (mMoveHandler.mUpdated) {
-            mCameraInfo!!.recalculateViewMatrix()
-            //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
-            mModelObject!!.mModelModelGLSLProgram!!.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
-        }
-        mModelObject!!.draw()
-
-        do {
-            val updated = mClickHandler!!.isUpdated()
-
-            if (updated) {
-                mClickHandler!!.release()
-                mClickPointer!!.need_to_be_drawn = true
-            }
-
-            if (!mClickPointer!!.need_to_be_drawn) {
-                break
-            }
-
-            if (updated) {
-                val n = mClickHandler!!.near
-                val f = mClickHandler!!.far
-                mClickPointer!!.set_points(n, f)
-            }
-
-            mClickPointer!!.mGLSLProgram.use_program()
-            if (mMoveHandler.mUpdated) {
-                mClickPointer!!.mGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
-            }
-            mClickPointer!!.bind_data()
-            mClickPointer!!.draw()
-        } while (false)
-
-        if (mMoveHandler.mUpdated) {
-            mMoveHandler.updateMatrix()
-        }
+        mScene?.onDrawFrame()
     }
 
 }

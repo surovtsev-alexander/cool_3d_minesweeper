@@ -78,7 +78,7 @@ class GameActivity : AppCompatActivity() {
                             val p = prev
                             val c = curr
                             override fun run() {
-                                game_renderer.mMoveHandler.handleTouchDrag(
+                                game_renderer.mScene?.mMoveHandler?.handleTouchDrag(
                                     p, c
                                 )
                             }
@@ -96,7 +96,7 @@ class GameActivity : AppCompatActivity() {
                                 ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
                             }
                             val curr = Vec2(event.x, event.y)
-                            game_renderer.mClickHandler?.handleClick(curr)
+                            game_renderer.mScene?.mClickHandler?.handleClick(curr)
                         }
                     }
                 }
