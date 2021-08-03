@@ -30,7 +30,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     var mScene: Scene? = null
 
     inner class ModelObjects {
-        val mModelObject: ModelObject
+        val mGameObject: ModelObject
         val mClickPointer: ClickPointer
 
         init {
@@ -45,7 +45,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     Point3d(5f, 5f, 5f),
                     Point3d(0.02f, 0.02f, 0.02f)
                 )
-                mModelObject = GLCubes(
+                mGameObject = GLCubes(
                     context,
                     Cubes.cubes(
                         IndexedCubes.indexedCubes(
@@ -54,7 +54,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     )
                 ).glObject
             } else {
-                mModelObject = Triangles(context).glslObject
+                mGameObject = Triangles(context).glslObject
             }
 
             mClickPointer = ClickPointer(context)
@@ -72,24 +72,24 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
 
         fun onSurfaceChanged() {
-            modelObjects.mModelObject.mModelModelGLSLProgram.use_program()
+            modelObjects.mGameObject.mModelModelGLSLProgram.use_program()
 
-            modelObjects.mModelObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
-            modelObjects.mModelObject.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
+            modelObjects.mGameObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+            modelObjects.mGameObject.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
 
             modelObjects.mClickPointer.mGLSLProgram.use_program()
             modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
         }
 
         fun onDrawFrame() {
-            modelObjects.mModelObject.mModelModelGLSLProgram.use_program()
-            modelObjects.mModelObject.bind_data()
+            modelObjects.mGameObject.mModelModelGLSLProgram.use_program()
+            modelObjects.mGameObject.bind_data()
             if (mMoveHandler.mUpdated) {
                 mCameraInfo.recalculateViewMatrix()
                 //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
-                modelObjects.mModelObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                modelObjects.mGameObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
             }
-            modelObjects.mModelObject.draw()
+            modelObjects.mGameObject.draw()
 
             do {
                 val updated = mClickHandler.isUpdated()
@@ -135,12 +135,30 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
     }
 
+    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        glViewport(0, 0, width, height)
+
+        mScene = Scene(mModelObjects!!, width, height)
+
+        mScene!!.onSurfaceChanged()
+    }
+
+    override fun onDrawFrame(gl: GL10?) {
+
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        mScene?.onDrawFrame()
+    }
+
     fun logScene() {
         val cameraInfo = mScene!!.mCameraInfo
         val vp_matrix = cameraInfo.mViewProjectionMatrix
         val model_matrix = mScene!!.mMoveHandler.rotMatrix
         val mvp_matrix = vp_matrix * model_matrix
-        val points = mModelObjects!!.mModelObject.trianglesCoordinates
+        val points = mModelObjects!!.mGameObject.trianglesCoordinates
 
         val test_str = StringBuilder()
 
@@ -193,23 +211,4 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         Log.d("TEST", test_str.toString())
     }
-
-    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        glViewport(0, 0, width, height)
-
-        mScene = Scene(mModelObjects!!, width, height)
-
-        mScene!!.onSurfaceChanged()
-    }
-
-    override fun onDrawFrame(gl: GL10?) {
-
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
-
-        glEnable (GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        mScene?.onDrawFrame()
-    }
-
 }
