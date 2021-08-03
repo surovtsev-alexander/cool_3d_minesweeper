@@ -29,11 +29,10 @@ class ModelObject(
         mModelModelGLSLProgram.prepare_program()
 
         mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
-        bind_attributes()
         set_texture()
     }
 
-    override fun bind_attributes() {
+    override fun bind_data() {
         vertexArray.setVertexAttribPointer(0, mModelModelGLSLProgram.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
         numsArray.setVertexAttribPointer(0, mModelModelGLSLProgram.mATriangleNum.location,

@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.program
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 
@@ -37,6 +38,14 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
     open fun load_locations() {
         fields.forEach { it.get_location() }
+
+        if (LoggerConfig.LOG_SHADER_FIELDS_LOCATIONS) {
+            Log.d("TEST", "{")
+            fields.forEach {
+                Log.d("TEST", "${it.name}: ${it.location}")
+            }
+            Log.d("TEST", "}")
+        }
     }
 
     abstract inner class GLSLField(val name: String, var location: Int = 0) {

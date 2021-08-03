@@ -16,11 +16,10 @@ class ClickPointer(context: Context): IGLObject {
 
     init {
         mGLSLProgram = CLickPointerGLSLProgram(context)
-        //mGLSLProgram.prepare_program()
-        //bind_attributes()
+        mGLSLProgram.prepare_program()
     }
 
-    override fun bind_attributes() {
+    override fun bind_data() {
         vertexArray.setVertexAttribPointer(0, mGLSLProgram.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
