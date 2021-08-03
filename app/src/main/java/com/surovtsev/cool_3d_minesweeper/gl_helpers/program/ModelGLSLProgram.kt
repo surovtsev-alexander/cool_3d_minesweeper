@@ -7,10 +7,10 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
 
-class ModelGLSLProgram(
+open class ModelGLSLProgram(
     context: Context): GLSLProgram(
     ShaderHelper.ShaderLoadParameters(
-    context, R.raw.scene_vertex_shader, R.raw.scene_fragment_shader)) {
+        context, R.raw.scene_vertex_shader, R.raw.scene_fragment_shader)) {
 
     private val A_TRIANGLE_NUM = "a_TriangleNum"
     private val A_TRIANGLE_TEXTURE = "a_TriangleTexture"
@@ -49,14 +49,14 @@ class ModelGLSLProgram(
         private val floatBuffer = FloatBuffer.allocate(16)
     }
 
-    fun set_vp_matrix(vp_matrix: Mat4) {
+    fun fillU_VP_Matrix(vp_matrix: Mat4) {
         glUniformMatrix4fv(mU_VP_Matrix.location, 1,
             false,
             vp_matrix.to(floatBuffer, 0).array()
             , 0)
     }
 
-    fun set_u_matrix(u_matrix: Mat4) {
+    fun fillU_M_Matrix(u_matrix: Mat4) {
         glUniformMatrix4fv(mU_M_Matrix.location, 1,
             false, u_matrix.to(floatBuffer, 0).array(), 0)
     }

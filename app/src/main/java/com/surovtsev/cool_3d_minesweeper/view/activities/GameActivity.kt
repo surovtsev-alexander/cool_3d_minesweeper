@@ -101,7 +101,7 @@ class GameActivity : AppCompatActivity() {
                             }
                             val currX = event.x
                             val currY = event.y
-                            game_renderer.mClickHandler!!.handleClick(currX, currY)
+                            game_renderer.mClickHandler?.handleClick(currX, currY)
                         }
                     }
                 }

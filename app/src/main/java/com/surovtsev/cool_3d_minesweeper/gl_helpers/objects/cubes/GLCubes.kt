@@ -1,16 +1,12 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
+import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
 
-class GLCubes(val modelGlslProgram: ModelGLSLProgram,
-              val cubes: Cubes,
-              val textureId: Int
-) {
+class GLCubes(context: Context, val cubes: Cubes) {
 
-    val glObject = ModelObject(modelGlslProgram, cubes.triangleCoordinates,
+    val glObject = ModelObject(context, cubes.triangleCoordinates,
         cubes.trianglesNums, cubes.trianglesTextures,
-        cubes.textureCoordinates,
-        textureId
-    )
+        cubes.textureCoordinates)
 }

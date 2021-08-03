@@ -29,10 +29,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
-    private var mModelModelGLSLProgram: ModelGLSLProgram? = null
-
     private var mModelObject: ModelObject? = null
-    private var mTextureId = 0
     val mMoveHandler = MoveHandler()
     var mCameraInfo: CameraInfo? = null
         private set
@@ -47,12 +44,6 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable(GL_CULL_FACE)
 
         fun load_model() {
-            mModelModelGLSLProgram = ModelGLSLProgram(context)
-            mModelModelGLSLProgram!!.load_program()
-            mModelModelGLSLProgram!!.use_program()
-            mModelModelGLSLProgram!!.load_locations()
-
-            mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
             if (true) {
                 val counts = if (false) {
                     Point3d<Short>(3, 3, 3)
@@ -65,15 +56,12 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     Point3d(0.02f, 0.02f, 0.02f)
                 )
                     mModelObject = GLCubes(
-                    mModelModelGLSLProgram!!,
+                    context,
                     Cubes.cubes(
                         IndexedCubes.indexedCubes(
-                            cubesConfig
-                        )
-                    ), mTextureId
-                ).glObject
+                            cubesConfig))).glObject
             } else {
-                mModelObject = Triangles(mModelModelGLSLProgram!!, mTextureId).glslObject
+                mModelObject = Triangles(context).glslObject
             }
             mModelObject!!.bind_attributes()
             mModelObject!!.set_texture()
@@ -157,10 +145,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mCameraInfo = CameraInfo(width, height)
         mClickHandler = ClickHandler(mCameraInfo!!)
 
-        mModelModelGLSLProgram!!.use_program()
+        mModelObject!!.mModelModelGLSLProgram.use_program()
 
-        mModelModelGLSLProgram!!.set_vp_matrix(mCameraInfo!!.mViewProjectionMatrix)
-        mModelModelGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
+        mModelObject!!.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
+        mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -170,7 +158,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (mMoveHandler.mUpdated) {
             mMoveHandler.updateMatrix()
-            mModelModelGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
+            mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
         }
         mModelObject!!.draw()
     }

@@ -1,9 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles
 
+import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
 
-class Triangles(val modelGlslProgram: ModelGLSLProgram, val textureId: Int) {
+class Triangles(context: Context) {
 
     private val triangleCoordinates = floatArrayOf(
         1f, 1f, 1f,
@@ -32,6 +33,6 @@ class Triangles(val modelGlslProgram: ModelGLSLProgram, val textureId: Int) {
         0f, 0f
     )
 
-    val glslObject = ModelObject(modelGlslProgram, triangleCoordinates, triangleNumbers,
-        triangleTextures, textureCoordinates, textureId)
+    val glslObject = ModelObject(context, triangleCoordinates, triangleNumbers,
+        triangleTextures, textureCoordinates)
 }
