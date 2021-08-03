@@ -1,17 +1,33 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer
 
+import android.content.Context
+import android.opengl.GLES20.*
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.IGLObject
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
 
-class ClickPointer(modelGlslProgram: ModelGLSLProgram): IGLObject {
+class ClickPointer(context: Context): IGLObject {
+    private val POSITION_COMPONENT_COUNT = 3
 
-    private val modelGlSLProgram: ModelGLSLProgram = modelGlslProgram
+    val mGLSLProgram: CLickPointerGLSLProgram
+    private val vertexArray = VertexArray(FloatArray(2 * 3))
+
+    var need_to_be_drawn = false
+
+    init {
+        mGLSLProgram = CLickPointerGLSLProgram(context)
+        //mGLSLProgram.prepare_program()
+        //bind_attributes()
+    }
 
     override fun bind_attributes() {
-        TODO("Not yet implemented")
+        vertexArray.setVertexAttribPointer(0, mGLSLProgram.mAPosition.location,
+            POSITION_COMPONENT_COUNT, 0)
     }
 
     override fun draw() {
-        TODO("Not yet implemented")
+        glDrawArrays(
+            GL_LINES, 0,
+            vertexArray.floatBuffer.capacity() / POSITION_COMPONENT_COUNT)
     }
 }

@@ -5,7 +5,6 @@ import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.MoveHandler
@@ -14,7 +13,6 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
@@ -68,10 +66,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
 
         fun load_click_pointer() {
-            mClickPointerModelGLSLProgram = CLickPointerGLSLProgram(context)
-            mClickPointerModelGLSLProgram!!.load_program()
-            mClickPointerModelGLSLProgram!!.use_program()
-            mClickPointerModelGLSLProgram!!.load_locations()
+            mClickPointer = ClickPointer(context)
         }
 
         load_model()
@@ -149,6 +144,9 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         mModelObject!!.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
         mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
+
+        //mClickPointer!!.mGLSLProgram.use_program()
+        //mClickPointer!!.mGLSLProgram.setVPMatrix(mCameraInfo!!.mViewProjectionMatrix)
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -156,11 +154,18 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        mModelObject!!.mModelModelGLSLProgram.use_program()
         if (mMoveHandler.mUpdated) {
             mMoveHandler.updateMatrix()
             mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.mMatrix)
         }
         mModelObject!!.draw()
+
+        if (false && mClickPointer!!.need_to_be_drawn) {
+            mClickPointer!!.mGLSLProgram.use_program()
+            mClickPointer!!.draw()
+        }
     }
 
 }

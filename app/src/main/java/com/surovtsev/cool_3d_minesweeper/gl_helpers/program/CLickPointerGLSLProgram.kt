@@ -4,8 +4,10 @@ import android.content.Context
 import android.opengl.GLES20
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
+import glm_.mat4x4.Mat4
+import java.nio.FloatBuffer
 
-class CLickPointerGLSLProgram(
+open class CLickPointerGLSLProgram(
     context: Context): GLSLProgram(
     ShaderHelper.ShaderLoadParameters(
     context, R.raw.pointer_vertex_shader, R.raw.pointer_fragment_shader
@@ -31,5 +33,18 @@ class CLickPointerGLSLProgram(
 
         GLES20.glUniform1f(mUPointSize.location, 10f)
         GLES20.glUniform4f(mUColor.location, 1f, 0f, 0f, 1f)
+    }
+
+    companion object {
+        private val floatBuffer = FloatBuffer.allocate(16)
+    }
+
+    fun setVPMatrix(vp_matrix: Mat4) {
+        GLES20.glUniformMatrix4fv(
+            mU_VP_Matrix.location, 1,
+            false,
+            vp_matrix.to(floatBuffer, 0).array()
+            , 0
+        )
     }
 }

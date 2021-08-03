@@ -17,6 +17,12 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
     abstract val fields: Array<GLSLField>
 
+    fun prepare_program() {
+        load_program()
+        use_program()
+        load_locations()
+    }
+
     fun load_program() {
         mProgramId = ShaderHelper.linkProgram(shaderLoadParameters)
 
