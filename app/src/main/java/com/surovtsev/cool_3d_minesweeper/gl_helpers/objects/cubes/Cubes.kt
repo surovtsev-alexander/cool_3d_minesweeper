@@ -28,9 +28,9 @@ class Cubes(val triangleCoordinates: FloatArray,
             val trianglesNums = FloatArray(pointsCount)
             val trianglesTextures = FloatArray(pointsCount)
 
-            val textureCoordinates = (0 until indexes.size / 6).flatMap {
+            val textureCoordinates = (0 until indexes.size / 6).map {
                 mTextureCoordinatesTemplate.asIterable()
-            }.toFloatArray()
+            }.flatten().toFloatArray()
 
             for (i in 0 until pointsCount) {
                 val pointId = indexes[i]

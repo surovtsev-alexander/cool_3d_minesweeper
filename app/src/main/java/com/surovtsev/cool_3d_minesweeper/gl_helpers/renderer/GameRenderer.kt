@@ -5,6 +5,7 @@ import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.MoveHandler
@@ -12,7 +13,8 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.Model_GLSL_Program
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
@@ -27,7 +29,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
-    private var mModelModelGLSLProgram: Model_GLSL_Program? = null
+    private var mModelModelGLSLProgram: ModelGLSLProgram? = null
 
     private var mModelObject: ModelObject? = null
     private var mTextureId = 0
@@ -36,8 +38,8 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         private set
     var mClickHandler: ClickHandler? = null
 
-    private val mClickPointerModelGLSL_Program: Model_GLSL_Program? = null
-    private val mClickPointer: ClickPointer? = null
+    private var mClickPointerModelGLSLProgram: CLickPointerGLSLProgram? = null
+    private var mClickPointer: ClickPointer? = null
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
@@ -45,7 +47,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable(GL_CULL_FACE)
 
         fun load_model() {
-            mModelModelGLSLProgram = Model_GLSL_Program(context)
+            mModelModelGLSLProgram = ModelGLSLProgram(context)
             mModelModelGLSLProgram!!.load_program()
             mModelModelGLSLProgram!!.use_program()
             mModelModelGLSLProgram!!.load_locations()
@@ -62,7 +64,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                     Point3d(5f, 5f, 5f),
                     Point3d(0.02f, 0.02f, 0.02f)
                 )
-                mModelObject = GLCubes(
+                    mModelObject = GLCubes(
                     mModelModelGLSLProgram!!,
                     Cubes.cubes(
                         IndexedCubes.indexedCubes(
@@ -78,7 +80,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
 
         fun load_click_pointer() {
-
+            mClickPointerModelGLSLProgram = CLickPointerGLSLProgram(context)
+            mClickPointerModelGLSLProgram!!.load_program()
+            mClickPointerModelGLSLProgram!!.use_program()
+            mClickPointerModelGLSLProgram!!.load_locations()
         }
 
         load_model()
@@ -91,7 +96,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
     fun test_test() {
         val vp_matrix = mCameraInfo!!.mViewProjectionMatrix
-        val model_matrix = mMoveHandler!!.mMatrix
+        val model_matrix = mMoveHandler.mMatrix
         val mvp_matrix = vp_matrix * model_matrix
         val points = mModelObject!!.trianglesCoordinates
 

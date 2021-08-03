@@ -8,6 +8,11 @@ import com.surovtsev.cool_3d_minesweeper.util.TextResourceReader
 
 class ShaderHelper {
 
+    class ShaderLoadParameters(
+        val context: Context,
+        val vertexShaderResourceId: Int,
+        val fragmentShaderResouceId: Int)
+
     companion object {
         val TAG = "ShaderHelper"
 
@@ -56,15 +61,15 @@ class ShaderHelper {
             return shaderObjectId
         }
 
-        fun linkProgram(context: Context, vertexShaderId: Int, fragmentShaderId: Int) =
+        fun linkProgram(params: ShaderLoadParameters) =
             linkProgram(
                 compileVertextShader(
                     TextResourceReader.readTextFileFromResource(
-                    context, vertexShaderId)
+                    params.context, params.vertexShaderResourceId)
                 ),
                 compileFragmentShader(
                     TextResourceReader.readTextFileFromResource(
-                    context, fragmentShaderId)
+                    params.context, params.fragmentShaderResouceId)
                 )
             )
 
