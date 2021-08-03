@@ -8,7 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
 
-class GLSL_Program(val context: Context) {
+class Model_GLSL_Program(val context: Context) {
     private var _programId = 0
 
     private val A_POSITION = "a_Position"
@@ -36,7 +36,7 @@ class GLSL_Program(val context: Context) {
 
     fun load_program() {
         _programId = ShaderHelper.linkProgram(
-            context, R.raw.vertex_shader, R.raw.fragment_shader
+            context, R.raw.scene_vertex_shader, R.raw.scene_fragment_shader
         )
 
         if (LoggerConfig.ON) {

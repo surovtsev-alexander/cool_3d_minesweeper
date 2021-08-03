@@ -3,9 +3,9 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.indexed
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.IndexBuffer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.Model_GLSL_Program
 
-open class GLIndexedObject(val glslProgram: GLSL_Program
+open class GLIndexedObject(val modelGlslProgram: Model_GLSL_Program
                            , val coordinates: FloatArray
                            , val indexes: ShortArray) {
 
@@ -16,7 +16,7 @@ open class GLIndexedObject(val glslProgram: GLSL_Program
 
 
     fun bind_attribs() {
-        vertexArray.setVertexAttribPointer(0, glslProgram._a_position_location,
+        vertexArray.setVertexAttribPointer(0, modelGlslProgram._a_position_location,
             POSITION_COMPONENT_COUNT, 0)
     }
 

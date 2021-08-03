@@ -5,13 +5,14 @@ import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.GLObject
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.GLSL_Program
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.Model_GLSL_Program
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
@@ -26,50 +27,62 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
-    private var mGLSLProgram: GLSL_Program? = null
+    private var mModelModelGLSLProgram: Model_GLSL_Program? = null
 
-    private var mGLObject: GLObject? = null
+    private var mModelObject: ModelObject? = null
     private var mTextureId = 0
     val mMoveHandler = MoveHandler()
     var mCameraInfo: CameraInfo? = null
         private set
     var mClickHandler: ClickHandler? = null
 
+    private val mClickPointerModelGLSL_Program: Model_GLSL_Program? = null
+    private val mClickPointer: ClickPointer? = null
+
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
-        mGLSLProgram = GLSL_Program(context)
-        mGLSLProgram!!.load_program()
-        mGLSLProgram!!.use_program()
-        mGLSLProgram!!.load_locations()
+        fun load_model() {
+            mModelModelGLSLProgram = Model_GLSL_Program(context)
+            mModelModelGLSLProgram!!.load_program()
+            mModelModelGLSLProgram!!.use_program()
+            mModelModelGLSLProgram!!.load_locations()
 
-        mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
-        if (true) {
-            val counts = if (false) {
-                Point3d<Short>(3, 3, 3)
+            mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
+            if (true) {
+                val counts = if (false) {
+                    Point3d<Short>(3, 3, 3)
+                } else {
+                    Point3d<Short>(1, 1, 1)
+                }
+                val cubesConfig = IndexedCubes.Companion.CubesConfig(
+                    counts,
+                    Point3d(5f, 5f, 5f),
+                    Point3d(0.02f, 0.02f, 0.02f)
+                )
+                mModelObject = GLCubes(
+                    mModelModelGLSLProgram!!,
+                    Cubes.cubes(
+                        IndexedCubes.indexedCubes(
+                            cubesConfig
+                        )
+                    ), mTextureId
+                ).glObject
             } else {
-                Point3d<Short>(1, 1, 1)
+                mModelObject = Triangles(mModelModelGLSLProgram!!, mTextureId).glslObject
             }
-            val cubesConfig = IndexedCubes.Companion.CubesConfig(
-                counts,
-                Point3d(5f, 5f, 5f),
-                Point3d(0.02f, 0.02f, 0.02f)
-            )
-            mGLObject = GLCubes(
-                mGLSLProgram!!,
-                Cubes.cubes(
-                    IndexedCubes.indexedCubes(
-                        cubesConfig
-                    )
-                ), mTextureId
-            ).glObject
-        } else {
-            mGLObject = Triangles(mGLSLProgram!!, mTextureId).glslObject
+            mModelObject!!.bind_attributes()
+            mModelObject!!.set_texture()
         }
-        mGLObject!!.bind_attribs()
-        mGLObject!!.set_texture()
+
+        fun load_click_pointer() {
+
+        }
+
+        load_model()
+        load_click_pointer()
 
         if (true) {
             ApplicationController.instance!!.print_test = this::test_test
@@ -80,7 +93,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val vp_matrix = mCameraInfo!!.mViewProjectionMatrix
         val model_matrix = mMoveHandler!!.mMatrix
         val mvp_matrix = vp_matrix * model_matrix
-        val points = mGLObject!!.trianglesCoordinates
+        val points = mModelObject!!.trianglesCoordinates
 
         val test_str = StringBuilder()
 
@@ -139,10 +152,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mCameraInfo = CameraInfo(width, height)
         mClickHandler = ClickHandler(mCameraInfo!!)
 
-        mGLSLProgram!!.use_program()
+        mModelModelGLSLProgram!!.use_program()
 
-        mGLSLProgram!!.set_vp_matrix(mCameraInfo!!.mViewProjectionMatrix)
-        mGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
+        mModelModelGLSLProgram!!.set_vp_matrix(mCameraInfo!!.mViewProjectionMatrix)
+        mModelModelGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -152,9 +165,9 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (mMoveHandler.mUpdated) {
             mMoveHandler.updateMatrix()
-            mGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
+            mModelModelGLSLProgram!!.set_u_matrix(mMoveHandler.mMatrix)
         }
-        mGLObject!!.draw()
+        mModelObject!!.draw()
     }
 
 }
