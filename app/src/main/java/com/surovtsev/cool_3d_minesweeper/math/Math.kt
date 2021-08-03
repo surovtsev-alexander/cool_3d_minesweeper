@@ -9,4 +9,5 @@ object Math {
 
     val XRay = Vec3(1f, 0f, 0f)
     val YRay = Vec3(0f, 1f, 0f)
+    val ZRay = Vec3(0f, 0f, 1f)
 }

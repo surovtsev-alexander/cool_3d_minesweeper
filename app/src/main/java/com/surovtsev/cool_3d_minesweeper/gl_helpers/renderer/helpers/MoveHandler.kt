@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.vec2.Vec2
 
-class MoveHandler {
+class MoveHandler() {
     private val COEFF = 15f
     var mUpdated = true
         private set
@@ -19,13 +19,14 @@ class MoveHandler {
 
     private var x_axis = Math.XRay
     private var y_axis = Math.YRay
+    private var z_axis = Math.ZRay
 
     fun handleTouchDrag(prev: Vec2, curr: Vec2) {
         val delta = (curr - prev) / COEFF
 
         rotMatrix = rotMatrix
-            .rotate(Math.gradToRad(delta[1]), x_axis)
             .rotate(Math.gradToRad(delta[0]), y_axis)
+            .rotate(Math.gradToRad(delta[1]), x_axis)
 
         /*
         val iRotMatrix = Mat4()

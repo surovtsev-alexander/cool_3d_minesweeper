@@ -95,9 +95,8 @@ class GameActivity : AppCompatActivity() {
                             if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
                                 ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
                             }
-                            val currX = event.x
-                            val currY = event.y
-                            game_renderer.mClickHandler?.handleClick(currX, currY)
+                            val curr = Vec2(event.x, event.y)
+                            game_renderer.mClickHandler?.handleClick(curr)
                         }
                     }
                 }

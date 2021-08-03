@@ -1,9 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 
 import android.content.Context
-import android.opengl.GLES20
 import android.opengl.GLES20.*
-import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
@@ -157,7 +155,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         mModelObject!!.mModelModelGLSLProgram.use_program()
         mModelObject!!.bind_data()
         if (mMoveHandler.mUpdated) {
-            mCameraInfo!!.calculate_matrices()
+            mCameraInfo!!.recalculateViewMatrix()
             //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
             mModelObject!!.mModelModelGLSLProgram!!.fillU_VP_Matrix(mCameraInfo!!.mViewProjectionMatrix)
         }
@@ -176,7 +174,9 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             }
 
             if (updated) {
-                mClickPointer!!.set_points(mClickHandler!!.x_near, mClickHandler!!.x_far)
+                val n = mClickHandler!!.near
+                val f = mClickHandler!!.far
+                mClickPointer!!.set_points(n, f)
             }
 
             mClickPointer!!.mGLSLProgram.use_program()

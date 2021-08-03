@@ -26,11 +26,11 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             mDisplayWidthF / mDisplayHeightF,
             zNear, zFar
         )
-        calculate_matrices()
+        mProjectionMatrix.inverse(mInvertedProjectionMatrix)
+        recalculateViewMatrix()
     }
 
-    fun calculate_matrices() {
-
+    fun recalculateViewMatrix() {
         mViewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
         mViewMatrix = mViewMatrix * moveHandler.rotMatrix
         Mat4.times(
@@ -39,7 +39,6 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             Mat4(mViewMatrix)
         )
 
-        mProjectionMatrix.inverse(mInvertedProjectionMatrix)
         mViewMatrix.inverse(mInvertedViewMatrix)
 
         if (LoggerConfig.LOG_CAMERA_INFO_DATA) {

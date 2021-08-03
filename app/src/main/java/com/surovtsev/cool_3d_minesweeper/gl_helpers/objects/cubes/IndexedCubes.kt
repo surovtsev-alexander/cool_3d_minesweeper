@@ -56,13 +56,13 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
             6, 4, 7,
         )
 
-        val invExtendedIndexedArray = (0 until extendedIndexesTemplateArray.size / 3).flatMap {
+        val invExtendedIndexedArray = (0 until extendedIndexesTemplateArray.size / 3).map {
             shortArrayOf(
                 extendedIndexesTemplateArray[it * 3 + 2],
                 extendedIndexesTemplateArray[it * 3 + 1],
                 extendedIndexesTemplateArray[it * 3]
             ).asIterable()
-        }.toShortArray()
+        }.flatten().toShortArray()
 
         fun indexedCube(): IndexedCubes {
             val trianglesCoordinates = coordinatesTemplateArray.map { it.toFloat() }.toFloatArray()

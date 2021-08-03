@@ -28,41 +28,41 @@ open class Updatable(): IHaveUpdatedStatus {
 class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     val mMessagesComponent = ApplicationController.instance!!.messagesComponent!!
 
-    var x_near = Vec3()
+    var near = Vec3()
         private set
-    var x_far  = Vec3()
+    var far  = Vec3()
         private set
 
-    fun handleClick(screenX: Float, screenY: Float) {
-        fun normalizedDisplayCoordinates() = run {
-            val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
-            val x = pp(screenX, cameraInfo.mDisplayWidthF)
-            val y = pp(screenY, cameraInfo.mDisplayHeightF) * -1f
-            Vec2(x, y)
-        }
+    fun normalizedDisplayCoordinates(point: Vec2) = run {
+        val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
+        val x = pp(point.x, cameraInfo.mDisplayWidthF)
+        val y = pp(point.y, cameraInfo.mDisplayHeightF) * -1f
+        Vec2(x, y)
+    }
 
-        class VPX(val vpx: Vec3) {
+    fun calc_near_by_proj(proj: Vec2) = calc_point_by_proj(-1f)(proj)
+    fun calc_far_by_proj(proj: Vec2) = calc_point_by_proj(1f)(proj)
+
+    fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
+        return fun (proj: Vec2): Vec3 {
+            val vpx = Vec3(proj, z)
             val vx = mult_mat4_vec3(cameraInfo.mInvertedProjectionMatrix, vpx)
-            val x = mult_mat4_vec3(cameraInfo.mInvertedViewMatrix, vx)
-
-            override fun toString(): String =
-                "vpx: $vpx\nvx: $vx\nx: $x"
+            return mult_mat4_vec3(cameraInfo.mInvertedViewMatrix, vx)
         }
+    }
 
-        val vpx = normalizedDisplayCoordinates()
-        val near = VPX(Vec3(vpx, -1f))
-        val far = VPX(Vec3(vpx, 1f))
+    fun handleClick(point: Vec2) {
+        val proj = normalizedDisplayCoordinates(point)
+        near = calc_near_by_proj(proj)
+        far = calc_far_by_proj(proj)
 
-
-        x_near = near.x
-        x_far = far.x
         update()
 
         if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {
             val message = arrayOf<String>(
-                "vpx:$vpx",
-                "x_near:$near",
-                "x_far:$far"
+                "proj:$proj",
+                "near:$near",
+                "far:$far"
             ).reduce {acc, x -> "$acc\n$x"}
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(message)
         }
