@@ -78,7 +78,7 @@ class GameActivity : AppCompatActivity() {
                             val p = prev
                             val c = curr
                             override fun run() {
-                                game_renderer.mScene?.mMoveHandler?.handleTouchDrag(
+                                game_renderer.mScene?.mCameraInfo?.mMoveHandler?.handleTouchDrag(
                                     p, c
                                 )
                             }

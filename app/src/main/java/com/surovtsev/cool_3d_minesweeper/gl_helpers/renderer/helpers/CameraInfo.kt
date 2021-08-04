@@ -1,6 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.glm;
@@ -9,7 +10,9 @@ import glm_.vec2.Vec2
 import glm_.vec3.Vec3
 
 class CameraInfo(val displayWidth: Int, val displayHeight: Int,
-                 val zNear: Float = 2f, val zFar: Float = 20f, val moveHandler: MoveHandler) {
+                 val zNear: Float = 2f, val zFar: Float = 20f) {
+
+    val mMoveHandler = MoveHandler()
 
     var mProjectionMatrix = MatrixHelper.zero_matrix()
         private set
@@ -32,9 +35,50 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         recalculateViewMatrix()
     }
 
+    inner class MoveHandler() {
+        private val COEFF = 15f
+        var mUpdated = true
+            private set
+
+        fun identity_matrix() = MatrixHelper.identity_matrix()
+
+        val I_MATRIX = identity_matrix()
+        var rotMatrix = identity_matrix()
+            private set
+
+        private var x_axis = Math.XRay
+        private var y_axis = Math.YRay
+        private var z_axis = Math.ZRay
+
+        fun handleTouchDrag(prev: Vec2, curr: Vec2) {
+            val delta = (curr - prev) / COEFF
+
+            rotMatrix = rotMatrix
+                .rotate(Math.gradToRad(delta[0]), y_axis)
+                .rotate(Math.gradToRad(delta[1]), x_axis)
+
+            /*
+            val iRotMatrix = Mat4()
+            rotMatrix.inverse(iRotMatrix)
+            x_axis = MatrixHelper.mult_mat4_vec3(iRotMatrix, x_axis)
+            y_axis = MatrixHelper.mult_mat4_vec3(iRotMatrix, y_axis)
+             */
+
+            mUpdated = true
+
+            if (LoggerConfig.LOG_TOUCH_HANDLER_DATA) {
+                ApplicationController.try_to_add_message_to_component("$rotMatrix")
+            }
+        }
+
+        fun updateMatrix() {
+            mUpdated = false
+        }
+    }
+
     fun recalculateViewMatrix() {
         mViewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
-        mViewMatrix = mViewMatrix * moveHandler.rotMatrix
+        mViewMatrix = mViewMatrix * mMoveHandler.rotMatrix
         Mat4.times(
             mViewProjectionMatrix,
             Mat4(mProjectionMatrix),

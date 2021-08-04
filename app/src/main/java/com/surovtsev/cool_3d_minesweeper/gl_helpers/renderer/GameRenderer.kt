@@ -6,7 +6,6 @@ import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
@@ -62,12 +61,11 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     }
 
     inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
-        val mMoveHandler = MoveHandler()
         val mCameraInfo: CameraInfo
         val mClickHandler: ClickHandler
 
         init {
-            mCameraInfo = CameraInfo(width, height, moveHandler = mMoveHandler)
+            mCameraInfo = CameraInfo(width, height)
             mClickHandler = ClickHandler(mCameraInfo)
         }
 
@@ -84,7 +82,9 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         fun onDrawFrame() {
             modelObjects.mGameObject.mModelModelGLSLProgram.use_program()
             modelObjects.mGameObject.bind_data()
-            if (mMoveHandler.mUpdated) {
+
+            val moveHandler = mCameraInfo.mMoveHandler
+            if (moveHandler.mUpdated) {
                 mCameraInfo.recalculateViewMatrix()
                 //mModelObject!!.mModelModelGLSLProgram.fillU_M_Matrix(mMoveHandler.rotMatrix)
                 modelObjects.mGameObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
@@ -110,15 +110,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 }
 
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
-                if (mMoveHandler.mUpdated) {
+                if (moveHandler.mUpdated) {
                     modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
                 }
                 modelObjects.mClickPointer.bind_data()
                 modelObjects.mClickPointer.draw()
             } while (false)
 
-            if (mMoveHandler.mUpdated) {
-                mMoveHandler.updateMatrix()
+            if (moveHandler.mUpdated) {
+                moveHandler.updateMatrix()
             }
         }
     }
@@ -156,7 +156,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     fun logScene() {
         val cameraInfo = mScene!!.mCameraInfo
         val vp_matrix = cameraInfo.mViewProjectionMatrix
-        val model_matrix = mScene!!.mMoveHandler.rotMatrix
+        val model_matrix = cameraInfo.mMoveHandler.rotMatrix
         val mvp_matrix = vp_matrix * model_matrix
         val points = mModelObjects!!.mGameObject.trianglesCoordinates
 
