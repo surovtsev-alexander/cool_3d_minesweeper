@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
@@ -20,6 +21,8 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
     val mViewProjectionMatrix = MatrixHelper.zero_matrix()
     val mInvertedProjectionMatrix = MatrixHelper.zero_matrix()
     val mInvertedViewMatrix = MatrixHelper.zero_matrix()
+
+    val mInvertedRMatrix = MatrixHelper.zero_matrix()
 
     val mDisplayWidthF = displayWidth.toFloat()
     val mDisplayHeightF = displayHeight.toFloat()
@@ -46,11 +49,32 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         var rotMatrix = identity_matrix()
             private set
 
+        var iRotMatrix = identity_matrix()
+            private set
+
         private var x_axis = Math.XRay
         private var y_axis = Math.YRay
-        private var z_axis = Math.ZRay
 
         fun handleTouchDrag(prev: Vec2, curr: Vec2) {
+            val nPrev = normalizedDisplayCoordinates(prev)
+            val nCurr = normalizedDisplayCoordinates(curr)
+
+            val prevNear = calc_near_model_point_by_proj(nPrev)
+            val currNear = calc_near_model_point_by_proj(nCurr)
+
+            if (LoggerConfig.LOG_MATRIX_HELPER) {
+                Log.d("TEST","test\nprev: $prev\ncurr: $curr\nn_prev: $nPrev\nn_curr: $nCurr\nprev_near: $prevNear\ncurr_near: $currNear")
+            }
+
+            val rotation = MatrixHelper.calc_rot_matrix(prevNear, currNear)
+            rotMatrix = rotMatrix * rotation
+
+            rotMatrix.inverse(iRotMatrix)
+
+            mUpdated = true
+        }
+
+        fun handleTouchDrag_old(prev: Vec2, curr: Vec2) {
             val delta = (curr - prev) / COEFF
 
             rotMatrix = rotMatrix
@@ -116,6 +140,12 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             val vx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, vpx)
             return MatrixHelper.mult_mat4_vec3(mInvertedViewMatrix, vx)
         }
+    }
+
+    fun calc_near_model_point_by_proj(proj: Vec2): Vec3 {
+        val vpx = Vec3(proj, -1)
+        val vx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, vpx)
+        return MatrixHelper.mult_mat4_vec3(mMoveHandler.iRotMatrix, vx)
     }
 
 

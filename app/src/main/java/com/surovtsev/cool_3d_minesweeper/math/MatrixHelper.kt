@@ -1,8 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.math
 
+import android.opengl.Matrix
+import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
+import java.lang.StringBuilder
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.sqrt
 import kotlin.math.tan
 
 object MatrixHelper {
@@ -39,6 +46,42 @@ object MatrixHelper {
     fun mult_mat4_vec3(mat: Mat4, vec: Vec3): Vec3 {
         val x = mat * Vec4(vec, 1.0);
         val res = Vec3(x) / x[3];
+        return res
+    }
+
+    val I_M = identity_matrix()
+
+    fun calc_rot_matrix(a: Vec3, b: Vec3): Mat4 {
+        val an = b.normalize()
+        val bn = a.normalize()
+
+        val dp = an.dot(bn)
+        val angle = acos(dp)
+
+        val sb = StringBuilder()
+        if (LoggerConfig.LOG_MATRIX_HELPER) {
+            sb.append("test\na: $a\nb: $b\nan: $an\nbn: $bn\ndp: $dp\nangle: $angle\n")
+        }
+
+        if (abs(angle) < 0.001f || angle.isNaN()) {
+            val res = identity_matrix()
+
+            if (LoggerConfig.LOG_MATRIX_HELPER) {
+                sb.append("res:\n$res")
+                Log.d("TEST", sb.toString())
+            }
+            return res
+        }
+
+        val axis = an.cross(bn)
+
+        val res = I_M.rotate(angle, axis)
+
+        if (LoggerConfig.LOG_MATRIX_HELPER) {
+            sb.append("axis: $axis\nres:\n$res")
+            Log.d("TEST", sb.toString())
+        }
+
         return res
     }
 }
