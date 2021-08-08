@@ -5,6 +5,7 @@ import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.IGLObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.CLickPointerGLSLProgram
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import glm_.set
 import glm_.vec3.Vec3
 
@@ -27,7 +28,9 @@ class ClickPointer(context: Context): IGLObject {
             POSITION_COMPONENT_COUNT, 0)
     }
 
-    fun set_points(near: Vec3, far: Vec3) {
+    fun set_points(pointer: IPointer) {
+        val near = pointer.near
+        val far = pointer.far
         val x = floatArrayOf(
             near[0], near[1], near[2],
             far[0], far[1], far[2])

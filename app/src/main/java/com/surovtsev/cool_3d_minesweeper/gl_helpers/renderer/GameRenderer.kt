@@ -35,14 +35,14 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         init {
             if (true) {
                 val counts = if (true) {
-                    Point3d<Short>(3, 3, 3)
+                    Point3d<Short>(10, 10, 10)
                 } else {
                     Point3d<Short>(1, 1, 1)
                 }
                 val cubesConfig = IndexedCubes.Companion.CubesConfig(
                     counts,
                     Point3d(5f, 5f, 5f),
-                    Point3d(0.02f, 0.02f, 0.02f)
+                    Point3d(0.04f, 0.04f, 0.04f)
                 )
                 mGameObject = GLCubes(
                     context,
@@ -104,9 +104,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 }
 
                 if (updated) {
-                    val n = mClickHandler.near
-                    val f = mClickHandler.far
-                    modelObjects.mClickPointer.set_points(n, f)
+                    modelObjects.mClickPointer.set_points(mClickHandler.pointer)
                 }
 
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
@@ -167,31 +165,31 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             "$caption\n${matrix}"
         }
 
-        if (true) {
+        if (false) {
             test_str.append("width: ${cameraInfo.mDisplayWidthF}\n")
             test_str.append("height: ${cameraInfo.mDisplayHeightF}\n")
         }
 
-        if (true) {
+        if (false) {
             test_str.append(
                 matrix_to_str("projection_matrix", cameraInfo.mProjectionMatrix)
             )
             test_str.append("\n")
         }
 
-        if (true) {
+        if (false) {
             test_str.append(
                 matrix_to_str("vp_matrix", vp_matrix)
             )
             test_str.append("\n")
         }
-        if (true) {
+        if (false) {
             test_str.append(
                 matrix_to_str("model_matrix", model_matrix)
             )
             test_str.append("\n")
         }
-        if (true) {
+        if (false) {
             test_str.append(
                 matrix_to_str("mvp_matrix", mvp_matrix)
             )

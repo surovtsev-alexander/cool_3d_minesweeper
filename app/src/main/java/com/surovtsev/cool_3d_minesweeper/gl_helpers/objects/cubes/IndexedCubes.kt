@@ -1,6 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
+import android.graphics.Point
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 
 class IndexedCubes(val trianglesCoordinates: FloatArray,
@@ -92,10 +95,15 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
             val trianglesCoordinates = FloatArray(coordinatesCount)
             val indexes = ShortArray(indexesCount)
 
+            val centers = Array<Point3d<Float>>(cubesCount) { _ -> Point3d<Float>(0f, 0f, 0f) }
+
             val cubesHalfDims = Point3d.divide(dimensions, 2)
             val cubeSpace = Point3d.divideShort(dimensions, counts)
+            val cubeHalfSpace = Point3d.divide(cubeSpace, 2)
             val cubeDims = Point3d.minus(cubeSpace, gaps)
             val halfGaps = Point3d.divide(gaps, 2)
+
+            val cubeSphereRaius = Point3d.len(cubeDims) / 2
 
             val xx = { i: Int ->
                 when (i % 3) {
@@ -116,8 +124,10 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
                             val rra = Point3d.multiply(cubeSpace, Point3d<Int>(x, y, z))
                             val ra = Point3d.minus(rra, cubesHalfDims)
 
+                            centers[id] = Point3d.plus(ra, cubeHalfSpace)
+
                             val a = Point3d.plus(ra, halfGaps)
-                            val b = Point3d.plus(ra, cubeDims)
+                            val b = Point3d.plus(a, cubeDims)
 
                             for (i in 0 until cubeCoordinatesCount) {
                                 val p = if (coordinatesTemplateArray[i] < 0) a else b
@@ -149,6 +159,8 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
                 }
                 Log.d("TEST", test_str)
             }
+
+            val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers)
 
             return IndexedCubes(trianglesCoordinates, indexes)
         }

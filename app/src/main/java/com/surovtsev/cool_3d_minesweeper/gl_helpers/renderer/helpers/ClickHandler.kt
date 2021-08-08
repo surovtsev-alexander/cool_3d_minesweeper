@@ -28,25 +28,29 @@ open class Updatable(): IHaveUpdatedStatus {
 class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     val mMessagesComponent = ApplicationController.instance!!.messagesComponent!!
 
-    var near = Vec3()
-        private set
-    var far  = Vec3()
-        private set
+    private val pointerData = Pointer()
+
+    val pointer: IPointer
+        get() = pointerData
 
     fun handleClick(point: Vec2) {
         val proj = cameraInfo.normalizedDisplayCoordinates(point)
-        near = cameraInfo.calc_near_by_proj(proj)
-        far = cameraInfo.calc_far_by_proj(proj)
+        pointerData.near = cameraInfo.calc_near_by_proj(proj)
+        pointerData.far = cameraInfo.calc_far_by_proj(proj)
 
         update()
 
         if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {
             val message = arrayOf<String>(
                 "proj:$proj",
-                "near:$near",
-                "far:$far"
+                "near:${pointerData.near}",
+                "far:${pointerData.far}"
             ).reduce {acc, x -> "$acc\n$x"}
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(message)
+        }
+
+        if (LoggerConfig.LOG_SCENE) {
+            ApplicationController.instance!!.logScene?.invoke()
         }
     }
 
@@ -86,10 +90,6 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
                 "worldRay: $worldRay",
                 "mouseRay: $mouseRay")
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(messages.reduce { acc, x -> "$acc\n$x" })
-        }
-
-        if (LoggerConfig.LOG_SCENE) {
-            ApplicationController.instance!!.logScene?.invoke()
         }
     }
 }
