@@ -47,7 +47,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val counts = Vec3s(xDim, yDim, zDim)
 
             val dimensions = Vec3(5f, 5f, 5f)
-            val gaps = dimensions / counts / 39
+            val gaps = dimensions / counts / 40
             val cubesConfig = CubesConfig(
                 counts,
                 dimensions,

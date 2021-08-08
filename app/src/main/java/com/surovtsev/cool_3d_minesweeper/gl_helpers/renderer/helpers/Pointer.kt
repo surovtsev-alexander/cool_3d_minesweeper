@@ -34,7 +34,7 @@ class Pointer(): PointerData(Vec3(), Vec3()), IPointer {
         return {m:Vec3 ->
             val a_lambda = n.dot(n)
             val b = n.dot(near - m)
-            val l = -1 * a_lambda / b
+            val l = -1 * b / a_lambda
             val res = near + n * l
             res
         }

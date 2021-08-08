@@ -57,6 +57,14 @@ class GLCubes(context: Context, val cubes: Cubes) {
             )
         }
 
+        /*
+        val sb = StringBuilder()
+
+        if (LoggerConfig.LOG_GL_CUBES) {
+            sb.append("_\nx1: $x1 x2: $x2 n: ${x2 - x1} squaredCubeSphereRadius: ${squaredCubeSphereRadius}\n")
+        }
+        */
+
         for (x in 0 until counts.x) {
             for (y in 0 until counts.y) {
                 for (z in 0 until counts.z) {
@@ -73,6 +81,12 @@ class GLCubes(context: Context, val cubes: Cubes) {
 
                     val squaredDistance = (c - projection).length2()
 
+                    /*
+                    if (LoggerConfig.LOG_GL_CUBES) {
+                        sb.append("c: $c projection $projection squaredDistance: ${squaredDistance}\n")
+                    }
+                     */
+
                     if (squaredDistance <= squaredCubeSphereRadius) {
                         d.isOpened = true
 
@@ -81,5 +95,11 @@ class GLCubes(context: Context, val cubes: Cubes) {
                 }
             }
         }
+
+        /*
+        if (LoggerConfig.LOG_GL_CUBES) {
+            Log.d("TEST", sb.toString())
+        }
+         */
     }
 }
