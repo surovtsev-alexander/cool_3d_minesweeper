@@ -15,6 +15,8 @@ void main()
     vec4 frag_color;
 
     if (tt == 0) {
+        frag_color = vec4(1f, 0f, 0f, 1f);
+    } else if (tt == 1) {
         frag_color = texture2D(u_TextureUnit, textureCoordinates);
     } else if (tt == 1) {
         frag_color = vec4(1f, 0f, 0f, 1f);

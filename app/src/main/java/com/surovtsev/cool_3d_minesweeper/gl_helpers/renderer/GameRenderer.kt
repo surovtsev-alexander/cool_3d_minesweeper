@@ -35,11 +35,17 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         init {
             if (true) {
-                val counts = if (true) {
-                    Point3d<Short>(10, 10, 10)
+                val d: Short = if (true) {
+                    3
                 } else {
-                    Point3d<Short>(1, 1, 1)
+                    1
                 }
+
+                val xDim = d
+                val yDim = d
+                val zDim = d
+
+                val counts = Point3d<Short>(xDim, yDim, zDim)
 
                 val dimensions = Point3d(5f, 5f, 5f)
                 val gaps = Point3d.divide(
