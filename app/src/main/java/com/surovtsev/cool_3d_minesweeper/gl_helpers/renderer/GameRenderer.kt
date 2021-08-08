@@ -7,8 +7,9 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.IndexedCubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.RawCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
@@ -39,15 +40,22 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 } else {
                     Point3d<Short>(1, 1, 1)
                 }
-                val cubesConfig = IndexedCubes.Companion.CubesConfig(
+
+                val dimensions = Point3d(5f, 5f, 5f)
+                val gaps = Point3d.divide(
+                    Point3d.divideShort(
+                        dimensions, counts),
+                    39
+                )
+                val cubesConfig = CubesConfig(
                     counts,
-                    Point3d(5f, 5f, 5f),
-                    Point3d(0.04f, 0.04f, 0.04f)
+                    dimensions,
+                    gaps
                 )
                 mGameObject = GLCubes(
                     context,
                     Cubes.cubes(
-                        IndexedCubes.indexedCubes(
+                        RawCubes.rawCubes(
                             cubesConfig
                         )
                     )

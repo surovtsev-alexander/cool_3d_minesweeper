@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision
 
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 
 class CollisionCubes(

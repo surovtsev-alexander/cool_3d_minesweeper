@@ -17,7 +17,7 @@ class Cubes(val triangleCoordinates: FloatArray,
             0f, 1f,
         )
 
-        fun cubes(indexedCubes: IndexedCubes): Cubes {
+        fun cubes(indexedCubes: RawCubes): Cubes {
             val compactCoordinates = indexedCubes.trianglesCoordinates
             val indexes = indexedCubes.indexes
             val pointsCount = indexes.count()

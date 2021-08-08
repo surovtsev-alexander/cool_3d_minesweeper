@@ -1,13 +1,12 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
-import android.graphics.Point
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
 
-class IndexedCubes(val trianglesCoordinates: FloatArray,
-                   val indexes: ShortArray) {
+class RawCubes(val trianglesCoordinates: FloatArray,
+               val indexes: ShortArray,
+               val collisionCubes: CollisionCubes) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
             -1,  1,  1, // A
@@ -67,20 +66,18 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
             ).asIterable()
         }.flatten().toShortArray()
 
-        fun indexedCube(): IndexedCubes {
+        /*
+        fun indexedCube(): RawCubes {
             val trianglesCoordinates = coordinatesTemplateArray.map { it.toFloat() }.toFloatArray()
             val indexes = extendedIndexesTemplateArray.clone()
 
-            return IndexedCubes(trianglesCoordinates, indexes)
+            return RawCubes(trianglesCoordinates, indexes)
         }
+        */
 
-        data class CubesConfig(val counts: Point3d<Short>,
-                               val dimensions: Point3d<Float>,
-                               val gaps: Point3d<Float>)
-
-        fun indexedCubes(
+        fun rawCubes(
             cubesConfig: CubesConfig
-        ): IndexedCubes {
+        ): RawCubes {
             val indexesArray = invExtendedIndexedArray
 
             val counts = cubesConfig.counts
@@ -162,7 +159,7 @@ class IndexedCubes(val trianglesCoordinates: FloatArray,
 
             val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers)
 
-            return IndexedCubes(trianglesCoordinates, indexes)
+            return RawCubes(trianglesCoordinates, indexes, collisionCubes)
         }
     }
 }
