@@ -15,6 +15,8 @@ class CollisionCubes(
         }
     }
 
+    val squaredCubeSphereRadius = cubeSphereRadius * cubeSphereRadius
+
     companion object {
         fun calcId(counts: Vec3s, x: Int, y: Int, z: Int) =
             x + counts.x * (y + counts.y * z)

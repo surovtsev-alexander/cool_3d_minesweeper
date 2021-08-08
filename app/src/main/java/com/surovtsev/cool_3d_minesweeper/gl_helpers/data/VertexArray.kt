@@ -32,7 +32,7 @@ class VertexArray {
 
     fun updateBuffer(vertexData: FloatArray, start: Int, count: Int) {
         floatBuffer.position(start)
-        floatBuffer.put(vertexData, start, count)
+        floatBuffer.put(vertexData, 0, count)
         floatBuffer.position(0)
     }
 }

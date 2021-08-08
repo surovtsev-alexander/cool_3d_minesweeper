@@ -10,9 +10,9 @@ import com.surovtsev.cool_3d_minesweeper.util.TextureHelper
 class ModelObject(
     context: Context,
     val trianglesCoordinates: FloatArray,
-    val trianglesNums: FloatArray,
-    val trianglesTextures: FloatArray,
-    val textureCoordinates: FloatArray): IGLObject
+    trianglesNums: FloatArray,
+    trianglesTextures: FloatArray,
+    textureCoordinates: FloatArray): IGLObject
 {
     val mModelModelGLSLProgram: ModelGLSLProgram
     private var mTextureId = 0
@@ -21,7 +21,7 @@ class ModelObject(
 
     private val vertexArray = VertexArray(trianglesCoordinates)
     private val numsArray = VertexArray(trianglesNums)
-    private val texturesArray = VertexArray(trianglesTextures)
+    val texturesArray = VertexArray(trianglesTextures)
     private val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {

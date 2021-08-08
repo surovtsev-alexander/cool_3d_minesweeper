@@ -10,5 +10,6 @@ class LoggerConfig {
         val LOG_SHADER_FIELDS_LOCATIONS = false
         val LOG_SCENE = false
         val LOG_MATRIX_HELPER = false
+        val LOG_GL_CUBES = true
     }
 }

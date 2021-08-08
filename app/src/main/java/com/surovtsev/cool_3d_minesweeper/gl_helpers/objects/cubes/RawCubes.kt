@@ -43,19 +43,22 @@ class RawCubes(val trianglesCoordinates: FloatArray,
                 , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
         */
         val extendedIndexesTemplateArray = shortArrayOf(
-            1, 2, 0,
+            1, 2, 0, // top
             0, 2, 3,
-            0, 3, 4,
+
+            0, 3, 4, // far
             4, 3, 7,
 
-            3, 2, 7,
+            3, 2, 7, // right
             7, 2, 6,
-            2, 1, 6,
+
+            2, 1, 6, // near
             6, 1, 5,
 
-            1, 0, 5,
+            1, 0, 5, // left
             5, 0, 4,
-            5, 4, 6,
+
+            5, 4, 6, // down
             6, 4, 7,
         )
 
@@ -103,14 +106,6 @@ class RawCubes(val trianglesCoordinates: FloatArray,
 
             val cubeSphereRaius = cubeDims.length() / 2
 
-            val xx = { i: Int ->
-                when (i % 3) {
-                    0 -> { p: Vec3 -> p.x }
-                    1 -> { p: Vec3 -> p.y }
-                    else -> { p: Vec3 -> p.z }
-                }
-            }
-
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {
@@ -129,7 +124,7 @@ class RawCubes(val trianglesCoordinates: FloatArray,
 
                             for (i in 0 until cubeCoordinatesCount) {
                                 val p = if (coordinatesTemplateArray[i] < 0) a else b
-                                trianglesCoordinates[startCoordinatesPos + i] = xx(i)(p)
+                                trianglesCoordinates[startCoordinatesPos + i] = p[i % 3]
                             }
                         }
 
