@@ -1,7 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.GameObject
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import java.lang.StringBuilder
 
 class Cubes(val triangleCoordinates: FloatArray,
@@ -65,6 +67,35 @@ class Cubes(val triangleCoordinates: FloatArray,
             }
 
             return res
+        }
+    }
+
+    fun testPointer(pointer: IPointer): Unit {
+        val collisionCubes = gameObject.collisionCubes
+        val counts = collisionCubes.counts
+        val descriptions = gameObject.descriptions
+        val centers = collisionCubes.centers
+
+        val x1 = pointer.near
+        val x2 = pointer.far
+        val n = x2 - x1
+
+        for (x in 0 until counts.x) {
+            for (y in 0 until counts.y) {
+                for (z in 0 until counts.z) {
+                    val id = CollisionCubes.calcId(counts, x, y, z)
+                    val d = descriptions[x][y][z]
+
+                    if (d.isOpened) {
+                        continue
+                    }
+
+                    val c = centers[x][y][z]
+
+
+
+                }
+            }
         }
     }
 

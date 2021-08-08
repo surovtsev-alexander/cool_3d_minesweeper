@@ -3,6 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.math.Point3d
+import glm_.vec3.Vec3i
+import glm_.vec3.Vec3s
 
 class RawCubes(val trianglesCoordinates: FloatArray,
                val indexes: ShortArray,
@@ -113,7 +115,7 @@ class RawCubes(val trianglesCoordinates: FloatArray,
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {
-                        val id = x + counts.x * (y + counts.y * z)
+                        val id = CollisionCubes.calcId(counts, x, y, z)
                         val startCoordinatesPos = cubeCoordinatesCount * id
                         val startIndexesPos = cubeIndexesCount * id
 
