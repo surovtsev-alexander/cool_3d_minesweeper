@@ -15,10 +15,10 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
-import com.surovtsev.cool_3d_minesweeper.math.Point3d
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
+import glm_.vec3.Vec3s
 import glm_.vec4.Vec4
 import java.lang.StringBuilder
 import javax.microedition.khronos.egl.EGLConfig
@@ -45,14 +45,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 val yDim = d
                 val zDim = d
 
-                val counts = Point3d<Short>(xDim, yDim, zDim)
+                val counts = Vec3s(xDim, yDim, zDim)
 
-                val dimensions = Point3d(5f, 5f, 5f)
-                val gaps = Point3d.divide(
-                    Point3d.divideShort(
-                        dimensions, counts),
-                    39
-                )
+                val dimensions = Vec3(5f, 5f, 5f)
+                val gaps = dimensions / counts / 39
                 val cubesConfig = CubesConfig(
                     counts,
                     dimensions,

@@ -2,9 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
-import com.surovtsev.cool_3d_minesweeper.math.Point3d
+import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
-import glm_.vec3.Vec3s
 
 class RawCubes(val trianglesCoordinates: FloatArray,
                val indexes: ShortArray,
@@ -94,21 +93,21 @@ class RawCubes(val trianglesCoordinates: FloatArray,
             val trianglesCoordinates = FloatArray(coordinatesCount)
             val indexes = ShortArray(indexesCount)
 
-            val centers = Array<Point3d<Float>>(cubesCount) { _ -> Point3d<Float>(0f, 0f, 0f) }
+            val centers = Array<Vec3>(cubesCount) { Vec3() }
 
-            val cubesHalfDims = Point3d.divide(dimensions, 2)
-            val cubeSpace = Point3d.divideShort(dimensions, counts)
-            val cubeHalfSpace = Point3d.divide(cubeSpace, 2)
-            val cubeDims = Point3d.minus(cubeSpace, gaps)
-            val halfGaps = Point3d.divide(gaps, 2)
+            val cubesHalfDims = dimensions / 2
+            val cubeSpace = dimensions / counts
+            val cubeHalfSpace = cubeSpace / 2
+            val cubeDims = cubeSpace - gaps
+            val halfGaps = gaps / 2
 
-            val cubeSphereRaius = Point3d.len(cubeDims) / 2
+            val cubeSphereRaius = cubeDims.length() / 2
 
             val xx = { i: Int ->
                 when (i % 3) {
-                    0 -> { p: Point3d<Float> -> p.x }
-                    1 -> { p: Point3d<Float> -> p.y }
-                    else -> { p: Point3d<Float> -> p.z }
+                    0 -> { p: Vec3 -> p.x }
+                    1 -> { p: Vec3 -> p.y }
+                    else -> { p: Vec3 -> p.z }
                 }
             }
 
@@ -120,13 +119,13 @@ class RawCubes(val trianglesCoordinates: FloatArray,
                         val startIndexesPos = cubeIndexesCount * id
 
                         fun fillCoordinates() {
-                            val rra = Point3d.multiply(cubeSpace, Point3d<Int>(x, y, z))
-                            val ra = Point3d.minus(rra, cubesHalfDims)
+                            val rra = cubeSpace.times(Vec3i(x, y, z))
+                            val ra = rra - cubesHalfDims
 
-                            centers[id] = Point3d.plus(ra, cubeHalfSpace)
+                            centers[id] = ra + cubeHalfSpace
 
-                            val a = Point3d.plus(ra, halfGaps)
-                            val b = Point3d.plus(a, cubeDims)
+                            val a = ra + halfGaps
+                            val b = a + cubeDims
 
                             for (i in 0 until cubeCoordinatesCount) {
                                 val p = if (coordinatesTemplateArray[i] < 0) a else b
