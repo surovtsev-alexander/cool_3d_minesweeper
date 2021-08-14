@@ -11,7 +11,13 @@ import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.*
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ClickAndRotationHelper
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.MovingHelper
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ScalingHelper
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.TouchHelper
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
@@ -51,20 +57,25 @@ class GameActivity : AppCompatActivity() {
         glsv_main.setOnTouchListener(object: View.OnTouchListener {
             var prevPointerCount = 0
 
-            val clickAndRotationHelper = ClickAndRotationHelper(
-                object: IReceiverCalculator<IClickReceiver> {
-                    override fun getReceiver(): IClickReceiver? =
-                        game_renderer.mScene?.mClickHandler
-                },
-                object: IReceiverCalculator<IRotationReceiver> {
-                    override fun getReceiver(): IRotationReceiver? =
-                        game_renderer.mScene?.mCameraInfo?.mMoveHandler
+            val clickAndRotationHelper =
+                ClickAndRotationHelper(
+                    object :
+                        IReceiverCalculator<IClickReceiver> {
+                        override fun getReceiver(): IClickReceiver? =
+                            game_renderer.mScene?.mClickHandler
+                    },
+                    object :
+                        IReceiverCalculator<IRotationReceiver> {
+                        override fun getReceiver(): IRotationReceiver? =
+                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
 
-                },
-                glsv_main
-            )
-            val scalingHelper = ScalingHelper()
-            val movingHelper = MovingHelper()
+                    },
+                    glsv_main
+                )
+            val scalingHelper =
+                ScalingHelper()
+            val movingHelper =
+                MovingHelper()
 
             var currTouchHelper: TouchHelper = clickAndRotationHelper
 

@@ -5,7 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.logic.application_controller.Applicatio
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
 import glm_.glm;
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
@@ -39,7 +39,8 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         recalculateViewMatrix()
     }
 
-    inner class MoveHandler(): IRotationReceiver {
+    inner class MoveHandler():
+        IRotationReceiver {
         private val COEFF = 15f
         var mUpdated = true
             private set

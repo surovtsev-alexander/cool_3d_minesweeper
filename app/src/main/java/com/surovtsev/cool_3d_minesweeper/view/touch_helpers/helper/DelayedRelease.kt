@@ -1,7 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_helpers
+package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.helper
 
-class DelayedRelease {
-    private var needToBeReleased = false
+open class DelayedRelease {
+    private var needToBeReleased = true
 
     fun release() {
         needToBeReleased = true

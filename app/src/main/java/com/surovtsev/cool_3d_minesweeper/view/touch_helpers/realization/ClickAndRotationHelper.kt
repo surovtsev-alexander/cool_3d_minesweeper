@@ -1,10 +1,13 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_helpers
+package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.util.Timer
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
 import glm_.vec2.Vec2
 import kotlin.math.abs
 
@@ -14,7 +17,6 @@ class ClickAndRotationHelper(
     val rotationReceiver: IReceiverCalculator<IRotationReceiver>,
     val clickEventQueueHandler: GLSurfaceView
 ) : TouchHelper() {
-    val delayedRelease = DelayedRelease()
 
     var prev = Vec2()
     val mTimer = Timer()
@@ -22,14 +24,9 @@ class ClickAndRotationHelper(
     var mMovingDistance = 0f
     val mMovindThreshold = 10
 
-
-    override fun release() {
-        delayedRelease.release()
-    }
-
     override fun onTouch(event: MotionEvent) {
         do {
-            val needToBeInited = event.action == MotionEvent.ACTION_DOWN || delayedRelease.getAndFlush()
+            val needToBeInited = event.action == MotionEvent.ACTION_DOWN || getAndFlush()
             if (needToBeInited) {
                 prev = Vec2(event.x, event.y)
                 mTimer.push()
@@ -40,7 +37,7 @@ class ClickAndRotationHelper(
 
             val moved = event.action == MotionEvent.ACTION_MOVE
             if (moved) {
-                var curr = Vec2(event.x, event.y)
+                val curr = Vec2(event.x, event.y)
 
                 val delta = curr - prev
 

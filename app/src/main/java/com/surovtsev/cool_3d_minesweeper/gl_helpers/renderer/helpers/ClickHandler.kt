@@ -1,9 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper.mult_mat4_vec3
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IClickReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import glm_.vec2.Vec2
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
@@ -26,7 +25,8 @@ open class Updatable(): IHaveUpdatedStatus {
     override fun isUpdated()= updated
 }
 
-class ClickHandler(val cameraInfo: CameraInfo): Updatable(), IClickReceiver {
+class ClickHandler(val cameraInfo: CameraInfo): Updatable(),
+    IClickReceiver {
     val mMessagesComponent = ApplicationController.instance!!.messagesComponent!!
 
     private val pointerData = Pointer()
