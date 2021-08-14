@@ -1,11 +1,11 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <TextView
         android:id="@+id/tv_messages"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:gravity="bottom"/>
-</LinearLayout>
+        android:scrollbars="vertical"/>
+</ScrollView>

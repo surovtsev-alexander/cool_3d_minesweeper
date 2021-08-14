@@ -5,13 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".view.activities.MainActivity">
 
     <Button
         android:id="@+id/btn_start_game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Game"
+        android:text="start game"
         />
+
+    <Button
+        android:id="@+id/btn_multitouch_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="multitouch test"/>
 
 </LinearLayout>

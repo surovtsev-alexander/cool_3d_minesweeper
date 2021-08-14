@@ -2,13 +2,15 @@ package com.surovtsev.cool_3d_minesweeper.view.components
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.widget.ScrollView
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.surovtsev.cool_3d_minesweeper.R
 import kotlinx.android.synthetic.main.messages_component.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class MessagesComponent: LinearLayoutCompat {
+class MessagesComponent: ScrollView {
     private var mLines: UInt = 0.toUInt()
 
 
@@ -36,6 +38,7 @@ class MessagesComponent: LinearLayoutCompat {
         }
         mLines++
         tv_messages.append("$lineSeparator\t$mLines: $message")
+        fullScroll(ScrollView.FOCUS_DOWN)
     }
 
     fun addMessageUI(message: String) {
