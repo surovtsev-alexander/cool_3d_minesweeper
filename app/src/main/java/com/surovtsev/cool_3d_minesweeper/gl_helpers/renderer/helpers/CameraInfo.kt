@@ -6,6 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
 import glm_.glm;
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
@@ -15,6 +16,9 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
                  val zNear: Float = 2f, val zFar: Float = 20f) {
 
     val mMoveHandler = MoveHandler()
+
+    var mScaleMatrix = MatrixHelper.identity_matrix()
+    var mIScaleMatrix = MatrixHelper.identity_matrix()
 
     var mProjectionMatrix = MatrixHelper.zero_matrix()
         private set
@@ -40,7 +44,7 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
     }
 
     inner class MoveHandler():
-        IRotationReceiver {
+        IRotationReceiver, IScaleReceiver {
         private val COEFF = 15f
         var mUpdated = true
             private set
@@ -72,6 +76,13 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             rotMatrix = rotMatrix * rotation
 
             rotMatrix.inverse(iRotMatrix)
+
+            mUpdated = true
+        }
+
+        override fun scale(factor: Float) {
+            mScaleMatrix = mScaleMatrix.scale(factor)
+            mIScaleMatrix = mScaleMatrix.inverse()
 
             mUpdated = true
         }
@@ -138,16 +149,18 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
 
     fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
         return fun (proj: Vec2): Vec3 {
-            val vpx = Vec3(proj, z)
-            val vx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, vpx)
-            return MatrixHelper.mult_mat4_vec3(mInvertedViewMatrix, vx)
+            val svpx = Vec3(proj, z)
+            val svx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, svpx)
+            val sx = MatrixHelper.mult_mat4_vec3(mInvertedViewMatrix, svx)
+            return MatrixHelper.mult_mat4_vec3(mIScaleMatrix, sx)
         }
     }
 
     fun calc_near_model_point_by_proj(proj: Vec2): Vec3 {
-        val vpx = Vec3(proj, -1)
-        val vx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, vpx)
-        return MatrixHelper.mult_mat4_vec3(mMoveHandler.iRotMatrix, vx)
+        val svpx = Vec3(proj, -1)
+        val svx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, svpx)
+        val sx = MatrixHelper.mult_mat4_vec3(mMoveHandler.iRotMatrix, svx)
+        return MatrixHelper.mult_mat4_vec3(mIScaleMatrix, sx)
     }
 
 

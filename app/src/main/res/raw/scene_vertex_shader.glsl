@@ -1,5 +1,5 @@
-uniform mat4 u_VP_Matrix;
 uniform mat4 u_M_Matrix;
+uniform mat4 u_VP_Matrix;
 
 attribute vec3 a_Position;
 

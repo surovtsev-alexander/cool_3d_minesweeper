@@ -19,6 +19,7 @@ open class CLickPointerGLSLProgram(
 
     private val mUPointSize = Uniform(U_POINT_SIZE)
     private val mUColor = Uniform(U_COLOR)
+    val mU_M_Matrix = Uniform(U_M_MATRIX)
     val mU_VP_Matrix = Uniform(U_VP_MATRIX)
     val mLineWidth = 10f;
 
@@ -26,6 +27,7 @@ open class CLickPointerGLSLProgram(
         mAPosition,
         mUPointSize,
         mUColor,
+        mU_M_Matrix,
         mU_VP_Matrix
     )
 
@@ -46,6 +48,15 @@ open class CLickPointerGLSLProgram(
             false,
             vp_matrix.to(floatBuffer, 0).array()
             , 0
+        )
+    }
+
+    fun fillU_M_Matrix(m_matrix: Mat4) {
+        GLES20.glUniformMatrix4fv(
+            mU_M_Matrix.location, 1,
+            false,
+            m_matrix.to(floatBuffer, 0).array(),
+            0
         )
     }
 }

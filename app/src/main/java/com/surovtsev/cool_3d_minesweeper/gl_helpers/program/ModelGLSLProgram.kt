@@ -15,7 +15,6 @@ open class ModelGLSLProgram(
     private val A_TRIANGLE_NUM = "a_TriangleNum"
     private val A_TRIANGLE_TEXTURE = "a_TriangleTexture"
     private val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
-    private val U_M_MATRIX = "u_M_Matrix"
     private val U_TEXTURE_UNIT = "u_TextureUnit"
 
     val mAPosition = Attribute(A_POSITION)

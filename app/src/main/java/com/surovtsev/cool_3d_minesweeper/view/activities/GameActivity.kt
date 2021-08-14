@@ -14,6 +14,7 @@ import com.surovtsev.cool_3d_minesweeper.logic.application_controller.Applicatio
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ScalingHelper
@@ -73,7 +74,13 @@ class GameActivity : AppCompatActivity() {
                     glsv_main
                 )
             val scalingHelper =
-                ScalingHelper()
+                ScalingHelper(
+                    object :
+                        IReceiverCalculator<IScaleReceiver> {
+                        override fun getReceiver(): IScaleReceiver? =
+                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
+                    }
+                )
             val movingHelper =
                 MovingHelper()
 

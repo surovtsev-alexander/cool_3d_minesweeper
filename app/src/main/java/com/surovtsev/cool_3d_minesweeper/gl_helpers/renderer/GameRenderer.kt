@@ -77,13 +77,18 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         fun onSurfaceChanged() {
             val glObject = modelObjects.glCubes.glObject
-            glObject.mModelModelGLSLProgram.use_program()
 
-            glObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
-            glObject.mModelModelGLSLProgram.fillU_M_Matrix(MatrixHelper.identity_matrix())
+            with(glObject.mModelModelGLSLProgram) {
+                use_program()
+                fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+            }
 
-            modelObjects.mClickPointer.mGLSLProgram.use_program()
-            modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+            with(modelObjects.mClickPointer.mGLSLProgram) {
+                use_program()
+                fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+                fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+            }
         }
 
         fun onDrawFrame() {
@@ -111,7 +116,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
                 if (moved) {
-                    modelObjects.mClickPointer.mGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                    with(modelObjects.mClickPointer.mGLSLProgram) {
+                        fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+                        fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                    }
                 }
                 modelObjects.mClickPointer.bind_data()
                 modelObjects.mClickPointer.draw()
@@ -127,7 +135,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 glCubes.testPointer(mClickHandler.pointer)
             }
             if (moved) {
-                glObject.mModelModelGLSLProgram.fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                with(glObject.mModelModelGLSLProgram) {
+                    fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                    fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+                }
             }
             glObject.draw()
 
