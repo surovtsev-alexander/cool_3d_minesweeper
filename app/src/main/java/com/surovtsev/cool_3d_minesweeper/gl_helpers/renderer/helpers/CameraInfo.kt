@@ -5,6 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.logic.application_controller.Applicatio
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IRotationReceiver
 import glm_.glm;
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
@@ -38,7 +39,7 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         recalculateViewMatrix()
     }
 
-    inner class MoveHandler() {
+    inner class MoveHandler(): IRotationReceiver {
         private val COEFF = 15f
         var mUpdated = true
             private set
@@ -55,7 +56,7 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         private var x_axis = Math.XRay
         private var y_axis = Math.YRay
 
-        fun handleTouchDrag(prev: Vec2, curr: Vec2) {
+        override fun rotateBetweenProjections(prev: Vec2, curr: Vec2) {
             val nPrev = normalizedDisplayCoordinates(prev)
             val nCurr = normalizedDisplayCoordinates(curr)
 

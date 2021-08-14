@@ -14,6 +14,10 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.util.Timer
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.ClickAndRotationHelper
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IClickReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IRotationReceiver
 import glm_.vec2.Vec2
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlin.math.abs
@@ -53,54 +57,25 @@ class GameActivity : AppCompatActivity() {
         glsv_main.setRenderer(_game_renderer)
 
         glsv_main.setOnTouchListener(object: View.OnTouchListener {
-            var prev = Vec2()
-            val mTimer = Timer()
-            val mMaxClickTimeMs = 100L
-            var mMovingDistance = 0f
-            val mMovindThreshold = 10
+            val clickAndRotationHelper = ClickAndRotationHelper(
+                object: IReceiverCalculator<IClickReceiver> {
+                    override fun getReceiver(): IClickReceiver? =
+                        game_renderer.mScene?.mClickHandler
+                },
+                object: IReceiverCalculator<IRotationReceiver> {
+                    override fun getReceiver(): IRotationReceiver? =
+                        game_renderer.mScene?.mCameraInfo?.mMoveHandler
+
+                },
+                glsv_main
+            )
 
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (event == null) {
                     return false
                 }
 
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        prev = Vec2(event.x, event.y)
-                        mTimer.push()
-                        mMovingDistance = 0f
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        var curr = Vec2(event.x, event.y)
-
-                        val delta = curr - prev
-
-                        glsv_main.queueEvent(object: Runnable {
-                            val p = prev
-                            val c = curr
-                            override fun run() {
-                                game_renderer.mScene?.mCameraInfo?.mMoveHandler?.handleTouchDrag(
-                                    p, c
-                                )
-                            }
-                        })
-
-                        mMovingDistance = abs(delta[0]) + abs(delta[1])
-
-                        prev = curr
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        mTimer.push()
-                        val moved = mMovingDistance >= mMovindThreshold ||  mTimer.diff() >= mMaxClickTimeMs
-                        if (!moved) {
-                            if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
-                                ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
-                            }
-                            val curr = Vec2(event.x, event.y)
-                            game_renderer.mScene?.mClickHandler?.handleClick(curr)
-                        }
-                    }
-                }
+                clickAndRotationHelper.onTouch(event)
                 return true
             }
         })
