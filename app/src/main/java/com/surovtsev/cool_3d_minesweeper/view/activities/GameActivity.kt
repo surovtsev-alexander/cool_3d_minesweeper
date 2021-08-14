@@ -5,22 +5,14 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.util.Timer
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.ClickAndRotationHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IClickReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.IRotationReceiver
-import glm_.vec2.Vec2
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.*
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlin.math.abs
 
 class GameActivity : AppCompatActivity() {
     var _game_renderer: GameRenderer? = null
@@ -57,6 +49,8 @@ class GameActivity : AppCompatActivity() {
         glsv_main.setRenderer(_game_renderer)
 
         glsv_main.setOnTouchListener(object: View.OnTouchListener {
+            var prevPointerCount = 0
+
             val clickAndRotationHelper = ClickAndRotationHelper(
                 object: IReceiverCalculator<IClickReceiver> {
                     override fun getReceiver(): IClickReceiver? =
@@ -69,13 +63,38 @@ class GameActivity : AppCompatActivity() {
                 },
                 glsv_main
             )
+            val scalingHelper = ScalingHelper()
+            val movingHelper = MovingHelper()
+
+            var currTouchHelper: TouchHelper = clickAndRotationHelper
 
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (event == null) {
                     return false
                 }
 
-                clickAndRotationHelper.onTouch(event)
+                val pointerCount = event.pointerCount
+
+                if (pointerCount != prevPointerCount) {
+                    currTouchHelper.release()
+
+                    prevPointerCount = pointerCount
+
+                    when (pointerCount) {
+                        1 -> {
+                            currTouchHelper = clickAndRotationHelper
+                        }
+                        2 -> {
+                            currTouchHelper = scalingHelper
+                        }
+                        else -> {
+                            currTouchHelper = movingHelper
+                        }
+                    }
+                }
+
+                currTouchHelper.onTouch(event)
+
                 return true
             }
         })

@@ -13,7 +13,8 @@ class ClickAndRotationHelper(
     val clickReceiver: IReceiverCalculator<IClickReceiver>,
     val rotationReceiver: IReceiverCalculator<IRotationReceiver>,
     val clickEventQueueHandler: GLSurfaceView
-) : ITouchHelper {
+) : TouchHelper() {
+    val delayedRelease = DelayedRelease()
 
     var prev = Vec2()
     val mTimer = Timer()
@@ -21,14 +22,24 @@ class ClickAndRotationHelper(
     var mMovingDistance = 0f
     val mMovindThreshold = 10
 
+
+    override fun release() {
+        delayedRelease.release()
+    }
+
     override fun onTouch(event: MotionEvent) {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
+        do {
+            val needToBeInited = event.action == MotionEvent.ACTION_DOWN || delayedRelease.getAndFlush()
+            if (needToBeInited) {
                 prev = Vec2(event.x, event.y)
                 mTimer.push()
                 mMovingDistance = 0f
+
+                break
             }
-            MotionEvent.ACTION_MOVE -> {
+
+            val moved = event.action == MotionEvent.ACTION_MOVE
+            if (moved) {
                 var curr = Vec2(event.x, event.y)
 
                 val delta = curr - prev
@@ -46,8 +57,12 @@ class ClickAndRotationHelper(
                 mMovingDistance = abs(delta[0]) + abs(delta[1])
 
                 prev = curr
+
+                break
             }
-            MotionEvent.ACTION_UP -> {
+
+            val up = event.action == MotionEvent.ACTION_UP
+            if (up) {
                 mTimer.push()
                 val moved = mMovingDistance >= mMovindThreshold ||  mTimer.diff() >= mMaxClickTimeMs
                 if (!moved) {
@@ -57,7 +72,9 @@ class ClickAndRotationHelper(
                     val curr = Vec2(event.x, event.y)
                     clickReceiver.getReceiver()?.handleClick(curr)
                 }
+
+                break
             }
-        }
+        } while (false)
     }
 }
