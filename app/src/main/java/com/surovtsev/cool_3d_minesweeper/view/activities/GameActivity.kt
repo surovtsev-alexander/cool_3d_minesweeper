@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
@@ -94,7 +95,9 @@ class GameActivity : AppCompatActivity() {
                 val pointerCount = event.pointerCount
 
                 if (pointerCount != prevPointerCount) {
-                    currTouchHelper.release()
+                    if (prevPointerCount != 0) {
+                        currTouchHelper.release()
+                    }
 
                     prevPointerCount = pointerCount
 
