@@ -13,7 +13,7 @@ class MovingHelper(
 
     override fun onTouch(event: MotionEvent) {
 
-        val needToBeInited = getAndFlush()
+        val needToBeInited = getAndRelease()
 
         val pointerCount = event.pointerCount
         val points = (0 until pointerCount).map {

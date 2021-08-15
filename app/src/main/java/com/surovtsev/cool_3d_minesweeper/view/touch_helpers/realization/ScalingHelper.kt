@@ -1,11 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
-import android.util.Log
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
-import glm_.vec2.Vec2
 
 class ScalingHelper(
     val scaleReceiverCalculator: IReceiverCalculator<IScaleReceiver>
@@ -13,7 +11,7 @@ class ScalingHelper(
     var prevDistance = 0f
 
     override fun onTouch(event: MotionEvent) {
-        val needToBeInitted = getAndFlush()
+        val needToBeInitted = getAndRelease()
 
         val distanceCalculator: () -> Float = {
             val a = getVec(event, 0)

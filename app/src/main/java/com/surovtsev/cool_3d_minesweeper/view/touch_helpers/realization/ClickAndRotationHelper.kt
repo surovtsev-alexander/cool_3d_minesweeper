@@ -1,7 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.opengl.GLSurfaceView
-import android.util.Log
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
@@ -19,7 +18,7 @@ class ClickAndRotationHelper(
     val clickEventQueueHandler: GLSurfaceView
 ) : TouchHelper() {
     init {
-        getAndFlush()
+        getAndRelease()
     }
 
     var prev = Vec2()
@@ -30,7 +29,7 @@ class ClickAndRotationHelper(
 
     override fun onTouch(event: MotionEvent) {
         do {
-            val released = getAndFlush()
+            val released = getAndRelease()
 
             if (event.action == MotionEvent.ACTION_DOWN || released) {
                 prev = getVec(event)

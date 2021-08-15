@@ -89,7 +89,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         fun onDrawFrame() {
             val moveHandler = mCameraInfo.mMoveHandler
-            val moved = moveHandler.mUpdated
+            val moved = moveHandler.getAndRelease()
             val clicked = mClickHandler.isUpdated()
 
             if (moved) {
@@ -135,10 +135,6 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 }
             }
             glObject.draw()
-
-            if (moved) {
-                moveHandler.updateMatrix()
-            }
         }
     }
 

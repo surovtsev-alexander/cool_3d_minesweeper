@@ -4,6 +4,7 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.helper.DelayedRelease
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMovingReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
@@ -14,16 +15,16 @@ import glm_.vec3.Vec3
 
 class CameraInfo(displayWidth: Int, displayHeight: Int,
                  zNear: Float = 2f, zFar: Float = 20f) {
+    val mDisplayWidthF = displayWidth.toFloat()
+    val mDisplayHeightF = displayHeight.toFloat()
+
 
     val mMoveHandler = MoveHandler()
 
     var mScaleMatrix = MatrixHelper.identity_matrix()
-
-    var mProjectionMatrix = MatrixHelper.zero_matrix()
     var mViewMatrix = MatrixHelper.zero_matrix()
+    var mProjectionMatrix = MatrixHelper.zero_matrix()
 
-    val mDisplayWidthF = displayWidth.toFloat()
-    val mDisplayHeightF = displayHeight.toFloat()
 
     var mMVPMatrix = MatrixHelper.identity_matrix()
     var mIMVPMatrix = MatrixHelper.identity_matrix()
@@ -41,15 +42,12 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         recalculateMVPMatrix()
     }
 
-    inner class MoveHandler() :
+    inner class MoveHandler(): DelayedRelease(),
         IRotationReceiver, IScaleReceiver, IMovingReceiver {
         private val COEFF = 15f
-        var mUpdated = true
-            private set
 
         fun identity_matrix() = MatrixHelper.identity_matrix()
 
-        val I_MATRIX = identity_matrix()
         var rotMatrix = identity_matrix()
             private set
 
@@ -78,21 +76,17 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
 
             rotMatrix.inverse(iRotMatrix)
 
-            mUpdated = true
+            update()
         }
 
         override fun scale(factor: Float) {
             mScaleMatrix = mScaleMatrix.scale(factor)
 
-            mUpdated = true
+            update()
         }
 
         override fun move(proj1: Vec2, proj2: Vec2) {
-            mUpdated = true
-        }
-
-        fun updateMatrix() {
-            mUpdated = false
+            update()
         }
     }
 
