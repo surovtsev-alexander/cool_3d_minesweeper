@@ -44,7 +44,7 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
         recalculateViewMatrix()
     }
 
-    inner class MoveHandler():
+    inner class MoveHandler() :
         IRotationReceiver, IScaleReceiver, IMovingReceiver {
         private val COEFF = 15f
         var mUpdated = true
@@ -70,7 +70,10 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
             val currNear = calc_near_model_point_by_proj(nCurr)
 
             if (LoggerConfig.LOG_MATRIX_HELPER) {
-                Log.d("TEST","test\nprev: $prev\ncurr: $curr\nn_prev: $nPrev\nn_curr: $nCurr\nprev_near: $prevNear\ncurr_near: $currNear")
+                Log.d(
+                    "TEST",
+                    "test\nprev: $prev\ncurr: $curr\nn_prev: $nPrev\nn_curr: $nCurr\nprev_near: $prevNear\ncurr_near: $currNear"
+                )
             }
 
             val rotation = MatrixHelper.calc_rot_matrix(prevNear, currNear)
@@ -134,10 +137,11 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
                 (mProjectionMatrix * mInvertedProjectionMatrix).toString(),
                 (mInvertedProjectionMatrix * mProjectionMatrix).toString(),
                 (mViewMatrix * mInvertedViewMatrix).toString(),
-                (mInvertedViewMatrix * mViewMatrix).toString())
+                (mInvertedViewMatrix * mViewMatrix).toString()
+            )
 
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(
-                messages.reduce { acc, x -> "$acc\n$x"}
+                messages.reduce { acc, x -> "$acc\n$x" }
             )
         }
     }
@@ -153,20 +157,15 @@ class CameraInfo(val displayWidth: Int, val displayHeight: Int,
     fun calc_far_by_proj(proj: Vec2) = calc_point_by_proj(1f)(proj)
 
     fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
-        return fun (proj: Vec2): Vec3 {
-            val svpx = Vec3(proj, z)
-            val svx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, svpx)
-            val sx = MatrixHelper.mult_mat4_vec3(mInvertedViewMatrix, svx)
-            return MatrixHelper.mult_mat4_vec3(mIScaleMatrix, sx)
-        }
+        return fun(proj: Vec2): Vec3 = MatrixHelper.mult_mat4_vec3(
+            mIScaleMatrix * mInvertedViewMatrix * mInvertedProjectionMatrix,
+            Vec3(proj, z)
+        )
     }
 
-    fun calc_near_model_point_by_proj(proj: Vec2): Vec3 {
-        val svpx = Vec3(proj, -1)
-        val svx = MatrixHelper.mult_mat4_vec3(mInvertedProjectionMatrix, svpx)
-        val sx = MatrixHelper.mult_mat4_vec3(mMoveHandler.iRotMatrix, svx)
-        return MatrixHelper.mult_mat4_vec3(mIScaleMatrix, sx)
-    }
-
-
+    fun calc_near_model_point_by_proj(proj: Vec2): Vec3 =
+        MatrixHelper.mult_mat4_vec3(
+            mIScaleMatrix * mMoveHandler.iRotMatrix * mInvertedProjectionMatrix,
+            Vec3(proj, -1)
+        )
 }
