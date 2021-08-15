@@ -22,8 +22,7 @@ open class ModelGLSLProgram(
     val mATriangleTexture = Attribute(A_TRIANGLE_TEXTURE)
     val mATextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
     private val mUColor = Uniform(U_COLOR)
-    private val mU_VP_Matrix = Uniform(U_VP_MATRIX)
-    private val mU_M_Matrix = Uniform(U_M_MATRIX)
+    private val mU_MVP_Matrix = Uniform(U_MVP_MATRIX)
     val mUTextureLocation = Uniform(U_TEXTURE_UNIT)
 
     override val fields = arrayOf(
@@ -32,8 +31,7 @@ open class ModelGLSLProgram(
         mATriangleTexture,
         mATextureCoordinates,
         mUColor,
-        mU_VP_Matrix,
-        mU_M_Matrix,
+        mU_MVP_Matrix,
         mUTextureLocation
     )
 
@@ -48,15 +46,10 @@ open class ModelGLSLProgram(
         private val floatBuffer = FloatBuffer.allocate(16)
     }
 
-    fun fillU_VP_Matrix(vp_matrix: Mat4) {
-        glUniformMatrix4fv(mU_VP_Matrix.location, 1,
+    fun fillU_MVP_Matrix(mvp_matrix: Mat4) {
+        glUniformMatrix4fv(mU_MVP_Matrix.location, 1,
             false,
-            vp_matrix.to(floatBuffer, 0).array()
+            mvp_matrix.to(floatBuffer, 0).array()
             , 0)
-    }
-
-    fun fillU_M_Matrix(u_matrix: Mat4) {
-        glUniformMatrix4fv(mU_M_Matrix.location, 1,
-            false, u_matrix.to(floatBuffer, 0).array(), 0)
     }
 }

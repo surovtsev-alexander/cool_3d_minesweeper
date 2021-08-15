@@ -5,16 +5,13 @@ import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.RawCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.tests.t_002_triangles.Triangles
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
@@ -78,16 +75,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         fun onSurfaceChanged() {
             val glObject = modelObjects.glCubes.glObject
 
+            val mVPMatrix = mCameraInfo.mMVPMatrix
             with(glObject.mModelModelGLSLProgram) {
                 use_program()
-                fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
-                fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+                fillU_MVP_Matrix(mVPMatrix)
             }
 
             with(modelObjects.mClickPointer.mGLSLProgram) {
                 use_program()
-                fillU_M_Matrix(mCameraInfo.mScaleMatrix)
-                fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                fillU_MVP_Matrix(mVPMatrix)
             }
         }
 
@@ -97,7 +93,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val clicked = mClickHandler.isUpdated()
 
             if (moved) {
-                mCameraInfo.recalculateViewMatrix()
+                mCameraInfo.recalculateMVPMatrix()
             }
 
             do {
@@ -117,8 +113,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
                 if (moved) {
                     with(modelObjects.mClickPointer.mGLSLProgram) {
-                        fillU_M_Matrix(mCameraInfo.mScaleMatrix)
-                        fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
+                        fillU_MVP_Matrix(mCameraInfo.mMVPMatrix)
                     }
                 }
                 modelObjects.mClickPointer.bind_data()
@@ -136,8 +131,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             }
             if (moved) {
                 with(glObject.mModelModelGLSLProgram) {
-                    fillU_VP_Matrix(mCameraInfo.mViewProjectionMatrix)
-                    fillU_M_Matrix(mCameraInfo.mScaleMatrix)
+                    fillU_MVP_Matrix(mCameraInfo.mMVPMatrix)
                 }
             }
             glObject.draw()
@@ -180,9 +174,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
     fun logScene() {
         val cameraInfo = mScene!!.mCameraInfo
-        val vp_matrix = cameraInfo.mViewProjectionMatrix
-        val model_matrix = cameraInfo.mMoveHandler.rotMatrix
-        val mvp_matrix = vp_matrix * model_matrix
+        val mvp_matrix = cameraInfo.mMVPMatrix
         val points = mModelObjects!!.glCubes.glObject.trianglesCoordinates
 
         val test_str = StringBuilder()
@@ -204,18 +196,6 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             test_str.append("\n")
         }
 
-        if (false) {
-            test_str.append(
-                matrix_to_str("vp_matrix", vp_matrix)
-            )
-            test_str.append("\n")
-        }
-        if (false) {
-            test_str.append(
-                matrix_to_str("model_matrix", model_matrix)
-            )
-            test_str.append("\n")
-        }
         if (false) {
             test_str.append(
                 matrix_to_str("mvp_matrix", mvp_matrix)

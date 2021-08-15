@@ -14,8 +14,7 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
     protected val A_POSITION = "a_Position"
     protected val U_COLOR  = "u_Color"
-    protected val U_VP_MATRIX = "u_VP_Matrix"
-    protected val U_M_MATRIX = "u_M_Matrix"
+    protected val U_MVP_MATRIX = "u_MVP_Matrix"
 
     abstract val fields: Array<GLSLField>
 
