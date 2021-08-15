@@ -22,8 +22,10 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
     val mMoveHandler = MoveHandler()
 
     var mScaleMatrix = MatrixHelper.identity_matrix()
-    var mViewMatrix = MatrixHelper.zero_matrix()
-    var mProjectionMatrix = MatrixHelper.zero_matrix()
+    var mViewMatrix = MatrixHelper.identity_matrix()
+    var mMoveMatrix = MatrixHelper.identity_matrix()
+    var mProjectionMatrix = MatrixHelper.identity_matrix()
+    var mIProjectionMatrix = MatrixHelper.identity_matrix()
 
 
     var mMVPMatrix = MatrixHelper.identity_matrix()
@@ -36,6 +38,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
             mDisplayWidthF / mDisplayHeightF,
             zNear, zFar
         )
+        mIProjectionMatrix = mProjectionMatrix.inverse()
 
         mViewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
 
@@ -86,12 +89,22 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         }
 
         override fun move(proj1: Vec2, proj2: Vec2) {
+            val nP1 = normalizedDisplayCoordinates(proj1)
+            val nP2 = normalizedDisplayCoordinates(proj2)
+
+            val p1Near = calcNearWorldPoint(nP1)
+            val p2Near = calcNearWorldPoint(nP2)
+
+            val diff = p2Near - p1Near
+
+            mMoveMatrix = mMoveMatrix.translate(diff)
+
             update()
         }
     }
 
     fun recalculateMVPMatrix() {
-        mMVPMatrix = mProjectionMatrix * mViewMatrix * mMoveHandler.rotMatrix * mScaleMatrix
+        mMVPMatrix = mProjectionMatrix * mMoveMatrix * mViewMatrix * mMoveHandler.rotMatrix * mScaleMatrix
         mIMVPMatrix = mMVPMatrix.inverse()
     }
 
@@ -111,4 +124,9 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
             Vec3(proj, z)
         )
     }
+
+    fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.mult_mat4_vec3(
+        mIProjectionMatrix,
+        Vec3(proj, -1)
+    )
 }
