@@ -19,7 +19,7 @@ import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.TouchHel
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity() {
-    var _game_renderer: GameRenderer? = null
+    var gameRenderer: GameRenderer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +48,9 @@ class GameActivity : AppCompatActivity() {
         }
 
         glsv_main.setEGLContextClientVersion(2)
-        val game_renderer = GameRenderer(this)
-        _game_renderer = game_renderer
-        glsv_main.setRenderer(_game_renderer)
+        val gR = GameRenderer(this)
+        gameRenderer = gR
+        glsv_main.setRenderer(gameRenderer)
 
         glsv_main.setOnTouchListener(object: View.OnTouchListener {
             var prevPointerCount = 0
@@ -60,12 +60,12 @@ class GameActivity : AppCompatActivity() {
                     object :
                         IReceiverCalculator<IClickReceiver> {
                         override fun getReceiver(): IClickReceiver? =
-                            game_renderer.mScene?.mClickHandler
+                            gR.mScene?.mClickHandler
                     },
                     object :
                         IReceiverCalculator<IRotationReceiver> {
                         override fun getReceiver(): IRotationReceiver? =
-                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
+                            gR.mScene?.mCameraInfo?.mMoveHandler
 
                     },
                     glsv_main
@@ -75,14 +75,14 @@ class GameActivity : AppCompatActivity() {
                     object :
                         IReceiverCalculator<IScaleReceiver> {
                         override fun getReceiver(): IScaleReceiver? =
-                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
+                            gR.mScene?.mCameraInfo?.mMoveHandler
                     }
                 )
             val movingHelper =
                 MovingHelper(
                     object: IReceiverCalculator<IMovingReceiver> {
                         override fun getReceiver(): IMovingReceiver? =
-                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
+                            gR.mScene?.mCameraInfo?.mMoveHandler
                     }
                 )
 
@@ -125,7 +125,7 @@ class GameActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        if (_game_renderer != null) {
+        if (gameRenderer != null) {
             glsv_main.onPause()
         }
     }
@@ -133,7 +133,7 @@ class GameActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (_game_renderer != null) {
+        if (gameRenderer != null) {
             glsv_main.onResume()
         }
     }
