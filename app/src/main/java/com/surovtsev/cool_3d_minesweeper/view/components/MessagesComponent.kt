@@ -9,7 +9,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class MessagesComponent: ScrollView {
-    private var lineCount: UInt = 0.toUInt()
+    private var lineCount = 0
 
 
     constructor(context: Context): super(context) {
@@ -29,7 +29,7 @@ class MessagesComponent: ScrollView {
     }
 
     fun addMessage(message: String) {
-        val lineSeparator = if (lineCount == 0u) {
+        val lineSeparator = if (lineCount == 0) {
             ""
         } else {
             "\n"

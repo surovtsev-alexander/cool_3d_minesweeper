@@ -76,12 +76,16 @@ class GameActivity : AppCompatActivity() {
                         IReceiverCalculator<IScaleReceiver> {
                         override fun getReceiver(): IScaleReceiver? =
                             gR.mScene?.mCameraInfo?.mMoveHandler
+                    },
+                    object: IReceiverCalculator<IMoveReceiver> {
+                        override fun getReceiver(): IMoveReceiver? =
+                            gR.mScene?.mCameraInfo?.mMoveHandler
                     }
                 )
             val movingHelper =
                 MovingHelper(
-                    object: IReceiverCalculator<IMovingReceiver> {
-                        override fun getReceiver(): IMovingReceiver? =
+                    object: IReceiverCalculator<IMoveReceiver> {
+                        override fun getReceiver(): IMoveReceiver? =
                             gR.mScene?.mCameraInfo?.mMoveHandler
                     }
                 )

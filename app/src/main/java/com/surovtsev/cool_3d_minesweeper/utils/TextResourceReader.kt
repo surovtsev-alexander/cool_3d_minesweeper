@@ -24,7 +24,7 @@ class TextResourceReader {
                 val inputStreamReader = InputStreamReader(inputStream)
                 val bufferedReader = BufferedReader(inputStreamReader)
 
-                var nextLine: String? = null
+                var nextLine: String?
 
                 while (true) {
                     nextLine = bufferedReader.readLine()

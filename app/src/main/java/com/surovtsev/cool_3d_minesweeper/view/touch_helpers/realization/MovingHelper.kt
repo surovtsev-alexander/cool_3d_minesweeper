@@ -1,12 +1,12 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMovingReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import glm_.vec2.Vec2
 
 class MovingHelper(
-    val movingReceiverCalculator: IReceiverCalculator<IMovingReceiver>
+    val movingReceiverCalculator: IReceiverCalculator<IMoveReceiver>
 ): TouchHelper() {
 
     var prevCenter = Vec2()

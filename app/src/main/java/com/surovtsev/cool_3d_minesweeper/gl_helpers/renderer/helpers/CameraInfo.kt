@@ -4,7 +4,7 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMovingReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
 import glm_.glm;
@@ -45,7 +45,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
     }
 
     inner class MoveHandler(): DelayedRelease(),
-        IRotationReceiver, IScaleReceiver, IMovingReceiver {
+        IRotationReceiver, IScaleReceiver, IMoveReceiver {
         private val COEFF = 15f
 
         fun identity_matrix() = MatrixHelper.identityMatrix()
