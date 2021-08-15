@@ -12,10 +12,7 @@ import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ScalingHelper
@@ -83,7 +80,12 @@ class GameActivity : AppCompatActivity() {
                     }
                 )
             val movingHelper =
-                MovingHelper()
+                MovingHelper(
+                    object: IReceiverCalculator<IMovingReceiver> {
+                        override fun getReceiver(): IMovingReceiver? =
+                            game_renderer.mScene?.mCameraInfo?.mMoveHandler
+                    }
+                )
 
             var currTouchHelper: TouchHelper = clickAndRotationHelper
 

@@ -15,15 +15,9 @@ class ScalingHelper(
     override fun onTouch(event: MotionEvent) {
         val needToBeInitted = getAndFlush()
 
-        val f: (Int) -> Vec2 = {
-            Vec2(
-                event.getX(it),
-                event.getY(it)
-            )
-        }
         val distanceCalculator: () -> Float = {
-            val a = f(0)
-            val b = f(1)
+            val a = getVec(event, 0)
+            val b = getVec(event, 1)
             (a - b).length()
         }
 

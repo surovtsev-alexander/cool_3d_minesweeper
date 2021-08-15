@@ -33,7 +33,7 @@ class ClickAndRotationHelper(
             val released = getAndFlush()
 
             if (event.action == MotionEvent.ACTION_DOWN || released) {
-                prev = Vec2(event.x, event.y)
+                prev = getVec(event)
                 if (released) {
                     mTimer.push_hour_before()
                 } else {
@@ -44,10 +44,9 @@ class ClickAndRotationHelper(
                 break
             }
 
-            val moved = event.action == MotionEvent.ACTION_MOVE
-            if (moved) {
-                val curr = Vec2(event.x, event.y)
+            val curr = getVec(event)
 
+            if (event.action == MotionEvent.ACTION_MOVE) {
                 val delta = curr - prev
 
                 clickEventQueueHandler.queueEvent(object: Runnable {
@@ -75,7 +74,6 @@ class ClickAndRotationHelper(
                     if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
                         ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
                     }
-                    val curr = Vec2(event.x, event.y)
                     clickReceiver.getReceiver()?.handleClick(curr)
                 }
 
