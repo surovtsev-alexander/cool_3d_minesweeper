@@ -1,15 +1,13 @@
 package com.surovtsev.cool_3d_minesweeper.math
 
-import android.opengl.Matrix
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import java.lang.StringBuilder
 import kotlin.math.abs
 import kotlin.math.acos
-import kotlin.math.sqrt
 import kotlin.math.tan
 
 object MatrixHelper {

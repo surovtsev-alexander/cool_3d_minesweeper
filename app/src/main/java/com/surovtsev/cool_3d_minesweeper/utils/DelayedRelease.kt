@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.helper
+package com.surovtsev.cool_3d_minesweeper.utils
 
 open class DelayedRelease {
     private var updated = true

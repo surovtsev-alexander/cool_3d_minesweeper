@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.util
+package com.surovtsev.cool_3d_minesweeper.utils
 
 class LoggerConfig {
     companion object {

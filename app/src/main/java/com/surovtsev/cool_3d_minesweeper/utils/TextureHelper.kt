@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.util
+package com.surovtsev.cool_3d_minesweeper.utils
 
 import android.content.Context
 import android.graphics.Bitmap

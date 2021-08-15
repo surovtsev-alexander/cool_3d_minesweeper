@@ -6,8 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import glm_.size
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import glm_.vec3.Vec3i
 
 class GLCubes(context: Context, val cubes: Cubes) {

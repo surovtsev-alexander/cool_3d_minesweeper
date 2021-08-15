@@ -12,7 +12,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.RawCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s

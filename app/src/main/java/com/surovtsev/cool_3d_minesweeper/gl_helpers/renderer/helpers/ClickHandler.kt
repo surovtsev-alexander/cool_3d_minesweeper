@@ -1,11 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import glm_.vec2.Vec2
-import glm_.vec3.Vec3
-import glm_.vec4.Vec4
 
 interface IHaveUpdatedStatus {
     abstract fun isUpdated(): Boolean

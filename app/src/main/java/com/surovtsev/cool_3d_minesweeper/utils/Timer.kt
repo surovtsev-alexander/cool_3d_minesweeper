@@ -1,6 +1,5 @@
-package com.surovtsev.cool_3d_minesweeper.util
+package com.surovtsev.cool_3d_minesweeper.utils
 
-import android.text.format.Time
 import java.util.*
 
 class Timer {

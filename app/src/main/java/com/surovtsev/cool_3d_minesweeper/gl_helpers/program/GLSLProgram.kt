@@ -5,7 +5,7 @@ import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 
 
 abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadParameters) {

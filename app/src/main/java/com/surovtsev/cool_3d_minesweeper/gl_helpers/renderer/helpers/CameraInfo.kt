@@ -3,8 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.helper.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMovingReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver

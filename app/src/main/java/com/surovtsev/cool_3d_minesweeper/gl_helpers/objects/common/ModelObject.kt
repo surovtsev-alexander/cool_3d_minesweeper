@@ -5,7 +5,7 @@ import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.data.VertexArray
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.program.ModelGLSLProgram
-import com.surovtsev.cool_3d_minesweeper.util.TextureHelper
+import com.surovtsev.cool_3d_minesweeper.utils.TextureHelper
 
 class ModelObject(
     context: Context,

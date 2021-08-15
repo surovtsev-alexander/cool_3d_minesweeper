@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.helper.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
 import glm_.vec2.Vec2
 
 abstract class TouchHelper:  DelayedRelease() {

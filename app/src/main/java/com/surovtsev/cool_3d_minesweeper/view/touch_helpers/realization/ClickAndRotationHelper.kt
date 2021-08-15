@@ -3,8 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.util.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.util.Timer
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.Timer
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
