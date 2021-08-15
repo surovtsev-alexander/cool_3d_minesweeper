@@ -11,7 +11,7 @@ class Timer {
         mCurrMs = Calendar.getInstance().timeInMillis
     }
 
-    fun push_hour_before() {
+    fun pushHourBefore() {
         mPrevMs = mCurrMs
         mCurrMs = Calendar.getInstance().timeInMillis - 1000L * 60L * 60L
     }

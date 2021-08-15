@@ -38,18 +38,18 @@ object MatrixHelper {
         m[15] = 0f
     }
 
-    fun zero_matrix() = Mat4(0f)
-    fun identity_matrix() = Mat4(1f)
+    fun zeroMatrix() = Mat4(0f)
+    fun identityMatrix() = Mat4(1f)
 
-    fun mult_mat4_vec3(mat: Mat4, vec: Vec3): Vec3 {
+    fun multMat4Vec3(mat: Mat4, vec: Vec3): Vec3 {
         val x = mat * Vec4(vec, 1.0);
         val res = Vec3(x) / x[3];
         return res
     }
 
-    val I_M = identity_matrix()
+    val I_M = identityMatrix()
 
-    fun calc_rot_matrix(a: Vec3, b: Vec3): Mat4 {
+    fun calcRotMatrix(a: Vec3, b: Vec3): Mat4 {
         val an = b.normalize()
         val bn = a.normalize()
 
@@ -62,7 +62,7 @@ object MatrixHelper {
         }
 
         if (abs(angle) < 0.001f || angle.isNaN()) {
-            val res = identity_matrix()
+            val res = identityMatrix()
 
             if (LoggerConfig.LOG_MATRIX_HELPER) {
                 sb.append("res:\n$res")

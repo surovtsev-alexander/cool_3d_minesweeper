@@ -29,21 +29,21 @@ class ModelObject(
         mModelModelGLSLProgram.prepare_program()
 
         mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
-        set_texture()
+        setTexture()
     }
 
-    override fun bind_data() {
-        vertexArray.setVertexAttribPointer(0, mModelModelGLSLProgram.mAPosition.location,
+    override fun bindData() {
+        vertexArray.setVertexAttribPointer(0, mModelModelGLSLProgram.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
-        numsArray.setVertexAttribPointer(0, mModelModelGLSLProgram.mATriangleNum.location,
+        numsArray.setVertexAttribPointer(0, mModelModelGLSLProgram.aTriangleNum.location,
             1, 0)
-        texturesArray.setVertexAttribPointer(0, mModelModelGLSLProgram.mATriangleTexture.location,
+        texturesArray.setVertexAttribPointer(0, mModelModelGLSLProgram.aTriangleTexture.location,
             1, 0)
         textureCoordinatesArray.setVertexAttribPointer(0,
-            mModelModelGLSLProgram.mATextureCoordinates.location, 2, 0)
+            mModelModelGLSLProgram.aTextureCoordinates.location, 2, 0)
     }
 
-    fun set_texture() {
+    fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, mTextureId)
         glUniform1i(mModelModelGLSLProgram.mUTextureLocation.location, 0)

@@ -15,7 +15,7 @@ class ClickPointer(context: Context): IGLObject {
     val mGLSLProgram: CLickPointerGLSLProgram
     private val vertexArray = VertexArray(FloatArray(2 * 3))
 
-    var need_to_be_drawn = false
+    var needToBeDrawn = false
 
     init {
         mGLSLProgram = CLickPointerGLSLProgram(context)
@@ -23,12 +23,12 @@ class ClickPointer(context: Context): IGLObject {
         glLineWidth(mGLSLProgram.mLineWidth)
     }
 
-    override fun bind_data() {
+    override fun bindData() {
         vertexArray.setVertexAttribPointer(0, mGLSLProgram.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
 
-    fun set_points(pointer: IPointer) {
+    fun setPoints(pointer: IPointer) {
         val near = pointer.near
         val far = pointer.far
         val x = floatArrayOf(

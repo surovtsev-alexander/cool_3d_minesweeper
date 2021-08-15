@@ -7,8 +7,6 @@ import android.view.View
 import glm_.vec2.Vec2ui
 
 class MultitouchView(context: Context?, attrs: AttributeSet?): View(context, attrs) {
-
-
     var pointer1 = Vec2ui()
     var pointer2 = Vec2ui()
 

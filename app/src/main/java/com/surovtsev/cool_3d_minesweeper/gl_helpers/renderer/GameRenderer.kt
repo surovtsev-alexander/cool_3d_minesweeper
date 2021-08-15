@@ -99,15 +99,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             do {
                 if (clicked) {
                     mClickHandler.release()
-                    modelObjects.mClickPointer.need_to_be_drawn = true
+                    modelObjects.mClickPointer.needToBeDrawn = true
                 }
 
-                if (!modelObjects.mClickPointer.need_to_be_drawn) {
+                if (!modelObjects.mClickPointer.needToBeDrawn) {
                     break
                 }
 
                 if (clicked) {
-                    modelObjects.mClickPointer.set_points(mClickHandler.pointer)
+                    modelObjects.mClickPointer.setPoints(mClickHandler.pointer)
                 }
 
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
@@ -116,7 +116,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                         fillU_MVP_Matrix(mCameraInfo.mMVPMatrix)
                     }
                 }
-                modelObjects.mClickPointer.bind_data()
+                modelObjects.mClickPointer.bindData()
                 modelObjects.mClickPointer.draw()
             } while (false)
 
@@ -125,7 +125,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val glObject = glCubes.glObject
             glObject.mModelModelGLSLProgram.use_program()
 
-            glObject.bind_data()
+            glObject.bindData()
             if (clicked) {
                 glCubes.testPointer(mClickHandler.pointer)
             }

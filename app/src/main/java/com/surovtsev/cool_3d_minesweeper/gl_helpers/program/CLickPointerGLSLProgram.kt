@@ -29,8 +29,8 @@ open class CLickPointerGLSLProgram(
         mU_MVP_Matrix
     )
 
-    override fun load_locations() {
-        super.load_locations()
+    override fun loadLocations() {
+        super.loadLocations()
 
         GLES20.glUniform1f(mUPointSize.location, mLineWidth)
         GLES20.glUniform4f(mUColor.location, 1f, 0f, 0f, 1f)
@@ -40,11 +40,11 @@ open class CLickPointerGLSLProgram(
         private val floatBuffer = FloatBuffer.allocate(16)
     }
 
-    fun fillU_MVP_Matrix(mvp_matrix: Mat4) {
+    fun fillU_MVP_Matrix(mvpMatrix: Mat4) {
         GLES20.glUniformMatrix4fv(
             mU_MVP_Matrix.location, 1,
             false,
-            mvp_matrix.to(floatBuffer, 0).array()
+            mvpMatrix.to(floatBuffer, 0).array()
             , 0
         )
     }

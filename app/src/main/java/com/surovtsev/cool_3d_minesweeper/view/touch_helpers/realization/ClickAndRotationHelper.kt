@@ -34,7 +34,7 @@ class ClickAndRotationHelper(
             if (event.action == MotionEvent.ACTION_DOWN || released) {
                 prev = getVec(event)
                 if (released) {
-                    mTimer.push_hour_before()
+                    mTimer.pushHourBefore()
                 } else {
                     mTimer.push()
                 }

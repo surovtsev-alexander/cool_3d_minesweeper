@@ -1,7 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.math.Math
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
@@ -21,15 +20,15 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
 
     val mMoveHandler = MoveHandler()
 
-    var mScaleMatrix = MatrixHelper.identity_matrix()
-    var mViewMatrix = MatrixHelper.identity_matrix()
-    var mMoveMatrix = MatrixHelper.identity_matrix()
-    var mProjectionMatrix = MatrixHelper.identity_matrix()
-    var mIProjectionMatrix = MatrixHelper.identity_matrix()
+    var mScaleMatrix = MatrixHelper.identityMatrix()
+    var mViewMatrix = MatrixHelper.identityMatrix()
+    var mMoveMatrix = MatrixHelper.identityMatrix()
+    var mProjectionMatrix = MatrixHelper.identityMatrix()
+    var mIProjectionMatrix = MatrixHelper.identityMatrix()
 
 
-    var mMVPMatrix = MatrixHelper.identity_matrix()
-    var mIMVPMatrix = MatrixHelper.identity_matrix()
+    var mMVPMatrix = MatrixHelper.identityMatrix()
+    var mIMVPMatrix = MatrixHelper.identityMatrix()
 
     init {
         glm.perspective(
@@ -49,7 +48,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         IRotationReceiver, IScaleReceiver, IMovingReceiver {
         private val COEFF = 15f
 
-        fun identity_matrix() = MatrixHelper.identity_matrix()
+        fun identity_matrix() = MatrixHelper.identityMatrix()
 
         var rotMatrix = identity_matrix()
             private set
@@ -57,15 +56,12 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         var iRotMatrix = identity_matrix()
             private set
 
-        private var x_axis = Math.XRay
-        private var y_axis = Math.YRay
-
         override fun rotateBetweenProjections(prev: Vec2, curr: Vec2) {
             val nPrev = normalizedDisplayCoordinates(prev)
             val nCurr = normalizedDisplayCoordinates(curr)
 
-            val prevFar = calc_far_by_proj(nPrev)
-            val currFar = calc_far_by_proj(nCurr)
+            val prevFar = calcFarByProj(nPrev)
+            val currFar = calcFarByProj(nCurr)
 
             if (LoggerConfig.LOG_MATRIX_HELPER) {
                 Log.d(
@@ -74,7 +70,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
                 )
             }
 
-            val rotation = MatrixHelper.calc_rot_matrix(prevFar, currFar)
+            val rotation = MatrixHelper.calcRotMatrix(prevFar, currFar)
             rotMatrix = rotMatrix * rotation
 
             rotMatrix.inverse(iRotMatrix)
@@ -115,17 +111,17 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         Vec2(x, y)
     }
 
-    fun calc_near_by_proj(proj: Vec2) = calc_point_by_proj(-1f)(proj)
-    fun calc_far_by_proj(proj: Vec2) = calc_point_by_proj(1f)(proj)
+    fun calcNearByProj(proj: Vec2) = calcPointByProj(-1f)(proj)
+    fun calcFarByProj(proj: Vec2) = calcPointByProj(1f)(proj)
 
-    fun calc_point_by_proj(z: Float): (Vec2) -> Vec3 {
-        return fun(proj: Vec2): Vec3 = MatrixHelper.mult_mat4_vec3(
+    fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
+        return fun(proj: Vec2): Vec3 = MatrixHelper.multMat4Vec3(
             mIMVPMatrix,
             Vec3(proj, z)
         )
     }
 
-    fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.mult_mat4_vec3(
+    fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.multMat4Vec3(
         mIProjectionMatrix,
         Vec3(proj, -1)
     )

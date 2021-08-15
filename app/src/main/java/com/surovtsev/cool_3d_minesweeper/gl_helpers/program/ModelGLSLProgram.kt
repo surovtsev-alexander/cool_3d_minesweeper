@@ -17,28 +17,28 @@ open class ModelGLSLProgram(
     private val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
     private val U_TEXTURE_UNIT = "u_TextureUnit"
 
-    val mAPosition = Attribute(A_POSITION)
-    val mATriangleNum = Attribute(A_TRIANGLE_NUM)
-    val mATriangleTexture = Attribute(A_TRIANGLE_TEXTURE)
-    val mATextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
-    private val mUColor = Uniform(U_COLOR)
-    private val mU_MVP_Matrix = Uniform(U_MVP_MATRIX)
+    val aPosition = Attribute(A_POSITION)
+    val aTriangleNum = Attribute(A_TRIANGLE_NUM)
+    val aTriangleTexture = Attribute(A_TRIANGLE_TEXTURE)
+    val aTextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
+    private val uColor = Uniform(U_COLOR)
+    private val u_MVP_Matrix = Uniform(U_MVP_MATRIX)
     val mUTextureLocation = Uniform(U_TEXTURE_UNIT)
 
     override val fields = arrayOf(
-        mAPosition,
-        mATriangleNum,
-        mATriangleTexture,
-        mATextureCoordinates,
-        mUColor,
-        mU_MVP_Matrix,
+        aPosition,
+        aTriangleNum,
+        aTriangleTexture,
+        aTextureCoordinates,
+        uColor,
+        u_MVP_Matrix,
         mUTextureLocation
     )
 
-    override fun load_locations() {
-        super.load_locations()
+    override fun loadLocations() {
+        super.loadLocations()
 
-        glUniform4f(mUColor.location, 1f, 0f, 0f, 1f)
+        glUniform4f(uColor.location, 1f, 0f, 0f, 1f)
     }
 
 
@@ -47,7 +47,7 @@ open class ModelGLSLProgram(
     }
 
     fun fillU_MVP_Matrix(mvp_matrix: Mat4) {
-        glUniformMatrix4fv(mU_MVP_Matrix.location, 1,
+        glUniformMatrix4fv(u_MVP_Matrix.location, 1,
             false,
             mvp_matrix.to(floatBuffer, 0).array()
             , 0)

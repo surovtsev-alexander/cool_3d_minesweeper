@@ -7,6 +7,6 @@ class GLIndexedCubes(val modelGlslProgram: ModelGLSLProgram,
                      val indexedCubes: RawCubes
 ) {
 
-    val indexed_object = GLIndexedObject(
+    val indexedObject = GLIndexedObject(
         modelGlslProgram, indexedCubes.trianglesCoordinates, indexedCubes.indexes)
 }

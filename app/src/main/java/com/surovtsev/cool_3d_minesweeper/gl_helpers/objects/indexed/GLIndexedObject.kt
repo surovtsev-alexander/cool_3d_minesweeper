@@ -15,8 +15,8 @@ open class GLIndexedObject(val modelGlslProgram: ModelGLSLProgram
     private val indexBuffer = IndexBuffer(indexes)
 
 
-    fun bind_attribs() {
-        vertexArray.setVertexAttribPointer(0, modelGlslProgram.mAPosition.location,
+    fun bindAttribs() {
+        vertexArray.setVertexAttribPointer(0, modelGlslProgram.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
 

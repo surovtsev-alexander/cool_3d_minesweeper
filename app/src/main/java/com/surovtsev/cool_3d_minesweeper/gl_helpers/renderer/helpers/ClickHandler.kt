@@ -25,8 +25,6 @@ open class Updatable(): IHaveUpdatedStatus {
 
 class ClickHandler(val cameraInfo: CameraInfo): Updatable(),
     IClickReceiver {
-    val mMessagesComponent = ApplicationController.instance!!.messagesComponent!!
-
     private val pointerData = Pointer()
 
     val pointer: IPointer
@@ -34,8 +32,8 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable(),
 
     override fun handleClick(point: Vec2) {
         val proj = cameraInfo.normalizedDisplayCoordinates(point)
-        pointerData.near = cameraInfo.calc_near_by_proj(proj)
-        pointerData.far = cameraInfo.calc_far_by_proj(proj)
+        pointerData.near = cameraInfo.calcNearByProj(proj)
+        pointerData.far = cameraInfo.calcFarByProj(proj)
 
         update()
 

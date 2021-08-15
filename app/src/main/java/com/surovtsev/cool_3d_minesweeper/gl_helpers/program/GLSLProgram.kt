@@ -9,7 +9,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 
 
 abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadParameters) {
-    protected var mProgramId = 0
+    protected var programId = 0
         private set
 
     protected val A_POSITION = "a_Position"
@@ -21,22 +21,22 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
     fun prepare_program() {
         load_program()
         use_program()
-        load_locations()
+        loadLocations()
     }
 
     fun load_program() {
-        mProgramId = ShaderHelper.linkProgram(shaderLoadParameters)
+        programId = ShaderHelper.linkProgram(shaderLoadParameters)
 
         if (LoggerConfig.ON) {
-            ShaderHelper.validateProgram(mProgramId)
+            ShaderHelper.validateProgram(programId)
         }
     }
 
     fun use_program() {
-        glUseProgram(mProgramId)
+        glUseProgram(programId)
     }
 
-    open fun load_locations() {
+    open fun loadLocations() {
         fields.forEach { it.get_location() }
 
         if (LoggerConfig.LOG_SHADER_FIELDS_LOCATIONS) {
@@ -54,13 +54,13 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
     inner class Attribute(name: String, location: Int = 0): GLSLField(name, location)  {
         override fun get_location() {
-            location = glGetAttribLocation(mProgramId, name)
+            location = glGetAttribLocation(programId, name)
         }
     }
 
     inner class Uniform(name: String, location: Int = 0): GLSLField(name, location) {
         override fun get_location() {
-            location = glGetUniformLocation(mProgramId, name)
+            location = glGetUniformLocation(programId, name)
         }
     }
 }
