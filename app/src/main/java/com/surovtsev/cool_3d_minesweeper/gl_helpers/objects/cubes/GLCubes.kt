@@ -39,8 +39,17 @@ class GLCubes(context: Context, val cubes: Cubes) {
             val textureIndexesCount = TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
             val startPos = textureIndexesCount * id * 6
 
-            val resArray = (0 until 6).map {
-                TextureCoordinatesHelper.textureCoordinates[TextureCoordinatesHelper.TextureTypes.EXPLODED_BOMB]!!.asIterable()
+            val xx = arrayOf(
+                TextureCoordinatesHelper.TextureTypes.ONE,
+                TextureCoordinatesHelper.TextureTypes.TWO,
+                TextureCoordinatesHelper.TextureTypes.THREE,
+                TextureCoordinatesHelper.TextureTypes.FOUR,
+                TextureCoordinatesHelper.TextureTypes.FIVE,
+                TextureCoordinatesHelper.TextureTypes.SIX
+            )
+
+            val resArray = xx.map {
+                TextureCoordinatesHelper.textureCoordinates[it]!!.asIterable()
             }.flatten().toFloatArray()
             glObject.textureCoordinatesArray.updateBuffer(
                 resArray,

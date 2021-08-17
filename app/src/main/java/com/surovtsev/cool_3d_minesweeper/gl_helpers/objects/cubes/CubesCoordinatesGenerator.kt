@@ -46,20 +46,20 @@ class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
             1, 2, 0, // top
             0, 2, 3,
 
-            0, 3, 4, // far
+            0, 3, 4, // near
             4, 3, 7,
 
             3, 2, 7, // right
             7, 2, 6,
 
-            2, 1, 6, // near
+            2, 1, 6, // far
             6, 1, 5,
 
             1, 0, 5, // left
             5, 0, 4,
 
-            5, 4, 6, // down
-            6, 4, 7,
+            4, 7, 5, // down
+            5, 7, 6,
         )
 
         val invExtendedIndexedArray = (0 until extendedIndexesTemplateArray.size / 3).map {
