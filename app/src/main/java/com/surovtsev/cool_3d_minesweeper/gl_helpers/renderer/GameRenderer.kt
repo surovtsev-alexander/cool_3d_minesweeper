@@ -31,10 +31,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val mClickPointer: ClickPointer
 
         init {
-            val d: Short = if (true) {
-                3
+            val d: Short = if (false) {
+                12
             } else {
-                1
+                5
             }
 
             val xDim = d

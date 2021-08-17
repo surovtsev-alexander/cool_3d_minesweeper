@@ -64,6 +64,8 @@ class GLCubes(context: Context, val cubes: Cubes) {
         }
         */
 
+        var candidateCubes
+
         for (x in 0 until counts.x) {
             for (y in 0 until counts.y) {
                 for (z in 0 until counts.z) {

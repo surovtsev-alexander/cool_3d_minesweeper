@@ -28,7 +28,7 @@ class ModelObject(
         mModelModelGLSLProgram = ModelGLSLProgram(context)
         mModelModelGLSLProgram.prepare_program()
 
-        mTextureId = TextureHelper.loadTexture(context, R.drawable.texture_1)
+        mTextureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
     }
 
