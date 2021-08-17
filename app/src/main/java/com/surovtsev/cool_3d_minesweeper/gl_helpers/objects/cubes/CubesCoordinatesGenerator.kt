@@ -5,9 +5,9 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.Coll
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 
-class RawCubes(val trianglesCoordinates: FloatArray,
-               val indexes: ShortArray,
-               val collisionCubes: CollisionCubes) {
+class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
+                                val indexes: ShortArray,
+                                val collisionCubes: CollisionCubes) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
             -1,  1,  1, // A
@@ -79,14 +79,14 @@ class RawCubes(val trianglesCoordinates: FloatArray,
         }
         */
 
-        fun rawCubes(
-            cubesConfig: CubesConfig
-        ): RawCubes {
+        fun generateCubesCoordinates(
+            cubesCoordinatesGeneratorConfig: CubesCoordinatesGeneratorConfig
+        ): CubesCoordinatesGenerator {
             val indexesArray = invExtendedIndexedArray
 
-            val counts = cubesConfig.counts
-            val dimensions = cubesConfig.dimensions
-            val gaps = cubesConfig.gaps
+            val counts = cubesCoordinatesGeneratorConfig.counts
+            val dimensions = cubesCoordinatesGeneratorConfig.dimensions
+            val gaps = cubesCoordinatesGeneratorConfig.gaps
             val cubesCount = counts.x * counts.y * counts.z
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = indexesArray.size
@@ -155,7 +155,7 @@ class RawCubes(val trianglesCoordinates: FloatArray,
 
             val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers)
 
-            return RawCubes(trianglesCoordinates, indexes, collisionCubes)
+            return CubesCoordinatesGenerator(trianglesCoordinates, indexes, collisionCubes)
         }
     }
 }

@@ -1,12 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.GameObject
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
-import glm_.vec3.Vec3
-import glm_.vec4.Vec4
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureHelper
 import java.lang.StringBuilder
 
 class Cubes(val triangleCoordinates: FloatArray,
@@ -16,19 +12,9 @@ class Cubes(val triangleCoordinates: FloatArray,
             val gameObject: GameObject
 ) {
     companion object {
-        val mTextureCoordinatesTemplate = floatArrayOf(
-            0f, 1f,
-            1f, 0f,
-            0f, 0f,
-
-            1f, 1f,
-            1f, 0f,
-            0f, 1f,
-        )
-
-        fun cubes(rawCubes: RawCubes): Cubes {
-            val compactCoordinates = rawCubes.trianglesCoordinates
-            val indexes = rawCubes.indexes
+        fun cubes(cubesCoordinatesGenerator: CubesCoordinatesGenerator): Cubes {
+            val compactCoordinates = cubesCoordinatesGenerator.trianglesCoordinates
+            val indexes = cubesCoordinatesGenerator.indexes
             val pointsCount = indexes.count()
 
             val trianglesCoordinatesCount = 3 * pointsCount
@@ -38,7 +24,7 @@ class Cubes(val triangleCoordinates: FloatArray,
             val trianglesTextures = FloatArray(pointsCount)
 
             val textureCoordinates = (0 until indexes.size / 6).map {
-                mTextureCoordinatesTemplate.asIterable()
+                TextureHelper.textureCoordinatesTemplate.asIterable()
             }.flatten().toFloatArray()
 
             for (i in 0 until pointsCount) {
@@ -56,7 +42,7 @@ class Cubes(val triangleCoordinates: FloatArray,
                 trianglesTextures[i] = 0f + 0.1f
             }
 
-            val gameObject = GameObject(rawCubes.collisionCubes)
+            val gameObject = GameObject(cubesCoordinatesGenerator.collisionCubes)
 
             val res = Cubes(
                 trianglesCoordinates,

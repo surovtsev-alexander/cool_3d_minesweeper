@@ -20,7 +20,7 @@ class GLCubes(context: Context, val cubes: Cubes) {
             Log.d("TEST", "buffer_len: ${glObject.texturesArray.floatBuffer.capacity()}")
             Log.d("TEST", "id: $id")
         }
-        val cubeIndexsCount = RawCubes.invExtendedIndexedArray.size
+        val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
 
         val startPos = cubeIndexsCount * id
 
@@ -64,7 +64,7 @@ class GLCubes(context: Context, val cubes: Cubes) {
         }
         */
 
-        var candidateCubes
+        //var candidateCubes
 
         for (x in 0 until counts.x) {
             for (y in 0 until counts.y) {

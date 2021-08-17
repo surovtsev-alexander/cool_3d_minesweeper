@@ -6,9 +6,9 @@ import android.opengl.GLSurfaceView
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesConfig
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.RawCubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
@@ -45,7 +45,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             val dimensions = Vec3(5f, 5f, 5f)
             val gaps = dimensions / counts / 40
-            val cubesConfig = CubesConfig(
+            val cubesConfig = CubesCoordinatesGeneratorConfig(
                 counts,
                 dimensions,
                 gaps
@@ -53,7 +53,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             glCubes = GLCubes(
                 context,
                 Cubes.cubes(
-                    RawCubes.rawCubes(
+                    CubesCoordinatesGenerator.generateCubesCoordinates(
                         cubesConfig
                     )
                 )
