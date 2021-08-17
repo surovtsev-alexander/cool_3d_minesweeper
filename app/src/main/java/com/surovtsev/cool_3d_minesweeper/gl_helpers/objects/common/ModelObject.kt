@@ -22,7 +22,7 @@ class ModelObject(
     private val vertexArray = VertexArray(trianglesCoordinates)
     private val numsArray = VertexArray(trianglesNums)
     val texturesArray = VertexArray(trianglesTextures)
-    private val textureCoordinatesArray = VertexArray(textureCoordinates)
+    val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {
         mModelModelGLSLProgram = ModelGLSLProgram(context)

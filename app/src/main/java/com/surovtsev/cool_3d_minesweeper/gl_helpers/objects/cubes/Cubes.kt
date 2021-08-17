@@ -2,7 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.GameObject
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureHelper
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import java.lang.StringBuilder
 
 class Cubes(val triangleCoordinates: FloatArray,
@@ -23,8 +24,10 @@ class Cubes(val triangleCoordinates: FloatArray,
             val trianglesNums = FloatArray(pointsCount)
             val trianglesTextures = FloatArray(pointsCount)
 
+            val tt =
+                TextureCoordinatesHelper.textureCoordinates[TextureCoordinatesHelper.TextureTypes.CLOSED]!!.asIterable()
             val textureCoordinates = (0 until indexes.size / 6).map {
-                TextureHelper.textureCoordinatesTemplate.asIterable()
+                tt
             }.flatten().toFloatArray()
 
             for (i in 0 until pointsCount) {
@@ -50,6 +53,32 @@ class Cubes(val triangleCoordinates: FloatArray,
                 trianglesTextures,
                 textureCoordinates,
                 gameObject)
+
+            if (LoggerConfig.LOG_TEXURE_HELPER) {
+                val sb = StringBuilder()
+
+                sb.append("TextureHelper\n")
+
+                sb.append(TextureCoordinatesHelper.TextureTypes.values())
+                sb.append('\n');
+
+                sb.append(TextureCoordinatesHelper.commonTexturesPositions)
+                sb.append('\n')
+
+                sb.append(TextureCoordinatesHelper.numberTexturesPositions)
+                sb.append('\n')
+
+                sb.append(TextureCoordinatesHelper.texturesPositions)
+                sb.append('\n')
+
+                sb.append(TextureCoordinatesHelper.textureCoordinates.map {
+                    it.key.toString() + " " + it.value.toList().toString()
+                }.reduce {sum, elem -> sum + "\n" + elem})
+                sb.append('\n')
+
+                Log.d("TEST", sb.toString())
+            }
+
 
             if (false) {
                 res.log()

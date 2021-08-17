@@ -5,8 +5,10 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.TextureHelper
 import glm_.vec3.Vec3i
 
 class GLCubes(context: Context, val cubes: Cubes) {
@@ -20,16 +22,33 @@ class GLCubes(context: Context, val cubes: Cubes) {
             Log.d("TEST", "buffer_len: ${glObject.texturesArray.floatBuffer.capacity()}")
             Log.d("TEST", "id: $id")
         }
-        val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
 
-        val startPos = cubeIndexsCount * id
+        run {
+            val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
+            val startPos = cubeIndexsCount * id
+            val c = description.getColor() + 0.1f
 
-        val c = description.getColor() + 0.1f
+            glObject.texturesArray.updateBuffer(
+                FloatArray(cubeIndexsCount) { c },
+                startPos,
+                cubeIndexsCount
+            )
+        }
 
-        glObject.texturesArray.updateBuffer(
-            FloatArray(cubeIndexsCount) { c },
-            startPos,
-            cubeIndexsCount)
+        run {
+            val textureIndexesCount = TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
+            val startPos = textureIndexesCount * id * 6
+
+            val resArray = (0 until 6).map {
+                TextureCoordinatesHelper.textureCoordinates[TextureCoordinatesHelper.TextureTypes.EXPLODED_BOMB]!!.asIterable()
+            }.flatten().toFloatArray()
+            glObject.textureCoordinatesArray.updateBuffer(
+                resArray,
+                startPos,
+                resArray.count()
+            )
+
+        }
     }
 
     fun testPointer(pointer: IPointer): Unit {
