@@ -10,7 +10,7 @@ import java.nio.FloatBuffer
 open class ModelGLSLProgram(
     context: Context): GLSLProgram(
     ShaderHelper.ShaderLoadParameters(
-        context, R.raw.scene_vertex_shader, R.raw.scene_fragment_shader)) {
+        context, R.raw.model_vertex_shader, R.raw.model_fragment_shader)) {
 
     private val A_TRIANGLE_NUM = "a_TriangleNum"
     private val A_TRIANGLE_TEXTURE = "a_TriangleTexture"
