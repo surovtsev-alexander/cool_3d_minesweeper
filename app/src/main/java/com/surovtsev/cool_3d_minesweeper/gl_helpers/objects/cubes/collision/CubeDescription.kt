@@ -2,35 +2,46 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision
 
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper.TextureType
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper.numberTextures
+import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 
 
 data class CubeDescription(
     val isBomb: Boolean = false,
     var neighbourBombs: Vec3i = Vec3i(),
-    var texture: TextureType =TextureType.CLOSED
+    var texture: Array<TextureType> = Array<TextureType>(3) { TextureType.CLOSED }
 ) {
-    fun isEmpty() = texture == TextureType.EMPTY
+    fun isEmpty() = texture[0] == TextureType.EMPTY
 
     fun touch() {
-        when (texture) {
+        when (texture[0]) {
             TextureType.CLOSED -> {
                if (isBomb) {
-                   texture = TextureType.EXPLODED_BOMB
+                    setTexture(TextureType.EXPLODED_BOMB)
                } else {
-                   texture = numberTextures[2]
+                   neighbourBombs = Vec3i(0, 2, 7)
+
+                   for (i in 0 until 3) {
+                       texture[i] = numberTextures[neighbourBombs[i]]
+                   }
                }
             }
             TextureType.MARKED -> {
                 if (isBomb) {
-                    texture = TextureType.EMPTY
+                    setTexture(TextureType.EMPTY)
                 } else {
-                    texture = TextureType.EXPLODED_BOMB
+                    setTexture(TextureType.EXPLODED_BOMB)
                 }
             }
             else -> {
-                texture = TextureType.EMPTY
+                setTexture(TextureType.EMPTY)
             }
+        }
+    }
+
+    private fun setTexture(tt: TextureType) {
+        for (i in 0 until texture.count()) {
+            texture[i] = tt
         }
     }
 }

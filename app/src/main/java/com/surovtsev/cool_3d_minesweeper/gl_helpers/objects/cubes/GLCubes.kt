@@ -32,12 +32,12 @@ class GLCubes(context: Context, val cubes: Cubes) {
             val startPos = textureIndexesCount * id * 6
 
             val xx = arrayOf(
-                description.texture,
-                description.texture,
-                description.texture,
-                description.texture,
-                description.texture,
-                description.texture,
+                description.texture[0],
+                description.texture[2],
+                description.texture[1],
+                description.texture[2],
+                description.texture[1],
+                description.texture[0],
             )
 
 
