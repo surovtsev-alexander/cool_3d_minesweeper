@@ -7,7 +7,7 @@ class CollisionCubes(
     val counts: Vec3s,
     val cubeSphereRadius: Float,
     centers: Array<Vec3>,
-    halfDims: Vec3
+    halfSpace: Vec3
 ) {
     val spaceParameters: Array<Array<Array<CubeSpaceParameters>>>
 
@@ -22,7 +22,7 @@ class CollisionCubes(
         spaceParameters = Array(counts.x.toInt()) { x ->
             Array(counts.y.toInt()) { y ->
                 Array(counts.z.toInt()) { z ->
-                    CubeSpaceParameters(centers[calcId(counts, x, y, z)], halfDims)
+                    CubeSpaceParameters(centers[calcId(counts, x, y, z)], halfSpace)
                 }
             }
         }

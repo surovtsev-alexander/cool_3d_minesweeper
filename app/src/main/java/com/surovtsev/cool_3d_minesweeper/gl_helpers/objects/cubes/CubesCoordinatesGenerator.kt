@@ -153,7 +153,7 @@ class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
                 Log.d("TEST", test_str)
             }
 
-            val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers, cubesHalfDims)
+            val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers, cubeHalfSpace)
 
             return CubesCoordinatesGenerator(trianglesCoordinates, indexes, collisionCubes)
         }

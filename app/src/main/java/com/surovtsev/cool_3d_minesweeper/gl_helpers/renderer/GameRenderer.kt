@@ -25,7 +25,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val mClickPointer: ClickPointer
 
         init {
-            val d: Short = if (false) {
+            val d: Short = if (true) {
                 12
             } else {
                 2
