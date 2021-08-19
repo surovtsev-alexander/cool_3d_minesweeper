@@ -13,13 +13,13 @@ open class CLickPointerGLSLProgram(
     context, R.raw.pointer_vertex_shader, R.raw.pointer_fragment_shader
 )) {
 
-    private val U_POINT_SIZE = "u_PointSize"
+    private val U_POINT_SIZE = "u_pointSize"
 
     val mAPosition = Attribute(A_POSITION)
 
     private val mUPointSize = Uniform(U_POINT_SIZE)
     private val mUColor = Uniform(U_COLOR)
-    val mU_MVP_Matrix = Uniform(U_MVP_MATRIX)
+    val mU_MVP_Matrix = Uniform(U_MVP)
     val mLineWidth = 10f;
 
     override val fields = arrayOf(
@@ -40,7 +40,7 @@ open class CLickPointerGLSLProgram(
         private val floatBuffer = FloatBuffer.allocate(16)
     }
 
-    fun fillU_MVP_Matrix(mvpMatrix: Mat4) {
+    fun fillU_MVP(mvpMatrix: Mat4) {
         GLES20.glUniformMatrix4fv(
             mU_MVP_Matrix.location, 1,
             false,

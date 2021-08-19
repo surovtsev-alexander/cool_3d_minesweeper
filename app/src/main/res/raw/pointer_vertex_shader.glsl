@@ -1,11 +1,11 @@
-uniform mat4 u_MVP_Matrix;
-uniform float u_PointSize;
+uniform mat4 u_MVP;
+uniform float u_pointSize;
 
-attribute vec3 a_Position;
+attribute vec3 a_position;
 
 
 void main()
 {
-    gl_Position = u_MVP_Matrix * vec4(a_Position, 1.0);
-    gl_PointSize = u_PointSize;
+    gl_Position = u_MVP * vec4(a_position, 1.0);
+    gl_PointSize = u_pointSize;
 }

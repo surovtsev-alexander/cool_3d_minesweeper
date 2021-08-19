@@ -13,29 +13,25 @@ open class ModelGLSLProgram(
         context, R.raw.model_vertex_shader, R.raw.model_fragment_shader)) {
 
     private val A_IS_EMPTY = "a_isEmpty"
-    private val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
-    private val U_TEXTURE_UNIT = "u_TextureUnit"
+    private val A_TEXTURE_COORDINATES = "a_textureCoordinates"
+    private val U_TEXTURE_UNIT = "u_textureUnit"
 
     val aPosition = Attribute(A_POSITION)
     val aIsEmpty = Attribute(A_IS_EMPTY)
     val aTextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
-    private val uColor = Uniform(U_COLOR)
-    private val u_MVP_Matrix = Uniform(U_MVP_MATRIX)
+    private val u_MVP = Uniform(U_MVP)
     val mUTextureLocation = Uniform(U_TEXTURE_UNIT)
 
     override val fields = arrayOf(
         aPosition,
         aIsEmpty,
         aTextureCoordinates,
-        uColor,
-        u_MVP_Matrix,
+        u_MVP,
         mUTextureLocation
     )
 
     override fun loadLocations() {
         super.loadLocations()
-
-        glUniform4f(uColor.location, 1f, 0f, 0f, 1f)
     }
 
 
@@ -43,8 +39,8 @@ open class ModelGLSLProgram(
         private val floatBuffer = FloatBuffer.allocate(16)
     }
 
-    fun fillU_MVP_Matrix(mvp_matrix: Mat4) {
-        glUniformMatrix4fv(u_MVP_Matrix.location, 1,
+    fun fillU_MVP(mvp_matrix: Mat4) {
+        glUniformMatrix4fv(u_MVP.location, 1,
             false,
             mvp_matrix.to(floatBuffer, 0).array()
             , 0)

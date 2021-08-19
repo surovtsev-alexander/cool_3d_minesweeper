@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
@@ -11,13 +10,8 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
-import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
-import glm_.vec4.Vec4
-import java.lang.StringBuilder
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -78,12 +72,12 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val mVPMatrix = mCameraInfo.mMVPMatrix
             with(glObject.mModelModelGLSLProgram) {
                 use_program()
-                fillU_MVP_Matrix(mVPMatrix)
+                fillU_MVP(mVPMatrix)
             }
 
             with(modelObjects.mClickPointer.mGLSLProgram) {
                 use_program()
-                fillU_MVP_Matrix(mVPMatrix)
+                fillU_MVP(mVPMatrix)
             }
         }
 
@@ -113,7 +107,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 modelObjects.mClickPointer.mGLSLProgram.use_program()
                 if (moved) {
                     with(modelObjects.mClickPointer.mGLSLProgram) {
-                        fillU_MVP_Matrix(mCameraInfo.mMVPMatrix)
+                        fillU_MVP(mCameraInfo.mMVPMatrix)
                     }
                 }
                 modelObjects.mClickPointer.bindData()
@@ -131,7 +125,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             }
             if (moved) {
                 with(glObject.mModelModelGLSLProgram) {
-                    fillU_MVP_Matrix(mCameraInfo.mMVPMatrix)
+                    fillU_MVP(mCameraInfo.mMVPMatrix)
                 }
             }
             glObject.draw()
