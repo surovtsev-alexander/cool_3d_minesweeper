@@ -7,7 +7,21 @@ interface IPointer {
     val near: Vec3
     val far: Vec3
 
-    fun getProjectionCalculator(): (Vec3) -> Vec3
+    fun getPointerDescriptor(): PointerDescriptor
+}
+
+data class PointerDescriptor(
+    val near: Vec3,
+    val far: Vec3) {
+
+    val n = far - near
+
+    fun calcProjection(p: Vec3): Vec3 {
+        val a_lambda = n.dot(n)
+        val b = n.dot(near - p)
+        val l = -1 * b / a_lambda
+        return near + n * l
+    }
 }
 
 open class PointerData(
@@ -28,15 +42,5 @@ class Pointer(): PointerData(Vec3(), Vec3()), IPointer {
             super.far = value
         }
 
-    override fun getProjectionCalculator(): (Vec3) -> Vec3 {
-        val n = far - near
-
-        return {m:Vec3 ->
-            val a_lambda = n.dot(n)
-            val b = n.dot(near - m)
-            val l = -1 * b / a_lambda
-            val res = near + n * l
-            res
-        }
-    }
+    override fun getPointerDescriptor() = PointerDescriptor(near, far)
 }

@@ -5,15 +5,11 @@ import glm_.vec3.Vec3s
 
 class CollisionCubes(
     val counts: Vec3s,
-    val cubeSphereRadius: Float
+    val cubeSphereRadius: Float,
+    centers: Array<Vec3>,
+    halfDims: Vec3
 ) {
-    val centers: Array<Array<Array<Vec3>>> = Array(counts.x.toInt()) {
-        Array(counts.y.toInt()) {
-            Array(counts.z.toInt()) {
-                Vec3()
-            }
-        }
-    }
+    val spaceParameters: Array<Array<Array<CubeSpaceParameters>>>
 
     val squaredCubeSphereRadius = cubeSphereRadius * cubeSphereRadius
 
@@ -22,18 +18,11 @@ class CollisionCubes(
             x + counts.x * (y + counts.y * z)
     }
 
-    constructor(
-        counts_: Vec3s,
-        cubeSphereRadius_: Float,
-        centers_: Array<Vec3>): this(
-        counts_, cubeSphereRadius_
-    ) {
-        for (x in 0 until counts.x) {
-            for (y in 0 until counts.y) {
-                for (z in 0 until counts.z) {
-                    val id = calcId(counts, x, y, z)
-
-                    centers[x][y][z] = centers_[id]
+    init {
+        spaceParameters = Array(counts.x.toInt()) { x ->
+            Array(counts.y.toInt()) { y ->
+                Array(counts.z.toInt()) { z ->
+                    CubeSpaceParameters(centers[calcId(counts, x, y, z)], halfDims)
                 }
             }
         }

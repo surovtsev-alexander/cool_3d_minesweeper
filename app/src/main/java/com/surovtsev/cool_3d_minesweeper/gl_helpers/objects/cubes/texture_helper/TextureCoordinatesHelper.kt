@@ -18,7 +18,8 @@ object TextureCoordinatesHelper {
     private val cols = 4
     private val rows = 3
 
-    enum class TextureTypes {
+    enum class TextureType {
+        EMPTY,
         CLOSED,
         MARKED,
         EXPLODED_BOMB,
@@ -32,19 +33,21 @@ object TextureCoordinatesHelper {
         SEVEN
     }
 
+    val commonTexturesCount = 4
+
+    val numberTextures = TextureType.values().drop(4)
+
     val commonTexturesPositions = mapOf(
-        TextureTypes.CLOSED to Vec2i(0, 0),
-        TextureTypes.MARKED to Vec2i(1, 0),
-        TextureTypes.EXPLODED_BOMB to Vec2i(2, 0),
+        TextureType.EMPTY to Vec2i(0, 0),
+        TextureType.CLOSED to Vec2i(0, 0),
+        TextureType.MARKED to Vec2i(1, 0),
+        TextureType.EXPLODED_BOMB to Vec2i(2, 0)
     )
 
-    val numberTexturesPositions = TextureTypes.values().let {
-        val commonTexturesCount = 3
-        (0 until it.count() - commonTexturesCount).map { x ->
-            val col = x % cols
-            val row = x / cols + 1
-            it[x + commonTexturesCount] to Vec2i(col, row)
-        }
+    val numberTexturesPositions = numberTextures.mapIndexed { idx, elem ->
+        val col = idx % cols
+        val row = idx / cols + 1
+        elem to Vec2i(col, row)
     }
 
     val texturesPositions = commonTexturesPositions + numberTexturesPositions

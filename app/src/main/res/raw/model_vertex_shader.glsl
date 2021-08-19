@@ -9,7 +9,7 @@ attribute vec2 a_TextureCoordinates;
 
 /* unused */
 varying float triangleNum;
-/* unused */
+
 varying float triangleTexture;
 
 varying vec2 textureCoordinates;

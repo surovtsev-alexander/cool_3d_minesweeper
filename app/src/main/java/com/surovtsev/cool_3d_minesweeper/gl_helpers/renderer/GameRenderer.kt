@@ -34,7 +34,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val d: Short = if (false) {
                 12
             } else {
-                5
+                2
             }
 
             val xDim = d

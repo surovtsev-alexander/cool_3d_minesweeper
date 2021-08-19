@@ -25,7 +25,7 @@ class Cubes(val triangleCoordinates: FloatArray,
             val trianglesTextures = FloatArray(pointsCount)
 
             val tt =
-                TextureCoordinatesHelper.textureCoordinates[TextureCoordinatesHelper.TextureTypes.CLOSED]!!.asIterable()
+                TextureCoordinatesHelper.textureCoordinates[TextureCoordinatesHelper.TextureType.CLOSED]!!.asIterable()
             val textureCoordinates = (0 until indexes.size / 6).map {
                 tt
             }.flatten().toFloatArray()
@@ -42,7 +42,7 @@ class Cubes(val triangleCoordinates: FloatArray,
                 trianglesNums[i] = (i / 3 % 2).toFloat() + 0.1f
 
                 //trianglesTextures[i] = (i / 6 % 6).toFloat() + 0.1f
-                trianglesTextures[i] = 0f + 0.1f
+                trianglesTextures[i] = 1f
             }
 
             val gameObject = GameObject(cubesCoordinatesGenerator.collisionCubes)
@@ -59,7 +59,7 @@ class Cubes(val triangleCoordinates: FloatArray,
 
                 sb.append("TextureHelper\n")
 
-                sb.append(TextureCoordinatesHelper.TextureTypes.values())
+                sb.append(TextureCoordinatesHelper.TextureType.values())
                 sb.append('\n');
 
                 sb.append(TextureCoordinatesHelper.commonTexturesPositions)

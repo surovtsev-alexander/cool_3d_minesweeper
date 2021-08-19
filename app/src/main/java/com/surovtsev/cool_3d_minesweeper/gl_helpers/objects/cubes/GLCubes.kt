@@ -5,10 +5,10 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.utils.TextureHelper
 import glm_.vec3.Vec3i
 
 class GLCubes(context: Context, val cubes: Cubes) {
@@ -18,35 +18,31 @@ class GLCubes(context: Context, val cubes: Cubes) {
         cubes.textureCoordinates)
 
     fun updateTexture(id: Int, description: CubeDescription) {
-        if (false && LoggerConfig.LOG_GL_CUBES) {
-            Log.d("TEST", "buffer_len: ${glObject.texturesArray.floatBuffer.capacity()}")
-            Log.d("TEST", "id: $id")
-        }
+        val empty = description.isEmpty()
 
-        run {
+        if (empty) {
             val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
             val startPos = cubeIndexsCount * id
-            val c = description.getColor() + 0.1f
 
             glObject.texturesArray.updateBuffer(
-                FloatArray(cubeIndexsCount) { c },
+                FloatArray(cubeIndexsCount) { -1f },
                 startPos,
                 cubeIndexsCount
             )
-        }
-
-        run {
-            val textureIndexesCount = TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
+        } else {
+            val textureIndexesCount =
+                TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
             val startPos = textureIndexesCount * id * 6
 
             val xx = arrayOf(
-                TextureCoordinatesHelper.TextureTypes.ONE,
-                TextureCoordinatesHelper.TextureTypes.TWO,
-                TextureCoordinatesHelper.TextureTypes.THREE,
-                TextureCoordinatesHelper.TextureTypes.FOUR,
-                TextureCoordinatesHelper.TextureTypes.FIVE,
-                TextureCoordinatesHelper.TextureTypes.SIX
+                description.texture,
+                description.texture,
+                description.texture,
+                description.texture,
+                description.texture,
+                description.texture,
             )
+
 
             val resArray = xx.map {
                 TextureCoordinatesHelper.textureCoordinates[it]!!.asIterable()
@@ -56,7 +52,6 @@ class GLCubes(context: Context, val cubes: Cubes) {
                 startPos,
                 resArray.count()
             )
-
         }
     }
 
@@ -65,34 +60,18 @@ class GLCubes(context: Context, val cubes: Cubes) {
         val collisionCubes = gameObject.collisionCubes
         val counts = collisionCubes.counts
         val descriptions = gameObject.descriptions
-        val centers = collisionCubes.centers
+        val spaceParameters = collisionCubes.spaceParameters
         val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
 
-        val x1 = pointer.near
-        val x2 = pointer.far
-        val n = x2 - x1
+        val pointerDescriptor = pointer.getPointerDescriptor()
 
-        val projectionCalculator = pointer.getProjectionCalculator()
+        data class PointedCube(
+            val id: Int,
+            val spaceParameters: CubeSpaceParameters,
+            val description: CubeDescription)
 
-        if (false) {
-            val testId = Vec3i(0, counts.y - 1, counts.z - 1)
-            val d = descriptions[testId.x][testId.y][testId.z]
-            d.isOpened = true
-            updateTexture(
-                CollisionCubes.calcId(counts, testId.x, testId.y, testId.z),
-                d
-            )
-        }
-
-        /*
-        val sb = StringBuilder()
-
-        if (LoggerConfig.LOG_GL_CUBES) {
-            sb.append("_\nx1: $x1 x2: $x2 n: ${x2 - x1} squaredCubeSphereRadius: ${squaredCubeSphereRadius}\n")
-        }
-        */
-
-        //var candidateCubes
+        var candidateCubes =
+            mutableListOf<Pair<Float, PointedCube>>()
 
         for (x in 0 until counts.x) {
             for (y in 0 until counts.y) {
@@ -100,35 +79,38 @@ class GLCubes(context: Context, val cubes: Cubes) {
                     val id = CollisionCubes.calcId(counts, x, y, z)
                     val d = descriptions[x][y][z]
 
-                    if (d.isOpened) {
+                    if (d.isEmpty()) {
                         continue
                     }
 
-                    val c = centers[x][y][z]
+                    val spaceParameter = spaceParameters[x][y][z]
+                    val center = spaceParameter.center
 
-                    val projection = projectionCalculator(c)
+                    val projection = pointerDescriptor.calcProjection(center)
+                    val squaredDistance = (center - projection).length2()
 
-                    val squaredDistance = (c - projection).length2()
-
-                    /*
-                    if (LoggerConfig.LOG_GL_CUBES) {
-                        sb.append("c: $c projection $projection squaredDistance: ${squaredDistance}\n")
-                    }
-                     */
 
                     if (squaredDistance <= squaredCubeSphereRadius) {
-                        d.isOpened = true
+                        val fromNear = (pointerDescriptor.near - projection).length()
 
-                        updateTexture(id, d)
+                        candidateCubes.add(fromNear to PointedCube(
+                            id, spaceParameter, d))
                     }
                 }
             }
         }
 
-        /*
-        if (LoggerConfig.LOG_GL_CUBES) {
-            Log.d("TEST", sb.toString())
+        val sortedCandidates = candidateCubes.sortedBy { it.first }
+
+
+        for (c in sortedCandidates) {
+            val candidate = c.second
+
+            if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
+                candidate.description.touch()
+                updateTexture(candidate.id, candidate.description)
+                break
+            }
         }
-         */
     }
 }
