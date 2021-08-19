@@ -37,7 +37,7 @@ class CubeSpaceParameters(
 
         companion object {
             fun dot(a: Vec4, b: Vec4): Float {
-                return a.x * b.x + a.y * b.y + a.z * b.z + a.w + b.w
+                return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
             }
 
             fun dist(p1: Vec3, p2: Vec3) = (p1 - p2).length()
@@ -61,8 +61,8 @@ class CubeSpaceParameters(
 
             val plane3 = Vec3(plane)
 
-            val denominator = n.dot(plane3)           //dot(Vec4(n, 0), plane)
-            val numerator = x1.dot(plane3) + plane[3] //dot(Vec4(x1, 1), plane)
+            val denominator = dot(Vec4(n, 0), plane)
+            val numerator = dot(Vec4(x1, 1), plane)
 
             if (Math.isZero(denominator)) {
                 return null
