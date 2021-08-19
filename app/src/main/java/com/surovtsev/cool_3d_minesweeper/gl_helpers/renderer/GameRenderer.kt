@@ -144,10 +144,6 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable(GL_CULL_FACE)
 
         mModelObjects = ModelObjects()
-
-        if (LoggerConfig.LOG_SCENE) {
-            ApplicationController.instance!!.logScene = this::logScene
-        }
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -166,50 +162,5 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         mScene?.onDrawFrame()
-    }
-
-    fun logScene() {
-        val cameraInfo = mScene!!.mCameraInfo
-        val mvp_matrix = cameraInfo.mMVPMatrix
-        val points = mModelObjects!!.glCubes.glObject.trianglesCoordinates
-
-        val test_str = StringBuilder()
-
-        val matrix_to_str = {
-                caption: String, matrix: Mat4 ->
-            "$caption\n${matrix}"
-        }
-
-        if (false) {
-            test_str.append("width: ${cameraInfo.mDisplayWidthF}\n")
-            test_str.append("height: ${cameraInfo.mDisplayHeightF}\n")
-        }
-
-        if (false) {
-            test_str.append(
-                matrix_to_str("projection_matrix", cameraInfo.mProjectionMatrix)
-            )
-            test_str.append("\n")
-        }
-
-        if (false) {
-            test_str.append(
-                matrix_to_str("mvp_matrix", mvp_matrix)
-            )
-            test_str.append("\n")
-        }
-
-        if (true) {
-            test_str.append("points:\n")
-            for (i in 0 until points.count() / 3) {
-                val p = Vec4(points[i * 3], points[i * 3 + 1], points[i * 3 + 2], 1f)
-                val pp = mvp_matrix * p
-                val ppn = Vec3(pp) / pp[3]
-
-                test_str.append("$p -> $pp -> $ppn\n")
-            }
-        }
-
-        Log.d("TEST", test_str.toString())
     }
 }

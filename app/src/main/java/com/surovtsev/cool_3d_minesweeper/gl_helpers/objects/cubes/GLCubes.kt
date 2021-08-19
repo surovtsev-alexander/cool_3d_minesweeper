@@ -1,20 +1,17 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.content.Context
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import glm_.vec3.Vec3i
 
 class GLCubes(context: Context, val cubes: Cubes) {
 
     val glObject = ModelObject(context, cubes.triangleCoordinates,
-        cubes.trianglesNums, cubes.trianglesTextures,
+        cubes.isEmpty,
         cubes.textureCoordinates)
 
     fun updateTexture(id: Int, description: CubeDescription) {
@@ -24,8 +21,8 @@ class GLCubes(context: Context, val cubes: Cubes) {
             val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
             val startPos = cubeIndexsCount * id
 
-            glObject.texturesArray.updateBuffer(
-                FloatArray(cubeIndexsCount) { -1f },
+            glObject.isEmptyArray.updateBuffer(
+                FloatArray(cubeIndexsCount) { 1f },
                 startPos,
                 cubeIndexsCount
             )

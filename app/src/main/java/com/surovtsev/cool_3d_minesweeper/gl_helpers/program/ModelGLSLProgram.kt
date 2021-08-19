@@ -12,14 +12,12 @@ open class ModelGLSLProgram(
     ShaderHelper.ShaderLoadParameters(
         context, R.raw.model_vertex_shader, R.raw.model_fragment_shader)) {
 
-    private val A_TRIANGLE_NUM = "a_TriangleNum"
-    private val A_TRIANGLE_TEXTURE = "a_TriangleTexture"
+    private val A_IS_EMPTY = "a_isEmpty"
     private val A_TEXTURE_COORDINATES = "a_TextureCoordinates"
     private val U_TEXTURE_UNIT = "u_TextureUnit"
 
     val aPosition = Attribute(A_POSITION)
-    val aTriangleNum = Attribute(A_TRIANGLE_NUM)
-    val aTriangleTexture = Attribute(A_TRIANGLE_TEXTURE)
+    val aIsEmpty = Attribute(A_IS_EMPTY)
     val aTextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
     private val uColor = Uniform(U_COLOR)
     private val u_MVP_Matrix = Uniform(U_MVP_MATRIX)
@@ -27,8 +25,7 @@ open class ModelGLSLProgram(
 
     override val fields = arrayOf(
         aPosition,
-        aTriangleNum,
-        aTriangleTexture,
+        aIsEmpty,
         aTextureCoordinates,
         uColor,
         u_MVP_Matrix,

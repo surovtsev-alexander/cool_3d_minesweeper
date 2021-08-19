@@ -23,6 +23,11 @@ class Triangles(context: Context) {
         1f, 1f, 1f
     )
 
+    private val isEmpty = floatArrayOf(
+        -1f, -1f, -1f,
+        -1f, -1f, -1f
+    )
+
     private val textureCoordinates = floatArrayOf(
         0f, 0f,
         1f, 1f,
@@ -33,6 +38,6 @@ class Triangles(context: Context) {
         0f, 0f
     )
 
-    val glslObject = ModelObject(context, triangleCoordinates, triangleNumbers,
-        triangleTextures, textureCoordinates)
+    val glslObject = ModelObject(context, triangleCoordinates,
+        isEmpty, textureCoordinates)
 }

@@ -45,9 +45,5 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable(),
             ).reduce {acc, x -> "$acc\n$x"}
             ApplicationController.instance!!.messagesComponent!!.addMessageUI(message)
         }
-
-        if (LoggerConfig.LOG_SCENE) {
-            ApplicationController.instance!!.logScene?.invoke()
-        }
     }
 }
