@@ -1,5 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
+import android.util.Log
+import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3s
 
@@ -13,6 +15,18 @@ data class GameObject(
         companion object {
             fun calcId(counts: Vec3s, x: Int, y: Int, z: Int) =
                 x + counts.x * (y + counts.y * z)
+
+            fun getPointCalculator(counts: Vec3s): (Int) -> Vec3i =  { xyz ->
+                val x = xyz % counts.x.toInt()
+                val yz = (xyz - x) / counts.x
+                val y = yz % counts.y
+                val z = (yz - y) / counts.y
+                Vec3i(x, y, z)
+            }
+
+            fun <T> getValue(arr: Array<Array<Array<T>>>, pos: Vec3i) =
+                arr[pos.x][pos.y][pos.z]
+
         }
         fun getVec() = Vec3i(x, y, z)
 

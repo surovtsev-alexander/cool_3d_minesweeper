@@ -26,11 +26,16 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         )
     private val doubleClickDelay = 200L
 
+    private var bombsList: BombsList = MutableList<Vec3i>(0) { Vec3i() }
+
     fun touch(clickType: ClickHelper.ClickType, pointedCube: GLCubes.PointedCube, currTime: Long) {
         val position = pointedCube.position
 
         if (state == GameState.NO_BOBMS_PLACED) {
-            placeBombs(position)
+            bombsList = BombPlacer.placeBombs(gameObject, pointedCube.position)
+
+            NeighboursCalculator.fillNeighbours(gameObject, bombsList)
+            state = GameState.BOMBS_PLACED
         }
 
         val id = position.id
@@ -52,13 +57,6 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     }
 
 
-    private fun placeBombs(position: GameObject.Position) {
-        val bombsCount = gameObject.bombsCount
-
-        state = GameState.BOMBS_PLACED
-    }
-
-
     private fun emptyCube(pointedCube: GLCubes.PointedCube) {
         setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
     }
@@ -70,10 +68,13 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
                 if (description.isBomb) {
                     setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 } else {
-                    description.neighbourBombs = Vec3i(0, 2, 7)
-
                     for (i in 0 until 3) {
+//                        description.neighbourBombs[0] = pointedCube.position.x
+//                        description.neighbourBombs[1] = 0
+//                        description.neighbourBombs[2] = 0
+
                         description.texture[i] = TextureCoordinatesHelper.numberTextures[description.neighbourBombs[i]]
+                        textureUpdater.updateTexture(pointedCube)
                     }
                 }
             }

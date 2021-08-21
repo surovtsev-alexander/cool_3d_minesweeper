@@ -28,7 +28,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         init {
             val d: Short = if (true) {
-                12
+                5
             } else {
                 2
             }

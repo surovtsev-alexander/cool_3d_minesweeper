@@ -23,6 +23,8 @@ class ClickAndRotationHelper(
     private var prev = Vec2()
     private var movement = 0f
 
+    private var downed = false
+
     override fun getMovement(): Float = movement
 
     override fun onTouch(event: MotionEvent) {
@@ -34,32 +36,39 @@ class ClickAndRotationHelper(
                 movement = 0f
 
                 touchReceiver.getReceiver()?.donw(curr, this)
+                downed = true
             }
             MotionEvent.ACTION_MOVE -> {
-                val delta = curr - prev
+                if (downed) {
+                    val delta = curr - prev
 
-                clickEventQueueHandler.queueEvent(object: Runnable {
-                    val p = prev
-                    val c = curr
-                    override fun run() {
-                        rotationReceiver.getReceiver()?.rotateBetweenProjections(
-                            p, c
-                        )
-                    }
-                })
+                    clickEventQueueHandler.queueEvent(object : Runnable {
+                        val p = prev
+                        val c = curr
+                        override fun run() {
+                            rotationReceiver.getReceiver()?.rotateBetweenProjections(
+                                p, c
+                            )
+                        }
+                    })
 
-                movement += abs(delta.x) + abs(delta.y)
+                    movement += abs(delta.x) + abs(delta.y)
 
-                prev = curr
+                    prev = curr
+                }
             }
             MotionEvent.ACTION_UP -> {
-                touchReceiver.getReceiver()?.up()
+                if (downed) {
+                    touchReceiver.getReceiver()?.up()
+                    downed = false
+                }
             }
         }
     }
 
     override fun tryToRelease() {
         getAndRelease()
+        downed = false
         touchReceiver.getReceiver()?.release()
     }
 }

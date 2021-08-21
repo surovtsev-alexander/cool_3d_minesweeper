@@ -5,7 +5,7 @@ import glm_.vec3.Vec3i
 
 
 data class CubeDescription(
-    val isBomb: Boolean = false,
+    var isBomb: Boolean = false,
     var neighbourBombs: Vec3i = Vec3i(),
     var texture: Array<TextureType> = Array<TextureType>(3) { TextureType.CLOSED }
 ) {

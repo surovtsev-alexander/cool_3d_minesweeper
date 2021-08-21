@@ -47,12 +47,12 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
             val startPos = textureIndexesCount * id * 6
 
             val xx = arrayOf(
-                description.texture[0],
-                description.texture[2],
                 description.texture[1],
                 description.texture[2],
-                description.texture[1],
                 description.texture[0],
+                description.texture[2],
+                description.texture[0],
+                description.texture[1],
             )
 
 
@@ -120,7 +120,6 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
 
             if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
                 gameTouchHandler.touch(clickType, candidate, currTime)
-                updateTexture(candidate)
                 break
             }
         }
