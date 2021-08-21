@@ -3,12 +3,15 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.*
+import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.math.RotationMatrixDecomposer
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -62,18 +65,18 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     }
 
     inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
-        val mCameraInfo: CameraInfo
-        val mClickHandler: ClickHandler
+        val cameraInfo: CameraInfo
+        val clickHandler: ClickHandler
 
         init {
-            mCameraInfo = CameraInfo(width, height)
-            mClickHandler = ClickHandler(mCameraInfo)
+            cameraInfo = CameraInfo(width, height)
+            clickHandler = ClickHandler(cameraInfo)
         }
 
         fun onSurfaceChanged() {
             val glObject = modelObjects.glCubes.glObject
 
-            val mVPMatrix = mCameraInfo.MVP
+            val mVPMatrix = cameraInfo.MVP
             with(glObject.modelModelGLSLProgram) {
                 use_program()
                 fillU_MVP(mVPMatrix)
@@ -86,17 +89,17 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         }
 
         fun onDrawFrame() {
-            val moveHandler = mCameraInfo.moveHandler
+            val moveHandler = cameraInfo.moveHandler
             val moved = moveHandler.getAndRelease()
-            val clicked = mClickHandler.isUpdated()
+            val clicked = clickHandler.isUpdated()
 
             if (moved) {
-                mCameraInfo.recalculateMVPMatrix()
+                cameraInfo.recalculateMVPMatrix()
             }
 
             do {
                 if (clicked) {
-                    mClickHandler.release()
+                    clickHandler.release()
                     modelObjects.clickPointer.needToBeDrawn = true
                 }
 
@@ -105,13 +108,13 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 }
 
                 if (clicked) {
-                    modelObjects.clickPointer.setPoints(mClickHandler.pointer)
+                    modelObjects.clickPointer.setPoints(clickHandler.pointer)
                 }
 
                 modelObjects.clickPointer.mGLSLProgram.use_program()
                 if (moved) {
                     with(modelObjects.clickPointer.mGLSLProgram) {
-                        fillU_MVP(mCameraInfo.MVP)
+                        fillU_MVP(cameraInfo.MVP)
                     }
                 }
                 modelObjects.clickPointer.bindData()
@@ -125,11 +128,11 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             glObject.bindData()
             if (clicked) {
-                glCubes.testPointer(mClickHandler.pointer, clickHelper.clickType, rendereTimer.time)
+                glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendereTimer.time)
             }
             if (moved) {
                 with(glObject.modelModelGLSLProgram) {
-                    fillU_MVP(mCameraInfo.MVP)
+                    fillU_MVP(cameraInfo.MVP)
                 }
             }
             glObject.draw()
@@ -164,8 +167,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
         if (clickHelper.isClicked()) {
 
-            scene?.mClickHandler?.handleClick(clickHelper.clickPos, clickHelper.clickType)
+            scene?.clickHandler?.handleClick(clickHelper.clickPos, clickHelper.clickType)
             clickHelper.release()
+
+            if (false) {
+                val x = RotationMatrixDecomposer.getAngles(
+                    scene!!.cameraInfo!!.moveHandler.rotMatrix
+                )
+                ApplicationController.instance!!.messagesComponent!!.addMessageUI("$x")
+            }
         }
 
         scene?.onDrawFrame()

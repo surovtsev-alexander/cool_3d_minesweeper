@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.math.Math
+import com.surovtsev.cool_3d_minesweeper.math.MyMath
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
@@ -25,7 +25,7 @@ class ScalingHelper(
         val center = (a + b) / 2
 
         if (!needToBeInitted) {
-            if (!Math.isZero(prevDistance)) {
+            if (!MyMath.isZero(prevDistance)) {
                 val factor = distance / prevDistance
                 scaleReceiverCalculator.getReceiver()?.scale(factor)
             }

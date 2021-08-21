@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.PointerDescriptor
-import com.surovtsev.cool_3d_minesweeper.math.Math
+import com.surovtsev.cool_3d_minesweeper.math.MyMath
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import kotlin.math.sqrt
@@ -64,7 +64,7 @@ class CubeSpaceParameters(
             val denominator = dot(Vec4(n, 0), plane)
             val numerator = dot(Vec4(x1, 1), plane)
 
-            if (Math.isZero(denominator)) {
+            if (MyMath.isZero(denominator)) {
                 return null
             } else {
                 val res = x1 - n * numerator / denominator
@@ -86,7 +86,7 @@ class CubeSpaceParameters(
                 Log.d("TEST", "SS $ss space $space")
             }
 
-            return Math.isZero(ss - space)
+            return MyMath.isZero(ss - space)
         }
 
         fun testIntersection(pointerDescriptor: PointerDescriptor): Boolean {

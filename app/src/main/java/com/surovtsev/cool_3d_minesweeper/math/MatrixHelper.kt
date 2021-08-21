@@ -13,7 +13,7 @@ import kotlin.math.tan
 object MatrixHelper {
     fun perspectiveM(m: FloatArray, yFovInDegrees: Float, aspect: Float,
                      n: Float, f: Float) {
-        val angleInRadians = Math.gradToRad(yFovInDegrees)
+        val angleInRadians = MyMath.gradToRad(yFovInDegrees)
 
         val a = (1.0 / tan(angleInRadians / 2.0)).toFloat()
 

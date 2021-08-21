@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper
 
-import com.surovtsev.cool_3d_minesweeper.math.Math
+import com.surovtsev.cool_3d_minesweeper.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 
@@ -63,7 +63,7 @@ object TextureCoordinatesHelper {
         val yCoords = calcPointCoords(pos.y, rows)
 
         val getCoord = { point: Vec2, flag: Float ->
-            if (Math.isZero(flag)) point.x else point.y
+            if (MyMath.isZero(flag)) point.x else point.y
         }
 
         val ll = textureToSquareTemplateCoordinates.count() / 2

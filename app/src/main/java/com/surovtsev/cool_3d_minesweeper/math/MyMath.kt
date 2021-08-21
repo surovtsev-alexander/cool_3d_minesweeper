@@ -4,7 +4,7 @@ import glm_.vec3.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
 
-object Math {
+object MyMath {
     val PIF = PI.toFloat()
     fun gradToRad(grad: Float) = grad * PIF / 180f
 

@@ -65,7 +65,7 @@ class GameActivity : AppCompatActivity() {
                     object :
                         IReceiverCalculator<IRotationReceiver> {
                         override fun getReceiver(): IRotationReceiver? =
-                            gR.scene?.mCameraInfo?.moveHandler
+                            gR.scene?.cameraInfo?.moveHandler
 
                     },
                     glsv_main
@@ -75,18 +75,18 @@ class GameActivity : AppCompatActivity() {
                     object :
                         IReceiverCalculator<IScaleReceiver> {
                         override fun getReceiver(): IScaleReceiver? =
-                            gR.scene?.mCameraInfo?.moveHandler
+                            gR.scene?.cameraInfo?.moveHandler
                     },
                     object: IReceiverCalculator<IMoveReceiver> {
                         override fun getReceiver(): IMoveReceiver? =
-                            gR.scene?.mCameraInfo?.moveHandler
+                            gR.scene?.cameraInfo?.moveHandler
                     }
                 )
             val movingHelper =
                 MovingHelper(
                     object: IReceiverCalculator<IMoveReceiver> {
                         override fun getReceiver(): IMoveReceiver? =
-                            gR.scene?.mCameraInfo?.moveHandler
+                            gR.scene?.cameraInfo?.moveHandler
                     }
                 )
 
