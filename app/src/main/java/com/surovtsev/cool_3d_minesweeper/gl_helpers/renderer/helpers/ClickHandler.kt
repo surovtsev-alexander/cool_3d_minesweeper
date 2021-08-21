@@ -2,7 +2,6 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import glm_.vec2.Vec2
 
 interface IHaveUpdatedStatus {

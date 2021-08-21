@@ -58,8 +58,8 @@ class GameActivity : AppCompatActivity() {
             val clickAndRotationHelper =
                 ClickAndRotationHelper(
                     object :
-                        IReceiverCalculator<IClickReceiver> {
-                        override fun getReceiver(): IClickReceiver? =
+                        IReceiverCalculator<ITouchReceiver> {
+                        override fun getReceiver(): ITouchReceiver? =
                             gR.clickHelper
                     },
                     object :

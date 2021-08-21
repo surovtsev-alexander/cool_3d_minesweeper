@@ -1,20 +1,17 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.opengl.GLSurfaceView
-import android.util.Log
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.Timer
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IClickReceiver
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 import kotlin.math.abs
 
 
 class ClickAndRotationHelper(
-    val clickReceiver: IReceiverCalculator<IClickReceiver>,
+    val touchReceiver: IReceiverCalculator<ITouchReceiver>,
     val rotationReceiver: IReceiverCalculator<IRotationReceiver>,
     val clickEventQueueHandler: GLSurfaceView
 ) : TouchHelper() {
@@ -24,11 +21,9 @@ class ClickAndRotationHelper(
 
     var prev = Vec2()
     val mTimer = Timer()
-    val mMaxClickTimeMs = 100L
-    val mMinLongClickTimeMs = 100L
-    val mMaxLongClickTimeMs = 1000L
+
     var mMovingDistance = 0f
-    val mMovindThreshold = 0.1
+
 
     override fun onTouch(event: MotionEvent) {
         do {
@@ -72,30 +67,9 @@ class ClickAndRotationHelper(
             if (up) {
                 mTimer.push()
 
-                val moved = mMovingDistance >= mMovindThreshold
-                if (!moved) {
-                    val timeDiff = mTimer.diff()
-
-                    if (true) {
-                        Log.d("TEST", "td $timeDiff")
-                    }
-
-                    val longClick =  timeDiff >= mMinLongClickTimeMs && timeDiff <= mMaxLongClickTimeMs
-                    if (longClick) {
-                        if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
-                            ApplicationController.instance!!.messagesComponent!!.addMessageUI("longClick")
-                        }
-                        clickReceiver.getReceiver()?.handleLongClick(curr)
-                    } else {
-                        val click = timeDiff <= mMaxClickTimeMs
-                        if (click) {
-                            if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
-                                ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
-                            }
-                            clickReceiver.getReceiver()?.handleClick(curr)
-                        }
-                    }
-                }
+                touchReceiver.getReceiver()?.handletouch(
+                    curr, mMovingDistance, mTimer.diff()
+                )
 
                 break
             }
