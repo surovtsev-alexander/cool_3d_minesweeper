@@ -1,16 +1,13 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.content.Context
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
+import com.surovtsev.cool_3d_minesweeper.game_logic.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelperComplex
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
-import glm_.vec3.Vec3i
 
 interface ICanUpdateTexture {
     fun updateTexture(pointedCube: GLCubes.PointedCube)
@@ -66,11 +63,12 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     data class PointedCube(
         val id: Int,
         val spaceParameters: CubeSpaceParameters,
-        val description: CubeDescription)
+        val description: CubeDescription
+    )
 
     fun testPointer(pointer: IPointer, clickType: ClickHelper.ClickType, currTime: Long): Unit {
         val gameObject = cubes.gameObject
-        val collisionCubes = gameObject.collisionCubes
+        val collisionCubes = cubes.collisionCubes
         val counts = collisionCubes.counts
         val descriptions = gameObject.descriptions
         val spaceParameters = collisionCubes.spaceParameters

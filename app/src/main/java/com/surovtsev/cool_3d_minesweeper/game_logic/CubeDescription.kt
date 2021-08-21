@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision
+package com.surovtsev.cool_3d_minesweeper.game_logic
 
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper.TextureType
 import glm_.vec3.Vec3i

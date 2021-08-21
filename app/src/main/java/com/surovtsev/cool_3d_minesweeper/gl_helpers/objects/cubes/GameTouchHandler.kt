@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.GameObject
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
 import glm_.vec3.Vec3i

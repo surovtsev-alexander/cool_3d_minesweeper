@@ -1,7 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.GameObject
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import java.lang.StringBuilder
@@ -9,7 +10,8 @@ import java.lang.StringBuilder
 class Cubes(val triangleCoordinates: FloatArray,
             val isEmpty: FloatArray,
             val textureCoordinates: FloatArray,
-            val gameObject: GameObject
+            val gameObject: GameObject,
+            val collisionCubes: CollisionCubes
 ) {
     companion object {
         fun cubes(cubesCoordinatesGenerator: CubesCoordinatesGenerator): Cubes {
@@ -41,13 +43,17 @@ class Cubes(val triangleCoordinates: FloatArray,
                 isEmpty[i] = -1f
             }
 
-            val gameObject = GameObject(cubesCoordinatesGenerator.collisionCubes)
+            val gameObject =
+                GameObject(
+                    cubesCoordinatesGenerator.collisionCubes.counts
+                )
 
             val res = Cubes(
                 trianglesCoordinates,
                 isEmpty,
                 textureCoordinates,
-                gameObject)
+                gameObject,
+                cubesCoordinatesGenerator.collisionCubes)
 
             if (LoggerConfig.LOG_TEXURE_HELPER) {
                 val sb = StringBuilder()
