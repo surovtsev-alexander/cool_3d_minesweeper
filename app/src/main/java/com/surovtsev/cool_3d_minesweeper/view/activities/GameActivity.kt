@@ -101,7 +101,7 @@ class GameActivity : AppCompatActivity() {
 
                 if (pointerCount != prevPointerCount) {
                     if (prevPointerCount != 0) {
-                        currTouchHelper.update()
+                        currTouchHelper.tryToRelease()
                     }
 
                     prevPointerCount = pointerCount

@@ -1,10 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.opengl.GLSurfaceView
+import android.util.Log
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.utils.Timer
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 import kotlin.math.abs
@@ -14,36 +15,27 @@ class ClickAndRotationHelper(
     val touchReceiver: IReceiverCalculator<ITouchReceiver>,
     val rotationReceiver: IReceiverCalculator<IRotationReceiver>,
     val clickEventQueueHandler: GLSurfaceView
-) : TouchHelper() {
+) : TouchHelper(), IStoreMovement {
     init {
         getAndRelease()
     }
 
-    var prev = Vec2()
-    val mTimer = Timer()
+    private var prev = Vec2()
+    private var movement = 0f
 
-    var mMovingDistance = 0f
-
+    override fun getMovement(): Float = movement
 
     override fun onTouch(event: MotionEvent) {
-        do {
-            val released = getAndRelease()
+        val curr = getVec(event)
 
-            if (event.action == MotionEvent.ACTION_DOWN || released) {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
                 prev = getVec(event)
-                if (released) {
-                    mTimer.pushHourBefore()
-                } else {
-                    mTimer.push()
-                }
-                mMovingDistance = 0f
+                movement = 0f
 
-                break
+                touchReceiver.getReceiver()?.donw(curr, this)
             }
-
-            val curr = getVec(event)
-
-            if (event.action == MotionEvent.ACTION_MOVE) {
+            MotionEvent.ACTION_MOVE -> {
                 val delta = curr - prev
 
                 clickEventQueueHandler.queueEvent(object: Runnable {
@@ -56,23 +48,18 @@ class ClickAndRotationHelper(
                     }
                 })
 
-                mMovingDistance = abs(delta[0]) + abs(delta[1])
+                movement = abs(delta[0]) + abs(delta[1])
 
                 prev = curr
-
-                break
             }
-
-            val up = event.action == MotionEvent.ACTION_UP
-            if (up) {
-                mTimer.push()
-
-                touchReceiver.getReceiver()?.handletouch(
-                    curr, mMovingDistance, mTimer.diff()
-                )
-
-                break
+            MotionEvent.ACTION_UP -> {
+                touchReceiver.getReceiver()?.up()
             }
-        } while (false)
+        }
+    }
+
+    override fun tryToRelease() {
+        getAndRelease()
+        touchReceiver.getReceiver()?.release()
     }
 }

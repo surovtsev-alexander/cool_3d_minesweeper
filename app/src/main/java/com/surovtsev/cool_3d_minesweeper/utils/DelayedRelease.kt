@@ -3,6 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.utils
 open class DelayedRelease {
     private var updated = true
 
+    open fun tryToRelease() {
+        update()
+    }
+
     fun update() {
         updated = true
     }
