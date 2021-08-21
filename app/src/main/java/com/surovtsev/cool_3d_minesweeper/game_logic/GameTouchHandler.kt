@@ -27,11 +27,13 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     private val doubleClickDelay = 200L
 
     fun touch(clickType: ClickHelper.ClickType, pointedCube: GLCubes.PointedCube, currTime: Long) {
+        val position = pointedCube.position
+
         if (state == GameState.NO_BOBMS_PLACED) {
-            placeBombs(pointedCube.id)
+            placeBombs(position)
         }
 
-        val id = pointedCube.id
+        val id = position.id
         when (clickType) {
             ClickHelper.ClickType.CLICK -> {
                 if (id == prevClickInfo.id && currTime - prevClickInfo.time < doubleClickDelay) {
@@ -50,7 +52,7 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     }
 
 
-    private fun placeBombs(exclubePoint: Int) {
+    private fun placeBombs(position: GameObject.Position) {
         val bombsCount = gameObject.bombsCount
 
         state = GameState.BOMBS_PLACED

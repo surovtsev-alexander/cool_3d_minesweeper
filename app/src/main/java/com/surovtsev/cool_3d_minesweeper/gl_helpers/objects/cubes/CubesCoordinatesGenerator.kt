@@ -109,7 +109,7 @@ class CubesCoordinatesGenerator(
             val cubeSphereRaius = cubeDims.length() / 2
 
             GameObject.iterateCubes(counts) { posision ->
-                val id = posision.calcId(counts)
+                val id = posision.id
                 val startCoordinatesPos = cubeCoordinatesCount * id
                 val startIndexesPos = cubeIndexesCount * id
 

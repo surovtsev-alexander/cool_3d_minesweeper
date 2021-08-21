@@ -28,7 +28,8 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         )
 
     override fun updateTexture(pointedCube: PointedCube) {
-        val (id, _, description) = pointedCube
+        val (position, _, description) = pointedCube
+        val id = position.id
         val empty = description.isEmpty()
 
         if (empty) {
@@ -67,7 +68,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     }
 
     data class PointedCube(
-        val id: Int,
+        val position: GameObject.Position,
         val spaceParameters: CubeSpaceParameters,
         val description: CubeDescription
     )
@@ -87,7 +88,6 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
 
         GameObject.iterateCubes(counts) { p: GameObject.Position ->
             do {
-                val id = p.calcId(counts)
                 val description = p.getValue(descriptions)
 
                 if (description.isEmpty()) {
@@ -106,7 +106,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
 
                     candidateCubes.add(
                         fromNear to PointedCube(
-                            id, spaceParameter, description
+                            p, spaceParameter, description
                         )
                     )
                 }

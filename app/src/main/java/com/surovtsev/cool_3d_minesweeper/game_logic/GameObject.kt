@@ -7,14 +7,13 @@ data class GameObject(
     val counts: Vec3s,
     val bombsCount: Int
 ) {
-    data class Position(val x: Int, val y: Int, val z: Int) {
+    class Position(val x: Int, val y: Int, val z: Int, counts: Vec3s) {
+        val id = calcId(counts, x, y, z)
+
         companion object {
             fun calcId(counts: Vec3s, x: Int, y: Int, z: Int) =
                 x + counts.x * (y + counts.y * z)
         }
-
-        fun calcId(counts: Vec3s) = Companion.calcId(counts, x, y, z)
-
         fun getVec() = Vec3i(x, y, z)
 
         fun <T> getValue(arr: Array<Array<Array<T>>>): T = arr[x][y][z]
@@ -26,7 +25,7 @@ data class GameObject(
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {
-                        action(Position(x, y, z))
+                        action(Position(x, y, z, counts))
                     }
                 }
             }
