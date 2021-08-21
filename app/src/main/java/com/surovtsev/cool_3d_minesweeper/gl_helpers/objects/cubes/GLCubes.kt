@@ -12,13 +12,20 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 import glm_.vec3.Vec3i
 
-class GLCubes(context: Context, val cubes: Cubes) {
+interface ICanUpdateTexture {
+    fun updateTexture(pointedCube: GLCubes.PointedCube)
+}
+
+class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
 
     val glObject = ModelObject(context, cubes.triangleCoordinates,
         cubes.isEmpty,
         cubes.textureCoordinates)
 
-    fun updateTexture(id: Int, description: CubeDescription) {
+    val gameTouchHandler = GameTouchHandler(cubes.gameObject, this)
+
+    override fun updateTexture(pointedCube: PointedCube) {
+        val (id, _, description) = pointedCube
         val empty = description.isEmpty()
 
         if (empty) {
@@ -103,58 +110,14 @@ class GLCubes(context: Context, val cubes: Cubes) {
 
         val sortedCandidates = candidateCubes.sortedBy { it.first }
 
-
         for (c in sortedCandidates) {
             val candidate = c.second
 
             if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
-                touch(clickType, candidate, currTime)
-                updateTexture(candidate.id, candidate.description)
+                gameTouchHandler.touch(clickType, candidate, currTime)
+                updateTexture(candidate)
                 break
             }
         }
-    }
-
-    private data class PrevClickInfo(var id: Int, var time: Long)
-    private val prevClickInfo = PrevClickInfo(-1, 0L)
-    private val doubleClickDelay = 200L
-
-    fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube, currTime: Long) {
-        val id = pointedCube.id
-        val description = pointedCube.description
-        when (clickType) {
-            ClickHelper.ClickType.CLICK -> {
-                if (id == prevClickInfo.id && currTime - prevClickInfo.time < doubleClickDelay) {
-                    description.setTexture(TextureCoordinatesHelper.TextureType.EMPTY)
-                } else {
-                    when (description.texture[0]) {
-                        TextureCoordinatesHelper.TextureType.CLOSED -> {
-                            if (description.isBomb) {
-                                description.setTexture(TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                            } else {
-                                description.neighbourBombs = Vec3i(0, 2, 7)
-
-                                for (i in 0 until 3) {
-                                    description.texture[i] = TextureCoordinatesHelper.numberTextures[description.neighbourBombs[i]]
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            ClickHelper.ClickType.LONG_CLICK -> {
-                when (description.texture[0]) {
-                    TextureCoordinatesHelper.TextureType.CLOSED -> {
-                        description.setTexture(TextureCoordinatesHelper.TextureType.MARKED)
-                    }
-                    TextureCoordinatesHelper.TextureType.MARKED -> {
-                        description.setTexture(TextureCoordinatesHelper.TextureType.CLOSED)
-                    }
-                }
-            }
-        }
-
-        prevClickInfo.id = id
-        prevClickInfo.time = currTime
     }
 }
