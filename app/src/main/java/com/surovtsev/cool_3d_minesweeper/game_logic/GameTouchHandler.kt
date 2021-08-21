@@ -69,10 +69,6 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
                     setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 } else {
                     for (i in 0 until 3) {
-//                        description.neighbourBombs[0] = pointedCube.position.x
-//                        description.neighbourBombs[1] = 0
-//                        description.neighbourBombs[2] = 0
-
                         description.texture[i] = TextureCoordinatesHelper.numberTextures[description.neighbourBombs[i]]
                         textureUpdater.updateTexture(pointedCube)
                     }

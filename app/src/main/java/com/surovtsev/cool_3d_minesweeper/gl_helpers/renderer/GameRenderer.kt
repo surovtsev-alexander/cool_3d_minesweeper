@@ -27,10 +27,10 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (true) {
-                5
+            val d: Short = if (false) {
+                12
             } else {
-                2
+                5
             }
 
             val xDim = d
@@ -40,7 +40,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             val counts = Vec3s(xDim, yDim, zDim)
 
             val dimensions = Vec3(5f, 5f, 5f)
-            val gaps = dimensions / counts / 40
+            val gaps = if (false) dimensions / counts / 40 else Vec3()
             val bombsRate = 0.2f
             val cubesConfig = CubesCoordinatesGeneratorConfig(
                 counts,
