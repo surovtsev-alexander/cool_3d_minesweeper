@@ -6,7 +6,9 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.Coll
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
+import glm_.vec3.Vec3i
 
 class GLCubes(context: Context, val cubes: Cubes) {
 
@@ -52,7 +54,12 @@ class GLCubes(context: Context, val cubes: Cubes) {
         }
     }
 
-    fun testPointer(pointer: IPointer): Unit {
+    data class PointedCube(
+        val id: Int,
+        val spaceParameters: CubeSpaceParameters,
+        val description: CubeDescription)
+
+    fun testPointer(pointer: IPointer, clickType: ClickHelper.ClickType): Unit {
         val gameObject = cubes.gameObject
         val collisionCubes = gameObject.collisionCubes
         val counts = collisionCubes.counts
@@ -61,11 +68,6 @@ class GLCubes(context: Context, val cubes: Cubes) {
         val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
 
         val pointerDescriptor = pointer.getPointerDescriptor()
-
-        data class PointedCube(
-            val id: Int,
-            val spaceParameters: CubeSpaceParameters,
-            val description: CubeDescription)
 
         var candidateCubes =
             mutableListOf<Pair<Float, PointedCube>>()
@@ -104,10 +106,45 @@ class GLCubes(context: Context, val cubes: Cubes) {
             val candidate = c.second
 
             if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
-                candidate.description.touch()
+                touch(clickType, candidate)
                 updateTexture(candidate.id, candidate.description)
                 break
             }
         }
+    }
+
+    fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube) {
+        val description = pointedCube.description
+        when (clickType) {
+            ClickHelper.ClickType.CLICK -> {
+                when (description.texture[0]) {
+                    TextureCoordinatesHelper.TextureType.CLOSED -> {
+                        if (description.isBomb) {
+                            description.setTexture(TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
+                        } else {
+                            description.neighbourBombs = Vec3i(0, 2, 7)
+
+                            for (i in 0 until 3) {
+                                description.texture[i] = TextureCoordinatesHelper.numberTextures[description.neighbourBombs[i]]
+                            }
+                        }
+                    }
+                }
+            }
+            ClickHelper.ClickType.LONG_CLICK -> {
+                when (description.texture[0]) {
+                    TextureCoordinatesHelper.TextureType.CLOSED -> {
+                        description.setTexture(TextureCoordinatesHelper.TextureType.MARKED)
+                    }
+                    TextureCoordinatesHelper.TextureType.MARKED -> {
+                        description.setTexture(TextureCoordinatesHelper.TextureType.CLOSED)
+                    }
+                }
+            }
+            ClickHelper.ClickType.DOUBLE_CLICK -> {
+                description.setTexture(TextureCoordinatesHelper.TextureType.EMPTY)
+            }
+        }
+
     }
 }

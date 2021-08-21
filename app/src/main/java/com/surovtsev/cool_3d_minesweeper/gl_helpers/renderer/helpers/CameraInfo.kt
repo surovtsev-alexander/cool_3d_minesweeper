@@ -14,32 +14,32 @@ import glm_.vec3.Vec3
 
 class CameraInfo(displayWidth: Int, displayHeight: Int,
                  zNear: Float = 2f, zFar: Float = 20f) {
-    val mDisplayWidthF = displayWidth.toFloat()
-    val mDisplayHeightF = displayHeight.toFloat()
+    val displayWidthF = displayWidth.toFloat()
+    val displayHeightF = displayHeight.toFloat()
 
 
-    val mMoveHandler = MoveHandler()
+    val moveHandler = MoveHandler()
 
-    var mScaleMatrix = MatrixHelper.identityMatrix()
-    var mViewMatrix = MatrixHelper.identityMatrix()
-    var mMoveMatrix = MatrixHelper.identityMatrix()
-    var mProjectionMatrix = MatrixHelper.identityMatrix()
-    var mIProjectionMatrix = MatrixHelper.identityMatrix()
+    var scaleMatrix = MatrixHelper.identityMatrix()
+    var viewMatrix = MatrixHelper.identityMatrix()
+    var moveMatrix = MatrixHelper.identityMatrix()
+    var projectionMatrix = MatrixHelper.identityMatrix()
+    var IProjectionMatrix = MatrixHelper.identityMatrix()
 
 
-    var mMVPMatrix = MatrixHelper.identityMatrix()
-    var mIMVPMatrix = MatrixHelper.identityMatrix()
+    var MVP = MatrixHelper.identityMatrix()
+    var IMVP = MatrixHelper.identityMatrix()
 
     init {
         glm.perspective(
-            mProjectionMatrix,
+            projectionMatrix,
             45f,
-            mDisplayWidthF / mDisplayHeightF,
+            displayWidthF / displayHeightF,
             zNear, zFar
         )
-        mIProjectionMatrix = mProjectionMatrix.inverse()
+        IProjectionMatrix = projectionMatrix.inverse()
 
-        mViewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
+        viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
 
         recalculateMVPMatrix()
     }
@@ -79,7 +79,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         }
 
         override fun scale(factor: Float) {
-            mScaleMatrix = mScaleMatrix.scale(factor)
+            scaleMatrix = scaleMatrix.scale(factor)
 
             update()
         }
@@ -93,21 +93,21 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
 
             val diff = p2Near - p1Near
 
-            mMoveMatrix = mMoveMatrix.translate(diff)
+            moveMatrix = moveMatrix.translate(diff)
 
             update()
         }
     }
 
     fun recalculateMVPMatrix() {
-        mMVPMatrix = mProjectionMatrix * mMoveMatrix * mViewMatrix * mMoveHandler.rotMatrix * mScaleMatrix
-        mIMVPMatrix = mMVPMatrix.inverse()
+        MVP = projectionMatrix * moveMatrix * viewMatrix * moveHandler.rotMatrix * scaleMatrix
+        IMVP = MVP.inverse()
     }
 
     fun normalizedDisplayCoordinates(point: Vec2) = run {
         val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
-        val x = pp(point.x, mDisplayWidthF)
-        val y = pp(point.y, mDisplayHeightF) * -1f
+        val x = pp(point.x, displayWidthF)
+        val y = pp(point.y, displayHeightF) * -1f
         Vec2(x, y)
     }
 
@@ -116,13 +116,13 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
 
     fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
         return fun(proj: Vec2): Vec3 = MatrixHelper.multMat4Vec3(
-            mIMVPMatrix,
+            IMVP,
             Vec3(proj, z)
         )
     }
 
     fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.multMat4Vec3(
-        mIProjectionMatrix,
+        IProjectionMatrix,
         Vec3(proj, -1)
     )
 }

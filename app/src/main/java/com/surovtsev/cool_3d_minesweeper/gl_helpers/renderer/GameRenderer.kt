@@ -10,6 +10,8 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.RendererTimer
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -17,12 +19,15 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
-    var mModelObjects: ModelObjects? = null
-    var mScene: Scene? = null
+    var modelObjects: ModelObjects? = null
+    var scene: Scene? = null
+
+    val rendereTimer = RendererTimer()
+    val clickHelper = ClickHelper(rendereTimer)
 
     inner class ModelObjects {
         val glCubes: GLCubes
-        val mClickPointer: ClickPointer
+        val clickPointer: ClickPointer
 
         init {
             val d: Short = if (true) {
@@ -53,7 +58,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 )
             )
 
-            mClickPointer = ClickPointer(context)
+            clickPointer = ClickPointer(context)
         }
     }
 
@@ -69,20 +74,20 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         fun onSurfaceChanged() {
             val glObject = modelObjects.glCubes.glObject
 
-            val mVPMatrix = mCameraInfo.mMVPMatrix
-            with(glObject.mModelModelGLSLProgram) {
+            val mVPMatrix = mCameraInfo.MVP
+            with(glObject.modelModelGLSLProgram) {
                 use_program()
                 fillU_MVP(mVPMatrix)
             }
 
-            with(modelObjects.mClickPointer.mGLSLProgram) {
+            with(modelObjects.clickPointer.mGLSLProgram) {
                 use_program()
                 fillU_MVP(mVPMatrix)
             }
         }
 
         fun onDrawFrame() {
-            val moveHandler = mCameraInfo.mMoveHandler
+            val moveHandler = mCameraInfo.moveHandler
             val moved = moveHandler.getAndRelease()
             val clicked = mClickHandler.isUpdated()
 
@@ -93,39 +98,39 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             do {
                 if (clicked) {
                     mClickHandler.release()
-                    modelObjects.mClickPointer.needToBeDrawn = true
+                    modelObjects.clickPointer.needToBeDrawn = true
                 }
 
-                if (!modelObjects.mClickPointer.needToBeDrawn) {
+                if (!modelObjects.clickPointer.needToBeDrawn) {
                     break
                 }
 
                 if (clicked) {
-                    modelObjects.mClickPointer.setPoints(mClickHandler.pointer)
+                    modelObjects.clickPointer.setPoints(mClickHandler.pointer)
                 }
 
-                modelObjects.mClickPointer.mGLSLProgram.use_program()
+                modelObjects.clickPointer.mGLSLProgram.use_program()
                 if (moved) {
-                    with(modelObjects.mClickPointer.mGLSLProgram) {
-                        fillU_MVP(mCameraInfo.mMVPMatrix)
+                    with(modelObjects.clickPointer.mGLSLProgram) {
+                        fillU_MVP(mCameraInfo.MVP)
                     }
                 }
-                modelObjects.mClickPointer.bindData()
-                modelObjects.mClickPointer.draw()
+                modelObjects.clickPointer.bindData()
+                modelObjects.clickPointer.draw()
             } while (false)
 
 
             val glCubes = modelObjects.glCubes
             val glObject = glCubes.glObject
-            glObject.mModelModelGLSLProgram.use_program()
+            glObject.modelModelGLSLProgram.use_program()
 
             glObject.bindData()
             if (clicked) {
-                glCubes.testPointer(mClickHandler.pointer)
+                glCubes.testPointer(mClickHandler.pointer, clickHelper.clickType)
             }
             if (moved) {
-                with(glObject.mModelModelGLSLProgram) {
-                    fillU_MVP(mCameraInfo.mMVPMatrix)
+                with(glObject.modelModelGLSLProgram) {
+                    fillU_MVP(mCameraInfo.MVP)
                 }
             }
             glObject.draw()
@@ -137,15 +142,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
-        mModelObjects = ModelObjects()
+        modelObjects = ModelObjects()
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
 
-        mScene = Scene(mModelObjects!!, width, height)
+        scene = Scene(modelObjects!!, width, height)
 
-        mScene!!.onSurfaceChanged()
+        scene!!.onSurfaceChanged()
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -155,6 +160,15 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        mScene?.onDrawFrame()
+        rendereTimer.updateTimer()
+        clickHelper.tick()
+
+        if (clickHelper.isClicked()) {
+
+            scene?.mClickHandler?.handleClick(clickHelper.clickPos, clickHelper.clickType)
+            clickHelper.release()
+        }
+
+        scene?.onDrawFrame()
     }
 }

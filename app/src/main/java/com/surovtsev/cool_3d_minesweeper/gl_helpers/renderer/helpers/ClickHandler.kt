@@ -23,18 +23,21 @@ open class Updatable(): IHaveUpdatedStatus {
     override fun isUpdated()= updated
 }
 
-class ClickHandler(val cameraInfo: CameraInfo): Updatable(),
-    IClickReceiver {
+class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     private val pointerData = Pointer()
 
     val pointer: IPointer
         get() = pointerData
 
-    override fun handleClick(point: Vec2) {
+    var clickType = ClickHelper.ClickType.CLICK
+        private set
+
+    fun handleClick(point: Vec2, clickType_: ClickHelper.ClickType) {
         val proj = cameraInfo.normalizedDisplayCoordinates(point)
         pointerData.near = cameraInfo.calcNearByProj(proj)
         pointerData.far = cameraInfo.calcFarByProj(proj)
 
+        clickType = clickType_
         update()
 
         if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {

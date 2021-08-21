@@ -13,8 +13,8 @@ class ModelObject(
     isEmpty: FloatArray,
     textureCoordinates: FloatArray): IGLObject
 {
-    val mModelModelGLSLProgram: ModelGLSLProgram
-    private var mTextureId = 0
+    val modelModelGLSLProgram: ModelGLSLProgram
+    private var textureId = 0
 
     private val POSITION_COMPONENT_COUNT = 3
 
@@ -23,26 +23,26 @@ class ModelObject(
     val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {
-        mModelModelGLSLProgram = ModelGLSLProgram(context)
-        mModelModelGLSLProgram.prepare_program()
+        modelModelGLSLProgram = ModelGLSLProgram(context)
+        modelModelGLSLProgram.prepare_program()
 
-        mTextureId = TextureHelper.loadTexture(context, R.drawable.skin)
+        textureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
     }
 
     override fun bindData() {
-        vertexArray.setVertexAttribPointer(0, mModelModelGLSLProgram.aPosition.location,
+        vertexArray.setVertexAttribPointer(0, modelModelGLSLProgram.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
-        isEmptyArray.setVertexAttribPointer(0, mModelModelGLSLProgram.aIsEmpty.location,
+        isEmptyArray.setVertexAttribPointer(0, modelModelGLSLProgram.aIsEmpty.location,
             1, 0)
         textureCoordinatesArray.setVertexAttribPointer(0,
-            mModelModelGLSLProgram.aTextureCoordinates.location, 2, 0)
+            modelModelGLSLProgram.aTextureCoordinates.location, 2, 0)
     }
 
     fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, mTextureId)
-        glUniform1i(mModelModelGLSLProgram.mUTextureLocation.location, 0)
+        glBindTexture(GL_TEXTURE_2D, textureId)
+        glUniform1i(modelModelGLSLProgram.mUTextureLocation.location, 0)
     }
 
     override fun draw() {

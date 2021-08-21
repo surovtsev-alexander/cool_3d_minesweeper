@@ -1,6 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
 
 import android.opengl.GLSurfaceView
+import android.util.Log
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
@@ -24,8 +25,10 @@ class ClickAndRotationHelper(
     var prev = Vec2()
     val mTimer = Timer()
     val mMaxClickTimeMs = 100L
+    val mMinLongClickTimeMs = 100L
+    val mMaxLongClickTimeMs = 1000L
     var mMovingDistance = 0f
-    val mMovindThreshold = 10
+    val mMovindThreshold = 0.1
 
     override fun onTouch(event: MotionEvent) {
         do {
@@ -68,12 +71,30 @@ class ClickAndRotationHelper(
             val up = event.action == MotionEvent.ACTION_UP
             if (up) {
                 mTimer.push()
-                val moved = mMovingDistance >= mMovindThreshold ||  mTimer.diff() >= mMaxClickTimeMs
+
+                val moved = mMovingDistance >= mMovindThreshold
                 if (!moved) {
-                    if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
-                        ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
+                    val timeDiff = mTimer.diff()
+
+                    if (true) {
+                        Log.d("TEST", "td $timeDiff")
                     }
-                    clickReceiver.getReceiver()?.handleClick(curr)
+
+                    val longClick =  timeDiff >= mMinLongClickTimeMs && timeDiff <= mMaxLongClickTimeMs
+                    if (longClick) {
+                        if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
+                            ApplicationController.instance!!.messagesComponent!!.addMessageUI("longClick")
+                        }
+                        clickReceiver.getReceiver()?.handleLongClick(curr)
+                    } else {
+                        val click = timeDiff <= mMaxClickTimeMs
+                        if (click) {
+                            if (LoggerConfig.LOG_GAME_ACTIVITY_ACTIONS) {
+                                ApplicationController.instance!!.messagesComponent!!.addMessageUI("clicked")
+                            }
+                            clickReceiver.getReceiver()?.handleClick(curr)
+                        }
+                    }
                 }
 
                 break
