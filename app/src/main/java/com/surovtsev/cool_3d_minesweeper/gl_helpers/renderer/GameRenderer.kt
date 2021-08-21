@@ -8,10 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.CameraInfo
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHandler
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.RendererTimer
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.*
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -126,7 +123,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             glObject.bindData()
             if (clicked) {
-                glCubes.testPointer(mClickHandler.pointer, clickHelper.clickType)
+                glCubes.testPointer(mClickHandler.pointer, clickHelper.clickType, rendereTimer.time)
             }
             if (moved) {
                 with(glObject.modelModelGLSLProgram) {

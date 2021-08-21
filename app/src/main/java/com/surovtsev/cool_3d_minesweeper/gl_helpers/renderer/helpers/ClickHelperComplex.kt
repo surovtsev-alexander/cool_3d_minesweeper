@@ -4,16 +4,18 @@ import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IStoreMov
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
-class ClickHelper(private val rendererTimer: RendererTimer): ITouchReceiver {
+class ClickHelperComplex(private val rendererTimer: RendererTimer): ITouchReceiver {
 
     enum class ClickType {
         CLICK,
         LONG_CLICK,
+        DOUBLE_CLICK
     }
 
     enum class State {
         IDLE,
         DELAY_BEFORE_LONG_CLICK,
+        DELAY_BEFORE_DOUBLE_CLICK,
         WAIT_FOR_RELEASE
     }
 
@@ -36,12 +38,17 @@ class ClickHelper(private val rendererTimer: RendererTimer): ITouchReceiver {
     val longClickDelay = 300L
 
     override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
-        clickPos = pos
-        downTime = rendererTimer.time
+        if (state == State.DELAY_BEFORE_DOUBLE_CLICK) {
+            state = State.WAIT_FOR_RELEASE
+            clickType = ClickType.DOUBLE_CLICK
+        } else {
+            clickPos = pos
+            downTime = rendererTimer.time
 
-        movementStorer = movementStorer_
+            movementStorer = movementStorer_
 
-        state = State.DELAY_BEFORE_LONG_CLICK
+            state = State.DELAY_BEFORE_LONG_CLICK
+        }
     }
 
     override fun up() {
@@ -59,9 +66,10 @@ class ClickHelper(private val rendererTimer: RendererTimer): ITouchReceiver {
                 }
 
                 if (state == State.DELAY_BEFORE_LONG_CLICK) {
-                    state = State.WAIT_FOR_RELEASE
-                    clickType = ClickType.CLICK
-                } else {
+                    clickTime = currTime
+                    state = State.DELAY_BEFORE_DOUBLE_CLICK
+                }
+                else {
                     state = State.IDLE
                 }
             } while (false)
@@ -69,7 +77,7 @@ class ClickHelper(private val rendererTimer: RendererTimer): ITouchReceiver {
     }
 
     private fun isMoved(): Boolean =
-        (movementStorer?.getMovement() ?: (movementThreshold + 1f)) >= movementThreshold
+        (movementStorer?.getMovement()?:(movementThreshold + 1f)) >= movementThreshold
 
     private fun releaseIfMovedOrPerform(action: () -> Unit) {
         if (isMoved()) {
@@ -87,6 +95,14 @@ class ClickHelper(private val rendererTimer: RendererTimer): ITouchReceiver {
                     if (currTime - downTime > longClickDelay) {
                         state = State.WAIT_FOR_RELEASE
                         clickType = ClickType.LONG_CLICK
+                    }
+                }
+            }
+            State.DELAY_BEFORE_DOUBLE_CLICK -> {
+                releaseIfMovedOrPerform {
+                    if (currTime - clickTime > doubleClickDelay) {
+                        state = State.WAIT_FOR_RELEASE
+                        clickType = ClickType.CLICK
                     }
                 }
             }
