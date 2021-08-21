@@ -5,5 +5,11 @@ import glm_.vec3.Vec3s
 
 data class CubesCoordinatesGeneratorConfig(val counts: Vec3s,
                                            val dimensions: Vec3,
-                                           val gaps: Vec3
-)
+                                           val gaps: Vec3,
+                                           val bombsRate: Float
+) {
+    init {
+        assert(bombsRate > 0)
+        assert(bombsRate < 1)
+    }
+}

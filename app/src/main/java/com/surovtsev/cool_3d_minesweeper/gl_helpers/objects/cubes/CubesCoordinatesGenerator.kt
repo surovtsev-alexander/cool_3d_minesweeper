@@ -1,13 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import glm_.vec3.Vec3
-import glm_.vec3.Vec3i
 
-class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
-                                val indexes: ShortArray,
-                                val collisionCubes: CollisionCubes) {
+class CubesCoordinatesGenerator(
+    val trianglesCoordinates: FloatArray,
+    val indexes: ShortArray,
+    val collisionCubes: CollisionCubes,
+    val bombsCount: Int) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
             -1,  1,  1, // A
@@ -106,39 +108,35 @@ class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
 
             val cubeSphereRaius = cubeDims.length() / 2
 
-            for (x in 0 until counts.x) {
-                for (y in 0 until counts.y) {
-                    for (z in 0 until counts.z) {
-                        val id = CollisionCubes.calcId(counts, x, y, z)
-                        val startCoordinatesPos = cubeCoordinatesCount * id
-                        val startIndexesPos = cubeIndexesCount * id
+            GameObject.iterateCubes(counts) { posision ->
+                val id = posision.calcId(counts)
+                val startCoordinatesPos = cubeCoordinatesCount * id
+                val startIndexesPos = cubeIndexesCount * id
 
-                        fun fillCoordinates() {
-                            val rra = cubeSpace.times(Vec3i(x, y, z))
-                            val ra = rra - cubesHalfDims
+                fun fillCoordinates() {
+                    val rra = cubeSpace.times(posision.getVec())
+                    val ra = rra - cubesHalfDims
 
-                            centers[id] = ra + cubeHalfSpace
+                    centers[id] = ra + cubeHalfSpace
 
-                            val a = ra + halfGaps
-                            val b = a + cubeDims
+                    val a = ra + halfGaps
+                    val b = a + cubeDims
 
-                            for (i in 0 until cubeCoordinatesCount) {
-                                val p = if (coordinatesTemplateArray[i] < 0) a else b
-                                trianglesCoordinates[startCoordinatesPos + i] = p[i % 3]
-                            }
-                        }
-
-                        fun fillIndexes() {
-                            for (i in 0 until cubeIndexesCount) {
-                                indexes[startIndexesPos + i] =
-                                    (indexesArray[i] + startCoordinatesPos / 3).toShort()
-                            }
-                        }
-
-                        fillCoordinates()
-                        fillIndexes()
+                    for (i in 0 until cubeCoordinatesCount) {
+                        val point = if (coordinatesTemplateArray[i] < 0) a else b
+                        trianglesCoordinates[startCoordinatesPos + i] = point[i % 3]
                     }
                 }
+
+                fun fillIndexes() {
+                    for (i in 0 until cubeIndexesCount) {
+                        indexes[startIndexesPos + i] =
+                            (indexesArray[i] + startCoordinatesPos / 3).toShort()
+                    }
+                }
+
+                fillCoordinates()
+                fillIndexes()
             }
 
             if (false) {
@@ -155,7 +153,14 @@ class CubesCoordinatesGenerator(val trianglesCoordinates: FloatArray,
 
             val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers, cubeHalfSpace)
 
-            return CubesCoordinatesGenerator(trianglesCoordinates, indexes, collisionCubes)
+            val bombsCount = Math.floor((
+                counts.x * counts.y * counts.z *
+                        cubesCoordinatesGeneratorConfig.bombsRate).toDouble()).toInt()
+
+            return CubesCoordinatesGenerator(
+                trianglesCoordinates, indexes, collisionCubes,
+                bombsCount
+            )
         }
     }
 }

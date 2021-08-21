@@ -4,6 +4,8 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.game_logic.CubeDescription
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
@@ -19,7 +21,11 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         cubes.isEmpty,
         cubes.textureCoordinates)
 
-    val gameTouchHandler = GameTouchHandler(cubes.gameObject, this)
+    val gameTouchHandler =
+        GameTouchHandler(
+            cubes.gameObject,
+            this
+        )
 
     override fun updateTexture(pointedCube: PointedCube) {
         val (id, _, description) = pointedCube
@@ -66,44 +72,45 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         val description: CubeDescription
     )
 
-    fun testPointer(pointer: IPointer, clickType: ClickHelper.ClickType, currTime: Long): Unit {
-        val gameObject = cubes.gameObject
-        val collisionCubes = cubes.collisionCubes
-        val counts = collisionCubes.counts
-        val descriptions = gameObject.descriptions
-        val spaceParameters = collisionCubes.spaceParameters
-        val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
+    val gameObject = cubes.gameObject
+    val collisionCubes = cubes.collisionCubes
+    val counts = collisionCubes.counts
+    val descriptions = gameObject.descriptions
+    val spaceParameters = collisionCubes.spaceParameters
+    val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
 
+    fun testPointer(pointer: IPointer, clickType: ClickHelper.ClickType, currTime: Long): Unit {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
             mutableListOf<Pair<Float, PointedCube>>()
 
-        for (x in 0 until counts.x) {
-            for (y in 0 until counts.y) {
-                for (z in 0 until counts.z) {
-                    val id = CollisionCubes.calcId(counts, x, y, z)
-                    val d = descriptions[x][y][z]
+        GameObject.iterateCubes(counts) { p: GameObject.Position ->
+            do {
+                val id = p.calcId(counts)
+                val description = p.getValue(descriptions)
 
-                    if (d.isEmpty()) {
-                        continue
-                    }
-
-                    val spaceParameter = spaceParameters[x][y][z]
-                    val center = spaceParameter.center
-
-                    val projection = pointerDescriptor.calcProjection(center)
-                    val squaredDistance = (center - projection).length2()
-
-
-                    if (squaredDistance <= squaredCubeSphereRadius) {
-                        val fromNear = (pointerDescriptor.near - projection).length()
-
-                        candidateCubes.add(fromNear to PointedCube(
-                            id, spaceParameter, d))
-                    }
+                if (description.isEmpty()) {
+                    continue
                 }
-            }
+
+                val spaceParameter = p.getValue(spaceParameters);
+                val center = spaceParameter.center
+
+                val projection = pointerDescriptor.calcProjection(center)
+                val squaredDistance = (center - projection).length2()
+
+
+                if (squaredDistance <= squaredCubeSphereRadius) {
+                    val fromNear = (pointerDescriptor.near - projection).length()
+
+                    candidateCubes.add(
+                        fromNear to PointedCube(
+                            id, spaceParameter, description
+                        )
+                    )
+                }
+            } while (false)
         }
 
         val sortedCandidates = candidateCubes.sortedBy { it.first }

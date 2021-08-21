@@ -1,17 +1,36 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
+package com.surovtsev.cool_3d_minesweeper.game_logic
 
-import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
+import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
 import glm_.vec3.Vec3i
 
 class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdateTexture) {
 
+    enum class GameState {
+        NO_BOBMS_PLACED,
+        BOMBS_PLACED,
+        WIN,
+        LOSE
+    }
+
+    var state = GameState.NO_BOBMS_PLACED
+
+
     private data class PrevClickInfo(var id: Int, var time: Long)
-    private val prevClickInfo = PrevClickInfo(-1, 0L)
+    private val prevClickInfo =
+        PrevClickInfo(
+            -1,
+            0L
+        )
     private val doubleClickDelay = 200L
 
     fun touch(clickType: ClickHelper.ClickType, pointedCube: GLCubes.PointedCube, currTime: Long) {
+        if (state == GameState.NO_BOBMS_PLACED) {
+            placeBombs(pointedCube.id)
+        }
+
         val id = pointedCube.id
         when (clickType) {
             ClickHelper.ClickType.CLICK -> {
@@ -29,6 +48,14 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         prevClickInfo.id = id
         prevClickInfo.time = currTime
     }
+
+
+    private fun placeBombs(exclubePoint: Int) {
+        val bombsCount = gameObject.bombsCount
+
+        state = GameState.BOMBS_PLACED
+    }
+
 
     private fun emptyCube(pointedCube: GLCubes.PointedCube) {
         setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)

@@ -41,10 +41,12 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             val dimensions = Vec3(5f, 5f, 5f)
             val gaps = dimensions / counts / 40
+            val bombsRate = 0.2f
             val cubesConfig = CubesCoordinatesGeneratorConfig(
                 counts,
                 dimensions,
-                gaps
+                gaps,
+                bombsRate
             )
             glCubes = GLCubes(
                 context,

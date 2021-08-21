@@ -45,7 +45,8 @@ class Cubes(val triangleCoordinates: FloatArray,
 
             val gameObject =
                 GameObject(
-                    cubesCoordinatesGenerator.collisionCubes.counts
+                    cubesCoordinatesGenerator.collisionCubes.counts,
+                    cubesCoordinatesGenerator.bombsCount
                 )
 
             val res = Cubes(
