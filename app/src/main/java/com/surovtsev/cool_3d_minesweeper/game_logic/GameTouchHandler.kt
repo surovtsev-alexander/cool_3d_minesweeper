@@ -1,6 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
@@ -31,9 +32,9 @@ class GameTouchHandler(
         )
     private val doubleClickDelay = 200L
 
-    private val bombsList = mutableListOf<GameObject.Position>()
-    val cubesToOpen = mutableListOf<GameObject.Position>()
-    private val cubesToRemove = mutableListOf<GameObject.Position>()
+    private val bombsList = mutableListOf<CubePosition>()
+    val cubesToOpen = mutableListOf<CubePosition>()
+    private val cubesToRemove = mutableListOf<CubePosition>()
 
     private var bombsLeft = 0
 
@@ -125,7 +126,7 @@ class GameTouchHandler(
 
     fun gameIsOver() = (state == GameState.WIN || state == GameState.LOSE)
 
-    fun processOnElement(list: MutableList<GameObject.Position>, action: (PointedCube) -> Unit) {
+    fun processOnElement(list: MutableList<CubePosition>, action: (PointedCube) -> Unit) {
         for (i in 0 until 10) {
             if (gameIsOver()) {
                 return

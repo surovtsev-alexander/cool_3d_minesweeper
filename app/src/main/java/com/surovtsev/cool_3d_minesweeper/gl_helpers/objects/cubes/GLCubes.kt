@@ -6,6 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.Coll
 import com.surovtsev.cool_3d_minesweeper.game_logic.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
@@ -71,7 +72,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     }
 
     class PointedCubeWithSpaceParameters(
-        position: GameObject.Position,
+        position: CubePosition,
         description: CubeDescription,
         val spaceParameters: CubeSpaceParameters
     ): PointedCube(position, description) {
@@ -91,7 +92,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         var candidateCubes =
             mutableListOf<Pair<Float, PointedCubeWithSpaceParameters>>()
 
-        gameObject.iterateCubes { p: GameObject.Position ->
+        gameObject.iterateCubes { p: CubePosition ->
             do {
                 val description = p.getValue(descriptions)
 

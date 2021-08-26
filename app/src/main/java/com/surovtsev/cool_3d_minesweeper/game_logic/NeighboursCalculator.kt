@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3s
@@ -17,11 +18,11 @@ object NeighboursCalculator {
         val yRange: IntRange,
         val zRange: IntRange
     ) {
-        fun iterate(counts: Vec3s, action: (GameObject.Position) -> Unit) {
+        fun iterate(counts: Vec3s, action: (CubePosition) -> Unit) {
             for (x in xRange) {
                 for (y in yRange) {
                     for (z in zRange) {
-                        action(GameObject.Position(x, y, z, counts))
+                        action(CubePosition(x, y, z, counts))
                     }
                 }
             }
@@ -33,7 +34,7 @@ object NeighboursCalculator {
         val yRange: PairDimRange,
         val zRange: PairDimRange
     ) {
-        constructor(idx: GameObject.Position, counts: Vec3s): this(
+        constructor(idx: CubePosition, counts: Vec3s): this(
             getPairDimRange(idx.x, counts.x),
             getPairDimRange(idx.y, counts.y),
             getPairDimRange(idx.z, counts.z)
@@ -53,7 +54,7 @@ object NeighboursCalculator {
 
 
     fun iterateAllNeighbours(
-        gameObject: GameObject, xyz: GameObject.Position,
+        gameObject: GameObject, xyz: CubePosition,
         action: (PointedCube) -> Unit
     ) {
         val ranges = PairDimRanges(xyz, gameObject.counts).getDimRanges(
@@ -64,7 +65,7 @@ object NeighboursCalculator {
     }
 
     fun iterate(
-        gameObject: GameObject, xyz: GameObject.Position,
+        gameObject: GameObject, xyz: CubePosition,
         ranges: DimRanges,
         action: (PointedCube, Int) -> Unit, i: Int
     ) {
@@ -86,15 +87,27 @@ object NeighboursCalculator {
         }
     }
 
+    fun getNeighbours(): List<CubePosition> {
+        val res = mutableListOf<CubePosition>()
+
+        return res
+    }
+
+    private val rangesFlags = mapOf<Int, Vec3bool>(
+        0 to Vec3bool(true, false, false),
+        1 to Vec3bool(false, true, false),
+        2 to Vec3bool(false, false, true)
+    )
+
     fun iterateNeightbours(
-        gameObject: GameObject, xyz: GameObject.Position,
+        gameObject: GameObject, xyz: CubePosition,
         action: (PointedCube, Int) -> Unit
     ) {
         val ranges = PairDimRanges(xyz, gameObject.counts)
 
-        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(true, false, false)), action, 0)
-        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(false, true, false)), action, 1)
-        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(false, false, true)), action, 2)
+        for (r in rangesFlags) {
+            iterate(gameObject, xyz, ranges.getDimRanges(r.value), action, r.key)
+        }
     }
 
     fun fillNeighbours(gameObject: GameObject, bombsList: BombsList) {
@@ -103,7 +116,7 @@ object NeighboursCalculator {
         }
     }
 
-    fun bombRemoved(gameObject: GameObject, position: GameObject.Position) {
+    fun bombRemoved(gameObject: GameObject, position: CubePosition) {
         iterateNeightbours(gameObject,position, { c, i -> c.description.neighbourBombs[i]-- })
     }
 }
