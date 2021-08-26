@@ -165,6 +165,10 @@ class GameTouchHandler(
         }
     }
 
+    fun storeZeroBorders() {
+
+    }
+
     private fun tryToOpenCube(pointedCube: PointedCube) {
         val description = pointedCube.description
         if (description.isClosed()) {

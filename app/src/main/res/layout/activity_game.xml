@@ -21,10 +21,22 @@
         android:layout_height="fill_parent"
         android:layout_weight="8"/>
      -->
-    <Button
-        android:id="@+id/btn_remove_marked_bombs"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="X"/>
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_remove_marked_bombs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="V"/>
+        <Button
+            android:id="@+id/btn_remove_border_zeros"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"/>
+    </LinearLayout>
 
 </LinearLayout>

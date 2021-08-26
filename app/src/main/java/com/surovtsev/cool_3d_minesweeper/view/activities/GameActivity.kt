@@ -41,6 +41,10 @@ class GameActivity : AppCompatActivity(), IHaveGameStatusProcessor {
             gameRenderer?.scene?.removeBombs?.update()
         })
 
+        btn_remove_border_zeros.setOnClickListener( { v->
+            gameRenderer?.scene?.removeBorderZeros?.update()
+        })
+
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo
         val supportsEs2 =

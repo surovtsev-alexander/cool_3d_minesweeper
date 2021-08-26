@@ -76,6 +76,7 @@ class GameRenderer(
         val cameraInfo: CameraInfo
         val clickHandler: ClickHandler
         val removeBombs = DelayedRelease()
+        val removeBorderZeros = DelayedRelease()
 
         init {
             cameraInfo = CameraInfo(width, height)
@@ -142,6 +143,9 @@ class GameRenderer(
 
             if (removeBombs.getAndRelease()) {
                 gameTouchHandler.storeSelectedBombs()
+            }
+            if (removeBorderZeros.getAndRelease()) {
+                gameTouchHandler.storeZeroBorders()
             }
             gameTouchHandler.removeCubes()
 
