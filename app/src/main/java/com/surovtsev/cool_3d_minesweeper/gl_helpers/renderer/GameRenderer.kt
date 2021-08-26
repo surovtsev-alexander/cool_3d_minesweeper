@@ -30,7 +30,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (false) {
+            val d: Short = if (true) {
                 12
             } else {
                 5
@@ -44,7 +44,11 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             val dimensions = Vec3(5f, 5f, 5f)
             val gaps = if (false) dimensions / counts / 40 else Vec3()
-            val bombsRate = 0.2f
+            val bombsRate =  if (false)  {
+                0.2f
+            } else {
+                0.1f
+            }
             val cubesConfig = CubesCoordinatesGeneratorConfig(
                 counts,
                 dimensions,
@@ -172,7 +176,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             if (false) {
                 val x = RotationMatrixDecomposer.getAngles(
-                    scene!!.cameraInfo!!.moveHandler.rotMatrix
+                    scene!!.cameraInfo.moveHandler.rotMatrix
                 )
                 ApplicationController.instance!!.messagesComponent!!.addMessageUI("$x")
             }

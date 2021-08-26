@@ -24,43 +24,57 @@ object BombPlacer {
 
         val bombsList = MutableList<Vec3i>(0) { Vec3i() }
 
+        val excludedPositionVec = excludedPosition.getVec()
+
         fun placeBomb() {
             for (i in 0 until tryCount) {
                 val rId = Random.nextInt(allCubesCount)
                 val xyz = pointCalculator(rId)
                 val d = GameObject.Position.getValue(descriptions, xyz)
 
-                if (!d.isBomb) {
-                    d.isBomb = true
-                    bombsList.add(xyz)
-
-                    freeCubes--
-                    return
+                if (d.isBomb) {
+                    continue
                 }
+
+                if (xyz == excludedPositionVec) {
+                    continue
+                }
+
+                d.isBomb = true
+                bombsList.add(xyz)
+
+                freeCubes--
+                return
             }
 
-            fun tryToSetSequentiallly(n: Int): Boolean {
+            fun tryToSetSequentially(n: Int): Boolean {
                 var nn = n
                 for (id in 0 until allCubesCount) {
                     val xyz = pointCalculator(id)
                     val d = GameObject.Position.getValue(descriptions, xyz)
 
-                    if (!d.isBomb) {
-                        nn--
-                        if (nn == 0) {
-                            d.isBomb = true
-                            bombsList.add(xyz)
+                    if (d.isBomb) {
+                        continue
+                    }
 
-                            freeCubes--
-                            return true
-                        }
+                    if (xyz == excludedPositionVec) {
+                        continue
+                    }
+
+                    nn--
+                    if (nn == 0) {
+                        d.isBomb = true
+                        bombsList.add(xyz)
+
+                        freeCubes--
+                        return true
                     }
                 }
 
                 return false
             }
 
-            val r = tryToSetSequentiallly(Random.nextInt(freeCubes))
+            val r = tryToSetSequentially(Random.nextInt(freeCubes))
             assert(r)
         }
 

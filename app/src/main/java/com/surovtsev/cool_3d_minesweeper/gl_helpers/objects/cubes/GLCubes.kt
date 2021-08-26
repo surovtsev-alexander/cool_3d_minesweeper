@@ -6,13 +6,14 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.Coll
 import com.surovtsev.cool_3d_minesweeper.game_logic.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CubeSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.IPointer
 
 interface ICanUpdateTexture {
-    fun updateTexture(pointedCube: GLCubes.PointedCube)
+    fun updateTexture(pointedCube: PointedCube)
 }
 
 class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
@@ -28,7 +29,8 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         )
 
     override fun updateTexture(pointedCube: PointedCube) {
-        val (position, _, description) = pointedCube
+        val position = pointedCube.position
+        val description = pointedCube.description
         val id = position.id
         val empty = description.isEmpty()
 
@@ -67,11 +69,13 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         }
     }
 
-    data class PointedCube(
-        val position: GameObject.Position,
-        val spaceParameters: CubeSpaceParameters,
-        val description: CubeDescription
-    )
+    class PointedCubeWithSpaceParameters(
+        position: GameObject.Position,
+        description: CubeDescription,
+        val spaceParameters: CubeSpaceParameters
+    ): PointedCube(position, description) {
+
+    }
 
     val gameObject = cubes.gameObject
     val collisionCubes = cubes.collisionCubes
@@ -84,7 +88,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
-            mutableListOf<Pair<Float, PointedCube>>()
+            mutableListOf<Pair<Float, PointedCubeWithSpaceParameters>>()
 
         GameObject.iterateCubes(counts) { p: GameObject.Position ->
             do {
@@ -105,8 +109,8 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
                     val fromNear = (pointerDescriptor.near - projection).length()
 
                     candidateCubes.add(
-                        fromNear to PointedCube(
-                            p, spaceParameter, description
+                        fromNear to PointedCubeWithSpaceParameters(
+                            p, description, spaceParameter
                         )
                     )
                 }

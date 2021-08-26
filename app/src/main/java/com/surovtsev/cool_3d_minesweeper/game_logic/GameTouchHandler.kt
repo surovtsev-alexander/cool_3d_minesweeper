@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
@@ -26,9 +27,9 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         )
     private val doubleClickDelay = 200L
 
-    private var bombsList: BombsList = MutableList<Vec3i>(0) { Vec3i() }
+    private var bombsList: BombsList = mutableListOf<Vec3i>()
 
-    fun touch(clickType: ClickHelper.ClickType, pointedCube: GLCubes.PointedCube, currTime: Long) {
+    fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube, currTime: Long) {
         val position = pointedCube.position
 
         if (state == GameState.NO_BOBMS_PLACED) {
@@ -57,27 +58,53 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     }
 
 
-    private fun emptyCube(pointedCube: GLCubes.PointedCube) {
+    private fun emptyCube(pointedCube: PointedCube) {
+        val isBomb = pointedCube.description.isBomb
+
         setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
+
+        if (isBomb) {
+            val cubesToOpen =
+                mutableListOf<PointedCube>()
+
+            val action = {
+                    c: PointedCube, i: Int ->
+                c.description.neighbourBombs[i]--
+
+                updateIfOpened(c)
+            }
+
+            NeighboursCalculator.iterateNeightbours(
+                gameObject, pointedCube.position.getVec(), action)
+        }
     }
 
-    private fun tryToOpenCube(pointedCube: GLCubes.PointedCube) {
+    private fun tryToOpenCube(pointedCube: PointedCube) {
         val description = pointedCube.description
         when (description.texture[0]) {
             TextureCoordinatesHelper.TextureType.CLOSED -> {
                 if (description.isBomb) {
                     setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 } else {
-                    for (i in 0 until 3) {
-                        description.texture[i] = TextureCoordinatesHelper.numberTextures[description.neighbourBombs[i]]
-                        textureUpdater.updateTexture(pointedCube)
-                    }
+                    description.setNumbers()
+                    textureUpdater.updateTexture(pointedCube)
                 }
             }
         }
     }
 
-    private fun toggleMarkingCube(pointedCube: GLCubes.PointedCube) {
+    private fun updateIfOpened(pointedCube: PointedCube) {
+        val description = pointedCube.description
+
+        if (description.isEmpty() || description.isClosed()) {
+            return
+        }
+
+        description.setNumbers()
+        textureUpdater.updateTexture(pointedCube)
+    }
+
+    private fun toggleMarkingCube(pointedCube: PointedCube) {
         when (pointedCube.description.texture[0]) {
             TextureCoordinatesHelper.TextureType.CLOSED -> {
                 setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.MARKED)
@@ -89,7 +116,7 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     }
 
     private fun setCubeTexture(
-        pointedCube: GLCubes.PointedCube,
+        pointedCube: PointedCube,
         textureType: TextureCoordinatesHelper.TextureType) {
         pointedCube.description.setTexture(textureType)
         textureUpdater.updateTexture(pointedCube)
