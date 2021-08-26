@@ -1,9 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
-import glm_.vec3.Vec3i
 import kotlin.random.Random
 
-typealias BombsList = MutableList<Vec3i>
+typealias BombsList = MutableList<GameObject.Position>
 
 object BombPlacer {
     fun placeBombs(gameObject: GameObject, excludedPosition: GameObject.Position):BombsList {
@@ -18,25 +17,23 @@ object BombPlacer {
 
         val tryCount = 4
 
-        val pointCalculator = GameObject.Position.getPointCalculator(gameObject.counts)
+        val positionCalculator = GameObject.Position.getPositionCalculator(gameObject.counts)
 
         val descriptions = gameObject.descriptions
 
-        val bombsList = MutableList<Vec3i>(0) { Vec3i() }
-
-        val excludedPositionVec = excludedPosition.getVec()
+        val bombsList = mutableListOf<GameObject.Position>()
 
         fun placeBomb() {
             for (i in 0 until tryCount) {
                 val rId = Random.nextInt(allCubesCount)
-                val xyz = pointCalculator(rId)
-                val d = GameObject.Position.getValue(descriptions, xyz)
+                val xyz = positionCalculator(rId)
+                val d = xyz.getValue(descriptions)
 
                 if (d.isBomb) {
                     continue
                 }
 
-                if (xyz == excludedPositionVec) {
+                if (xyz == excludedPosition) {
                     continue
                 }
 
@@ -50,14 +47,14 @@ object BombPlacer {
             fun tryToSetSequentially(n: Int): Boolean {
                 var nn = n
                 for (id in 0 until allCubesCount) {
-                    val xyz = pointCalculator(id)
-                    val d = GameObject.Position.getValue(descriptions, xyz)
+                    val xyz = positionCalculator(id)
+                    val d = xyz.getValue(descriptions)
 
                     if (d.isBomb) {
                         continue
                     }
 
-                    if (xyz == excludedPositionVec) {
+                    if (xyz.equals(excludedPosition)) {
                         continue
                     }
 

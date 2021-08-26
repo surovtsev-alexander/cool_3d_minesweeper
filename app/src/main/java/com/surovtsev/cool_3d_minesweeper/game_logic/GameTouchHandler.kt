@@ -1,11 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
-import glm_.vec3.Vec3i
 
 class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdateTexture) {
 
@@ -27,7 +26,7 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         )
     private val doubleClickDelay = 200L
 
-    private var bombsList: BombsList = mutableListOf<Vec3i>()
+    private var bombsList: BombsList = mutableListOf<GameObject.Position>()
 
     fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube, currTime: Long) {
         val position = pointedCube.position
@@ -64,9 +63,6 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
 
         if (isBomb) {
-            val cubesToOpen =
-                mutableListOf<PointedCube>()
-
             val action = {
                     c: PointedCube, i: Int ->
                 c.description.neighbourBombs[i]--
@@ -75,21 +71,81 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
             }
 
             NeighboursCalculator.iterateNeightbours(
-                gameObject, pointedCube.position.getVec(), action)
+                gameObject, pointedCube.position, action)
+
+            openNeighbours(pointedCube)
         }
+    }
+
+    val cubesToOpen = mutableListOf<GameObject.Position>()
+
+    fun openCubes() {
+        if (cubesToOpen.isEmpty()) {
+            return
+        }
+
+        val x = cubesToOpen.removeAt(0)
+
+        openNeighbours(gameObject.getPointedCube(x))
     }
 
     private fun tryToOpenCube(pointedCube: PointedCube) {
         val description = pointedCube.description
-        when (description.texture[0]) {
-            TextureCoordinatesHelper.TextureType.CLOSED -> {
-                if (description.isBomb) {
-                    setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                } else {
-                    description.setNumbers()
-                    textureUpdater.updateTexture(pointedCube)
-                }
+        if (description.isClosed()) {
+            if (description.isBomb) {
+                setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
+            } else {
+//                Log.d("TEST+++", "open cube $pointedCube")
+                openCube(pointedCube)
             }
+        } else {
+//            Log.d("TEST+++", "open cube neighbours $pointedCube")
+            openNeighbours(pointedCube)
+        }
+    }
+
+    private fun openCube(pointedCube: PointedCube) {
+        val description = pointedCube.description
+        description.setNumbers()
+        description.emptyIfZero()
+        textureUpdater.updateTexture(pointedCube)
+
+        openNeighbours(pointedCube)
+    }
+
+    private fun openNeighbours(pointedCube: PointedCube) {
+        val action = {
+                c: PointedCube ->
+            do {
+//                Log.d("TEST+++", "open $c")
+                if (cubesToOpen.any { it == c.position }) {
+//                    Log.d("TEST+++", "already added")
+                    break
+                }
+
+                val d = c.description
+                if (d.isZero()) {
+//                    Log.d("TEST+++", "ZERO")
+                } else if (!d.isClosed()) {
+//                    Log.d("TEST+++", "opened")
+                    break
+                }
+
+//                Log.d("TEST+++", "added")
+                val description = c.description
+                description.setNumbers()
+                description.emptyIfZero()
+                textureUpdater.updateTexture(c)
+                cubesToOpen.add(c.position)
+            } while (false)
+        }
+
+        val description = pointedCube.description
+        if (description.hasZero() ||
+            (description.isBomb && description.isEmpty())) {
+            NeighboursCalculator.iterateAllNeighbours(
+                gameObject, pointedCube.position, action
+            )
         }
     }
 

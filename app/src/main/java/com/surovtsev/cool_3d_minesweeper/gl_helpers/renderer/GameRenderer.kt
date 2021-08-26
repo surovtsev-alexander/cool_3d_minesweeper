@@ -30,7 +30,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (true) {
+            val d: Short = if (false) {
                 12
             } else {
                 5
@@ -131,6 +131,9 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
             glObject.modelModelGLSLProgram.use_program()
 
             glObject.bindData()
+
+            glCubes.gameTouchHandler.openCubes()
+
             if (clicked) {
                 glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendereTimer.time)
             }

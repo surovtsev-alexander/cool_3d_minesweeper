@@ -26,4 +26,27 @@ data class CubeDescription(
             texture[i] = TextureCoordinatesHelper.numberTextures[neighbourBombs[i]]
         }
     }
+
+    fun isZero(): Boolean {
+        for (t in texture)
+            if (t != TextureType.ZERO) return false
+
+        return true
+    }
+
+    fun emptyIfZero() {
+        if (!isZero()) return
+        setTexture(TextureType.EMPTY)
+    }
+
+    override fun toString() = "$isBomb $neighbourBombs"
+
+    fun hasZero(): Boolean {
+        for (i in 0 until 3) {
+            if (neighbourBombs[i] == 0) {
+                return true
+            }
+        }
+        return false
+    }
 }
