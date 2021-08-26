@@ -1,14 +1,20 @@
 package com.surovtsev.cool_3d_minesweeper.view.activities
 
 import android.app.ActivityManager
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.*
@@ -17,8 +23,11 @@ import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.MovingHe
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ScalingHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.TouchHelper
 import kotlinx.android.synthetic.main.activity_game.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.lang.IllegalStateException
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity(), IHaveGameStatusProcessor {
     var gameRenderer: GameRenderer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +61,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         glsv_main.setEGLContextClientVersion(2)
-        val gR = GameRenderer(this)
+        val gR = GameRenderer(this, this)
         gameRenderer = gR
         glsv_main.setRenderer(gameRenderer)
 
@@ -137,6 +146,30 @@ class GameActivity : AppCompatActivity() {
             glsv_main.onPause()
         }
     }
+
+    class MyDialog(val msg: String): DialogFragment() {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return activity?.let {
+                val builder = AlertDialog.Builder(it)
+                builder.setTitle(msg)
+                builder.setPositiveButton("Ok") { dialog, which -> dialog.cancel() }
+                builder.create()
+            } ?: throw IllegalStateException("Activity cannot be null")
+        }
+    }
+
+    override fun gameStatusUpdated(s: GameTouchHandler.GameState) {
+        val ctx = this as Context
+        doAsync {
+            uiThread {
+                val gameStateDialog = MyDialog(s.toString())
+                val manager = supportFragmentManager
+                gameStateDialog.show(manager, "gameStateDialog")
+            }
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()

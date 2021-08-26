@@ -4,6 +4,7 @@ import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
@@ -18,7 +19,9 @@ import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GameRenderer(val context: Context): GLSurfaceView.Renderer {
+class GameRenderer(
+    val context: Context,
+    val gameStatusProcessor: IHaveGameStatusProcessor): GLSurfaceView.Renderer {
 
     var modelObjects: ModelObjects? = null
     var scene: Scene? = null
@@ -31,7 +34,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (false) {
+            val d: Short = if (true) {
                 12
             } else {
                 5
@@ -45,7 +48,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             val dimensions = Vec3(5f, 5f, 5f)
             val gaps = if (false) dimensions / counts / 40 else Vec3()
-            val bombsRate =  if (false)  {
+            val bombsRate =  if (true )  {
                 0.2f
             } else {
                 0.1f
@@ -54,7 +57,8 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 counts,
                 dimensions,
                 gaps,
-                bombsRate
+                bombsRate,
+                gameStatusProcessor
             )
             glCubes = GLCubes(
                 context,

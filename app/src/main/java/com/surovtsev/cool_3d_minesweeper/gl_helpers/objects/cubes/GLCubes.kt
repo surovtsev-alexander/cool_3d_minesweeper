@@ -25,7 +25,8 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     val gameTouchHandler =
         GameTouchHandler(
             cubes.gameObject,
-            this
+            this,
+            cubes.gameStatusProcessor
         )
 
     override fun updateTexture(pointedCube: PointedCube) {
