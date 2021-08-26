@@ -16,7 +16,17 @@ object NeighboursCalculator {
         val xRange: IntRange,
         val yRange: IntRange,
         val zRange: IntRange
-    )
+    ) {
+        fun iterate(counts: Vec3s, action: (GameObject.Position) -> Unit) {
+            for (x in xRange) {
+                for (y in yRange) {
+                    for (z in zRange) {
+                        action(GameObject.Position(x, y, z, counts))
+                    }
+                }
+            }
+        }
+    }
 
     data class PairDimRanges(
         val xRange: PairDimRange,
@@ -46,50 +56,33 @@ object NeighboursCalculator {
         gameObject: GameObject, xyz: GameObject.Position,
         action: (PointedCube) -> Unit
     ) {
-        val ranges = PairDimRanges(xyz, gameObject.counts)
-        val (xRanges, yRanges, zRanges) = ranges
+        val ranges = PairDimRanges(xyz, gameObject.counts).getDimRanges(
+            Vec3bool(false, false, false)
+        )
 
-        val counts = gameObject.counts
-        for (x in xRanges.second) {
-            for (y in yRanges.second) {
-                for (z in zRanges.second) {
-                    val p = GameObject.Position(x, y, z, counts)
-                    if (p == xyz) {
-                        continue
-                    }
-
-                    val c = gameObject.getPointedCube(p)
-                    val d = c.description
-                    if (d.isBomb || d.isEmpty()) continue
-
-                    action(c)
-                }
-            }
-        }
+        iterate(gameObject, xyz, ranges, { c, i -> action(c) }, 0)
     }
 
     fun iterate(
-        gameObject: GameObject, position: GameObject.Position,
+        gameObject: GameObject, xyz: GameObject.Position,
         ranges: DimRanges,
         action: (PointedCube, Int) -> Unit, i: Int
     ) {
         val counts = gameObject.counts
-        for (x in ranges.xRange) {
-            for (y in ranges.yRange) {
-                for (z in ranges.zRange) {
-                    val p = GameObject.Position(x, y, z, counts)
-                    if (p == position) {
-                        continue
-                    }
 
-                    val c = gameObject.getPointedCube(p)
-                    val d = c.description
-
-                    if (d.isBomb || d.isEmpty()) continue
-
-                    action(c, i)
+        ranges.iterate(counts) {
+            do {
+                if (it == xyz) {
+                    break
                 }
-            }
+
+                val c = gameObject.getPointedCube(it)
+                val d = c.description
+
+                if (d.isBomb || d.isEmpty()) break
+
+                action(c, i)
+            } while (false)
         }
     }
 
