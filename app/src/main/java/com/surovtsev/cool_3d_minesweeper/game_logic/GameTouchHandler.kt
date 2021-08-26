@@ -92,13 +92,19 @@ class GameTouchHandler(
 
             val action: (PointedCube, Int) -> Unit = {
                     c: PointedCube, i: Int ->
-                c.description.neighbourBombs[i]--
+                do {
+                    if (c.description.isBomb) {
+                        break
+                    }
 
-                if (false && c.description.neighbourBombs[i] == 0) {
-                    cubesToRemove.add(c.position)
-                } else {
-                    updateIfOpened(c)
-                }
+                    c.description.neighbourBombs[i]--
+
+                    if (false && c.description.neighbourBombs[i] == 0) {
+                        cubesToRemove.add(c.position)
+                    } else {
+                        updateIfOpened(c)
+                    }
+                } while (false)
             }
 
             NeighboursCalculator.iterateNeightbours(
@@ -140,7 +146,7 @@ class GameTouchHandler(
     }
 
     fun openCubes() {
-        processOnElement(cubesToOpen, this::openNeighbours)
+        processOnElement(cubesToOpen, this::tryToOpenCube)
     }
 
     fun removeCubes() {
@@ -186,7 +192,24 @@ class GameTouchHandler(
     }
 
     private fun openNeighboursIfBombsMarked(pointedCube: PointedCube) {
+        for (i in 0 until 3) {
+            val cubeNbhBombs = pointedCube.description.neighbourBombs[i]
+            if (cubeNbhBombs == 0) {
+                continue
+            }
+            val neighbours = NeighboursCalculator.getNeighbours(
+                gameObject, pointedCube.position, i)
 
+            val marked = neighbours.count { it.description.isMarked() }
+
+            if (cubeNbhBombs == marked) {
+                for (n in neighbours) {
+                    if (n.description.isClosed()) {
+                        cubesToOpen.add(n.position)
+                    }
+                }
+            }
+        }
     }
 
     private fun openNeighbours(pointedCube: PointedCube) {
@@ -213,9 +236,6 @@ class GameTouchHandler(
 
 //                Log.d("TEST+++", "added")
                 val description = c.description
-                description.setNumbers()
-                description.emptyIfZero()
-                textureUpdater.updateTexture(c)
                 cubesToOpen.add(c.position)
             } while (false)
         }

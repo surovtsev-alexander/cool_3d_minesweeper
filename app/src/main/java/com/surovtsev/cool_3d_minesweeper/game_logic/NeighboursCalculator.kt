@@ -61,7 +61,12 @@ object NeighboursCalculator {
             Vec3bool(false, false, false)
         )
 
-        iterate(gameObject, xyz, ranges, { c, i -> action(c) }, 0)
+        val fl = {c: PointedCube, i: Int ->
+            if (!c.description.isBomb) {
+                action(c)
+            }
+        }
+        iterate(gameObject, xyz, ranges, fl, 0)
     }
 
     fun iterate(
@@ -80,15 +85,21 @@ object NeighboursCalculator {
                 val c = gameObject.getPointedCube(it)
                 val d = c.description
 
-                if (d.isBomb || d.isEmpty()) break
+                if (d.isEmpty()) break
 
                 action(c, i)
             } while (false)
         }
     }
 
-    fun getNeighbours(): List<CubePosition> {
-        val res = mutableListOf<CubePosition>()
+    fun getNeighbours(gameObject: GameObject, xyz: CubePosition, dim: Int): List<PointedCube> {
+        val res = mutableListOf<PointedCube>()
+
+        val ranges = PairDimRanges(xyz, gameObject.counts)
+
+        iterate(gameObject, xyz, ranges.getDimRanges(rangesFlags[dim]!!), { pointedCube, i ->
+            res.add(pointedCube)
+        }, dim)
 
         return res
     }
@@ -111,8 +122,14 @@ object NeighboursCalculator {
     }
 
     fun fillNeighbours(gameObject: GameObject, bombsList: BombsList) {
+        val fl = {c: PointedCube, i: Int ->
+            if (!c.description.isBomb) {
+                c.description.neighbourBombs[i]++
+            }
+        }
+
         for (b in bombsList) {
-            iterateNeightbours(gameObject, b, { c, i -> c.description.neighbourBombs[i]++ })
+            iterateNeightbours(gameObject, b, fl)
         }
     }
 
