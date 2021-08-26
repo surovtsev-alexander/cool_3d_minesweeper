@@ -1,34 +1,52 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
+import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3s
 
 
-typealias DimRanges = Pair<IntRange, IntRange>
+typealias PairDimRange = Pair<IntRange, IntRange>
 
 object NeighboursCalculator {
 
-    fun getDimRanges(pos: Int, dim: Short): DimRanges =
+    fun getPairDimRange(pos: Int, dim: Short): PairDimRange =
         IntRange(pos, pos) to IntRange(Math.max(pos - 1, 0), Math.min(pos + 1, dim - 1))
 
-    data class Ranges(
-        val xRange: DimRanges,
-        val yRange: DimRanges,
-        val zRange: DimRanges
+    data class DimRanges(
+        val xRange: IntRange,
+        val yRange: IntRange,
+        val zRange: IntRange
+    )
+
+    data class PairDimRanges(
+        val xRange: PairDimRange,
+        val yRange: PairDimRange,
+        val zRange: PairDimRange
     ) {
         constructor(idx: GameObject.Position, counts: Vec3s): this(
-            getDimRanges(idx.x, counts.x),
-            getDimRanges(idx.y, counts.y),
-            getDimRanges(idx.z, counts.z)
+            getPairDimRange(idx.x, counts.x),
+            getPairDimRange(idx.y, counts.y),
+            getPairDimRange(idx.z, counts.z)
         )
+
+        companion object {
+            fun selectRange(pair: PairDimRange, first: Boolean) = if (first) pair.first else pair.second
+        }
+
+        fun getDimRanges(flags: Vec3bool) =
+            DimRanges(
+                selectRange(xRange, flags[0]),
+                selectRange(yRange, flags[1]),
+                selectRange(zRange, flags[2])
+            )
     }
 
+
     fun iterateAllNeighbours(
-        gameObject: GameObject, idx: GameObject.Position,
+        gameObject: GameObject, xyz: GameObject.Position,
         action: (PointedCube) -> Unit
     ) {
-        val ranges = Ranges(idx, gameObject.counts)
+        val ranges = PairDimRanges(xyz, gameObject.counts)
         val (xRanges, yRanges, zRanges) = ranges
 
         val counts = gameObject.counts
@@ -36,7 +54,7 @@ object NeighboursCalculator {
             for (y in yRanges.second) {
                 for (z in zRanges.second) {
                     val p = GameObject.Position(x, y, z, counts)
-                    if (p == idx) {
+                    if (p == xyz) {
                         continue
                     }
 
@@ -51,15 +69,18 @@ object NeighboursCalculator {
     }
 
     fun iterate(
-        gameObject: GameObject,
-        xRange: IntRange, yRange: IntRange, zRange: IntRange,
+        gameObject: GameObject, position: GameObject.Position,
+        ranges: DimRanges,
         action: (PointedCube, Int) -> Unit, i: Int
     ) {
         val counts = gameObject.counts
-        for (x in xRange) {
-            for (y in yRange) {
-                for (z in zRange) {
+        for (x in ranges.xRange) {
+            for (y in ranges.yRange) {
+                for (z in ranges.zRange) {
                     val p = GameObject.Position(x, y, z, counts)
+                    if (p == position) {
+                        continue
+                    }
 
                     val c = gameObject.getPointedCube(p)
                     val d = c.description
@@ -73,15 +94,14 @@ object NeighboursCalculator {
     }
 
     fun iterateNeightbours(
-        gameObject: GameObject, idx: GameObject.Position,
+        gameObject: GameObject, xyz: GameObject.Position,
         action: (PointedCube, Int) -> Unit
     ) {
-        val ranges = Ranges(idx, gameObject.counts)
-        val (xRanges, yRanges, zRanges) = ranges
+        val ranges = PairDimRanges(xyz, gameObject.counts)
 
-        iterate(gameObject, xRanges.first, yRanges.second, zRanges.second, action, 0)
-        iterate(gameObject, xRanges.second, yRanges.first, zRanges.second, action, 1)
-        iterate(gameObject, xRanges.second, yRanges.second, zRanges.first, action, 2)
+        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(true, false, false)), action, 0)
+        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(false, true, false)), action, 1)
+        iterate(gameObject, xyz, ranges.getDimRanges(Vec3bool(false, false, true)), action, 2)
     }
 
     fun fillNeighbours(gameObject: GameObject, bombsList: BombsList) {

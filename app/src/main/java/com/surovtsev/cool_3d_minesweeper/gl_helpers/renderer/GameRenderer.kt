@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
@@ -144,7 +143,7 @@ class GameRenderer(
             if (removeBombs.getAndRelease()) {
                 gameTouchHandler.storeSelectedBombs()
             }
-            gameTouchHandler.removeSelectedBombs()
+            gameTouchHandler.removeCubes()
 
             if (clicked) {
                 glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendereTimer.time)

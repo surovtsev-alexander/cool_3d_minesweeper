@@ -33,7 +33,7 @@ class GameTouchHandler(
 
     private val bombsList = mutableListOf<GameObject.Position>()
     val cubesToOpen = mutableListOf<GameObject.Position>()
-    private val bombsToRemove= mutableListOf<GameObject.Position>()
+    private val cubesToRemove = mutableListOf<GameObject.Position>()
 
     private var bombsLeft = 0
 
@@ -89,11 +89,15 @@ class GameTouchHandler(
                 return
             }
 
-            val action = {
+            val action: (PointedCube, Int) -> Unit = {
                     c: PointedCube, i: Int ->
                 c.description.neighbourBombs[i]--
 
-                updateIfOpened(c)
+                if (false && c.description.neighbourBombs[i] == 0) {
+                    cubesToRemove.add(c.position)
+                } else {
+                    updateIfOpened(c)
+                }
             }
 
             NeighboursCalculator.iterateNeightbours(
@@ -138,8 +142,8 @@ class GameTouchHandler(
         processOnElement(cubesToOpen, this::openNeighbours)
     }
 
-    fun removeSelectedBombs() {
-        processOnElement(bombsToRemove, this::emptyCube)
+    fun removeCubes() {
+        processOnElement(cubesToRemove, this::emptyCube)
     }
 
     fun storeSelectedBombs() {
@@ -148,7 +152,7 @@ class GameTouchHandler(
                 val p = gameObject.getPointedCube(xyz)
                 val d = p.description
                 if (d.isMarked()) {
-                    bombsToRemove.add(xyz)
+                    cubesToRemove.add(xyz)
                 }
             } while (false)
         }
@@ -166,6 +170,7 @@ class GameTouchHandler(
             }
         } else {
 //            Log.d("TEST+++", "open cube neighbours $pointedCube")
+            openNeighboursIfBombsMarked(pointedCube)
             openNeighbours(pointedCube)
         }
     }
@@ -177,6 +182,10 @@ class GameTouchHandler(
         textureUpdater.updateTexture(pointedCube)
 
         openNeighbours(pointedCube)
+    }
+
+    private fun openNeighboursIfBombsMarked(pointedCube: PointedCube) {
+
     }
 
     private fun openNeighbours(pointedCube: PointedCube) {
