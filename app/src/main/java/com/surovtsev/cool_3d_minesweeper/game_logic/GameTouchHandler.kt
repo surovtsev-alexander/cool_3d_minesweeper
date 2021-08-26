@@ -26,13 +26,15 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
         )
     private val doubleClickDelay = 200L
 
-    private var bombsList: BombsList = mutableListOf<GameObject.Position>()
+    private val bombsList = mutableListOf<GameObject.Position>()
+    val cubesToOpen = mutableListOf<GameObject.Position>()
+    private val bombsToRemove= mutableListOf<GameObject.Position>()
 
     fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube, currTime: Long) {
         val position = pointedCube.position
 
         if (state == GameState.NO_BOBMS_PLACED) {
-            bombsList = BombPlacer.placeBombs(gameObject, pointedCube.position)
+            bombsList += BombPlacer.placeBombs(gameObject, pointedCube.position)
 
             NeighboursCalculator.fillNeighbours(gameObject, bombsList)
             state = GameState.BOMBS_PLACED
@@ -60,8 +62,6 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
     private fun emptyCube(pointedCube: PointedCube) {
         val isBomb = pointedCube.description.isBomb
 
-        setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
-
         if (isBomb) {
             val action = {
                     c: PointedCube, i: Int ->
@@ -75,18 +75,36 @@ class GameTouchHandler(val gameObject: GameObject, val textureUpdater: ICanUpdat
 
             openNeighbours(pointedCube)
         }
+
+        setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
     }
 
-    val cubesToOpen = mutableListOf<GameObject.Position>()
-
-    fun openCubes() {
-        if (cubesToOpen.isEmpty()) {
+    fun processOnElement(list: MutableList<GameObject.Position>, action: (PointedCube) -> Unit) {
+        if (list.isEmpty()) {
             return
         }
 
-        val x = cubesToOpen.removeAt(0)
+        action(gameObject.getPointedCube(list.removeAt(0)))
+    }
 
-        openNeighbours(gameObject.getPointedCube(x))
+    fun openCubes() {
+        processOnElement(cubesToOpen, this::openNeighbours)
+    }
+
+    fun removeSelectedBombs() {
+        processOnElement(bombsToRemove, this::emptyCube)
+    }
+
+    fun storeSelectedBombs() {
+        gameObject.iterateCubes { xyz ->
+            do {
+                val p = gameObject.getPointedCube(xyz)
+                val d = p.description
+                if (d.isMarked()) {
+                    bombsToRemove.add(xyz)
+                }
+            } while (false)
+        }
     }
 
     private fun tryToOpenCube(pointedCube: PointedCube) {

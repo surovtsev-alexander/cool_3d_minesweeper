@@ -45,7 +45,7 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
                 "near:${pointerData.near}",
                 "far:${pointerData.far}"
             ).reduce {acc, x -> "$acc\n$x"}
-            ApplicationController.instance!!.messagesComponent!!.addMessageUI(message)
+            ApplicationController.instance!!.messagesComponent?.addMessageUI(message)
         }
     }
 }

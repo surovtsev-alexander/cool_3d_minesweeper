@@ -25,8 +25,12 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        ApplicationController.instance!!.messagesComponent = mmc_main
-        ApplicationController.instance!!.messagesComponent!!.addMessage("started")
+//        ApplicationController.instance!!.messagesComponent = mmc_main
+        ApplicationController.instance!!.messagesComponent?.addMessage("started")
+
+        btn_remove_marked_bombs.setOnClickListener(View.OnClickListener { v ->
+            gameRenderer?.scene?.removeBombs?.update()
+        })
 
         val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val configurationInfo = activityManager.deviceConfigurationInfo

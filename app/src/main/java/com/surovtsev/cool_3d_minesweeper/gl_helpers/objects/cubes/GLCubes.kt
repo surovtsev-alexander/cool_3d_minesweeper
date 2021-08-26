@@ -90,7 +90,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         var candidateCubes =
             mutableListOf<Pair<Float, PointedCubeWithSpaceParameters>>()
 
-        GameObject.iterateCubes(counts) { p: GameObject.Position ->
+        gameObject.iterateCubes { p: GameObject.Position ->
             do {
                 val description = p.getValue(descriptions)
 

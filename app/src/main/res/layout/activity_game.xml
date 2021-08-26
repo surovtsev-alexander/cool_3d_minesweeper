@@ -14,10 +14,17 @@
         android:layout_weight="2"
         />
 
+    <!--
     <com.surovtsev.cool_3d_minesweeper.view.components.MessagesComponent
         android:id="@+id/mmc_main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="8"/>
+     -->
+    <Button
+        android:id="@+id/btn_remove_marked_bombs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="X"/>
 
 </LinearLayout>

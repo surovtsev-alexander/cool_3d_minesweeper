@@ -49,7 +49,7 @@ data class GameObject(
 
     companion object {
 
-        fun iterateCubes(counts: Vec3s, action: (p: Position) -> Unit) {
+        fun iterateCubes(counts: Vec3s, action: (xyz: Position) -> Unit) {
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {
@@ -70,4 +70,6 @@ data class GameObject(
         }
 
     fun getPointedCube(p: Position) = PointedCube(p, p.getValue(descriptions))
+
+    fun iterateCubes(action: (xyz: Position) -> Unit) = Companion.iterateCubes(counts, action)
 }

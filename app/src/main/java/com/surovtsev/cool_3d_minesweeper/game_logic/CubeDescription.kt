@@ -10,9 +10,13 @@ data class CubeDescription(
     var neighbourBombs: Vec3i = Vec3i(),
     var texture: Array<TextureType> = Array<TextureType>(3) { TextureType.CLOSED }
 ) {
-    fun isEmpty() = texture[0] == TextureType.EMPTY
+    fun isTexture(t: TextureType) = texture[0] == t
 
-    fun isClosed() = texture[0] == TextureType.CLOSED
+    fun isEmpty() = isTexture(TextureType.EMPTY)
+
+    fun isClosed() = isTexture(TextureType.CLOSED)
+
+    fun isMarked() = isTexture(TextureType.MARKED)
 
     fun setTexture(tt: TextureType) {
         for (i in 0 until texture.count()) {

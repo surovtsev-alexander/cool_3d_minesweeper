@@ -12,6 +12,7 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinat
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.*
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.math.RotationMatrixDecomposer
+import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -71,6 +72,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
     inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
         val cameraInfo: CameraInfo
         val clickHandler: ClickHandler
+        val removeBombs = DelayedRelease()
 
         init {
             cameraInfo = CameraInfo(width, height)
@@ -132,7 +134,13 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
 
             glObject.bindData()
 
-            glCubes.gameTouchHandler.openCubes()
+            val gameTouchHandler = glCubes.gameTouchHandler
+            gameTouchHandler.openCubes()
+
+            if (removeBombs.getAndRelease()) {
+                gameTouchHandler.storeSelectedBombs()
+            }
+            gameTouchHandler.removeSelectedBombs()
 
             if (clicked) {
                 glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendereTimer.time)
@@ -181,7 +189,7 @@ class GameRenderer(val context: Context): GLSurfaceView.Renderer {
                 val x = RotationMatrixDecomposer.getAngles(
                     scene!!.cameraInfo.moveHandler.rotMatrix
                 )
-                ApplicationController.instance!!.messagesComponent!!.addMessageUI("$x")
+                ApplicationController.instance!!.messagesComponent?.addMessageUI("$x")
             }
         }
 
