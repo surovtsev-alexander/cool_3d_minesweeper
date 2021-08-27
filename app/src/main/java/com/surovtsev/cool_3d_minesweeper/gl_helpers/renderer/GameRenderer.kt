@@ -46,7 +46,7 @@ class GameRenderer(
             val counts = Vec3s(xDim, yDim, zDim)
 
             val dimensions = Vec3(5f, 5f, 5f)
-            val gaps = if (false) dimensions / counts / 40 else Vec3()
+            val gaps = if (false) dimensions / counts / 40 else if (false) Vec3() else dimensions / counts / 10
             val bombsRate =  if (true )  {
                 0.2f
             } else {
@@ -145,6 +145,7 @@ class GameRenderer(
                 gameTouchHandler.storeSelectedBombs()
             }
             if (removeBorderZeros.getAndRelease()) {
+                //gameTouchHandler.openCubes()
                 gameTouchHandler.storeZeroBorders()
             }
             gameTouchHandler.removeCubes()

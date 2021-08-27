@@ -1,7 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.*
+import com.surovtsev.cool_3d_minesweeper.math.MyMath
+import glm_.vec3.Vec3
 import glm_.vec3.Vec3bool
+import glm_.vec3.Vec3i
 import glm_.vec3.Vec3s
 
 
@@ -58,10 +62,10 @@ object NeighboursCalculator {
         return res
     }
 
-    private val rangesFlags = mapOf<Int, Vec3bool>(
-        0 to Vec3bool(true, false, false),
-        1 to Vec3bool(false, true, false),
-        2 to Vec3bool(false, false, true)
+    private val rangesFlags = arrayOf<Vec3bool>(
+        Vec3bool(true, false, false),
+        Vec3bool(false, true, false),
+        Vec3bool(false, false, true)
     )
 
     fun iterateNeightbours(
@@ -70,21 +74,57 @@ object NeighboursCalculator {
     ) {
         val ranges = PairDimRanges(xyz, gameObject.counts)
 
-        for (r in rangesFlags) {
-            iterate(gameObject, xyz, ranges.getDimRanges(r.value), action, r.key)
+        for (i in 0 until 3) {
+            iterate(gameObject, xyz, ranges.getDimRanges(rangesFlags[i]), action, i)
         }
     }
 
     fun fillNeighbours(gameObject: GameObject, bombsList: BombsList) {
         val fl = {c: PointedCube, i: Int ->
-            if (!c.description.isBomb) {
-                c.description.neighbourBombs[i]++
-            }
+                c.description.neighbourBombs[i] += 1
         }
 
         for (b in bombsList) {
             iterateNeightbours(gameObject, b, fl)
         }
+    }
+
+    fun hasPosEmptyNeighbours(
+        gameObject: GameObject, xyz: CubePosition, direction: Int): Boolean {
+        val r = MyMath.Rays[direction]
+        val xyzV = xyz.getVec()
+        val counts = gameObject.counts
+
+//        val sb = StringBuilder()
+//        sb.append(
+//            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $r"
+//        )
+
+        fun test_point(p: Vec3i): Boolean {
+//            sb.append("p $p")
+
+            if (!MyMath.isPointInCounts(p, counts)) {
+                return true
+            }
+
+            val d = gameObject.getPointedCube(
+                CubePosition(p, counts)
+            )
+
+            return d.description.isEmpty()
+        }
+
+        if (test_point(xyzV - r)) {
+            return true
+        }
+
+        if (test_point(xyzV + r)) {
+            return true
+        }
+
+//        Log.d("TEST++", sb.toString())
+
+        return false
     }
 
     fun bombRemoved(gameObject: GameObject, position: CubePosition) {

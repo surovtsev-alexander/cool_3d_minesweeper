@@ -8,6 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusPr
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
+import java.lang.StringBuilder
 
 class GameTouchHandler(
     val gameObject: GameObject,
@@ -94,15 +95,8 @@ class GameTouchHandler(
             val action: (PointedCube, Int) -> Unit = {
                     c: PointedCube, i: Int ->
                 do {
-                    if (c.description.isBomb) {
-                        break
-                    }
-
                     c.description.neighbourBombs[i]--
-
-                    if (false && c.description.neighbourBombs[i] == 0) {
-                        cubesToRemove.add(c.position)
-                    } else {
+                    if (!c.description.isBomb) {
                         updateIfOpened(c)
                     }
                 } while (false)
@@ -129,16 +123,16 @@ class GameTouchHandler(
         }
     }
 
-    val removeCount = 10
+    val removeCount = 1
 
     private fun gameIsOver() = (state == GameState.WIN || state == GameState.LOSE)
 
     private fun processOnElement(list: MutableList<CubePosition>, action: (PointedCube) -> Unit) {
-        for (i in 0 until 10) {
+        for (i in 0 until removeCount) {
             if (gameIsOver()) {
                 return
             }
-            if (list.isEmpty()) {
+            if (list.count() == 0) {
                 return
             }
 
@@ -309,6 +303,9 @@ class GameTouchHandler(
 
     private fun openCube(pointedCube: PointedCube) {
         val description = pointedCube.description
+
+//        Log.d("TEST++", "openCube ${description.neighbourBombs}")
+
         description.setNumbers()
         description.emptyIfZero()
         textureUpdater.updateTexture(pointedCube)
@@ -319,9 +316,14 @@ class GameTouchHandler(
     private fun openNeighboursIfBombsMarked(pointedCube: PointedCube) {
         for (i in 0 until 3) {
             val cubeNbhBombs = pointedCube.description.neighbourBombs[i]
-            if (cubeNbhBombs == 0) {
+
+            if (!NeighboursCalculator.hasPosEmptyNeighbours(
+                    gameObject, pointedCube.position, i
+                )) {
+//                sb.append("it has not empty neighbours\n")
                 continue
             }
+
             val neighbours = NeighboursCalculator.getNeighbours(
                 gameObject, pointedCube.position, i)
 
@@ -330,7 +332,7 @@ class GameTouchHandler(
             if (cubeNbhBombs == marked) {
                 for (n in neighbours) {
                     if (n.description.isClosed()) {
-                        cubesToOpen.add(n.position)
+                        tryToOpenCube(n)
                     }
                 }
             }
@@ -338,6 +340,70 @@ class GameTouchHandler(
     }
 
     private fun openNeighbours(pointedCube: PointedCube) {
+//        val sb = StringBuilder()
+
+        val neighbourBombs = pointedCube.description.neighbourBombs
+        val position = pointedCube.position
+
+//        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
+        for (i in 0 until 3) {
+            val cubeNbhBombs = neighbourBombs[i]
+
+//            if (i > 0) {
+//                break
+//            }
+
+            if (cubeNbhBombs > 0) {
+                continue
+            }
+
+//            sb.append("i $i\n")
+
+            // need to be modified. check surrendings
+            if (!NeighboursCalculator.hasPosEmptyNeighbours(
+                    gameObject, position, i
+                )) {
+//                sb.append("it has not empty neighbours\n")
+                continue
+            }
+
+            val neighbours = NeighboursCalculator.getNeighbours(
+                gameObject, position, i)
+
+            for (n in neighbours) {
+                val p = n.position
+                val d = n.description
+
+                if (!d.isClosed()) {
+                    continue
+                }
+
+                if (d.isBomb) {
+                    setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
+                    setGameState(GameState.LOSE)
+                    return
+                }
+
+                if (d.isMarked()) {
+                    continue
+                }
+
+                if (cubesToOpen.any { it == p }) {
+//                    Log.d("TEST+++", "already added")
+                    continue
+                }
+//                sb.append("n ${p} ${d.neighbourBombs}\n")
+                cubesToOpen.add(p)
+            }
+        }
+//        sb.append("--\ncubesToOpen.count ${cubesToOpen.count()}")
+//        sb.append(
+//            cubesToOpen.map { it.id.toString() }.fold("") { acc , s -> "$acc $s"}
+//        )
+//        Log.d("TEST+++", sb.toString())
+    }
+
+    private fun openNeighbours_old(pointedCube: PointedCube) {
         val action = {
                 c: PointedCube ->
             do {
@@ -366,12 +432,12 @@ class GameTouchHandler(
         }
 
         val description = pointedCube.description
-        if (description.hasZero() ||
-            (description.isBomb && description.isEmpty())) {
-            NeighboursCalculator.iterateAllNeighbours(
-                gameObject, pointedCube.position, action
-            )
-        }
+//        if ( description.isZero() ||
+//            (description.isBomb && description.isEmpty())) {
+//            NeighboursCalculator.iterateAllNeighbours(
+//                gameObject, pointedCube.position, action
+//            )
+//        }
     }
 
     private fun updateIfOpened(pointedCube: PointedCube) {

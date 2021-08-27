@@ -23,6 +23,10 @@ class CubePosition(val x: Int, val y: Int, val z: Int, counts: Vec3s) {
 
     }
 
+    constructor(v: Vec3i, counts: Vec3s): this(
+        v.x, v.y, v.z, counts
+    )
+
     override fun equals(other: Any?): Boolean {
         if (other is CubePosition) {
             return (x == other.x && y == other.y && z == other.z && id == other.id)
