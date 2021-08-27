@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.game_logic
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.DimRanges
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
@@ -130,9 +131,9 @@ class GameTouchHandler(
 
     val removeCount = 10
 
-    fun gameIsOver() = (state == GameState.WIN || state == GameState.LOSE)
+    private fun gameIsOver() = (state == GameState.WIN || state == GameState.LOSE)
 
-    fun processOnElement(list: MutableList<CubePosition>, action: (PointedCube) -> Unit) {
+    private fun processOnElement(list: MutableList<CubePosition>, action: (PointedCube) -> Unit) {
         for (i in 0 until 10) {
             if (gameIsOver()) {
                 return
@@ -166,7 +167,127 @@ class GameTouchHandler(
     }
 
     fun storeZeroBorders() {
+        val ranges = gameObject.ranges
 
+        var stop = false
+
+        val l = { r: DimRanges ->
+            val sd = inspectSlice(r)
+
+//            Log.d("TEST++", "sd $sd")
+            when (sd) {
+                SliceDescription.NOT_EMPTY -> {
+                    true
+                }
+                SliceDescription.HAS_ZERO -> {
+                    emptySlice(r)
+                    false
+                }
+                SliceDescription.EMPTY -> {
+                    false
+                }
+            }
+        }
+
+//        for (x in ranges.xRange) {
+//            val r = ranges.copy(xRange = x..x)
+//            val stop = l(r)
+////            Log.d("TEST++", "r $r\tstop $stop")
+//            if (stop) {
+//                break
+//            }
+//        }
+//
+//        for (x in ranges.xRange.reversed()) {
+//            val r = ranges.copy(xRange = x..x)
+//            val stop = l(r)
+////            Log.d("TEST++", "r $r\tstop $stop")
+//            if (stop) {
+//                break
+//            }
+//        }
+
+
+        val xx = { r: IntRange, c: (Int) -> DimRanges ->
+
+            val fv = { p: IntProgression ->
+                for (v in p) {
+                    val rr = c(v)
+                    val stop = l(rr)
+//                Log.d("TEST++", "r $r\tstop $stop")
+                    if (stop) {
+                        break
+                    }
+                }
+            }
+
+            fv(r)
+            fv(r.reversed())
+        }
+
+        xx(ranges.xRange, { v -> ranges.copy(xRange = v..v) })
+        xx(ranges.yRange, { v -> ranges.copy(yRange = v..v) })
+        xx(ranges.zRange, { v -> ranges.copy(zRange = v..v) })
+    }
+
+    private enum class SliceDescription {
+        EMPTY,
+        NOT_EMPTY,
+        HAS_ZERO
+    }
+
+    private fun emptySlice(ranges: DimRanges) {
+//        Log.d("TEST++", "emptySlice $ranges")
+        ranges.iterate(gameObject.counts) {
+            val c = gameObject.getPointedCube(it)
+            val d = c.description
+            if (!d.isEmpty()) {
+//                Log.d("TEST++", "$it")
+                cubesToRemove.add(it)
+            }
+        }
+    }
+
+    private fun inspectSlice(ranges: DimRanges): SliceDescription {
+        var notEmpty = false
+        var hasZero = false
+
+        val counts = gameObject.counts
+        for (x in ranges.xRange) {
+            for (y in ranges.yRange) {
+                for (z in ranges.zRange) {
+                    val p = CubePosition(x, y, z, counts)
+                    val c = gameObject.getPointedCube(p)
+                    val d = c.description
+
+                    if (d.isEmpty()) {
+                        continue
+                    } else if (d.isClosed() || d.isMarked()) {
+                        notEmpty = true
+                    } else {
+                        hasZero = true
+                    }
+
+                    if (notEmpty) {
+                        break
+                    }
+                }
+                if (notEmpty) {
+                    break
+                }
+            }
+            if (notEmpty) {
+                break
+            }
+        }
+
+        if (notEmpty) {
+            return SliceDescription.NOT_EMPTY
+        } else if (hasZero) {
+            return SliceDescription.HAS_ZERO
+        } else {
+            return SliceDescription.EMPTY
+        }
     }
 
     private fun tryToOpenCube(pointedCube: PointedCube) {

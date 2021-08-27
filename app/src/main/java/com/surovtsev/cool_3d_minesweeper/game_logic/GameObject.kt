@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.game_logic
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.DimRanges
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
@@ -11,6 +12,8 @@ data class GameObject(
     val counts: Vec3s,
     val bombsCount: Int
 ) {
+    val ranges = DimRanges(counts)
+
     companion object {
 
         fun iterateCubes(counts: Vec3s, action: (xyz: CubePosition) -> Unit) {

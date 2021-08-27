@@ -7,6 +7,16 @@ data class DimRanges(
     val yRange: IntRange,
     val zRange: IntRange
 ) {
+    companion object {
+        fun getIntRange(v: Short) = 0 until v
+    }
+
+    constructor(counts: Vec3s): this(
+        getIntRange(counts.x),
+        getIntRange(counts.y),
+        getIntRange(counts.z)
+    )
+
     fun iterate(counts: Vec3s, action: (CubePosition) -> Unit) {
         for (x in xRange) {
             for (y in yRange) {
@@ -16,4 +26,6 @@ data class DimRanges(
             }
         }
     }
+
+    override fun toString() = "${xRange.toString()} ${yRange.toString()} ${zRange.toString()}"
 }

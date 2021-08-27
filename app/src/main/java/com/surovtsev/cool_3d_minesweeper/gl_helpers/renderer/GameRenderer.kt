@@ -33,10 +33,10 @@ class GameRenderer(
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (true) {
+            val d: Short = if (false) {
                 12
             } else {
-                5
+                7
             }
 
             val xDim = d
@@ -75,8 +75,8 @@ class GameRenderer(
     inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
         val cameraInfo: CameraInfo
         val clickHandler: ClickHandler
-        val removeBombs = DelayedRelease()
-        val removeBorderZeros = DelayedRelease()
+        val removeBombs = DelayedRelease(false)
+        val removeBorderZeros = DelayedRelease(false)
 
         init {
             cameraInfo = CameraInfo(width, height)
