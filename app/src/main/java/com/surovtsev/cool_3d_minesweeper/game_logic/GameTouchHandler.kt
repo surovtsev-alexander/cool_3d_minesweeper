@@ -141,7 +141,7 @@ class GameTouchHandler(
     }
 
     fun openCubes() {
-        processOnElement(cubesToOpen, this::tryToOpenCube)
+        processOnElement(cubesToOpen, this::openCube)
     }
 
     fun removeCubes() {
@@ -318,9 +318,8 @@ class GameTouchHandler(
             val cubeNbhBombs = pointedCube.description.neighbourBombs[i]
 
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    gameObject, pointedCube.position, i
+                    gameObject, pointedCube.position, i, null
                 )) {
-//                sb.append("it has not empty neighbours\n")
                 continue
             }
 
@@ -340,30 +339,26 @@ class GameTouchHandler(
     }
 
     private fun openNeighbours(pointedCube: PointedCube) {
-//        val sb = StringBuilder()
+        val sb = StringBuilder()
 
         val neighbourBombs = pointedCube.description.neighbourBombs
         val position = pointedCube.position
 
-//        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
+        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
         for (i in 0 until 3) {
             val cubeNbhBombs = neighbourBombs[i]
 
-//            if (i > 0) {
-//                break
-//            }
+            sb.append("i $i\n")
 
             if (cubeNbhBombs > 0) {
                 continue
             }
 
-//            sb.append("i $i\n")
-
             // need to be modified. check surrendings
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    gameObject, position, i
+                    gameObject, position, i, sb
                 )) {
-//                sb.append("it has not empty neighbours\n")
+                sb.append("it has not empty neighbours\n")
                 continue
             }
 
@@ -384,23 +379,19 @@ class GameTouchHandler(
                     return
                 }
 
-                if (d.isMarked()) {
-                    continue
-                }
-
                 if (cubesToOpen.any { it == p }) {
-//                    Log.d("TEST+++", "already added")
+                    Log.d("TEST+++", "already added\n")
                     continue
                 }
-//                sb.append("n ${p} ${d.neighbourBombs}\n")
+                sb.append("n ${p} ${d.neighbourBombs}\n")
                 cubesToOpen.add(p)
             }
         }
-//        sb.append("--\ncubesToOpen.count ${cubesToOpen.count()}")
-//        sb.append(
-//            cubesToOpen.map { it.id.toString() }.fold("") { acc , s -> "$acc $s"}
-//        )
-//        Log.d("TEST+++", sb.toString())
+        sb.append("--cubesToOpen.count ${cubesToOpen.count()}\n")
+        sb.append(
+            cubesToOpen.map { it.id.toString() }.fold("") { acc , s -> "$acc $s"} + "\n"
+        )
+        Log.d("TEST+++", sb.toString())
     }
 
     private fun openNeighbours_old(pointedCube: PointedCube) {
@@ -448,6 +439,7 @@ class GameTouchHandler(
         }
 
         description.setNumbers()
+        description.emptyIfZero()
         textureUpdater.updateTexture(pointedCube)
     }
 

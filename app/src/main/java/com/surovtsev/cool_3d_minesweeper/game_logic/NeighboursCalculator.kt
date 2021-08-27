@@ -90,18 +90,17 @@ object NeighboursCalculator {
     }
 
     fun hasPosEmptyNeighbours(
-        gameObject: GameObject, xyz: CubePosition, direction: Int): Boolean {
+        gameObject: GameObject, xyz: CubePosition, direction: Int, sb: StringBuilder?): Boolean {
         val r = MyMath.Rays[direction]
         val xyzV = xyz.getVec()
         val counts = gameObject.counts
 
-//        val sb = StringBuilder()
-//        sb.append(
-//            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $r"
-//        )
+        sb?.append(
+            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $direction $r\n"
+        )
 
         fun test_point(p: Vec3i): Boolean {
-//            sb.append("p $p")
+            sb?.append("p $p\n")
 
             if (!MyMath.isPointInCounts(p, counts)) {
                 return true
@@ -121,8 +120,6 @@ object NeighboursCalculator {
         if (test_point(xyzV + r)) {
             return true
         }
-
-//        Log.d("TEST++", sb.toString())
 
         return false
     }

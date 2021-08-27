@@ -33,7 +33,7 @@ class GameRenderer(
         val clickPointer: ClickPointer
 
         init {
-            val d: Short = if (false) {
+            val d: Short = if (true) {
                 12
             } else {
                 7
@@ -46,8 +46,8 @@ class GameRenderer(
             val counts = Vec3s(xDim, yDim, zDim)
 
             val dimensions = Vec3(5f, 5f, 5f)
-            val gaps = if (false) dimensions / counts / 40 else if (false) Vec3() else dimensions / counts / 10
-            val bombsRate =  if (true )  {
+            val gaps = if (false) dimensions / counts / 40 else if (true) Vec3() else dimensions / counts / 10
+            val bombsRate =  if (true)  {
                 0.2f
             } else {
                 0.1f
@@ -77,6 +77,7 @@ class GameRenderer(
         val clickHandler: ClickHandler
         val removeBombs = DelayedRelease(false)
         val removeBorderZeros = DelayedRelease(false)
+        val drawPointer = false
 
         init {
             cameraInfo = CameraInfo(width, height)
@@ -121,14 +122,16 @@ class GameRenderer(
                     modelObjects.clickPointer.setPoints(clickHandler.pointer)
                 }
 
-                modelObjects.clickPointer.mGLSLProgram.use_program()
-                if (moved) {
-                    with(modelObjects.clickPointer.mGLSLProgram) {
-                        fillU_MVP(cameraInfo.MVP)
+                if (drawPointer) {
+                    modelObjects.clickPointer.mGLSLProgram.use_program()
+                    if (moved) {
+                        with(modelObjects.clickPointer.mGLSLProgram) {
+                            fillU_MVP(cameraInfo.MVP)
+                        }
                     }
+                    modelObjects.clickPointer.bindData()
+                    modelObjects.clickPointer.draw()
                 }
-                modelObjects.clickPointer.bindData()
-                modelObjects.clickPointer.draw()
             } while (false)
 
 
