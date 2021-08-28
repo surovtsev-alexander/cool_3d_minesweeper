@@ -33,10 +33,9 @@ class TouchListener(receiver: TouchListenerReceiver): View.OnTouchListener {
 
         val pointerCount = event.pointerCount
 
-        if (pointerCount != prevPointerCount) {
-            if (prevPointerCount != 0) {
-                currTouchHelper.release()
-            }
+        val changeHelper = pointerCount != prevPointerCount
+        if (changeHelper) {
+            currTouchHelper.release()
 
             prevPointerCount = pointerCount
 
@@ -51,6 +50,8 @@ class TouchListener(receiver: TouchListenerReceiver): View.OnTouchListener {
                     currTouchHelper = movingHelper
                 }
             }
+
+            currTouchHelper.update()
         }
 
         currTouchHelper.onTouch(event)
