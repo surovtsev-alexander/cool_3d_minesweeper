@@ -5,8 +5,6 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.MotionEvent
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.surovtsev.cool_3d_minesweeper.R
@@ -16,16 +14,11 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesRece
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.utils.OpenGLInfoHelper
+import com.surovtsev.cool_3d_minesweeper.view.my_dialog.MyDialog
 import com.surovtsev.cool_3d_minesweeper.view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.*
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.MovingHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.ScalingHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.TouchHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_listener.receiver.TouchListenerReceiver
 import kotlinx.android.synthetic.main.activity_game.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.lang.IllegalStateException
 
 class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
@@ -36,8 +29,22 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         setContentView(R.layout.activity_game)
         updateTime()
 
-//        ApplicationController.instance!!.messagesComponent = mmc_main
-        ApplicationController.instance!!.messagesComponent?.addMessage("started")
+        if (!OpenGLInfoHelper.isSupportEs2(this)) {
+            Toast.makeText(this
+                , "This device does not support OpenGL ES 2.0"
+                , Toast.LENGTH_LONG).show()
+            return
+        }
+
+        glsv_main.setEGLContextClientVersion(2)
+        gameRenderer = GameRenderer(this, this, this::updateTime)
+        glsv_main.setRenderer(gameRenderer)
+
+        assignListeners()
+    }
+
+    private fun assignListeners() {
+        val gR = gameRenderer!!
 
         btn_remove_marked_bombs.setOnClickListener { _ ->
             gameRenderer?.scene?.removeBombs?.update()
@@ -46,18 +53,6 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         btn_remove_border_zeros.setOnClickListener { _ ->
             gameRenderer?.scene?.removeBorderZeros?.update()
         }
-
-        if (!OpenGLInfoHelper.isSupportEs2(this)) {
-            Toast.makeText(this
-                , "This device does not suppoert OpenGL ES 2.0"
-                , Toast.LENGTH_LONG).show()
-            return
-        }
-
-        glsv_main.setEGLContextClientVersion(2)
-        val gR = GameRenderer(this, this, this::updateTime)
-        gameRenderer = gR
-        glsv_main.setRenderer(gameRenderer)
 
         val touchReceiverCalculator = object: ITouchReceiverCalculator {
             override fun getReceiver(): ITouchReceiver? = gR.clickHelper
@@ -90,29 +85,14 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         }
     }
 
-    class MyDialog(val msg: String): DialogFragment() {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return activity?.let {
-                val builder = AlertDialog.Builder(it)
-                builder.setTitle(msg)
-                builder.setPositiveButton("Ok") { dialog, which -> dialog.cancel() }
-                builder.create()
-            } ?: throw IllegalStateException("Activity cannot be null")
-        }
-    }
-
     override fun gameStatusUpdated(newStatus: GameStatus) {
         if (GameStatusHelper.isGameOver(newStatus)) {
             gameRenderer?.gameTimeTicker?.turnOff()
 
-            doAsync {
-                uiThread {
-                    val gameStateDialog = MyDialog(newStatus.toString())
-                    val manager = supportFragmentManager
-                    gameStateDialog.show(manager, "gameStateDialog")
-                }
-            }
+            val gameStatusDialog = MyDialog(newStatus.toString())
+            val manager = supportFragmentManager
+            gameStatusDialog.show(manager, "gameStatusDialog")
+
         } else if (GameStatusHelper.isGameStarted(newStatus)) {
             gameRenderer?.gameTimeTicker?.turnOn()
         }
@@ -122,7 +102,6 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         val time = gameRenderer?.gameTimeTicker?.getElapsed()?:0
         lbl_time.text = DateUtils.formatElapsedTime( time / 1000)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -137,5 +116,4 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
 
         ApplicationController.instance!!.messagesComponent = null
     }
-
 }
