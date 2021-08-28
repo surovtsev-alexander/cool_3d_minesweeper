@@ -19,18 +19,18 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
     var touchType = TouchType.SHORT
         private set
 
-    var clickPos = Vec2()
+    var touchPos = Vec2()
         private set
     private var downTime = 0L
 
     private var movementStorer: IStoreMovement? = null
 
     private val movementThreshold = 10f
-    private val clickDelay = 100L
-    private val longClickDelay = 300L
+    private val touchDely = 100L
+    private val longTouchDelay = 300L
 
     override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
-        clickPos = pos
+        touchPos = pos
         downTime = customClock.time
 
         movementStorer = movementStorer_
@@ -48,7 +48,7 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
 
                 val currTime = customClock.time
 
-                if (currTime - downTime > clickDelay) {
+                if (currTime - downTime > touchDely) {
                     release()
                     break
                 }
@@ -58,8 +58,7 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
                         State.WAIT_FOR_RELEASE
                     touchType = TouchType.SHORT
                 } else {
-                    state =
-                        State.IDLE
+                    state = State.IDLE
                 }
             } while (false)
         }
@@ -81,9 +80,8 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
         when (state) {
             State.DELAY_BEFORE_LONG_TOUCH -> {
                 releaseIfMovedOrPerform {
-                    if (currTime - downTime > longClickDelay) {
-                        state =
-                            State.WAIT_FOR_RELEASE
+                    if (currTime - downTime > longTouchDelay) {
+                        state = State.WAIT_FOR_RELEASE
                         touchType = TouchType.LONG
                     }
                 }

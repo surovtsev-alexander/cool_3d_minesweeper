@@ -58,7 +58,7 @@ class MinesweeperController(
 
         if (clickHelper.getState()) {
 
-            scene?.touchHandler?.handleClick(clickHelper.clickPos, clickHelper.touchType)
+            scene?.touchHandler?.handleClick(clickHelper.touchPos, clickHelper.touchType)
             clickHelper.release()
         }
 
