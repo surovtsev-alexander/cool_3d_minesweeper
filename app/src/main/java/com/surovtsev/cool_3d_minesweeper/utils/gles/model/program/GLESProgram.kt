@@ -1,30 +1,35 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs
+package com.surovtsev.cool_3d_minesweeper.utils.gles.model.program
 
+import android.opengl.GLES20
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
+import glm_.mat4x4.Mat4
+import java.nio.FloatBuffer
 
 
-abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadParameters) {
+abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadParameters) {
     protected var programId = 0
         private set
 
     protected val A_POSITION = "a_position"
     protected val U_COLOR  = "u_color"
-    protected val U_MVP = "u_MVP"
+    private val U_MVP = "u_MVP"
+
+    private val mU_MVP_Matrix = Uniform(U_MVP)
 
     abstract val fields: Array<GLSLField>
 
-    fun prepare_program() {
-        load_program()
-        use_program()
+    fun prepareProgram() {
+        loadProgram()
+        useProgram()
         loadLocations()
     }
 
-    fun load_program() {
+    private fun loadProgram() {
         programId = ShaderHelper.linkProgram(shaderLoadParameters)
 
         if (LoggerConfig.ON) {
@@ -32,12 +37,14 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
         }
     }
 
-    fun use_program() {
+    fun useProgram() {
         glUseProgram(programId)
     }
 
     open fun loadLocations() {
-        fields.forEach { it.get_location() }
+        mU_MVP_Matrix.getLocation()
+
+        fields.forEach { it.getLocation() }
 
         if (LoggerConfig.LOG_SHADER_FIELDS_LOCATIONS) {
             Log.d("TEST", "{")
@@ -48,18 +55,31 @@ abstract class GLSLProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
         }
     }
 
+    companion object {
+        private val floatBuffer = FloatBuffer.allocate(16)
+    }
+
+    fun fillMVP(mvpMatrix: Mat4) {
+        GLES20.glUniformMatrix4fv(
+            mU_MVP_Matrix.location, 1,
+            false,
+            mvpMatrix.to(floatBuffer, 0).array()
+            , 0
+        )
+    }
+
     abstract inner class GLSLField(val name: String, var location: Int = 0) {
-        abstract fun get_location()
+        abstract fun getLocation()
     }
 
     inner class Attribute(name: String, location: Int = 0): GLSLField(name, location)  {
-        override fun get_location() {
+        override fun getLocation() {
             location = glGetAttribLocation(programId, name)
         }
     }
 
     inner class Uniform(name: String, location: Int = 0): GLSLField(name, location) {
-        override fun get_location() {
+        override fun getLocation() {
             location = glGetUniformLocation(programId, name)
         }
     }

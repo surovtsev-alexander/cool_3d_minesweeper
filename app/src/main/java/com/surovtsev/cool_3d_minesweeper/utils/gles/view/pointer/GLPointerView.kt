@@ -4,21 +4,24 @@ import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.gles.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs.CLickPointerGLSLProgram
+import com.surovtsev.cool_3d_minesweeper.models.gles.programs.PointerGLESProgram
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.IPointer
 
 class GLPointerView(context: Context):
     IGLObject {
     private val POSITION_COMPONENT_COUNT = 3
 
-    val mGLSLProgram: CLickPointerGLSLProgram
+    val mGLSLProgram: PointerGLESProgram
     private val vertexArray = VertexArray(FloatArray(2 * 3))
 
     var needToBeDrawn = false
 
     init {
-        mGLSLProgram = CLickPointerGLSLProgram(context)
-        mGLSLProgram.prepare_program()
+        mGLSLProgram =
+            PointerGLESProgram(
+                context
+            )
+        mGLSLProgram.prepareProgram()
         glLineWidth(mGLSLProgram.mLineWidth)
     }
 

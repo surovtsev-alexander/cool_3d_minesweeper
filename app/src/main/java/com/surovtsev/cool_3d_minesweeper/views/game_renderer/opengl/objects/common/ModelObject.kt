@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.gles.buffers.VertexArray
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs.ModelGLSLProgram
+import com.surovtsev.cool_3d_minesweeper.models.gles.programs.ModelGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
@@ -15,7 +15,7 @@ class ModelObject(
     textureCoordinates: FloatArray):
     IGLObject
 {
-    val modelModelGLSLProgram: ModelGLSLProgram
+    val modelModelGLSLProgram: ModelGLESProgram
     private var textureId = 0
 
     private val POSITION_COMPONENT_COUNT = 3
@@ -25,8 +25,11 @@ class ModelObject(
     val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {
-        modelModelGLSLProgram = ModelGLSLProgram(context)
-        modelModelGLSLProgram.prepare_program()
+        modelModelGLSLProgram =
+            ModelGLESProgram(
+                context
+            )
+        modelModelGLSLProgram.prepareProgram()
 
         textureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
