@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene.Scene
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 
 interface IHandleOpenGLEvents {
     fun onSurfaceCreated()
@@ -36,12 +36,13 @@ class MinesweeperController(
     }
 
     override fun onSurfaceChanged(width: Int, height: Int) {
-        scene = Scene(
-            gameObjectsHolder!!,
-            realtime,
-            width,
-            height
-        )
+        scene =
+            Scene(
+                gameObjectsHolder!!,
+                realtime,
+                width,
+                height
+            )
 
         scene!!.onSurfaceChanged()
     }

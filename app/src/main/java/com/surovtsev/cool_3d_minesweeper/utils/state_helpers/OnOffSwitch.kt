@@ -1,17 +1,14 @@
 package com.surovtsev.cool_3d_minesweeper.utils.state_helpers
 
 interface ISwitch {
-    fun isOn(): Boolean
-
     fun turnOn()
     fun turnOff()
+
+    fun isOn(): Boolean
 }
 
 class Switch: ISwitch {
     var on = false
-        private set
-
-    override fun isOn() = on
 
     override fun turnOn() {
         on = true
@@ -20,4 +17,6 @@ class Switch: ISwitch {
     override fun turnOff() {
         on = false
     }
+
+    override fun isOn() = on
 }

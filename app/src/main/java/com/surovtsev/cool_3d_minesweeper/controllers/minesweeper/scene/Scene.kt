@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
@@ -6,6 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.DrawablePointer
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.Pointer
 
 class Scene(
@@ -15,13 +16,12 @@ class Scene(
     height: Int
 ) {
     private val cameraInfo = CameraInfo(width, height)
-    private val pointer = Pointer()
+    private val pointer = DrawablePointer()
 
     val moveHandler = MoveHandler(cameraInfo)
     val touchHandler = TouchHandler(cameraInfo, pointer)
     val removeBombs = Updatable(false)
     val removeBorderZeros = Updatable(false)
-    private val drawPointer = false
 
     fun onSurfaceChanged() {
         val glObject = gameObjectsHolder.glCubes.glObject
@@ -60,7 +60,7 @@ class Scene(
                 gameObjectsHolder.clickPointer.setPoints(touchHandler.pointer)
             }
 
-            if (drawPointer) {
+            if (pointer.isOn()) {
                 gameObjectsHolder.clickPointer.mGLSLProgram.use_program()
                 if (cameraMoved) {
                     with(gameObjectsHolder.clickPointer.mGLSLProgram) {
