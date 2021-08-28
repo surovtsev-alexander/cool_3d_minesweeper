@@ -8,7 +8,6 @@ import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
@@ -55,7 +54,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         }
 
         val touchReceiverCalculator = object: ITouchReceiverCalculator {
-            override fun getReceiver(): ITouchReceiver? = minesweeperController?.clickHelper
+            override fun getReceiver(): ITouchReceiver? = minesweeperController?.touchReceiver
         }
         val rotationReceiverCalculator = object: IRotationReceiverCalculator {
             override fun getReceiver(): IRotationReceiver? = minesweeperController?.scene?.moveHandler

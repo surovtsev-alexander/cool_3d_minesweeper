@@ -7,7 +7,7 @@ interface ICanBeReleased {
 interface IHaveUpdatableState:
     ICanBeReleased
 {
-    fun getState(): Boolean
+    fun isUpdated(): Boolean
 }
 
 interface ICanBeUpdated:
@@ -25,14 +25,14 @@ open class Updatable(
         updated = false
     }
 
-    override fun getState() = updated
+    override fun isUpdated() = updated
 
     override fun update() {
         updated = true
     }
 
     fun getAndRelease(): Boolean {
-        val res = getState()
+        val res = isUpdated()
         release()
         return res
     }

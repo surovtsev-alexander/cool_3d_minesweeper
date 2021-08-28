@@ -25,13 +25,9 @@ class MinesweeperController(
     var scene: Scene? = null
 
     private val rendererClock = CustomClock()
-    val clickHelper =
-        TouchReceiver(
-            rendererClock
-        )
+    val touchReceiver = TouchReceiver(rendererClock)
 
-    val gameTimeTicker =
-        Ticker(1000L, rendererClock)
+    val gameTimeTicker = Ticker(1000L, rendererClock)
 
     val gameRenderer = GameRenderer(this)
 
@@ -40,26 +36,23 @@ class MinesweeperController(
     }
 
     override fun onSurfaceChanged(width: Int, height: Int) {
-        scene =
-            Scene(
-                gameObjectsHolder!!,
-                clickHelper,
-                rendererClock,
-                width,
-                height
-            )
+        scene = Scene(
+            gameObjectsHolder!!,
+            rendererClock,
+            width,
+            height
+        )
 
         scene!!.onSurfaceChanged()
     }
 
     override fun onDrawFrame() {
         rendererClock.updateTime()
-        clickHelper.tick()
+        touchReceiver.tick()
 
-        if (clickHelper.getState()) {
-
-            scene?.touchHandler?.handleClick(clickHelper.touchPos, clickHelper.touchType)
-            clickHelper.release()
+        if (touchReceiver.isUpdated()) {
+            scene?.touchHandler?.handleTouch(touchReceiver.touchPos, touchReceiver.touchType)
+            touchReceiver.release()
         }
 
         if (gameTimeTicker.isOn()) {

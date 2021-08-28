@@ -85,7 +85,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     val spaceParameters = collisionCubes.spaceParameters
     val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
 
-    fun testPointer(pointer: IPointer, touchType: TouchType, currTime: Long): Unit {
+    fun testPointer(pointer: IPointer, currTime: Long): Unit {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
@@ -124,7 +124,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
             val candidate = c.second
 
             if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
-                gameTouchHandler.touch(touchType, candidate, currTime)
+                gameTouchHandler.touch(pointer.touchType, candidate, currTime)
                 break
             }
         }

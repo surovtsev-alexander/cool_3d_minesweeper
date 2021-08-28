@@ -13,16 +13,15 @@ class ComplexTouchHelper(private val customClock: CustomClock): ITouchReceiver {
         DOUBLE_TOUCH
     }
 
-    enum class State {
+    private enum class State {
         IDLE,
         DELAY_BEFORE_LONG_TOUCH,
         DELAY_BEFORE_DOUBLE_TOUCH,
         WAIT_FOR_RELEASE
     }
 
-    var state =
+    private var state =
         State.IDLE
-        private set
 
     var touchType =
         TouchType.SHORT
@@ -120,5 +119,5 @@ class ComplexTouchHelper(private val customClock: CustomClock): ITouchReceiver {
         state = State.IDLE
     }
 
-    override fun getState() = state == State.WAIT_FOR_RELEASE
+    override fun isUpdated() = state == State.WAIT_FOR_RELEASE
 }

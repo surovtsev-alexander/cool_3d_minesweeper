@@ -6,9 +6,12 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
-class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
+class TouchReceiver(
+    private val customClock: CustomClock
+): ITouchReceiver
+{
 
-    enum class State {
+    private enum class State {
         IDLE,
         DELAY_BEFORE_LONG_TOUCH,
         WAIT_FOR_RELEASE
@@ -93,5 +96,5 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
         state = State.IDLE
     }
 
-    override fun getState() = state == State.WAIT_FOR_RELEASE
+    override fun isUpdated() = state == State.WAIT_FOR_RELEASE
 }

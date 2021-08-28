@@ -11,7 +11,6 @@ import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.Poin
 
 class Scene(
     private val gameObjectsHolder: GameObjectsHolder,
-    private val touchReceiver: TouchReceiver,
     private val rendererClock: CustomClock,
     width: Int,
     height: Int
@@ -94,7 +93,7 @@ class Scene(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            glCubes.testPointer(touchHandler.pointer, touchReceiver.touchType, rendererClock.time)
+            glCubes.testPointer(touchHandler.pointer, rendererClock.time)
         }
         if (cameraMoved) {
             with(glObject.modelModelGLSLProgram) {
