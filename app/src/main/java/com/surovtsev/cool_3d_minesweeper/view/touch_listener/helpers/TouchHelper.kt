@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
+package com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers
 
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease

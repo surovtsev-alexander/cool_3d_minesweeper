@@ -4,9 +4,9 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMoveReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IRotationReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IScaleReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IMoveReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IScaleReceiver
 import glm_.glm;
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2

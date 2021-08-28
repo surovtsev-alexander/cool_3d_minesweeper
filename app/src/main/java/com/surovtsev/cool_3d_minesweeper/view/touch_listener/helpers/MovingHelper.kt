@@ -1,8 +1,8 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization
+package com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IMoveReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IMoveReceiver
+import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IReceiverCalculator
 import glm_.vec2.Vec2
 
 class MovingHelper(
