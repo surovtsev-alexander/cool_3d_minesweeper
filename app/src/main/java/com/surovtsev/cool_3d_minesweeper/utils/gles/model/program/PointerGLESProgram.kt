@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.gles.programs
+package com.surovtsev.cool_3d_minesweeper.utils.gles.model.program
 
 import android.content.Context
 import android.opengl.GLES20

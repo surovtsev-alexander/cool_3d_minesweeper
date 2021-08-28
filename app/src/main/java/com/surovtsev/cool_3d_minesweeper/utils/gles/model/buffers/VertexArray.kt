@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.utils.gles.buffers
+package com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers
 
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.constants.Constants

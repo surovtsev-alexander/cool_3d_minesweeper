@@ -1,8 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers
+package com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer
 
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 import glm_.vec3.Vec3
 
 interface IPointer {
@@ -33,7 +31,8 @@ open class PointerData(
     open var touchType: TouchType
 )
 
-open class Pointer(): PointerData(Vec3(), Vec3(), TouchType.SHORT), IPointer {
+open class Pointer(): PointerData(Vec3(), Vec3(), TouchType.SHORT),
+    IPointer {
     override var near: Vec3
         get() = super.near
         set(value) {
@@ -52,7 +51,10 @@ open class Pointer(): PointerData(Vec3(), Vec3(), TouchType.SHORT), IPointer {
             super.touchType = value
         }
 
-    override fun getPointerDescriptor() = PointerDescriptor(near, far)
+    override fun getPointerDescriptor() =
+        PointerDescriptor(
+            near,
+            far
+        )
 }
 
-class DrawablePointer(): Pointer(), ISwitch by Switch()

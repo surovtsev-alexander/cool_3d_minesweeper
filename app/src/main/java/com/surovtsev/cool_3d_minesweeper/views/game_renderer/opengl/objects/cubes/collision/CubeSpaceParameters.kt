@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.collision
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.PointerDescriptor
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.PointerDescriptor
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4

@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.com
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.utils.gles.buffers.VertexArray
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.ModelGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
