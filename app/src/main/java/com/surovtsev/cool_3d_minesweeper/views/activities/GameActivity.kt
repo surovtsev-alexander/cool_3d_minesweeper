@@ -58,13 +58,13 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
             override fun getReceiver(): ITouchReceiver? = minesweeperController?.clickHelper
         }
         val rotationReceiverCalculator = object: IRotationReceiverCalculator {
-            override fun getReceiver(): IRotationReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IRotationReceiver? = minesweeperController?.scene?.moveHandler
         }
         val scaleReceiverCalculator = object: IScaleReceiverCalculator {
-            override fun getReceiver(): IScaleReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IScaleReceiver? = minesweeperController?.scene?.moveHandler
         }
         val moveReceiverCalculator = object: IMoveReceiverCalculator {
-            override fun getReceiver(): IMoveReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IMoveReceiver? = minesweeperController?.scene?.moveHandler
         }
         val touchListenerReceiver = TouchListenerReceiver(
             glsv_main,

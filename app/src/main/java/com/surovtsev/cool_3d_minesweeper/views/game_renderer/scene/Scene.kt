@@ -1,9 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene
 
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.CameraInfo
+import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHandler
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
 
@@ -14,7 +15,12 @@ class Scene(
     width: Int,
     height: Int
 ) {
-    val cameraInfo: CameraInfo = CameraInfo(width, height)
+    val cameraInfo: CameraInfo =
+        CameraInfo(
+            width,
+            height
+        )
+    val moveHandler = MoveHandler(cameraInfo)
     val clickHandler: ClickHandler = ClickHandler(cameraInfo)
     val removeBombs =
         Updatable(false)
@@ -38,11 +44,10 @@ class Scene(
     }
 
     fun onDrawFrame() {
-        val moveHandler = cameraInfo.moveHandler
-        val moved = moveHandler.getAndRelease()
+        val cameraMoved = cameraInfo.getAndRelease()
         val clicked = clickHandler.isUpdated()
 
-        if (moved) {
+        if (cameraMoved) {
             cameraInfo.recalculateMVPMatrix()
         }
 
@@ -62,7 +67,7 @@ class Scene(
 
             if (drawPointer) {
                 gameObjectsHolder.clickPointer.mGLSLProgram.use_program()
-                if (moved) {
+                if (cameraMoved) {
                     with(gameObjectsHolder.clickPointer.mGLSLProgram) {
                         fillU_MVP(cameraInfo.MVP)
                     }
@@ -94,7 +99,7 @@ class Scene(
         if (clicked) {
             glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendererClock.time)
         }
-        if (moved) {
+        if (cameraMoved) {
             with(glObject.modelModelGLSLProgram) {
                 fillU_MVP(cameraInfo.MVP)
             }
