@@ -3,22 +3,22 @@
     package="com.surovtsev.cool_3d_minesweeper">
 
     <application
-        android:name=".logic.application_controller.ApplicationController"
+        android:name=".controllers.application_controller.ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_coll_3d_minesweeper"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_coll_3d_minesweeper_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cool_3d_minesweeper">
-        <activity android:name=".view.activities.MainActivity">
+        <activity android:name=".views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.GameActivity"/>
-        <activity android:name=".view.activities.multitouchTest.MultitouchTestActivity"/>
+        <activity android:name=".views.activities.GameActivity"/>
+        <activity android:name=".views.activities.multitouchTest.MultitouchTestActivity"/>
     </application>
 
 </manifest>

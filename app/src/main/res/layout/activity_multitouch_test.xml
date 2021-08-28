@@ -8,9 +8,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
-    tools:context=".view.activities.multitouchTest.MultitouchTestActivity">
+    tools:context=".views.activities.multitouchTest.MultitouchTestActivity">
 
-    <com.surovtsev.cool_3d_minesweeper.view.activities.multitouchTest.MultitouchView
+    <com.surovtsev.cool_3d_minesweeper.views.activities.multitouchTest.MultitouchView
         android:id="@+id/mv_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

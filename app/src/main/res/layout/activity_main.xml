@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".view.activities.MainActivity">
+    tools:context=".views.activities.MainActivity">
 
     <Button
         android:id="@+id/btn_start_game"
