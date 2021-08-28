@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import glm_.vec2.Vec2
 
@@ -29,15 +30,15 @@ class ClickHandler(val cameraInfo: CameraInfo): Updatable() {
     val pointer: IPointer
         get() = pointerData
 
-    var clickType = ClickHelper.ClickType.CLICK
+    var touchType = TouchType.SHORT
         private set
 
-    fun handleClick(point: Vec2, clickType_: ClickHelper.ClickType) {
+    fun handleClick(point: Vec2, touchType_: TouchType) {
         val proj = cameraInfo.normalizedDisplayCoordinates(point)
         pointerData.near = cameraInfo.calcNearByProj(proj)
         pointerData.far = cameraInfo.calcFarByProj(proj)
 
-        clickType = clickType_
+        touchType = touchType_
         update()
 
         if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {

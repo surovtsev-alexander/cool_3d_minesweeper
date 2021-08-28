@@ -97,7 +97,7 @@ class Scene(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendererClock.time)
+            glCubes.testPointer(clickHandler.pointer, clickHelper.touchType, rendererClock.time)
         }
         if (cameraMoved) {
             with(glObject.modelModelGLSLProgram) {

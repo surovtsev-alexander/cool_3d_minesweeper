@@ -1,10 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
-import com.surovtsev.cool_3d_minesweeper.utils.math.RotationMatrixDecomposer
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
@@ -57,7 +55,7 @@ class MinesweeperController(
 
         if (clickHelper.isClicked()) {
 
-            scene?.clickHandler?.handleClick(clickHelper.clickPos, clickHelper.clickType)
+            scene?.clickHandler?.handleClick(clickHelper.clickPos, clickHelper.touchType)
             clickHelper.release()
         }
 

@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.Bom
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.NeighboursCalculator
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
@@ -36,7 +37,7 @@ class GameTouchHandler(
 
     private var bombsLeft = 0
 
-    fun touch(clickType: ClickHelper.ClickType, pointedCube: PointedCube, currTime: Long) {
+    fun touch(touchType: TouchType, pointedCube: PointedCube, currTime: Long) {
         val position = pointedCube.position
 
         if (gameIsOver()) {
@@ -52,15 +53,15 @@ class GameTouchHandler(
         }
 
         val id = position.id
-        when (clickType) {
-            ClickHelper.ClickType.CLICK -> {
+        when (touchType) {
+            TouchType.SHORT -> {
                 if (id == prevClickInfo.id && currTime - prevClickInfo.time < doubleClickDelay) {
                     emptyCube(pointedCube)
                 } else {
                     tryToOpenCube(pointedCube)
                 }
             }
-            ClickHelper.ClickType.LONG_CLICK -> {
+            TouchType.LONG -> {
                 toggleMarkingCube(pointedCube)
             }
         }
