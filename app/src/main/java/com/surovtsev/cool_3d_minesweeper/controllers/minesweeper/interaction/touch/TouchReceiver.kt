@@ -1,13 +1,13 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
+import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
 class TouchReceiver(
-    private val customClock: CustomClock
+    private val customClock: CustomRealtime
 ): ITouchReceiver
 {
 

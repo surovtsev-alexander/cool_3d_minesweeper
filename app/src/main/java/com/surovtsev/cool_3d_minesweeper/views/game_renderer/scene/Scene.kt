@@ -3,15 +3,14 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
+import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.Pointer
 
 class Scene(
     private val gameObjectsHolder: GameObjectsHolder,
-    private val rendererClock: CustomClock,
+    private val rendererClock: CustomRealtime,
     width: Int,
     height: Int
 ) {

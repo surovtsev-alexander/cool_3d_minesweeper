@@ -1,17 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer
 
-import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.*
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.IHandleOpenGLEvents
-import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene.Scene
-import com.surovtsev.cool_3d_minesweeper.utils.math.RotationMatrixDecomposer
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
-import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 

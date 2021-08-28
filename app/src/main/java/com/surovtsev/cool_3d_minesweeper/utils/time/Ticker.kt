@@ -4,9 +4,16 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 
-class Ticker(val interval: Long, val clock: CustomClock): Updatable(), ISwitch by Switch() {
+class Ticker(
+    private val interval: Long,
+    private val clock: CustomRealtime,
+):
+    Updatable(),
+    ISwitch
+{
+    private val switch: Switch = Switch()
+
     private var startTime = currentTime()
-        private set
     private var prev = startTime
 
     private fun currentTime() = clock.time
@@ -20,12 +27,18 @@ class Ticker(val interval: Long, val clock: CustomClock): Updatable(), ISwitch b
         }
     }
 
-    fun start() {
+    fun getElapsed() = currentTime() - startTime
+
+    override fun turnOn() {
+        switch.turnOn()
+
         startTime = currentTime()
         prev = startTime
-        turnOn()
+
         update()
     }
 
-    fun getElapsed() = currentTime() - startTime
+    override fun turnOff() = switch.turnOff()
+
+    override fun isOn() = switch.isOn()
 }
