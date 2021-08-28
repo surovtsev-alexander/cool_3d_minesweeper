@@ -4,7 +4,7 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGeneratorConfig
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.clik_pointer.ClickPointer
+import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCubes
 import glm_.vec3.Vec3
@@ -15,7 +15,7 @@ class GameObjectsHolder(
     private val gameStatusesReceiver: IGameStatusesReceiver
 ) {
     val glCubes: GLCubes
-    val clickPointer: ClickPointer
+    val glPointerView: GLPointerView
 
     init {
         val d: Short = if (true) {
@@ -54,6 +54,6 @@ class GameObjectsHolder(
             )
         )
 
-        clickPointer = ClickPointer(context)
+        glPointerView = GLPointerView(context)
     }
 }

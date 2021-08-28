@@ -7,7 +7,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.DrawablePointer
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.Pointer
 
 class Scene(
     private val gameObjectsHolder: GameObjectsHolder,
@@ -32,7 +31,7 @@ class Scene(
             fillU_MVP(mVPMatrix)
         }
 
-        with(gameObjectsHolder.clickPointer.mGLSLProgram) {
+        with(gameObjectsHolder.glPointerView.mGLSLProgram) {
             use_program()
             fillU_MVP(mVPMatrix)
         }
@@ -49,26 +48,26 @@ class Scene(
         do {
             if (clicked) {
                 touchHandler.release()
-                gameObjectsHolder.clickPointer.needToBeDrawn = true
+                gameObjectsHolder.glPointerView.needToBeDrawn = true
             }
 
-            if (!gameObjectsHolder.clickPointer.needToBeDrawn) {
+            if (!gameObjectsHolder.glPointerView.needToBeDrawn) {
                 break
             }
 
             if (clicked) {
-                gameObjectsHolder.clickPointer.setPoints(touchHandler.pointer)
+                gameObjectsHolder.glPointerView.setPoints(touchHandler.pointer)
             }
 
             if (pointer.isOn()) {
-                gameObjectsHolder.clickPointer.mGLSLProgram.use_program()
+                gameObjectsHolder.glPointerView.mGLSLProgram.use_program()
                 if (cameraMoved) {
-                    with(gameObjectsHolder.clickPointer.mGLSLProgram) {
+                    with(gameObjectsHolder.glPointerView.mGLSLProgram) {
                         fillU_MVP(cameraInfo.MVP)
                     }
                 }
-                gameObjectsHolder.clickPointer.bindData()
-                gameObjectsHolder.clickPointer.draw()
+                gameObjectsHolder.glPointerView.bindData()
+                gameObjectsHolder.glPointerView.draw()
             }
         } while (false)
 

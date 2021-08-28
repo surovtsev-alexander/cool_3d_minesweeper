@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.clik_pointer
+package com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer
 
 import android.content.Context
 import android.opengl.GLES20.*
@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs.CLickPointerGLSLProgram
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.IPointer
 
-class ClickPointer(context: Context):
+class GLPointerView(context: Context):
     IGLObject {
     private val POSITION_COMPONENT_COUNT = 3
 
