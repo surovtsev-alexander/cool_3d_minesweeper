@@ -10,7 +10,6 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
 import java.lang.StringBuilder
 
 class GameTouchHandler(

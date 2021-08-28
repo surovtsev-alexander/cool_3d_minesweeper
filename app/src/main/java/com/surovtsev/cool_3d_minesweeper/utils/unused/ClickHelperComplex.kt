@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers
+package com.surovtsev.cool_3d_minesweeper.utils.unused
 
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
@@ -20,10 +20,12 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
         WAIT_FOR_RELEASE
     }
 
-    var state = State.IDLE
+    var state =
+        State.IDLE
         private set
 
-    var clickType = ClickType.CLICK
+    var clickType =
+        ClickType.CLICK
         private set
 
     var clickPos = Vec2()
@@ -40,15 +42,18 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
 
     override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
         if (state == State.DELAY_BEFORE_DOUBLE_CLICK) {
-            state = State.WAIT_FOR_RELEASE
-            clickType = ClickType.DOUBLE_CLICK
+            state =
+                State.WAIT_FOR_RELEASE
+            clickType =
+                ClickType.DOUBLE_CLICK
         } else {
             clickPos = pos
             downTime = customClock.time
 
             movementStorer = movementStorer_
 
-            state = State.DELAY_BEFORE_LONG_CLICK
+            state =
+                State.DELAY_BEFORE_LONG_CLICK
         }
     }
 
@@ -68,10 +73,12 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
 
                 if (state == State.DELAY_BEFORE_LONG_CLICK) {
                     clickTime = currTime
-                    state = State.DELAY_BEFORE_DOUBLE_CLICK
+                    state =
+                        State.DELAY_BEFORE_DOUBLE_CLICK
                 }
                 else {
-                    state = State.IDLE
+                    state =
+                        State.IDLE
                 }
             } while (false)
         }
@@ -94,16 +101,20 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
             State.DELAY_BEFORE_LONG_CLICK -> {
                 releaseIfMovedOrPerform {
                     if (currTime - downTime > longClickDelay) {
-                        state = State.WAIT_FOR_RELEASE
-                        clickType = ClickType.LONG_CLICK
+                        state =
+                            State.WAIT_FOR_RELEASE
+                        clickType =
+                            ClickType.LONG_CLICK
                     }
                 }
             }
             State.DELAY_BEFORE_DOUBLE_CLICK -> {
                 releaseIfMovedOrPerform {
                     if (currTime - clickTime > doubleClickDelay) {
-                        state = State.WAIT_FOR_RELEASE
-                        clickType = ClickType.CLICK
+                        state =
+                            State.WAIT_FOR_RELEASE
+                        clickType =
+                            ClickType.CLICK
                     }
                 }
             }
@@ -111,7 +122,8 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
     }
 
     override fun release() {
-        state = State.IDLE
+        state =
+            State.IDLE
     }
 
     fun isClicked() = state == State.WAIT_FOR_RELEASE

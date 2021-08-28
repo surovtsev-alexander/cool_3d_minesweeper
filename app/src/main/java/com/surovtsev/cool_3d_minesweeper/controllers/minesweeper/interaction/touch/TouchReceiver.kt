@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
-class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
+class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
 
     enum class State {
         IDLE,
@@ -14,7 +14,8 @@ class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
         WAIT_FOR_RELEASE
     }
 
-    var state = State.IDLE
+    var state =
+        State.IDLE
         private set
 
     var touchType = TouchType.SHORT
@@ -36,7 +37,8 @@ class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
 
         movementStorer = movementStorer_
 
-        state = State.DELAY_BEFORE_LONG_TOUCH
+        state =
+            State.DELAY_BEFORE_LONG_TOUCH
     }
 
     override fun up() {
@@ -54,10 +56,12 @@ class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
                 }
 
                 if (state == State.DELAY_BEFORE_LONG_TOUCH) {
-                    state = State.WAIT_FOR_RELEASE
+                    state =
+                        State.WAIT_FOR_RELEASE
                     touchType = TouchType.SHORT
                 } else {
-                    state = State.IDLE
+                    state =
+                        State.IDLE
                 }
             } while (false)
         }
@@ -80,7 +84,8 @@ class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
             State.DELAY_BEFORE_LONG_TOUCH -> {
                 releaseIfMovedOrPerform {
                     if (currTime - downTime > longClickDelay) {
-                        state = State.WAIT_FOR_RELEASE
+                        state =
+                            State.WAIT_FOR_RELEASE
                         touchType = TouchType.LONG
                     }
                 }
@@ -89,7 +94,8 @@ class ClickHelper(private val customClock: CustomClock): ITouchReceiver {
     }
 
     override fun release() {
-        state = State.IDLE
+        state =
+            State.IDLE
     }
 
     fun isClicked() = state == State.WAIT_FOR_RELEASE

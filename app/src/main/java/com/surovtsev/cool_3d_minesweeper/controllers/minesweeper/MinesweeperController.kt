@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObj
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene.Scene
 
 interface IHandleOpenGLEvents {
@@ -25,7 +25,10 @@ class MinesweeperController(
     var scene: Scene? = null
 
     private val rendererClock = CustomClock()
-    val clickHelper = ClickHelper(rendererClock)
+    val clickHelper =
+        TouchReceiver(
+            rendererClock
+        )
 
     val gameTimeTicker =
         Ticker(1000L, rendererClock)
@@ -55,7 +58,7 @@ class MinesweeperController(
 
         if (clickHelper.isClicked()) {
 
-            scene?.clickHandler?.handleClick(clickHelper.clickPos, clickHelper.touchType)
+            scene?.touchHandler?.handleClick(clickHelper.clickPos, clickHelper.touchType)
             clickHelper.release()
         }
 

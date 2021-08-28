@@ -5,27 +5,24 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObj
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHandler
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.Pointer
 
 class Scene(
     private val gameObjectsHolder: GameObjectsHolder,
-    private val clickHelper: ClickHelper,
+    private val touchReceiver: TouchReceiver,
     private val rendererClock: CustomClock,
     width: Int,
     height: Int
 ) {
-    val cameraInfo: CameraInfo =
-        CameraInfo(
-            width,
-            height
-        )
+    private val cameraInfo = CameraInfo(width, height)
+    private val pointer = Pointer()
+
     val moveHandler = MoveHandler(cameraInfo)
-    val clickHandler: ClickHandler = ClickHandler(cameraInfo)
-    val removeBombs =
-        Updatable(false)
-    val removeBorderZeros =
-        Updatable(false)
+    val touchHandler = TouchHandler(cameraInfo, pointer)
+    val removeBombs = Updatable(false)
+    val removeBorderZeros = Updatable(false)
     private val drawPointer = false
 
     fun onSurfaceChanged() {
@@ -45,7 +42,7 @@ class Scene(
 
     fun onDrawFrame() {
         val cameraMoved = cameraInfo.getAndRelease()
-        val clicked = clickHandler.isUpdated()
+        val clicked = touchHandler.isUpdated()
 
         if (cameraMoved) {
             cameraInfo.recalculateMVPMatrix()
@@ -53,7 +50,7 @@ class Scene(
 
         do {
             if (clicked) {
-                clickHandler.release()
+                touchHandler.release()
                 gameObjectsHolder.clickPointer.needToBeDrawn = true
             }
 
@@ -62,7 +59,7 @@ class Scene(
             }
 
             if (clicked) {
-                gameObjectsHolder.clickPointer.setPoints(clickHandler.pointer)
+                gameObjectsHolder.clickPointer.setPoints(touchHandler.pointer)
             }
 
             if (drawPointer) {
@@ -97,7 +94,7 @@ class Scene(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            glCubes.testPointer(clickHandler.pointer, clickHelper.touchType, rendererClock.time)
+            glCubes.testPointer(touchHandler.pointer, touchReceiver.touchType, rendererClock.time)
         }
         if (cameraMoved) {
             with(glObject.modelModelGLSLProgram) {
