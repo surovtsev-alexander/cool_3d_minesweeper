@@ -10,6 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelpe
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.my_dialog.MyDialog
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
@@ -18,7 +19,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.recei
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
-    var gameRenderer: GameRenderer? = null
+    private var minesweeperController: MinesweeperController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,39 +34,37 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         }
 
         glsv_main.setEGLContextClientVersion(2)
-        gameRenderer =
-            GameRenderer(
-                this,
-                this,
-                this::updateTime
-            )
-        glsv_main.setRenderer(gameRenderer)
+
+        minesweeperController = MinesweeperController(
+            this,
+            this,
+            this::updateTime
+        )
+        glsv_main.setRenderer(minesweeperController!!.gameRenderer)
 
         assignListeners()
     }
 
     private fun assignListeners() {
-        val gR = gameRenderer!!
-
         btn_remove_marked_bombs.setOnClickListener { _ ->
-            gameRenderer?.scene?.removeBombs?.update()
+            minesweeperController?.scene?.removeBombs?.update()
         }
 
         btn_remove_border_zeros.setOnClickListener { _ ->
-            gameRenderer?.scene?.removeBorderZeros?.update()
+            minesweeperController?.scene?.removeBorderZeros?.update()
         }
 
         val touchReceiverCalculator = object: ITouchReceiverCalculator {
-            override fun getReceiver(): ITouchReceiver? = gR.clickHelper
+            override fun getReceiver(): ITouchReceiver? = minesweeperController?.clickHelper
         }
         val rotationReceiverCalculator = object: IRotationReceiverCalculator {
-            override fun getReceiver(): IRotationReceiver? = gR.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IRotationReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
         }
         val scaleReceiverCalculator = object: IScaleReceiverCalculator {
-            override fun getReceiver(): IScaleReceiver? = gR.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IScaleReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
         }
         val moveReceiverCalculator = object: IMoveReceiverCalculator {
-            override fun getReceiver(): IMoveReceiver? = gR.scene?.cameraInfo?.moveHandler
+            override fun getReceiver(): IMoveReceiver? = minesweeperController?.scene?.cameraInfo?.moveHandler
         }
         val touchListenerReceiver = TouchListenerReceiver(
             glsv_main,
@@ -78,36 +77,36 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         glsv_main.setOnTouchListener(touchListener)
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        if (gameRenderer != null) {
-            glsv_main.onPause()
-        }
-    }
-
     override fun gameStatusUpdated(newStatus: GameStatus) {
         if (GameStatusHelper.isGameOver(newStatus)) {
-            gameRenderer?.gameTimeTicker?.turnOff()
+            minesweeperController?.gameTimeTicker?.turnOff()
 
             val gameStatusDialog = MyDialog(newStatus.toString())
             val manager = supportFragmentManager
             gameStatusDialog.show(manager, "gameStatusDialog")
 
         } else if (GameStatusHelper.isGameStarted(newStatus)) {
-            gameRenderer?.gameTimeTicker?.turnOn()
+            minesweeperController?.gameTimeTicker?.turnOn()
         }
     }
 
     private fun updateTime() {
-        val time = gameRenderer?.gameTimeTicker?.getElapsed()?:0
+        val time = minesweeperController?.gameTimeTicker?.getElapsed()?:0
         lbl_time.text = DateUtils.formatElapsedTime( time / 1000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (minesweeperController != null) {
+            glsv_main.onPause()
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (gameRenderer != null) {
+        if (minesweeperController != null) {
             glsv_main.onResume()
         }
     }
