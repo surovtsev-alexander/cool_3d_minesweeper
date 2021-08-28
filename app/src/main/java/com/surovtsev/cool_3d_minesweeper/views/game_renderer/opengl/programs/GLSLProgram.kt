@@ -4,7 +4,7 @@ import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers.ShaderHelper
+import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 
 

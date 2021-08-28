@@ -1,8 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers
 
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
-import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IStoreMovement
-import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.ITouchReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
 class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {

@@ -10,11 +10,11 @@ import com.surovtsev.cool_3d_minesweeper.models.game.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers.OpenGLInfoHelper
-import com.surovtsev.cool_3d_minesweeper.utils.view.my_dialog.MyDialog
-import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.TouchListener
-import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.*
-import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.receiver.TouchListenerReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.my_dialog.MyDialog
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), IGameStatusesReceiver {

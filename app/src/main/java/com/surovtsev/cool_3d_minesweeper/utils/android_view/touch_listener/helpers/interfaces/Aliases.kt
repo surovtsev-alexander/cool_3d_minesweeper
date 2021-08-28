@@ -1,0 +1,6 @@
+package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces
+
+typealias ITouchReceiverCalculator = IReceiverCalculator<ITouchReceiver>
+typealias IRotationReceiverCalculator = IReceiverCalculator<IRotationReceiver>
+typealias IScaleReceiverCalculator = IReceiverCalculator<IScaleReceiver>
+typealias IMoveReceiverCalculator = IReceiverCalculator<IMoveReceiver>

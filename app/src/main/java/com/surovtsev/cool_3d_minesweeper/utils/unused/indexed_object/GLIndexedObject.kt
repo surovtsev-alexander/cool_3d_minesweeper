@@ -1,8 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.utils.unused.indexed_object
 
 import android.opengl.GLES20.*
-import com.surovtsev.cool_3d_minesweeper.utils.opengl.buffers.IndexBuffer
-import com.surovtsev.cool_3d_minesweeper.utils.opengl.buffers.VertexArray
+import com.surovtsev.cool_3d_minesweeper.utils.gles.buffers.IndexBuffer
+import com.surovtsev.cool_3d_minesweeper.utils.gles.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs.ModelGLSLProgram
 
 open class GLIndexedObject(val modelGlslProgram: ModelGLSLProgram
