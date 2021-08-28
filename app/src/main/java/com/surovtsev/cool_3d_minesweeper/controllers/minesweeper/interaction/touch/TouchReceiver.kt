@@ -14,9 +14,7 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
         WAIT_FOR_RELEASE
     }
 
-    var state =
-        State.IDLE
-        private set
+    private var state = State.IDLE
 
     var touchType = TouchType.SHORT
         private set
@@ -94,9 +92,8 @@ class TouchReceiver(private val customClock: CustomClock): ITouchReceiver {
     }
 
     override fun release() {
-        state =
-            State.IDLE
+        state = State.IDLE
     }
 
-    fun isClicked() = state == State.WAIT_FOR_RELEASE
+    override fun getState() = state == State.WAIT_FOR_RELEASE
 }

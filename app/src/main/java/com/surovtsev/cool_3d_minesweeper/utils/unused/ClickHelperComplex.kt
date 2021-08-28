@@ -126,5 +126,5 @@ class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
             State.IDLE
     }
 
-    fun isClicked() = state == State.WAIT_FOR_RELEASE
+    override fun getState() = state == State.WAIT_FOR_RELEASE
 }
