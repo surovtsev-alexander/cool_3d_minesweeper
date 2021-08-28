@@ -6,8 +6,8 @@ import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.*
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.models.game.scene.game_objects_holder.GameObjectsHolder
-import com.surovtsev.cool_3d_minesweeper.models.game.scene.Scene
+import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.utils.math.RotationMatrixDecomposer
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
@@ -40,7 +40,14 @@ class GameRenderer(
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
 
-        scene = Scene(gameObjectsHolder!!, clickHelper, rendererClock, width, height)
+        scene =
+            Scene(
+                gameObjectsHolder!!,
+                clickHelper,
+                rendererClock,
+                width,
+                height
+            )
 
         scene!!.onSurfaceChanged()
     }

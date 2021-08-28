@@ -1,6 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.scene
+package com.surovtsev.cool_3d_minesweeper.views.game_renderer.scene
 
-import com.surovtsev.cool_3d_minesweeper.models.game.scene.game_objects_holder.GameObjectsHolder
+import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.CameraInfo
@@ -14,18 +14,13 @@ class Scene(
     width: Int,
     height: Int
 ) {
-    val cameraInfo: CameraInfo
-    val clickHandler: ClickHandler
+    val cameraInfo: CameraInfo = CameraInfo(width, height)
+    val clickHandler: ClickHandler = ClickHandler(cameraInfo)
     val removeBombs =
         Updatable(false)
     val removeBorderZeros =
         Updatable(false)
-    val drawPointer = false
-
-    init {
-        cameraInfo = CameraInfo(width, height)
-        clickHandler = ClickHandler(cameraInfo)
-    }
+    private val drawPointer = false
 
     fun onSurfaceChanged() {
         val glObject = gameObjectsHolder.glCubes.glObject

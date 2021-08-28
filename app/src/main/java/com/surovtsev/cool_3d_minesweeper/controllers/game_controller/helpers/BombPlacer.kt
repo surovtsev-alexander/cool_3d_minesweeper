@@ -1,12 +1,13 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
+package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
 import kotlin.random.Random
 
 typealias BombsList = MutableList<CubePosition>
 
 object BombPlacer {
-    fun placeBombs(gameObject: GameObject, excludedPosition: CubePosition):BombsList {
+    fun placeBombs(gameObject: GameObject, excludedPosition: CubePosition): BombsList {
         val bombsCount = gameObject.bombsCount
 
         val counts = gameObject.counts

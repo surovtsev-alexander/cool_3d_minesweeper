@@ -1,5 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
+package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.models.game.*
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3bool
@@ -20,7 +21,13 @@ object NeighboursCalculator {
                 action(c)
             }
         }
-        iterate(gameObject, xyz, ranges, fl, 0)
+        iterate(
+            gameObject,
+            xyz,
+            ranges,
+            fl,
+            0
+        )
     }
 
     fun iterate(
@@ -51,9 +58,15 @@ object NeighboursCalculator {
 
         val ranges = PairDimRanges(xyz, gameObject.counts)
 
-        iterate(gameObject, xyz, ranges.getDimRanges(rangesFlags[dim]!!), { pointedCube, i ->
-            res.add(pointedCube)
-        }, dim)
+        iterate(
+            gameObject,
+            xyz,
+            ranges.getDimRanges(rangesFlags[dim]!!),
+            { pointedCube, i ->
+                res.add(pointedCube)
+            },
+            dim
+        )
 
         return res
     }
@@ -71,7 +84,13 @@ object NeighboursCalculator {
         val ranges = PairDimRanges(xyz, gameObject.counts)
 
         for (i in 0 until 3) {
-            iterate(gameObject, xyz, ranges.getDimRanges(rangesFlags[i]), action, i)
+            iterate(
+                gameObject,
+                xyz,
+                ranges.getDimRanges(rangesFlags[i]),
+                action,
+                i
+            )
         }
     }
 
@@ -81,7 +100,11 @@ object NeighboursCalculator {
         }
 
         for (b in bombsList) {
-            iterateNeightbours(gameObject, b, fl)
+            iterateNeightbours(
+                gameObject,
+                b,
+                fl
+            )
         }
     }
 
@@ -121,6 +144,9 @@ object NeighboursCalculator {
     }
 
     fun bombRemoved(gameObject: GameObject, position: CubePosition) {
-        iterateNeightbours(gameObject,position, { c, i -> c.description.neighbourBombs[i]-- })
+        iterateNeightbours(
+            gameObject,
+            position,
+            { c, i -> c.description.neighbourBombs[i]-- })
     }
 }

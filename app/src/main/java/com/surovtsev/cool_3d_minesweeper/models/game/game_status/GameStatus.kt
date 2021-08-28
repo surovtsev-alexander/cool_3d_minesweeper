@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game
+package com.surovtsev.cool_3d_minesweeper.models.game.game_status
 
 enum class GameStatus {
     NO_BOBMS_PLACED,

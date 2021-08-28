@@ -3,6 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.models.game.*
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.BombPlacer
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.NeighboursCalculator
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper

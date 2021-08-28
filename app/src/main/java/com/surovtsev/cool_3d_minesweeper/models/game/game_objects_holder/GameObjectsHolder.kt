@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.scene.game_objects_holder
+package com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver

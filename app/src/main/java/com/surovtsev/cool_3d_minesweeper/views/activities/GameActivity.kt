@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.models.game.GameStatus
-import com.surovtsev.cool_3d_minesweeper.models.game.GameStatusHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
