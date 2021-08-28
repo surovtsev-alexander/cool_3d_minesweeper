@@ -18,6 +18,7 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.utils.OpenGLInfoHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.realization.MovingHelper
@@ -47,22 +48,10 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
             gameRenderer?.scene?.removeBorderZeros?.update()
         })
 
-        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val configurationInfo = activityManager.deviceConfigurationInfo
-        val supportsEs2 =
-            configurationInfo.reqGlEsVersion >= 0x20000
-                    || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
-                    && (Build.FINGERPRINT.startsWith("generic")
-                    || Build.FINGERPRINT.startsWith("unknown")
-                    || Build.MODEL.contains("google_sdk")
-                    || Build.MODEL.contains("Emulator")
-                    || Build.MODEL.contains("Android SDK built for x86")))
-
-        if (!supportsEs2) {
+        if (!OpenGLInfoHelper.isSupportEs2(this)) {
             Toast.makeText(this
                 , "This device does not suppoert OpenGL ES 2.0"
                 , Toast.LENGTH_LONG).show()
-
             return
         }
 
