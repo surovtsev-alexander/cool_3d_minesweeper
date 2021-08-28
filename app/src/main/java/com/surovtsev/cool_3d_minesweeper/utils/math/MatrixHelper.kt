@@ -1,7 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.math
+package com.surovtsev.cool_3d_minesweeper.utils.math
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4

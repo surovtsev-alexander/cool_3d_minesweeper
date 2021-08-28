@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper
 
-import com.surovtsev.cool_3d_minesweeper.math.MyMath
+import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 

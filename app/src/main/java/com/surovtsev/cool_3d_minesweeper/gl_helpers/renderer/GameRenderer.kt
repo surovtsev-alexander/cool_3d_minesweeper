@@ -11,10 +11,10 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.GLCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.*
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.math.RotationMatrixDecomposer
-import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
-import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
-import com.surovtsev.cool_3d_minesweeper.utils.Ticker
+import com.surovtsev.cool_3d_minesweeper.utils.math.RotationMatrixDecomposer
+import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
+import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -32,7 +32,8 @@ class GameRenderer(
     val rendereTimer = CustomClock()
     val clickHelper = ClickHelper(rendereTimer)
 
-    val gameTimeTicker = Ticker(1000L, rendereTimer)
+    val gameTimeTicker =
+        Ticker(1000L, rendereTimer)
 
     inner class ModelObjects {
         val glCubes: GLCubes
@@ -81,8 +82,10 @@ class GameRenderer(
     inner class Scene(val modelObjects: ModelObjects, width: Int, height: Int) {
         val cameraInfo: CameraInfo
         val clickHandler: ClickHandler
-        val removeBombs = DelayedRelease(false)
-        val removeBorderZeros = DelayedRelease(false)
+        val removeBombs =
+            Updatable(false)
+        val removeBorderZeros =
+            Updatable(false)
         val drawPointer = false
 
         init {

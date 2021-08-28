@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.math.MyMath
+import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IReceiverCalculator
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IScaleReceiver

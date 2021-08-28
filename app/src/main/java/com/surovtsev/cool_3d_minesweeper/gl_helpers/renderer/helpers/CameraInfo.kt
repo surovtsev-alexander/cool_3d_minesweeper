@@ -1,9 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.math.MatrixHelper
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
+import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IScaleReceiver
@@ -44,7 +44,7 @@ class CameraInfo(displayWidth: Int, displayHeight: Int,
         recalculateMVPMatrix()
     }
 
-    inner class MoveHandler(): DelayedRelease(),
+    inner class MoveHandler(): Updatable(),
         IRotationReceiver, IScaleReceiver, IMoveReceiver {
         private val COEFF = 15f
 

@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.utils
+package com.surovtsev.cool_3d_minesweeper.utils.time
 
 import android.os.SystemClock
 

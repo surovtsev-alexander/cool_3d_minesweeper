@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
-import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
+import com.surovtsev.cool_3d_minesweeper.utils.time.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2

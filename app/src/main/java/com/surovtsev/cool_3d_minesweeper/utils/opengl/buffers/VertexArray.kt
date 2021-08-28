@@ -1,7 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.data
+package com.surovtsev.cool_3d_minesweeper.utils.opengl.buffers
 
 import android.opengl.GLES20.*
-import com.surovtsev.cool_3d_minesweeper.constants.Constants
+import com.surovtsev.cool_3d_minesweeper.utils.constants.Constants
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer

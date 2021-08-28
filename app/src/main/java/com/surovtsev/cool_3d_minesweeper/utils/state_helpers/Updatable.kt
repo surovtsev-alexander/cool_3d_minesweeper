@@ -1,6 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.utils
+package com.surovtsev.cool_3d_minesweeper.utils.state_helpers
 
-open class DelayedRelease {
+open class Updatable {
     private var updated: Boolean
 
     constructor() {

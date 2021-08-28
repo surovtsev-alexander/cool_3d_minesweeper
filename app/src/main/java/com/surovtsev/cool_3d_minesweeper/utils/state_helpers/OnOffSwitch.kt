@@ -1,6 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.utils
-
-import java.security.KeyStore
+package com.surovtsev.cool_3d_minesweeper.utils.state_helpers
 
 interface ISwitch {
     fun isOn(): Boolean

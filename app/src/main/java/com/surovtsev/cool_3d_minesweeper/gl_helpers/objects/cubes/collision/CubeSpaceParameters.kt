@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.PointerDescriptor
-import com.surovtsev.cool_3d_minesweeper.math.MyMath
+import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import kotlin.math.sqrt

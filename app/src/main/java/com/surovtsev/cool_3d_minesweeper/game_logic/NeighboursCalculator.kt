@@ -1,13 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.*
-import com.surovtsev.cool_3d_minesweeper.math.MyMath
-import glm_.vec3.Vec3
+import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
-import glm_.vec3.Vec3s
-
 
 
 object NeighboursCalculator {

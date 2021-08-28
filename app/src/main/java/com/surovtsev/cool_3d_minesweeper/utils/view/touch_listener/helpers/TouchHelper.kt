@@ -1,10 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers
 
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import glm_.vec2.Vec2
 
-abstract class TouchHelper:  DelayedRelease() {
+abstract class TouchHelper:  Updatable() {
     abstract fun onTouch(event: MotionEvent)
 
     companion object {

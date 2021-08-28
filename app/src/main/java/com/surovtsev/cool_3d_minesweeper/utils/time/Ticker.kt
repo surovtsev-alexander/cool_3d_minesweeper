@@ -1,9 +1,10 @@
-package com.surovtsev.cool_3d_minesweeper.utils
+package com.surovtsev.cool_3d_minesweeper.utils.time
 
-import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
-import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 
-class Ticker(val interval: Long, val clock: CustomClock): DelayedRelease(), ISwitch by Switch() {
+class Ticker(val interval: Long, val clock: CustomClock): Updatable(), ISwitch by Switch() {
     private var startTime = currentTime()
         private set
     private var prev = startTime

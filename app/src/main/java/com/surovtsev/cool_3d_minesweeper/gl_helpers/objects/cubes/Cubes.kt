@@ -5,7 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import java.lang.StringBuilder
 
 class Cubes(val triangleCoordinates: FloatArray,

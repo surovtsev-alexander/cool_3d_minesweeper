@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.utils
+package com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers
 
 import android.app.Activity
 import android.app.ActivityManager

@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.program
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers.ShaderHelper
+import com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers.ShaderHelper
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
 

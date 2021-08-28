@@ -10,7 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.utils.OpenGLInfoHelper
+import com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers.OpenGLInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.view.my_dialog.MyDialog
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.*

@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.math
+package com.surovtsev.cool_3d_minesweeper.utils.math
 
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i

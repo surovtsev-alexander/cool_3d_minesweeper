@@ -1,10 +1,10 @@
-package com.surovtsev.cool_3d_minesweeper.gl_helpers.helpers
+package com.surovtsev.cool_3d_minesweeper.utils.opengl.helpers
 
 import android.content.Context
 import android.opengl.GLES20.*
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.utils.LoggerConfig
-import com.surovtsev.cool_3d_minesweeper.utils.TextResourceReader
+import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
+import com.surovtsev.cool_3d_minesweeper.utils.text_resource_reader.TextResourceReader
 
 class ShaderHelper {
 
