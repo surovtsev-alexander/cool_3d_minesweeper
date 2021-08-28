@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
 
 class Ticker(val interval: Long, val clock: CustomClock): DelayedRelease(), ISwitch by Switch() {
-    var startTime = currentTime()
+    private var startTime = currentTime()
         private set
     private var prev = startTime
 

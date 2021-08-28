@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces
+package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces
 
 typealias ITouchReceiverCalculator = IReceiverCalculator<ITouchReceiver>
 typealias IRotationReceiverCalculator = IReceiverCalculator<IRotationReceiver>

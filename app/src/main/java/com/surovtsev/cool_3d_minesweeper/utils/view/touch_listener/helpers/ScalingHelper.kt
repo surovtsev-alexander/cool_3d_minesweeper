@@ -1,18 +1,18 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers
+package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers
 
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.math.MyMath
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IMoveReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IScaleReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IMoveReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IScaleReceiver
 import glm_.vec2.Vec2
 
 class ScalingHelper(
     val scaleReceiverCalculator: IReceiverCalculator<IScaleReceiver>,
     val moveReceiverCalculator: IReceiverCalculator<IMoveReceiver>
 ): TouchHelper() {
-    var prevDistance = 0f
-    var prevCenter = Vec2()
+    private var prevDistance = 0f
+    private var prevCenter = Vec2()
 
     override fun onTouch(event: MotionEvent) {
         val needToBeInitted = getAndRelease()

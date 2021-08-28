@@ -1,11 +1,11 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers
+package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IRotationReceiver
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.IStoreMovement
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.ITouchReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IReceiverCalculator
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.IStoreMovement
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 import kotlin.math.abs
 

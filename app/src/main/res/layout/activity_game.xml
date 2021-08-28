@@ -15,7 +15,7 @@
         />
 
     <!--
-    <com.surovtsev.cool_3d_minesweeper.view.components.MessagesComponent
+    <com.surovtsev.cool_3d_minesweeper.utils.view.components.MessagesComponent
         android:id="@+id/mmc_main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

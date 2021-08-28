@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.view.components
+package com.surovtsev.cool_3d_minesweeper.utils.view.components
 
 import android.content.Context
 import android.util.AttributeSet
@@ -36,7 +36,7 @@ class MessagesComponent: ScrollView {
         }
         lineCount++
         tv_messages.append("$lineSeparator\t$lineCount: $message")
-        fullScroll(ScrollView.FOCUS_DOWN)
+        fullScroll(FOCUS_DOWN)
     }
 
     fun addMessageUI(message: String) {

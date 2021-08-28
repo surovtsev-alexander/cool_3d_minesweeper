@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.logic.application_controller
 
 import android.app.Application
-import com.surovtsev.cool_3d_minesweeper.view.components.MessagesComponent
+import com.surovtsev.cool_3d_minesweeper.utils.view.components.MessagesComponent
 import java.lang.Exception
 
 class ApplicationController: Application {

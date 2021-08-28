@@ -1,12 +1,12 @@
-package com.surovtsev.cool_3d_minesweeper.view.touch_listener
+package com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener
 
 import android.view.MotionEvent
 import android.view.View
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.MovingHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.ScalingHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.TouchHelper
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.receiver.TouchListenerReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.ClickAndRotationHelper
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.MovingHelper
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.ScalingHelper
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.TouchHelper
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.receiver.TouchListenerReceiver
 
 class TouchListener(receiver: TouchListenerReceiver): View.OnTouchListener {
     val clickAndRotationHelper = ClickAndRotationHelper(

@@ -1,12 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.view.activities
 
-import android.app.AlertDialog
-import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatus
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatusHelper
@@ -14,12 +11,11 @@ import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesRece
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.utils.OpenGLInfoHelper
-import com.surovtsev.cool_3d_minesweeper.view.my_dialog.MyDialog
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.TouchListener
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.helpers.interfaces.*
-import com.surovtsev.cool_3d_minesweeper.view.touch_listener.receiver.TouchListenerReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.view.my_dialog.MyDialog
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.TouchListener
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.helpers.interfaces.*
+import com.surovtsev.cool_3d_minesweeper.utils.view.touch_listener.receiver.TouchListenerReceiver
 import kotlinx.android.synthetic.main.activity_game.*
-import java.lang.IllegalStateException
 
 class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
     var gameRenderer: GameRenderer? = null
