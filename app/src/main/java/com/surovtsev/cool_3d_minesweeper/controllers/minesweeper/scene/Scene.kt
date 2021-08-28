@@ -48,7 +48,7 @@ class Scene(
         do {
             if (clicked) {
                 touchHandler.release()
-                gameObjectsHolder.glPointerView.turnOn()
+                //gameObjectsHolder.glPointerView.turnOn()
             }
 
             if (!gameObjectsHolder.glPointerView.isOn()) {
@@ -83,7 +83,6 @@ class Scene(
             gameTouchHandler.storeSelectedBombs()
         }
         if (removeBorderZeros.getAndRelease()) {
-            //gameTouchHandler.openCubes()
             gameTouchHandler.storeZeroBorders()
         }
         gameTouchHandler.removeCubes()
