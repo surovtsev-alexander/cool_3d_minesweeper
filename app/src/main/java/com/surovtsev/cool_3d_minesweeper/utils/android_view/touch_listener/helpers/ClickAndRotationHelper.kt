@@ -65,8 +65,7 @@ class ClickAndRotationHelper(
         }
     }
 
-    override fun tryToRelease() {
-        getAndRelease()
+    override fun release() {
         downed = false
         touchReceiver.getReceiver()?.release()
     }

@@ -35,7 +35,7 @@ class TouchListener(receiver: TouchListenerReceiver): View.OnTouchListener {
 
         if (pointerCount != prevPointerCount) {
             if (prevPointerCount != 0) {
-                currTouchHelper.tryToRelease()
+                currTouchHelper.release()
             }
 
             prevPointerCount = pointerCount

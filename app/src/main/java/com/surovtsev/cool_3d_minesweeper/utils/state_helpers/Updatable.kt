@@ -1,27 +1,40 @@
 package com.surovtsev.cool_3d_minesweeper.utils.state_helpers
 
-open class Updatable {
-    private var updated: Boolean
+interface ICanBeReleased {
+    fun release()
+}
 
-    constructor() {
-        updated = true
-    }
 
-    constructor(updated_: Boolean) {
-        updated = updated_
-    }
-
-    open fun tryToRelease() {
-        update()
-    }
-
-    fun update() {
-        updated = true
-    }
-
+interface IHaveUpdatableState:
+    ICanBeReleased
+{
+    fun getState(): Boolean
     fun getAndRelease(): Boolean {
-        val res = updated
-        updated = false
+        val res = getState()
+        release()
         return res
+    }
+}
+
+interface ICanBeUpdated:
+    IHaveUpdatableState
+{
+    fun update()
+}
+
+
+open class Updatable(
+    private var updated: Boolean = true
+):
+    ICanBeUpdated
+{
+    override fun release() {
+        updated = false
+    }
+
+    override fun getState() = updated
+
+    override fun update() {
+        updated = true
     }
 }
