@@ -1,10 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.game_logic
 
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
-import com.surovtsev.cool_3d_minesweeper.game_logic.data.DimRanges
-import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
-import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.*
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.texture_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.ClickHelper
@@ -13,17 +11,11 @@ import java.lang.StringBuilder
 class GameTouchHandler(
     val gameObject: GameObject,
     val textureUpdater: ICanUpdateTexture,
-    val gameStatusProcessor: IHaveGameStatusProcessor
+    val gameStatusesReceiver: IGameStatusesReceiver
 ) {
 
-    enum class GameState {
-        NO_BOBMS_PLACED,
-        BOMBS_PLACED,
-        WIN,
-        LOSE
-    }
 
-    var state = GameState.NO_BOBMS_PLACED
+    var state = GameStatus.NO_BOBMS_PLACED
 
 
     private data class PrevClickInfo(var id: Int, var time: Long)
@@ -47,12 +39,12 @@ class GameTouchHandler(
             return
         }
 
-        if (state == GameState.NO_BOBMS_PLACED) {
+        if (state == GameStatus.NO_BOBMS_PLACED) {
             bombsList += BombPlacer.placeBombs(gameObject, pointedCube.position)
             bombsLeft = bombsList.size
 
             NeighboursCalculator.fillNeighbours(gameObject, bombsList)
-            setGameState(GameState.BOMBS_PLACED)
+            setGameState(GameStatus.BOMBS_PLACED)
         }
 
         val id = position.id
@@ -73,12 +65,10 @@ class GameTouchHandler(
         prevClickInfo.time = currTime
     }
 
-    private fun setGameState(newState: GameState) {
+    private fun setGameState(newState: GameStatus) {
         state = newState
 
-        if (gameIsOver()) {
-            gameStatusProcessor.gameStatusUpdated(state)
-        }
+        gameStatusesReceiver.gameStatusUpdated(state)
     }
 
     private fun emptyCube(pointedCube: PointedCube) {
@@ -88,7 +78,7 @@ class GameTouchHandler(
         if (isBomb) {
             if (!description.isMarked()) {
                 setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameState.LOSE)
+                setGameState(GameStatus.LOSE)
                 return
             }
 
@@ -111,7 +101,7 @@ class GameTouchHandler(
         } else {
             if (description.isMarked()) {
                 setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameState.LOSE)
+                setGameState(GameStatus.LOSE)
                 return
             }
         }
@@ -119,13 +109,13 @@ class GameTouchHandler(
         setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EMPTY)
 
         if (bombsLeft == 0) {
-            setGameState(GameState.WIN)
+            setGameState(GameStatus.WIN)
         }
     }
 
     val removeCount = 1
 
-    private fun gameIsOver() = (state == GameState.WIN || state == GameState.LOSE)
+    private fun gameIsOver() = GameStatusHelper.isGameOver(state)
 
     private fun processOnElement(list: MutableList<CubePosition>, action: (PointedCube) -> Unit) {
         for (i in 0 until removeCount) {
@@ -289,7 +279,7 @@ class GameTouchHandler(
         if (description.isClosed()) {
             if (description.isBomb) {
                 setCubeTexture(pointedCube, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameState.LOSE)
+                setGameState(GameStatus.LOSE)
             } else {
 //                Log.d("TEST+++", "open cube $pointedCube")
                 openCube(pointedCube)
@@ -375,7 +365,7 @@ class GameTouchHandler(
 
                 if (d.isBomb) {
                     setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    setGameState(GameState.LOSE)
+                    setGameState(GameStatus.LOSE)
                     return
                 }
 

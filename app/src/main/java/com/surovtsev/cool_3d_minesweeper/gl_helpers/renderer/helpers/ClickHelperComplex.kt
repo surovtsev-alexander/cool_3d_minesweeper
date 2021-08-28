@@ -1,10 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers
 
+import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
-class ClickHelperComplex(private val rendererTimer: RendererTimer): ITouchReceiver {
+class ClickHelperComplex(private val customClock: CustomClock): ITouchReceiver {
 
     enum class ClickType {
         CLICK,
@@ -43,7 +44,7 @@ class ClickHelperComplex(private val rendererTimer: RendererTimer): ITouchReceiv
             clickType = ClickType.DOUBLE_CLICK
         } else {
             clickPos = pos
-            downTime = rendererTimer.time
+            downTime = customClock.time
 
             movementStorer = movementStorer_
 
@@ -58,7 +59,7 @@ class ClickHelperComplex(private val rendererTimer: RendererTimer): ITouchReceiv
                     break
                 }
 
-                val currTime = rendererTimer.time
+                val currTime = customClock.time
 
                 if (currTime - downTime > clickDelay) {
                     release()
@@ -88,7 +89,7 @@ class ClickHelperComplex(private val rendererTimer: RendererTimer): ITouchReceiv
     }
 
     fun tick() {
-        val currTime = rendererTimer.time
+        val currTime = customClock.time
         when (state) {
             State.DELAY_BEFORE_LONG_CLICK -> {
                 releaseIfMovedOrPerform {

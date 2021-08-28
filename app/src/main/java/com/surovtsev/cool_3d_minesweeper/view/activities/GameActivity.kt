@@ -7,14 +7,15 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.format.DateUtils
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
-import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatus
+import com.surovtsev.cool_3d_minesweeper.game_logic.data.GameStatusHelper
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.GameRenderer
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.view.touch_helpers.interfaces.*
@@ -27,12 +28,13 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.lang.IllegalStateException
 
-class GameActivity : AppCompatActivity(), IHaveGameStatusProcessor {
+class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
     var gameRenderer: GameRenderer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        updateTime()
 
 //        ApplicationController.instance!!.messagesComponent = mmc_main
         ApplicationController.instance!!.messagesComponent?.addMessage("started")
@@ -65,7 +67,7 @@ class GameActivity : AppCompatActivity(), IHaveGameStatusProcessor {
         }
 
         glsv_main.setEGLContextClientVersion(2)
-        val gR = GameRenderer(this, this)
+        val gR = GameRenderer(this, this, this::updateTime)
         gameRenderer = gR
         glsv_main.setRenderer(gameRenderer)
 
@@ -163,15 +165,25 @@ class GameActivity : AppCompatActivity(), IHaveGameStatusProcessor {
         }
     }
 
-    override fun gameStatusUpdated(s: GameTouchHandler.GameState) {
-        val ctx = this as Context
-        doAsync {
-            uiThread {
-                val gameStateDialog = MyDialog(s.toString())
-                val manager = supportFragmentManager
-                gameStateDialog.show(manager, "gameStateDialog")
+    override fun gameStatusUpdated(newStatus: GameStatus) {
+        if (GameStatusHelper.isGameOver(newStatus)) {
+            gameRenderer?.gameTimeTicker?.turnOff()
+
+            doAsync {
+                uiThread {
+                    val gameStateDialog = MyDialog(newStatus.toString())
+                    val manager = supportFragmentManager
+                    gameStateDialog.show(manager, "gameStateDialog")
+                }
             }
+        } else if (GameStatusHelper.isGameStarted(newStatus)) {
+            gameRenderer?.gameTimeTicker?.turnOn()
         }
+    }
+
+    private fun updateTime() {
+        val time = gameRenderer?.gameTimeTicker?.getElapsed()?:0
+        lbl_time.text = DateUtils.formatElapsedTime( time / 1000)
     }
 
 

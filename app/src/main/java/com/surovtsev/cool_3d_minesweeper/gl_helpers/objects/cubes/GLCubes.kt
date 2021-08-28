@@ -2,9 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.common.ModelObject
-import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import com.surovtsev.cool_3d_minesweeper.game_logic.CubeDescription
-import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameTouchHandler
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.CubePosition
 import com.surovtsev.cool_3d_minesweeper.game_logic.data.PointedCube
@@ -27,7 +25,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         GameTouchHandler(
             cubes.gameObject,
             this,
-            cubes.gameStatusProcessor
+            cubes.gameStatusesReceiver
         )
 
     override fun updateTexture(pointedCube: PointedCube) {

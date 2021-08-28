@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer
 import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.Cubes
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinatesGeneratorConfig
@@ -12,7 +12,9 @@ import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.CubesCoordinat
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.renderer.helpers.*
 import com.surovtsev.cool_3d_minesweeper.logic.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.math.RotationMatrixDecomposer
+import com.surovtsev.cool_3d_minesweeper.utils.CustomClock
 import com.surovtsev.cool_3d_minesweeper.utils.DelayedRelease
+import com.surovtsev.cool_3d_minesweeper.utils.Ticker
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 import javax.microedition.khronos.egl.EGLConfig
@@ -20,13 +22,17 @@ import javax.microedition.khronos.opengles.GL10
 
 class GameRenderer(
     val context: Context,
-    val gameStatusProcessor: IHaveGameStatusProcessor): GLSurfaceView.Renderer {
+    val gameStatusesReceiver: IGameStatusesReceiver,
+    val timeUpdated: () -> Unit
+): GLSurfaceView.Renderer {
 
     var modelObjects: ModelObjects? = null
     var scene: Scene? = null
 
-    val rendereTimer = RendererTimer()
+    val rendereTimer = CustomClock()
     val clickHelper = ClickHelper(rendereTimer)
+
+    val gameTimeTicker = Ticker(1000L, rendereTimer)
 
     inner class ModelObjects {
         val glCubes: GLCubes
@@ -57,7 +63,7 @@ class GameRenderer(
                 dimensions,
                 gaps,
                 bombsRate,
-                gameStatusProcessor
+                gameStatusesReceiver
             )
             glCubes = GLCubes(
                 context,
@@ -188,7 +194,7 @@ class GameRenderer(
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        rendereTimer.updateTimer()
+        rendereTimer.updateTime()
         clickHelper.tick()
 
         if (clickHelper.isClicked()) {
@@ -201,6 +207,13 @@ class GameRenderer(
                     scene!!.cameraInfo.moveHandler.rotMatrix
                 )
                 ApplicationController.instance!!.messagesComponent?.addMessageUI("$x")
+            }
+        }
+
+        if (gameTimeTicker.isOn()) {
+            gameTimeTicker.tick()
+            if (gameTimeTicker.getAndRelease()) {
+                timeUpdated()
             }
         }
 

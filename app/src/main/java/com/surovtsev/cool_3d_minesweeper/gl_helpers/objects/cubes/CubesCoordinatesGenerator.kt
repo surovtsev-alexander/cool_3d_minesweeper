@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.game_logic.GameObject
-import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IHaveGameStatusProcessor
+import com.surovtsev.cool_3d_minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.gl_helpers.objects.cubes.collision.CollisionCubes
 import glm_.vec3.Vec3
 
@@ -11,7 +11,7 @@ class CubesCoordinatesGenerator(
     val indexes: ShortArray,
     val collisionCubes: CollisionCubes,
     val bombsCount: Int,
-    val gameStatusProcessor: IHaveGameStatusProcessor
+    val gameStatusesReceiver: IGameStatusesReceiver
 ) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
@@ -162,7 +162,7 @@ class CubesCoordinatesGenerator(
 
             return CubesCoordinatesGenerator(
                 trianglesCoordinates, indexes, collisionCubes,
-                bombsCount, cubesCoordinatesGeneratorConfig.gameStatusProcessor
+                bombsCount, cubesCoordinatesGeneratorConfig.gameStatusesReceiver
             )
         }
     }
