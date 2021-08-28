@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
+package com.surovtsev.cool_3d_minesweeper.models.game
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
@@ -87,7 +87,8 @@ class CubesCoordinatesGenerator(
         fun generateCubesCoordinates(
             cubesCoordinatesGeneratorConfig: CubesCoordinatesGeneratorConfig
         ): CubesCoordinatesGenerator {
-            val indexesArray = invExtendedIndexedArray
+            val indexesArray =
+                invExtendedIndexedArray
 
             val counts = cubesCoordinatesGeneratorConfig.counts
             val dimensions = cubesCoordinatesGeneratorConfig.dimensions

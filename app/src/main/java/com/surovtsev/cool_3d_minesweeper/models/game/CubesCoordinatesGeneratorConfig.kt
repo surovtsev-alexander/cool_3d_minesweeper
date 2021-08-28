@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
+package com.surovtsev.cool_3d_minesweeper.models.game
 
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import glm_.vec3.Vec3

@@ -6,9 +6,9 @@ import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.clik_pointer.ClickPointer
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.Cubes
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubesCoordinatesGeneratorConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCubes
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.*
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.utils.math.RotationMatrixDecomposer
@@ -29,11 +29,11 @@ class GameRenderer(
     var modelObjects: ModelObjects? = null
     var scene: Scene? = null
 
-    val rendereTimer = CustomClock()
-    val clickHelper = ClickHelper(rendereTimer)
+    val rendererTimer = CustomClock()
+    val clickHelper = ClickHelper(rendererTimer)
 
     val gameTimeTicker =
-        Ticker(1000L, rendereTimer)
+        Ticker(1000L, rendererTimer)
 
     inner class ModelObjects {
         val glCubes: GLCubes
@@ -59,13 +59,14 @@ class GameRenderer(
             } else {
                 0.1f
             }
-            val cubesConfig = CubesCoordinatesGeneratorConfig(
-                counts,
-                dimensions,
-                gaps,
-                bombsRate,
-                gameStatusesReceiver
-            )
+            val cubesConfig =
+                CubesCoordinatesGeneratorConfig(
+                    counts,
+                    dimensions,
+                    gaps,
+                    bombsRate,
+                    gameStatusesReceiver
+                )
             glCubes = GLCubes(
                 context,
                 Cubes.cubes(
@@ -163,7 +164,7 @@ class GameRenderer(
             gameTouchHandler.removeCubes()
 
             if (clicked) {
-                glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendereTimer.time)
+                glCubes.testPointer(clickHandler.pointer, clickHelper.clickType, rendererTimer.time)
             }
             if (moved) {
                 with(glObject.modelModelGLSLProgram) {
@@ -197,7 +198,7 @@ class GameRenderer(
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        rendereTimer.updateTime()
+        rendererTimer.updateTime()
         clickHelper.tick()
 
         if (clickHelper.isClicked()) {

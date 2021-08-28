@@ -3,11 +3,12 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cli
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.opengl.buffers.VertexArray
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.common.IGLObject
+import com.surovtsev.cool_3d_minesweeper.utils.opengl.interfaces.IGLObject
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.programs.CLickPointerGLSLProgram
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.IPointer
 
-class ClickPointer(context: Context): IGLObject {
+class ClickPointer(context: Context):
+    IGLObject {
     private val POSITION_COMPONENT_COUNT = 3
 
     val mGLSLProgram: CLickPointerGLSLProgram

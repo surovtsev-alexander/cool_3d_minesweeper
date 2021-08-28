@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_helper
+package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper
 
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2

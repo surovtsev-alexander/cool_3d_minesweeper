@@ -3,8 +3,9 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cub
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.collision.CollisionCubes
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import java.lang.StringBuilder
 

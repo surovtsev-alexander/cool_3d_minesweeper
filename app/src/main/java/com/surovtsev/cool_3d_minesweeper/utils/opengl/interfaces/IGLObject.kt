@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.common
+package com.surovtsev.cool_3d_minesweeper.utils.opengl.interfaces
 
 abstract interface IGLObject {
     abstract fun bindData()

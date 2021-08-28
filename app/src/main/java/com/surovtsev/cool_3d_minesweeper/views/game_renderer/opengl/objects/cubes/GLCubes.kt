@@ -5,9 +5,10 @@ import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.comm
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
+import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.PointedCube
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.collision.CubeSpaceParameters
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.ClickHelper
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.helpers.IPointer
 

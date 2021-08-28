@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.indexed
+package com.surovtsev.cool_3d_minesweeper.utils.unused.indexed_object
 
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.opengl.buffers.IndexBuffer
