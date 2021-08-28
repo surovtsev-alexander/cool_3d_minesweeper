@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHa
 import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.PointedCube
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.collision.CubeSpaceParameters
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.CubeCell
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
@@ -72,16 +72,16 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
     class PointedCubeWithSpaceParameters(
         position: CubePosition,
         description: CubeDescription,
-        val spaceParameters: CubeSpaceParameters
+        val cell: CubeCell
     ): PointedCube(position, description) {
 
     }
 
     val gameObject = cubes.gameObject
-    val collisionCubes = cubes.collisionCubes
+    val collisionCubes = cubes.cube
     val counts = collisionCubes.counts
     val descriptions = gameObject.descriptions
-    val spaceParameters = collisionCubes.spaceParameters
+    val spaceParameters = collisionCubes.cells
     val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
 
     fun testPointer(pointer: IPointer, currTime: Long): Unit {
@@ -122,7 +122,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         for (c in sortedCandidates) {
             val candidate = c.second
 
-            if (candidate.spaceParameters.testIntersection(pointerDescriptor)) {
+            if (candidate.cell.testIntersection(pointerDescriptor)) {
                 gameTouchHandler.touch(pointer.touchType, candidate, currTime)
                 break
             }

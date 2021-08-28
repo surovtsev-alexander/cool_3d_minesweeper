@@ -3,13 +3,13 @@ package com.surovtsev.cool_3d_minesweeper.models.game
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.collision.CollisionCubes
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import glm_.vec3.Vec3
 
 class CubesCoordinatesGenerator(
     val trianglesCoordinates: FloatArray,
     val indexes: ShortArray,
-    val collisionCubes: CollisionCubes,
+    val cube: Cube,
     val bombsCount: Int,
     val gameStatusesReceiver: IGameStatusesReceiver
 ) {
@@ -155,7 +155,13 @@ class CubesCoordinatesGenerator(
                 Log.d("TEST", test_str)
             }
 
-            val collisionCubes = CollisionCubes(counts, cubeSphereRaius, centers, cubeHalfSpace)
+            val collisionCubes =
+                Cube(
+                    counts,
+                    cubeSphereRaius,
+                    centers,
+                    cubeHalfSpace
+                )
 
             val bombsCount = Math.floor((
                 counts.x * counts.y * counts.z *
