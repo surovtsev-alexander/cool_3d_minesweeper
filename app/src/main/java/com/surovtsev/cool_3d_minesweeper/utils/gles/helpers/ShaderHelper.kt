@@ -26,7 +26,7 @@ class ShaderHelper {
             val shaderObjectId = glCreateShader(type)
 
             if (shaderObjectId == 0) {
-                if (LoggerConfig.ON) {
+                if (LoggerConfig.LOG_SHADER_COMPILATION) {
                     Log.w(TAG, "Coould not create new shader")
                 }
 
@@ -41,7 +41,7 @@ class ShaderHelper {
             glGetShaderiv(
                 shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
 
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.LOG_SHADER_COMPILATION) {
                 Log.v(
                     TAG, "Result of compiling source:"
                         + "\n" + shaderCode
@@ -51,7 +51,7 @@ class ShaderHelper {
             if (compileStatus[0] == 0) {
                 glDeleteShader(shaderObjectId)
 
-                if (LoggerConfig.ON) {
+                if (LoggerConfig.LOG_SHADER_COMPILATION) {
                     Log.w(TAG, "Compilation of shader failed.")
                 }
 
@@ -77,7 +77,7 @@ class ShaderHelper {
             val programObjectId = glCreateProgram()
 
             if (programObjectId == 0) {
-                if (LoggerConfig.ON) {
+                if (LoggerConfig.LOG_SHADER_COMPILATION) {
                     Log.w(TAG, "Could not create new program")
                 }
 
@@ -94,7 +94,7 @@ class ShaderHelper {
             glGetProgramiv(programObjectId, GL_LINK_STATUS
                 , linkStatus, 0)
 
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.LOG_SHADER_COMPILATION) {
                 Log.v(
                     TAG, "Result of linking program:\n"
                         + glGetProgramInfoLog(programObjectId))
@@ -103,7 +103,7 @@ class ShaderHelper {
             if (linkStatus[0] == 0) {
                 glDeleteProgram(programObjectId)
 
-                if (LoggerConfig.ON) {
+                if (LoggerConfig.LOG_SHADER_COMPILATION) {
                     Log.w(TAG, "Link of program failed.")
                 }
 
@@ -121,7 +121,7 @@ class ShaderHelper {
             glGetProgramiv(programObjecId, GL_VALIDATE_STATUS
                 , validateStatus, 0)
 
-            if (false) {
+            if (LoggerConfig.LOG_SHADER_COMPILATION) {
                 Log.v(
                     TAG, "Result of validating program: " + validateStatus[0] + "\n"
                             + glGetProgramInfoLog(programObjecId)
