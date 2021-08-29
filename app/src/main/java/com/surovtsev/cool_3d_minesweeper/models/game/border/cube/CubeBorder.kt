@@ -1,8 +1,8 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.border
+package com.surovtsev.cool_3d_minesweeper.models.game.border.cube
 
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.border.cell.CellBorder
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellIndex
+import com.surovtsev.cool_3d_minesweeper.models.game.border.cube.cell.CellBorder
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import glm_.vec3.Vec3
 
 class CubeBorder(

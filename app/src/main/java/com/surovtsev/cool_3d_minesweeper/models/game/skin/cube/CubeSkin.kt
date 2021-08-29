@@ -1,10 +1,10 @@
-package com.surovtsev.cool_3d_minesweeper.models.game
+package com.surovtsev.cool_3d_minesweeper.models.game.skin.cube
 
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.skin.CellSkin
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellIndex
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.cell.CellSkin
 import glm_.vec3.Vec3s
 
 class CubeSkin(

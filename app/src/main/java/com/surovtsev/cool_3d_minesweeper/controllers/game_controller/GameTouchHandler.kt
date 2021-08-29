@@ -7,11 +7,11 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.models.game.CubeSkin
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellIndex
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 
 class GameTouchHandler(

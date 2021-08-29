@@ -2,11 +2,11 @@ package com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
-import com.surovtsev.cool_3d_minesweeper.models.game.CubeSkin
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
-import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.border.CubeBorder
+import com.surovtsev.cool_3d_minesweeper.models.game.border.cube.CubeBorder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewFactory

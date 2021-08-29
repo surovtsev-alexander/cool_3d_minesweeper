@@ -1,10 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
-import com.surovtsev.cool_3d_minesweeper.models.game.CubeSkin
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PairCellRange
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellIndex
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PairCellRange
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i

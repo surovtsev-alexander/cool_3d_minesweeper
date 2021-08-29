@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers
+package com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers
 
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3s

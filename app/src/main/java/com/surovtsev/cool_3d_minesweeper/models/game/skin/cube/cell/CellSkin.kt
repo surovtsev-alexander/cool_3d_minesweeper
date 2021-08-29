@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.skin
+package com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.cell
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper.TextureType

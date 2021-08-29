@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.border.cell.edge
+package com.surovtsev.cool_3d_minesweeper.models.game.border.cube.cell.edge
 
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.PointerDescriptor
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath

@@ -1,6 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.models.game
+package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import glm_.vec3.Vec3
 
 class CubesCoordinatesGenerator(
@@ -137,7 +138,8 @@ class CubesCoordinatesGenerator(
             }
 
             return CubesCoordinatesGenerator(
-                trianglesCoordinates, indexes,
+                trianglesCoordinates,
+                indexes,
                 centers
             )
         }
