@@ -13,19 +13,16 @@ class GLPointerView(context: Context):
     IGLObject, ISwitch by Switch() {
     private val POSITION_COMPONENT_COUNT = 3
 
-    val mGLSLProgram =
-        PointerGLESProgram(
-            context
-        )
+    val mGLESProgram = PointerGLESProgram(context)
     private val vertexArray = VertexArray(FloatArray(2 * 3))
 
     init {
-        mGLSLProgram.prepareProgram()
-        glLineWidth(mGLSLProgram.mLineWidth)
+        mGLESProgram.prepareProgram()
+        glLineWidth(mGLESProgram.mLineWidth)
     }
 
     override fun bindData() {
-        vertexArray.setVertexAttribPointer(0, mGLSLProgram.mAPosition.location,
+        vertexArray.setVertexAttribPointer(0, mGLESProgram.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
 

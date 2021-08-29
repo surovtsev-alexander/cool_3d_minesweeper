@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper
 
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2
@@ -59,8 +59,12 @@ object TextureCoordinatesHelper {
                 1f * (p + 1) / dim
             )
         }
-        val xCoords = calcPointCoords(pos.x, cols)
-        val yCoords = calcPointCoords(pos.y, rows)
+        val xCoords = calcPointCoords(pos.x,
+            cols
+        )
+        val yCoords = calcPointCoords(pos.y,
+            rows
+        )
 
         val getCoord = { point: Vec2, flag: Float ->
             if (MyMath.isZero(flag)) point.x else point.y
@@ -80,7 +84,9 @@ object TextureCoordinatesHelper {
 
 
     val textureCoordinates = texturesPositions.map { (t, p) ->
-        t to getTextureCoordinates(p)
+        t to getTextureCoordinates(
+            p
+        )
     }.toMap()
 
 }

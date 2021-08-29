@@ -1,23 +1,33 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
 
-import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
-import com.surovtsev.cool_3d_minesweeper.models.game.DimRanges
-import com.surovtsev.cool_3d_minesweeper.models.game.PointedCube
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import glm_.vec3.Vec3s
 
 data class GameObject(
     val counts: Vec3s,
     val bombsCount: Int
 ) {
-    val ranges = DimRanges(counts)
+    val cellRange =
+        CellRange(
+            counts
+        )
 
     companion object {
 
-        fun iterateCubes(counts: Vec3s, action: (xyz: CubePosition) -> Unit) {
+        fun iterateCubes(counts: Vec3s, action: (xyz: CellPosition) -> Unit) {
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {
-                        action(CubePosition(x, y, z, counts))
+                        action(
+                            CellPosition(
+                                x,
+                                y,
+                                z,
+                                counts
+                            )
+                        )
                     }
                 }
             }
@@ -33,7 +43,11 @@ data class GameObject(
             }
         }
 
-    fun getPointedCube(p: CubePosition) = PointedCube(p, p.getValue(descriptions))
+    fun getPointedCube(p: CellPosition) =
+        PointedCell(
+            p,
+            p.getValue(descriptions)
+        )
 
-    fun iterateCubes(action: (xyz: CubePosition) -> Unit) = Companion.iterateCubes(counts, action)
+    fun iterateCubes(action: (xyz: CellPosition) -> Unit) = Companion.iterateCubes(counts, action)
 }

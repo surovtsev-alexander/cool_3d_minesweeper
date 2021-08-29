@@ -26,12 +26,12 @@ class Scene(
         val glObject = gameObjectsHolder.glCubes.glObject
 
         val mVPMatrix = cameraInfo.MVP
-        with(glObject.modelModelGLSLProgram) {
+        with(glObject.cubeGLESProgram) {
             useProgram()
             fillMVP(mVPMatrix)
         }
 
-        with(gameObjectsHolder.glPointerView.mGLSLProgram) {
+        with(gameObjectsHolder.glPointerView.mGLESProgram) {
             useProgram()
             fillMVP(mVPMatrix)
         }
@@ -59,9 +59,9 @@ class Scene(
                 gameObjectsHolder.glPointerView.setPoints(touchHandler.pointer)
             }
 
-            gameObjectsHolder.glPointerView.mGLSLProgram.useProgram()
+            gameObjectsHolder.glPointerView.mGLESProgram.useProgram()
             if (cameraMoved) {
-                with(gameObjectsHolder.glPointerView.mGLSLProgram) {
+                with(gameObjectsHolder.glPointerView.mGLESProgram) {
                     fillMVP(cameraInfo.MVP)
                 }
             }
@@ -72,7 +72,7 @@ class Scene(
 
         val glCubes = gameObjectsHolder.glCubes
         val glObject = glCubes.glObject
-        glObject.modelModelGLSLProgram.useProgram()
+        glObject.cubeGLESProgram.useProgram()
 
         glObject.bindData()
 
@@ -91,7 +91,7 @@ class Scene(
             glCubes.testPointer(touchHandler.pointer, rendererClock.time)
         }
         if (cameraMoved) {
-            with(glObject.modelModelGLSLProgram) {
+            with(glObject.cubeGLESProgram) {
                 fillMVP(cameraInfo.MVP)
             }
         }

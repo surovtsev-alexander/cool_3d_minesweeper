@@ -3,9 +3,9 @@ package com.surovtsev.cool_3d_minesweeper.utils.unused.indexed_object
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.IndexBuffer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
-import com.surovtsev.cool_3d_minesweeper.models.gles.programs.ModelGLESProgram
+import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 
-open class GLIndexedObject(val modelGlslProgram: ModelGLESProgram
+open class GLIndexedObject(val cubeGLESProgram: CubeGLESProgram
                            , val coordinates: FloatArray
                            , val indexes: ShortArray) {
 
@@ -16,7 +16,7 @@ open class GLIndexedObject(val modelGlslProgram: ModelGLESProgram
 
 
     fun bindAttribs() {
-        vertexArray.setVertexAttribPointer(0, modelGlslProgram.aPosition.location,
+        vertexArray.setVertexAttribPointer(0, cubeGLESProgram.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
 

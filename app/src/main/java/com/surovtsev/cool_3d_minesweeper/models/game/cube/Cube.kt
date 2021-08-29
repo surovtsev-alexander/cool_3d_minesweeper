@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.cube
 
-import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.CubeCell
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
@@ -20,7 +20,7 @@ class Cube(
             Array(counts.y.toInt()) { y ->
                 Array(counts.z.toInt()) { z ->
                     CubeCell(
-                        centers[CubePosition.calcId(counts, x, y, z)],
+                        centers[CellPosition.calcId(counts, x, y, z)],
                         halfSpace
                     )
                 }

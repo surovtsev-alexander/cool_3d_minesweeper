@@ -1,21 +1,21 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.common
+package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl
 
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
-import com.surovtsev.cool_3d_minesweeper.models.gles.programs.ModelGLESProgram
+import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
-class ModelObject(
+class Cube(
     context: Context,
     trianglesCoordinates: FloatArray,
     isEmpty: FloatArray,
     textureCoordinates: FloatArray):
     IGLObject
 {
-    val modelModelGLSLProgram: ModelGLESProgram
+    val cubeGLESProgram: CubeGLESProgram
     private var textureId = 0
 
     private val POSITION_COMPONENT_COUNT = 3
@@ -25,29 +25,29 @@ class ModelObject(
     val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {
-        modelModelGLSLProgram =
-            ModelGLESProgram(
+        cubeGLESProgram =
+            CubeGLESProgram(
                 context
             )
-        modelModelGLSLProgram.prepareProgram()
+        cubeGLESProgram.prepareProgram()
 
         textureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
     }
 
     override fun bindData() {
-        vertexArray.setVertexAttribPointer(0, modelModelGLSLProgram.aPosition.location,
+        vertexArray.setVertexAttribPointer(0, cubeGLESProgram.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
-        isEmptyArray.setVertexAttribPointer(0, modelModelGLSLProgram.aIsEmpty.location,
+        isEmptyArray.setVertexAttribPointer(0, cubeGLESProgram.aIsEmpty.location,
             1, 0)
         textureCoordinatesArray.setVertexAttribPointer(0,
-            modelModelGLSLProgram.aTextureCoordinates.location, 2, 0)
+            cubeGLESProgram.aTextureCoordinates.location, 2, 0)
     }
 
     fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, textureId)
-        glUniform1i(modelModelGLSLProgram.mUTextureLocation.location, 0)
+        glUniform1i(cubeGLESProgram.mUTextureLocation.location, 0)
     }
 
     override fun draw() {

@@ -21,7 +21,7 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
     private val mU_MVP_Matrix = Uniform(U_MVP)
 
-    abstract val fields: Array<GLSLField>
+    abstract val fields: Array<GLESField>
 
     fun prepareProgram() {
         loadProgram()
@@ -68,17 +68,17 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
         )
     }
 
-    abstract inner class GLSLField(val name: String, var location: Int = 0) {
+    abstract inner class GLESField(val name: String, var location: Int = 0) {
         abstract fun getLocation()
     }
 
-    inner class Attribute(name: String, location: Int = 0): GLSLField(name, location)  {
+    inner class Attribute(name: String, location: Int = 0): GLESField(name, location)  {
         override fun getLocation() {
             location = glGetAttribLocation(programId, name)
         }
     }
 
-    inner class Uniform(name: String, location: Int = 0): GLSLField(name, location) {
+    inner class Uniform(name: String, location: Int = 0): GLESField(name, location) {
         override fun getLocation() {
             location = glGetUniformLocation(programId, name)
         }

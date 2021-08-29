@@ -1,36 +1,40 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.common.ModelObject
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.Cube
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
-import com.surovtsev.cool_3d_minesweeper.models.game.CubePosition
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
-import com.surovtsev.cool_3d_minesweeper.models.game.PointedCube
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.CubeCell
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCellWithSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
 interface ICanUpdateTexture {
-    fun updateTexture(pointedCube: PointedCube)
+    fun updateTexture(pointedCell: PointedCell)
 }
 
-class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
+class GLCubes(context: Context, val cubesFactory: CubesFactory): ICanUpdateTexture {
 
-    val glObject = ModelObject(context, cubes.triangleCoordinates,
-        cubes.isEmpty,
-        cubes.textureCoordinates)
+    val glObject =
+        Cube(
+            context, cubesFactory.triangleCoordinates,
+            cubesFactory.isEmpty,
+            cubesFactory.textureCoordinates
+        )
 
     val gameTouchHandler =
         GameTouchHandler(
-            cubes.gameObject,
+            cubesFactory.gameObject,
             this,
-            cubes.gameStatusesReceiver
+            cubesFactory.gameStatusesReceiver
         )
 
-    override fun updateTexture(pointedCube: PointedCube) {
-        val position = pointedCube.position
-        val description = pointedCube.description
+    override fun updateTexture(pointedCell: PointedCell) {
+        val position = pointedCell.position
+        val description = pointedCell.description
         val id = position.id
         val empty = description.isEmpty()
 
@@ -69,16 +73,8 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         }
     }
 
-    class PointedCubeWithSpaceParameters(
-        position: CubePosition,
-        description: CubeDescription,
-        val cell: CubeCell
-    ): PointedCube(position, description) {
-
-    }
-
-    val gameObject = cubes.gameObject
-    val collisionCubes = cubes.cube
+    val gameObject = cubesFactory.gameObject
+    val collisionCubes = cubesFactory.cube
     val counts = collisionCubes.counts
     val descriptions = gameObject.descriptions
     val spaceParameters = collisionCubes.cells
@@ -88,9 +84,9 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
-            mutableListOf<Pair<Float, PointedCubeWithSpaceParameters>>()
+            mutableListOf<Pair<Float, PointedCellWithSpaceParameters>>()
 
-        gameObject.iterateCubes { p: CubePosition ->
+        gameObject.iterateCubes { p: CellPosition ->
             do {
                 val description = p.getValue(descriptions)
 
@@ -109,7 +105,7 @@ class GLCubes(context: Context, val cubes: Cubes): ICanUpdateTexture {
                     val fromNear = (pointerDescriptor.near - projection).length()
 
                     candidateCubes.add(
-                        fromNear to PointedCubeWithSpaceParameters(
+                        fromNear to PointedCellWithSpaceParameters(
                             p, description, spaceParameter
                         )
                     )
