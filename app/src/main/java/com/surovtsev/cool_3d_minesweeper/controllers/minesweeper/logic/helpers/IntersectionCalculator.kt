@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
@@ -8,7 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.Po
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
 
-class CubeCellCalculator(
+class IntersectionCalculator(
     private val pointer: IPointer,
     private val gameObject: GameObject,
     cube: Cube
@@ -17,7 +17,7 @@ class CubeCellCalculator(
     private val cells = cube.cells
     private val squaredCubeSphereRadius = cube.squaredCubeSphereRadius
 
-    fun testPointer(): PointedCell? {
+    fun getIntersection(): PointedCell? {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =

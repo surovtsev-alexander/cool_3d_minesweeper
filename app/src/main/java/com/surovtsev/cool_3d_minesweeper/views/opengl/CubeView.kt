@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl
+package com.surovtsev.cool_3d_minesweeper.views.opengl
 
 import android.content.Context
 import android.opengl.GLES20.*
@@ -9,14 +9,10 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.Po
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
+import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
-interface ICanUpdateTexture {
-    fun updateTexture(pointedCell: PointedCell)
-}
-
-
-class MinesweeperCubeView(
+class CubeView(
     context: Context,
     trianglesCoordinates: FloatArray,
     isEmpty: FloatArray,
@@ -25,8 +21,11 @@ class MinesweeperCubeView(
     IGLObject,
     ICanUpdateTexture
 {
-    val cubeGLESProgram: CubeGLESProgram
-    private var textureId = 0
+    val cubeGLESProgram =
+        CubeGLESProgram(
+            context
+        )
+    private val textureId = TextureHelper.loadTexture(context, R.drawable.skin)
 
     private val POSITION_COMPONENT_COUNT = 3
 
@@ -35,13 +34,7 @@ class MinesweeperCubeView(
     val textureCoordinatesArray = VertexArray(textureCoordinates)
 
     init {
-        cubeGLESProgram =
-            CubeGLESProgram(
-                context
-            )
         cubeGLESProgram.prepareProgram()
-
-        textureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
     }
 

@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.NeighboursCalculator
@@ -12,8 +11,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.ICanUpdateTexture
-import java.lang.StringBuilder
+import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 
 class GameTouchHandler(
     val gameObject: GameObject,
