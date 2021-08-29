@@ -324,16 +324,16 @@ class GameTouchHandler(
     }
 
     private fun openNeighbours(pointedCell: PointedCell) {
-        val sb = StringBuilder()
+//        val sb = StringBuilder()
 
         val neighbourBombs = pointedCell.description.neighbourBombs
         val position = pointedCell.position
 
-        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
+//        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
         for (i in 0 until 3) {
             val cubeNbhBombs = neighbourBombs[i]
 
-            sb.append("i $i\n")
+//            sb.append("i $i\n")
 
             if (cubeNbhBombs > 0) {
                 continue
@@ -341,9 +341,9 @@ class GameTouchHandler(
 
             // need to be modified. check surrendings
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    gameObject, position, i, sb
+                    gameObject, position, i, null
                 )) {
-                sb.append("it has not empty neighbours\n")
+//                sb.append("it has not empty neighbours\n")
                 continue
             }
 
@@ -365,18 +365,18 @@ class GameTouchHandler(
                 }
 
                 if (cubesToOpen.any { it == p }) {
-                    Log.d("TEST+++", "already added\n")
+//                    Log.d("TEST+++", "already added\n")
                     continue
                 }
-                sb.append("n ${p} ${d.neighbourBombs}\n")
+//                sb.append("n ${p} ${d.neighbourBombs}\n")
                 cubesToOpen.add(p)
             }
         }
-        sb.append("--cubesToOpen.count ${cubesToOpen.count()}\n")
-        sb.append(
-            cubesToOpen.map { it.id.toString() }.fold("") { acc , s -> "$acc $s"} + "\n"
-        )
-        Log.d("TEST+++", sb.toString())
+//        sb.append("--cubesToOpen.count ${cubesToOpen.count()}\n")
+//        sb.append(
+//            cubesToOpen.map { it.id.toString() }.fold("") { acc , s -> "$acc $s"} + "\n"
+//        )
+//        Log.d("TEST+++", sb.toString())
     }
 
     private fun openNeighbours_old(pointedCell: PointedCell) {

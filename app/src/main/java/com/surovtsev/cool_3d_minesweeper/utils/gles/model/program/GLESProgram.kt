@@ -46,6 +46,7 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
 
         fields.forEach { it.getLocation() }
 
+        /*
         if (LoggerConfig.LOG_SHADER_FIELDS_LOCATIONS) {
             Log.d("TEST", "{")
             fields.forEach {
@@ -53,6 +54,7 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
             }
             Log.d("TEST", "}")
         }
+         */
     }
 
     companion object {

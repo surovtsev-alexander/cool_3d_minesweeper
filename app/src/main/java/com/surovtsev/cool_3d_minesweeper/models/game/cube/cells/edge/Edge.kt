@@ -85,12 +85,6 @@ data class Edge(
         } else {
             val res = x1 - n * numerator / denominator
 
-            if (false) {
-                Log.d("TEST", "denominator $denominator numerator $numerator")
-                Log.d("TEST", "plane $plane x1 $x1 x2 ${pointerDescriptor.far} n $n res $res")
-                Log.d("TEST", "---")
-            }
-
             return res
         }
     }
@@ -113,10 +107,6 @@ data class Edge(
             p1,
             p
         )
-
-        if (false) {
-            Log.d("TEST", "SS $ss space $space")
-        }
 
         return MyMath.isZero(ss - space)
     }

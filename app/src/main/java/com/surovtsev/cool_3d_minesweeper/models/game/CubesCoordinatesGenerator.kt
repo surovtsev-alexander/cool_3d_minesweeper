@@ -6,7 +6,6 @@ import glm_.vec3.Vec3
 class CubesCoordinatesGenerator(
     val trianglesCoordinates: FloatArray,
     val indexes: ShortArray,
-    val gameStatusesReceiver: IGameStatusesReceiver,
     val centers: Array<Vec3>
 ) {
     companion object {
@@ -139,7 +138,7 @@ class CubesCoordinatesGenerator(
 
             return CubesCoordinatesGenerator(
                 trianglesCoordinates, indexes,
-                cubesCoordinatesGeneratorConfig.gameStatusesReceiver, centers
+                centers
             )
         }
     }

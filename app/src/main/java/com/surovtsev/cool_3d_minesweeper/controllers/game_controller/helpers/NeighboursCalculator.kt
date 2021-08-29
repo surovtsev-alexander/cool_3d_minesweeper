@@ -128,12 +128,12 @@ object NeighboursCalculator {
         val xyzV = xyz.getVec()
         val counts = gameObject.counts
 
-        sb?.append(
-            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $direction $r\n"
-        )
+//        sb?.append(
+//            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $direction $r\n"
+//        )
 
         fun test_point(p: Vec3i): Boolean {
-            sb?.append("p $p\n")
+//            sb?.append("p $p\n")
 
             if (!MyMath.isPointInCounts(p, counts)) {
                 return true

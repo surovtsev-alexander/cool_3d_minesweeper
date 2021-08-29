@@ -121,9 +121,12 @@ class ShaderHelper {
             glGetProgramiv(programObjecId, GL_VALIDATE_STATUS
                 , validateStatus, 0)
 
-            Log.v(
-                TAG, "Result of validating program: " + validateStatus[0] + "\n"
-                    + glGetProgramInfoLog(programObjecId))
+            if (false) {
+                Log.v(
+                    TAG, "Result of validating program: " + validateStatus[0] + "\n"
+                            + glGetProgramInfoLog(programObjecId)
+                )
+            }
 
             return validateStatus[0] != 0
         }

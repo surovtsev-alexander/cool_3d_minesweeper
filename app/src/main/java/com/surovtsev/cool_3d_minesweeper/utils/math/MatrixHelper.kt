@@ -56,29 +56,15 @@ object MatrixHelper {
         val dp = an.dot(bn)
         val angle = acos(dp)
 
-        val sb = StringBuilder()
-        if (LoggerConfig.LOG_MATRIX_HELPER) {
-            sb.append("test\na: $a\nb: $b\nan: $an\nbn: $bn\ndp: $dp\nangle: $angle\n")
-        }
-
         if (abs(angle) < 0.001f || angle.isNaN()) {
             val res = identityMatrix()
 
-            if (LoggerConfig.LOG_MATRIX_HELPER) {
-                sb.append("res:\n$res")
-                Log.d("TEST", sb.toString())
-            }
             return res
         }
 
         val axis = an.cross(bn)
 
         val res = I_M.rotate(angle, axis)
-
-        if (LoggerConfig.LOG_MATRIX_HELPER) {
-            sb.append("axis: $axis\nres:\n$res")
-            Log.d("TEST", sb.toString())
-        }
 
         return res
     }

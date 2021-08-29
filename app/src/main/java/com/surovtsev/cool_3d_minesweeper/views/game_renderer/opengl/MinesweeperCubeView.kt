@@ -16,7 +16,7 @@ interface ICanUpdateTexture {
 }
 
 
-class GLCube(
+class MinesweeperCubeView(
     context: Context,
     trianglesCoordinates: FloatArray,
     isEmpty: FloatArray,

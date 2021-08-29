@@ -31,7 +31,7 @@ class Scene(
 
 
     fun onSurfaceChanged() {
-        val glObject = gameObjectsHolder.glCube
+        val glObject = gameObjectsHolder.minesweeperCubeView
 
         val mVPMatrix = cameraInfo.MVP
         with(glObject.cubeGLESProgram) {
@@ -77,7 +77,7 @@ class Scene(
             gameObjectsHolder.glPointerView.draw()
         } while (false)
 
-        val glCube = gameObjectsHolder.glCube
+        val glCube = gameObjectsHolder.minesweeperCubeView
         glCube.cubeGLESProgram.useProgram()
 
         glCube.bindData()
