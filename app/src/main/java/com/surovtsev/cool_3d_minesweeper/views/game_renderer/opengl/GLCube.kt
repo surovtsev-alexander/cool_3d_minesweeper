@@ -3,17 +3,27 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
+interface ICanUpdateTexture {
+    fun updateTexture(pointedCell: PointedCell)
+}
+
+
 class GLCube(
     context: Context,
     trianglesCoordinates: FloatArray,
     isEmpty: FloatArray,
-    textureCoordinates: FloatArray):
-    IGLObject
+    textureCoordinates: FloatArray
+):
+    IGLObject,
+    ICanUpdateTexture
 {
     val cubeGLESProgram: CubeGLESProgram
     private var textureId = 0
@@ -33,6 +43,47 @@ class GLCube(
 
         textureId = TextureHelper.loadTexture(context, R.drawable.skin)
         setTexture()
+    }
+
+    override fun updateTexture(pointedCell: PointedCell) {
+        val position = pointedCell.position
+        val description = pointedCell.description
+        val id = position.id
+        val empty = description.isEmpty()
+
+        if (empty) {
+            val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
+            val startPos = cubeIndexsCount * id
+
+            isEmptyArray.updateBuffer(
+                FloatArray(cubeIndexsCount) { 1f },
+                startPos,
+                cubeIndexsCount
+            )
+        } else {
+            val textureIndexesCount =
+                TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
+            val startPos = textureIndexesCount * id * 6
+
+            val xx = arrayOf(
+                description.texture[1],
+                description.texture[2],
+                description.texture[0],
+                description.texture[2],
+                description.texture[0],
+                description.texture[1],
+            )
+
+
+            val resArray = xx.map {
+                TextureCoordinatesHelper.textureCoordinates[it]!!.asIterable()
+            }.flatten().toFloatArray()
+            textureCoordinatesArray.updateBuffer(
+                resArray,
+                startPos,
+                resArray.count()
+            )
+        }
     }
 
     override fun bindData() {

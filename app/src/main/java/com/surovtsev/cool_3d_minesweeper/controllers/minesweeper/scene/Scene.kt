@@ -23,7 +23,7 @@ class Scene(
     val removeBorderZeros = Updatable(false)
 
     fun onSurfaceChanged() {
-        val glObject = gameObjectsHolder.glCubes.glObject
+        val glObject = gameObjectsHolder.glCellHelper.glCube
 
         val mVPMatrix = cameraInfo.MVP
         with(glObject.cubeGLESProgram) {
@@ -70,8 +70,8 @@ class Scene(
         } while (false)
 
 
-        val glCubes = gameObjectsHolder.glCubes
-        val glObject = glCubes.glObject
+        val glCubes = gameObjectsHolder.glCellHelper
+        val glObject = glCubes.glCube
         glObject.cubeGLESProgram.useProgram()
 
         glObject.bindData()

@@ -8,7 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGeneratorCo
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubeViewHelper
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCubes
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCellHelper
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 
@@ -16,7 +16,7 @@ class GameObjectsHolder(
     private val context: Context,
     private val gameStatusesReceiver: IGameStatusesReceiver
 ) {
-    val glCubes: GLCubes
+    val glCellHelper: GLCellHelper
     val glPointerView: GLPointerView
 
     init {
@@ -68,7 +68,7 @@ class GameObjectsHolder(
                 cubesConfig.bombsCount
             )
 
-        glCubes = GLCubes(
+        glCellHelper = GLCellHelper(
             context,
             CubeViewHelper.calculateCoordinates(
                 cubesCoordinates

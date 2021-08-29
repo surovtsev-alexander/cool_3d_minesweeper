@@ -7,11 +7,11 @@ import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.Nei
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.ICanUpdateTexture
 import java.lang.StringBuilder
 
 class GameTouchHandler(
