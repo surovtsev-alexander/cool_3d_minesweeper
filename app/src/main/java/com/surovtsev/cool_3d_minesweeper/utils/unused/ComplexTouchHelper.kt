@@ -94,22 +94,17 @@ class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceive
 
     fun tick() {
         val currTime = customClock.time
-        when (state) {
-            State.DELAY_BEFORE_LONG_TOUCH -> {
-                releaseIfMovedOrPerform {
-                    if (currTime - downTime > longTouchDelay) {
-                        state = State.WAIT_FOR_RELEASE
-                        touchType = TouchType.LONG
-                    }
+        if (state == State.DELAY_BEFORE_LONG_TOUCH) {
+            releaseIfMovedOrPerform {
+                if (currTime - downTime > longTouchDelay) {
+                    state = State.WAIT_FOR_RELEASE
+                    touchType = TouchType.LONG
                 }
             }
-            State.DELAY_BEFORE_DOUBLE_TOUCH -> {
-                releaseIfMovedOrPerform {
-                    if (currTime - clickTime > doubleTouchDelay) {
-                        state = State.WAIT_FOR_RELEASE
-                        touchType = TouchType.SHORT
-                    }
-                }
+        } else if (state == State.DELAY_BEFORE_DOUBLE_TOUCH) {
+            if (currTime - clickTime > doubleTouchDelay) {
+                state = State.WAIT_FOR_RELEASE
+                touchType = TouchType.SHORT
             }
         }
     }

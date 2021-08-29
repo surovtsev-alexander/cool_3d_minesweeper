@@ -10,8 +10,8 @@ import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewFactory
 
 class GameObjectsHolder(
-    private val context: Context,
-    private val gameConfig: GameConfig
+    context: Context,
+    gameConfig: GameConfig
 ) {
     val glPointerView: GLPointerView
     val cubeBorder: CubeBorder

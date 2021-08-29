@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.inte
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.utils.time.Ticker
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.GameRenderer
+import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
@@ -24,18 +24,20 @@ class MinesweeperController(
     private val timeUpdated: () -> Unit
 
 ): IHandleOpenGLEvents {
-    var gameObjectsHolder: GameObjectsHolder? = null
-    var gameLogic: GameLogic? = null
-    var scene: Scene? = null
+    val gameRenderer = GLESRenderer(this)
 
     private val realtime = CustomRealtime()
     val touchReceiver = TouchReceiver(realtime)
-
     val gameTimeTicker = Ticker(1000L, realtime)
 
-    val gameRenderer = GameRenderer(this)
+    private val gameConfig: GameConfig = GameConfigFactory.createGameConfig()
 
-    val gameConfig: GameConfig = GameConfigFactory.createGameConfig()
+    var gameObjectsHolder: GameObjectsHolder? = null
+        private set
+    var gameLogic: GameLogic? = null
+        private set
+    var scene: Scene? = null
+        private set
 
     override fun onSurfaceCreated() {
         gameObjectsHolder = GameObjectsHolder(context, gameConfig)

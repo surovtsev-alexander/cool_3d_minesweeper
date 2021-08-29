@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.game_renderer
+package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.IHandleOpenGLEv
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GameRenderer(
+class GLESRenderer(
     private val openglEventsHandler: IHandleOpenGLEvents,
 ): GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
