@@ -1,11 +1,11 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
+package com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.description
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper.TextureType
 import glm_.vec3.Vec3i
 
 
-data class CubeDescription(
+data class CellDescription(
     var isBomb: Boolean = false,
     var neighbourBombs: Vec3i = Vec3i(),
     var texture: Array<TextureType> = Array<TextureType>(3) { TextureType.CLOSED }

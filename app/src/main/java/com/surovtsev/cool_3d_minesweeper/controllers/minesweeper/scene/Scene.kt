@@ -23,7 +23,7 @@ class Scene(
     val removeBorderZeros = Updatable(false)
 
     fun onSurfaceChanged() {
-        val glObject = gameObjectsHolder.glCellHelper.glCube
+        val glObject = gameObjectsHolder.glCube
 
         val mVPMatrix = cameraInfo.MVP
         with(glObject.cubeGLESProgram) {
@@ -70,13 +70,13 @@ class Scene(
         } while (false)
 
 
-        val glCubes = gameObjectsHolder.glCellHelper
-        val glObject = glCubes.glCube
-        glObject.cubeGLESProgram.useProgram()
+        val cellCalculator = gameObjectsHolder.cubeCellCalculator
+        val glCube = gameObjectsHolder.glCube
+        glCube.cubeGLESProgram.useProgram()
 
-        glObject.bindData()
+        glCube.bindData()
 
-        val gameTouchHandler = glCubes.gameTouchHandler
+        val gameTouchHandler = cellCalculator.gameTouchHandler
         gameTouchHandler.openCubes()
 
         if (removeBombs.getAndRelease()) {
@@ -88,13 +88,13 @@ class Scene(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            glCubes.testPointer(touchHandler.pointer, rendererClock.time)
+            cellCalculator.testPointer(touchHandler.pointer, rendererClock.time)
         }
         if (cameraMoved) {
-            with(glObject.cubeGLESProgram) {
+            with(glCube.cubeGLESProgram) {
                 fillMVP(cameraInfo.MVP)
             }
         }
-        glObject.draw()
+        glCube.draw()
     }
 }

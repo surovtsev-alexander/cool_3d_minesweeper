@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
+import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.GLCube
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
@@ -11,27 +11,14 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.Po
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
 
-class GLCellHelper(
+class CubeCellCalculator(
     context: Context,
     val cubeViewHelper: CubeViewHelper,
     val gameObject: GameObject,
-    val gameStatusesReceiver: IGameStatusesReceiver,
+    val gameTouchHandler: GameTouchHandler,
     val cube: Cube
 ) {
 
-    val glCube =
-        GLCube(
-            context, cubeViewHelper.triangleCoordinates,
-            cubeViewHelper.isEmpty,
-            cubeViewHelper.textureCoordinates
-        )
-
-    val gameTouchHandler =
-        GameTouchHandler(
-            gameObject,
-            glCube,
-            gameStatusesReceiver
-        )
 
     private val descriptions = gameObject.descriptions
     private val spaceParameters = cube.cells

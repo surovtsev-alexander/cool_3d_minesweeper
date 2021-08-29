@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
+import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PairCellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell

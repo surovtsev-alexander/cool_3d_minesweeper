@@ -1,9 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 
 class CubeViewHelper(

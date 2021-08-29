@@ -1,14 +1,16 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
+import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.GLCube
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubeViewHelper
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCellHelper
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubeCellCalculator
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 
@@ -16,8 +18,12 @@ class GameObjectsHolder(
     private val context: Context,
     private val gameStatusesReceiver: IGameStatusesReceiver
 ) {
-    val glCellHelper: GLCellHelper
+
+    val cubeCellCalculator: CubeCellCalculator
     val glPointerView: GLPointerView
+    val cube: Cube
+    val gameObject: GameObject
+    val glCube: GLCube
 
     init {
         val d: Short = if (true) {
@@ -54,7 +60,7 @@ class GameObjectsHolder(
             )
 
 
-        val cube =
+        cube =
             Cube(
                 counts,
                 cubesConfig.cellSphereRadius,
@@ -62,17 +68,37 @@ class GameObjectsHolder(
                 cubesConfig.halfCellSpace
             )
 
-        val gameObject =
+        gameObject =
             GameObject(
                 cube.counts,
                 cubesConfig.bombsCount
             )
 
-        glCellHelper = GLCellHelper(
+        val cubeViewHelper = CubeViewHelper.calculateCoordinates(
+            cubesCoordinates
+        )
+
+        glCube =
+            GLCube(
+                context,
+                cubeViewHelper.triangleCoordinates,
+                cubeViewHelper.isEmpty,
+                cubeViewHelper.textureCoordinates
+            )
+
+        val gameTouchHandler =
+            GameTouchHandler(
+                gameObject,
+                glCube,
+                gameStatusesReceiver
+            )
+
+        cubeCellCalculator = CubeCellCalculator(
             context,
-            CubeViewHelper.calculateCoordinates(
-                cubesCoordinates
-            ), gameObject, gameStatusesReceiver, cube
+            cubeViewHelper,
+            gameObject,
+            gameTouchHandler,
+            cube
         )
 
         glPointerView = GLPointerView(context)
