@@ -1,12 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.Cube
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.GLCube
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
+import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCellWithSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
@@ -14,10 +17,18 @@ interface ICanUpdateTexture {
     fun updateTexture(pointedCell: PointedCell)
 }
 
-class GLCubes(context: Context, val cubeViewHelper: CubeViewHelper): ICanUpdateTexture {
+class GLCubes(
+    context: Context,
+    val cubeViewHelper: CubeViewHelper,
+    val gameObject: GameObject,
+    val gameStatusesReceiver: IGameStatusesReceiver,
+    val cube: Cube
+):
+    ICanUpdateTexture
+{
 
     val glObject =
-        Cube(
+        GLCube(
             context, cubeViewHelper.triangleCoordinates,
             cubeViewHelper.isEmpty,
             cubeViewHelper.textureCoordinates
@@ -25,9 +36,9 @@ class GLCubes(context: Context, val cubeViewHelper: CubeViewHelper): ICanUpdateT
 
     val gameTouchHandler =
         GameTouchHandler(
-            cubeViewHelper.gameObject,
+            gameObject,
             this,
-            cubeViewHelper.gameStatusesReceiver
+            gameStatusesReceiver
         )
 
     override fun updateTexture(pointedCell: PointedCell) {
@@ -71,12 +82,10 @@ class GLCubes(context: Context, val cubeViewHelper: CubeViewHelper): ICanUpdateT
         }
     }
 
-    val gameObject = cubeViewHelper.gameObject
-    val collisionCubes = cubeViewHelper.cube
-    val counts = collisionCubes.counts
-    val descriptions = gameObject.descriptions
-    val spaceParameters = collisionCubes.cells
-    val squaredCubeSphereRadius = collisionCubes.squaredCubeSphereRadius
+    private val counts = cube.counts
+    private val descriptions = gameObject.descriptions
+    private val spaceParameters = cube.cells
+    private val squaredCubeSphereRadius = cube.squaredCubeSphereRadius
 
     fun testPointer(pointer: IPointer, currTime: Long): Unit {
         val pointerDescriptor = pointer.getPointerDescriptor()

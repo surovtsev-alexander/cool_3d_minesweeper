@@ -8,7 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
-class Cube(
+class GLCube(
     context: Context,
     trianglesCoordinates: FloatArray,
     isEmpty: FloatArray,

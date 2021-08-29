@@ -15,4 +15,15 @@ data class CubesCoordinatesGeneratorConfig(
         assert(bombsRate > 0)
         assert(bombsRate < 1)
     }
+
+    val cubesCount = counts.x * counts.y * counts.z
+
+    val bombsCount = Math.floor(
+        (counts.x * counts.y * counts.z * bombsRate).toDouble()
+    ).toInt()
+
+    val cellSpaceWithGaps = dimensions / counts
+    val cellSpace = cellSpaceWithGaps - gaps
+    val halfCellSpace = cellSpace / 2
+    val cellSphereRadius = cellSpace.length() / 2
 }

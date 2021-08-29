@@ -7,7 +7,7 @@ import glm_.vec3.Vec3s
 
 class Cube(
     val counts: Vec3s,
-    val cubeSphereRadius: Float,
+    cubeSphereRadius: Float,
     centers: Array<Vec3>,
     halfSpace: Vec3
 ) {

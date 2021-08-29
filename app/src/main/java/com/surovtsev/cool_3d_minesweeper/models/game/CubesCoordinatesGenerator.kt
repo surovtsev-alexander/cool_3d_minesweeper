@@ -8,9 +8,8 @@ import glm_.vec3.Vec3
 class CubesCoordinatesGenerator(
     val trianglesCoordinates: FloatArray,
     val indexes: ShortArray,
-    val cube: Cube,
-    val bombsCount: Int,
-    val gameStatusesReceiver: IGameStatusesReceiver
+    val gameStatusesReceiver: IGameStatusesReceiver,
+    val centers: Array<Vec3>
 ) {
     companion object {
         val coordinatesTemplateArray = intArrayOf(
@@ -92,7 +91,7 @@ class CubesCoordinatesGenerator(
             val counts = cubesCoordinatesGeneratorConfig.counts
             val dimensions = cubesCoordinatesGeneratorConfig.dimensions
             val gaps = cubesCoordinatesGeneratorConfig.gaps
-            val cubesCount = counts.x * counts.y * counts.z
+            val cubesCount = cubesCoordinatesGeneratorConfig.cubesCount
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = indexesArray.size
             val coordinatesCount = cubeCoordinatesCount * cubesCount
@@ -104,12 +103,10 @@ class CubesCoordinatesGenerator(
             val centers = Array<Vec3>(cubesCount) { Vec3() }
 
             val cubesHalfDims = dimensions / 2
-            val cubeSpace = dimensions / counts
-            val cubeHalfSpace = cubeSpace / 2
-            val cubeDims = cubeSpace - gaps
+            val cellSpaceWithGaps = cubesCoordinatesGeneratorConfig.cellSpaceWithGaps
+            val cellWithGapsHalfSpace = cellSpaceWithGaps / 2
+            val cellSpace = cubesCoordinatesGeneratorConfig.cellSpace
             val halfGaps = gaps / 2
-
-            val cubeSphereRaius = cubeDims.length() / 2
 
             GameObject.iterateCubes(counts) { posision ->
                 val id = posision.id
@@ -117,13 +114,13 @@ class CubesCoordinatesGenerator(
                 val startIndexesPos = cubeIndexesCount * id
 
                 fun fillCoordinates() {
-                    val rra = cubeSpace.times(posision.getVec())
+                    val rra = cellSpaceWithGaps.times(posision.getVec())
                     val ra = rra - cubesHalfDims
 
-                    centers[id] = ra + cubeHalfSpace
+                    centers[id] = ra + cellWithGapsHalfSpace
 
                     val a = ra + halfGaps
-                    val b = a + cubeDims
+                    val b = a + cellSpace
 
                     for (i in 0 until cubeCoordinatesCount) {
                         val point = if (coordinatesTemplateArray[i] < 0) a else b
@@ -142,22 +139,9 @@ class CubesCoordinatesGenerator(
                 fillIndexes()
             }
 
-
-            val cube =
-                Cube(
-                    counts,
-                    cubeSphereRaius,
-                    centers,
-                    cubeHalfSpace
-                )
-
-            val bombsCount = Math.floor((
-                counts.x * counts.y * counts.z *
-                        cubesCoordinatesGeneratorConfig.bombsRate).toDouble()).toInt()
-
             return CubesCoordinatesGenerator(
-                trianglesCoordinates, indexes, cube,
-                bombsCount, cubesCoordinatesGeneratorConfig.gameStatusesReceiver
+                trianglesCoordinates, indexes,
+                cubesCoordinatesGeneratorConfig.gameStatusesReceiver, centers
             )
         }
     }

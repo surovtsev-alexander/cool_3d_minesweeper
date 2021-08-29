@@ -9,10 +9,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_c
 class CubeViewHelper(
     val triangleCoordinates: FloatArray,
     val isEmpty: FloatArray,
-    val textureCoordinates: FloatArray,
-    val gameObject: GameObject,
-    val cube: Cube,
-    val gameStatusesReceiver: IGameStatusesReceiver
+    val textureCoordinates: FloatArray
 ) {
     companion object {
         fun calculateCoordinates(cubesCoordinatesGenerator: CubesCoordinatesGenerator): CubeViewHelper {
@@ -44,19 +41,11 @@ class CubeViewHelper(
                 isEmpty[i] = -1f
             }
 
-            val gameObject =
-                GameObject(
-                    cubesCoordinatesGenerator.cube.counts,
-                    cubesCoordinatesGenerator.bombsCount
-                )
 
             val res = CubeViewHelper(
                 trianglesCoordinates,
                 isEmpty,
-                textureCoordinates,
-                gameObject,
-                cubesCoordinatesGenerator.cube,
-                cubesCoordinatesGenerator.gameStatusesReceiver
+                textureCoordinates
             )
 
             return res
