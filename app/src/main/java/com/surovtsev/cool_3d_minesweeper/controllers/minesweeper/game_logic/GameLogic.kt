@@ -1,8 +1,8 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.BombPlacer
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.NeighboursCalculator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
@@ -14,16 +14,13 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 
-class GameTouchHandler(
-    val cubeSkin: CubeSkin,
-    val textureUpdater: ICanUpdateTexture,
-    val gameStatusesReceiver: IGameStatusesReceiver,
+class GameLogic(
+    private val cubeSkin: CubeSkin,
+    private val textureUpdater: ICanUpdateTexture,
+    private val gameStatusesReceiver: IGameStatusesReceiver,
     private val gameConfig: GameConfig
 ) {
-
-
-    var state = GameStatus.NO_BOBMS_PLACED
-
+    private var state = GameStatus.NO_BOBMS_PLACED
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =
@@ -40,7 +37,7 @@ class GameTouchHandler(
     var bombsLeft = 0
         private set
 
-    fun touch(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
+    fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
 
         if (gameIsOver()) {
@@ -81,11 +78,11 @@ class GameTouchHandler(
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
-        val description = pointedCell.skin
+        val skin = pointedCell.skin
         val isBomb = pointedCell.skin.isBomb
 
         if (isBomb) {
-            if (!description.isMarked()) {
+            if (!skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 setGameState(GameStatus.LOSE)
                 return
@@ -109,7 +106,7 @@ class GameTouchHandler(
             bombsLeft--;
             gameStatusesReceiver.bombCountUpdated()
         } else {
-            if (description.isMarked()) {
+            if (skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 setGameState(GameStatus.LOSE)
                 return
@@ -152,8 +149,8 @@ class GameTouchHandler(
         cubeSkin.iterateCubes { xyz ->
             do {
                 val p = cubeSkin.getPointedCube(xyz)
-                val d = p.skin
-                if (d.isMarked()) {
+                val s = p.skin
+                if (s.isMarked()) {
                     cubesToRemove.add(xyz)
                 }
             } while (false)
@@ -162,8 +159,6 @@ class GameTouchHandler(
 
     fun storeZeroBorders() {
         val cellRange = cubeSkin.cellRange
-
-        var stop = false
 
         val l = { r: CellRange ->
             val sd = inspectSlice(r)
@@ -189,7 +184,6 @@ class GameTouchHandler(
                 for (v in p) {
                     val rr = c(v)
                     val stop = l(rr)
-//                Log.d("TEST++", "r $r\tstop $stop")
                     if (stop) {
                         break
                     }
@@ -200,9 +194,9 @@ class GameTouchHandler(
             fv(r.reversed())
         }
 
-        xx(cellRange.xRange, { v -> cellRange.copy(xRange = v..v) })
-        xx(cellRange.yRange, { v -> cellRange.copy(yRange = v..v) })
-        xx(cellRange.zRange, { v -> cellRange.copy(zRange = v..v) })
+        xx(cellRange.xRange) { v -> cellRange.copy(xRange = v..v) }
+        xx(cellRange.yRange) { v -> cellRange.copy(yRange = v..v) }
+        xx(cellRange.zRange) { v -> cellRange.copy(zRange = v..v) }
     }
 
     private enum class SliceDescription {
@@ -214,8 +208,8 @@ class GameTouchHandler(
     private fun emptySlice(cellRange: CellRange) {
         cellRange.iterate(cubeSkin.counts) {
             val c = cubeSkin.getPointedCube(it)
-            val d = c.skin
-            if (!d.isEmpty()) {
+            val s = c.skin
+            if (!s.isEmpty()) {
                 cubesToRemove.add(it)
             }
         }
@@ -237,11 +231,11 @@ class GameTouchHandler(
                             counts
                         )
                     val c = cubeSkin.getPointedCube(p)
-                    val d = c.skin
+                    val s = c.skin
 
-                    if (d.isEmpty()) {
+                    if (s.isEmpty()) {
                         continue
-                    } else if (d.isClosed() || d.isMarked()) {
+                    } else if (s.isClosed() || s.isMarked()) {
                         notEmpty = true
                     } else {
                         hasZero = true
@@ -270,9 +264,9 @@ class GameTouchHandler(
     }
 
     private fun tryToOpenCube(pointedCell: PointedCell) {
-        val description = pointedCell.skin
-        if (description.isClosed()) {
-            if (description.isBomb) {
+        val skin = pointedCell.skin
+        if (skin.isClosed()) {
+            if (skin.isBomb) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 setGameState(GameStatus.LOSE)
             } else {
@@ -287,12 +281,10 @@ class GameTouchHandler(
     }
 
     private fun openCube(pointedCell: PointedCell) {
-        val description = pointedCell.skin
+        val skin = pointedCell.skin
 
-//        Log.d("TEST++", "openCube ${description.neighbourBombs}")
-
-        description.setNumbers()
-        description.emptyIfZero()
+        skin.setNumbers()
+        skin.emptyIfZero()
         textureUpdater.updateTexture(pointedCell)
 
         openNeighbours(pointedCell)
@@ -303,7 +295,7 @@ class GameTouchHandler(
             val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
 
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    cubeSkin, pointedCell.index, i, null
+                    cubeSkin, pointedCell.index, i
                 )) {
                 continue
             }
@@ -341,7 +333,7 @@ class GameTouchHandler(
 
             // need to be modified. check surrendings
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    cubeSkin, position, i, null
+                    cubeSkin, position, i
                 )) {
 //                sb.append("it has not empty neighbours\n")
                 continue
@@ -352,13 +344,13 @@ class GameTouchHandler(
 
             for (n in neighbours) {
                 val p = n.index
-                val d = n.skin
+                val s = n.skin
 
-                if (!d.isClosed()) {
+                if (!s.isClosed()) {
                     continue
                 }
 
-                if (d.isBomb) {
+                if (s.isBomb) {
                     setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                     setGameState(GameStatus.LOSE)
                     return
@@ -379,52 +371,15 @@ class GameTouchHandler(
 //        Log.d("TEST+++", sb.toString())
     }
 
-    private fun openNeighbours_old(pointedCell: PointedCell) {
-        val action = {
-                c: PointedCell ->
-            do {
-//                Log.d("TEST+++", "open $c")
-                if (cubesToOpen.any { it == c.index }) {
-//                    Log.d("TEST+++", "already added")
-                    break
-                }
-
-                val d = c.skin
-                if (d.isMarked()) {
-                    break
-                }
-
-                if (d.isZero()) {
-//                    Log.d("TEST+++", "ZERO")
-                } else if (!d.isClosed()) {
-//                    Log.d("TEST+++", "opened")
-                    break
-                }
-
-//                Log.d("TEST+++", "added")
-                val description = c.skin
-                cubesToOpen.add(c.index)
-            } while (false)
-        }
-
-        val description = pointedCell.skin
-//        if ( description.isZero() ||
-//            (description.isBomb && description.isEmpty())) {
-//            NeighboursCalculator.iterateAllNeighbours(
-//                gameObject, pointedCube.position, action
-//            )
-//        }
-    }
-
     private fun updateIfOpened(pointedCell: PointedCell) {
-        val description = pointedCell.skin
+        val skin = pointedCell.skin
 
-        if (description.isEmpty() || description.isClosed()) {
+        if (skin.isEmpty() || skin.isClosed()) {
             return
         }
 
-        description.setNumbers()
-        description.emptyIfZero()
+        skin.setNumbers()
+        skin.emptyIfZero()
         textureUpdater.updateTexture(pointedCell)
     }
 
@@ -435,6 +390,9 @@ class GameTouchHandler(
             }
             TextureCoordinatesHelper.TextureType.MARKED -> {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.CLOSED)
+            }
+            else -> {
+                assert(false)
             }
         }
     }

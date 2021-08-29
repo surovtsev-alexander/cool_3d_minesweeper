@@ -23,12 +23,12 @@ object RotationMatrixDecomposer {
         val y = angle_by_sin_cos(sy, cy)
 
 
-        var sx = 0f
-        var cx = 0f
-        var sz = 0f
-        var cz = 0f
-        var x = 0f
-        var z = 0f
+        var sx: Float
+        var cx: Float
+        var sz: Float
+        var cz: Float
+        var x: Float
+        var z: Float
 
         if (MyMath.isZero(cy)) {
             if (sy > 0.0f) {

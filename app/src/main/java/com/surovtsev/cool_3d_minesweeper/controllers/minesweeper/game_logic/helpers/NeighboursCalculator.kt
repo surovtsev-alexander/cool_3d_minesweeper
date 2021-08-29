@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
@@ -22,7 +22,7 @@ object NeighboursCalculator {
             Vec3bool(false, false, false)
         )
 
-        val fl = { c: PointedCell, i: Int ->
+        val fl = { c: PointedCell, _: Int ->
             if (!c.skin.isBomb) {
                 action(c)
             }
@@ -50,9 +50,9 @@ object NeighboursCalculator {
                 }
 
                 val c = cubeSkin.getPointedCube(it)
-                val d = c.skin
+                val s = c.skin
 
-                if (d.isEmpty()) break
+                if (s.isEmpty()) break
 
                 action(c, i)
             } while (false)
@@ -71,8 +71,8 @@ object NeighboursCalculator {
         iterate(
             cubeSkin,
             xyz,
-            pairCellRange.getCellRange(rangeFlags[dim]!!),
-            { pointedCube, i ->
+            pairCellRange.getCellRange(rangeFlags[dim]),
+            { pointedCube, _ ->
                 res.add(pointedCube)
             },
             dim
@@ -123,30 +123,25 @@ object NeighboursCalculator {
     }
 
     fun hasPosEmptyNeighbours(
-        cubeSkin: CubeSkin, xyz: CellIndex, direction: Int, sb: StringBuilder?): Boolean {
+        cubeSkin: CubeSkin, xyz: CellIndex, direction: Int): Boolean {
         val r = MyMath.Rays[direction]
         val xyzV = xyz.getVec()
         val counts = cubeSkin.counts
 
-//        sb?.append(
-//            "-\nhasPosNonEmptyNeighbours\nxyz $xyzV $direction $r\n"
-//        )
-
         fun test_point(p: Vec3i): Boolean {
-//            sb?.append("p $p\n")
 
             if (!MyMath.isPointInCounts(p, counts)) {
                 return true
             }
 
-            val d = cubeSkin.getPointedCube(
+            val s = cubeSkin.getPointedCube(
                 CellIndex(
                     p,
                     counts
                 )
             )
 
-            return d.skin.isEmpty()
+            return s.skin.isEmpty()
         }
 
         if (test_point(xyzV - r)) {
@@ -163,7 +158,6 @@ object NeighboursCalculator {
     fun bombRemoved(cubeSkin: CubeSkin, index: CellIndex) {
         iterateNeightbours(
             cubeSkin,
-            index,
-            { c, i -> c.skin.neighbourBombs[i]-- })
+            index) { c, i -> c.skin.neighbourBombs[i]-- }
     }
 }

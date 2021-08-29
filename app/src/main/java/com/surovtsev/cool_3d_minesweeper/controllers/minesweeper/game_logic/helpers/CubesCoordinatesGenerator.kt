@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin

@@ -12,7 +12,7 @@ class MyDialog(val msg: String): DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(msg)
-            builder.setPositiveButton("Ok") { dialog, which -> dialog.cancel() }
+            builder.setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

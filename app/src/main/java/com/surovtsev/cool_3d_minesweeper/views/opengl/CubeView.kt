@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
@@ -40,9 +40,9 @@ class CubeView(
 
     override fun updateTexture(pointedCell: PointedCell) {
         val position = pointedCell.index
-        val description = pointedCell.skin
+        val skin = pointedCell.skin
         val id = position.id
-        val empty = description.isEmpty()
+        val empty = skin.isEmpty()
 
         if (empty) {
             val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
@@ -59,12 +59,12 @@ class CubeView(
             val startPos = textureIndexesCount * id * 6
 
             val xx = arrayOf(
-                description.texture[1],
-                description.texture[2],
-                description.texture[0],
-                description.texture[2],
-                description.texture[0],
-                description.texture[1],
+                skin.texture[1],
+                skin.texture[2],
+                skin.texture[0],
+                skin.texture[2],
+                skin.texture[0],
+                skin.texture[1],
             )
 
 

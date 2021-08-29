@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.logic.helpers
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
@@ -25,9 +25,9 @@ class IntersectionCalculator(
 
         cubeSkin.iterateCubes { p: CellIndex ->
             do {
-                val description = p.getValue(skins)
+                val skin = p.getValue(skins)
 
-                if (description.isEmpty()) {
+                if (skin.isEmpty()) {
                     continue
                 }
 
@@ -43,7 +43,7 @@ class IntersectionCalculator(
 
                     candidateCubes.add(
                         fromNear to PointedCellWithBorder(
-                            p, description, spaceParameter
+                            p, skin, spaceParameter
                         )
                     )
                 }

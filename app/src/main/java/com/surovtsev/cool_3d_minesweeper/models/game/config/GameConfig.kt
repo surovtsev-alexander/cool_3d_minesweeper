@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.config
 
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 

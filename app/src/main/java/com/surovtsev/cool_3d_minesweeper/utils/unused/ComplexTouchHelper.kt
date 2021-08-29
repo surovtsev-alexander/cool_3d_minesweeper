@@ -6,7 +6,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import glm_.vec2.Vec2
 
 class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceiver {
-
     enum class TouchType {
         SHORT,
         LONG,

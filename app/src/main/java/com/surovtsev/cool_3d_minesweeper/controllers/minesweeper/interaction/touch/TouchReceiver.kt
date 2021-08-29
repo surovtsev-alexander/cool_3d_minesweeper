@@ -80,13 +80,11 @@ class TouchReceiver(
 
     fun tick() {
         val currTime = customClock.time
-        when (state) {
-            State.DELAY_BEFORE_LONG_TOUCH -> {
-                releaseIfMovedOrPerform {
-                    if (currTime - downTime > longTouchDelay) {
-                        state = State.WAIT_FOR_RELEASE
-                        touchType = TouchType.LONG
-                    }
+        if (state == State.DELAY_BEFORE_LONG_TOUCH) {
+            releaseIfMovedOrPerform {
+                if (currTime - downTime > longTouchDelay) {
+                    state = State.WAIT_FOR_RELEASE
+                    touchType = TouchType.LONG
                 }
             }
         }

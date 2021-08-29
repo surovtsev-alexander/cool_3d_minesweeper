@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
@@ -19,7 +19,7 @@ object BombPlacer {
 
         val positionCalculator = CellIndex.getIndexCalculator(cubeSkin.counts)
 
-        val descriptions = cubeSkin.skins
+        val skins = cubeSkin.skins
 
         val bombsList = mutableListOf<CellIndex>()
 
@@ -27,7 +27,7 @@ object BombPlacer {
             for (i in 0 until tryCount) {
                 val rId = Random.nextInt(allCubesCount)
                 val xyz = positionCalculator(rId)
-                val d = xyz.getValue(descriptions)
+                val d = xyz.getValue(skins)
 
                 if (d.isBomb) {
                     continue
@@ -48,9 +48,9 @@ object BombPlacer {
                 var nn = n
                 for (id in 0 until allCubesCount) {
                     val xyz = positionCalculator(id)
-                    val d = xyz.getValue(descriptions)
+                    val s = xyz.getValue(skins)
 
-                    if (d.isBomb) {
+                    if (s.isBomb) {
                         continue
                     }
 
@@ -60,7 +60,7 @@ object BombPlacer {
 
                     nn--
                     if (nn == 0) {
-                        d.isBomb = true
+                        s.isBomb = true
                         bombsList.add(xyz)
 
                         freeCubes--

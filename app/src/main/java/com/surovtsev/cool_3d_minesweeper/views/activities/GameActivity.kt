@@ -7,7 +7,7 @@ import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
@@ -91,7 +91,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
     }
 
     override fun bombCountUpdated() {
-        lbl_bombs_count.text = (minesweeperController?.gameObjectsHolder?.gameTouchHandler?.bombsLeft?:0).toString()
+        lbl_bombs_count.text = (minesweeperController?.gameLogic?.bombsLeft?:0).toString()
     }
 
     private fun updateTime() {

@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene
 
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
@@ -7,9 +8,10 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.logic.helpers.IntersectionCalculator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 
-class Scene(
+class Scene (
+    private val gameLogic: GameLogic,
     private val gameObjectsHolder: GameObjectsHolder,
     private val rendererClock: CustomRealtime,
     width: Int,
@@ -83,21 +85,20 @@ class Scene(
 
         glCube.bindData()
 
-        val gameTouchHandler = gameObjectsHolder.gameTouchHandler
-        gameTouchHandler.openCubes()
+        gameLogic.openCubes()
 
         if (removeBombs.getAndRelease()) {
-            gameTouchHandler.storeSelectedBombs()
+            gameLogic.storeSelectedBombs()
         }
         if (removeBorderZeros.getAndRelease()) {
-            gameTouchHandler.storeZeroBorders()
+            gameLogic.storeZeroBorders()
         }
-        gameTouchHandler.removeCubes()
+        gameLogic.removeCubes()
 
         if (clicked) {
             val cell = cellCalculator.getIntersection()
             if (cell != null) {
-                gameTouchHandler.touch(pointer.touchType, cell, rendererClock.time)
+                gameLogic.touchCell(pointer.touchType, cell, rendererClock.time)
             }
 
         }

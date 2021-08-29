@@ -66,8 +66,6 @@ data class EdgeBorder(
         val x1 = pointerDescriptor.near
         val n = pointerDescriptor.n
 
-        val plane3 = Vec3(plane)
-
         val denominator =
             dot(
                 Vec4(n, 0),
