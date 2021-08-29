@@ -18,7 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.activities.GameActivity"/>
-        <activity android:name=".views.activities.multitouchTest.MultitouchTestActivity"/>
     </application>
 
 </manifest>

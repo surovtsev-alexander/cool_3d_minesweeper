@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.views.activities.multitouchTest.MultitouchTestActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,10 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         btn_start_game.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
-        }
-
-        btn_multitouch_test.setOnClickListener {
-            startActivity(Intent(this, MultitouchTestActivity::class.java))
         }
     }
 }

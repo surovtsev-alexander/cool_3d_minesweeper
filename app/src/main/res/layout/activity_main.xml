@@ -16,10 +16,4 @@
         android:text="start game"
         />
 
-    <Button
-        android:id="@+id/btn_multitouch_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="multitouch test"/>
-
 </LinearLayout>
