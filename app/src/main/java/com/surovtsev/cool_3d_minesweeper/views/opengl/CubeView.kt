@@ -39,8 +39,8 @@ class CubeView(
     }
 
     override fun updateTexture(pointedCell: PointedCell) {
-        val position = pointedCell.position
-        val description = pointedCell.description
+        val position = pointedCell.index
+        val description = pointedCell.skin
         val id = position.id
         val empty = description.isEmpty()
 

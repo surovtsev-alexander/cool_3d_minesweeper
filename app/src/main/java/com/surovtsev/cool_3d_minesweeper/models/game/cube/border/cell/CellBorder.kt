@@ -1,21 +1,21 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.cells
+package com.surovtsev.cool_3d_minesweeper.models.game.cube.border.cell
 
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.edge.Edge
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.border.cell.edge.EdgeBorder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.PointerDescriptor
 import glm_.vec3.Vec3
 
-class CubeCell(
+class CellBorder(
     val center: Vec3,
     halfSpace: Vec3
 ) {
-    val up: Edge
-    val down: Edge
-    val left: Edge
-    val right: Edge
-    val near: Edge
-    val far: Edge
+    val up: EdgeBorder
+    val down: EdgeBorder
+    val left: EdgeBorder
+    val right: EdgeBorder
+    val near: EdgeBorder
+    val far: EdgeBorder
 
-    val edges: Array<Edge>
+    val edges: Array<EdgeBorder>
 
     init {
         val p1 = center - halfSpace
@@ -35,42 +35,42 @@ class CubeCell(
         val H = Vec3(x2, y1, z1)
 
         up =
-            Edge(
+            EdgeBorder(
                 A,
                 B,
                 C,
                 D
             )
         down =
-            Edge(
+            EdgeBorder(
                 E,
                 F,
                 G,
                 H
             )
         left =
-            Edge(
+            EdgeBorder(
                 A,
                 B,
                 F,
                 E
             )
         right =
-            Edge(
+            EdgeBorder(
                 D,
                 C,
                 G,
                 H
             )
         near =
-            Edge(
+            EdgeBorder(
                 A,
                 D,
                 H,
                 E
             )
         far =
-            Edge(
+            EdgeBorder(
                 B,
                 C,
                 G,

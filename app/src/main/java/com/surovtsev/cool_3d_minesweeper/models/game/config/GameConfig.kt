@@ -1,10 +1,10 @@
-package com.surovtsev.cool_3d_minesweeper.models.game
+package com.surovtsev.cool_3d_minesweeper.models.game.config
 
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
 
-data class CubesCoordinatesGeneratorConfig(
+data class GameConfig(
     val counts: Vec3s,
     val dimensions: Vec3,
     val gaps: Vec3,

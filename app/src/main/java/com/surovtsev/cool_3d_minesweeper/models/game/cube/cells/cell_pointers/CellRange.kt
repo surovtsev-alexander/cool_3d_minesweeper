@@ -23,12 +23,12 @@ data class CellRange(
         )
     )
 
-    fun iterate(counts: Vec3s, action: (CellPosition) -> Unit) {
+    fun iterate(counts: Vec3s, action: (CellIndex) -> Unit) {
         for (x in xRange) {
             for (y in yRange) {
                 for (z in zRange) {
                     action(
-                        CellPosition(
+                        CellIndex(
                             x,
                             y,
                             z,

@@ -1,16 +1,14 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.game_controller.helpers
 
-import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
+import com.surovtsev.cool_3d_minesweeper.models.game.CubeSkin
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellIndex
 import kotlin.random.Random
 
-typealias BombsList = MutableList<CellPosition>
+typealias BombsList = MutableList<CellIndex>
 
 object BombPlacer {
-    fun placeBombs(gameObject: GameObject, excludedPosition: CellPosition): BombsList {
-        val bombsCount = gameObject.bombsCount
-
-        val counts = gameObject.counts
+    fun placeBombs(cubeSkin: CubeSkin, excludedIndex: CellIndex, bombsCount: Int): BombsList {
+        val counts = cubeSkin.counts
 
         val allCubesCount = counts.x * counts.y * counts.z
         var freeCubes = allCubesCount - 1
@@ -19,11 +17,11 @@ object BombPlacer {
 
         val tryCount = 4
 
-        val positionCalculator = CellPosition.getPositionCalculator(gameObject.counts)
+        val positionCalculator = CellIndex.getIndexCalculator(cubeSkin.counts)
 
-        val descriptions = gameObject.descriptions
+        val descriptions = cubeSkin.skins
 
-        val bombsList = mutableListOf<CellPosition>()
+        val bombsList = mutableListOf<CellIndex>()
 
         fun placeBomb() {
             for (i in 0 until tryCount) {
@@ -35,7 +33,7 @@ object BombPlacer {
                     continue
                 }
 
-                if (xyz == excludedPosition) {
+                if (xyz == excludedIndex) {
                     continue
                 }
 
@@ -56,7 +54,7 @@ object BombPlacer {
                         continue
                     }
 
-                    if (xyz.equals(excludedPosition)) {
+                    if (xyz.equals(excludedIndex)) {
                         continue
                     }
 

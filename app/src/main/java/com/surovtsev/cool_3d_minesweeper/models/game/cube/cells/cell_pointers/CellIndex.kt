@@ -3,7 +3,12 @@ package com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers
 import glm_.vec3.Vec3i
 import glm_.vec3.Vec3s
 
-class CellPosition(val x: Int, val y: Int, val z: Int, counts: Vec3s) {
+class CellIndex(
+    val x: Int,
+    val y: Int,
+    val z: Int,
+    counts: Vec3s
+) {
     val id =
         calcId(
             counts,
@@ -16,12 +21,12 @@ class CellPosition(val x: Int, val y: Int, val z: Int, counts: Vec3s) {
         fun calcId(counts: Vec3s, x: Int, y: Int, z: Int) =
             x + counts.x * (y + counts.y * z)
 
-        fun getPositionCalculator(counts: Vec3s): (Int) -> CellPosition =  { xyz ->
+        fun getIndexCalculator(counts: Vec3s): (Int) -> CellIndex =  { xyz ->
             val x = xyz % counts.x.toInt()
             val yz = (xyz - x) / counts.x
             val y = yz % counts.y
             val z = (yz - y) / counts.y
-            CellPosition(
+            CellIndex(
                 x,
                 y,
                 z,
@@ -39,7 +44,7 @@ class CellPosition(val x: Int, val y: Int, val z: Int, counts: Vec3s) {
     )
 
     override fun equals(other: Any?): Boolean {
-        if (other is CellPosition) {
+        if (other is CellIndex) {
             return (x == other.x && y == other.y && z == other.z && id == other.id)
         } else {
             return super.equals(other)

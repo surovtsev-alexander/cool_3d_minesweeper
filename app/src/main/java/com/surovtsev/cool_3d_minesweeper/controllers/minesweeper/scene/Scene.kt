@@ -26,8 +26,8 @@ class Scene(
     val cellCalculator =
         IntersectionCalculator(
             pointer,
-            gameObjectsHolder.gameObject,
-            gameObjectsHolder.cube
+            gameObjectsHolder.cubeSkin,
+            gameObjectsHolder.cubeBorder
         )
 
 

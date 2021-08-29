@@ -1,13 +1,12 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.edge
+package com.surovtsev.cool_3d_minesweeper.models.game.cube.border.cell.edge
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.PointerDescriptor
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import kotlin.math.sqrt
 
-data class Edge(
+data class EdgeBorder(
     val p1: Vec3,
     val p2: Vec3,
     val p3: Vec3,

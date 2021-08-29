@@ -15,7 +15,7 @@ data class PairCellRange(
     val yRange: PairDimRange,
     val zRange: PairDimRange
 ) {
-    constructor(idx: CellPosition, counts: Vec3s): this(
+    constructor(idx: CellIndex, counts: Vec3s): this(
         getPairDimRange(
             idx.x,
             counts.x

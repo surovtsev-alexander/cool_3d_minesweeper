@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.models.game
 
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import glm_.vec3.Vec3
 
 class CubesCoordinatesGenerator(
@@ -80,15 +80,15 @@ class CubesCoordinatesGenerator(
         */
 
         fun generateCubesCoordinates(
-            cubesCoordinatesGeneratorConfig: CubesCoordinatesGeneratorConfig
+            gameConfig: GameConfig
         ): CubesCoordinatesGenerator {
             val indexesArray =
                 invExtendedIndexedArray
 
-            val counts = cubesCoordinatesGeneratorConfig.counts
-            val dimensions = cubesCoordinatesGeneratorConfig.dimensions
-            val gaps = cubesCoordinatesGeneratorConfig.gaps
-            val cubesCount = cubesCoordinatesGeneratorConfig.cubesCount
+            val counts = gameConfig.counts
+            val dimensions = gameConfig.dimensions
+            val gaps = gameConfig.gaps
+            val cubesCount = gameConfig.cubesCount
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = indexesArray.size
             val coordinatesCount = cubeCoordinatesCount * cubesCount
@@ -100,12 +100,12 @@ class CubesCoordinatesGenerator(
             val centers = Array<Vec3>(cubesCount) { Vec3() }
 
             val cubesHalfDims = dimensions / 2
-            val cellSpaceWithGaps = cubesCoordinatesGeneratorConfig.cellSpaceWithGaps
+            val cellSpaceWithGaps = gameConfig.cellSpaceWithGaps
             val cellWithGapsHalfSpace = cellSpaceWithGaps / 2
-            val cellSpace = cubesCoordinatesGeneratorConfig.cellSpace
+            val cellSpace = gameConfig.cellSpace
             val halfGaps = gaps / 2
 
-            GameObject.iterateCubes(counts) { posision ->
+            CubeSkin.iterateCubes(counts) { posision ->
                 val id = posision.id
                 val startCoordinatesPos = cubeCoordinatesCount * id
                 val startIndexesPos = cubeIndexesCount * id
