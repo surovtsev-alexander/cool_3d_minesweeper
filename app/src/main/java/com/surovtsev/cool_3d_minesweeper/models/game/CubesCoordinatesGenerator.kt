@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.models.game
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
@@ -143,19 +142,8 @@ class CubesCoordinatesGenerator(
                 fillIndexes()
             }
 
-            if (false) {
-                var test_str = "\ntriangleCoordinates:\n"
-                for (i in 0 until trianglesCoordinates.size / 3) {
-                    test_str += "${trianglesCoordinates[i * 3]}\t${trianglesCoordinates[i * 3 + 1]}\t${trianglesCoordinates[i * 3 + 2]}\n"
-                }
-                test_str += "indexes:\n"
-                for (i in 0 until indexes.size / 3) {
-                    test_str += "${indexes[i * 3]}\t${indexes[i * 3 + 1]}\t${indexes[i * 3 + 2]}\n"
-                }
-                Log.d("TEST", test_str)
-            }
 
-            val collisionCubes =
+            val cube =
                 Cube(
                     counts,
                     cubeSphereRaius,
@@ -168,7 +156,7 @@ class CubesCoordinatesGenerator(
                         cubesCoordinatesGeneratorConfig.bombsRate).toDouble()).toInt()
 
             return CubesCoordinatesGenerator(
-                trianglesCoordinates, indexes, collisionCubes,
+                trianglesCoordinates, indexes, cube,
                 bombsCount, cubesCoordinatesGeneratorConfig.gameStatusesReceiver
             )
         }

@@ -14,20 +14,20 @@ interface ICanUpdateTexture {
     fun updateTexture(pointedCell: PointedCell)
 }
 
-class GLCubes(context: Context, val cubeCoordinates: CubeCoordinates): ICanUpdateTexture {
+class GLCubes(context: Context, val cubeViewHelper: CubeViewHelper): ICanUpdateTexture {
 
     val glObject =
         Cube(
-            context, cubeCoordinates.triangleCoordinates,
-            cubeCoordinates.isEmpty,
-            cubeCoordinates.textureCoordinates
+            context, cubeViewHelper.triangleCoordinates,
+            cubeViewHelper.isEmpty,
+            cubeViewHelper.textureCoordinates
         )
 
     val gameTouchHandler =
         GameTouchHandler(
-            cubeCoordinates.gameObject,
+            cubeViewHelper.gameObject,
             this,
-            cubeCoordinates.gameStatusesReceiver
+            cubeViewHelper.gameStatusesReceiver
         )
 
     override fun updateTexture(pointedCell: PointedCell) {
@@ -71,8 +71,8 @@ class GLCubes(context: Context, val cubeCoordinates: CubeCoordinates): ICanUpdat
         }
     }
 
-    val gameObject = cubeCoordinates.gameObject
-    val collisionCubes = cubeCoordinates.cube
+    val gameObject = cubeViewHelper.gameObject
+    val collisionCubes = cubeViewHelper.cube
     val counts = collisionCubes.counts
     val descriptions = gameObject.descriptions
     val spaceParameters = collisionCubes.cells

@@ -1,23 +1,21 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameObject
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
-import java.lang.StringBuilder
 
-class CubeCoordinates(val triangleCoordinates: FloatArray,
-                      val isEmpty: FloatArray,
-                      val textureCoordinates: FloatArray,
-                      val gameObject: GameObject,
-                      val cube: Cube,
-                      val gameStatusesReceiver: IGameStatusesReceiver
+class CubeViewHelper(
+    val triangleCoordinates: FloatArray,
+    val isEmpty: FloatArray,
+    val textureCoordinates: FloatArray,
+    val gameObject: GameObject,
+    val cube: Cube,
+    val gameStatusesReceiver: IGameStatusesReceiver
 ) {
     companion object {
-        fun cubes(cubesCoordinatesGenerator: CubesCoordinatesGenerator): CubeCoordinates {
+        fun calculateCoordinates(cubesCoordinatesGenerator: CubesCoordinatesGenerator): CubeViewHelper {
             val compactCoordinates = cubesCoordinatesGenerator.trianglesCoordinates
             val indexes = cubesCoordinatesGenerator.indexes
             val pointsCount = indexes.count()
@@ -52,7 +50,7 @@ class CubeCoordinates(val triangleCoordinates: FloatArray,
                     cubesCoordinatesGenerator.bombsCount
                 )
 
-            val res = CubeCoordinates(
+            val res = CubeViewHelper(
                 trianglesCoordinates,
                 isEmpty,
                 textureCoordinates,
