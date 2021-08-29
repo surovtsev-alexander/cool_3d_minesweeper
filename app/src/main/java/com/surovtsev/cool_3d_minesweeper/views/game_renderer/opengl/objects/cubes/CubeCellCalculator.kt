@@ -1,10 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes
 
-import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.models.game.GameObject
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.GLCube
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
@@ -15,12 +11,10 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 class CubeCellCalculator(
     private val pointer: IPointer,
     private val gameObject: GameObject,
-    private val cube: Cube
+    cube: Cube
 ) {
-
-
     private val descriptions = gameObject.descriptions
-    private val spaceParameters = cube.cells
+    private val cells = cube.cells
     private val squaredCubeSphereRadius = cube.squaredCubeSphereRadius
 
     fun testPointer(): PointedCell? {
@@ -37,7 +31,7 @@ class CubeCellCalculator(
                     continue
                 }
 
-                val spaceParameter = p.getValue(spaceParameters);
+                val spaceParameter = p.getValue(cells);
                 val center = spaceParameter.center
 
                 val projection = pointerDescriptor.calcProjection(center)

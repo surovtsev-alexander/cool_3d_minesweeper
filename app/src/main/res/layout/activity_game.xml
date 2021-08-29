@@ -37,13 +37,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="0"/>
-        <TextView
-            android:id="@+id/lbl_time"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:text="12:34"/>
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/lbl_bombs_count"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:text="-"/>
+            <TextView
+                android:id="@+id/lbl_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:text="-"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

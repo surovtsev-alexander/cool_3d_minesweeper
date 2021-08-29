@@ -24,6 +24,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         updateTime()
+        bombCountUpdated()
 
         if (!OpenGLInfoHelper.isSupportEs2(this)) {
             Toast.makeText(this
@@ -87,6 +88,10 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         } else if (GameStatusHelper.isGameStarted(newStatus)) {
             minesweeperController?.gameTimeTicker?.turnOn()
         }
+    }
+
+    override fun bombCountUpdated() {
+        lbl_bombs_count.text = (minesweeperController?.gameObjectsHolder?.gameTouchHandler?.bombsLeft?:0).toString()
     }
 
     private fun updateTime() {

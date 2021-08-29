@@ -34,10 +34,11 @@ class GameTouchHandler(
     private val doubleClickDelay = 200L
 
     private val bombsList = mutableListOf<CellPosition>()
-    val cubesToOpen = mutableListOf<CellPosition>()
+    private val cubesToOpen = mutableListOf<CellPosition>()
     private val cubesToRemove = mutableListOf<CellPosition>()
 
-    private var bombsLeft = 0
+    var bombsLeft = 0
+        private set
 
     fun touch(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.position
@@ -49,6 +50,7 @@ class GameTouchHandler(
         if (state == GameStatus.NO_BOBMS_PLACED) {
             bombsList += BombPlacer.placeBombs(gameObject, pointedCell.position)
             bombsLeft = bombsList.size
+            gameStatusesReceiver.bombCountUpdated()
 
             NeighboursCalculator.fillNeighbours(gameObject, bombsList)
             setGameState(GameStatus.BOMBS_PLACED)
@@ -105,6 +107,7 @@ class GameTouchHandler(
             openNeighbours(pointedCell)
 
             bombsLeft--;
+            gameStatusesReceiver.bombCountUpdated()
         } else {
             if (description.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
