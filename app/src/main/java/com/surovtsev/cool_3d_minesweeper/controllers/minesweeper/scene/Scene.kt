@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubeCellCalculator
 
 class Scene(
     private val gameObjectsHolder: GameObjectsHolder,
@@ -21,6 +22,13 @@ class Scene(
     val touchHandler = TouchHandler(cameraInfo, pointer)
     val removeBombs = Updatable(false)
     val removeBorderZeros = Updatable(false)
+
+    val cellCalculator = CubeCellCalculator(
+        pointer,
+        gameObjectsHolder.gameObject,
+        gameObjectsHolder.cube
+    )
+
 
     fun onSurfaceChanged() {
         val glObject = gameObjectsHolder.glCube
@@ -69,14 +77,12 @@ class Scene(
             gameObjectsHolder.glPointerView.draw()
         } while (false)
 
-
-        val cellCalculator = gameObjectsHolder.cubeCellCalculator
         val glCube = gameObjectsHolder.glCube
         glCube.cubeGLESProgram.useProgram()
 
         glCube.bindData()
 
-        val gameTouchHandler = cellCalculator.gameTouchHandler
+        val gameTouchHandler = gameObjectsHolder.gameTouchHandler
         gameTouchHandler.openCubes()
 
         if (removeBombs.getAndRelease()) {
@@ -88,7 +94,11 @@ class Scene(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            cellCalculator.testPointer(touchHandler.pointer, rendererClock.time)
+            val cell = cellCalculator.testPointer()
+            if (cell != null) {
+                gameTouchHandler.touch(pointer.touchType, cell, rendererClock.time)
+            }
+
         }
         if (cameraMoved) {
             with(glCube.cubeGLESProgram) {

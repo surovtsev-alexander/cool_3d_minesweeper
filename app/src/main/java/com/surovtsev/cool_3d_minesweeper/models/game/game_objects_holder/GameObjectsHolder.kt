@@ -19,11 +19,11 @@ class GameObjectsHolder(
     private val gameStatusesReceiver: IGameStatusesReceiver
 ) {
 
-    val cubeCellCalculator: CubeCellCalculator
     val glPointerView: GLPointerView
     val cube: Cube
     val gameObject: GameObject
     val glCube: GLCube
+    val gameTouchHandler: GameTouchHandler
 
     init {
         val d: Short = if (true) {
@@ -86,20 +86,12 @@ class GameObjectsHolder(
                 cubeViewHelper.textureCoordinates
             )
 
-        val gameTouchHandler =
+        gameTouchHandler =
             GameTouchHandler(
                 gameObject,
                 glCube,
                 gameStatusesReceiver
             )
-
-        cubeCellCalculator = CubeCellCalculator(
-            context,
-            cubeViewHelper,
-            gameObject,
-            gameTouchHandler,
-            cube
-        )
 
         glPointerView = GLPointerView(context)
     }

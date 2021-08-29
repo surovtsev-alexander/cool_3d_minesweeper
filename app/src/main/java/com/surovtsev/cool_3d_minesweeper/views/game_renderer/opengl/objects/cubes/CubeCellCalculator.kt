@@ -7,16 +7,15 @@ import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHa
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.Cube
+import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCellWithSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 
 
 class CubeCellCalculator(
-    context: Context,
-    val cubeViewHelper: CubeViewHelper,
-    val gameObject: GameObject,
-    val gameTouchHandler: GameTouchHandler,
-    val cube: Cube
+    private val pointer: IPointer,
+    private val gameObject: GameObject,
+    private val cube: Cube
 ) {
 
 
@@ -24,7 +23,7 @@ class CubeCellCalculator(
     private val spaceParameters = cube.cells
     private val squaredCubeSphereRadius = cube.squaredCubeSphereRadius
 
-    fun testPointer(pointer: IPointer, currTime: Long): Unit {
+    fun testPointer(): PointedCell? {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
@@ -63,9 +62,10 @@ class CubeCellCalculator(
             val candidate = c.second
 
             if (candidate.cell.testIntersection(pointerDescriptor)) {
-                gameTouchHandler.touch(pointer.touchType, candidate, currTime)
-                break
+                return candidate
             }
         }
+
+        return null
     }
 }
