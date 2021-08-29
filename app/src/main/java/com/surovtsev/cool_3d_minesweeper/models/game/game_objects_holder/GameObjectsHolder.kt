@@ -5,7 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.interfaces.
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGeneratorConfig
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
-import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubesFactory
+import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cubes.GLCubes
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3s
@@ -47,7 +47,7 @@ class GameObjectsHolder(
             )
         glCubes = GLCubes(
             context,
-            CubesFactory.cubes(
+            CubeCoordinates.cubes(
                 CubesCoordinatesGenerator.generateCubesCoordinates(
                     cubesConfig
                 )

@@ -2,12 +2,10 @@ package com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.objects.cub
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.views.game_renderer.opengl.Cube
-import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.CubeDescription
 import com.surovtsev.cool_3d_minesweeper.controllers.game_controller.GameTouchHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.CellPosition
 import com.surovtsev.cool_3d_minesweeper.models.game.CubesCoordinatesGenerator
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCell
-import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.CubeCell
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.cube.cells.cell_pointers.PointedCellWithSpaceParameters
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
@@ -16,20 +14,20 @@ interface ICanUpdateTexture {
     fun updateTexture(pointedCell: PointedCell)
 }
 
-class GLCubes(context: Context, val cubesFactory: CubesFactory): ICanUpdateTexture {
+class GLCubes(context: Context, val cubeCoordinates: CubeCoordinates): ICanUpdateTexture {
 
     val glObject =
         Cube(
-            context, cubesFactory.triangleCoordinates,
-            cubesFactory.isEmpty,
-            cubesFactory.textureCoordinates
+            context, cubeCoordinates.triangleCoordinates,
+            cubeCoordinates.isEmpty,
+            cubeCoordinates.textureCoordinates
         )
 
     val gameTouchHandler =
         GameTouchHandler(
-            cubesFactory.gameObject,
+            cubeCoordinates.gameObject,
             this,
-            cubesFactory.gameStatusesReceiver
+            cubeCoordinates.gameStatusesReceiver
         )
 
     override fun updateTexture(pointedCell: PointedCell) {
@@ -73,8 +71,8 @@ class GLCubes(context: Context, val cubesFactory: CubesFactory): ICanUpdateTextu
         }
     }
 
-    val gameObject = cubesFactory.gameObject
-    val collisionCubes = cubesFactory.cube
+    val gameObject = cubeCoordinates.gameObject
+    val collisionCubes = cubeCoordinates.cube
     val counts = collisionCubes.counts
     val descriptions = gameObject.descriptions
     val spaceParameters = collisionCubes.cells
