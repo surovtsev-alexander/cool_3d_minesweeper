@@ -80,14 +80,9 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
 
     override fun gameStatusUpdated(newStatus: GameStatus) {
         if (GameStatusHelper.isGameOver(newStatus)) {
-            minesweeperController?.gameTimeTicker?.turnOff()
-
             val gameStatusDialog = MyDialog(newStatus.toString())
             val manager = supportFragmentManager
             gameStatusDialog.show(manager, "gameStatusDialog")
-
-        } else if (GameStatusHelper.isGameInProgress(newStatus)) {
-            minesweeperController?.gameTimeTicker?.turnOn()
         }
     }
 
@@ -96,7 +91,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
     }
 
     private fun updateTime() {
-        val time = minesweeperController?.gameTimeTicker?.getElapsed()?:0
+        val time = minesweeperController?.gameLogic?.gameLogicStateHelper?.getElapsed()?:0
         lbl_time.text = DateUtils.formatElapsedTime( time / 1000)
     }
 

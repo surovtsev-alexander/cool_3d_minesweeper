@@ -1,7 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
@@ -9,10 +8,10 @@ import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
+import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
-import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpan
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
@@ -25,9 +24,8 @@ interface IHandleOpenGLEvents {
 
 class MinesweeperController(
     private val context: Context,
-    private val gameStatusesReceiver: IGameStatusesReceiver,
-    private val timeUpdated: () -> Unit
-
+    gameStatusesReceiver: IGameStatusesReceiver,
+    timeUpdated: () -> Unit
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy
@@ -37,13 +35,12 @@ class MinesweeperController(
     private val timeSpanHelper = TimeSpanHelper()
     val touchReceiver = TouchReceiver(timeSpanHelper)
 
-    // TODO: move to gameLogic
-    val gameTimeTicker = TimeSpan(1000L, timeSpanHelper)
-
     private val gameConfig: GameConfig = GameConfigFactory.createGameConfig()
 
     var gameObjectsHolder: GameObjectsHolder? = null
         private set
+    private val cameraInfo = CameraInfo()
+
     var gameLogic: GameLogic? = null
         private set
     var scene: Scene? = null
@@ -85,13 +82,14 @@ class MinesweeperController(
 
         val createScene = (
                 scene == null ||
-                scene!!.cameraInfo.displaySize != displaySize)
+                scene!!.cameraInfoHelper.displaySize != displaySize)
 
         if (createScene) {
             scene =
                 Scene(
                     gameLogic!!,
                     gameObjectsHolder!!,
+                    cameraInfo,
                     timeSpanHelper,
                     displaySize,
                     null,
@@ -121,18 +119,11 @@ class MinesweeperController(
             touchReceiver.release()
         }
 
-        if (gameTimeTicker.isOn()) {
-            gameTimeTicker.tick()
-            if (gameTimeTicker.getAndRelease()) {
-                timeUpdated()
-            }
-        }
-
         scene?.onDrawFrame()
     }
 
     override fun onPause() {
-        gameTimeTicker.turnOff()
+        gameLogic?.gameLogicStateHelper?.onPause()
     }
 
     override fun onResume() {

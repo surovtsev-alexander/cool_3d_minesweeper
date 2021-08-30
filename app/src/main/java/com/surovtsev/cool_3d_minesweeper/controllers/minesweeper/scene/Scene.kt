@@ -4,10 +4,11 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.Game
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
+import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
+import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
@@ -15,17 +16,18 @@ import glm_.vec2.Vec2i
 
 class Scene (
     private val gameLogic: GameLogic,
-    private val gameObjectsHolder: GameObjectsHolder,
+    gameObjectsHolder: GameObjectsHolder,
+    cameraInfo: CameraInfo,
     private val timeSpanHelper: TimeSpanHelper,
-    val displaySize: Vec2i,
+    displaySize: Vec2i,
     var cubeView: CubeView?,
     var glPointerView: GLPointerView?
 ) {
-    val cameraInfo = CameraInfo(displaySize)
+    val cameraInfoHelper = CameraInfoHelper(cameraInfo, displaySize)
     private val pointer = Pointer()
 
-    val moveHandler = MoveHandler(cameraInfo)
-    val touchHandler = TouchHandler(cameraInfo, pointer)
+    val moveHandler = MoveHandler(cameraInfoHelper)
+    val touchHandler = TouchHandler(cameraInfoHelper, pointer)
     val removeBombs = Updatable(false)
     val removeBorderZeros = Updatable(false)
 
@@ -37,7 +39,7 @@ class Scene (
         )
 
     fun onSurfaceChanged() {
-        val mVPMatrix = cameraInfo.MVP
+        val mVPMatrix = cameraInfoHelper.cameraInfo.MVP
         with(cubeView!!.cubeGLESProgram) {
             useProgram()
             fillMVP(mVPMatrix)
@@ -50,11 +52,11 @@ class Scene (
     }
 
     fun onDrawFrame() {
-        val cameraMoved = cameraInfo.getAndRelease()
+        val cameraMoved = cameraInfoHelper.getAndRelease()
         val clicked = touchHandler.isUpdated()
 
         if (cameraMoved) {
-            cameraInfo.recalculateMVPMatrix()
+            cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
         }
 
         do {
@@ -74,7 +76,7 @@ class Scene (
             glPointerView!!.mGLESProgram.useProgram()
             if (cameraMoved) {
                 with(glPointerView!!.mGLESProgram) {
-                    fillMVP(cameraInfo.MVP)
+                    fillMVP(cameraInfoHelper.cameraInfo.MVP)
                 }
             }
             glPointerView!!.bindData()
@@ -105,7 +107,7 @@ class Scene (
         }
         if (cameraMoved) {
             with(glCube.cubeGLESProgram) {
-                fillMVP(cameraInfo.MVP)
+                fillMVP(cameraInfoHelper.cameraInfo.MVP)
             }
         }
         glCube.draw()
