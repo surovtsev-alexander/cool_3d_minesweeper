@@ -10,6 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameCon
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.control.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
@@ -37,8 +38,8 @@ class MinesweeperController(
 
     private val gameConfig: GameConfig = GameConfigFactory.createGameConfig()
 
-    var gameObjectsHolder: GameObjectsHolder? = null
-        private set
+    private val gameObjectsHolder: GameObjectsHolder
+
     private val cameraInfo = CameraInfo()
 
     var gameLogic: GameLogic? = null
@@ -46,8 +47,10 @@ class MinesweeperController(
     var scene: Scene? = null
         private set
 
-    var glPointerView: GLPointerView? = null
-    var cubeView: CubeView? = null
+    val gameControls = GameControls()
+
+    private var glPointerView: GLPointerView? = null
+    private var cubeView: CubeView? = null
 
 
     init {
@@ -93,7 +96,8 @@ class MinesweeperController(
                     timeSpanHelper,
                     displaySize,
                     null,
-                    null
+                    null,
+                    gameControls
                 )
         }
 

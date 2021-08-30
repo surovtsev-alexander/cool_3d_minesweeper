@@ -8,7 +8,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.tou
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
-import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfoHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.control.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
@@ -21,15 +22,18 @@ class Scene (
     private val timeSpanHelper: TimeSpanHelper,
     displaySize: Vec2i,
     var cubeView: CubeView?,
-    var glPointerView: GLPointerView?
+    var glPointerView: GLPointerView?,
+    val gameControls: GameControls
 ) {
-    val cameraInfoHelper = CameraInfoHelper(cameraInfo, displaySize)
+    val cameraInfoHelper =
+        CameraInfoHelper(
+            cameraInfo,
+            displaySize
+        )
     private val pointer = Pointer()
 
     val moveHandler = MoveHandler(cameraInfoHelper)
     val touchHandler = TouchHandler(cameraInfoHelper, pointer)
-    val removeBombs = Updatable(false)
-    val removeBorderZeros = Updatable(false)
 
     private val intersectionCalculator =
         IntersectionCalculator(
@@ -53,7 +57,7 @@ class Scene (
 
     fun onDrawFrame() {
         val cameraMoved = cameraInfoHelper.getAndRelease()
-        val clicked = touchHandler.isUpdated()
+        val clicked = touchHandler.getAndRelease()
 
         if (cameraMoved) {
             cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
@@ -61,7 +65,6 @@ class Scene (
 
         do {
             if (clicked) {
-                touchHandler.release()
                 //gameObjectsHolder.glPointerView.turnOn()
             }
 
@@ -90,10 +93,10 @@ class Scene (
 
         gameLogic.openCubes()
 
-        if (removeBombs.getAndRelease()) {
+        if (gameControls.removeBombs.getAndRelease()) {
             gameLogic.storeSelectedBombs()
         }
-        if (removeBorderZeros.getAndRelease()) {
+        if (gameControls.removeBorderZeros.getAndRelease()) {
             gameLogic.storeZeroBorders()
         }
         gameLogic.removeCubes()

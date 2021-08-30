@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfoHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable

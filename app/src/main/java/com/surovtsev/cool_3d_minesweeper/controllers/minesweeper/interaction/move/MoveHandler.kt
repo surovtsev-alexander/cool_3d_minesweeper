@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IScaleReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
-import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfoHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
 import glm_.vec2.Vec2
 
 class MoveHandler(

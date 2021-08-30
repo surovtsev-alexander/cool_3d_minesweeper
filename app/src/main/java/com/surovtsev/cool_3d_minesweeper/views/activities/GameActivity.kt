@@ -48,11 +48,11 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
 
     private fun assignListeners() {
         btn_remove_marked_bombs.setOnClickListener { _ ->
-            minesweeperController?.scene?.removeBombs?.update()
+            minesweeperController?.gameControls?.removeBombs?.update()
         }
 
         btn_remove_border_zeros.setOnClickListener { _ ->
-            minesweeperController?.scene?.removeBorderZeros?.update()
+            minesweeperController?.gameControls?.removeBorderZeros?.update()
         }
 
         val touchReceiverCalculator = object: ITouchReceiverCalculator {
