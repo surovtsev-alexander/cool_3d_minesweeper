@@ -10,23 +10,26 @@ class CameraInfo() {
     }
 
     var scaleMatrix = identityMatrix()
+    var rotMatrix = identityMatrix()
     var viewMatrix = identityMatrix()
     var moveMatrix = identityMatrix()
     var projectionMatrix = identityMatrix()
-    var invProjectionMatrix = identityMatrix()
-    var rotMatrix = identityMatrix()
-    var iRotMatrix = identityMatrix()
+
+
     var MVP = identityMatrix()
-    var IMVP = identityMatrix()
+
+    var invProjectionMatrix = identityMatrix()
+    var invRotMatrix = identityMatrix()
+    var invMVP = identityMatrix()
 
     fun recalculateMVPMatrix() {
         MVP = projectionMatrix * moveMatrix * viewMatrix * rotMatrix * scaleMatrix
-        IMVP = MVP.inverse()
+        invMVP = MVP.inverse()
     }
 
     fun multiplyRotationMatrix(m: Mat4) {
         rotMatrix *= m
-        rotMatrix.inverse(iRotMatrix)
+        rotMatrix.inverse(invRotMatrix)
     }
 
     fun scale(factor: Float) {

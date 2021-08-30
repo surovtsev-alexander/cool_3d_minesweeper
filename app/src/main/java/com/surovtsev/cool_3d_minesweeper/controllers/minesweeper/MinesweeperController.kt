@@ -1,6 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
+import android.util.Log
+import com.google.gson.Gson
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
@@ -100,6 +102,15 @@ class MinesweeperController(
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()
+
+        if (false) {
+            val gson = Gson()
+            val x = gson.toJson(gameConfig)
+            Log.d("TEST+++", "gameConfigJson:\n$x")
+
+            //val y = gson.toJson(cameraInfo)
+            //Log.d("TEST+++", "cameraInfo:\n$y")
+        }
     }
 
     override fun onDrawFrame() {

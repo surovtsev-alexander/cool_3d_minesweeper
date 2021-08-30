@@ -48,7 +48,7 @@ class CameraInfoHelper(
 
     fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
         return fun(proj: Vec2): Vec3 = MatrixHelper.multMat4Vec3(
-            cameraInfo.IMVP,
+            cameraInfo.invMVP,
             Vec3(proj, z)
         )
     }

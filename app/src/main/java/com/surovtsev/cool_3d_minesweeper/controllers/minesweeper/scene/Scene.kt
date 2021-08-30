@@ -66,9 +66,9 @@ class Scene (
         }
 
         do {
-            if (clicked) {
-                //gameObjectsHolder.glPointerView.turnOn()
-            }
+//            if (clicked) {
+//                gameObjectsHolder.glPointerView.turnOn()
+//            }
 
             if (!glPointerView.isOn()) {
                 break
@@ -88,10 +88,9 @@ class Scene (
             glPointerView.draw()
         } while (false)
 
-        val glCube = cubeView
-        glCube.cubeGLESProgram.useProgram()
+        cubeView.cubeGLESProgram.useProgram()
 
-        glCube.bindData()
+        cubeView.bindData()
 
         gameLogic.openCubes()
 
@@ -111,10 +110,10 @@ class Scene (
 
         }
         if (cameraMoved) {
-            with(glCube.cubeGLESProgram) {
+            with(cubeView.cubeGLESProgram) {
                 fillMVP(cameraInfoHelper.cameraInfo.MVP)
             }
         }
-        glCube.draw()
+        cubeView.draw()
     }
 }

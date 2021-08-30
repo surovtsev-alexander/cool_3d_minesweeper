@@ -30,8 +30,8 @@ class CubeView(
     private val POSITION_COMPONENT_COUNT = 3
 
     private val vertexArray: VertexArray
-    val isEmptyArray: VertexArray
-    val textureCoordinatesArray: VertexArray
+    private val isEmptyArray: VertexArray
+    private val textureCoordinatesArray: VertexArray
 
     init {
         val cubeViewDataHelper = CubeViewDataHelper.createObject(
@@ -92,8 +92,6 @@ class CubeView(
         cubeSkin.iterateCubes { xyz ->
             val skin = xyz.getValue(cubeSkin.skins)
             val id = xyz.id
-
-            val startPos = id * cubeIndexesCount
 
             if (skin.isEmpty()) {
                 onesEmpty.copyInto(
