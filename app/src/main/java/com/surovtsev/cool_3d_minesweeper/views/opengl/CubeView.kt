@@ -5,6 +5,7 @@ import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewFactory
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram

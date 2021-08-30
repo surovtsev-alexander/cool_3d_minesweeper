@@ -2,9 +2,9 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
-import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
@@ -13,14 +13,21 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
+import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 
 class GameLogic(
     private val cubeSkin: CubeSkin,
-    private val textureUpdater: ICanUpdateTexture,
-    private val gameStatusesReceiver: IGameStatusesReceiver,
-    private val gameConfig: GameConfig
+    var textureUpdater: ICanUpdateTexture?,
+    private val gameConfig: GameConfig,
+    val gameStatusesReceiver: IGameStatusesReceiver,
+    timeUpdated: () -> Unit,
+    timeSpanHelper: TimeSpanHelper
 ) {
-    private var gameStatus = GameStatus.NO_BOBMS_PLACED
+    val gameLogicStateHelper = GameLogicStateHelper(
+        gameStatusesReceiver,
+        timeUpdated,
+        timeSpanHelper
+    )
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =
@@ -40,17 +47,17 @@ class GameLogic(
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
 
-        if (isGameOver()) {
+        if (gameLogicStateHelper.isGameOver()) {
             return
         }
 
-        if (gameStatus == GameStatus.NO_BOBMS_PLACED) {
+        if (gameLogicStateHelper.gameStatus == GameStatus.NO_BOBMS_PLACED) {
             bombsList += BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
             bombsLeft = bombsList.size
             gameStatusesReceiver.bombCountUpdated()
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
-            setGameState(GameStatus.BOMBS_PLACED)
+            gameLogicStateHelper.setGameState(GameStatus.BOMBS_PLACED)
         }
 
         val id = position.id
@@ -71,12 +78,6 @@ class GameLogic(
         prevClickInfo.time = currTime
     }
 
-    private fun setGameState(newState: GameStatus) {
-        gameStatus = newState
-
-        gameStatusesReceiver.gameStatusUpdated(gameStatus)
-    }
-
     private fun emptyCube(pointedCell: PointedCell) {
         val skin = pointedCell.skin
         val isBomb = pointedCell.skin.isBomb
@@ -84,7 +85,7 @@ class GameLogic(
         if (isBomb) {
             if (!skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameStatus.LOSE)
+                gameLogicStateHelper.setGameState(GameStatus.LOSE)
                 return
             }
 
@@ -108,7 +109,7 @@ class GameLogic(
         } else {
             if (skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameStatus.LOSE)
+                gameLogicStateHelper.setGameState(GameStatus.LOSE)
                 return
             }
         }
@@ -116,19 +117,15 @@ class GameLogic(
         setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EMPTY)
 
         if (bombsLeft == 0) {
-            setGameState(GameStatus.WIN)
+            gameLogicStateHelper.setGameState(GameStatus.WIN)
         }
     }
 
     val removeCount = 1
 
-    private fun isGameOver() = GameStatusHelper.isGameOver(gameStatus)
-
-    fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus)
-
     private fun processOnElement(list: MutableList<CellIndex>, action: (PointedCell) -> Unit) {
         for (i in 0 until removeCount) {
-            if (isGameOver()) {
+            if (gameLogicStateHelper.isGameOver()) {
                 return
             }
             if (list.count() == 0) {
@@ -270,7 +267,7 @@ class GameLogic(
         if (skin.isClosed()) {
             if (skin.isBomb) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                setGameState(GameStatus.LOSE)
+                gameLogicStateHelper.setGameState(GameStatus.LOSE)
             } else {
 //                Log.d("TEST+++", "open cube $pointedCube")
                 openCube(pointedCell)
@@ -287,7 +284,7 @@ class GameLogic(
 
         skin.setNumbers()
         skin.emptyIfZero()
-        textureUpdater.updateTexture(pointedCell)
+        textureUpdater?.updateTexture(pointedCell)
 
         openNeighbours(pointedCell)
     }
@@ -354,7 +351,7 @@ class GameLogic(
 
                 if (s.isBomb) {
                     setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    setGameState(GameStatus.LOSE)
+                    gameLogicStateHelper.setGameState(GameStatus.LOSE)
                     return
                 }
 
@@ -382,7 +379,7 @@ class GameLogic(
 
         skin.setNumbers()
         skin.emptyIfZero()
-        textureUpdater.updateTexture(pointedCell)
+        textureUpdater?.updateTexture(pointedCell)
     }
 
     private fun toggleMarkingCube(pointedCell: PointedCell) {
@@ -399,6 +396,6 @@ class GameLogic(
         pointedCell: PointedCell,
         textureType: TextureCoordinatesHelper.TextureType) {
         pointedCell.skin.setTexture(textureType)
-        textureUpdater.updateTexture(pointedCell)
+        textureUpdater?.updateTexture(pointedCell)
     }
 }

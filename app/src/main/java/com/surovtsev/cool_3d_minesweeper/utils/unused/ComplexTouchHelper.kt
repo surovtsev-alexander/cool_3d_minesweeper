@@ -1,11 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.utils.unused
 
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
+import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
-class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceiver {
+class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceiver {
     enum class TouchType {
         SHORT,
         LONG,
@@ -31,7 +31,7 @@ class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceive
     private var downTime = 0L
     private var clickTime = 0L
 
-    var movementStorer: IStoreMovement? = null
+    private var movementStorer: IStoreMovement? = null
 
     val movementThreshold = 10f
     val touchDelay = 100L
@@ -46,7 +46,7 @@ class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceive
                 TouchType.DOUBLE_TOUCH
         } else {
             touchPos = pos
-            downTime = customClock.time
+            downTime = customClock.timeAfterDeviceStartup
 
             movementStorer = movementStorer_
 
@@ -61,7 +61,7 @@ class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceive
                     break
                 }
 
-                val currTime = customClock.time
+                val currTime = customClock.timeAfterDeviceStartup
 
                 if (currTime - downTime > touchDelay) {
                     release()
@@ -93,7 +93,7 @@ class ComplexTouchHelper(private val customClock: CustomRealtime): ITouchReceive
     }
 
     fun tick() {
-        val currTime = customClock.time
+        val currTime = customClock.timeAfterDeviceStartup
         if (state == State.DELAY_BEFORE_LONG_TOUCH) {
             releaseIfMovedOrPerform {
                 if (currTime - downTime > longTouchDelay) {

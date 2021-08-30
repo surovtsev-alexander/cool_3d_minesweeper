@@ -8,7 +8,9 @@ enum class GameStatus {
 }
 
 object GameStatusHelper {
-    fun isGameOver(gameStatus: GameStatus) = (gameStatus == GameStatus.WIN || gameStatus == GameStatus.LOSE)
+    fun isGameNotStarted(gameStatus: GameStatus) = (gameStatus == GameStatus.NO_BOBMS_PLACED)
 
     fun isGameInProgress(gameStatus: GameStatus) = (gameStatus == GameStatus.BOMBS_PLACED)
+
+    fun isGameOver(gameStatus: GameStatus) = (gameStatus == GameStatus.WIN || gameStatus == GameStatus.LOSE)
 }

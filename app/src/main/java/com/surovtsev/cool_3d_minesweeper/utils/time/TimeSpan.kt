@@ -1,26 +1,27 @@
 package com.surovtsev.cool_3d_minesweeper.utils.time
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 
-class Ticker(
+class TimeSpan(
     private val interval: Long,
-    private val clock: CustomRealtime,
+    private val timeSpanHelper: TimeSpanHelper,
 ):
     Updatable(),
     ISwitch
 {
     private val switch: Switch = Switch()
 
-    private var  elapsedTimeBeforePause = 0L
-    private var onTime = currentTime()
-    private var prev = onTime
+    var  elapsedTimeBeforePause = 0L
+    var onTime = timeAfterDeviceStartup()
+    var prev = onTime
 
-    private fun currentTime() = clock.time
+    fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartup
 
     fun tick() {
-        val currTime = currentTime()
+        val currTime = timeAfterDeviceStartup()
 
         if (currTime - prev >= interval) {
             update()
@@ -28,12 +29,12 @@ class Ticker(
         }
     }
 
-    fun getElapsed() = elapsedTimeBeforePause + currentTime() - onTime
+    fun getElapsed() = elapsedTimeBeforePause + timeAfterDeviceStartup() - onTime
 
     override fun turnOn() {
         switch.turnOn()
 
-        onTime = currentTime()
+        onTime = timeAfterDeviceStartup()
         prev = onTime
 
         update()

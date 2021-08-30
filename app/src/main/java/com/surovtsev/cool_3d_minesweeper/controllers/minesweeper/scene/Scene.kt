@@ -4,18 +4,22 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.Game
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
+import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
+import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
 
 class Scene (
     private val gameLogic: GameLogic,
     private val gameObjectsHolder: GameObjectsHolder,
-    private val rendererClock: CustomRealtime,
-    val displaySize: Vec2i
+    private val timeSpanHelper: TimeSpanHelper,
+    val displaySize: Vec2i,
+    var cubeView: CubeView?,
+    var glPointerView: GLPointerView?
 ) {
     val cameraInfo = CameraInfo(displaySize)
     private val pointer = Pointer()
@@ -33,15 +37,13 @@ class Scene (
         )
 
     fun onSurfaceChanged() {
-        val glObject = gameObjectsHolder.cubeView
-
         val mVPMatrix = cameraInfo.MVP
-        with(glObject.cubeGLESProgram) {
+        with(cubeView!!.cubeGLESProgram) {
             useProgram()
             fillMVP(mVPMatrix)
         }
 
-        with(gameObjectsHolder.glPointerView.mGLESProgram) {
+        with(glPointerView!!.mGLESProgram) {
             useProgram()
             fillMVP(mVPMatrix)
         }
@@ -61,25 +63,25 @@ class Scene (
                 //gameObjectsHolder.glPointerView.turnOn()
             }
 
-            if (!gameObjectsHolder.glPointerView.isOn()) {
+            if (!glPointerView!!.isOn()) {
                 break
             }
 
             if (clicked) {
-                gameObjectsHolder.glPointerView.setPoints(touchHandler.pointer)
+                glPointerView!!.setPoints(touchHandler.pointer)
             }
 
-            gameObjectsHolder.glPointerView.mGLESProgram.useProgram()
+            glPointerView!!.mGLESProgram.useProgram()
             if (cameraMoved) {
-                with(gameObjectsHolder.glPointerView.mGLESProgram) {
+                with(glPointerView!!.mGLESProgram) {
                     fillMVP(cameraInfo.MVP)
                 }
             }
-            gameObjectsHolder.glPointerView.bindData()
-            gameObjectsHolder.glPointerView.draw()
+            glPointerView!!.bindData()
+            glPointerView!!.draw()
         } while (false)
 
-        val glCube = gameObjectsHolder.cubeView
+        val glCube = cubeView!!
         glCube.cubeGLESProgram.useProgram()
 
         glCube.bindData()
@@ -97,7 +99,7 @@ class Scene (
         if (clicked) {
             val cell = intersectionCalculator.getCell()
             if (cell != null) {
-                gameLogic.touchCell(pointer.touchType, cell, rendererClock.time)
+                gameLogic.touchCell(pointer.touchType, cell, timeSpanHelper.timeAfterDeviceStartup)
             }
 
         }

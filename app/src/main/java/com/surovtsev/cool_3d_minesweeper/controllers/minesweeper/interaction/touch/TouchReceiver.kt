@@ -1,13 +1,13 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.time.CustomRealtime
+import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
 class TouchReceiver(
-    private val customClock: CustomRealtime
+    private val customClock: TimeSpanHelper
 ): ITouchReceiver
 {
 
@@ -34,7 +34,7 @@ class TouchReceiver(
 
     override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
         touchPos = pos
-        downTime = customClock.time
+        downTime = customClock.timeAfterDeviceStartup
 
         movementStorer = movementStorer_
 
@@ -49,7 +49,7 @@ class TouchReceiver(
                     break
                 }
 
-                val currTime = customClock.time
+                val currTime = customClock.timeAfterDeviceStartup
 
                 if (currTime - downTime > touchDely) {
                     release()
@@ -79,7 +79,7 @@ class TouchReceiver(
     }
 
     fun tick() {
-        val currTime = customClock.time
+        val currTime = customClock.timeAfterDeviceStartup
         if (state == State.DELAY_BEFORE_LONG_TOUCH) {
             releaseIfMovedOrPerform {
                 if (currTime - downTime > longTouchDelay) {

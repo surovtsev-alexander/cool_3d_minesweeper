@@ -13,11 +13,9 @@ class GameObjectsHolder(
     context: Context,
     gameConfig: GameConfig
 ) {
-    val glPointerView: GLPointerView
     val cubeBorder: CubeBorder
     val cubeSkin: CubeSkin
-    val cubeView: CubeView
-
+    val cubeViewHelper: CubeViewFactory
     init {
 
         val cubesCoordinates =
@@ -37,18 +35,9 @@ class GameObjectsHolder(
                 gameConfig
             )
 
-        val cubeViewHelper = CubeViewFactory.getCubeView(
+        cubeViewHelper = CubeViewFactory.getCubeView(
             cubesCoordinates
         )
 
-        cubeView =
-            CubeView(
-                context,
-                cubeViewHelper.triangleCoordinates,
-                cubeViewHelper.isEmpty,
-                cubeViewHelper.textureCoordinates
-            )
-
-        glPointerView = GLPointerView(context)
     }
 }
