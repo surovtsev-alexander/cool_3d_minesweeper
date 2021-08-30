@@ -8,9 +8,9 @@ import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.my_dialog.MyDialog
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
@@ -18,14 +18,14 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import kotlinx.android.synthetic.main.activity_game.*
 
-class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
+class GameActivity : AppCompatActivity(), IGameEventsReceiver {
     private var minesweeperController: MinesweeperController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        updateTime()
-        bombCountUpdated()
+
+        (this as IGameEventsReceiver).init()
 
         if (!OpenGLInfoHelper.isSupportEs2(this)) {
             Toast.makeText(this
@@ -38,8 +38,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
 
         minesweeperController = MinesweeperController(
             this,
-            this,
-            this::updateTime
+            this
         )
         glsv_main.setRenderer(minesweeperController!!.gameRenderer)
 
@@ -90,7 +89,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         lbl_bombs_count.text = (minesweeperController?.gameLogic?.bombsLeft?:0).toString()
     }
 
-    private fun updateTime() {
+    override fun timeUpdated() {
         val time = minesweeperController?.gameLogic?.gameLogicStateHelper?.getElapsed()?:0
         lbl_time.text = DateUtils.formatElapsedTime( time / 1000)
     }

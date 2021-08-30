@@ -1,19 +1,19 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers
 
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubesCoordinatesGenerator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 
-class CubeViewFactory(
+class CubeViewDataHelper(
     val triangleCoordinates: FloatArray,
     val isEmpty: FloatArray,
     val textureCoordinates: FloatArray
 ) {
     companion object {
-        fun getCubeView(
-            cubesCoordinatesGenerator: CubesCoordinatesGenerator
-        ): CubeViewFactory {
-            val compactCoordinates = cubesCoordinatesGenerator.trianglesCoordinates
-            val indexes = cubesCoordinatesGenerator.indexes
+        fun createObject(
+            cubeCoordinates: CubeCoordinates
+        ): CubeViewDataHelper {
+            val compactCoordinates = cubeCoordinates.trianglesCoordinates
+            val indexes = cubeCoordinates.indexes
             val pointsCount = indexes.count()
 
             val trianglesCoordinatesCount = 3 * pointsCount
@@ -42,7 +42,7 @@ class CubeViewFactory(
 
 
             val res =
-                CubeViewFactory(
+                CubeViewDataHelper(
                     trianglesCoordinates,
                     isEmpty,
                     textureCoordinates

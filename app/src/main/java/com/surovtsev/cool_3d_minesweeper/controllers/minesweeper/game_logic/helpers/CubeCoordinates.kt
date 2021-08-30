@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import glm_.vec3.Vec3
 
-class CubesCoordinatesGenerator(
+class CubeCoordinates(
     val trianglesCoordinates: FloatArray,
     val indexes: ShortArray,
     val centers: Array<Vec3>
@@ -80,9 +80,9 @@ class CubesCoordinatesGenerator(
         }
         */
 
-        fun generateCubesCoordinates(
+        fun createObject(
             gameConfig: GameConfig
-        ): CubesCoordinatesGenerator {
+        ): CubeCoordinates {
             val indexesArray =
                 invExtendedIndexedArray
 
@@ -137,7 +137,7 @@ class CubesCoordinatesGenerator(
                 fillIndexes()
             }
 
-            return CubesCoordinatesGenerator(
+            return CubeCoordinates(
                 trianglesCoordinates,
                 indexes,
                 centers

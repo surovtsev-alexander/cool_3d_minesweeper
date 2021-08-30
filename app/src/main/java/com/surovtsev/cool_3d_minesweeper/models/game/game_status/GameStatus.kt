@@ -8,6 +8,8 @@ enum class GameStatus {
 }
 
 object GameStatusHelper {
+    val initStatus = GameStatus.NO_BOBMS_PLACED
+
     fun isGameNotStarted(gameStatus: GameStatus) = (gameStatus == GameStatus.NO_BOBMS_PLACED)
 
     fun isGameInProgress(gameStatus: GameStatus) = (gameStatus == GameStatus.BOMBS_PLACED)

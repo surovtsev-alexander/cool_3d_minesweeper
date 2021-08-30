@@ -1,9 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
@@ -19,13 +19,11 @@ class GameLogic(
     private val cubeSkin: CubeSkin,
     var textureUpdater: ICanUpdateTexture?,
     private val gameConfig: GameConfig,
-    val gameStatusesReceiver: IGameStatusesReceiver,
-    timeUpdated: () -> Unit,
+    val gameEventsReceiver: IGameEventsReceiver,
     timeSpanHelper: TimeSpanHelper
 ) {
     val gameLogicStateHelper = GameLogicStateHelper(
-        gameStatusesReceiver,
-        timeUpdated,
+        gameEventsReceiver,
         timeSpanHelper
     )
 
@@ -54,7 +52,7 @@ class GameLogic(
         if (gameLogicStateHelper.gameStatus == GameStatus.NO_BOBMS_PLACED) {
             bombsList += BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
             bombsLeft = bombsList.size
-            gameStatusesReceiver.bombCountUpdated()
+            gameEventsReceiver.bombCountUpdated()
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
             gameLogicStateHelper.setGameState(GameStatus.BOMBS_PLACED)
@@ -105,7 +103,7 @@ class GameLogic(
             openNeighbours(pointedCell)
 
             bombsLeft--;
-            gameStatusesReceiver.bombCountUpdated()
+            gameEventsReceiver.bombCountUpdated()
         } else {
             if (skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
@@ -269,11 +267,12 @@ class GameLogic(
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 gameLogicStateHelper.setGameState(GameStatus.LOSE)
             } else {
-//                Log.d("TEST+++", "open cube $pointedCube")
                 openCube(pointedCell)
             }
         } else {
-//            Log.d("TEST+++", "open cube neighbours $pointedCube")
+            if (skin.isBomb) {
+                return
+            }
             openNeighboursIfBombsMarked(pointedCell)
             openNeighbours(pointedCell)
         }

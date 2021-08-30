@@ -4,8 +4,8 @@ import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubesCoordinatesGenerator
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewFactory
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
@@ -15,9 +15,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
 class CubeView(
     context: Context,
-    trianglesCoordinates: FloatArray,
-    isEmpty: FloatArray,
-    textureCoordinates: FloatArray
+    cubeCoordinates: CubeCoordinates
 ):
     IGLObject,
     ICanUpdateTexture
@@ -30,11 +28,20 @@ class CubeView(
 
     private val POSITION_COMPONENT_COUNT = 3
 
-    private val vertexArray = VertexArray(trianglesCoordinates)
-    val isEmptyArray = VertexArray(isEmpty)
-    val textureCoordinatesArray = VertexArray(textureCoordinates)
+    private val vertexArray: VertexArray
+    val isEmptyArray: VertexArray
+    val textureCoordinatesArray: VertexArray
 
     init {
+        val cubeViewDataHelper = CubeViewDataHelper.createObject(
+            cubeCoordinates
+        )
+
+        vertexArray = VertexArray(cubeViewDataHelper.triangleCoordinates)
+        isEmptyArray = VertexArray(cubeViewDataHelper.isEmpty)
+        textureCoordinatesArray = VertexArray(cubeViewDataHelper.textureCoordinates)
+
+
         cubeGLESProgram.prepareProgram()
         setTexture()
     }
@@ -46,7 +53,7 @@ class CubeView(
         val empty = skin.isEmpty()
 
         if (empty) {
-            val cubeIndexsCount = CubesCoordinatesGenerator.invExtendedIndexedArray.size
+            val cubeIndexsCount = CubeCoordinates.invExtendedIndexedArray.size
             val startPos = cubeIndexsCount * id
 
             isEmptyArray.updateBuffer(

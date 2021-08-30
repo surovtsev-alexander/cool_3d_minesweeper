@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusesReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResume
@@ -9,8 +9,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpan
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 
 class GameLogicStateHelper(
-    private val gameStatusesReceiver: IGameStatusesReceiver,
-    private val timeUpdated: () -> Unit,
+    private val gameEventsReceiver: IGameEventsReceiver,
     timeSpanHelper: TimeSpanHelper
 ):
     INeedToBeUpdated, IHandlePauseResume
@@ -34,7 +33,7 @@ class GameLogicStateHelper(
         if (timeSpan.isOn()) {
             timeSpan.tick()
             if (timeSpan.getAndRelease()) {
-                timeUpdated()
+                gameEventsReceiver.timeUpdated()
             }
         }
     }
@@ -53,7 +52,7 @@ class GameLogicStateHelper(
 
     fun setGameState(newState: GameStatus) {
         gameStatus = newState
-        gameStatusesReceiver.gameStatusUpdated(gameStatus)
+        gameEventsReceiver.gameStatusUpdated(gameStatus)
 
         if (isGameInProgress()) {
             timeSpan.turnOn()
