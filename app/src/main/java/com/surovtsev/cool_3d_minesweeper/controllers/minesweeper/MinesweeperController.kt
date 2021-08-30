@@ -96,6 +96,8 @@ class MinesweeperController(
 
         scene!!.onSurfaceChanged()
 
+        gameViewsHolder!!.cubeView.updateTexture(gameObjectsHolder.cubeSkin)
+
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()
     }

@@ -47,6 +47,16 @@ class CubeView(
         setTexture()
     }
 
+    companion object {
+        private val cubeIndexesCount =
+            CubeCoordinates.invExtendedIndexedArray.size
+        private val textureIndexesCount =
+            TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count() * 6
+
+        private val onesEmpty = FloatArray(cubeIndexesCount) { 1f }
+        private val zerosEmpty = FloatArray(cubeIndexesCount) { 0f }
+    }
+
     override fun updateTexture(pointedCell: PointedCell) {
         val position = pointedCell.index
         val skin = pointedCell.skin
@@ -54,30 +64,56 @@ class CubeView(
         val empty = skin.isEmpty()
 
         if (empty) {
-            val cubeIndexsCount = CubeCoordinates.invExtendedIndexedArray.size
-            val startPos = cubeIndexsCount * id
+            val startPos = cubeIndexesCount * id
 
             isEmptyArray.updateBuffer(
-                FloatArray(cubeIndexsCount) { 1f },
-                startPos,
-                cubeIndexsCount
+                onesEmpty,
+                startPos
             )
         } else {
-            val textureIndexesCount =
-                TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
-            val startPos = textureIndexesCount * id * 6
+            val startPos = textureIndexesCount * id
 
             val resArray = TextureCoordinatesHelper.getTextureCoordinates(skin.texture)
             textureCoordinatesArray.updateBuffer(
                 resArray,
-                startPos,
-                resArray.count()
+                startPos
             )
         }
     }
 
     fun updateTexture(cubeSkin: CubeSkin) {
-        TODO("implement me")
+        val cubesCount = cubeSkin.cubesCount
+
+        val emptyCubes =
+            FloatArray(cubeIndexesCount * cubesCount) { 0f }
+        val textureCoordinates =
+            FloatArray(textureIndexesCount * cubesCount)
+
+        cubeSkin.iterateCubes { xyz ->
+            val skin = xyz.getValue(cubeSkin.skins)
+            val id = xyz.id
+
+            val startPos = id * cubeIndexesCount
+
+            if (skin.isEmpty()) {
+                onesEmpty.copyInto(
+                    emptyCubes,
+                    cubeIndexesCount * id
+                )
+            } else {
+                skin.getTextureCoordinates().copyInto(
+                    textureCoordinates,
+                    textureIndexesCount * id
+                )
+            }
+        }
+
+        isEmptyArray.updateBuffer(
+            emptyCubes, 0
+        )
+        textureCoordinatesArray.updateBuffer(
+            textureCoordinates, 0
+        )
     }
 
     override fun bindData() {

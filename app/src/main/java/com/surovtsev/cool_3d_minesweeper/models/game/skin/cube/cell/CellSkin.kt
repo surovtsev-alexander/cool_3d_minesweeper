@@ -53,4 +53,6 @@ data class CellSkin(
         }
         return false
     }
+
+    fun getTextureCoordinates() = TextureCoordinatesHelper.getTextureCoordinates(texture)
 }

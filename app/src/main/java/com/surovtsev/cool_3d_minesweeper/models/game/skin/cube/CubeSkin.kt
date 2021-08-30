@@ -17,6 +17,8 @@ class CubeSkin(
             counts
         )
 
+    val cubesCount = counts.x * counts.y * counts.z
+
     companion object {
 
         fun iterateCubes(counts: Vec3s, action: (xyz: CellIndex) -> Unit) {

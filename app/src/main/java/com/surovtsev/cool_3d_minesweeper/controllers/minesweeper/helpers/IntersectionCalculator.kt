@@ -23,15 +23,15 @@ class IntersectionCalculator(
         var candidateCubes =
             mutableListOf<Pair<Float, PointedCellWithBorder>>()
 
-        cubeSkin.iterateCubes { p: CellIndex ->
+        cubeSkin.iterateCubes { xyz: CellIndex ->
             do {
-                val skin = p.getValue(skins)
+                val skin = xyz.getValue(skins)
 
                 if (skin.isEmpty()) {
                     continue
                 }
 
-                val spaceParameter = p.getValue(borders);
+                val spaceParameter = xyz.getValue(borders);
                 val center = spaceParameter.center
 
                 val projection = pointerDescriptor.calcProjection(center)
@@ -43,7 +43,7 @@ class IntersectionCalculator(
 
                     candidateCubes.add(
                         fromNear to PointedCellWithBorder(
-                            p, skin, spaceParameter
+                            xyz, skin, spaceParameter
                         )
                     )
                 }
