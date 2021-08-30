@@ -9,15 +9,15 @@ import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
+import glm_.vec2.Vec2i
 
 class Scene (
     private val gameLogic: GameLogic,
     private val gameObjectsHolder: GameObjectsHolder,
     private val rendererClock: CustomRealtime,
-    width: Int,
-    height: Int
+    val displaySize: Vec2i
 ) {
-    private val cameraInfo = CameraInfo(width, height)
+    val cameraInfo = CameraInfo(displaySize)
     private val pointer = Pointer()
 
     val moveHandler = MoveHandler(cameraInfo)
@@ -25,13 +25,12 @@ class Scene (
     val removeBombs = Updatable(false)
     val removeBorderZeros = Updatable(false)
 
-    val cellCalculator =
+    private val intersectionCalculator =
         IntersectionCalculator(
             pointer,
             gameObjectsHolder.cubeSkin,
             gameObjectsHolder.cubeBorder
         )
-
 
     fun onSurfaceChanged() {
         val glObject = gameObjectsHolder.cubeView
@@ -96,7 +95,7 @@ class Scene (
         gameLogic.removeCubes()
 
         if (clicked) {
-            val cell = cellCalculator.getIntersection()
+            val cell = intersectionCalculator.getCell()
             if (cell != null) {
                 gameLogic.touchCell(pointer.touchType, cell, rendererClock.time)
             }

@@ -5,26 +5,31 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import glm_.glm;
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
+import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 
 class CameraInfo(
-    displayWidth: Int, displayHeight: Int,
-    zNear: Float = 2f, zFar: Float = 20f): Updatable()  {
-    val displayWidthF = displayWidth.toFloat()
-    val displayHeightF = displayHeight.toFloat()
+    val displaySize: Vec2i,
+    zNear: Float = 2f,
+    zFar: Float = 20f
+):
+    Updatable()
+{
+    val displayWidthF = displaySize.x.toFloat()
+    val displayHeightF = displaySize.y.toFloat()
 
     var scaleMatrix = MatrixHelper.identityMatrix()
     var viewMatrix = MatrixHelper.identityMatrix()
     var moveMatrix = MatrixHelper.identityMatrix()
     var projectionMatrix = MatrixHelper.identityMatrix()
-    var IProjectionMatrix = MatrixHelper.identityMatrix()
+    private var invProjectionMatrix = MatrixHelper.identityMatrix()
 
 
-    fun identity_matrix() = MatrixHelper.identityMatrix()
+    private fun identityMatix() = MatrixHelper.identityMatrix()
 
-    var rotMatrix = identity_matrix()
+    var rotMatrix = identityMatix()
 
-    var iRotMatrix = identity_matrix()
+    var iRotMatrix = identityMatix()
         private set
 
 
@@ -38,7 +43,7 @@ class CameraInfo(
             displayWidthF / displayHeightF,
             zNear, zFar
         )
-        IProjectionMatrix = projectionMatrix.inverse()
+        invProjectionMatrix = projectionMatrix.inverse()
 
         viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
 
@@ -68,12 +73,12 @@ class CameraInfo(
     }
 
     fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.multMat4Vec3(
-        IProjectionMatrix,
+        invProjectionMatrix,
         Vec3(proj, -1)
     )
 
     fun multiplyRotationMatrix(m: Mat4) {
-        rotMatrix = rotMatrix * m
+        rotMatrix *= m
         rotMatrix.inverse(iRotMatrix)
 
         update()

@@ -13,8 +13,9 @@ class Ticker(
 {
     private val switch: Switch = Switch()
 
-    private var startTime = currentTime()
-    private var prev = startTime
+    private var  elapsedTimeBeforePause = 0L
+    private var onTime = currentTime()
+    private var prev = onTime
 
     private fun currentTime() = clock.time
 
@@ -27,18 +28,22 @@ class Ticker(
         }
     }
 
-    fun getElapsed() = currentTime() - startTime
+    fun getElapsed() = elapsedTimeBeforePause + currentTime() - onTime
 
     override fun turnOn() {
         switch.turnOn()
 
-        startTime = currentTime()
-        prev = startTime
+        onTime = currentTime()
+        prev = onTime
 
         update()
     }
 
-    override fun turnOff() = switch.turnOff()
+    override fun turnOff() {
+        switch.turnOff()
+
+        elapsedTimeBeforePause = getElapsed()
+    }
 
     override fun isOn() = switch.isOn()
 }

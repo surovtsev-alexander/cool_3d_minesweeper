@@ -11,6 +11,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.tou
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
+import glm_.vec2.Vec2i
 
 interface IHandleOpenGLEvents {
     fun onSurfaceCreated()
@@ -23,11 +25,16 @@ class MinesweeperController(
     private val gameStatusesReceiver: IGameStatusesReceiver,
     private val timeUpdated: () -> Unit
 
-): IHandleOpenGLEvents {
+):
+    IHandleOpenGLEvents,
+    IHandlePauseResumeDestroy
+{
     val gameRenderer = GLESRenderer(this)
 
     private val realtime = CustomRealtime()
     val touchReceiver = TouchReceiver(realtime)
+
+    // TODO: move to gameLogic
     val gameTimeTicker = Ticker(1000L, realtime)
 
     private val gameConfig: GameConfig = GameConfigFactory.createGameConfig()
@@ -52,14 +59,21 @@ class MinesweeperController(
     }
 
     override fun onSurfaceChanged(width: Int, height: Int) {
-        scene =
-            Scene(
-                gameLogic!!,
-                gameObjectsHolder!!,
-                realtime,
-                width,
-                height
-            )
+        val displaySize = Vec2i(width, height)
+
+        val createScene = (
+                scene == null ||
+                scene!!.cameraInfo.displaySize != displaySize)
+
+        if (createScene) {
+            scene =
+                Scene(
+                    gameLogic!!,
+                    gameObjectsHolder!!,
+                    realtime,
+                    displaySize
+                )
+        }
 
         scene!!.onSurfaceChanged()
     }
@@ -81,5 +95,22 @@ class MinesweeperController(
         }
 
         scene?.onDrawFrame()
+    }
+
+    override fun onPause() {
+        gameTimeTicker.turnOff()
+    }
+
+    override fun onResume() {
+        if (gameLogic!= null) {
+            if (gameLogic!!.isGameInProgress()) {
+                realtime.updateTime()
+                gameTimeTicker.turnOn()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+
     }
 }

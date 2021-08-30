@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.Log
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
@@ -85,7 +86,7 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
             val manager = supportFragmentManager
             gameStatusDialog.show(manager, "gameStatusDialog")
 
-        } else if (GameStatusHelper.isGameStarted(newStatus)) {
+        } else if (GameStatusHelper.isGameInProgress(newStatus)) {
             minesweeperController?.gameTimeTicker?.turnOn()
         }
     }
@@ -103,21 +104,32 @@ class GameActivity : AppCompatActivity(), IGameStatusesReceiver {
         super.onPause()
 
         if (minesweeperController != null) {
+            minesweeperController!!.onPause()
             glsv_main.onPause()
         }
+
+        Log.d("TEST+++", "GameActivity onPause")
+
     }
 
     override fun onResume() {
         super.onResume()
 
         if (minesweeperController != null) {
+            minesweeperController!!.onResume()
             glsv_main.onResume()
         }
+
+        Log.d("TEST+++", "GameActivity onResume")
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
+        minesweeperController?.onDestroy()
+
         ApplicationController.instance!!.messagesComponent = null
+
+        Log.d("TEST+++", "GameActivity onDestroy")
     }
 }

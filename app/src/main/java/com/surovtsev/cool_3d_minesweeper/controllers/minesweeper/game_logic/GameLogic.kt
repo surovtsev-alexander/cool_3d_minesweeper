@@ -20,7 +20,7 @@ class GameLogic(
     private val gameStatusesReceiver: IGameStatusesReceiver,
     private val gameConfig: GameConfig
 ) {
-    private var state = GameStatus.NO_BOBMS_PLACED
+    private var gameStatus = GameStatus.NO_BOBMS_PLACED
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =
@@ -40,11 +40,11 @@ class GameLogic(
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
 
-        if (gameIsOver()) {
+        if (isGameOver()) {
             return
         }
 
-        if (state == GameStatus.NO_BOBMS_PLACED) {
+        if (gameStatus == GameStatus.NO_BOBMS_PLACED) {
             bombsList += BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
             bombsLeft = bombsList.size
             gameStatusesReceiver.bombCountUpdated()
@@ -72,9 +72,9 @@ class GameLogic(
     }
 
     private fun setGameState(newState: GameStatus) {
-        state = newState
+        gameStatus = newState
 
-        gameStatusesReceiver.gameStatusUpdated(state)
+        gameStatusesReceiver.gameStatusUpdated(gameStatus)
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
@@ -122,11 +122,13 @@ class GameLogic(
 
     val removeCount = 1
 
-    private fun gameIsOver() = GameStatusHelper.isGameOver(state)
+    private fun isGameOver() = GameStatusHelper.isGameOver(gameStatus)
+
+    fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus)
 
     private fun processOnElement(list: MutableList<CellIndex>, action: (PointedCell) -> Unit) {
         for (i in 0 until removeCount) {
-            if (gameIsOver()) {
+            if (isGameOver()) {
                 return
             }
             if (list.count() == 0) {
@@ -384,16 +386,12 @@ class GameLogic(
     }
 
     private fun toggleMarkingCube(pointedCell: PointedCell) {
-        when (pointedCell.skin.texture[0]) {
-            TextureCoordinatesHelper.TextureType.CLOSED -> {
-                setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.MARKED)
-            }
-            TextureCoordinatesHelper.TextureType.MARKED -> {
-                setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.CLOSED)
-            }
-            else -> {
-                assert(false)
-            }
+        val skin = pointedCell.skin.texture[0]
+
+        if (skin == TextureCoordinatesHelper.TextureType.CLOSED) {
+            setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.MARKED)
+        } else if (skin == TextureCoordinatesHelper.TextureType.MARKED) {
+            setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.CLOSED)
         }
     }
 

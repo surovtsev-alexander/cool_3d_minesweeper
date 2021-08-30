@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.IHandleOpenGLEvents
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -15,12 +16,16 @@ class GLESRenderer(
         glEnable(GL_CULL_FACE)
 
         openglEventsHandler.onSurfaceCreated()
+
+        Log.d("TEST+++", "GLESRenderer onSurfaceCreated")
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
 
         openglEventsHandler.onSurfaceChanged(width, height)
+
+        Log.d("TEST+++", "GLESRenderer onSurfaceChanged $width $height")
     }
 
     override fun onDrawFrame(gl: GL10?) {

@@ -17,7 +17,7 @@ class IntersectionCalculator(
     private val borders = cubeBorder.cells
     private val squaredCubeSphereRadius = cubeBorder.squaredCellSphereRadius
 
-    fun getIntersection(): PointedCell? {
+    fun getCell(): PointedCell? {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         var candidateCubes =
