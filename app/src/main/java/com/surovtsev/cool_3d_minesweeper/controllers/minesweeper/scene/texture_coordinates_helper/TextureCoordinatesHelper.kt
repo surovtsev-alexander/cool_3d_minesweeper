@@ -1,8 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper
 
+import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
+import glm_.vec3.Vec3s
 
 object TextureCoordinatesHelper {
     val textureToSquareTemplateCoordinates = floatArrayOf(
@@ -35,7 +37,7 @@ object TextureCoordinatesHelper {
 
     val commonTexturesCount = 4
 
-    val numberTextures = TextureType.values().drop(4)
+    val numberTextures = TextureType.values().drop(commonTexturesCount)
 
     val commonTexturesPositions = mapOf(
         TextureType.EMPTY to Vec2i(0, 0),
@@ -83,10 +85,65 @@ object TextureCoordinatesHelper {
     }
 
 
-    val textureCoordinates = texturesPositions.map { (t, p) ->
-        t to getTextureCoordinates(
-            p
-        )
-    }.toMap()
+    val textureCoordinates: Map<TextureType, FloatArray>
 
+
+    private val textureTypeCount = TextureType.values().count()
+    private val counts = Vec3s(textureTypeCount)
+
+    private val possibleSkins: Array<CellIndex>
+    private val possibleTextureCoordinates: Map<Int, FloatArray>
+
+    init {
+        textureCoordinates = texturesPositions.map { (t, p) ->
+            t to getTextureCoordinates(
+                p
+            )
+        }.toMap()
+
+
+        val numberTexturesRange = (commonTexturesCount until textureTypeCount)
+
+        val c = (0 until commonTexturesCount).map {
+            CellIndex(it, it, it, counts)
+        }.toTypedArray()
+
+        val n = numberTexturesRange.map { x ->
+            numberTexturesRange.map { y ->
+                numberTexturesRange.map { z ->
+                    CellIndex(x, y, z, counts)
+                }
+            }.flatten()
+        }.flatten().toTypedArray()
+
+        possibleSkins = c + n
+
+        possibleTextureCoordinates = possibleSkins.map { it ->
+            val id = it.id
+            val s = it.getVec()
+
+            fun textureIndexes() = arrayOf(
+                s[1],
+                s[2],
+                s[0],
+                s[2],
+                s[0],
+                s[1]
+            )
+
+            val a = textureIndexes().map {x: Int ->
+                textureCoordinates[TextureType.values()[x]]!!.asIterable()
+            }.flatten().toFloatArray()
+            id to a
+        }.toMap()
+    }
+
+    fun getTextureCoordinates(t: Array<TextureType>): FloatArray {
+        val ci = CellIndex(
+            t[0].ordinal, t[1].ordinal, t[2].ordinal,
+            counts
+        )
+
+        return possibleTextureCoordinates[ci.id]!!
+    }
 }

@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_c
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
@@ -66,25 +67,17 @@ class CubeView(
                 TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count()
             val startPos = textureIndexesCount * id * 6
 
-            val xx = arrayOf(
-                skin.texture[1],
-                skin.texture[2],
-                skin.texture[0],
-                skin.texture[2],
-                skin.texture[0],
-                skin.texture[1],
-            )
-
-
-            val resArray = xx.map {
-                TextureCoordinatesHelper.textureCoordinates[it]!!.asIterable()
-            }.flatten().toFloatArray()
+            val resArray = TextureCoordinatesHelper.getTextureCoordinates(skin.texture)
             textureCoordinatesArray.updateBuffer(
                 resArray,
                 startPos,
                 resArray.count()
             )
         }
+    }
+
+    fun updateTexture(cubeSkin: CubeSkin) {
+        TODO("implement me")
     }
 
     override fun bindData() {
