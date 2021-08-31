@@ -108,7 +108,7 @@ object NeighboursCalculator {
         }
     }
 
-    fun fillNeighbours(cubeSkin: CubeSkin, bombsList: BombsList) {
+    fun fillNeighbours(cubeSkin: CubeSkin, bombsList: List<CellIndex>) {
         val fl = { c: PointedCell, i: Int ->
                 c.skin.neighbourBombs[i] += 1
         }

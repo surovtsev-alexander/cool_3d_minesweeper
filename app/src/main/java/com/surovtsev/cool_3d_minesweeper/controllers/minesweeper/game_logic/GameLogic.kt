@@ -57,8 +57,7 @@ class GameLogic(
 
         if (gameLogicStateHelper.gameStatus == GameStatus.NO_BOBMS_PLACED) {
             val bombsList = BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
-            bombsLeft = bombsList.size
-            gameEventsReceiver.bombCountUpdated()
+            setBombsLeft(bombsList.size)
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
             gameLogicStateHelper.setGameState(GameStatus.BOMBS_PLACED)
@@ -80,6 +79,11 @@ class GameLogic(
 
         prevClickInfo.id = id
         prevClickInfo.time = currTime
+    }
+
+    fun setBombsLeft(v: Int) {
+        bombsLeft = v
+        gameEventsReceiver.bombCountUpdated()
     }
 
     private fun emptyCube(pointedCell: PointedCell) {

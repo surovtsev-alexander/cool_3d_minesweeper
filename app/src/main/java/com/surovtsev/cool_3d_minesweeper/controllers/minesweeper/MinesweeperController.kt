@@ -94,6 +94,11 @@ class MinesweeperController(
             cameraInfo = save!!.cameraInfoToSave.getCameraInfo()
 
             save!!.gameLogicToSave.applySavedData(gameLogic)
+
+            save!!.cubeSkinToSave.applySavedData(
+                gameObjectsHolder.cubeSkin,
+                gameLogic
+            )
         } else {
             cameraInfo = CameraInfo()
         }
@@ -136,6 +141,9 @@ class MinesweeperController(
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()
+
+        gameLogic.gameEventsReceiver.bombCountUpdated()
+        gameLogic.gameEventsReceiver.timeUpdated()
     }
 
     override fun onDrawFrame() {
@@ -154,14 +162,7 @@ class MinesweeperController(
     override fun onPause() {
         Log.d("TEST+++", "MinesweeperController onPause")
         gameLogic.gameLogicStateHelper.onPause()
-    }
 
-    override fun onResume() {
-        Log.d("TEST+++", "MinesweeperController onResume")
-    }
-
-    override fun onDestroy() {
-        Log.d("TEST+++", "MinesweeperController onResume")
         val gson = Gson()
         val save = Save.createObject(
             gameConfig,
@@ -172,5 +173,13 @@ class MinesweeperController(
         val saveJson = gson.toJson(save)
 
         SaveController(context).save(saveJson)
+    }
+
+    override fun onResume() {
+        Log.d("TEST+++", "MinesweeperController onResume")
+    }
+
+    override fun onDestroy() {
+        Log.d("TEST+++", "MinesweeperController onResume")
     }
 }
