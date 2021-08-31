@@ -11,21 +11,26 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelpe
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.my_dialog.MyDialog
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
-import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), IGameEventsReceiver {
     private var minesweeperController: MinesweeperController? = null
 
+    companion object {
+        const val LoadGame = "LoadGame"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        val intent = getIntent()
+        val loadGame = intent.getBooleanExtra(LoadGame, false)
 
         (this as IGameEventsReceiver).init()
 
@@ -40,7 +45,8 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
 
         minesweeperController = MinesweeperController(
             this,
-            this
+            this,
+            loadGame
         )
         glsv_main.setRenderer(minesweeperController!!.gameRenderer)
 

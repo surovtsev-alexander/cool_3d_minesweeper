@@ -10,6 +10,13 @@
     tools:context=".views.activities.MainActivity">
 
     <Button
+        android:id="@+id/btn_load_game"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="load game"
+        />
+
+    <Button
         android:id="@+id/btn_start_game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

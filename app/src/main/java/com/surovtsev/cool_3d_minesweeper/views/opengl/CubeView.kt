@@ -82,15 +82,16 @@ class CubeView(
     }
 
     fun updateTexture(cubeSkin: CubeSkin) {
-        val cubesCount = cubeSkin.cubesCount
+        val cubesCount = cubeSkin.cellCount
 
         val emptyCubes =
             FloatArray(cubeIndexesCount * cubesCount) { 0f }
         val textureCoordinates =
             FloatArray(textureIndexesCount * cubesCount)
 
+        val skins = cubeSkin.skins
         cubeSkin.iterateCubes { xyz ->
-            val skin = xyz.getValue(cubeSkin.skins)
+            val skin = xyz.getValue(skins)
             val id = xyz.id
 
             if (skin.isEmpty()) {

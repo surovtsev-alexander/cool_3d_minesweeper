@@ -31,6 +31,10 @@ class TimeSpan(
 
     fun getElapsed() = elapsedTimeBeforePause + timeAfterDeviceStartup() - onTime
 
+    fun setElapsed(elapsed: Long) {
+        elapsedTimeBeforePause = elapsed
+    }
+
     override fun turnOn() {
         switch.turnOn()
 

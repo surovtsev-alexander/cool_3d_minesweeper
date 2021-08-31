@@ -35,12 +35,18 @@ class GameLogic(
         )
     private val doubleClickDelay = 200L
 
-    private val bombsList = mutableListOf<CellIndex>()
-    private val cubesToOpen = mutableListOf<CellIndex>()
-    private val cubesToRemove = mutableListOf<CellIndex>()
+    val cubesToOpen = mutableListOf<CellIndex>()
+    val cubesToRemove = mutableListOf<CellIndex>()
 
     var bombsLeft = 0
         private set
+
+    fun applySavedData(
+        cubesToOpen_: List<CellIndex>,
+        cubesToRemove_: List<CellIndex>) {
+        cubesToOpen += cubesToOpen_
+        cubesToRemove += cubesToRemove_
+    }
 
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
@@ -50,7 +56,7 @@ class GameLogic(
         }
 
         if (gameLogicStateHelper.gameStatus == GameStatus.NO_BOBMS_PLACED) {
-            bombsList += BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
+            val bombsList = BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
             bombsLeft = bombsList.size
             gameEventsReceiver.bombCountUpdated()
 

@@ -62,4 +62,9 @@ class GameLogicStateHelper(
     }
 
     fun getElapsed() = timeSpan.getElapsed()
+
+    fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
+        timeSpan.setElapsed(elapsedTime)
+        setGameState(gameStatus)
+    }
 }

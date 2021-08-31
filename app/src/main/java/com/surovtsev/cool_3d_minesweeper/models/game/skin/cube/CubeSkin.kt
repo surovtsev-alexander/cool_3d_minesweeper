@@ -17,7 +17,7 @@ class CubeSkin(
             counts
         )
 
-    val cubesCount = counts.x * counts.y * counts.z
+    val cellCount = counts.x * counts.y * counts.z
 
     companion object {
 
