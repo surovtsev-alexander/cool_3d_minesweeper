@@ -48,7 +48,7 @@ class CubeSkin(
             }
         }
 
-    fun getPointedCube(p: CellIndex) =
+    fun getPointedCell(p: CellIndex) =
         PointedCell(
             p,
             p.getValue(skins)

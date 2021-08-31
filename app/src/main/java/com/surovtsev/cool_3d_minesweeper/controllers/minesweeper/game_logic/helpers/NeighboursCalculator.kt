@@ -9,7 +9,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 
-
 object NeighboursCalculator {
     fun iterateAllNeighbours(
         cubeSkin: CubeSkin, xyz: CellIndex,
@@ -36,20 +35,21 @@ object NeighboursCalculator {
         )
     }
 
-    fun iterate(
+    private fun iterate(
         cubeSkin: CubeSkin, xyz: CellIndex,
         range: CellRange,
         action: (PointedCell, Int) -> Unit, i: Int
     ) {
         val counts = cubeSkin.counts
 
+        val xyzVec = xyz.getVec()
         range.iterate(counts) {
             do {
-                if (it == xyz) {
+                if (it.getVec() == xyzVec) {
                     break
                 }
 
-                val c = cubeSkin.getPointedCube(it)
+                val c = cubeSkin.getPointedCell(it)
                 val s = c.skin
 
                 if (s.isEmpty()) break
@@ -72,8 +72,8 @@ object NeighboursCalculator {
             cubeSkin,
             xyz,
             pairCellRange.getCellRange(rangeFlags[dim]),
-            { pointedCube, _ ->
-                res.add(pointedCube)
+            { pointedCell, _ ->
+                res.add(pointedCell)
             },
             dim
         )
@@ -114,6 +114,10 @@ object NeighboursCalculator {
         }
 
         for (b in bombsList) {
+            val pointedCell = cubeSkin.getPointedCell(b)
+            if (pointedCell.skin.isEmpty()) {
+                continue
+            }
             iterateNeightbours(
                 cubeSkin,
                 b,
@@ -134,7 +138,7 @@ object NeighboursCalculator {
                 return true
             }
 
-            val s = cubeSkin.getPointedCube(
+            val s = cubeSkin.getPointedCell(
                 CellIndex(
                     p,
                     counts

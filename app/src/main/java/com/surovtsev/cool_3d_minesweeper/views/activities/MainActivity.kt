@@ -17,13 +17,12 @@ class MainActivity : AppCompatActivity() {
             startGame(true)
         }
 
-        btn_start_game.setOnClickListener {
+        btn_new_game.setOnClickListener {
             startGame(false)
         }
     }
 
     override fun onResume() {
-        Log.d("TEST+++", "MainActivity onResume")
         super.onResume()
         btn_load_game.isEnabled = SaveController(this).hasSave()
     }

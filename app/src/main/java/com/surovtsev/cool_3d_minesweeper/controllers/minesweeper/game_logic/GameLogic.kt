@@ -140,7 +140,7 @@ class GameLogic(
                 return
             }
 
-            action(cubeSkin.getPointedCube(list.removeAt(0)))
+            action(cubeSkin.getPointedCell(list.removeAt(0)))
         }
     }
 
@@ -155,7 +155,7 @@ class GameLogic(
     fun storeSelectedBombs() {
         cubeSkin.iterateCubes { xyz ->
             do {
-                val p = cubeSkin.getPointedCube(xyz)
+                val p = cubeSkin.getPointedCell(xyz)
                 val s = p.skin
                 if (s.isMarked()) {
                     cubesToRemove.add(xyz)
@@ -214,7 +214,7 @@ class GameLogic(
 
     private fun emptySlice(cellRange: CellRange) {
         cellRange.iterate(cubeSkin.counts) {
-            val c = cubeSkin.getPointedCube(it)
+            val c = cubeSkin.getPointedCell(it)
             val s = c.skin
             if (!s.isEmpty()) {
                 cubesToRemove.add(it)
@@ -237,7 +237,7 @@ class GameLogic(
                             z,
                             counts
                         )
-                    val c = cubeSkin.getPointedCube(p)
+                    val c = cubeSkin.getPointedCell(p)
                     val s = c.skin
 
                     if (s.isEmpty()) {
