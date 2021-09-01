@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +18,15 @@ class MainActivity : AppCompatActivity() {
 
         btn_new_game.setOnClickListener {
             startGame(false)
+        }
+
+        btn_settings.setOnClickListener {
+            startActivity(
+                Intent(
+                    this, SettingsActivity::class.java
+                )
+            )
+
         }
     }
 

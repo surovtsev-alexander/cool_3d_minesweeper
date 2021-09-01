@@ -151,7 +151,6 @@ class MinesweeperController(
         x()
     }
 
-
     override fun onDrawFrame() {
         timeSpanHelper.tick()
         touchReceiver.tick()
