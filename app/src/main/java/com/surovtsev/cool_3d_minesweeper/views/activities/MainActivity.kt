@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,7 +33,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        btn_load_game.isEnabled = SaveController(this).hasData(SaveController.SaveJson)
+        btn_load_game.isEnabled =
+            ApplicationController.instance.saveController.hasData(
+                SaveController.SaveJson
+            )
     }
 
     fun startGame(loadGame: Boolean) {

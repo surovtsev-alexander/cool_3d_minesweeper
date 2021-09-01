@@ -130,7 +130,7 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
 
         minesweeperController?.onDestroy()
 
-        ApplicationController.instance!!.messagesComponent = null
+        ApplicationController.instance.messagesComponent = null
 
         Log.d("TEST+++", "GameActivity onDestroy")
     }

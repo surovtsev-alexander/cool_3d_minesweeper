@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MyIntEdit
@@ -31,9 +32,10 @@ class SettingsActivity : AppCompatActivity() {
 
         controls.map { initMyIntEdit(it.value, it.key) }
 
-        val loadedGameSettings = SaveController(this).tryToLoad<GameSettings>(
-            SaveController.GameSettingsJson
-        )
+        val loadedGameSettings =
+            ApplicationController.instance.saveController.tryToLoad<GameSettings>(
+                SaveController.GameSettingsJson
+            )
 
         val gameSettings = GameSettings.createObject(
             loadedGameSettings
@@ -59,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
                 x.key to x.value.value
             }.toMap()
             val gameSettings = GameSettings(m)
-            SaveController(this).save<GameSettings>(
+            ApplicationController.instance.saveController.save(
                 SaveController.GameSettingsJson,
                 gameSettings
             )

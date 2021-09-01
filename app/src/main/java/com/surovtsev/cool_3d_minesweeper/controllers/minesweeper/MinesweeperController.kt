@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
@@ -57,10 +58,8 @@ class MinesweeperController(
     private var save: Save? = null
 
     init {
-        val saveController = SaveController(context)
-
         if (loadGame) {
-            save = saveController.tryToLoad(
+            save = ApplicationController.instance.saveController.tryToLoad(
                 SaveController.SaveJson
             )
         }
@@ -68,7 +67,7 @@ class MinesweeperController(
         if (save != null) {
             gameConfig = save!!.gameConfig
         } else {
-            val loadedGameSettings = saveController.tryToLoad<GameSettings>(
+            val loadedGameSettings = ApplicationController.instance.saveController.tryToLoad<GameSettings>(
                 SaveController.GameSettingsJson
             )
             val settings = GameSettings.createObject(loadedGameSettings)
@@ -172,7 +171,7 @@ class MinesweeperController(
                 gameLogic,
                 gameObjectsHolder.cubeSkin
             )
-            SaveController(context).save(
+            ApplicationController.instance.saveController.save(
                 SaveController.SaveJson,
                 save
             )
