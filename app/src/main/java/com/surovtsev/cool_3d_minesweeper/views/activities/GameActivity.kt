@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
@@ -146,5 +147,17 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
         ApplicationController.instance.messagesComponent = null
 
         Log.d("TEST+++", "GameActivity onDestroy")
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (
+            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+        ) {
+            cb_marking.toggle()
+            return true
+        }
+
+        return super.onKeyDown(keyCode, event)
     }
 }
