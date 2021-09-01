@@ -2,7 +2,6 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
@@ -13,14 +12,13 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameCon
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
-import java.lang.Exception
-import java.util.concurrent.locks.ReentrantLock
 
 interface IHandleOpenGLEvents {
     fun onSurfaceCreated()
@@ -59,8 +57,10 @@ class MinesweeperController(
     private var save: Save? = null
 
     init {
+        val saveController = SaveController(context)
+
         if (loadGame) {
-            save = SaveController(context).tryToLoad(
+            save = saveController.tryToLoad(
                 SaveController.SaveJson
             )
         }
@@ -68,7 +68,11 @@ class MinesweeperController(
         if (save != null) {
             gameConfig = save!!.gameConfig
         } else {
-            gameConfig = GameConfigFactory.createGameConfig()
+            val loadedGameSettings = saveController.tryToLoad<GameSettings>(
+                SaveController.GameSettingsJson
+            )
+            val settings = GameSettings.createObject(loadedGameSettings)
+            gameConfig = GameConfigFactory.createGameConfig(settings)
         }
 
         gameObjectsHolder = GameObjectsHolder(gameConfig)

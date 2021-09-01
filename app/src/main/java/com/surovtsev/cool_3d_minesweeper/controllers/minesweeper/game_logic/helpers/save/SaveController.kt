@@ -14,7 +14,7 @@ class SaveController(
 ) {
     companion object {
         const val SaveJson = "SAVE_JSON"
-        const val SettingsJson = "SETTINGS_JSON"
+        const val GameSettingsJson = "GAME_SETTINGS_JSON"
     }
 
     val gson by lazy {

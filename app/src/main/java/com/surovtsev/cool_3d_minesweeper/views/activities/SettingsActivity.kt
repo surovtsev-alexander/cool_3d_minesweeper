@@ -2,9 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import com.google.gson.Gson
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
@@ -14,10 +12,10 @@ import kotlinx.android.synthetic.main.activity_settings.*
 class SettingsActivity : AppCompatActivity() {
     private val controls: Map<String, MyIntEdit> by lazy {
         mapOf<String, MyIntEdit>(
-            "x count" to mie_xCount,
-            "y count" to mie_yCount,
-            "z count" to mie_zCount,
-            "bombs percentage" to mie_bombsPercentage
+            GameSettings.xCount to mie_xCount,
+            GameSettings.yCount to mie_yCount,
+            GameSettings.zCount to mie_zCount,
+            GameSettings.bombsPercentage to mie_bombsPercentage
         )
     }
 
@@ -29,20 +27,20 @@ class SettingsActivity : AppCompatActivity() {
             e.name = name
             e.minValue = 3
             e.maxValue = 100
-            e.value = 12
         }
 
         controls.map { initMyIntEdit(it.value, it.key) }
 
-        mie_bombsPercentage.value = 20
-
-
-        val gameSettings = SaveController(this).tryToLoad<GameSettings>(
-            SaveController.SettingsJson
+        val loadedGameSettings = SaveController(this).tryToLoad<GameSettings>(
+            SaveController.GameSettingsJson
         )
 
-        gameSettings?.settingsMap?.map { a ->
-            controls[a.key]?.value = a.value
+        val gameSettings = GameSettings.createObject(
+            loadedGameSettings
+        )
+
+        gameSettings.settingsMap.map { (k, v) ->
+            controls[k]?.value = v
         }
 
         btn_save.setOnClickListener {
@@ -62,7 +60,7 @@ class SettingsActivity : AppCompatActivity() {
             }.toMap()
             val gameSettings = GameSettings(m)
             SaveController(this).save<GameSettings>(
-                SaveController.SettingsJson,
+                SaveController.GameSettingsJson,
                 gameSettings
             )
 
