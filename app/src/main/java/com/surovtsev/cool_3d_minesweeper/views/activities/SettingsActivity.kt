@@ -4,17 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.google.gson.Gson
 import com.surovtsev.cool_3d_minesweeper.R
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MyIntEdit
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
-    val controls: Array<Pair<MyIntEdit, String>> by lazy {
-        arrayOf<Pair<MyIntEdit, String>>(
-            mie_xCount to "x count",
-            mie_yCount to "y count",
-            mie_zCount to "z count",
-            mie_bombsPercentage to "bombs percentage"
+    private val controls: Map<String, MyIntEdit> by lazy {
+        mapOf<String, MyIntEdit>(
+            "x count" to mie_xCount,
+            "y count" to mie_yCount,
+            "z count" to mie_zCount,
+            "bombs percentage" to mie_bombsPercentage
         )
     }
 
@@ -29,11 +32,18 @@ class SettingsActivity : AppCompatActivity() {
             e.value = 12
         }
 
-        controls.map { initMyIntEdit(it.first, it.second) }
+        controls.map { initMyIntEdit(it.value, it.key) }
 
         mie_bombsPercentage.value = 20
 
-        Log.d("TEST+++", "${mie_bombsPercentage.value}")
+
+        val gameSettings = SaveController(this).tryToLoad<GameSettings>(
+            SaveController.SettingsJson
+        )
+
+        gameSettings?.settingsMap?.map { a ->
+            controls[a.key]?.value = a.value
+        }
 
         btn_save.setOnClickListener {
             tryToSaveAndFinish()
@@ -42,19 +52,28 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun tryToSaveAndFinish() {
         val invalidControls = controls.filter {
-            !it.first.isValueInBorders()
+            !it.value.isValueInBorders()
         }
 
         val invalidControlsCount = invalidControls.count()
         if (invalidControlsCount == 0) {
+            val m = controls.map { x ->
+                x.key to x.value.value
+            }.toMap()
+            val gameSettings = GameSettings(m)
+            SaveController(this).save<GameSettings>(
+                SaveController.SettingsJson,
+                gameSettings
+            )
+
             finish()
             return
         }
 
-        val names = invalidControls.fold("") { acc, p ->
-            acc + "\n${p.second}"
+        val names = invalidControls.asIterable().fold("") { acc, p ->
+            acc + "\n${p.key}"
         }
-        invalidControls.map { it.first.setMinValue() }
+        invalidControls.map { it.value.setMinValue() }
 
         Toast.makeText(
             this,

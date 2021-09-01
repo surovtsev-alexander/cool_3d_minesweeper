@@ -60,18 +60,9 @@ class MinesweeperController(
 
     init {
         if (loadGame) {
-            val gson = Gson()
-            val saveController = SaveController(context)
-            try {
-                val data = saveController.loadData()
-                save = gson.fromJson<Save>(
-                    data,
-                    Save::class.java
-                )
-            } catch (ex: Exception) {
-                Log.d("Minesweeper", "error while loading save\n${ex.message}\n${ex.printStackTrace()}")
-                saveController.emptyData()
-            }
+            save = SaveController(context).tryToLoad(
+                SaveController.SaveJson
+            )
         }
 
         if (save != null) {
@@ -171,16 +162,16 @@ class MinesweeperController(
         SyncExecution {
             gameLogic.gameLogicStateHelper.onPause()
 
-            val gson = Gson()
             val save = Save.createObject(
                 gameConfig,
                 cameraInfo,
                 gameLogic,
                 gameObjectsHolder.cubeSkin
             )
-            val saveJson = gson.toJson(save)
-
-            SaveController(context).save(saveJson)
+            SaveController(context).save(
+                SaveController.SaveJson,
+                save
+            )
         }
     }
 

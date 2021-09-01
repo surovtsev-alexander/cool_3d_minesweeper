@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        btn_load_game.isEnabled = SaveController(this).hasSave()
+        btn_load_game.isEnabled = SaveController(this).hasData(SaveController.SaveJson)
     }
 
     fun startGame(loadGame: Boolean) {
