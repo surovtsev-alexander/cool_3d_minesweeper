@@ -16,10 +16,20 @@ interface ICanBeUpdated:
     fun update()
 }
 
+interface ICanBeSmartUpdated:
+    ICanBeUpdated
+{
+    fun getAndRelease(): Boolean {
+        val res = isUpdated()
+        release()
+        return res
+    }
+}
+
 open class Updatable(
     private var updated: Boolean = true
 ):
-    ICanBeUpdated
+    ICanBeSmartUpdated
 {
     override fun release() {
         updated = false
@@ -29,11 +39,5 @@ open class Updatable(
 
     override fun update() {
         updated = true
-    }
-
-    fun getAndRelease(): Boolean {
-        val res = isUpdated()
-        release()
-        return res
     }
 }

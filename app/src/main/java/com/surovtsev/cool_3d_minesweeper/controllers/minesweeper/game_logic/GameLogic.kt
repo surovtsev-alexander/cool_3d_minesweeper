@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
@@ -35,6 +36,8 @@ class GameLogic(
         )
     private val doubleClickDelay = 200L
 
+    var markingOnShotTap = false
+
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()
 
@@ -69,7 +72,7 @@ class GameLogic(
                 if (id == prevClickInfo.id && currTime - prevClickInfo.time < doubleClickDelay) {
                     emptyCube(pointedCell)
                 } else {
-                    tryToOpenCube(pointedCell)
+                    tryToOpenCube(pointedCell, markingOnShotTap)
                 }
             }
             TouchType.LONG -> {
@@ -270,19 +273,24 @@ class GameLogic(
         }
     }
 
-    private fun tryToOpenCube(pointedCell: PointedCell) {
+    private fun tryToOpenCube(pointedCell: PointedCell, markIfClosed: Boolean) {
         val skin = pointedCell.skin
         if (skin.isClosed()) {
-            if (skin.isBomb) {
-                setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                gameLogicStateHelper.setGameState(GameStatus.LOSE)
+            if (markIfClosed) {
+                toggleMarkingCube(pointedCell)
             } else {
-                openCube(pointedCell)
+                if (skin.isBomb) {
+                    setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
+                    gameLogicStateHelper.setGameState(GameStatus.LOSE)
+                } else {
+                    openCube(pointedCell)
+                }
+            }
+        } else if (skin.isMarked()) {
+            if (markIfClosed) {
+                toggleMarkingCube(pointedCell)
             }
         } else {
-            if (skin.isBomb) {
-                return
-            }
             openNeighboursIfBombsMarked(pointedCell)
             openNeighbours(pointedCell)
         }
@@ -299,6 +307,9 @@ class GameLogic(
     }
 
     private fun openNeighboursIfBombsMarked(pointedCell: PointedCell) {
+        if (pointedCell.skin.isBomb) {
+            return
+        }
         for (i in 0 until 3) {
             val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
 
@@ -316,7 +327,7 @@ class GameLogic(
             if (cubeNbhBombs == marked) {
                 for (n in neighbours) {
                     if (n.skin.isClosed()) {
-                        tryToOpenCube(n)
+                        tryToOpenCube(n, false)
                     }
                 }
             }

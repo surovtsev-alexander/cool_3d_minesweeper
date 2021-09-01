@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.IHandleOpenGLEvents
+import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 

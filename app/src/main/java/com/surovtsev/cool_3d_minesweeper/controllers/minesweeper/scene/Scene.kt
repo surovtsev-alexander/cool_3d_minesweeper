@@ -58,6 +58,10 @@ class Scene (
         val cameraMoved = cameraInfoHelper.getAndRelease()
         val clicked = touchHandler.getAndRelease()
 
+        if (gameControls.markOnShortTap.getAndRelease()) {
+            gameLogic.markingOnShotTap = gameControls.markOnShortTap.isOn()
+        }
+
         val glPointerView = gameViewsHolder!!.glPointerView
         val cubeView = gameViewsHolder!!.cubeView
 

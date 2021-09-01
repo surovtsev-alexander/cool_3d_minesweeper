@@ -62,6 +62,18 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
             minesweeperController?.gameControls?.removeBorderZeros?.update()
         }
 
+        cb_marking.setOnCheckedChangeListener { buttonView, isChecked ->
+            val x = minesweeperController?.gameControls?.markOnShortTap
+
+            if (x != null) {
+                if (isChecked) {
+                    x.turnOn()
+                } else {
+                    x.turnOff()
+                }
+            }
+        }
+
         val touchReceiverCalculator = object: ITouchReceiverCalculator {
             override fun getReceiver(): ITouchReceiver? = minesweeperController?.touchReceiver
         }

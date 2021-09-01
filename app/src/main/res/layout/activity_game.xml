@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.activities.GameActivity">
 
     <android.opengl.GLSurfaceView
         android:id="@+id/glsv_main"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="2"
         />
 
@@ -27,30 +27,38 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/btn_remove_marked_bombs"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="V"/>
         <Button
             android:id="@+id/btn_remove_border_zeros"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0"/>
+            android:text="0"
+            />
+        <CheckBox
+            android:id="@+id/cb_marking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MARKING"
+            />
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/lbl_bombs_count"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
                 android:text="-"/>
             <TextView
                 android:id="@+id/lbl_time"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
                 android:text="-"/>

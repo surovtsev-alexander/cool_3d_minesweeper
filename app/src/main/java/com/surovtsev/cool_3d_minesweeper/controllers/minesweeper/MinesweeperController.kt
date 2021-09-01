@@ -17,15 +17,10 @@ import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
+import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
-
-interface IHandleOpenGLEvents {
-    fun onSurfaceCreated()
-    fun onSurfaceChanged(width: Int, height: Int)
-    fun onDrawFrame()
-}
 
 class MinesweeperController(
     private val context: Context,

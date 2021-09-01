@@ -7,8 +7,9 @@ interface ISwitch {
     fun isOn(): Boolean
 }
 
-class Switch: ISwitch {
-    var on = false
+open class Switch(
+    private var on: Boolean = false
+): ISwitch {
 
     override fun turnOn() {
         on = true
