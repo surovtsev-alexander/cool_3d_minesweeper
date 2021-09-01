@@ -6,11 +6,11 @@ import glm_.vec3.Vec3
 
 class CubeCoordinates(
     val trianglesCoordinates: FloatArray,
-    val indexes: ShortArray,
+    val indexes: IntArray,
     val centers: Array<Vec3>
 ) {
     companion object {
-        val coordinatesTemplateArray = intArrayOf(
+        private val coordinatesTemplateArray = intArrayOf(
             -1,  1,  1, // A
             -1,  1, -1, // B
             1,  1, -1, // C
@@ -43,7 +43,7 @@ class CubeCoordinates(
                 , indexesTemplateArray[it + 1]
                 , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
         */
-        val extendedIndexesTemplateArray = shortArrayOf(
+        private val extendedIndexesTemplateArray = intArrayOf(
             1, 2, 0, // top
             0, 2, 3,
 
@@ -64,12 +64,12 @@ class CubeCoordinates(
         )
 
         val invExtendedIndexedArray = (0 until extendedIndexesTemplateArray.size / 3).map {
-            shortArrayOf(
+            intArrayOf(
                 extendedIndexesTemplateArray[it * 3 + 2],
                 extendedIndexesTemplateArray[it * 3 + 1],
                 extendedIndexesTemplateArray[it * 3]
             ).asIterable()
-        }.flatten().toShortArray()
+        }.flatten().toIntArray()
 
         /*
         fun indexedCube(): RawCubes {
@@ -96,7 +96,7 @@ class CubeCoordinates(
             val indexesCount = cubeIndexesCount * cubesCount
 
             val trianglesCoordinates = FloatArray(coordinatesCount)
-            val indexes = ShortArray(indexesCount)
+            val indexes = IntArray(indexesCount)
 
             val centers = Array<Vec3>(cubesCount) { Vec3() }
 
@@ -129,7 +129,7 @@ class CubeCoordinates(
                 fun fillIndexes() {
                     for (i in 0 until cubeIndexesCount) {
                         indexes[startIndexesPos + i] =
-                            (indexesArray[i] + startCoordinatesPos / 3).toShort()
+                            indexesArray[i] + startCoordinatesPos / 3
                     }
                 }
 

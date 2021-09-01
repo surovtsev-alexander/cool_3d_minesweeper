@@ -5,7 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.cell.CellSkin
-import glm_.vec3.Vec3s
+import glm_.vec3.Vec3i
 
 class CubeSkin(
     gameConfig: GameConfig
@@ -21,7 +21,7 @@ class CubeSkin(
 
     companion object {
 
-        fun iterateCubes(counts: Vec3s, action: (xyz: CellIndex) -> Unit) {
+        fun iterateCubes(counts: Vec3i, action: (xyz: CellIndex) -> Unit) {
             for (x in 0 until counts.x) {
                 for (y in 0 until counts.y) {
                     for (z in 0 until counts.z) {

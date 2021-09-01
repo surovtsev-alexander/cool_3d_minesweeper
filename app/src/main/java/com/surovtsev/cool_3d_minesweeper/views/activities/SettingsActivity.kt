@@ -24,10 +24,12 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        val borders = GameSettings.borders
         val initMyIntEdit = { e: MyIntEdit, name: String ->
             e.name = name
-            e.minValue = 3
-            e.maxValue = 100
+            val (l, r) = borders[name]!!
+            e.minValue = l
+            e.maxValue = r
         }
 
         controls.map { initMyIntEdit(it.value, it.key) }

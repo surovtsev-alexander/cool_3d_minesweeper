@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
-import glm_.vec3.Vec3s
+import glm_.vec3.Vec3i
 
 object TextureCoordinatesHelper {
     val textureToSquareTemplateCoordinates = floatArrayOf(
@@ -89,7 +89,7 @@ object TextureCoordinatesHelper {
 
 
     private val textureTypeCount = TextureType.values().count()
-    private val counts = Vec3s(textureTypeCount)
+    private val counts = Vec3i(textureTypeCount)
 
     private val possibleSkins: Array<CellIndex>
     private val possibleTextureCoordinates: Map<Int, FloatArray>

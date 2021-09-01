@@ -6,7 +6,7 @@ import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class IndexBuffer(val vertexData: ShortArray) {
+class IndexBuffer(val vertexData: IntArray) {
     val bufferId: Int
 
     init {
@@ -25,9 +25,9 @@ class IndexBuffer(val vertexData: ShortArray) {
 
         // Transfer data to native memory.
         val vertexArray = ByteBuffer
-            .allocateDirect(vertexData.count() * Constants.BYTES_PER_SHORT)
+            .allocateDirect(vertexData.count() * Constants.BYTES_PER_INT)
             .order(ByteOrder.nativeOrder())
-            .asShortBuffer()
+            .asIntBuffer()
             .put(vertexData)
         vertexArray.position(0)
 

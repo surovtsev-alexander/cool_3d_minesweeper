@@ -1,10 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.config
 
 import glm_.vec3.Vec3
-import glm_.vec3.Vec3s
+import glm_.vec3.Vec3i
 
 data class GameConfig(
-    val counts: Vec3s,
+    val counts: Vec3i,
     val dimensions: Vec3,
     val gaps: Vec3,
     val bombsRate: Float

@@ -63,17 +63,10 @@ class CubeSkinToSave(
             val cellCount = cubeSkin.cellCount
 
             val resArr = { CharArray(cellCount) }
-            val xx =
-                {tc: Char, fc: Char ->
-                    { flag: Boolean ->
-                        if (flag) tc else fc
-                    }
-            }
 
             val bombs = resArr()
             val markedClosedEmpty = resArr()
 
-            val bXX = xx(BombChar, SpaceChar)
 
             val skins = cubeSkin.skins
             cubeSkin.iterateCubes { xyz ->

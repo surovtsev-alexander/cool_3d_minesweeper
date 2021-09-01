@@ -16,6 +16,22 @@ data class GameSettings(
             bombsPercentage to 20
         )
 
+        private val paramNames = arrayOf(
+            xCount,
+            yCount,
+            zCount,
+            bombsPercentage
+        )
+
+        private val dimParamsCount = 3
+
+        val borders = (
+                paramNames.take(dimParamsCount).map {
+                    it to (3 to 25)
+                } + paramNames.drop(dimParamsCount).map {
+                    it to (10 to 90)
+                }).toMap()
+
         fun createObject(part: GameSettings?): GameSettings {
             if (part == null) {
                 return GameSettings(defaultValues)

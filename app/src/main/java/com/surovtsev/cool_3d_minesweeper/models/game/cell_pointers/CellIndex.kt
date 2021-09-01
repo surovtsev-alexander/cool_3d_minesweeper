@@ -1,13 +1,12 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers
 
 import glm_.vec3.Vec3i
-import glm_.vec3.Vec3s
 
 class CellIndex(
     val x: Int,
     val y: Int,
     val z: Int,
-    counts: Vec3s
+    counts: Vec3i
 ) {
     val id =
         calcId(
@@ -18,10 +17,10 @@ class CellIndex(
         )
 
     companion object {
-        fun calcId(counts: Vec3s, x: Int, y: Int, z: Int) =
+        fun calcId(counts: Vec3i, x: Int, y: Int, z: Int) =
             x + counts.x * (y + counts.y * z)
 
-        fun getIndexCalculator(counts: Vec3s): (Int) -> CellIndex =  { xyz ->
+        fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { xyz ->
             val x = xyz % counts.x.toInt()
             val yz = (xyz - x) / counts.x
             val y = yz % counts.y
@@ -39,7 +38,7 @@ class CellIndex(
 
     }
 
-    constructor(v: Vec3i, counts: Vec3s): this(
+    constructor(v: Vec3i, counts: Vec3i): this(
         v.x, v.y, v.z, counts
     )
 

@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers
 
-import glm_.vec3.Vec3s
+import glm_.vec3.Vec3i
 
 data class CellRange(
     val xRange: IntRange,
@@ -8,10 +8,10 @@ data class CellRange(
     val zRange: IntRange
 ) {
     companion object {
-        fun getIntRange(v: Short) = 0 until v
+        fun getIntRange(v: Int) = 0 until v
     }
 
-    constructor(counts: Vec3s): this(
+    constructor(counts: Vec3i): this(
         getIntRange(
             counts.x
         ),
@@ -23,7 +23,7 @@ data class CellRange(
         )
     )
 
-    fun iterate(counts: Vec3s, action: (CellIndex) -> Unit) {
+    fun iterate(counts: Vec3i, action: (CellIndex) -> Unit) {
         for (x in xRange) {
             for (y in yRange) {
                 for (z in zRange) {

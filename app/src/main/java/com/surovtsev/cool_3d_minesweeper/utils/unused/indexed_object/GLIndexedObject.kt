@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 
 open class GLIndexedObject(val cubeGLESProgram: CubeGLESProgram
                            , val coordinates: FloatArray
-                           , val indexes: ShortArray) {
+                           , val indexes: IntArray) {
 
     private val POSITION_COMPONENT_COUNT = 3
 
