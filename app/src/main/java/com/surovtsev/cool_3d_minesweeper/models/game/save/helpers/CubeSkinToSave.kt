@@ -123,7 +123,7 @@ class CubeSkinToSave(
 
         NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
 
-        var closedBombs = bombsList.count()
+        val closedBombs = bombsList.count() - openedBombCount
         cubeSkin.iterateCubes { xyz ->
             val skin = xyz.getValue(skins)
             val id = xyz.id

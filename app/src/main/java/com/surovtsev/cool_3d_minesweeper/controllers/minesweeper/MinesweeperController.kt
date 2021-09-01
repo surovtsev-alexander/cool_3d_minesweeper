@@ -20,6 +20,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDest
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
 import java.lang.Exception
+import java.util.concurrent.locks.ReentrantLock
 
 interface IHandleOpenGLEvents {
     fun onSurfaceCreated()
@@ -146,6 +147,11 @@ class MinesweeperController(
         gameLogic.gameEventsReceiver.timeUpdated()
     }
 
+    @Synchronized fun SyncExecution(x: () -> Unit) {
+        x()
+    }
+
+
     override fun onDrawFrame() {
         timeSpanHelper.tick()
         touchReceiver.tick()
@@ -156,23 +162,27 @@ class MinesweeperController(
             touchReceiver.release()
         }
 
-        scene?.onDrawFrame()
+        SyncExecution {
+            scene?.onDrawFrame()
+        }
     }
 
     override fun onPause() {
         Log.d("TEST+++", "MinesweeperController onPause")
-        gameLogic.gameLogicStateHelper.onPause()
+        SyncExecution {
+            gameLogic.gameLogicStateHelper.onPause()
 
-        val gson = Gson()
-        val save = Save.createObject(
-            gameConfig,
-            cameraInfo,
-            gameLogic,
-            gameObjectsHolder.cubeSkin
-        )
-        val saveJson = gson.toJson(save)
+            val gson = Gson()
+            val save = Save.createObject(
+                gameConfig,
+                cameraInfo,
+                gameLogic,
+                gameObjectsHolder.cubeSkin
+            )
+            val saveJson = gson.toJson(save)
 
-        SaveController(context).save(saveJson)
+            SaveController(context).save(saveJson)
+        }
     }
 
     override fun onResume() {
