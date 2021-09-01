@@ -116,6 +116,7 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
 
     override fun onResume() {
         super.onResume()
+        ApplicationController.activityStarted()
 
         if (minesweeperController != null) {
             minesweeperController!!.onResume()

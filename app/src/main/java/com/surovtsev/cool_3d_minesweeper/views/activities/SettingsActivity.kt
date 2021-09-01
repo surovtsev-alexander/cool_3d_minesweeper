@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MyIntEdit
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -36,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val loadedGameSettings =
             ApplicationController.instance.saveController.tryToLoad<GameSettings>(
-                SaveController.GameSettingsJson
+                SaveTypes.GameSettingsJson
             )
 
         val gameSettings = GameSettings.createObject(
@@ -52,6 +53,11 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        ApplicationController.activityStarted()
+    }
+
     private fun tryToSaveAndFinish() {
         val invalidControls = controls.filter {
             !it.value.isValueInBorders()
@@ -64,7 +70,7 @@ class SettingsActivity : AppCompatActivity() {
             }.toMap()
             val gameSettings = GameSettings(m)
             ApplicationController.instance.saveController.save(
-                SaveController.GameSettingsJson,
+                SaveTypes.GameSettingsJson,
                 gameSettings
             )
 

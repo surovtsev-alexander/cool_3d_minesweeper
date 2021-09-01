@@ -2,6 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.models.game.config
 
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
+import kotlin.math.floor
+import kotlin.math.max
 
 data class GameConfig(
     val counts: Vec3i,
@@ -16,9 +18,10 @@ data class GameConfig(
 
     val cubesCount = counts.x * counts.y * counts.z
 
-    val bombsCount = Math.floor(
-        (counts.x * counts.y * counts.z * bombsRate).toDouble()
-    ).toInt()
+    val bombsCount = max(1,
+        floor(
+            (counts.x * counts.y * counts.z * bombsRate).toDouble()
+        ).toInt())
 
     val cellSpaceWithGaps = dimensions / counts
     val cellSpace = cellSpaceWithGaps - gaps

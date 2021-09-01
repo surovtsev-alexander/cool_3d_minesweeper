@@ -3,9 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,27 +23,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_settings.setOnClickListener {
-            startActivity(
-                Intent(
-                    this, SettingsActivity::class.java
-                )
-            )
-
+            ApplicationController.startingActivityCode {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d("TEST+++", "MainActivity onResume")
         btn_load_game.isEnabled =
             ApplicationController.instance.saveController.hasData(
-                SaveController.SaveJson
+                SaveTypes.SaveGameJson
             )
     }
 
-    fun startGame(loadGame: Boolean) {
-        val intent = Intent(this, GameActivity::class.java)
-        intent.putExtra(GameActivity.LoadGame, loadGame)
-        startActivity(intent)
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("TEST+++", "MainActivity onRestart")
+        btn_load_game.isEnabled =
+            ApplicationController.instance.saveController.hasData(
+                SaveTypes.SaveGameJson
+            )
     }
 
+    private fun startGame(loadGame: Boolean) {
+        ApplicationController.startingActivityCode {
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra(GameActivity.LoadGame, loadGame)
+            startActivity(intent)
+        }
+    }
 }

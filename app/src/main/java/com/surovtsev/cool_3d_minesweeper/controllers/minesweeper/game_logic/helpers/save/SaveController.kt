@@ -12,11 +12,6 @@ import kotlin.reflect.KClass
 class SaveController(
     context: Context
 ) {
-    companion object {
-        const val SaveJson = "SAVE_JSON"
-        const val GameSettingsJson = "GAME_SETTINGS_JSON"
-    }
-
     val gson by lazy {
         Gson()
     }
@@ -60,14 +55,13 @@ class SaveController(
             Log.d(
                 "Minesweeper",
                 "error while loading save\n${ex.message}\n${ex.printStackTrace()}")
-            emptyData(SaveController.SaveJson)
+            emptyData(name)
             null
         }
     }
 
     fun <T: Any> save(name: String, data: T) {
         val text = gson.toJson(data)
-        Log.d("TEST+++", "SaveController save: $text")
         save(name, text)
     }
 }

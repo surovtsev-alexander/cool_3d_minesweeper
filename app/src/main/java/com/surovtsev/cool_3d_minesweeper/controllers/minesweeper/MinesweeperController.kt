@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
@@ -60,15 +60,18 @@ class MinesweeperController(
     init {
         if (loadGame) {
             save = ApplicationController.instance.saveController.tryToLoad(
-                SaveController.SaveJson
+                SaveTypes.SaveGameJson
             )
         }
 
         if (save != null) {
+            ApplicationController.instance.saveController.emptyData(
+                SaveTypes.SaveGameJson
+            )
             gameConfig = save!!.gameConfig
         } else {
             val loadedGameSettings = ApplicationController.instance.saveController.tryToLoad<GameSettings>(
-                SaveController.GameSettingsJson
+                SaveTypes.GameSettingsJson
             )
             val settings = GameSettings.createObject(loadedGameSettings)
             gameConfig = GameConfigFactory.createGameConfig(settings)
@@ -162,6 +165,10 @@ class MinesweeperController(
 
     override fun onPause() {
         Log.d("TEST+++", "MinesweeperController onPause")
+        if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
+            return
+        }
+
         SyncExecution {
             gameLogic.gameLogicStateHelper.onPause()
 
@@ -172,7 +179,7 @@ class MinesweeperController(
                 gameObjectsHolder.cubeSkin
             )
             ApplicationController.instance.saveController.save(
-                SaveController.SaveJson,
+                SaveTypes.SaveGameJson,
                 save
             )
         }
