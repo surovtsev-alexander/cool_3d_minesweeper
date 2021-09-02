@@ -3,14 +3,15 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.components
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
-import kotlinx.android.synthetic.main.my_int_edit.view.*
+import kotlinx.android.synthetic.main.my_int_seek_bar.view.*
 
 /**
  * TODO: document your custom view class.
  */
-class MyIntEdit : LinearLayout, IUiIntValueSelector {
+class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -30,7 +31,19 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
 
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        inflate(context, R.layout.my_int_edit, this)
+        inflate(context, R.layout.my_int_seek_bar, this)
+
+        sb_value.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                tv_value.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
     }
 
     override var name: String
@@ -39,33 +52,27 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
             tv_name.text = value
         }
 
-    private var minValueData = 0
-
     override var minValue: Int
-        get() = minValueData
+        get() = sb_value.min
         set(value) {
-            minValueData = value
-
+            sb_value.min = value
             borderUpdated()
         }
 
-    private var maxValueData = 0
-
     override var maxValue: Int
-        get() = maxValueData
+        get() = sb_value.max
         set(value) {
-            maxValueData = value
-
+            sb_value.max = value
             borderUpdated()
         }
 
     override var value: Int
-        get() = Integer.parseInt(et_value.text.toString())
+        get() = sb_value.progress
         set(v) {
-            et_value.setText(v.toString())
+            sb_value.progress = v
         }
 
     private fun borderUpdated() {
-        tv_min_max.setText("($minValueData..$maxValueData)")
+        tv_min_max.setText("($minValue..$maxValue)")
     }
 }

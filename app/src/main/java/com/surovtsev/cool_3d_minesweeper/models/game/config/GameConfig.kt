@@ -4,6 +4,7 @@ import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.min
 
 data class GameConfig(
     val counts: Vec3i,
@@ -18,10 +19,16 @@ data class GameConfig(
 
     val cubesCount = counts.x * counts.y * counts.z
 
-    val bombsCount = max(1,
-        ceil(
-            (counts.x * counts.y * counts.z * bombsRate)
-        ).toInt())
+    val bombsCount =
+        max(
+            1,
+            min(
+                cubesCount - 2,
+                ceil(
+                    (cubesCount * bombsRate)
+                ).toInt()
+            )
+        )
 
     val cellSpaceWithGaps = dimensions / counts
     val cellSpace = cellSpaceWithGaps - gaps

@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MyIntEdit
+import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
-    private val controls: Map<String, MyIntEdit> by lazy {
-        mapOf<String, MyIntEdit>(
-            GameSettings.xCount to mie_xCount,
-            GameSettings.yCount to mie_yCount,
-            GameSettings.zCount to mie_zCount,
-            GameSettings.bombsPercentage to mie_bombsPercentage
+    private val controls: Map<String, IUiIntValueSelector> by lazy {
+        mapOf<String, IUiIntValueSelector>(
+            GameSettings.xCount to ivs_xCount,
+            GameSettings.yCount to ivs_yCount,
+            GameSettings.zCount to ivs_zCount,
+            GameSettings.bombsPercentage to ivs_bombsPercentage
         )
     }
 
@@ -26,7 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val borders = GameSettings.borders
-        val initMyIntEdit = { e: MyIntEdit, name: String ->
+        val initMyIntEdit = { e: IUiIntValueSelector, name: String ->
             e.name = name
             val (l, r) = borders[name]!!
             e.minValue = l
