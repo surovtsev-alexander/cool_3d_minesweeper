@@ -30,22 +30,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("TEST+++", "MainActivity onResume")
+    private fun invalidate() {
         btn_load_game.isEnabled =
             ApplicationController.instance.saveController.hasData(
                 SaveTypes.SaveGameJson
             )
     }
 
+    override fun onResume() {
+        super.onResume()
+        invalidate()
+    }
+
     override fun onRestart() {
         super.onRestart()
-        Log.d("TEST+++", "MainActivity onRestart")
-        btn_load_game.isEnabled =
-            ApplicationController.instance.saveController.hasData(
-                SaveTypes.SaveGameJson
-            )
+        invalidate()
     }
 
     private fun startGame(loadGame: Boolean) {

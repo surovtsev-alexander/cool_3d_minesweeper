@@ -2,13 +2,16 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDBHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.lang.StringBuilder
 
 class SettingsActivity : AppCompatActivity() {
     private val controls: Map<String, IUiIntValueSelector> by lazy {
@@ -50,6 +53,17 @@ class SettingsActivity : AppCompatActivity() {
         btn_save.setOnClickListener {
             tryToSaveAndFinish()
         }
+
+        val settingsDB = SettingsDBHelper(this)
+        val settingsList = settingsDB.getSettingsList()
+
+        val sb = StringBuilder()
+        sb.append("x\nsettingsList:\n")
+        settingsList.map {
+            sb.append("$it\n")
+        }
+        sb.append("----\n")
+        Log.d("TEST+++", sb.toString())
     }
 
     override fun onResume() {
