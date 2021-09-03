@@ -18,6 +18,8 @@ data class CellSkin(
 
     fun isMarked() = isTexture(TextureType.MARKED)
 
+    fun isOpenedNumber() = !isMarked() && !isClosed() && !isEmpty()
+
     fun setTexture(tt: TextureType) {
         for (i in 0 until texture.count()) {
             texture[i] = tt

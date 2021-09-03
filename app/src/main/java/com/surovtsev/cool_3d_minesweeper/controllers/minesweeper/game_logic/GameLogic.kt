@@ -311,13 +311,13 @@ class GameLogic(
             return
         }
         for (i in 0 until 3) {
-            val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
-
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
                     cubeSkin, pointedCell.index, i
                 )) {
                 continue
             }
+
+            val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
 
             val neighbours = NeighboursCalculator.getNeighbours(
                 cubeSkin, pointedCell.index, i)
@@ -407,6 +407,21 @@ class GameLogic(
 
         if (skin == TextureCoordinatesHelper.TextureType.CLOSED) {
             setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.MARKED)
+
+            if (true) {
+                for (i in 0 until 3) {
+                    val neighbours = NeighboursCalculator.getNeighbours(
+                        cubeSkin, pointedCell.index, i
+                    )
+
+                    for (n in neighbours) {
+                        if (n.skin.isOpenedNumber()) {
+                            openNeighboursIfBombsMarked(n)
+                            openNeighbours(n)
+                        }
+                    }
+                }
+            }
         } else if (skin == TextureCoordinatesHelper.TextureType.MARKED) {
             setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.CLOSED)
         }
