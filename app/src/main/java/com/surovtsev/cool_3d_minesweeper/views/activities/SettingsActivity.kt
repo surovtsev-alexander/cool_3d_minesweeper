@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
@@ -20,7 +21,7 @@ class SettingsActivity :
     SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
     private val settingsDBHelper: SettingsDBHelper by lazy {
-        SettingsDBHelper(this)
+        SettingsDBHelper(DBHelper(this))
     }
 
     private fun getDbSettingsList() =

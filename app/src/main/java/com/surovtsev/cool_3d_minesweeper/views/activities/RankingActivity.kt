@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingData
 
 class RankingActivity : AppCompatActivity() {
     private val rankingDBHelper: RankingDBHelper by lazy {
-        RankingDBHelper(this)
+        RankingDBHelper(DBHelper(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

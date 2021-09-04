@@ -7,33 +7,11 @@ import android.provider.Settings
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 
-typealias DatabaseAction<T> = (db: SQLiteDatabase) -> T
-
 class SettingsDBHelper(
-    context: Context
-): SQLiteOpenHelper(
-    context,
-    DBConfig.dataBaseName,
-    null,
-    DBConfig.dataBaseVersion
-) {
-    override fun onCreate(db: SQLiteDatabase?) {
-        Log.d("TEST+++", "SettingsDBHelper onCreate")
-        if (db == null) {
-            Log.e("Minesweeper",  "Can not create Settings database.")
-            return
-        }
-
-        db.execSQL(
-            "CREATE TABLE ${DBConfig.settingsTableName} (" +
-                    "${SettingsData.idColumnName} INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "${SettingsData.xCountColumnName} INTEGER," +
-                    "${SettingsData.yCountColumnName} INTEGER," +
-                    "${SettingsData.zCountColumnName} INTEGER," +
-                    "${SettingsData.bombsPercentageColumnName} INTEGER" +
-                    ");"
-        )
-
+    private val dbHelper: IDBHelper
+)
+{
+    fun insertDefaultValues(db: SQLiteDatabase) {
         val defaultSettings = arrayOf(
             SettingsData(12, 20),
             SettingsData(10, 20),
@@ -46,20 +24,14 @@ class SettingsDBHelper(
         }
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        Log.d("TEST+++", "SettingsDBHelper onUpgrade")
-        TODO("Not yet implemented")
-    }
-
-
     fun isPresent(settingsData: SettingsData): Boolean {
-        return actionWithDB { db ->
+        return dbHelper.actionWithDB { db ->
             getIsPresentAction(settingsData)(db)
         }
     }
 
     fun delete(settingsData: SettingsData) {
-        actionWithDB { db ->
+        dbHelper.actionWithDB { db ->
             getDeleteAction(settingsData)(db)
         }
     }
@@ -91,7 +63,7 @@ class SettingsDBHelper(
     }
 
     fun insertIfNotPresent(settingsData: SettingsData) {
-        actionWithDB { db ->
+        dbHelper.actionWithDB { db ->
             val isPresent = getIsPresentAction(settingsData)(db)
             if (!isPresent) {
                 getInsertAction(settingsData)(db)
@@ -108,7 +80,7 @@ class SettingsDBHelper(
     }
 
     fun getId(settingsData: SettingsData): Int? =
-        actionWithDB { db ->
+        dbHelper.actionWithDB { db ->
             getIdAction(settingsData) (db)
         }
 
@@ -161,18 +133,10 @@ class SettingsDBHelper(
         res
     }
 
-    private fun <T> actionWithDB(f: DatabaseAction<T>): T {
-        val db = writableDatabase
-        val res = f(db)
-        db.close()
-
-        return res
-    }
-
     fun getSettingsList(): List<SettingsData> {
         val res = mutableListOf<SettingsData>()
 
-        actionWithDB { db ->
+        dbHelper.actionWithDB { db ->
             val c = db.query(
                 DBConfig.settingsTableName,
                 null, null,
