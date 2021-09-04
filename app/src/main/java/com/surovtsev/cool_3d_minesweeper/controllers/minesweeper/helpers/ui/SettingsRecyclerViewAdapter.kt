@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,30 @@ import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDBHelper
 import kotlinx.android.synthetic.main.settings.view.*
 
 class SettingsRecyclerViewAdapter(
-    private val settingsList: List<SettingsDBHelper.SettingsData>,
-    private val listener: OnItemClickListener
+    private val settingsList: MutableList<SettingsDBHelper.SettingsData>,
+    private val listener: ISettingsRVEventListener
     ):
     RecyclerView.Adapter<SettingsRecyclerViewAdapter.SettingsViewHolder>()
 {
+    fun isValidPosition(position: Int): Boolean {
+        if (position >= settingsList.count()) {
+            Log.e("Minesweeper", "settings list position error")
+            return false
+        }
+        return true
+    }
+
+    fun get(position: Int) = settingsList[position]
+
+    fun removeAt(position: Int) {
+        settingsList.removeAt(position)
+        this.notifyItemRemoved(position)
+        this.notifyItemRangeChanged(
+            position,
+            settingsList.count()
+        )
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
         val itemView =LayoutInflater.from(parent.context)
             .inflate(R.layout.settings, parent, false)
@@ -34,19 +54,27 @@ class SettingsRecyclerViewAdapter(
     {
         init {
             itemView.setOnClickListener(this)
+            itemView.btn_delete.setOnClickListener {
+                callIfTruePosition(listener::onItemDelete)
+            }
         }
         val counts = itemView.tv_counts!!
         val bombsPercentage = itemView.tv_bombsPercentage!!
 
         override fun onClick(v: View?) {
+            callIfTruePosition(listener::onItemClick)
+        }
+
+        private fun callIfTruePosition(f: (Int) -> Unit) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
+                f(position)
             }
         }
     }
 
-    interface OnItemClickListener {
+    interface ISettingsRVEventListener {
         fun onItemClick(position: Int)
+        fun onItemDelete(position: Int)
     }
 }

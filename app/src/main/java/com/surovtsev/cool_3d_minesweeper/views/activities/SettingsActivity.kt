@@ -13,14 +13,20 @@ import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDBHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.lang.StringBuilder
 
 class SettingsActivity :
     AppCompatActivity(),
-    SettingsRecyclerViewAdapter.OnItemClickListener
+    SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
-    private val dbSettingsList: List<SettingsDBHelper.SettingsData> by lazy {
-        SettingsDBHelper(this).getSettingsList()
+    private val settingsDBHelper: SettingsDBHelper by lazy {
+        SettingsDBHelper(this)
+    }
+
+    private fun getDbSettingsList() =
+        settingsDBHelper.getSettingsList().toMutableList()
+
+    private val settingsRecyclerViewAdapter: SettingsRecyclerViewAdapter by lazy {
+        SettingsRecyclerViewAdapter(getDbSettingsList(), this)
     }
 
     private val controls: Map<String, IUiIntValueSelector> by lazy {
@@ -65,7 +71,7 @@ class SettingsActivity :
 
         with (rv_settingsList) {
             val sA = this@SettingsActivity
-            adapter = SettingsRecyclerViewAdapter(dbSettingsList, sA)
+            adapter = settingsRecyclerViewAdapter
             layoutManager = LinearLayoutManager(sA)
             setHasFixedSize(true)
         }
@@ -86,6 +92,13 @@ class SettingsActivity :
             val m = controls.map { x ->
                 x.key to x.value.value
             }.toMap()
+
+            settingsDBHelper.insertIfNotPresent(
+                SettingsDBHelper.SettingsData(
+                    m
+                )
+            )
+
             val gameSettings = GameSettings(m)
             ApplicationController.instance.saveController.save(
                 SaveTypes.GameSettingsJson,
@@ -109,14 +122,22 @@ class SettingsActivity :
     }
 
     override fun onItemClick(position: Int) {
-        if (position >= dbSettingsList.count()) {
-            Log.e("Minesweeper", "settings list count error")
+        if (!settingsRecyclerViewAdapter.isValidPosition(position)) {
             return
         }
-        val s = dbSettingsList[position]
+        val s = settingsRecyclerViewAdapter.get(position)
         s.getMap().map { (k, v) ->
             controls[k]?.value = v
         }
     }
 
+    override fun onItemDelete(position: Int) {
+        if (!settingsRecyclerViewAdapter.isValidPosition(position)) {
+            return
+        }
+        val settingsData = settingsRecyclerViewAdapter.get(position)
+        settingsDBHelper.delete(settingsData)
+
+        settingsRecyclerViewAdapter.removeAt(position)
+    }
 }
