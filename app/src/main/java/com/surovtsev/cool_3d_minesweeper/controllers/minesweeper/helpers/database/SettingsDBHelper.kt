@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.models.game.database
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
 import android.content.ContentValues
 import android.content.Context

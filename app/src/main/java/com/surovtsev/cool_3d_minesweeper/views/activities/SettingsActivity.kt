@@ -2,7 +2,6 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.surovtsev.cool_3d_minesweeper.R
@@ -10,7 +9,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
-import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDBHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
 
