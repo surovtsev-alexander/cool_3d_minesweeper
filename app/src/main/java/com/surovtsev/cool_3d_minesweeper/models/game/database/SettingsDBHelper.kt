@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
+import glm_.vec3.Vec3i
 
 class SettingsDBHelper(
     context: Context
@@ -26,6 +27,15 @@ class SettingsDBHelper(
             put(GameSettings.zCountColumnName, zCount)
             put(GameSettings.bombsPercentageColumnName, bombsPercentage)
         }
+
+        fun getCounts() = Vec3i(xCount, yCount, zCount)
+
+        fun getMap() = mapOf<String, Int>(
+            GameSettings.xCount to xCount,
+            GameSettings.yCount to yCount,
+            GameSettings.zCount to zCount,
+            GameSettings.bombsPercentage to bombsPercentage
+        )
     }
 
     companion object {
