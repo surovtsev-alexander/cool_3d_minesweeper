@@ -22,11 +22,12 @@ class MainActivity : AppCompatActivity() {
             startGame(false)
         }
 
+        btn_ranking.setOnClickListener {
+            startActivity(RankingActivity::class.java)
+        }
+
         btn_settings.setOnClickListener {
-            ApplicationController.startingActivityCode {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
+            startActivity(SettingsActivity::class.java)
         }
     }
 
@@ -45,6 +46,14 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         invalidate()
+    }
+
+    private fun <T> startActivity(x: Class<T>) {
+        ApplicationController.startingActivityCode {
+            startActivity(
+                Intent(this, x)
+            )
+        }
     }
 
     private fun startGame(loadGame: Boolean) {

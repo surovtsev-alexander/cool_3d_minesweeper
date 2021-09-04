@@ -24,6 +24,13 @@
         />
 
     <Button
+        android:id="@+id/btn_ranking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ranking"
+        />
+
+    <Button
         android:id="@+id/btn_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

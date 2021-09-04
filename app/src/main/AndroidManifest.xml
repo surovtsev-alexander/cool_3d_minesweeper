@@ -9,8 +9,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_coll_3d_minesweeper_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Cool_3d_minesweeper"
-        >
+        android:theme="@style/Theme.Cool_3d_minesweeper">
+        <activity android:name=".views.activities.RankingActivity"></activity>
         <activity android:name=".views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,4 +21,5 @@
         <activity android:name=".views.activities.GameActivity" />
         <activity android:name=".views.activities.SettingsActivity" />
     </application>
+
 </manifest>
