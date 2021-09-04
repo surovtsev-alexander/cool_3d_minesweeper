@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
 import kotlinx.android.synthetic.main.settings.view.*
 
 class SettingsRecyclerViewAdapter(
-    private val settingsList: MutableList<SettingsDBHelper.SettingsData>,
+    private val settingsList: MutableList<SettingsData>,
     private val listener: ISettingsRVEventListener
     ):
     RecyclerView.Adapter<SettingsRecyclerViewAdapter.SettingsViewHolder>()

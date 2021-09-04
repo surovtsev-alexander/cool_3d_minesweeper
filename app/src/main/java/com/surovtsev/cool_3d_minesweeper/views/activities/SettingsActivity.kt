@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.surovtsev.cool_3d_minesweeper.R
@@ -10,6 +11,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -93,7 +95,7 @@ class SettingsActivity :
             }.toMap()
 
             settingsDBHelper.insertIfNotPresent(
-                SettingsDBHelper.SettingsData(
+                SettingsData(
                     m
                 )
             )
@@ -127,6 +129,11 @@ class SettingsActivity :
         val s = settingsRecyclerViewAdapter.get(position)
         s.getMap().map { (k, v) ->
             controls[k]?.value = v
+        }
+
+        if (true) {
+            val x = settingsDBHelper.getId(s)
+            Log.d("TEST+++", "SettingsActivity id: $x")
         }
     }
 

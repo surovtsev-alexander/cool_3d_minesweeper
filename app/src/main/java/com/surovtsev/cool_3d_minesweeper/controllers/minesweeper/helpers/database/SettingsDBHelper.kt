@@ -1,62 +1,22 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.provider.Settings
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
-import glm_.vec3.Vec3i
 
 typealias DatabaseAction<T> = (db: SQLiteDatabase) -> T
 
 class SettingsDBHelper(
     context: Context
-): SQLiteOpenHelper(context, "minesweeperDB", null, 1) {
-    data class SettingsData(
-        val xCount: Int,
-        val yCount: Int,
-        val zCount: Int,
-        val bombsPercentage: Int
-    ) {
-        constructor(count: Int, bombsPercentage: Int): this(
-            count, count, count, bombsPercentage
-        )
-
-        constructor(values: Map<String, Int>): this(
-            values[GameSettings.xCount]!!,
-            values[GameSettings.yCount]!!,
-            values[GameSettings.zCount]!!,
-            values[GameSettings.bombsPercentage]!!
-        )
-
-        fun getContentValues() = ContentValues().apply {
-            put(GameSettings.xCountColumnName, xCount)
-            put(GameSettings.yCountColumnName, yCount)
-            put(GameSettings.zCountColumnName, zCount)
-            put(GameSettings.bombsPercentageColumnName, bombsPercentage)
-        }
-
-        fun getCounts() = Vec3i(xCount, yCount, zCount)
-
-        fun getMap() = mapOf<String, Int>(
-            GameSettings.xCount to xCount,
-            GameSettings.yCount to yCount,
-            GameSettings.zCount to zCount,
-            GameSettings.bombsPercentage to bombsPercentage
-        )
-
-        fun getEqualsForWhereString(): String =
-            "${GameSettings.xCountColumnName} = ${xCount} " +
-                    "and ${GameSettings.yCountColumnName} = ${yCount} " +
-                    "and ${GameSettings.zCountColumnName} = ${zCount} " +
-                    "and ${GameSettings.bombsPercentageColumnName} = ${bombsPercentage}"
-    }
-
-    companion object {
-        private const val tableName = "settings"
-    }
-
+): SQLiteOpenHelper(
+    context,
+    DBConfig.dataBaseName,
+    null,
+    DBConfig.dataBaseVersion
+) {
     override fun onCreate(db: SQLiteDatabase?) {
         Log.d("TEST+++", "SettingsDBHelper onCreate")
         if (db == null) {
@@ -65,12 +25,12 @@ class SettingsDBHelper(
         }
 
         db.execSQL(
-            "create table $tableName (" +
-                    "id integer PRIMARY KEY AUTOINCREMENT," +
-                    "${GameSettings.xCountColumnName} INTEGER," +
-                    "${GameSettings.yCountColumnName} INTEGER," +
-                    "${GameSettings.zCountColumnName} INTEGER," +
-                    "${GameSettings.bombsPercentageColumnName} INTEGER" +
+            "CREATE TABLE ${DBConfig.settingsTableName} (" +
+                    "${SettingsData.idColumnName} INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "${SettingsData.xCountColumnName} INTEGER," +
+                    "${SettingsData.yCountColumnName} INTEGER," +
+                    "${SettingsData.zCountColumnName} INTEGER," +
+                    "${SettingsData.bombsPercentageColumnName} INTEGER" +
                     ");"
         )
 
@@ -110,7 +70,7 @@ class SettingsDBHelper(
             Log.e("Minesweeper", "settings database can not delete value")
         } else {
             db.execSQL(
-                "DELETE FROM $tableName where id = $id",
+                "DELETE FROM ${DBConfig.settingsTableName} where id = $id",
             )
         }
     }
@@ -118,7 +78,7 @@ class SettingsDBHelper(
     private fun getIdCalculationAction(settingsData: SettingsData): DatabaseAction<Int?> = { db ->
         val c = db.rawQuery(
             "SELECT id " +
-                    "from $tableName " +
+                    "from ${DBConfig.settingsTableName} " +
                     "where ${settingsData.getEqualsForWhereString()}",
             null)
         val res = if (c.moveToFirst()) {
@@ -141,20 +101,25 @@ class SettingsDBHelper(
 
     private fun getInsertAction(settingsData: SettingsData): DatabaseAction<Unit> = { db ->
         db.insert(
-            tableName,
+            DBConfig.settingsTableName,
             null,
             settingsData.getContentValues()
         )
     }
 
+    fun getId(settingsData: SettingsData): Int? =
+        actionWithDB { db ->
+            getIdAction(settingsData) (db)
+        }
+
     private fun getIsPresentAction(settingsData: SettingsData): DatabaseAction<Boolean> = { db ->
         val c = db.rawQuery(
             "SELECT COUNT(*) " +
-                    "FROM $tableName " +
-                    "WHERE ${GameSettings.xCountColumnName} = ${settingsData.xCount} " +
-                    "and ${GameSettings.yCountColumnName} = ${settingsData.yCount} " +
-                    "and ${GameSettings.zCountColumnName} = ${settingsData.zCount} " +
-                    "and ${GameSettings.bombsPercentageColumnName} = ${settingsData.bombsPercentage}",
+                    "FROM ${DBConfig}.settingsTableName " +
+                    "WHERE ${SettingsData.xCountColumnName} = ${settingsData.xCount} " +
+                    "and ${SettingsData.yCountColumnName} = ${settingsData.yCount} " +
+                    "and ${SettingsData.zCountColumnName} = ${settingsData.zCount} " +
+                    "and ${SettingsData.bombsPercentageColumnName} = ${settingsData.bombsPercentage}",
             null
         )
 
@@ -165,6 +130,30 @@ class SettingsDBHelper(
             false
         } else {
             c.getInt(0) > 0
+        }
+
+        c.close()
+
+        res
+    }
+
+    private fun getIdAction(settingsData: SettingsData): DatabaseAction<Int?> = { db ->
+        val c = db.rawQuery(
+            "SELECT ${SettingsData.idColumnName} " +
+                    "FROM ${DBConfig.settingsTableName} " +
+                    "WHERE ${SettingsData.xCountColumnName} = ${settingsData.xCount} " +
+                    "and ${SettingsData.yCountColumnName} = ${settingsData.yCount} " +
+                    "and ${SettingsData.zCountColumnName} = ${settingsData.zCount} " +
+                    "and ${SettingsData.bombsPercentageColumnName} = ${settingsData.bombsPercentage}",
+            null
+        )
+
+        val r = c.moveToFirst()
+
+        val res = if (!r) {
+            null
+        } else {
+            c.getInt(0)
         }
 
         c.close()
@@ -185,18 +174,18 @@ class SettingsDBHelper(
 
         actionWithDB { db ->
             val c = db.query(
-                tableName,
+                DBConfig.settingsTableName,
                 null, null,
                 null, null,
                 null, null
             )
 
             if (c.moveToFirst()) {
-                val xCountColIndex = c.getColumnIndex(GameSettings.xCountColumnName)
-                val yCountColIndex = c.getColumnIndex(GameSettings.yCountColumnName)
-                val zCountColIndex = c.getColumnIndex(GameSettings.zCountColumnName)
+                val xCountColIndex = c.getColumnIndex(SettingsData.xCountColumnName)
+                val yCountColIndex = c.getColumnIndex(SettingsData.yCountColumnName)
+                val zCountColIndex = c.getColumnIndex(SettingsData.zCountColumnName)
                 val bombsPercentageColIndex =
-                    c.getColumnIndex(GameSettings.bombsPercentageColumnName)
+                    c.getColumnIndex(SettingsData.bombsPercentageColumnName)
 
                 do {
                     res.add(

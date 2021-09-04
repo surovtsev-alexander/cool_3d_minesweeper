@@ -4,17 +4,11 @@ data class GameSettings(
     val settingsMap: Map<String, Int>
     ) {
     companion object {
-        private fun glueWithUnderscores(s: String) = s.replace(' ', '_')
 
         const val xCount = "x count"
         const val yCount = "y count"
         const val zCount = "z count"
         const val bombsPercentage = "bombs percentage"
-
-        val xCountColumnName = glueWithUnderscores(xCount)
-        val yCountColumnName = glueWithUnderscores(yCount)
-        val zCountColumnName = glueWithUnderscores(zCount)
-        val bombsPercentageColumnName = glueWithUnderscores(bombsPercentage)
 
         private val defaultValues = mapOf<String, Int>(
             xCount to 12,
