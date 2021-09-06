@@ -69,7 +69,9 @@ class GameLogic(
         val id = position.id
         when (touchType) {
             TouchType.SHORT -> {
-                if (id == prevClickInfo.id && currTime - prevClickInfo.time < doubleClickDelay) {
+                if (!markingOnShotTap &&
+                    id == prevClickInfo.id &&
+                    currTime - prevClickInfo.time < doubleClickDelay) {
                     emptyCube(pointedCell)
                 } else {
                     tryToOpenCube(pointedCell, markingOnShotTap)
