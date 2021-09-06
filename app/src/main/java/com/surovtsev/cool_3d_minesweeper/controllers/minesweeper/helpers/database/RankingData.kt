@@ -8,10 +8,12 @@ data class RankingData(
     val dateTime: String
 ) {
     companion object {
+        const val rankingIdName = "ranking id"
         const val settingsIdName = "settings id"
         const val elapsedName = "elapsed"
         const val dateTimeName = "date time"
 
+        val rankingIdColumnName = DBConfig.glueWithUnderscores(rankingIdName)
         val settingsIdColumnName = DBConfig.glueWithUnderscores(settingsIdName)
         val elapsedColumnName = DBConfig.glueWithUnderscores(elapsedName)
         val dateTimeColumnName = DBConfig.glueWithUnderscores(dateTimeName)

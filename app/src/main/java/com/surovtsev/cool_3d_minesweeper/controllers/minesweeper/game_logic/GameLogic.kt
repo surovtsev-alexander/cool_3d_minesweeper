@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
@@ -117,7 +116,7 @@ class GameLogic(
 
             openNeighbours(pointedCell)
 
-            bombsLeft--;
+            bombsLeft--
             gameEventsReceiver.bombCountUpdated()
         } else {
             if (skin.isMarked()) {
@@ -134,7 +133,7 @@ class GameLogic(
         }
     }
 
-    val removeCount = 1
+    private val removeCount = 1
 
     private fun processOnElement(list: MutableList<CellIndex>, action: (PointedCell) -> Unit) {
         for (i in 0 until removeCount) {
@@ -266,12 +265,12 @@ class GameLogic(
             }
         }
 
-        if (notEmpty) {
-            return SliceDescription.NOT_EMPTY
+        return if (notEmpty) {
+            SliceDescription.NOT_EMPTY
         } else if (hasZero) {
-            return SliceDescription.HAS_ZERO
+            SliceDescription.HAS_ZERO
         } else {
-            return SliceDescription.EMPTY
+            SliceDescription.EMPTY
         }
     }
 
@@ -352,7 +351,7 @@ class GameLogic(
                 continue
             }
 
-            // need to be modified. check surrendings
+            // need to be modified. check surroundings
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
                     cubeSkin, position, i
                 )) {

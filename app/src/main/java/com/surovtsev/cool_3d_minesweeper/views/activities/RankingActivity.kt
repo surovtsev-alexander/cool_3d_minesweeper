@@ -8,6 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingData
+import kotlinx.android.synthetic.main.activity_ranking.*
 
 class RankingActivity : AppCompatActivity() {
     private val rankingDBHelper: RankingDBHelper by lazy {
@@ -18,7 +19,10 @@ class RankingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking)
 
-        rankingDBHelper.insert(RankingData(3, 100, "1dafd"))
+
+        btn_test.setOnClickListener {
+            rankingDBHelper.insert(RankingData(3, 100, "1dafd"))
+        }
         val rankingList = rankingDBHelper.getRankingList()
         val str = rankingList.map { it.toString() }.fold("") {acc, r -> acc + ", " + r}
 

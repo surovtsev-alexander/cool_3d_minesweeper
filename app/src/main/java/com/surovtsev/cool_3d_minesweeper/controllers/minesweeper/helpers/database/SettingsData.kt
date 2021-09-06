@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
 import android.content.ContentValues
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import glm_.vec3.Vec3i
 
 data class SettingsData(
@@ -11,11 +11,12 @@ data class SettingsData(
     val bombsPercentage: Int
 ) {
     companion object {
-        const val idColumnName = "id"
-        val xCountColumnName = DBConfig.glueWithUnderscores(GameSettings.xCount)
-        val yCountColumnName = DBConfig.glueWithUnderscores(GameSettings.yCount)
-        val zCountColumnName = DBConfig.glueWithUnderscores(GameSettings.zCount)
-        val bombsPercentageColumnName = DBConfig.glueWithUnderscores(GameSettings.bombsPercentage)
+        const val settingsIdName = "settings id"
+        val settingsIdColumnName = DBConfig.glueWithUnderscores(settingsIdName)
+        val xCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.xCount)
+        val yCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.yCount)
+        val zCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.zCount)
+        val bombsPercentageColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.bombsPercentage)
     }
 
     constructor(count: Int, bombsPercentage: Int): this(
@@ -23,10 +24,10 @@ data class SettingsData(
     )
 
     constructor(values: Map<String, Int>): this(
-        values[GameSettings.xCount]!!,
-        values[GameSettings.yCount]!!,
-        values[GameSettings.zCount]!!,
-        values[GameSettings.bombsPercentage]!!
+        values[GameSettingsMap.xCount]!!,
+        values[GameSettingsMap.yCount]!!,
+        values[GameSettingsMap.zCount]!!,
+        values[GameSettingsMap.bombsPercentage]!!
     )
 
     fun getContentValues() = ContentValues().apply {
@@ -39,11 +40,13 @@ data class SettingsData(
     fun getCounts() = Vec3i(xCount, yCount, zCount)
 
     fun getMap() = mapOf<String, Int>(
-        GameSettings.xCount to xCount,
-        GameSettings.yCount to yCount,
-        GameSettings.zCount to zCount,
-        GameSettings.bombsPercentage to bombsPercentage
+        GameSettingsMap.xCount to xCount,
+        GameSettingsMap.yCount to yCount,
+        GameSettingsMap.zCount to zCount,
+        GameSettingsMap.bombsPercentage to bombsPercentage
     )
+
+    fun getGameSettingsMap() = GameSettingsMap(getMap())
 
     fun getEqualsForWhereString(): String =
         "${xCountColumnName} = ${xCount} " +

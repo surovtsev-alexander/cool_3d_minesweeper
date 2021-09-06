@@ -1,11 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-import android.provider.Settings
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
 
 class SettingsDBHelper(
     private val dbHelper: IDBHelper
@@ -42,14 +38,14 @@ class SettingsDBHelper(
             Log.e("Minesweeper", "settings database can not delete value")
         } else {
             db.execSQL(
-                "DELETE FROM ${DBConfig.settingsTableName} where id = $id",
+                "DELETE FROM ${DBConfig.settingsTableName} where ${SettingsData.settingsIdColumnName} = $id",
             )
         }
     }
 
     private fun getIdCalculationAction(settingsData: SettingsData): DatabaseAction<Int?> = { db ->
         val c = db.rawQuery(
-            "SELECT id " +
+            "SELECT ${SettingsData.settingsIdColumnName} " +
                     "from ${DBConfig.settingsTableName} " +
                     "where ${settingsData.getEqualsForWhereString()}",
             null)
@@ -87,7 +83,7 @@ class SettingsDBHelper(
     private fun getIsPresentAction(settingsData: SettingsData): DatabaseAction<Boolean> = { db ->
         val c = db.rawQuery(
             "SELECT COUNT(*) " +
-                    "FROM ${DBConfig}.settingsTableName " +
+                    "FROM ${DBConfig.settingsTableName} " +
                     "WHERE ${SettingsData.xCountColumnName} = ${settingsData.xCount} " +
                     "and ${SettingsData.yCountColumnName} = ${settingsData.yCount} " +
                     "and ${SettingsData.zCountColumnName} = ${settingsData.zCount} " +
@@ -111,7 +107,7 @@ class SettingsDBHelper(
 
     private fun getIdAction(settingsData: SettingsData): DatabaseAction<Int?> = { db ->
         val c = db.rawQuery(
-            "SELECT ${SettingsData.idColumnName} " +
+            "SELECT ${SettingsData.settingsIdColumnName} " +
                     "FROM ${DBConfig.settingsTableName} " +
                     "WHERE ${SettingsData.xCountColumnName} = ${settingsData.xCount} " +
                     "and ${SettingsData.yCountColumnName} = ${settingsData.yCount} " +

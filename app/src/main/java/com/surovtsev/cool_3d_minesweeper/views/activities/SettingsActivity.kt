@@ -10,7 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
@@ -33,10 +33,10 @@ class SettingsActivity :
 
     private val controls: Map<String, IUiIntValueSelector> by lazy {
         mapOf<String, IUiIntValueSelector>(
-            GameSettings.xCount to ivs_xCount,
-            GameSettings.yCount to ivs_yCount,
-            GameSettings.zCount to ivs_zCount,
-            GameSettings.bombsPercentage to ivs_bombsPercentage
+            GameSettingsMap.xCount to ivs_xCount,
+            GameSettingsMap.yCount to ivs_yCount,
+            GameSettingsMap.zCount to ivs_zCount,
+            GameSettingsMap.bombsPercentage to ivs_bombsPercentage
         )
     }
 
@@ -44,7 +44,7 @@ class SettingsActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val borders = GameSettings.borders
+        val borders = GameSettingsMap.borders
         val initMyIntEdit = { e: IUiIntValueSelector, name: String ->
             e.name = name
             val (l, r) = borders[name]!!
@@ -55,11 +55,11 @@ class SettingsActivity :
         controls.map { initMyIntEdit(it.value, it.key) }
 
         val loadedGameSettings =
-            ApplicationController.instance.saveController.tryToLoad<GameSettings>(
+            ApplicationController.instance.saveController.tryToLoad<GameSettingsMap>(
                 SaveTypes.GameSettingsJson
             )
 
-        val gameSettings = GameSettings.createObject(
+        val gameSettings = GameSettingsMap.createObject(
             loadedGameSettings
         )
 
@@ -101,7 +101,7 @@ class SettingsActivity :
                 )
             )
 
-            val gameSettings = GameSettings(m)
+            val gameSettings = GameSettingsMap(m)
             ApplicationController.instance.saveController.save(
                 SaveTypes.GameSettingsJson,
                 gameSettings

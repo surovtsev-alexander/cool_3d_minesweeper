@@ -1,10 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-
 class RankingDBHelper(
     private val dBHelper: IDBHelper
 ) {

@@ -13,7 +13,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameCon
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettings
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
@@ -65,10 +65,10 @@ class MinesweeperController(
             )
             gameConfig = save!!.gameConfig
         } else {
-            val loadedGameSettings = ApplicationController.instance.saveController.tryToLoad<GameSettings>(
+            val loadedGameSettings = ApplicationController.instance.saveController.tryToLoad<GameSettingsMap>(
                 SaveTypes.GameSettingsJson
             )
-            val settings = GameSettings.createObject(loadedGameSettings)
+            val settings = GameSettingsMap.createObject(loadedGameSettings)
             gameConfig = GameConfigFactory.createGameConfig(settings)
         }
 

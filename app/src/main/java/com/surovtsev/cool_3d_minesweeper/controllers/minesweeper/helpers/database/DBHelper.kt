@@ -13,6 +13,16 @@ open class DBHelper(
   null,
   DBConfig.dataBaseVersion
 ), IDBHelper {
+
+    override fun onOpen(db: SQLiteDatabase?) {
+        super.onOpen(db)
+
+        if (db != null && !db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
+
     override fun onCreate(db: SQLiteDatabase?) {
         if (db == null) {
             Log.e("Minesweeper", "Can not create ranking databases.")
@@ -22,7 +32,7 @@ open class DBHelper(
         run {
             db.execSQL(
                 "CREATE TABLE ${DBConfig.settingsTableName} (" +
-                        "${SettingsData.idColumnName} INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "${SettingsData.settingsIdColumnName} INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "${SettingsData.xCountColumnName} INTEGER," +
                         "${SettingsData.yCountColumnName} INTEGER," +
                         "${SettingsData.zCountColumnName} INTEGER," +
@@ -37,10 +47,15 @@ open class DBHelper(
         run {
             val query =
                 "CREATE TABLE ${DBConfig.rankingTableName} (" +
-                        "${RankingData.settingsIdColumnName} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "${RankingData.rankingIdColumnName} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "${RankingData.settingsIdColumnName}, " +
                         "${RankingData.elapsedColumnName} INTEGER, " +
                         "${RankingData.dateTimeColumnName} VARCHAR(20), " +
-                        "FOREIGN KEY (${RankingData.settingsIdColumnName}) REFERENCES  ${DBConfig.settingsTableName} (${SettingsData.idColumnName}))"
+                        "CONSTRAINT fk_ranking_settings_id " +
+                        "FOREIGN KEY (${RankingData.settingsIdColumnName})" +
+                        "REFERENCES  ${DBConfig.settingsTableName} (${SettingsData.settingsIdColumnName}) " +
+                        "ON DELETE CASCADE " +
+                        ")"
 
             Log.d("TEST+++", "RankingDBHelper onCreate str:\n$query")
             db.execSQL(

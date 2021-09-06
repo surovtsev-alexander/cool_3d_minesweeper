@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.config
 
-data class GameSettings(
+data class GameSettingsMap(
     val settingsMap: Map<String, Int>
     ) {
     companion object {
@@ -33,9 +33,9 @@ data class GameSettings(
                     it to (10 to 90)
                 }).toMap()
 
-        fun createObject(part: GameSettings?): GameSettings {
+        fun createObject(part: GameSettingsMap?): GameSettingsMap {
             if (part == null) {
-                return GameSettings(defaultValues)
+                return GameSettingsMap(defaultValues)
             }
 
             val x = defaultValues.map { (k, v) ->
@@ -46,7 +46,7 @@ data class GameSettings(
                 }
             }.toMap()
 
-            return GameSettings(x)
+            return GameSettingsMap(x)
         }
     }
 }
