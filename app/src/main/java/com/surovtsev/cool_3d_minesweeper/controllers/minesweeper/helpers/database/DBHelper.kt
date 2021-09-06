@@ -50,7 +50,7 @@ open class DBHelper(
                         "${RankingData.rankingIdColumnName} INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "${RankingData.settingsIdColumnName}, " +
                         "${RankingData.elapsedColumnName} INTEGER, " +
-                        "${RankingData.dateTimeColumnName} VARCHAR(20), " +
+                        "${RankingData.dateTimeColumnName} VARCHAR(30), " +
                         "CONSTRAINT fk_ranking_settings_id " +
                         "FOREIGN KEY (${RankingData.settingsIdColumnName})" +
                         "REFERENCES  ${DBConfig.settingsTableName} (${SettingsData.settingsIdColumnName}) " +

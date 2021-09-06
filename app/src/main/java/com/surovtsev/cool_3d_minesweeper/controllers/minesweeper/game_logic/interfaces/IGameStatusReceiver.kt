@@ -3,13 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.int
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 
-interface IGameEventsReceiver: IGameStatusReceiver {
-    fun bombCountUpdated()
-    fun timeUpdated()
+interface IGameStatusReceiver {
+    fun gameStatusUpdated(newStatus: GameStatus)
 
-    override fun init() {
-        super.init()
-        bombCountUpdated()
-        timeUpdated()
+    fun init() {
+        gameStatusUpdated(GameStatusHelper.initStatus)
     }
 }

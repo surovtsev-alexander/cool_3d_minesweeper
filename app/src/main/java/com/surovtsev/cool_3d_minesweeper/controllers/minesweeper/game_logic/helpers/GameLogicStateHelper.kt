@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResume
@@ -11,6 +12,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 
 class GameLogicStateHelper(
     private val gameEventsReceiver: IGameEventsReceiver,
+    private val gameStatusReceiver: IGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper
 ):
     INeedToBeUpdated, IHandlePauseResume
@@ -53,6 +55,7 @@ class GameLogicStateHelper(
 
     fun setGameState(newState: GameStatus) {
         gameStatus = newState
+        gameStatusReceiver.gameStatusUpdated(gameStatus)
         gameEventsReceiver.gameStatusUpdated(gameStatus)
 
         if (isGameInProgress()) {

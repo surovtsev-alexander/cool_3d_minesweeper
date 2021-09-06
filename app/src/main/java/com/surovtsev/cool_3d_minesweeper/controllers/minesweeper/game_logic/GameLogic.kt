@@ -4,6 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
@@ -20,10 +21,12 @@ class GameLogic(
     var textureUpdater: ICanUpdateTexture?,
     private val gameConfig: GameConfig,
     val gameEventsReceiver: IGameEventsReceiver,
+    gameStatusReceiver: IGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper
 ) {
     val gameLogicStateHelper = GameLogicStateHelper(
         gameEventsReceiver,
+        gameStatusReceiver,
         timeSpanHelper
     )
 

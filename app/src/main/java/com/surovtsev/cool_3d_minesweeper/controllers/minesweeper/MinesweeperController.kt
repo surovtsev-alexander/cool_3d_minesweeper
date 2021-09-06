@@ -6,14 +6,16 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
@@ -21,6 +23,8 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEven
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
+import java.time.Clock
+import java.time.LocalDateTime
 
 class MinesweeperController(
     private val context: Context,
@@ -28,7 +32,8 @@ class MinesweeperController(
     loadGame: Boolean
 ):
     IHandleOpenGLEvents,
-    IHandlePauseResumeDestroy
+    IHandlePauseResumeDestroy,
+    IGameStatusReceiver
 {
     val gameRenderer = GLESRenderer(this)
 
@@ -50,6 +55,8 @@ class MinesweeperController(
 
     private var gameViewsHolder: GameViewsHolder? = null
 
+    private var settingsData: SettingsData? = null
+
     private var save: Save? = null
 
     init {
@@ -68,6 +75,7 @@ class MinesweeperController(
             val loadedSettingsData = ApplicationController.instance.saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
             )?: SettingsData()
+            settingsData = loadedSettingsData
             gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
         }
 
@@ -79,6 +87,7 @@ class MinesweeperController(
                 null,
                 gameConfig,
                 gameEventsReceiver,
+                this,
                 timeSpanHelper
             )
 
@@ -185,5 +194,23 @@ class MinesweeperController(
 
     override fun onDestroy() {
         Log.d("TEST+++", "MinesweeperController onResume")
+    }
+
+    override fun gameStatusUpdated(newStatus: GameStatus) {
+        if (newStatus != GameStatus.WIN) {
+            return
+        }
+
+        val dbHelper = DBHelper(context)
+        val settingsDBHelper = SettingsDBHelper(dbHelper)
+        val rankingDBHelper = RankingDBHelper(dbHelper)
+
+        val settingId = settingsDBHelper.insertIfNotPresent(settingsData!!)
+        val rankingData = RankingData(
+            settingId,
+            gameLogic.gameLogicStateHelper.getElapsed(),
+            LocalDateTime.now().toString()
+        )
+        rankingDBHelper.insert(rankingData)
     }
 }

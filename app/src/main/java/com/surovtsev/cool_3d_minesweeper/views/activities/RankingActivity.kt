@@ -23,7 +23,7 @@ class RankingActivity : AppCompatActivity() {
             rankingDBHelper.insert(RankingData(3, 100, "1dafd"))
         }
         val rankingList = rankingDBHelper.getRankingList()
-        val str = rankingList.map { it.toString() }.fold("") {acc, r -> acc + ", " + r}
+        val str = rankingList.map { it.toString() }.fold("") {acc, r -> "$acc, $r" }
 
         Log.d("TEST+++", "RankingActivity $str")
     }

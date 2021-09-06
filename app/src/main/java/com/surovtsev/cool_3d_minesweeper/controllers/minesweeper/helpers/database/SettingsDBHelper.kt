@@ -58,21 +58,17 @@ class SettingsDBHelper(
         res
     }
 
-    fun insertIfNotPresent(settingsData: SettingsData) {
+    fun insertIfNotPresent(settingsData: SettingsData): Int =
         dbHelper.actionWithDB { db ->
-            val isPresent = getIsPresentAction(settingsData)(db)
-            if (!isPresent) {
-                getInsertAction(settingsData)(db)
-            }
+            getIdAction(settingsData)(db)?: getInsertAction(settingsData)(db)
         }
-    }
 
-    private fun getInsertAction(settingsData: SettingsData): DatabaseAction<Unit> = { db ->
+    private fun getInsertAction(settingsData: SettingsData): DatabaseAction<Int> = { db ->
         db.insert(
             DBConfig.settingsTableName,
             null,
             settingsData.getContentValues()
-        )
+        ).toInt()
     }
 
     fun getId(settingsData: SettingsData): Int? =
