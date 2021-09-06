@@ -10,9 +10,9 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -20,9 +20,8 @@ class SettingsActivity :
     AppCompatActivity(),
     SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
-    private val settingsDBHelper: SettingsDBHelper by lazy {
-        SettingsDBHelper(DBHelper(this))
-    }
+    private val settingsDBHelper: SettingsDBHelper = SettingsDBHelper(DBHelper(this))
+
 
     private fun getDbSettingsList() =
         settingsDBHelper.getSettingsList().toMutableList()
@@ -33,10 +32,10 @@ class SettingsActivity :
 
     private val controls: Map<String, IUiIntValueSelector> by lazy {
         mapOf<String, IUiIntValueSelector>(
-            GameSettingsMap.xCount to ivs_xCount,
-            GameSettingsMap.yCount to ivs_yCount,
-            GameSettingsMap.zCount to ivs_zCount,
-            GameSettingsMap.bombsPercentage to ivs_bombsPercentage
+            SettingsData.xCountName to ivs_xCount,
+            SettingsData.yCountName to ivs_yCount,
+            SettingsData.zCountName to ivs_zCount,
+            SettingsData.bombsPercentageName to ivs_bombsPercentage
         )
     }
 
@@ -44,26 +43,23 @@ class SettingsActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val borders = GameSettingsMap.borders
+        val borders = SettingsDataHelper.borders
         val initMyIntEdit = { e: IUiIntValueSelector, name: String ->
             e.name = name
-            val (l, r) = borders[name]!!
-            e.minValue = l
-            e.maxValue = r
+            val lR = borders[name]!!
+            e.minValue = lR.first
+            e.maxValue = lR.last
         }
 
         controls.map { initMyIntEdit(it.value, it.key) }
 
-        val loadedGameSettings =
-            ApplicationController.instance.saveController.tryToLoad<GameSettingsMap>(
+        val loadedSettingsData =
+            ApplicationController.instance.saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
-            )
+            )?: SettingsData()
 
-        val gameSettings = GameSettingsMap.createObject(
-            loadedGameSettings
-        )
 
-        gameSettings.settingsMap.map { (k, v) ->
+        loadedSettingsData.getMap().map { (k, v) ->
             controls[k]?.value = v
         }
 
@@ -95,16 +91,14 @@ class SettingsActivity :
                 x.key to x.value.value
             }.toMap()
 
+            val settingsData = SettingsData(m)
             settingsDBHelper.insertIfNotPresent(
-                SettingsData(
-                    m
-                )
+                settingsData
             )
 
-            val gameSettings = GameSettingsMap(m)
             ApplicationController.instance.saveController.save(
                 SaveTypes.GameSettingsJson,
-                gameSettings
+                settingsData
             )
 
             finish()

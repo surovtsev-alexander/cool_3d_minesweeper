@@ -11,9 +11,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import kotlinx.android.synthetic.main.activity_ranking.*
 
 class RankingActivity : AppCompatActivity() {
-    private val rankingDBHelper: RankingDBHelper by lazy {
-        RankingDBHelper(DBHelper(this))
-    }
+    private val rankingDBHelper: RankingDBHelper = RankingDBHelper(DBHelper(this))
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -10,10 +10,10 @@ import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObj
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
@@ -65,11 +65,10 @@ class MinesweeperController(
             )
             gameConfig = save!!.gameConfig
         } else {
-            val loadedGameSettings = ApplicationController.instance.saveController.tryToLoad<GameSettingsMap>(
+            val loadedSettingsData = ApplicationController.instance.saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
-            )
-            val settings = GameSettingsMap.createObject(loadedGameSettings)
-            gameConfig = GameConfigFactory.createGameConfig(settings)
+            )?: SettingsData()
+            gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
         }
 
         gameObjectsHolder = GameObjectsHolder(gameConfig)

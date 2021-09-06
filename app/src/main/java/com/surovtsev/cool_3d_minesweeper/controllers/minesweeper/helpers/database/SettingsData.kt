@@ -1,7 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
 import android.content.ContentValues
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameSettingsMap
 import glm_.vec3.Vec3i
 
 data class SettingsData(
@@ -11,23 +10,33 @@ data class SettingsData(
     val bombsPercentage: Int
 ) {
     companion object {
-        const val settingsIdName = "settings id"
+        private const val settingsIdName = "settings id"
+        const val xCountName = "x count"
+        const val yCountName = "y count"
+        const val zCountName = "z count"
+        const val bombsPercentageName = "bombs percentage"
+
         val settingsIdColumnName = DBConfig.glueWithUnderscores(settingsIdName)
-        val xCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.xCount)
-        val yCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.yCount)
-        val zCountColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.zCount)
-        val bombsPercentageColumnName = DBConfig.glueWithUnderscores(GameSettingsMap.bombsPercentage)
+        val xCountColumnName = DBConfig.glueWithUnderscores(xCountName)
+        val yCountColumnName = DBConfig.glueWithUnderscores(yCountName)
+        val zCountColumnName = DBConfig.glueWithUnderscores(zCountName)
+        val bombsPercentageColumnName = DBConfig.glueWithUnderscores(bombsPercentageName)
     }
+
+    constructor() : this(
+        12, 12, 12, 20
+    )
 
     constructor(count: Int, bombsPercentage: Int): this(
         count, count, count, bombsPercentage
     )
 
+
     constructor(values: Map<String, Int>): this(
-        values[GameSettingsMap.xCount]!!,
-        values[GameSettingsMap.yCount]!!,
-        values[GameSettingsMap.zCount]!!,
-        values[GameSettingsMap.bombsPercentage]!!
+        values[xCountName]!!,
+        values[yCountName]!!,
+        values[zCountName]!!,
+        values[bombsPercentageName]!!
     )
 
     fun getContentValues() = ContentValues().apply {
@@ -39,18 +48,16 @@ data class SettingsData(
 
     fun getCounts() = Vec3i(xCount, yCount, zCount)
 
-    fun getMap() = mapOf<String, Int>(
-        GameSettingsMap.xCount to xCount,
-        GameSettingsMap.yCount to yCount,
-        GameSettingsMap.zCount to zCount,
-        GameSettingsMap.bombsPercentage to bombsPercentage
+    fun getMap() = mapOf(
+        xCountName to xCount,
+        yCountName to yCount,
+        zCountName to zCount,
+        bombsPercentageName to bombsPercentage
     )
 
-    fun getGameSettingsMap() = GameSettingsMap(getMap())
-
     fun getEqualsForWhereString(): String =
-        "${xCountColumnName} = ${xCount} " +
-                "and ${yCountColumnName} = ${yCount} " +
-                "and ${zCountColumnName} = ${zCount} " +
-                "and ${bombsPercentageColumnName} = ${bombsPercentage}"
+        "$xCountColumnName = $xCount " +
+                "and $yCountColumnName = $yCount " +
+                "and $zCountColumnName = $zCount " +
+                "and $bombsPercentageColumnName = $bombsPercentage"
 }

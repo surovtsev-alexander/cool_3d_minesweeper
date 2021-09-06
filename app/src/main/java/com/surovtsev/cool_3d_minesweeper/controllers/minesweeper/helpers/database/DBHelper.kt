@@ -19,7 +19,7 @@ open class DBHelper(
 
         if (db != null && !db.isReadOnly()) {
             // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys=ON;");
+            db.setForeignKeyConstraintsEnabled(true)
         }
     }
 
