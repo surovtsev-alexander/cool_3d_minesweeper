@@ -68,7 +68,7 @@ class GameLogic(
         val id = position.id
         when (touchType) {
             TouchType.SHORT -> {
-                if (!markingOnShotTap &&
+                if ((!markingOnShotTap || pointedCell.skin.isOpenedNumber()) &&
                     id == prevClickInfo.id &&
                     currTime - prevClickInfo.time < doubleClickDelay) {
                     emptyCube(pointedCell)
@@ -172,10 +172,7 @@ class GameLogic(
         val cellRange = cubeSkin.cellRange
 
         val l = { r: CellRange ->
-            val sd = inspectSlice(r)
-
-//            Log.d("TEST++", "sd $sd")
-            when (sd) {
+            when (inspectSlice((r))) {
                 SliceDescription.NOT_EMPTY -> {
                     true
                 }
@@ -265,12 +262,10 @@ class GameLogic(
             }
         }
 
-        return if (notEmpty) {
-            SliceDescription.NOT_EMPTY
-        } else if (hasZero) {
-            SliceDescription.HAS_ZERO
-        } else {
-            SliceDescription.EMPTY
+        return when {
+            notEmpty -> SliceDescription.NOT_EMPTY
+            hasZero -> SliceDescription.HAS_ZERO
+            else -> SliceDescription.EMPTY
         }
     }
 
