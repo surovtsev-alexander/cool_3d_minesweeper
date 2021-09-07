@@ -23,7 +23,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEven
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
-import java.time.Clock
 import java.time.LocalDateTime
 
 class MinesweeperController(
@@ -202,8 +201,8 @@ class MinesweeperController(
         }
 
         val dbHelper = DBHelper(context)
-        val settingsDBHelper = SettingsDBHelper(dbHelper)
-        val rankingDBHelper = RankingDBHelper(dbHelper)
+        val settingsDBHelper = SettingsDBQueries(dbHelper)
+        val rankingDBQueries = RankingDBQueries(dbHelper)
 
         val settingId = settingsDBHelper.insertIfNotPresent(settingsData!!)
         val rankingData = RankingData(
@@ -211,6 +210,6 @@ class MinesweeperController(
             gameLogic.gameLogicStateHelper.getElapsed(),
             LocalDateTime.now().toString()
         )
-        rankingDBHelper.insert(rankingData)
+        rankingDBQueries.insert(rankingData)
     }
 }

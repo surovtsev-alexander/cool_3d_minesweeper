@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
-class RankingDBHelper(
+class RankingDBQueries(
     private val dBHelper: IDBHelper
 ) {
 

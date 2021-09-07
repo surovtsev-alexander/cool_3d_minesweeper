@@ -40,7 +40,7 @@ open class DBHelper(
                         ");"
             )
 
-            val settingsDBHelper = SettingsDBHelper(this)
+            val settingsDBHelper = SettingsDBQueries(this)
             settingsDBHelper.insertDefaultValues(db)
         }
 

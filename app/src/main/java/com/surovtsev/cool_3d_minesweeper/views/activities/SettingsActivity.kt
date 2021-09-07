@@ -10,7 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.ui.SettingsRecyclerViewAdapter
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
@@ -20,11 +20,11 @@ class SettingsActivity :
     AppCompatActivity(),
     SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
-    private val settingsDBHelper: SettingsDBHelper = SettingsDBHelper(DBHelper(this))
+    private val settingsDBQueries: SettingsDBQueries = SettingsDBQueries(DBHelper(this))
 
 
     private fun getDbSettingsList() =
-        settingsDBHelper.getSettingsList().toMutableList()
+        settingsDBQueries.getSettingsList().toMutableList()
 
     private val settingsRecyclerViewAdapter: SettingsRecyclerViewAdapter by lazy {
         SettingsRecyclerViewAdapter(getDbSettingsList(), this)
@@ -92,7 +92,7 @@ class SettingsActivity :
             }.toMap()
 
             val settingsData = SettingsData(m)
-            settingsDBHelper.insertIfNotPresent(
+            settingsDBQueries.insertIfNotPresent(
                 settingsData
             )
 
@@ -127,7 +127,7 @@ class SettingsActivity :
         }
 
         if (true) {
-            val x = settingsDBHelper.getId(s)
+            val x = settingsDBQueries.getId(s)
             Log.d("TEST+++", "SettingsActivity id: $x")
         }
     }
@@ -137,7 +137,7 @@ class SettingsActivity :
             return
         }
         val settingsData = settingsRecyclerViewAdapter.get(position)
-        settingsDBHelper.delete(settingsData)
+        settingsDBQueries.delete(settingsData)
 
         settingsRecyclerViewAdapter.removeAt(position)
     }

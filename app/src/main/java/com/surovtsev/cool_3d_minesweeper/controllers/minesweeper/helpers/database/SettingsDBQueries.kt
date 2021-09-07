@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databa
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 
-class SettingsDBHelper(
+class SettingsDBQueries(
     private val dbHelper: IDBHelper
 )
 {

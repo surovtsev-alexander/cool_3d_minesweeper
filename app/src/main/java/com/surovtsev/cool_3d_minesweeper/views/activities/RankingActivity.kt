@@ -6,12 +6,12 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBHelper
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingData
 import kotlinx.android.synthetic.main.activity_ranking.*
 
 class RankingActivity : AppCompatActivity() {
-    private val rankingDBHelper: RankingDBHelper = RankingDBHelper(DBHelper(this))
+    private val rankingDBQueries: RankingDBQueries = RankingDBQueries(DBHelper(this))
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,9 +20,9 @@ class RankingActivity : AppCompatActivity() {
 
 
         btn_test.setOnClickListener {
-            rankingDBHelper.insert(RankingData(3, 100, "1dafd"))
+            rankingDBQueries.insert(RankingData(3, 100, "1dafd"))
         }
-        val rankingList = rankingDBHelper.getRankingList()
+        val rankingList = rankingDBQueries.getRankingList()
         val str = rankingList.map { it.toString() }.fold("") {acc, r -> "$acc, $r" }
 
         Log.d("TEST+++", "RankingActivity $str")
