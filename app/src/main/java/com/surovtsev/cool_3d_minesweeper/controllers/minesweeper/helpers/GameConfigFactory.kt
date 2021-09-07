@@ -17,6 +17,7 @@ object GameConfigFactory {
         val bombsRate =  settingsData.bombsPercentage.toFloat() / 100f
 
         return GameConfig(
+            settingsData,
             counts,
             dimensions,
             gaps,

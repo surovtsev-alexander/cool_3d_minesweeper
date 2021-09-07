@@ -54,8 +54,6 @@ class MinesweeperController(
 
     private var gameViewsHolder: GameViewsHolder? = null
 
-    private var settingsData: SettingsData? = null
-
     private var save: Save? = null
 
     init {
@@ -74,7 +72,6 @@ class MinesweeperController(
             val loadedSettingsData = ApplicationController.instance.saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
             )?: SettingsData()
-            settingsData = loadedSettingsData
             gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
         }
 
@@ -204,7 +201,7 @@ class MinesweeperController(
         val settingsDBHelper = SettingsDBQueries(dbHelper)
         val rankingDBQueries = RankingDBQueries(dbHelper)
 
-        val settingId = settingsDBHelper.insertIfNotPresent(settingsData!!)
+        val settingId = settingsDBHelper.insertIfNotPresent(gameConfig.settingsData)
         val rankingData = RankingData(
             settingId,
             gameLogic.gameLogicStateHelper.getElapsed(),
