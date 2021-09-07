@@ -143,7 +143,7 @@ class MinesweeperController(
         gameLogic.gameEventsReceiver.timeUpdated()
     }
 
-    @Synchronized fun SyncExecution(x: () -> Unit) {
+    @Synchronized fun syncExecution(x: () -> Unit) {
         x()
     }
 
@@ -157,7 +157,7 @@ class MinesweeperController(
             touchReceiver.release()
         }
 
-        SyncExecution {
+        syncExecution {
             scene?.onDrawFrame()
         }
     }
@@ -168,7 +168,7 @@ class MinesweeperController(
             return
         }
 
-        SyncExecution {
+        syncExecution {
             gameLogic.gameLogicStateHelper.onPause()
 
             val save = Save.createObject(
@@ -193,6 +193,13 @@ class MinesweeperController(
     }
 
     override fun gameStatusUpdated(newStatus: GameStatus) {
+        if (newStatus == GameStatus.WIN ||
+            newStatus == GameStatus.LOSE) {
+            ApplicationController.instance.saveController.emptyData(
+                SaveTypes.SaveGameJson
+            )
+        }
+
         if (newStatus != GameStatus.WIN) {
             return
         }

@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
+import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
@@ -96,6 +97,10 @@ class GameLogic(
     private fun emptyCube(pointedCell: PointedCell) {
         val skin = pointedCell.skin
         val isBomb = pointedCell.skin.isBomb
+
+        if (skin.isEmpty()) {
+            return
+        }
 
         if (isBomb) {
             if (!skin.isMarked()) {
@@ -246,7 +251,7 @@ class GameLogic(
 
                     if (s.isEmpty()) {
                         continue
-                    } else if (s.isClosed() || s.isMarked()) {
+                    } else if (s.isClosed()) {
                         notEmpty = true
                     } else {
                         hasZero = true
