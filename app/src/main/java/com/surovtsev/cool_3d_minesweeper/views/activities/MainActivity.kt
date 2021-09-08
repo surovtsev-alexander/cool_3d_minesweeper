@@ -21,7 +21,7 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
 import androidx.compose.runtime.getValue
 
-class MainActivityV2: ComponentActivity() {
+class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,7 +68,7 @@ class MainActivityV2: ComponentActivity() {
                             MainMenuButton(
                                 n,
                                 a,
-                                if (a == this@MainActivityV2::loadGame) enabled else true
+                                if (a == this@MainActivity::loadGame) enabled else true
                             )
                         }
                     }
