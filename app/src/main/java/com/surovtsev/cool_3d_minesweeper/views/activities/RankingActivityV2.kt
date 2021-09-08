@@ -92,21 +92,11 @@ class RankingActivityV2: ComponentActivity() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 val settingsData = settingDataWithId.data
+                val counts = settingsData.getCounts()
                 Text(
-                    settingsData.xCount.toString(),
-                    Modifier.fillMaxWidth(0.25f),
-                    textAlign = TextAlign.End
-                )
-                Text(
-                    settingsData.yCount.toString(),
-                    Modifier.fillMaxWidth(0.33f),
-                    textAlign = TextAlign.End
-
-                )
-                Text(
-                    settingsData.zCount.toString(),
+                    counts.toString(),
                     Modifier.fillMaxWidth(0.5f),
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.Center
                 )
                 Text(
                     settingsData.bombsPercentage.toString(),
