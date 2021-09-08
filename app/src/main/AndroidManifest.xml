@@ -21,8 +21,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.activities.RankingActivity" />
-
         <activity android:name=".views.activities.GameActivity" />
 
         <activity android:name=".views.activities.SettingsActivity" />
