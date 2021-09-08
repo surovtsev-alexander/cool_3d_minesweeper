@@ -13,13 +13,13 @@ data class CellRange(
 
     constructor(counts: Vec3i): this(
         getIntRange(
-            counts.x
+            counts[0]
         ),
         getIntRange(
-            counts.y
+            counts[1]
         ),
         getIntRange(
-            counts.z
+            counts[2]
         )
     )
 

@@ -20,9 +20,9 @@ class CubeBorder(
         val halfSpace = gameConfig.halfCellSpace
 
         val counts = gameConfig.counts
-        cells = Array(counts.x.toInt()) { x ->
-            Array(counts.y.toInt()) { y ->
-                Array(counts.z.toInt()) { z ->
+        cells = Array(counts[0]) { x ->
+            Array(counts[1]) { y ->
+                Array(counts[2]) { z ->
                     CellBorder(
                         centers[CellIndex.calcId(counts, x, y, z)],
                         halfSpace

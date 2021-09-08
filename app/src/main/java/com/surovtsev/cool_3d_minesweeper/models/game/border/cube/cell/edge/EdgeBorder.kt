@@ -32,7 +32,7 @@ data class EdgeBorder(
 
     companion object {
         fun dot(a: Vec4, b: Vec4): Float {
-            return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+            return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]
         }
 
         fun dist(p1: Vec3, p2: Vec3) = (p1 - p2).length()

@@ -51,7 +51,7 @@ class ClickAndRotationHelper(
                         }
                     })
 
-                    movement += abs(delta.x) + abs(delta.y)
+                    movement += abs(delta[0]) + abs(delta[1])
 
                     prev = curr
                 }

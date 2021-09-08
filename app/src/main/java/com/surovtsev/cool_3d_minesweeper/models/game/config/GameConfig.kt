@@ -19,7 +19,7 @@ data class GameConfig(
         assert(bombsRate < 1)
     }
 
-    val cubesCount = counts.x * counts.y * counts.z
+    val cubesCount = counts[0] * counts[1] * counts[2]
 
     val bombsCount =
         max(

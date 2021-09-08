@@ -18,13 +18,15 @@ class CellIndex(
 
     companion object {
         fun calcId(counts: Vec3i, x: Int, y: Int, z: Int) =
-            x + counts.x * (y + counts.y * z)
+            x + counts[0] * (y + counts[1] * z)
 
         fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { xyz ->
-            val x = xyz % counts.x.toInt()
-            val yz = (xyz - x) / counts.x
-            val y = yz % counts.y
-            val z = (yz - y) / counts.y
+            val countX = counts[0]
+            val countY = counts[1]
+            val x = xyz % countX
+            val yz = (xyz - x) / countX
+            val y = yz % countY
+            val z = (yz - y) / countY
             CellIndex(
                 x,
                 y,
@@ -34,12 +36,12 @@ class CellIndex(
         }
 
         fun <T> getValue(arr: Array<Array<Array<T>>>, pos: Vec3i) =
-            arr[pos.x][pos.y][pos.z]
+            arr[pos[0]][pos[1]][pos[2]]
 
     }
 
     constructor(v: Vec3i, counts: Vec3i): this(
-        v.x, v.y, v.z, counts
+        v[0], v[1], v[2], counts
     )
 
     override fun equals(other: Any?): Boolean {

@@ -10,16 +10,29 @@
         android:roundIcon="@mipmap/ic_coll_3d_minesweeper_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cool_3d_minesweeper">
-        <activity android:name=".views.activities.RankingActivity"></activity>
-        <activity android:name=".views.activities.MainActivity">
+
+        <activity
+            android:name=".views.activities.MainActivityV2"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".views.activities.RankingActivity" />
+
+        <activity
+            android:name=".views.activities.MainActivity"
+            android:exported="true"
+            >
+        </activity>
+
         <activity android:name=".views.activities.GameActivity" />
+
         <activity android:name=".views.activities.SettingsActivity" />
+
     </application>
 
 </manifest>

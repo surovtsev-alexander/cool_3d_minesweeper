@@ -17,14 +17,14 @@ class CubeSkin(
             counts
         )
 
-    val cellCount = counts.x * counts.y * counts.z
+    val cellCount = counts[0] * counts[1] * counts[2]
 
     companion object {
 
         fun iterateCubes(counts: Vec3i, action: (xyz: CellIndex) -> Unit) {
-            for (x in 0 until counts.x) {
-                for (y in 0 until counts.y) {
-                    for (z in 0 until counts.z) {
+            for (x in 0 until counts[0]) {
+                for (y in 0 until counts[1]) {
+                    for (z in 0 until counts[2]) {
                         action(
                             CellIndex(
                                 x,
@@ -40,9 +40,9 @@ class CubeSkin(
     }
 
     val skins: Array<Array<Array<CellSkin>>> =
-        Array(counts.x.toInt()) {
-            Array(counts.y.toInt()) {
-                Array(counts.z.toInt()) {
+        Array(counts[0]) {
+            Array(counts[1]) {
+                Array(counts[2]) {
                     CellSkin()
                 }
             }

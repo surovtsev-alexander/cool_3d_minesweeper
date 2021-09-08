@@ -10,7 +10,7 @@ object BombPlacer {
     fun placeBombs(cubeSkin: CubeSkin, excludedIndex: CellIndex, bombsCount: Int): BombsList {
         val counts = cubeSkin.counts
 
-        val allCubesCount = counts.x * counts.y * counts.z
+        val allCubesCount = counts[0] * counts[1] * counts[2]
         var freeCubes = allCubesCount - 1
 
         assert(freeCubes > bombsCount)

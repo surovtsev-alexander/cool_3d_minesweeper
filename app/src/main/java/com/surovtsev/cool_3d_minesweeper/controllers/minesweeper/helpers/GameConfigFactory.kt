@@ -9,7 +9,7 @@ object GameConfigFactory {
     fun createGameConfig(settingsData: SettingsData): GameConfig {
         val counts = settingsData.getCounts()
 
-        val maxDim = max(max(counts.x, counts.y), counts.z)
+        val maxDim = max(max(counts[0], counts[1]), counts[2])
         val cellDim = 5f / maxDim
 
         val dimensions = Vec3(counts) * cellDim

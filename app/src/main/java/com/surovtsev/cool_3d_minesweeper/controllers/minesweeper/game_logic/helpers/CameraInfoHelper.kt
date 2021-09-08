@@ -17,8 +17,8 @@ class CameraInfoHelper(
 ):
     Updatable()
 {
-    val displayWidthF = displaySize.x.toFloat()
-    val displayHeightF = displaySize.y.toFloat()
+    val displayWidthF = displaySize[0].toFloat()
+    val displayHeightF = displaySize[1].toFloat()
 
     init {
         glm.perspective(
@@ -38,8 +38,8 @@ class CameraInfoHelper(
 
     fun normalizedDisplayCoordinates(point: Vec2) = run {
         val pp = { p: Float, s: Float -> 2f * p / s - 1.0f }
-        val x = pp(point.x, displayWidthF)
-        val y = pp(point.y, displayHeightF) * -1f
+        val x = pp(point[0], displayWidthF)
+        val y = pp(point[1], displayHeightF) * -1f
         Vec2(x, y)
     }
 

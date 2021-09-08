@@ -61,15 +61,15 @@ object TextureCoordinatesHelper {
                 1f * (p + 1) / dim
             )
         }
-        val xCoords = calcPointCoords(pos.x,
+        val xCoords = calcPointCoords(pos[0],
             cols
         )
-        val yCoords = calcPointCoords(pos.y,
+        val yCoords = calcPointCoords(pos[1],
             rows
         )
 
         val getCoord = { point: Vec2, flag: Float ->
-            if (MyMath.isZero(flag)) point.x else point.y
+            if (MyMath.isZero(flag)) point[0] else point[1]
         }
 
         val ll = textureToSquareTemplateCoordinates.count() / 2

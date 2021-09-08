@@ -99,10 +99,12 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
     }
 
     override fun gameStatusUpdated(newStatus: GameStatus) {
-        if (GameStatusHelper.isGameOver(newStatus)) {
-            val gameStatusDialog = MyDialog(newStatus.toString())
-            val manager = supportFragmentManager
-            gameStatusDialog.show(manager, "gameStatusDialog")
+        runOnUiThread {
+            if (GameStatusHelper.isGameOver(newStatus)) {
+                val gameStatusDialog = MyDialog(newStatus.toString())
+                val manager = supportFragmentManager
+                gameStatusDialog.show(manager, "gameStatusDialog")
+            }
         }
     }
 

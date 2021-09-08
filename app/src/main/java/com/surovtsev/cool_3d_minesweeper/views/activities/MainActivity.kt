@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
@@ -23,11 +22,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_ranking.setOnClickListener {
-            startActivity(RankingActivity::class.java)
+            startActivityX(RankingActivity::class.java)
         }
 
         btn_settings.setOnClickListener {
-            startActivity(SettingsActivity::class.java)
+            startActivityX(SettingsActivity::class.java)
         }
     }
 
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         invalidate()
     }
 
-    private fun <T> startActivity(x: Class<T>) {
+    private fun <T> startActivityX(x: Class<T>) {
         ApplicationController.startingActivityCode {
             startActivity(
                 Intent(this, x)

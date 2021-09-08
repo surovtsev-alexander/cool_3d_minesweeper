@@ -18,15 +18,15 @@ data class PairCellRange(
     constructor(idx: CellIndex, counts: Vec3i): this(
         getPairDimRange(
             idx.x,
-            counts.x
+            counts[0]
         ),
         getPairDimRange(
             idx.y,
-            counts.y
+            counts[1]
         ),
         getPairDimRange(
             idx.z,
-            counts.z
+            counts[2]
         )
     )
 
