@@ -86,7 +86,7 @@ class MainActivity: ComponentActivity() {
     }
 
     private fun openRanking() {
-        startActivityHelper(RankingActivity::class.java)
+        startActivityHelper(RankingActivityV2::class.java)
     }
 
     private fun openSettings() {

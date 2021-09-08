@@ -57,7 +57,7 @@ open class DBHelper(
                         "ON DELETE CASCADE " +
                         ")"
 
-            Log.d("TEST+++", "RankingDBHelper onCreate str:\n$query")
+            Log.d("TEST+++", "RankingDBQueries onCreate str:\n$query")
             db.execSQL(
                 query
             )

@@ -125,8 +125,8 @@ class SettingsDBQueries(
         res
     }
 
-    fun getSettingsList(): List<SettingsData> {
-        val res = mutableListOf<SettingsData>()
+    fun getSettingsList(): List<DataWithId<SettingsData>> {
+        val res = mutableListOf<DataWithId<SettingsData>>()
 
         dbHelper.actionWithDB { db ->
             val c = db.query(
@@ -137,6 +137,7 @@ class SettingsDBQueries(
             )
 
             if (c.moveToFirst()) {
+                val idColumnIndex = c.getColumnIndex(SettingsData.settingsIdColumnName)
                 val xCountColIndex = c.getColumnIndex(SettingsData.xCountColumnName)
                 val yCountColIndex = c.getColumnIndex(SettingsData.yCountColumnName)
                 val zCountColIndex = c.getColumnIndex(SettingsData.zCountColumnName)
@@ -144,14 +145,18 @@ class SettingsDBQueries(
                     c.getColumnIndex(SettingsData.bombsPercentageColumnName)
 
                 do {
-                    res.add(
+                    val settingsData  =
                         SettingsData(
                             c.getInt(xCountColIndex),
                             c.getInt(yCountColIndex),
                             c.getInt(zCountColIndex),
                             c.getInt(bombsPercentageColIndex)
                         )
+                    val settingDataWithId = DataWithId<SettingsData>(
+                        c.getInt(idColumnIndex),
+                        settingsData
                     )
+                    res.add(settingDataWithId)
                 } while (c.moveToNext())
             }
 

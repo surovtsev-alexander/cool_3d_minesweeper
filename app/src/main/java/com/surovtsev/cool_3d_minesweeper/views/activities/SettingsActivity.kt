@@ -121,7 +121,7 @@ class SettingsActivity :
         if (!settingsRecyclerViewAdapter.isValidPosition(position)) {
             return
         }
-        val s = settingsRecyclerViewAdapter.get(position)
+        val s = settingsRecyclerViewAdapter.get(position).data
         s.getMap().map { (k, v) ->
             controls[k]?.value = v
         }
@@ -137,7 +137,7 @@ class SettingsActivity :
             return
         }
         val settingsData = settingsRecyclerViewAdapter.get(position)
-        settingsDBQueries.delete(settingsData)
+        settingsDBQueries.delete(settingsData.data)
 
         settingsRecyclerViewAdapter.removeAt(position)
     }
