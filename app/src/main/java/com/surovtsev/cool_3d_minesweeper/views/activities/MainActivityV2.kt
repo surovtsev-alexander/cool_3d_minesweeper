@@ -7,14 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
+import androidx.compose.runtime.getValue
 
 class MainActivityV2: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,21 +30,29 @@ class MainActivityV2: ComponentActivity() {
         }
     }
 
+    private class MainActivityViewModel: ViewModel() {
+        private val _hasSave = MutableLiveData<Boolean>(false)
+        val hasSave: LiveData<Boolean> = _hasSave
+
+        fun onHasSaveChanged(newVal: Boolean) {
+            _hasSave.value = newVal
+        }
+    }
+
+    private val mainActivityViewModel = MainActivityViewModel()
+
+    private val buttonsParameters = arrayOf(
+        "load game" to this::loadGame,
+        "new game" to this::startNewGame,
+        "ranking" to this::openRanking,
+        "settings" to this::openSettings,
+    )
+
+
     @Preview
     @Composable
     fun MainMenuButtons() {
-        val loadGameEnabled = {
-            ApplicationController.instance.saveController.hasData(
-                SaveTypes.SaveGameJson
-            )
-        }
-
-        val buttonsParameters = arrayOf(
-            "load game" to this::loadGame to loadGameEnabled,
-            "new game" to this::startNewGame to null,
-            "ranking" to this::openRanking to null,
-            "settings" to this::openSettings to null
-        )
+        val enabled: Boolean by mainActivityViewModel.hasSave.observeAsState(false)
 
         Test_composeTheme {
             Surface(color = MaterialTheme.colors.background) {
@@ -51,36 +64,16 @@ class MainActivityV2: ComponentActivity() {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
-                        buttonsParameters.map { (na, e) ->
+                        buttonsParameters.map { (n, a) ->
                             MainMenuButton(
-                                na.first,
-                                na.second,
-                                e
+                                n,
+                                a,
+                                if (a == this@MainActivityV2::loadGame) enabled else true
                             )
                         }
                     }
                 }
             }
-        }
-    }
-
-    @Composable
-    fun Greeting(name: String) {
-        Text(text = "Hello $name!")
-    }
-
-    @Composable
-    fun MainMenuButton(
-        caption: String,
-        action: () -> Unit,
-        enabled: (() -> Boolean)?
-    ) {
-        Button(
-            onClick = action,
-            Modifier.fillMaxWidth(fraction=0.75f),
-            enabled = true
-        ) {
-            Text(caption)
         }
     }
 
@@ -112,4 +105,41 @@ class MainActivityV2: ComponentActivity() {
         startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        invalidate()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        invalidate()
+    }
+
+    private fun invalidate() {
+        mainActivityViewModel.onHasSaveChanged(
+            ApplicationController.instance.saveController.hasData(
+                SaveTypes.SaveGameJson
+            )
+        )
+    }
+}
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+@Composable
+fun MainMenuButton(
+    caption: String,
+    action: () -> Unit,
+    enabled: Boolean
+) {
+    Button(
+        onClick = action,
+        Modifier.fillMaxWidth(fraction=0.75f),
+        enabled
+    ) {
+        Text(caption)
+    }
 }
