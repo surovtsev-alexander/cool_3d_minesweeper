@@ -28,7 +28,7 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 import kotlin.math.round
 
 class SettingsActivityV2: ComponentActivity() {
-    private class ModelView() {
+    private class ModelView {
         companion object {
             val paramNames = SettingsDataHelper.paramNames
             val borders = SettingsDataHelper.borders
@@ -97,6 +97,23 @@ class SettingsActivityV2: ComponentActivity() {
         )
     }
 
+    private fun useSettings() {
+        val controlsValues = modelView.controlsValues.data.value!!
+        val settingsData = SettingsData(controlsValues)
+        settingsDBQueries.insertIfNotPresent(
+            settingsData
+        )
+
+        ApplicationController.instance.saveController.save(
+            SaveTypes.GameSettingsJson,
+            settingsData
+        )
+
+        finish()
+        return
+    }
+
+
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun SettingsList() {
@@ -123,11 +140,6 @@ class SettingsActivityV2: ComponentActivity() {
                         "bombs %",
                         Modifier.fillMaxWidth(0.5f),
                         textAlign = TextAlign.Center
-                    )
-                    Text(
-                        "wins",
-                        Modifier.fillMaxWidth(1f),
-                        textAlign = TextAlign.End
                     )
                 }
                 LazyColumn {
@@ -157,13 +169,29 @@ class SettingsActivityV2: ComponentActivity() {
         }
     }
 
-    fun useSettings(settingsDataWithId: DataWithId<SettingsData>) {
+    private fun useSettings(settingsDataWithId: DataWithId<SettingsData>) {
         modelView.selectedSettingsId.onDataChanged(settingsDataWithId.id)
         modelView.controlsValues.onDataChanged(
             settingsDataWithId.data.getMap()
         )
     }
 
+    private fun deleteSettings(settingsId: Int) {
+        settingsDBQueries.delete(settingsId)
+        modelView.settingsList.onDataChanged(
+            settingsDBQueries.getSettingsList()
+        )
+    }
+
+    private fun setValue(name: String, value: Int) {
+        val controlsValues = modelView.controlsValues.data.value!!.toMutableMap()
+        controlsValues[name] = value
+        modelView.controlsValues.onDataChanged(
+            controlsValues
+        )
+    }
+
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun SettingsDataItem(settingDataWithId: DataWithId<SettingsData>) {
         Row(
@@ -182,6 +210,16 @@ class SettingsActivityV2: ComponentActivity() {
                 Modifier.fillMaxWidth(0.5f),
                 textAlign = TextAlign.Center
             )
+            Surface (
+                shape = MaterialTheme.shapes.large,
+                onClick = { deleteSettings(settingDataWithId.id) },
+                color = PrimaryColor1
+            ) {
+                Text(
+                    "delete",
+                    textAlign = TextAlign.End
+                )
+            }
         }
     }
 
@@ -232,14 +270,6 @@ class SettingsActivityV2: ComponentActivity() {
         }
     }
 
-    private fun setValue(name: String, value: Int) {
-        val controlsValues = modelView.controlsValues.data.value!!.toMutableMap()
-        controlsValues[name] = value
-        modelView.controlsValues.onDataChanged(
-            controlsValues
-        )
-    }
-
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     fun UseButton() {
@@ -257,21 +287,5 @@ class SettingsActivityV2: ComponentActivity() {
                 fontSize = 25.sp
             )
         }
-    }
-
-    fun useSettings() {
-        val controlsValues = modelView.controlsValues.data.value!!
-        val settingsData = SettingsData(controlsValues)
-        settingsDBQueries.insertIfNotPresent(
-            settingsData
-        )
-
-        ApplicationController.instance.saveController.save(
-            SaveTypes.GameSettingsJson,
-            settingsData
-        )
-
-        finish()
-        return
     }
 }

@@ -37,10 +37,20 @@ class SettingsDBQueries(
         if (id == null) {
             Log.e("Minesweeper", "settings database can not delete value")
         } else {
-            db.execSQL(
-                "DELETE FROM ${DBConfig.settingsTableName} where ${SettingsData.settingsIdColumnName} = $id",
-            )
+            getDeleteAction(id)(db)
         }
+    }
+
+    fun delete(settingsId: Int) {
+        dbHelper.actionWithDB { db ->
+            getDeleteAction(settingsId)(db)
+        }
+    }
+
+    private fun getDeleteAction(settingsId: Int): DatabaseAction<Unit> = { db ->
+        db.execSQL(
+            "DELETE FROM ${DBConfig.settingsTableName} where ${SettingsData.settingsIdColumnName} = $settingsId",
+        )
     }
 
     private fun getIdCalculationAction(settingsData: SettingsData): DatabaseAction<Int?> = { db ->
