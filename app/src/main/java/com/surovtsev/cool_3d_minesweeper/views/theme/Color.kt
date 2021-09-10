@@ -11,3 +11,5 @@ val PrimaryColor1 = Color(0xFFDF514A)
 val PrimaryColor2 = Color(0xFF42C6AD)
 
 val GrayBackground = Color(0xFFd8e2dc)
+val LightBlue = Color(0xffa8dadc)
+val DeepGray = Color(0xff9a8c98)

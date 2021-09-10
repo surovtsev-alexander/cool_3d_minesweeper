@@ -24,6 +24,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
+import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 import kotlin.math.round
 
 class SettingsActivityV2: ComponentActivity() {
@@ -136,7 +137,7 @@ class SettingsActivityV2: ComponentActivity() {
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        Color(0xffa8dadc)
+                                        LightBlue
                                     )
 
                             ) {

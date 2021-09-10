@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +62,7 @@ class MainActivity: ComponentActivity() {
         Test_composeTheme {
             Surface(color = MaterialTheme.colors.background) {
                 Box(
-                    Modifier.background(Color(0xFF48cae4))
+                    Modifier.background(GrayBackground)//Color(0xFF48cae4))
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -148,7 +150,9 @@ fun MainMenuButton(
 ) {
     Button(
         onClick = action,
-        Modifier.fillMaxWidth(fraction=0.75f),
+        Modifier
+            .fillMaxWidth(fraction=0.75f)
+            .border(1.dp, Color.Black),
         enabled
     ) {
         Text(caption)

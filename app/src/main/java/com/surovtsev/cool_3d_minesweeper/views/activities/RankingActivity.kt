@@ -21,7 +21,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
+import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 
 
 class RankingActivity: ComponentActivity() {
@@ -119,7 +121,7 @@ class RankingActivity: ComponentActivity() {
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        Color(0xffa8dadc)
+                                        LightBlue
                                     )
 
                             ) {
@@ -171,7 +173,7 @@ class RankingActivity: ComponentActivity() {
         val rankingList: List<RankingData> by modelView.rankingList.data.observeAsState(
             listOf<RankingData>())
         Box (
-            modifier = Modifier.fillMaxSize().background(Color(0xff9a8c98)),
+            modifier = Modifier.fillMaxSize().background(DeepGray),
         ) {
             Column() {
                 Row() {
