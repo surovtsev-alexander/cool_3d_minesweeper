@@ -25,7 +25,7 @@
 
         <activity android:name=".views.activities.SettingsActivity" />
 
-        <activity android:name=".views.activities.RankingActivityV2" />
+        <activity android:name=".views.activities.RankingActivity" />
 
     </application>
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,20 +58,24 @@ class MainActivity: ComponentActivity() {
 
         Test_composeTheme {
             Surface(color = MaterialTheme.colors.background) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Box(
+                    Modifier.background(Color(0xFF48cae4))
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(15.dp)
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        buttonsParameters.map { (n, a) ->
-                            MainMenuButton(
-                                n,
-                                a,
-                                if (a == this@MainActivity::loadGame) enabled else true
-                            )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(15.dp)
+                        ) {
+                            buttonsParameters.map { (n, a) ->
+                                MainMenuButton(
+                                    n,
+                                    a,
+                                    if (a == this@MainActivity::loadGame) enabled else true
+                                )
+                            }
                         }
                     }
                 }
@@ -86,7 +92,7 @@ class MainActivity: ComponentActivity() {
     }
 
     private fun openRanking() {
-        startActivityHelper(RankingActivityV2::class.java)
+        startActivityHelper(RankingActivity::class.java)
     }
 
     private fun openSettings() {
