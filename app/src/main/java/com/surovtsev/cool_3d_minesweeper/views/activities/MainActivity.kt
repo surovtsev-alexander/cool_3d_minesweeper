@@ -48,6 +48,7 @@ class MainActivity: ComponentActivity() {
         "new game" to this::startNewGame,
         "ranking" to this::openRanking,
         "settings" to this::openSettings,
+        "settingsV2" to this::openSettingsV2,
     )
 
 
@@ -97,6 +98,10 @@ class MainActivity: ComponentActivity() {
 
     private fun openSettings() {
         startActivityHelper(SettingsActivity::class.java)
+    }
+
+    private fun openSettingsV2() {
+        startActivityHelper(SettingsActivityV2::class.java)
     }
 
     private fun <T> startActivityHelper(x: Class<T>) {

@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
 
 object SettingsDataHelper {
-    private val paramNames = arrayOf(
+    val paramNames = arrayOf(
         SettingsData.xCountName,
         SettingsData.yCountName,
         SettingsData.zCountName,

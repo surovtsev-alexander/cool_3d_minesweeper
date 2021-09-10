@@ -60,21 +60,19 @@ class RankingActivity: ComponentActivity() {
     @Composable
     fun RankingControls() {
         Test_composeTheme {
-            Surface(color = MaterialTheme.colors.background) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    //verticalArrangement = Arrangement.spacedBy(15.dp),
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                //verticalArrangement = Arrangement.spacedBy(15.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxHeight(.3f)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxHeight(.3f)
-                    ) {
-                        SettingsList()
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxHeight(1f)
-                    ) {
-                        RankingList()
-                    }
+                    SettingsList()
+                }
+                Row(
+                    modifier = Modifier.fillMaxHeight(1f)
+                ) {
+                    RankingList()
                 }
             }
         }
@@ -128,8 +126,6 @@ class RankingActivity: ComponentActivity() {
                             }
                         } else {
                             Surface (
-                                modifier = Modifier
-                                    .border(1.dp, Color.Black),
                                 shape = MaterialTheme.shapes.large,
                                 onClick = { loadRankingForSettingsId(itemId) },
                             ) {
@@ -145,7 +141,8 @@ class RankingActivity: ComponentActivity() {
     @Composable
     fun SettingsDataItem(settingDataWithId: DataWithId<SettingsData>) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             val settingsData = settingDataWithId.data
             val counts = settingsData.getCounts()
