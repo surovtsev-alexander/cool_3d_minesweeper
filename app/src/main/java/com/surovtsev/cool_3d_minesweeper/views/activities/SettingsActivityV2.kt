@@ -16,21 +16,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBQueries
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
+import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import kotlin.math.round
 
 class SettingsActivityV2: ComponentActivity() {
+    private class ModelView() {
+        companion object {
+            val paramNames = SettingsDataHelper.paramNames
+            val borders = SettingsDataHelper.borders
+        }
 
-    private val settingsDBQueries: SettingsDBQueries = SettingsDBQueries(DBHelper(this))
+        val settingsList = MyLiveData<List<DataWithId<SettingsData>>>(
+            listOf<DataWithId<SettingsData>>()
+        )
+
+        val controlsValues = MyLiveData<Map<String, Int>>(
+            paramNames.map { it to borders[it]!!.first }.toMap()
+        )
+
+        val selectedSettingsId = MyLiveData<Int>(-1)
+    }
+
+    private val modelView = ModelView()
+    private val dbHelper = DBHelper(this)
+    private val settingsDBQueries = SettingsDBQueries(dbHelper)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +54,7 @@ class SettingsActivityV2: ComponentActivity() {
         setContent {
             Test_composeTheme {
                 Box(
-                    Modifier.background(Color(0xFF48cae4))
+                    Modifier.background(GrayBackground)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -74,25 +90,99 @@ class SettingsActivityV2: ComponentActivity() {
         loadedSettingsData.getMap().map { (k, v) ->
             setValue(k, v)
         }
-    }
-    
-    @Composable
-    fun SettingsList() {
-        
-    }
 
-    private class ModelView() {
-        companion object {
-            val paramNames = SettingsDataHelper.paramNames
-            val borders = SettingsDataHelper.borders
-        }
-
-        val controlsValues = MyLiveData<Map<String, Int>>(
-            paramNames.map { it to borders[it]!!.first }.toMap()
+        modelView.settingsList.onDataChanged(
+            settingsDBQueries.getSettingsList()
         )
     }
 
-    private val modelView = ModelView()
+    @OptIn(ExperimentalMaterialApi::class)
+    @Composable
+    fun SettingsList() {
+        val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
+            listOf<DataWithId<SettingsData>>()
+        )
+        val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
+
+        Box(
+            modifier = Modifier
+                .background(GrayBackground)
+                .border(1.dp, Color.Black),
+        ) {
+            Column(
+                Modifier.fillMaxSize()
+            ) {
+                Row() {
+                    Text(
+                        "counts",
+                        Modifier.fillMaxWidth(0.33f),
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        "bombs %",
+                        Modifier.fillMaxWidth(0.5f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "wins",
+                        Modifier.fillMaxWidth(1f),
+                        textAlign = TextAlign.End
+                    )
+                }
+                LazyColumn {
+                    items(settingsList) { item ->
+                        val itemId = item.id
+                        if (selectedSettingsId == itemId) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        Color(0xffa8dadc)
+                                    )
+
+                            ) {
+                                SettingsDataItem(item)
+                            }
+                        } else {
+                            Surface (
+                                shape = MaterialTheme.shapes.large,
+                                onClick = { useSettings(item) },
+                            ) {
+                                SettingsDataItem(item)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun useSettings(settingsDataWithId: DataWithId<SettingsData>) {
+        modelView.selectedSettingsId.onDataChanged(settingsDataWithId.id)
+        modelView.controlsValues.onDataChanged(
+            settingsDataWithId.data.getMap()
+        )
+    }
+
+    @Composable
+    fun SettingsDataItem(settingDataWithId: DataWithId<SettingsData>) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val settingsData = settingDataWithId.data
+            val counts = settingsData.getCounts()
+            Text(
+                counts.toString(),
+                Modifier.fillMaxWidth(0.33f),
+                textAlign = TextAlign.Start
+            )
+            Text(
+                settingsData.bombsPercentage.toString(),
+                Modifier.fillMaxWidth(0.5f),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
 
     private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
         x.first.toFloat()..x.last.toFloat()

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 
 
 class RankingActivity: ComponentActivity() {
@@ -88,7 +89,7 @@ class RankingActivity: ComponentActivity() {
 
         Box(
             modifier = Modifier
-                .background(Color(0xFFd8e2dc))
+                .background(GrayBackground)
                 .border(1.dp, Color.Black),
         ) {
             Column(
@@ -229,7 +230,7 @@ class RankingActivity: ComponentActivity() {
     private fun loadRankingForSettingsId(
         settingsId: Int
     ) {
-        this.modelView.selectedSettingsId.onDataChanged(settingsId)
+        modelView.selectedSettingsId.onDataChanged(settingsId)
         rankingList?.let {
             val filteredRankingList = it.filter {
                 it.settingId == settingsId
