@@ -58,14 +58,9 @@ class GameActivityV2: ComponentActivity() {
 fun MinesweeperView(
     modelView: GameActivityModelView
 ) {
-    val layoutParams = remember {
-        ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT)
-    }
-
     val glSurfaceView = remember {
         GLSurfaceView(modelView.context).apply {
+            modelView.assignTouchListenerToGLSurfaceView(this)
         }
     }
     AndroidView(
