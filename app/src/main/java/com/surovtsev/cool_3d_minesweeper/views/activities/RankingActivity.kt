@@ -68,7 +68,7 @@ fun RankingControls(modelView: RankingActivityModelView) {
 @Composable
 fun SettingsList(modelView: RankingActivityModelView) {
     val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
-        listOf<DataWithId<SettingsData>>()
+        listOf()
     )
     val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
 
@@ -81,7 +81,7 @@ fun SettingsList(modelView: RankingActivityModelView) {
         Column(
             Modifier.fillMaxSize()
         ) {
-            Row() {
+            Row {
                 Text(
                     "counts",
                     Modifier.fillMaxWidth(0.33f),
@@ -166,8 +166,8 @@ fun RankingList(modelView: RankingActivityModelView) {
             .border(1.dp, Color.Black)
             .padding(horizontal = 1.dp),
     ) {
-        Column() {
-            Row() {
+        Column {
+            Row {
                 Text(
                     "#",
                     Modifier.fillMaxWidth(0.2f),
@@ -201,7 +201,7 @@ fun RankingDataItem(indexedRankingData: IndexedValue<RankingData>) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                indexedRankingData.index.toString(),
+                (indexedRankingData.index + 1).toString(),
                 Modifier.fillMaxWidth(0.2f),
                 textAlign = TextAlign.Start
             )

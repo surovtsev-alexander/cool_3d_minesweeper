@@ -25,7 +25,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 
-class SettingsActivityV2: ComponentActivity() {
+class SettingsActivity: ComponentActivity() {
 
     private val modelView = SettingsActivityModelView(this::finish)
 
