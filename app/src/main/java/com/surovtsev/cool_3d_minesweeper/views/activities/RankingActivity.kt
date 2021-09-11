@@ -1,9 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.views.activities
 
-import android.content.Context
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -22,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
+import com.surovtsev.cool_3d_minesweeper.model_views.RankingActivityModelView
 import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
@@ -29,228 +28,195 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 
 
 class RankingActivity: ComponentActivity() {
-    private class ModelView {
-        val settingsList = MyLiveData<List<DataWithId<SettingsData>>>(
-            listOf<DataWithId<SettingsData>>()
-        )
-        val rankingList = MyLiveData<List<RankingData>>(
-            listOf<RankingData>()
-        )
-        val selectedSettingsId = MyLiveData<Int>(-1)
-    }
-
-    private val modelView = ModelView()
-
-    private val applicationController = ApplicationController.getInstance()
-    private val settingsDBQueries = applicationController.settingsDBQueries
-    private val rankingDBQueries = applicationController.rankingDBQueries
-
-    private var rankingList: List<RankingData>? = null
-    private var winsCount: Map<Int, Int>? = null
+    private val modelView = RankingActivityModelView()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            RankingControls()
+            RankingControls(modelView)
         }
 
-        modelView.settingsList.onDataChanged(
-            settingsDBQueries.getSettingsList()
-        )
-
-        rankingList = rankingDBQueries.getRankingList()
-        winsCount = rankingList?.map{ it.settingId }?.groupingBy { it }?.eachCount()
+        modelView.loadData()
     }
+}
 
-    @Composable
-    fun RankingControls() {
-        Test_composeTheme {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(1.dp, Color.Black),
-                //verticalArrangement = Arrangement.spacedBy(15.dp),
+@Composable
+fun RankingControls(modelView: RankingActivityModelView) {
+    Test_composeTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(1.dp, Color.Black),
+            //verticalArrangement = Arrangement.spacedBy(15.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxHeight(.3f)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxHeight(.3f)
-                ) {
-                    SettingsList()
-                }
-                Row(
-                    modifier = Modifier.fillMaxHeight(1f)
-                ) {
-                    RankingList()
-                }
+                SettingsList(modelView)
+            }
+            Row(
+                modifier = Modifier.fillMaxHeight(1f)
+            ) {
+                RankingList(modelView)
             }
         }
     }
+}
 
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    fun SettingsList() {
-        val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
-            listOf<DataWithId<SettingsData>>()
-        )
-        val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun SettingsList(modelView: RankingActivityModelView) {
+    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
+        listOf<DataWithId<SettingsData>>()
+    )
+    val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
 
-        Box(
-            modifier = Modifier
-                .background(GrayBackground)
-                .border(1.dp, Color.Black)
-                .padding(horizontal = 1.dp),
+    Box(
+        modifier = Modifier
+            .background(GrayBackground)
+            .border(1.dp, Color.Black)
+            .padding(horizontal = 1.dp),
+    ) {
+        Column(
+            Modifier.fillMaxSize()
         ) {
-            Column(
-                Modifier.fillMaxSize()
-            ) {
-                Row() {
-                    Text(
-                        "counts",
-                        Modifier.fillMaxWidth(0.33f),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        "bombs %",
-                        Modifier.fillMaxWidth(0.5f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        "wins",
-                        Modifier.fillMaxWidth(1f),
-                        textAlign = TextAlign.End
-                    )
-                }
-                LazyColumn {
-                    items(settingsList) { item ->
-                        val itemId = item.id
-                        if (selectedSettingsId == itemId) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        LightBlue
-                                    )
+            Row() {
+                Text(
+                    "counts",
+                    Modifier.fillMaxWidth(0.33f),
+                    textAlign = TextAlign.Start
+                )
+                Text(
+                    "bombs %",
+                    Modifier.fillMaxWidth(0.5f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    "wins",
+                    Modifier.fillMaxWidth(1f),
+                    textAlign = TextAlign.End
+                )
+            }
+            LazyColumn {
+                items(settingsList) { item ->
+                    val itemId = item.id
+                    if (selectedSettingsId == itemId) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    LightBlue
+                                )
 
-                            ) {
-                                SettingsDataItem(item)
-                            }
-                        } else {
-                            Surface (
-                                shape = MaterialTheme.shapes.large,
-                                onClick = { loadRankingForSettingsId(itemId) },
-                            ) {
-                                SettingsDataItem(item)
-                            }
+                        ) {
+                            SettingsDataItem(modelView, item)
+                        }
+                    } else {
+                        Surface (
+                            shape = MaterialTheme.shapes.large,
+                            onClick = { modelView.loadRankingForSettingsId(itemId) },
+                        ) {
+                            SettingsDataItem(modelView, item)
                         }
                     }
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun SettingsDataItem(settingDataWithId: DataWithId<SettingsData>) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            val settingsData = settingDataWithId.data
-            val counts = settingsData.getCounts()
-            val wins = winsCount?.get(settingDataWithId.id)?:0
-            Text(
-                counts.toString(),
-                Modifier.fillMaxWidth(0.33f),
-                textAlign = TextAlign.Start
-            )
-            Text(
-                settingsData.bombsPercentage.toString(),
-                Modifier.fillMaxWidth(0.5f),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                wins.toString(),
-                Modifier.fillMaxWidth(1f),
-                textAlign = TextAlign.End
-            )
-        }
+@Composable
+fun SettingsDataItem(
+    modelView: RankingActivityModelView,
+    settingDataWithId: DataWithId<SettingsData>
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        val settingsData = settingDataWithId.data
+        val counts = settingsData.getCounts()
+        val wins = modelView.winsCount?.get(settingDataWithId.id)?:0
+        Text(
+            counts.toString(),
+            Modifier.fillMaxWidth(0.33f),
+            textAlign = TextAlign.Start
+        )
+        Text(
+            settingsData.bombsPercentage.toString(),
+            Modifier.fillMaxWidth(0.5f),
+            textAlign = TextAlign.Center
+        )
+        Text(
+            wins.toString(),
+            Modifier.fillMaxWidth(1f),
+            textAlign = TextAlign.End
+        )
     }
+}
 
-    @Composable
-    fun RankingList() {
-        val rankingList: List<RankingData> by modelView.rankingList.data.observeAsState(
-            listOf<RankingData>())
-        Box (
-            modifier = Modifier
-                .fillMaxSize()
-                .background(DeepGray)
-                .border(1.dp, Color.Black)
-                .padding(horizontal = 1.dp),
-        ) {
-            Column() {
-                Row() {
-                    Text(
-                        "#",
-                        Modifier.fillMaxWidth(0.2f),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        "date",
-                        Modifier.fillMaxWidth(0.5f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        "seconds",
-                        Modifier.fillMaxWidth(1f),
-                        textAlign = TextAlign.End
-                    )
-                }
-                LazyColumn {
-                    items(rankingList.withIndex().toList()) { item ->
-                        RankingDataItem(item)
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun RankingDataItem(indexedRankingData: IndexedValue<RankingData>) {
-        Box ()
-        {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+@Composable
+fun RankingList(modelView: RankingActivityModelView) {
+    val filteredRankingList: List<RankingData> by modelView.filteredRankingList.data.observeAsState(
+        listOf<RankingData>())
+    Box (
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DeepGray)
+            .border(1.dp, Color.Black)
+            .padding(horizontal = 1.dp),
+    ) {
+        Column() {
+            Row() {
                 Text(
-                    indexedRankingData.index.toString(),
+                    "#",
                     Modifier.fillMaxWidth(0.2f),
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
+                    "date",
                     Modifier.fillMaxWidth(0.5f),
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
-                    Modifier.fillMaxWidth(),
+                    "seconds",
+                    Modifier.fillMaxWidth(1f),
                     textAlign = TextAlign.End
-
                 )
+            }
+            LazyColumn {
+                items(filteredRankingList.withIndex().toList()) { item ->
+                    RankingDataItem(item)
+                }
             }
         }
     }
+}
 
-    private fun loadRankingForSettingsId(
-        settingsId: Int
-    ) {
-        modelView.selectedSettingsId.onDataChanged(settingsId)
-        rankingList?.let {
-            val filteredRankingList = it.filter {
-                it.settingId == settingsId
-            }
+@Composable
+fun RankingDataItem(indexedRankingData: IndexedValue<RankingData>) {
+    Box ()
+    {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                indexedRankingData.index.toString(),
+                Modifier.fillMaxWidth(0.2f),
+                textAlign = TextAlign.Start
+            )
+            Text(
+                indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
+                Modifier.fillMaxWidth(0.5f),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
+                Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End
 
-            modelView.rankingList.onDataChanged(
-                filteredRankingList
             )
         }
     }
 }
+
