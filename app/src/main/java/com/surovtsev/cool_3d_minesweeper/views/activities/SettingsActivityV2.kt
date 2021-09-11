@@ -20,14 +20,13 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
-import com.surovtsev.cool_3d_minesweeper.model_views.SettingActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.SettingsActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
-import kotlin.math.round
 
 class SettingsActivityV2: ComponentActivity() {
 
-    private val modelView = SettingActivityModelView(this::finish)
+    private val modelView = SettingsActivityModelView(this::finish)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +67,7 @@ class SettingsActivityV2: ComponentActivity() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsList(modelView: SettingActivityModelView) {
+fun SettingsList(modelView: SettingsActivityModelView) {
     val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
         listOf<DataWithId<SettingsData>>()
     )
@@ -124,7 +123,7 @@ fun SettingsList(modelView: SettingActivityModelView) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsDataItem(
-    modelView: SettingActivityModelView,
+    modelView: SettingsActivityModelView,
     settingDataWithId: DataWithId<SettingsData>) {
     Row(
         modifier = Modifier
@@ -160,19 +159,17 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 
 @Composable
 fun Controls(
-    modelView: SettingActivityModelView
+    modelView: SettingsActivityModelView
 ) {
-    val paramNames = SettingActivityModelView.paramNames
-    val sliderValues = modelView.sliderValues
-    val borders = SettingActivityModelView.borders
+    val slidersInfo = modelView.slidersInfo
 
     LazyColumn {
-        items(paramNames) { param ->
-            val sV = sliderValues[param]!!
+        items(slidersInfo) { (name, borderAndValue) ->
+            val sV = borderAndValue.second
             val sliderValue: Float by sV.data.observeAsState(
                 sV.defaultValue
             )
-            val border = borders[param]!!
+            val border = borderAndValue.first
             MySlider(intRange = border, value = sliderValue, onChangeAction = sV::onDataChanged)
         }
     }
@@ -194,7 +191,7 @@ fun MySlider(
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
             Text(
-                SettingActivityModelView.floatToInt(value).toString(),
+                SettingsActivityModelView.floatToInt(value).toString(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.5f)
             )
@@ -217,7 +214,7 @@ fun MySlider(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UseButton(
-    modelView: SettingActivityModelView
+    modelView: SettingsActivityModelView
 ) {
     Surface (
         modifier = Modifier

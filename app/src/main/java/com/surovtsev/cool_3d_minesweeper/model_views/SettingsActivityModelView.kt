@@ -8,7 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import kotlin.math.round
 
-class SettingActivityModelView(
+class SettingsActivityModelView(
     private val finishAction: () -> Unit
 ) {
     private val applicationController = ApplicationController.getInstance()
@@ -16,8 +16,7 @@ class SettingActivityModelView(
     private val saveController = applicationController.saveController
 
     companion object {
-        val paramNames = SettingsDataHelper.paramNames
-        val borders = SettingsDataHelper.borders
+        private val borders = SettingsDataHelper.borders
 
         private fun createMyLiveDataForSlider(defValue: Int) = MyLiveData(defValue.toFloat())
 
@@ -37,12 +36,17 @@ class SettingActivityModelView(
     private val bombsPercentageSliderValue = createMyLiveDataForSlider(
         SettingsData.bombsPercentageDefaultValue)
 
-    val sliderValues = mapOf(
+    private val sliderValues = mapOf(
         SettingsData.xCountName to xCountSliderValue,
         SettingsData.yCountName to yCountSliderValue,
         SettingsData.zCountName to zCountSliderValue,
         SettingsData.bombsPercentageName to bombsPercentageSliderValue
     )
+
+    val slidersInfo = sliderValues.map { (name, value) ->
+        val border = borders[name]!!
+        name to (border to value)
+    }
 
     val selectedSettingsId = MyLiveData(-1)
 
