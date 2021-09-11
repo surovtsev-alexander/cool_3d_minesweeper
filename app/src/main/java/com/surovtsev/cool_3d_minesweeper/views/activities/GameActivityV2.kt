@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.ViewGroup
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,15 +18,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
-import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivityV2: ComponentActivity() {
     private val modelView = GameActivityModelView(
-        this
+        this,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         if (!OpenGLInfoHelper.isSupportEs2(this)) {
             Toast.makeText(this
@@ -51,8 +51,31 @@ class GameActivityV2: ComponentActivity() {
                         Controls(modelView)
                     }
                 }
+                GameStatusDialog(modelView)
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        modelView.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        modelView.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        modelView.onDestroy()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (modelView.onKeyDown(keyCode)) {
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }
 
@@ -63,6 +86,7 @@ fun MinesweeperView(
     val glSurfaceView = remember {
         GLSurfaceView(modelView.context).apply {
             modelView.assignTouchListenerToGLSurfaceView(this)
+            modelView.glSurfaceView = this
         }
     }
     AndroidView(
@@ -186,3 +210,29 @@ fun TimeElapsed(
     )
 }
 
+@Composable
+fun GameStatusDialog(
+    modelView: GameActivityModelView
+) {
+    val showDialog: Boolean by modelView.showDialog.data.observeAsState(
+        modelView.showDialog.defaultValue
+    )
+    if (showDialog) {
+        val closeDialogAction = { modelView.showDialog.onDataChanged(false) }
+        AlertDialog(
+            onDismissRequest = closeDialogAction,
+            title = { Text(text = "Game status") },
+            text = { Text(
+                text = modelView.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
+            ) },
+
+            confirmButton = {
+                Button(
+                    onClick = closeDialogAction
+                ) {
+                    Text(text = "Ok")
+                }
+            },
+        )
+    }
+}

@@ -2,22 +2,29 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
 import org.jetbrains.anko.runOnUiThread
 
 class GameActivityModelView(
-    val context: Context
-): IGameEventsReceiver {
+    val context: Context,
+):
+    IGameEventsReceiver,
+    IHandlePauseResumeDestroyKeyDown
+{
 
     val marking = MyLiveData(false)
     val elapsedTime = MyLiveData(0L)
     val bombsLeft = MyLiveData(0)
+    val showDialog = MyLiveData(false)
 
 
     val minesweeperController = MinesweeperController(
@@ -28,6 +35,12 @@ class GameActivityModelView(
     private val removeBombs = gameControls.removeBombs
     private val removeZeroBorders = gameControls.removeZeroBorders
     private val markOnShortTap = gameControls.markOnShortTap
+
+    var glSurfaceView: GLSurfaceView? = null
+
+    init {
+        (this as IGameEventsReceiver).init()
+    }
 
     fun setMarking(newValue: Boolean) {
         marking.onDataChanged(newValue)
@@ -63,7 +76,11 @@ class GameActivityModelView(
     }
 
     override fun gameStatusUpdated(newStatus: GameStatus) {
-
+        context.runOnUiThread {
+            if (GameStatusHelper.isGameOver(newStatus)) {
+                showDialog.onDataChanged(true)
+            }
+        }
     }
 
     fun assignTouchListenerToGLSurfaceView(
@@ -90,5 +107,34 @@ class GameActivityModelView(
         )
         val touchListener = TouchListener(touchListenerReceiver)
         glSurfaceView.setOnTouchListener(touchListener)
+    }
+
+    override fun onPause() {
+        minesweeperController.onPause()
+        glSurfaceView?.onPause()
+    }
+
+    override fun onResume() {
+        minesweeperController.onResume()
+        glSurfaceView?.onResume()
+    }
+
+    override fun onDestroy() {
+        minesweeperController.onDestroy()
+    }
+
+    override fun onKeyDown(keyCode: Int): Boolean {
+        if (
+            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+        ) {
+            setMarking(
+                !(marking.data.value!!)
+            )
+
+            return true
+        }
+
+        return false
     }
 }

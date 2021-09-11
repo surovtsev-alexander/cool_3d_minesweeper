@@ -11,3 +11,9 @@ interface IHandlePauseResumeDestroy:
     fun onDestroy()
 }
 
+interface IHandlePauseResumeDestroyKeyDown:
+        IHandlePauseResumeDestroy
+{
+    fun onKeyDown(keyCode: Int): Boolean
+}
+
