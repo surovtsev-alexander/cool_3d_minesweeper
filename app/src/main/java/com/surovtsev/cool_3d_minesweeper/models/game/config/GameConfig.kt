@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.config
 
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import kotlin.math.ceil

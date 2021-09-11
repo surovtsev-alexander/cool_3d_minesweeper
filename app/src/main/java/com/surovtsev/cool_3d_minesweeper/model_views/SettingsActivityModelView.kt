@@ -2,9 +2,9 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DataWithId
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDataHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import kotlin.math.round
 

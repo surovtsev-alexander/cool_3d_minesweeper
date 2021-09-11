@@ -1,4 +1,6 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
+package com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database
+
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 
 object SettingsDataHelper {
     val paramNames = arrayOf(

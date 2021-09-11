@@ -1,6 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
+package com.surovtsev.cool_3d_minesweeper.models.game.database
 
 import android.content.ContentValues
+import com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database.DBConfig
 
 data class RankingData(
     val settingId: Int,
@@ -8,10 +9,10 @@ data class RankingData(
     val dateTime: String
 ) {
     companion object {
-        const val rankingIdName = "ranking id"
-        const val settingsIdName = "settings id"
-        const val elapsedName = "elapsed"
-        const val dateTimeName = "date time"
+        private const val rankingIdName = "ranking id"
+        private const val settingsIdName = "settings id"
+        private const val elapsedName = "elapsed"
+        private const val dateTimeName = "date time"
 
         val rankingIdColumnName = DBConfig.glueWithUnderscores(rankingIdName)
         val settingsIdColumnName = DBConfig.glueWithUnderscores(settingsIdName)

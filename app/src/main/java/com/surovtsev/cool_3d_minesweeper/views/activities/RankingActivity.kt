@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.model_views.RankingActivityModelView
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue

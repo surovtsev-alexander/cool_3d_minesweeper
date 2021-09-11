@@ -1,9 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.model_views
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DataWithId
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingData
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 
 class RankingActivityModelView {

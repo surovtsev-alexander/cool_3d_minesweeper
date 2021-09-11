@@ -3,12 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
-import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import java.lang.Exception
-import java.lang.reflect.Type
-import java.util.*
-import kotlin.reflect.KClass
 
 class SaveController(
     context: Context

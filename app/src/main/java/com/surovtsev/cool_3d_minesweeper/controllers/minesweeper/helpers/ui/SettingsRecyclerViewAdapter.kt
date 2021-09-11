@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DataWithId
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import kotlinx.android.synthetic.main.settings.view.*
 
 class SettingsRecyclerViewAdapter(

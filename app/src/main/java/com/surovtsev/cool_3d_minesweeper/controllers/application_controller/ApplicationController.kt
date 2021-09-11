@@ -1,11 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.application_controller
 
 import android.app.Application
-import android.content.Intent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBQueries
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBQueries
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MessagesComponent
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLazyVal
 import java.lang.Exception

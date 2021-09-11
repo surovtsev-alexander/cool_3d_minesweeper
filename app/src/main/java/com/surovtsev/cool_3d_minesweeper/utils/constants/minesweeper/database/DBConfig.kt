@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
+package com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database
 
 object DBConfig {
     const val dataBaseName = "minesweeperDB"

@@ -1,6 +1,7 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database
+package com.surovtsev.cool_3d_minesweeper.models.game.database
 
 import android.content.ContentValues
+import com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database.DBConfig
 import glm_.vec3.Vec3i
 
 data class SettingsData(

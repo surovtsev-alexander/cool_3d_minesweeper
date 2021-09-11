@@ -19,8 +19,9 @@ import androidx.compose.ui.unit.sp
 import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.model_views.SettingsActivityModelView
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 
@@ -123,7 +124,8 @@ fun SettingsList(modelView: SettingsActivityModelView) {
 @Composable
 fun SettingsDataItem(
     modelView: SettingsActivityModelView,
-    settingDataWithId: DataWithId<SettingsData>) {
+    settingDataWithId: DataWithId<SettingsData>
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

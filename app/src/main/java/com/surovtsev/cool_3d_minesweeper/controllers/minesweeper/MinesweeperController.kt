@@ -12,9 +12,12 @@ import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save

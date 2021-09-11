@@ -4,6 +4,12 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
+import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database.DBConfig
+import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.DatabaseAction
+import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 
 open class DBHelper(
     context: Context
