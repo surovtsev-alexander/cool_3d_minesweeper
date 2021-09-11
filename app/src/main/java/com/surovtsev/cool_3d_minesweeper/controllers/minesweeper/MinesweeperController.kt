@@ -32,8 +32,7 @@ import java.time.LocalDateTime
 
 class MinesweeperController(
     private val context: Context,
-    gameEventsReceiver: IGameEventsReceiver,
-    loadGame: Boolean
+    private val gameEventsReceiver: IGameEventsReceiver
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
@@ -47,14 +46,14 @@ class MinesweeperController(
     private val timeSpanHelper = TimeSpanHelper()
     val touchReceiver = TouchReceiver(timeSpanHelper)
 
-    private val gameConfig: GameConfig
+    private var gameConfig: GameConfig
 
-    private val gameObjectsHolder: GameObjectsHolder
-
-    private val cameraInfo: CameraInfo
+    private var gameObjectsHolder: GameObjectsHolder
 
     var gameLogic: GameLogic
         private set
+    private var cameraInfo: CameraInfo
+
     var scene: Scene? = null
         private set
 
@@ -62,24 +61,9 @@ class MinesweeperController(
 
     private var gameViewsHolder: GameViewsHolder? = null
 
-    private var save: Save? = null
-
     init {
-        if (loadGame) {
-            save = saveController.tryToLoad(
-                SaveTypes.SaveGameJson
-            )
-        }
-
-        if (save != null) {
-            saveController.emptyData(
-                SaveTypes.SaveGameJson
-            )
-            gameConfig = save!!.gameConfig
-        } else {
-            val loadedSettingsData = saveController.loadSettingDataOrDefault()
-            gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
-        }
+        val loadedSettingsData = saveController.loadSettingDataOrDefault()
+        gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
 
         gameObjectsHolder = GameObjectsHolder(gameConfig)
 
@@ -93,19 +77,49 @@ class MinesweeperController(
                 timeSpanHelper
             )
 
-        if (save != null) {
-            cameraInfo = save!!.cameraInfoToSave.getCameraInfo()
+        cameraInfo = CameraInfo()
+    }
 
-            save!!.gameLogicToSave.applySavedData(gameLogic)
+    fun loadGame() {
+        val save = saveController.tryToLoad<Save>(
+            SaveTypes.SaveGameJson
+        )
 
-            save!!.cubeSkinToSave.applySavedData(
-                gameObjectsHolder.cubeSkin,
-                gameLogic
-            )
-        } else {
-            cameraInfo = CameraInfo()
+        if (save == null) {
+            return
         }
 
+        saveController.emptyData(
+            SaveTypes.SaveGameJson
+        )
+        gameConfig = save.gameConfig
+
+        gameObjectsHolder = GameObjectsHolder(gameConfig)
+
+        gameLogic =
+            GameLogic(
+                gameObjectsHolder.cubeSkin,
+                null,
+                gameConfig,
+                gameEventsReceiver,
+                this,
+                timeSpanHelper
+            )
+
+        cameraInfo = save.cameraInfoToSave.getCameraInfo()
+
+        save.gameLogicToSave.applySavedData(gameLogic)
+
+        save.cubeSkinToSave.applySavedData(
+            gameObjectsHolder.cubeSkin,
+            gameLogic
+        )
+
+        if (scene != null) {
+            val displaySize = scene!!.cameraInfoHelper.displaySize
+            onSurfaceCreated()
+            onSurfaceChanged(displaySize[0], displaySize[1])
+        }
     }
 
     override fun onSurfaceCreated() {

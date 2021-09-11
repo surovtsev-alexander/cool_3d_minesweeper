@@ -46,9 +46,12 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
 
         minesweeperController = MinesweeperController(
             this,
-            this,
-            loadGame
+            this
         )
+
+        if (loadGame) {
+            minesweeperController!!.loadGame()
+        }
         glsv_main.setRenderer(minesweeperController!!.gameRenderer)
 
         assignListeners()

@@ -16,10 +16,16 @@ import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 
 class GameActivityV2: ComponentActivity() {
+    companion object {
+        const val LoadGame = "LoadGame"
+    }
+
     private val modelView = GameActivityModelView(
         this,
     )
@@ -33,6 +39,13 @@ class GameActivityV2: ComponentActivity() {
                 , "This device does not support OpenGL ES 2.0"
                 , Toast.LENGTH_LONG).show()
             return
+        }
+
+        val intent = getIntent()
+        val loadGame = intent.getBooleanExtra(GameActivity.LoadGame, false)
+
+        if (loadGame) {
+            modelView.minesweeperController.loadGame()
         }
 
         setContent {
@@ -177,7 +190,8 @@ fun GameInfo(
     modelView: GameActivityModelView
 ) {
     Column(
-        Modifier.fillMaxWidth()
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.End
     ) {
         BombsLeft(modelView)
         TimeElapsed(modelView)
@@ -205,7 +219,7 @@ fun TimeElapsed(
     )
     Text(
         DateUtils.formatElapsedTime(
-            elapsed / 1000
+            elapsed / 1000,
         )
     )
 }

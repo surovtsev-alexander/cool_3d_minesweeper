@@ -22,11 +22,12 @@ class MainActivityModelView(
         "new game" to this::startNewGame,
         "ranking" to this::openRanking,
         "settings" to this::openSettings,
-        "new game v2" to this::startGameV2,
+        "load game v2" to this::loadGameV2,
+        "new game v2" to this::startNewGameV2,
     )
 
     fun isLoadGameAction(action: () -> Unit): Boolean =
-        action == this::loadGame
+        action == this::loadGame || action == this::loadGameV2
 
     private fun loadGame() {
         startGame(true)
@@ -56,10 +57,19 @@ class MainActivityModelView(
         context.startActivity(intent)
     }
 
-    private fun startGameV2() {
-        startActivityHelper(
-            GameActivityV2::class.java
-        )
+    private fun loadGameV2() {
+        startGameV2(true)
+    }
+
+    private fun startNewGameV2() {
+        startGameV2(false)
+    }
+
+    private fun startGameV2(loadGame: Boolean) {
+        val intent = Intent(context, GameActivityV2::class.java)
+        intent.putExtra(GameActivityV2.LoadGame, loadGame)
+        context.startActivity(intent)
+
     }
 
     fun invalidate() {

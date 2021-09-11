@@ -29,8 +29,7 @@ class GameActivityModelView(
 
     val minesweeperController = MinesweeperController(
         context,
-        this,
-        false)
+        this)
     private val gameControls = minesweeperController.gameControls
     private val removeBombs = gameControls.removeBombs
     private val removeZeroBorders = gameControls.removeZeroBorders
