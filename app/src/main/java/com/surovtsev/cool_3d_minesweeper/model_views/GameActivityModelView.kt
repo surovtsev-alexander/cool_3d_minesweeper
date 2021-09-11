@@ -10,11 +10,15 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import kotlinx.android.synthetic.main.activity_game.*
+import org.jetbrains.anko.runOnUiThread
 
 class GameActivityModelView(
     val context: Context
 ): IGameEventsReceiver {
+
     val marking = MyLiveData(false)
+    val elapsedTime = MyLiveData(0L)
+    val bombsLeft = MyLiveData(0)
 
 
     val minesweeperController = MinesweeperController(
@@ -31,11 +35,19 @@ class GameActivityModelView(
     }
 
     override fun bombCountUpdated() {
-
+        context.runOnUiThread {
+            bombsLeft.onDataChanged(
+                minesweeperController.gameLogic.bombsLeft
+            )
+        }
     }
 
     override fun timeUpdated() {
-
+        context.runOnUiThread {
+            elapsedTime.onDataChanged(
+                minesweeperController.gameLogic.gameLogicStateHelper.getElapsed()
+            )
+        }
     }
 
     override fun gameStatusUpdated(newStatus: GameStatus) {

@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.views.activities
 
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
+import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivityV2: ComponentActivity() {
     private val modelView = GameActivityModelView(
@@ -153,8 +155,34 @@ fun GameInfo(
     Column(
         Modifier.fillMaxWidth()
     ) {
-        Text("0")
-        Text("0:00")
+        BombsLeft(modelView)
+        TimeElapsed(modelView)
     }
+}
+
+@Composable
+fun BombsLeft(
+    modelView: GameActivityModelView
+) {
+    val bombsLeft: Int by modelView.bombsLeft.data.observeAsState(
+        modelView.bombsLeft.defaultValue
+    )
+    Text(
+        bombsLeft.toString()
+    )
+}
+
+@Composable
+fun TimeElapsed(
+    modelView: GameActivityModelView
+) {
+    val elapsed: Long by modelView.elapsedTime.data.observeAsState(
+        modelView.elapsedTime.defaultValue
+    )
+    Text(
+        DateUtils.formatElapsedTime(
+            elapsed / 1000
+        )
+    )
 }
 
