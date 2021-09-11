@@ -1,24 +1,37 @@
 package com.surovtsev.cool_3d_minesweeper.views.activities
 
+import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.viewinterop.AndroidView
+import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 
 class GameActivityV2: ComponentActivity() {
-    private val modelView = GameActivityModelView()
+    private val modelView = GameActivityModelView(
+        this
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!OpenGLInfoHelper.isSupportEs2(this)) {
+            Toast.makeText(this
+                , "This device does not support OpenGL ES 2.0"
+                , Toast.LENGTH_LONG).show()
+            return
+        }
 
         setContent {
             Test_composeTheme {
@@ -28,12 +41,12 @@ class GameActivityV2: ComponentActivity() {
                     Row(
                         modifier = Modifier.weight(1f)
                     ) {
-                        MinesweeperView()
+                        MinesweeperView(modelView)
                     }
                     Row(
 
                     ) {
-                        Controls()
+                        Controls(modelView)
                     }
                 }
             }
@@ -42,13 +55,33 @@ class GameActivityV2: ComponentActivity() {
 }
 
 @Composable
-fun MinesweeperView() {
+fun MinesweeperView(
+    modelView: GameActivityModelView
+) {
+    val layoutParams = remember {
+        ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT)
+    }
 
+    val glSurfaceView = remember {
+        GLSurfaceView(modelView.context).apply {
+        }
+    }
+    AndroidView(
+        factory = {
+            glSurfaceView.apply {
+                setEGLContextClientVersion(2)
+                setRenderer(modelView.minesweeperController.gameRenderer)
+            }
+        }
+    )
 }
 
-@Preview
 @Composable
-fun Controls() {
+fun Controls(
+    modelView: GameActivityModelView
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -56,35 +89,35 @@ fun Controls() {
             modifier = Modifier.weight(2f),
             Arrangement.Center
         ) {
-            ControlButtons()
+            ControlButtons(modelView)
         }
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Bottom
         ) {
-            ControlCheckBox()
-
+            ControlCheckBox(modelView)
         }
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            GameInfo()
-
+            GameInfo(modelView)
         }
     }
 }
 
 @Composable
-fun ControlButtons() {
+fun ControlButtons(
+    modelView: GameActivityModelView
+) {
     Row() {
         Button(
-            onClick = { },
+            onClick = modelView::removeMarkedBombs,
             modifier = Modifier.fillMaxWidth(0.5f)
         ) {
             Text("V")
         }
         Button(
-            onClick = { },
+            onClick = modelView::removeZeroBorders,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("O")
@@ -92,23 +125,36 @@ fun ControlButtons() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ControlCheckBox() {
-    Row(
-        Modifier.fillMaxWidth(),
+fun ControlCheckBox(
+    modelView: GameActivityModelView
+) {
+    val checked: Boolean by modelView.marking.data.observeAsState(
+        modelView.marking.defaultValue
+    )
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        onClick = { modelView.marking.onDataChanged(!checked) },
     ) {
-        Checkbox(
-            checked = true,
-            onCheckedChange = { }
-        )
-        Text(
-            "marking"
-        )
+        Row(
+            Modifier.fillMaxWidth(),
+        ) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = modelView.marking::onDataChanged
+            )
+            Text(
+                "marking"
+            )
+        }
     }
 }
 
 @Composable
-fun GameInfo() {
+fun GameInfo(
+    modelView: GameActivityModelView
+) {
     Column(
         Modifier.fillMaxWidth()
     ) {
