@@ -9,6 +9,7 @@ import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivityV2
 
 
 class MainActivityModelView(
@@ -21,6 +22,7 @@ class MainActivityModelView(
         "new game" to this::startNewGame,
         "ranking" to this::openRanking,
         "settings" to this::openSettings,
+        "new game v2" to this::startGameV2,
     )
 
     fun isLoadGameAction(action: () -> Unit): Boolean =
@@ -52,6 +54,12 @@ class MainActivityModelView(
         val intent = Intent(context, GameActivity::class.java)
         intent.putExtra(GameActivity.LoadGame, loadGame)
         context.startActivity(intent)
+    }
+
+    private fun startGameV2() {
+        startActivityHelper(
+            GameActivityV2::class.java
+        )
     }
 
     fun invalidate() {

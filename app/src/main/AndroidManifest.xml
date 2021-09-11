@@ -23,9 +23,11 @@
 
         <activity android:name=".views.activities.GameActivity" />
 
-        <activity android:name=".views.activities.SettingsActivity"/>
+        <activity android:name=".views.activities.GameActivityV2" />
 
         <activity android:name=".views.activities.RankingActivity" />
+
+        <activity android:name=".views.activities.SettingsActivity"/>
 
     </application>
 
