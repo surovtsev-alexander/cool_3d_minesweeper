@@ -20,7 +20,9 @@ class SettingsActivity :
     AppCompatActivity(),
     SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
-    private val settingsDBQueries: SettingsDBQueries = SettingsDBQueries(DBHelper(this))
+    private val applicationController = ApplicationController.getInstance()
+    private val settingsDBQueries = applicationController.settingsDBQueries
+    private val saveController = applicationController.saveController
 
 
     private fun getDbSettingsList() =
@@ -54,7 +56,7 @@ class SettingsActivity :
         controls.map { initMyIntEdit(it.value, it.key) }
 
         val loadedSettingsData =
-            ApplicationController.instance.saveController.tryToLoad<SettingsData>(
+            saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
             )?: SettingsData()
 
@@ -96,7 +98,7 @@ class SettingsActivity :
                 settingsData
             )
 
-            ApplicationController.instance.saveController.save(
+            saveController.save(
                 SaveTypes.GameSettingsJson,
                 settingsData
             )

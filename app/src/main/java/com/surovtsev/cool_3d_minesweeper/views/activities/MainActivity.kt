@@ -130,7 +130,7 @@ class MainActivity: ComponentActivity() {
 
     private fun invalidate() {
         mainActivityViewModel.onHasSaveChanged(
-            ApplicationController.instance.saveController.hasData(
+            ApplicationController.getInstance().saveController.hasData(
                 SaveTypes.SaveGameJson
             )
         )

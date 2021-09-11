@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
@@ -39,9 +40,10 @@ class RankingActivity: ComponentActivity() {
     }
 
     private val modelView = ModelView()
-    private val dbHelper = DBHelper(this)
-    private val settingsDBQueries = SettingsDBQueries(dbHelper)
-    private val rankingDBQueries = RankingDBQueries(dbHelper)
+
+    private val applicationController = ApplicationController.getInstance()
+    private val settingsDBQueries = applicationController.settingsDBQueries
+    private val rankingDBQueries = applicationController.rankingDBQueries
 
     private var rankingList: List<RankingData>? = null
     private var winsCount: Map<Int, Int>? = null

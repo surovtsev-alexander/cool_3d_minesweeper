@@ -36,6 +36,9 @@ class MinesweeperController(
 {
     val gameRenderer = GLESRenderer(this)
 
+    private val applicationController = ApplicationController.getInstance()
+    private val saveController = applicationController.saveController
+
     private val timeSpanHelper = TimeSpanHelper()
     val touchReceiver = TouchReceiver(timeSpanHelper)
 
@@ -58,18 +61,18 @@ class MinesweeperController(
 
     init {
         if (loadGame) {
-            save = ApplicationController.instance.saveController.tryToLoad(
+            save = saveController.tryToLoad(
                 SaveTypes.SaveGameJson
             )
         }
 
         if (save != null) {
-            ApplicationController.instance.saveController.emptyData(
+            saveController.emptyData(
                 SaveTypes.SaveGameJson
             )
             gameConfig = save!!.gameConfig
         } else {
-            val loadedSettingsData = ApplicationController.instance.saveController.tryToLoad<SettingsData>(
+            val loadedSettingsData = applicationController.saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
             )?: SettingsData()
             gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
@@ -177,7 +180,7 @@ class MinesweeperController(
                 gameLogic,
                 gameObjectsHolder.cubeSkin
             )
-            ApplicationController.instance.saveController.save(
+            saveController.save(
                 SaveTypes.SaveGameJson,
                 save
             )
@@ -195,7 +198,7 @@ class MinesweeperController(
     override fun gameStatusUpdated(newStatus: GameStatus) {
         if (newStatus == GameStatus.WIN ||
             newStatus == GameStatus.LOSE) {
-            ApplicationController.instance.saveController.emptyData(
+            saveController.emptyData(
                 SaveTypes.SaveGameJson
             )
         }

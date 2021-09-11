@@ -46,8 +46,9 @@ class SettingsActivityV2: ComponentActivity() {
     }
 
     private val modelView = ModelView()
-    private val dbHelper = DBHelper(this)
-    private val settingsDBQueries = SettingsDBQueries(dbHelper)
+    private val applicationController = ApplicationController.getInstance()
+    private val settingsDBQueries = applicationController.settingsDBQueries
+    private val saveController = applicationController.saveController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +84,7 @@ class SettingsActivityV2: ComponentActivity() {
         }
 
         val loadedSettingsData =
-            ApplicationController.instance.saveController.tryToLoad<SettingsData>(
+            saveController.tryToLoad<SettingsData>(
                 SaveTypes.GameSettingsJson
             )?: SettingsData()
 
@@ -104,7 +105,7 @@ class SettingsActivityV2: ComponentActivity() {
             settingsData
         )
 
-        ApplicationController.instance.saveController.save(
+        saveController.save(
             SaveTypes.GameSettingsJson,
             settingsData
         )

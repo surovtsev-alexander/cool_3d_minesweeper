@@ -29,7 +29,7 @@ class TouchHandler(
                 "near:${pointer.near}",
                 "far:${pointer.far}"
             ).reduce {acc, x -> "$acc\n$x"}
-            ApplicationController.instance.messagesComponent?.addMessageUI(message)
+            ApplicationController.getInstance().messagesComponent?.addMessageUI(message)
         }
     }
 }
