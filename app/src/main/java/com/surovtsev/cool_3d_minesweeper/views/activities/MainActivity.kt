@@ -23,6 +23,7 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import com.surovtsev.cool_3d_minesweeper.model_views.MainActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 
 class MainActivity: ComponentActivity() {
@@ -30,116 +31,53 @@ class MainActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MainMenuButtons()
+            MainMenuButtons(modelView)
         }
     }
 
-    private class MainActivityViewModel: ViewModel() {
-        private val _hasSave = MutableLiveData<Boolean>(false)
-        val hasSave: LiveData<Boolean> = _hasSave
+    private val modelView = MainActivityModelView(this)
 
-        fun onHasSaveChanged(newVal: Boolean) {
-            _hasSave.value = newVal
-        }
+
+    override fun onResume() {
+        super.onResume()
+        modelView.invalidate()
     }
 
-    private val mainActivityViewModel = MainActivityViewModel()
+    override fun onRestart() {
+        super.onRestart()
+        modelView.invalidate()
+    }
+}
 
-    private val buttonsParameters = arrayOf(
-        "load game" to this::loadGame,
-        "new game" to this::startNewGame,
-        "ranking" to this::openRanking,
-        "settings" to this::openSettings,
-        "settingsV2" to this::openSettingsV2,
-    )
+@Composable
+fun MainMenuButtons(modelView: MainActivityModelView) {
+    val enabled: Boolean by modelView.hasSave.data.observeAsState(false)
 
-
-    @Preview
-    @Composable
-    fun MainMenuButtons() {
-        val enabled: Boolean by mainActivityViewModel.hasSave.observeAsState(false)
-
-        Test_composeTheme {
-            Surface(color = MaterialTheme.colors.background) {
-                Box(
-                    Modifier.background(GrayBackground)//Color(0xFF48cae4))
+    Test_composeTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            Box(
+                Modifier.background(GrayBackground)//Color(0xFF48cae4))
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        verticalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(15.dp)
-                        ) {
-                            buttonsParameters.map { (n, a) ->
-                                MainMenuButton(
-                                    n,
-                                    a,
-                                    if (a == this@MainActivity::loadGame) enabled else true
-                                )
-                            }
+                        modelView.buttonsParameters.map { (n, a) ->
+                            MainMenuButton(
+                                n,
+                                a,
+                                if (modelView.isLoadGameAction(a)) enabled else true
+                            )
                         }
                     }
                 }
             }
         }
     }
-
-    private fun loadGame() {
-        startGame(true)
-    }
-
-    private fun startNewGame() {
-        startGame(false)
-    }
-
-    private fun openRanking() {
-        startActivityHelper(RankingActivity::class.java)
-    }
-
-    private fun openSettings() {
-        startActivityHelper(SettingsActivity::class.java)
-    }
-
-    private fun openSettingsV2() {
-        startActivityHelper(SettingsActivityV2::class.java)
-    }
-
-    private fun <T> startActivityHelper(x: Class<T>) {
-        startActivity(
-            Intent(this, x)
-        )
-    }
-
-    private fun startGame(loadGame: Boolean) {
-        val intent = Intent(this, GameActivity::class.java)
-        intent.putExtra(GameActivity.LoadGame, loadGame)
-        startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        invalidate()
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        invalidate()
-    }
-
-    private fun invalidate() {
-        mainActivityViewModel.onHasSaveChanged(
-            ApplicationController.getInstance().saveController.hasData(
-                SaveTypes.SaveGameJson
-            )
-        )
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }
 
 @Composable
