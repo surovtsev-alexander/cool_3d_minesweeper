@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.views.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
@@ -27,7 +28,7 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 
 
 class RankingActivity: ComponentActivity() {
-    private class ModelView() {
+    private class ModelView {
         val settingsList = MyLiveData<List<DataWithId<SettingsData>>>(
             listOf<DataWithId<SettingsData>>()
         )
@@ -64,7 +65,9 @@ class RankingActivity: ComponentActivity() {
     fun RankingControls() {
         Test_composeTheme {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(1.dp, Color.Black),
                 //verticalArrangement = Arrangement.spacedBy(15.dp),
             ) {
                 Row(
@@ -92,7 +95,8 @@ class RankingActivity: ComponentActivity() {
         Box(
             modifier = Modifier
                 .background(GrayBackground)
-                .border(1.dp, Color.Black),
+                .border(1.dp, Color.Black)
+                .padding(horizontal = 1.dp),
         ) {
             Column(
                 Modifier.fillMaxSize()
@@ -173,7 +177,11 @@ class RankingActivity: ComponentActivity() {
         val rankingList: List<RankingData> by modelView.rankingList.data.observeAsState(
             listOf<RankingData>())
         Box (
-            modifier = Modifier.fillMaxSize().background(DeepGray),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DeepGray)
+                .border(1.dp, Color.Black)
+                .padding(horizontal = 1.dp),
         ) {
             Column() {
                 Row() {
