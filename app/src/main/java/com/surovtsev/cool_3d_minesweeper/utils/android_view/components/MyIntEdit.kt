@@ -66,6 +66,6 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
         }
 
     private fun borderUpdated() {
-        tv_min_max.setText("($minValueData..$maxValueData)")
+        tv_min_max.setText("(${minValueData..maxValueData})")
     }
 }

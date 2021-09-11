@@ -52,8 +52,7 @@ class SettingsActivityV2: ComponentActivity() {
                         ) {
                             Controls(modelView)
                         }
-                        Column(
-                        ) {
+                        Column {
                             UseButton(modelView)
                         }
                     }
@@ -69,7 +68,7 @@ class SettingsActivityV2: ComponentActivity() {
 @Composable
 fun SettingsList(modelView: SettingsActivityModelView) {
     val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
-        listOf<DataWithId<SettingsData>>()
+        listOf()
     )
     val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
 
@@ -81,7 +80,7 @@ fun SettingsList(modelView: SettingsActivityModelView) {
         Column(
             Modifier.fillMaxSize()
         ) {
-            Row() {
+            Row {
                 Text(
                     "counts",
                     Modifier.fillMaxWidth(0.33f),
@@ -164,29 +163,35 @@ fun Controls(
     val slidersInfo = modelView.slidersInfo
 
     LazyColumn {
-        items(slidersInfo) { (name, borderAndValue) ->
-            val sV = borderAndValue.second
+        items(slidersInfo) { (name, bordersAndValue) ->
+            val sV = bordersAndValue.second
             val sliderValue: Float by sV.data.observeAsState(
                 sV.defaultValue
             )
-            val border = borderAndValue.first
-            MySlider(intRange = border, value = sliderValue, onChangeAction = sV::onDataChanged)
+            val borders = bordersAndValue.first
+            MySlider(
+                name,
+                borders,
+                sliderValue,
+                sV::onDataChanged
+            )
         }
     }
 }
 
 @Composable
 fun MySlider(
-    intRange: IntRange,
+    name: String,
+    borders: IntRange,
     value: Float,
     onChangeAction: (Float) -> Unit,
 ) {
-    val valueRange = toFloatRange(intRange)
-    val steps = intRange.last - intRange.first - 1
-    Column() {
-        Row() {
+    val valueRange = toFloatRange(borders)
+    val steps = borders.last - borders.first - 1
+    Column {
+        Row {
             Text(
-                intRange.start.toString(),
+                name,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
@@ -196,7 +201,7 @@ fun MySlider(
                 modifier = Modifier.fillMaxWidth(0.5f)
             )
             Text(
-                intRange.last.toString(),
+                "(${borders})",
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )

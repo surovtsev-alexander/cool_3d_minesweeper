@@ -73,6 +73,6 @@ class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
         }
 
     private fun borderUpdated() {
-        tv_min_max.setText("($minValue..$maxValue)")
+        tv_min_max.setText("(${minValue..maxValue})")
     }
 }
