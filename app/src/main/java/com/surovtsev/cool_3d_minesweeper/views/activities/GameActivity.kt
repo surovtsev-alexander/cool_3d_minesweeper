@@ -60,7 +60,7 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
         }
 
         btn_remove_border_zeros.setOnClickListener { _ ->
-            minesweeperController?.gameControls?.removeBorderZeros?.update()
+            minesweeperController?.gameControls?.removeZeroBorders?.update()
         }
 
         cb_marking.setOnCheckedChangeListener { _, isChecked ->

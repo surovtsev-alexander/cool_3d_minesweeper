@@ -132,14 +132,14 @@ fun ControlCheckBox(
     )
     Surface(
         shape = MaterialTheme.shapes.large,
-        onClick = { modelView.marking.onDataChanged(!checked) },
+        onClick = { modelView.setMarking(!checked) },
     ) {
         Row(
             Modifier.fillMaxWidth(),
         ) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = modelView.marking::onDataChanged
+                onCheckedChange = modelView::setMarking
             )
             Text(
                 "marking"

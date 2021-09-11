@@ -9,7 +9,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.Touch
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
-import kotlinx.android.synthetic.main.activity_game.*
 import org.jetbrains.anko.runOnUiThread
 
 class GameActivityModelView(
@@ -25,13 +24,26 @@ class GameActivityModelView(
         context,
         this,
         false)
+    private val gameControls = minesweeperController.gameControls
+    private val removeBombs = gameControls.removeBombs
+    private val removeZeroBorders = gameControls.removeZeroBorders
+    private val markOnShortTap = gameControls.markOnShortTap
+
+    fun setMarking(newValue: Boolean) {
+        marking.onDataChanged(newValue)
+        if (newValue) {
+            markOnShortTap.turnOn()
+        } else {
+            markOnShortTap.turnOff()
+        }
+    }
 
     fun removeMarkedBombs() {
-
+        removeBombs.update()
     }
 
     fun removeZeroBorders() {
-
+        removeZeroBorders.update()
     }
 
     override fun bombCountUpdated() {

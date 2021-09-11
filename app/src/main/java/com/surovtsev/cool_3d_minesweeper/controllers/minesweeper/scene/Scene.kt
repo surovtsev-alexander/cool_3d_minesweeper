@@ -10,9 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
-import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
-import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
 
 class Scene (
@@ -101,7 +99,7 @@ class Scene (
         if (gameControls.removeBombs.getAndRelease()) {
             gameLogic.storeSelectedBombs()
         }
-        if (gameControls.removeBorderZeros.getAndRelease()) {
+        if (gameControls.removeZeroBorders.getAndRelease()) {
             gameLogic.storeZeroBorders()
         }
         gameLogic.removeCubes()
