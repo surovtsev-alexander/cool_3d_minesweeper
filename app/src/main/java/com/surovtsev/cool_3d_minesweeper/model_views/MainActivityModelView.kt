@@ -5,7 +5,6 @@ import android.content.Intent
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
-import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivityV2
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
@@ -21,7 +20,6 @@ class MainActivityModelView(
         "load game" to this::loadGame,
         "new game" to this::startNewGame,
         "ranking" to this::openRanking,
-        "settings" to this::openSettings,
         "settingsV2" to this::openSettingsV2,
     )
 
@@ -38,10 +36,6 @@ class MainActivityModelView(
 
     private fun openRanking() {
         startActivityHelper(RankingActivity::class.java)
-    }
-
-    private fun openSettings() {
-        startActivityHelper(SettingsActivity::class.java)
     }
 
     private fun openSettingsV2() {
