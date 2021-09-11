@@ -16,12 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
 import com.surovtsev.cool_3d_minesweeper.model_views.SettingActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
@@ -165,45 +162,55 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 fun Controls(
     modelView: SettingActivityModelView
 ) {
-    val controlsValues: Map<String, Int> by modelView.controlsValues.data.observeAsState(
-        SettingActivityModelView.paramNames.map { it to SettingActivityModelView.borders[it]!!.first }.toMap()
-    )
+    val paramNames = SettingActivityModelView.paramNames
+    val sliderValues = modelView.sliderValues
+    val borders = SettingActivityModelView.borders
 
     LazyColumn {
-        items(SettingActivityModelView.paramNames) { item ->
-            val intRange = SettingActivityModelView.borders[item]!!
-            val valueRange = toFloatRange(
-                intRange
+        items(paramNames) { param ->
+            val sV = sliderValues[param]!!
+            val sliderValue: Float by sV.data.observeAsState(
+                sV.defaultValue
             )
-            val steps = intRange.last - intRange.first - 1
-            val value = controlsValues[item]!!
-            Column() {
-                Row() {
-                    Text(
-                        intRange.start.toString(),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth(0.33f)
-                    )
-                    Text(
-                        value.toString(),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(0.5f)
-                    )
-                    Text(
-                        intRange.last.toString(),
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                Slider(
-                    value = value.toFloat(),
-                    onValueChange = { modelView.setValue(item, round(it).toInt()) },
-                    valueRange = valueRange,
-                    steps = steps,
-                    enabled = true
-                )
-            }
+            val border = borders[param]!!
+            MySlider(intRange = border, value = sliderValue, onChangeAction = sV::onDataChanged)
         }
+    }
+}
+
+@Composable
+fun MySlider(
+    intRange: IntRange,
+    value: Float,
+    onChangeAction: (Float) -> Unit,
+) {
+    val valueRange = toFloatRange(intRange)
+    val steps = intRange.last - intRange.first - 1
+    Column() {
+        Row() {
+            Text(
+                intRange.start.toString(),
+                textAlign = TextAlign.Start,
+                modifier = Modifier.fillMaxWidth(0.33f)
+            )
+            Text(
+                SettingActivityModelView.floatToInt(value).toString(),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(0.5f)
+            )
+            Text(
+                intRange.last.toString(),
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Slider(
+            value = value,
+            onValueChange = onChangeAction,
+            valueRange = valueRange,
+            steps = steps,
+            enabled = true
+        )
     }
 }
 

@@ -63,7 +63,7 @@ class GameActivity : AppCompatActivity(), IGameEventsReceiver {
             minesweeperController?.gameControls?.removeBorderZeros?.update()
         }
 
-        cb_marking.setOnCheckedChangeListener { buttonView, isChecked ->
+        cb_marking.setOnCheckedChangeListener { _, isChecked ->
             val x = minesweeperController?.gameControls?.markOnShortTap
 
             if (x != null) {

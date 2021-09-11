@@ -21,10 +21,18 @@ data class SettingsData(
         val yCountColumnName = DBConfig.glueWithUnderscores(yCountName)
         val zCountColumnName = DBConfig.glueWithUnderscores(zCountName)
         val bombsPercentageColumnName = DBConfig.glueWithUnderscores(bombsPercentageName)
+
+        const val xCountDefaultValue = 12
+        const val yCountDefaultValue = 12
+        const val zCountDefaultValue = 12
+        const val bombsPercentageDefaultValue = 20
     }
 
     constructor() : this(
-        12, 12, 12, 20
+        xCountDefaultValue,
+        yCountDefaultValue,
+        zCountDefaultValue,
+        bombsPercentageDefaultValue
     )
 
     constructor(count: Int, bombsPercentage: Int): this(

@@ -72,9 +72,7 @@ class MinesweeperController(
             )
             gameConfig = save!!.gameConfig
         } else {
-            val loadedSettingsData = applicationController.saveController.tryToLoad<SettingsData>(
-                SaveTypes.GameSettingsJson
-            )?: SettingsData()
+            val loadedSettingsData = saveController.loadSettingDataOrDefault()
             gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
         }
 

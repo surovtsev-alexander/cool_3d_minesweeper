@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 
 import android.content.Context
 import android.content.Intent
-import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
@@ -15,7 +15,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 class MainActivityModelView(
     private val context: Context
 ) {
-    val hasSave = MyLiveData<Boolean>(false)
+    val hasSave = MyLiveData(false)
 
     val buttonsParameters = arrayOf(
         "load game" to this::loadGame,

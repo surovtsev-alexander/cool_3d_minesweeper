@@ -4,24 +4,23 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.Appl
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsData
-import com.surovtsev.cool_3d_minesweeper.utils.live_data.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 
 class RankingActivityModelView {
-    val settingsList = MyLiveData<List<DataWithId<SettingsData>>>(
+    val settingsList = MyLiveData(
         listOf<DataWithId<SettingsData>>()
     )
-    val filteredRankingList = MyLiveData<List<RankingData>>(
+    val filteredRankingList = MyLiveData(
         listOf<RankingData>()
     )
-    val selectedSettingsId = MyLiveData<Int>(-1)
+    val selectedSettingsId = MyLiveData(-1)
 
 
-    val applicationController = ApplicationController.getInstance()
-    val settingsDBQueries = applicationController.settingsDBQueries
-    val rankingDBQueries = applicationController.rankingDBQueries
+    private val applicationController = ApplicationController.getInstance()
+    private val settingsDBQueries = applicationController.settingsDBQueries.value
+    private val rankingDBQueries = applicationController.rankingDBQueries.value
 
-    var rankingList: List<RankingData>? = null
-        private set
+    private var rankingList: List<RankingData>? = null
     var winsCount: Map<Int, Int>? = null
         private set
 
@@ -32,14 +31,20 @@ class RankingActivityModelView {
 
         rankingList = rankingDBQueries.getRankingList()
         winsCount = rankingList?.map{ it.settingId }?.groupingBy { it }?.eachCount()
+
+        settingsDBQueries.getId(
+            applicationController.saveController.loadSettingDataOrDefault()
+        )?.let {
+            loadRankingForSettingsId(it)
+        }
     }
 
     fun loadRankingForSettingsId(
         settingsId: Int
     ) {
-        rankingList?.let {
+        rankingList?.let { rl ->
             filteredRankingList.onDataChanged(
-                it.filter {
+                rl.filter {
                     it.settingId == settingsId
                 }
             )

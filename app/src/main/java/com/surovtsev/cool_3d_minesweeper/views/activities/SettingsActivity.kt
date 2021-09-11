@@ -21,7 +21,7 @@ class SettingsActivity :
     SettingsRecyclerViewAdapter.ISettingsRVEventListener
 {
     private val applicationController = ApplicationController.getInstance()
-    private val settingsDBQueries = applicationController.settingsDBQueries
+    private val settingsDBQueries = applicationController.settingsDBQueries.value
     private val saveController = applicationController.saveController
 
 

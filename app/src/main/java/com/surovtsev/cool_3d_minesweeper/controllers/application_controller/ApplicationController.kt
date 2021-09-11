@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MessagesComponent
+import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLazyVal
 import java.lang.Exception
 
 class ApplicationController() : Application() {
@@ -44,33 +45,9 @@ class ApplicationController() : Application() {
             return _saveController!!
         }
 
-    private var _dbHelper: DBHelper? = null
-    private var _settingsDBQueries: SettingsDBQueries? = null
-    private var _rankingDBQueries: RankingDBQueries? = null
-
-    val dbHelper: DBHelper
-        get(): DBHelper {
-            if (_dbHelper == null) {
-                _dbHelper = DBHelper(instance!!)
-            }
-            return _dbHelper!!
-        }
-
-    val settingsDBQueries: SettingsDBQueries
-        get(): SettingsDBQueries {
-            if (_settingsDBQueries == null) {
-                _settingsDBQueries = SettingsDBQueries(dbHelper)
-            }
-            return _settingsDBQueries!!
-        }
-
-    val rankingDBQueries: RankingDBQueries
-        get(): RankingDBQueries {
-            if (_rankingDBQueries == null) {
-                _rankingDBQueries = RankingDBQueries(dbHelper)
-            }
-            return _rankingDBQueries!!
-        }
+    private val dbHelper = MyLazyVal { DBHelper(instance!!) }
+    val settingsDBQueries = MyLazyVal { SettingsDBQueries(dbHelper.value) }
+    val rankingDBQueries = MyLazyVal { RankingDBQueries(dbHelper.value) }
 
     init {
         if (instance != null) {
