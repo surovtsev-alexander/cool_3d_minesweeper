@@ -42,7 +42,7 @@ class GameActivityV2: ComponentActivity() {
         }
 
         val intent = getIntent()
-        val loadGame = intent.getBooleanExtra(GameActivity.LoadGame, false)
+        val loadGame = intent.getBooleanExtra(LoadGame, false)
 
         if (loadGame) {
             modelView.minesweeperController.loadGame()

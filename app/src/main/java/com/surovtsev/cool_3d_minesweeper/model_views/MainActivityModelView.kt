@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 import android.content.Context
 import android.content.Intent
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
-import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 
@@ -18,8 +17,6 @@ class MainActivityModelView(
     val hasSave = MyLiveData(false)
 
     val buttonsParameters = arrayOf(
-        "load game" to this::loadGame,
-        "new game" to this::startNewGame,
         "ranking" to this::openRanking,
         "settings" to this::openSettings,
         "load game v2" to this::loadGameV2,
@@ -27,15 +24,8 @@ class MainActivityModelView(
     )
 
     fun isLoadGameAction(action: () -> Unit): Boolean =
-        action == this::loadGame || action == this::loadGameV2
+        action == this::loadGameV2
 
-    private fun loadGame() {
-        startGame(true)
-    }
-
-    private fun startNewGame() {
-        startGame(false)
-    }
 
     private fun openRanking() {
         startActivityHelper(RankingActivity::class.java)
@@ -49,12 +39,6 @@ class MainActivityModelView(
         context.startActivity(
             Intent(context, x)
         )
-    }
-
-    private fun startGame(loadGame: Boolean) {
-        val intent = Intent(context, GameActivity::class.java)
-        intent.putExtra(GameActivity.LoadGame, loadGame)
-        context.startActivity(intent)
     }
 
     private fun loadGameV2() {
