@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 
-class GameActivityV2: ComponentActivity() {
+class GameActivity: ComponentActivity() {
     companion object {
         const val LoadGame = "LoadGame"
     }
