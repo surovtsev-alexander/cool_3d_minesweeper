@@ -12,7 +12,7 @@
         >
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -20,7 +20,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_value"
+            android:id="@+id/tvValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -28,7 +28,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_min_max"
+            android:id="@+id/tvMinMax"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -38,10 +38,9 @@
 
     </RelativeLayout>
     <SeekBar
-        android:id="@+id/sb_value"
+        android:id="@+id/sbValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
     <Space
         android:layout_width="match_parent"

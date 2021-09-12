@@ -2,14 +2,13 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.components
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
-import kotlinx.android.synthetic.main.my_int_edit.view.*
 
-/**
- * TODO: document your custom view class.
- */
+
 class MyIntEdit : LinearLayout, IUiIntValueSelector {
 
     constructor(context: Context) : super(context) {
@@ -28,15 +27,22 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
         init(attrs, defStyle)
     }
 
+    var tvName: TextView? = null
+    var etValue: EditText? = null
+    var tvMinMax: TextView? = null
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         inflate(context, R.layout.my_int_edit, this)
+
+        tvName = findViewById(R.id.tvName)
+        etValue = findViewById(R.id.etValue)
+        tvMinMax = findViewById(R.id.tvMinMax)
     }
 
     override var name: String
-        get() = tv_name.text.toString()
+        get() = tvName?.text.toString()?:""
         set(value) {
-            tv_name.text = value
+            tvName?.text = value
         }
 
     private var minValueData = 0
@@ -60,12 +66,12 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
         }
 
     override var value: Int
-        get() = Integer.parseInt(et_value.text.toString())
+        get() = Integer.parseInt(etValue?.text.toString())
         set(v) {
-            et_value.setText(v.toString())
+            etValue?.setText(v.toString())
         }
 
     private fun borderUpdated() {
-        tv_min_max.setText("(${minValueData..maxValueData})")
+        tvMinMax?.setText("(${minValueData..maxValueData})")
     }
 }
