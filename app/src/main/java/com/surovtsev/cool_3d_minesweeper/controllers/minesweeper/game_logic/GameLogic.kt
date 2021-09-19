@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
@@ -9,6 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.inte
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
@@ -23,13 +23,16 @@ class GameLogic(
     private val gameConfig: GameConfig,
     val gameEventsReceiver: IGameEventsReceiver,
     gameStatusReceiver: IGameStatusReceiver,
-    timeSpanHelper: TimeSpanHelper
+    timeSpanHelper: TimeSpanHelper,
+    appComponent: AppComponent
 ) {
-    val gameLogicStateHelper = GameLogicStateHelper(
-        gameEventsReceiver,
-        gameStatusReceiver,
-        timeSpanHelper
-    )
+    val gameLogicStateHelper: GameLogicStateHelper by lazy {
+        appComponent.gameLogicStateHelperFactory.create(
+            gameEventsReceiver,
+            gameStatusReceiver,
+            timeSpanHelper
+        )
+    }
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =

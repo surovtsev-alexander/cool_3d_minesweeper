@@ -1,15 +1,26 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.application_controller
 
 import android.app.Application
+import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
+import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MessagesComponent
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLazyVal
 import java.lang.Exception
 
-class ApplicationController() : Application() {
+class ApplicationController : Application() {
+    lateinit var appComponent: AppComponent
+
+    override fun onCreate() {
+        super.onCreate()
+
+        appComponent = DaggerAppComponent.create()
+    }
+
     companion object {
         private var instance: ApplicationController? = null
 
@@ -57,3 +68,9 @@ class ApplicationController() : Application() {
 }
 
 typealias LogSceneDelegate = () -> Unit
+
+val Context.appComponent:AppComponent
+    get() = when (this) {
+        is ApplicationController -> appComponent
+        else -> this.applicationContext.appComponent
+    }

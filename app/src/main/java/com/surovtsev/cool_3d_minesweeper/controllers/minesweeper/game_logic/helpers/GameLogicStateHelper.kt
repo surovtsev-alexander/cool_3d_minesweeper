@@ -9,14 +9,27 @@ import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResume
 import com.surovtsev.cool_3d_minesweeper.utils.time.INeedToBeUpdated
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpan
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class GameLogicStateHelper(
-    private val gameEventsReceiver: IGameEventsReceiver,
-    private val gameStatusReceiver: IGameStatusReceiver,
-    timeSpanHelper: TimeSpanHelper
+class GameLogicStateHelper @AssistedInject constructor(
+    @Assisted private val gameEventsReceiver: IGameEventsReceiver,
+    @Assisted private val gameStatusReceiver: IGameStatusReceiver,
+    @Assisted timeSpanHelper: TimeSpanHelper
 ):
     INeedToBeUpdated, IHandlePauseResume
 {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            gameEventsReceiver: IGameEventsReceiver,
+            gameStatusReceiver: IGameStatusReceiver,
+            timeSpanHelper: TimeSpanHelper
+        ): GameLogicStateHelper
+    }
+
+
     var gameStatus: GameStatus
         private set
 

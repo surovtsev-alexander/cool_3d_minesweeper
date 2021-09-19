@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView
 import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
@@ -16,6 +17,7 @@ import org.jetbrains.anko.runOnUiThread
 
 class GameActivityModelView(
     val context: Context,
+    private val appComponent: AppComponent
 ):
     IGameEventsReceiver,
     IHandlePauseResumeDestroyKeyDown
@@ -29,7 +31,9 @@ class GameActivityModelView(
 
     val minesweeperController = MinesweeperController(
         context,
-        this)
+        this,
+        appComponent
+    )
     private val gameControls = minesweeperController.gameControls
     private val removeBombs = gameControls.removeBombs
     private val removeZeroBorders = gameControls.removeZeroBorders

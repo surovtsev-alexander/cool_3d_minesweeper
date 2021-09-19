@@ -17,6 +17,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
+import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -32,7 +33,8 @@ import java.time.LocalDateTime
 
 class MinesweeperController(
     private val context: Context,
-    private val gameEventsReceiver: IGameEventsReceiver
+    private val gameEventsReceiver: IGameEventsReceiver,
+    private val appComponent: AppComponent
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
@@ -74,7 +76,8 @@ class MinesweeperController(
                 gameConfig,
                 gameEventsReceiver,
                 this,
-                timeSpanHelper
+                timeSpanHelper,
+                appComponent
             )
 
         cameraInfo = CameraInfo()
@@ -103,7 +106,8 @@ class MinesweeperController(
                 gameConfig,
                 gameEventsReceiver,
                 this,
-                timeSpanHelper
+                timeSpanHelper,
+                appComponent
             )
 
         cameraInfo = save.cameraInfoToSave.getCameraInfo()

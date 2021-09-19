@@ -19,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.appComponent
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 
 class GameActivity: ComponentActivity() {
@@ -26,10 +28,11 @@ class GameActivity: ComponentActivity() {
         const val LoadGame = "LoadGame"
     }
 
-    private val modelView = GameActivityModelView(
-        this,
-    )
-
+    private val modelView: GameActivityModelView by lazy {
+        GameActivityModelView(
+            this, appComponent
+        )
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
