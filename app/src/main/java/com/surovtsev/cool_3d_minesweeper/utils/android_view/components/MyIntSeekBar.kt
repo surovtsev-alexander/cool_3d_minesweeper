@@ -31,7 +31,10 @@ class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
     var tvMinMax: TextView? = null
     var sbValue: SeekBar? = null
 
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
+    private fun init(
+        @Suppress("UNUSED_PARAMETER") attrs: AttributeSet?,
+        @Suppress("UNUSED_PARAMETER") defStyle: Int
+    ) {
         inflate(context, R.layout.my_int_seek_bar, this)
 
         tvName = findViewById(R.id.tvName)

@@ -31,7 +31,10 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
     var etValue: EditText? = null
     var tvMinMax: TextView? = null
 
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
+    private fun init(
+        @Suppress("UNUSED_PARAMETER") attrs: AttributeSet?,
+        @Suppress("UNUSED_PARAMETER") defStyle: Int
+    ) {
         inflate(context, R.layout.my_int_edit, this)
 
         tvName = findViewById(R.id.tvName)
@@ -40,7 +43,7 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
     }
 
     override var name: String
-        get() = tvName?.text.toString()?:""
+        get() = tvName?.text.toString()
         set(value) {
             tvName?.text = value
         }
