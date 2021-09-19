@@ -35,6 +35,7 @@ class GameActivityModelView(
     private val removeZeroBorders = gameControls.removeZeroBorders
     private val markOnShortTap = gameControls.markOnShortTap
 
+    /* TODO: move to activity class */
     var glSurfaceView: GLSurfaceView? = null
 
     init {

@@ -2,6 +2,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id "kotlin-kapt"
 }
 
 android {
@@ -74,4 +75,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+
+
+    implementation "com.google.dagger:dagger:$daggerVersion"
+
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
 }
