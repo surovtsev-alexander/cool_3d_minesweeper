@@ -1,12 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
+import javax.inject.Inject
 
-class TouchReceiver(
+@GameControllerScope
+class TouchReceiver @Inject constructor(
     private val customClock: TimeSpanHelper
 ): ITouchReceiver
 {

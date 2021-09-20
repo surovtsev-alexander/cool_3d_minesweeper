@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
@@ -15,6 +16,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -27,24 +29,22 @@ import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDest
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
 import org.threeten.bp.LocalDateTime
+import javax.inject.Inject
 
-class MinesweeperController(
+@GameControllerScope
+class MinesweeperController @Inject constructor(
     private val context: Context,
     private val gameEventsReceiver: IGameEventsReceiver,
-    private val load: Boolean
+    private val load: Boolean,
+    private val timeSpanHelper: TimeSpanHelper,
+    val touchReceiver: TouchReceiver,
+    val gameControls: GameControls,
+    val saveController: SaveController
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
     IGameStatusReceiver
 {
-    val gameRenderer = GLESRenderer(this)
-
-    private val applicationController = ApplicationController.getInstance()
-    private val saveController = applicationController.saveController
-
-    private val timeSpanHelper = TimeSpanHelper()
-    val touchReceiver = TouchReceiver(timeSpanHelper)
-
     private var gameConfig: GameConfig
 
     private var gameObjectsHolder: GameObjectsHolder
@@ -55,8 +55,6 @@ class MinesweeperController(
 
     var scene: Scene? = null
         private set
-
-    val gameControls = GameControls()
 
     private var gameViewsHolder: GameViewsHolder? = null
 

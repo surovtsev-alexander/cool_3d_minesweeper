@@ -3,13 +3,19 @@ package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
+import javax.inject.Inject
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GLESRenderer(
-    private val openglEventsHandler: IHandleOpenGLEvents,
+@GameControllerScope
+class GLESRenderer @Inject constructor(
+    val minesweeperController: MinesweeperController,
 ): GLSurfaceView.Renderer {
+    private val openglEventsHandler = minesweeperController as IHandleOpenGLEvents
+
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
         glEnable(GL_DEPTH_TEST)

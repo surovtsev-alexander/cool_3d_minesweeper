@@ -16,6 +16,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
+import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 
@@ -33,6 +34,8 @@ class GameActivityModelView(
 
     @Inject
     lateinit var minesweeperController: MinesweeperController
+    @Inject
+    lateinit var gameRenderer: GLESRenderer
 
     private val gameControls: GameControls
     private val removeBombs: Updatable

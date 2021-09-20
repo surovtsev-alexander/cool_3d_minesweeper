@@ -51,7 +51,7 @@ class GameActivity: ComponentActivity() {
             GLSurfaceView(this).apply {
                 modelView.assignTouchListenerToGLSurfaceView(this)
                 setEGLContextClientVersion(2)
-                setRenderer(modelView.minesweeperController.gameRenderer)
+                setRenderer(modelView.gameRenderer)
             }
         glSurfaceView = gLSV
 
