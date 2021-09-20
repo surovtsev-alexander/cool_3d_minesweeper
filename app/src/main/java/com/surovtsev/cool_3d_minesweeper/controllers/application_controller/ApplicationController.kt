@@ -9,19 +9,20 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.DaggerAppComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.components.MessagesComponent
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLazyVal
 import java.lang.Exception
 
 class ApplicationController : Application() {
-    lateinit var appComponent: AppComponent
+    lateinit var daggerComponentsHolder: DaggerComponentsHolder
 
     override fun onCreate() {
         AndroidThreeTen.init(this)
 
         super.onCreate()
 
-        appComponent = DaggerAppComponent.create()
+        daggerComponentsHolder = DaggerComponentsHolder(this)
     }
 
     companion object {
@@ -72,8 +73,8 @@ class ApplicationController : Application() {
 
 typealias LogSceneDelegate = () -> Unit
 
-val Context.appComponent:AppComponent
+val Context.daggerComponentsHolder:DaggerComponentsHolder
     get() = when (this) {
-        is ApplicationController -> appComponent
-        else -> this.applicationContext.appComponent
+        is ApplicationController -> daggerComponentsHolder
+        else -> this.applicationContext.daggerComponentsHolder
     }

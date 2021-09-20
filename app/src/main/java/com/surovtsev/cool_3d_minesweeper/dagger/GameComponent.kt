@@ -5,43 +5,50 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperCont
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
-import dagger.BindsInstance
-import dagger.Component
-import dagger.Module
-import dagger.Provides
+import dagger.*
 import javax.inject.Scope
 
-@Component(modules = [GameModule::class])
 @GameScope
+@Subcomponent(modules = [GameModule::class])
 interface GameComponent {
-    val minesweeperController: MinesweeperController
+    val gameActivityModelView: GameActivityModelView
+//    val minesweeperController: MinesweeperController
 
-    @Component.Builder
+    @Subcomponent.Builder
     interface Builder {
-
         @BindsInstance
-        fun context(context: Context): Builder
-
-        @BindsInstance
-        fun gameEventsReceiver(gameEventsReceiver: IGameEventsReceiver): Builder
+        fun loadGame(loadGame: Boolean): Builder
 
         fun build(): GameComponent
     }
 
-    fun inject(gameActivityModelView: GameActivityModelView)
+    fun inject(gameActivity: GameActivity)
 }
 
 @Module
 object GameModule {
+//    @Provides
+//    @GameScope
+//    fun provideMineSweeperController(
+//        context: Context,
+//        gameEventsReceiver: IGameEventsReceiver,
+//        loadGame: Boolean
+//    ): MinesweeperController {
+//        return MinesweeperController(
+//            context,
+//            gameEventsReceiver,
+//            loadGame
+//        )
+//    }
     @Provides
     @GameScope
-    fun provideMineSweeperController(
+    fun provideGameActivityModelView(
         context: Context,
-        gameEventsReceiver: IGameEventsReceiver
-    ): MinesweeperController {
-        return MinesweeperController(
+        loadGame: Boolean
+    ): GameActivityModelView {
+        return GameActivityModelView(
             context,
-            gameEventsReceiver
+            loadGame
         )
     }
 }

@@ -17,15 +17,17 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.cool_3d_minesweeper.dagger.DaggerGameComponent
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
+import javax.inject.Inject
 
 class GameActivity: ComponentActivity() {
     companion object {
         const val LoadGame = "LoadGame"
     }
 
-    private var modelView: GameActivityModelView? = null
+    @Inject
+    lateinit var modelView: GameActivityModelView
 
     private var glSurfaceView: GLSurfaceView? = null
 
@@ -39,22 +41,18 @@ class GameActivity: ComponentActivity() {
             return
         }
 
-        val mv = GameActivityModelView(
-            this
-        )
-        this.modelView = mv
-
         val loadGame = intent.getBooleanExtra(LoadGame, false)
 
-        if (loadGame) {
-            mv.minesweeperController.loadGame()
-        }
+        daggerComponentsHolder.createAndGetGameComponent(
+            this,
+            loadGame
+        ).inject(this)
 
         val gLSV =
             GLSurfaceView(this).apply {
-                mv.assignTouchListenerToGLSurfaceView(this)
+                modelView.assignTouchListenerToGLSurfaceView(this)
                 setEGLContextClientVersion(2)
-                setRenderer(mv.minesweeperController.gameRenderer)
+                setRenderer(modelView.minesweeperController.gameRenderer)
             }
         glSurfaceView = gLSV
 
@@ -71,10 +69,10 @@ class GameActivity: ComponentActivity() {
                     Row(
 
                     ) {
-                        Controls(mv)
+                        Controls(modelView)
                     }
                 }
-                GameStatusDialog(mv)
+                GameStatusDialog(modelView)
             }
         }
     }
@@ -82,22 +80,22 @@ class GameActivity: ComponentActivity() {
     override fun onPause() {
         super.onPause()
         glSurfaceView?.onPause()
-        modelView?.onPause()
+        modelView.onPause()
     }
 
     override fun onResume() {
         super.onResume()
         glSurfaceView?.onResume()
-        modelView?.onResume()
+        modelView.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        modelView?.onDestroy()
+        modelView.onDestroy()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (modelView?.onKeyDown(keyCode) == true) {
+        if (modelView.onKeyDown(keyCode) == true) {
             return true
         }
         return super.onKeyDown(keyCode, event)

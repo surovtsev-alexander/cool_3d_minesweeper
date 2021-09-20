@@ -31,6 +31,7 @@ import org.threeten.bp.LocalDateTime
 class MinesweeperController(
     private val context: Context,
     private val gameEventsReceiver: IGameEventsReceiver,
+    private val load: Boolean
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
@@ -60,59 +61,59 @@ class MinesweeperController(
     private var gameViewsHolder: GameViewsHolder? = null
 
     init {
-        val loadedSettingsData = saveController.loadSettingDataOrDefault()
-        gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
-
-        gameObjectsHolder = GameObjectsHolder(gameConfig)
-
-        gameLogic =
-            GameLogic(
-                gameObjectsHolder.cubeSkin,
-                null,
-                gameConfig,
-                gameEventsReceiver,
-                this,
-                timeSpanHelper
+        val save = if (load) {
+            saveController.tryToLoad<Save>(
+                SaveTypes.SaveGameJson
             )
+        } else {
+            null
+        }
 
-        cameraInfo = CameraInfo()
-    }
+        if (save != null) {
 
-    fun loadGame() {
-        val save = saveController.tryToLoad<Save>(
-            SaveTypes.SaveGameJson
-        ) ?: return
-
-        saveController.emptyData(
-            SaveTypes.SaveGameJson
-        )
-        gameConfig = save.gameConfig
-
-        gameObjectsHolder = GameObjectsHolder(gameConfig)
-
-        gameLogic =
-            GameLogic(
-                gameObjectsHolder.cubeSkin,
-                null,
-                gameConfig,
-                gameEventsReceiver,
-                this,
-                timeSpanHelper
+            saveController.emptyData(
+                SaveTypes.SaveGameJson
             )
+            gameConfig = save.gameConfig
 
-        cameraInfo = save.cameraInfoToSave.getCameraInfo()
+            gameObjectsHolder = GameObjectsHolder(gameConfig)
 
-        save.gameLogicToSave.applySavedData(gameLogic)
+            gameLogic =
+                GameLogic(
+                    gameObjectsHolder.cubeSkin,
+                    null,
+                    gameConfig,
+                    gameEventsReceiver,
+                    this,
+                    timeSpanHelper
+                )
 
-        save.cubeSkinToSave.applySavedData(
-            gameObjectsHolder.cubeSkin,
-            gameLogic
-        )
+            cameraInfo = save.cameraInfoToSave.getCameraInfo()
 
-        if (scene != null) {
-            val displaySize = scene!!.cameraInfoHelper.displaySize
-            onSurfaceCreated()
-            onSurfaceChanged(displaySize[0], displaySize[1])
+            save.gameLogicToSave.applySavedData(gameLogic)
+
+            save.cubeSkinToSave.applySavedData(
+                gameObjectsHolder.cubeSkin,
+                gameLogic
+            )
+        } else {
+
+            val loadedSettingsData = saveController.loadSettingDataOrDefault()
+            gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
+
+            gameObjectsHolder = GameObjectsHolder(gameConfig)
+
+            gameLogic =
+                GameLogic(
+                    gameObjectsHolder.cubeSkin,
+                    null,
+                    gameConfig,
+                    gameEventsReceiver,
+                    this,
+                    timeSpanHelper
+                )
+
+            cameraInfo = CameraInfo()
         }
     }
 
