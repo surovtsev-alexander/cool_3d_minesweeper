@@ -1,8 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder
 
 import android.content.Context
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.dagger.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.GameComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 
 class DaggerComponentsHolder(
     context: Context
@@ -14,7 +16,10 @@ class DaggerComponentsHolder(
     var gameComponent: GameComponent? = null
         private set
 
-    fun createAndGetGameComponent(context: Context, loadGame: Boolean): GameComponent {
+    var gameControllerComponent: GameControllerComponent? = null
+        private set
+
+    fun createAndGetGameComponent(loadGame: Boolean): GameComponent {
         emptyGameComponent()
         val res = appComponent
             .gameComponent()
@@ -24,7 +29,24 @@ class DaggerComponentsHolder(
         return res
     }
 
-    fun emptyGameComponent() {
+    fun createAndGetGameControllerComponent(
+        gameEventsReceiver: IGameEventsReceiver
+    ): GameControllerComponent {
+        emptyGameControllerComponent()
+        val res = gameComponent!!
+            .gameControllerComponent()
+            .gameEventsReceiver(gameEventsReceiver)
+            .build()
+        gameControllerComponent = res
+        return res
+    }
+
+    private fun emptyGameComponent() {
+        emptyGameControllerComponent()
         gameComponent = null
+    }
+
+    private fun emptyGameControllerComponent() {
+        gameControllerComponent = null
     }
 }

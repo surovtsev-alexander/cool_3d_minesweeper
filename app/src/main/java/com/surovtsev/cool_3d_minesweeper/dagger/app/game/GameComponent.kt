@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.dagger
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import dagger.*
@@ -23,23 +24,12 @@ interface GameComponent {
     }
 
     fun inject(gameActivity: GameActivity)
+
+    fun gameControllerComponent(): GameControllerComponent.Builder
 }
 
 @Module
 object GameModule {
-//    @Provides
-//    @GameScope
-//    fun provideMineSweeperController(
-//        context: Context,
-//        gameEventsReceiver: IGameEventsReceiver,
-//        loadGame: Boolean
-//    ): MinesweeperController {
-//        return MinesweeperController(
-//            context,
-//            gameEventsReceiver,
-//            loadGame
-//        )
-//    }
     @Provides
     @GameScope
     fun provideGameActivityModelView(

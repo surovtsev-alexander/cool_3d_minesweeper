@@ -44,7 +44,6 @@ class GameActivity: ComponentActivity() {
         val loadGame = intent.getBooleanExtra(LoadGame, false)
 
         daggerComponentsHolder.createAndGetGameComponent(
-            this,
             loadGame
         ).inject(this)
 

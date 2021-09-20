@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 import android.content.Context
 import android.opengl.GLSurfaceView
 import android.view.KeyEvent
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
@@ -18,7 +19,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitc
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 
-class GameActivityModelView @Inject constructor(
+class GameActivityModelView(
     private val context: Context,
     load: Boolean
 ):
@@ -30,7 +31,8 @@ class GameActivityModelView @Inject constructor(
     val bombsLeft = MyLiveData(0)
     val showDialog = MyLiveData(false)
 
-    var minesweeperController: MinesweeperController = MinesweeperController(context, this, load)
+    @Inject
+    lateinit var minesweeperController: MinesweeperController
 
     private val gameControls: GameControls
     private val removeBombs: Updatable
@@ -38,6 +40,9 @@ class GameActivityModelView @Inject constructor(
     private val markOnShortTap: UpdatableOnOffSwitch
 
     init {
+        context.daggerComponentsHolder.createAndGetGameControllerComponent(this)
+            .inject(this)
+
         gameControls = minesweeperController.gameControls
         removeBombs = gameControls.removeBombs
         removeZeroBorders = gameControls.removeZeroBorders
