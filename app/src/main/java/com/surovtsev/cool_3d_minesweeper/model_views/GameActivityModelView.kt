@@ -32,15 +32,11 @@ class GameActivityModelView(
     val minesweeperController = MinesweeperController(
         context,
         this,
-        appComponent
     )
     private val gameControls = minesweeperController.gameControls
     private val removeBombs = gameControls.removeBombs
     private val removeZeroBorders = gameControls.removeZeroBorders
     private val markOnShortTap = gameControls.markOnShortTap
-
-    /* TODO: move to activity class */
-    var glSurfaceView: GLSurfaceView? = null
 
     init {
         (this as IGameEventsReceiver).init()
@@ -115,12 +111,10 @@ class GameActivityModelView(
 
     override fun onPause() {
         minesweeperController.onPause()
-        glSurfaceView?.onPause()
     }
 
     override fun onResume() {
         minesweeperController.onResume()
-        glSurfaceView?.onResume()
     }
 
     override fun onDestroy() {

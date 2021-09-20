@@ -1,9 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
-import android.opengl.GLSurfaceView
 import android.util.Log
-import androidx.compose.runtime.remember
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
@@ -17,7 +15,6 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
-import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -29,12 +26,11 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEven
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
-import java.time.LocalDateTime
+import org.threeten.bp.LocalDateTime
 
 class MinesweeperController(
     private val context: Context,
     private val gameEventsReceiver: IGameEventsReceiver,
-    private val appComponent: AppComponent
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
@@ -76,8 +72,7 @@ class MinesweeperController(
                 gameConfig,
                 gameEventsReceiver,
                 this,
-                timeSpanHelper,
-                appComponent
+                timeSpanHelper
             )
 
         cameraInfo = CameraInfo()
@@ -86,11 +81,7 @@ class MinesweeperController(
     fun loadGame() {
         val save = saveController.tryToLoad<Save>(
             SaveTypes.SaveGameJson
-        )
-
-        if (save == null) {
-            return
-        }
+        ) ?: return
 
         saveController.emptyData(
             SaveTypes.SaveGameJson
@@ -106,8 +97,7 @@ class MinesweeperController(
                 gameConfig,
                 gameEventsReceiver,
                 this,
-                timeSpanHelper,
-                appComponent
+                timeSpanHelper
             )
 
         cameraInfo = save.cameraInfoToSave.getCameraInfo()

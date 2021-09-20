@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.application_controller
 
 import android.app.Application
 import android.content.Context
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
@@ -16,6 +17,8 @@ class ApplicationController : Application() {
     lateinit var appComponent: AppComponent
 
     override fun onCreate() {
+        AndroidThreeTen.init(this)
+
         super.onCreate()
 
         appComponent = DaggerAppComponent.create()

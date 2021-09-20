@@ -24,15 +24,12 @@ class GameLogic(
     val gameEventsReceiver: IGameEventsReceiver,
     gameStatusReceiver: IGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper,
-    appComponent: AppComponent
 ) {
-    val gameLogicStateHelper: GameLogicStateHelper by lazy {
-        appComponent.gameLogicStateHelperFactory.create(
-            gameEventsReceiver,
-            gameStatusReceiver,
-            timeSpanHelper
-        )
-    }
+    val gameLogicStateHelper = GameLogicStateHelper(
+        gameEventsReceiver,
+        gameStatusReceiver,
+        timeSpanHelper
+    )
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =

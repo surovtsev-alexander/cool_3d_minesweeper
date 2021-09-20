@@ -33,6 +33,9 @@ class GameActivity: ComponentActivity() {
             this, appComponent
         )
     }
+
+    private var glSurfaceView: GLSurfaceView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,12 +47,19 @@ class GameActivity: ComponentActivity() {
             return
         }
 
-        val intent = getIntent()
         val loadGame = intent.getBooleanExtra(LoadGame, false)
 
         if (loadGame) {
             modelView.minesweeperController.loadGame()
         }
+
+        val gLSV =
+            GLSurfaceView(modelView.context).apply {
+                modelView.assignTouchListenerToGLSurfaceView(this)
+                setEGLContextClientVersion(2)
+                setRenderer(modelView.minesweeperController.gameRenderer)
+            }
+        glSurfaceView = gLSV
 
         setContent {
             Test_composeTheme {
@@ -59,7 +69,7 @@ class GameActivity: ComponentActivity() {
                     Row(
                         modifier = Modifier.weight(1f)
                     ) {
-                        MinesweeperView(modelView)
+                        MinesweeperView(gLSV)
                     }
                     Row(
 
@@ -74,11 +84,13 @@ class GameActivity: ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
+        glSurfaceView?.onPause()
         modelView.onPause()
     }
 
     override fun onResume() {
         super.onResume()
+        glSurfaceView?.onResume()
         modelView.onResume()
     }
 
@@ -97,20 +109,11 @@ class GameActivity: ComponentActivity() {
 
 @Composable
 fun MinesweeperView(
-    modelView: GameActivityModelView
+    glSurfaceView: GLSurfaceView
 ) {
-    val glSurfaceView = remember {
-        GLSurfaceView(modelView.context).apply {
-            modelView.assignTouchListenerToGLSurfaceView(this)
-            modelView.glSurfaceView = this
-        }
-    }
     AndroidView(
         factory = {
-            glSurfaceView.apply {
-                setEGLContextClientVersion(2)
-                setRenderer(modelView.minesweeperController.gameRenderer)
-            }
+            glSurfaceView
         }
     )
 }

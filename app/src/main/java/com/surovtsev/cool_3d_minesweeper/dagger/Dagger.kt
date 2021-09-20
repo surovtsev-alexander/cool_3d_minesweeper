@@ -4,11 +4,9 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import dagger.Component
 import dagger.Module
 
-class Dagger {
-}
-
 @Component(modules = [AppModule::class])
 interface AppComponent {
+
     val gameLogicStateHelperFactory: GameLogicStateHelper.Factory
 }
 

@@ -82,4 +82,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
+    // time
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
 }
