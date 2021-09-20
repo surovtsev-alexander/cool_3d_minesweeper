@@ -34,12 +34,13 @@ import javax.inject.Inject
 @GameControllerScope
 class MinesweeperController @Inject constructor(
     private val context: Context,
-    private val gameEventsReceiver: IGameEventsReceiver,
-    private val load: Boolean,
+    gameEventsReceiver: IGameEventsReceiver,
+    load: Boolean,
     private val timeSpanHelper: TimeSpanHelper,
     val touchReceiver: TouchReceiver,
     val gameControls: GameControls,
-    val saveController: SaveController
+    val saveController: SaveController,
+    val save: Save?
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
@@ -59,15 +60,10 @@ class MinesweeperController @Inject constructor(
     private var gameViewsHolder: GameViewsHolder? = null
 
     init {
-        val save = if (load) {
-            saveController.tryToLoad<Save>(
-                SaveTypes.SaveGameJson
-            )
-        } else {
-            null
-        }
-
         if (save != null) {
+
+            Log.d("TEST+++", "MinesweeperController save != null")
+            Log.d("TEST+++", "save:\n${save.toString()}")
 
             saveController.emptyData(
                 SaveTypes.SaveGameJson

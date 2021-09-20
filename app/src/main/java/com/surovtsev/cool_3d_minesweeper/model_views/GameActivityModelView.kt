@@ -19,19 +19,38 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitc
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
+import javax.inject.Named
 
 class GameActivityModelView(
-    private val context: Context,
-    load: Boolean
+    private val context: Context
 ):
-    IGameEventsReceiver,
     IHandlePauseResumeDestroyKeyDown
 {
-    val marking = MyLiveData(false)
-    val elapsedTime = MyLiveData(0L)
-    val bombsLeft = MyLiveData(0)
-    val showDialog = MyLiveData(false)
+    companion object {
+        const val Marking = "marking"
+        const val ElapsedTime = "elapsedTime"
+        const val BombsLeft = "bombsLeft"
+        const val ShowDialog = "showDialog"
+    }
 
+    @Inject
+    @Named(Marking)
+    lateinit var marking: MyLiveData<Boolean>
+
+    @Inject
+    @Named(ElapsedTime)
+    lateinit var elapsedTime: MyLiveData<Long>
+
+    @Inject
+    @Named(BombsLeft)
+    lateinit var bombsLeft: MyLiveData<Int>
+
+    @Inject
+    @Named(ShowDialog)
+    lateinit var showDialog: MyLiveData<Boolean>
+
+
+    var gameEventsReceiver: IGameEventsReceiver = GameEventsReceiver()
     @Inject
     lateinit var minesweeperController: MinesweeperController
     @Inject
@@ -43,7 +62,7 @@ class GameActivityModelView(
     private val markOnShortTap: UpdatableOnOffSwitch
 
     init {
-        context.daggerComponentsHolder.createAndGetGameControllerComponent(this)
+        context.daggerComponentsHolder.createAndGetGameControllerComponent(gameEventsReceiver)
             .inject(this)
 
         gameControls = minesweeperController.gameControls
@@ -51,7 +70,7 @@ class GameActivityModelView(
         removeZeroBorders = gameControls.removeZeroBorders
         markOnShortTap = gameControls.markOnShortTap
 
-        (this as IGameEventsReceiver).init()
+        gameEventsReceiver.init()
     }
 
     fun setMarking(newValue: Boolean) {
@@ -71,26 +90,28 @@ class GameActivityModelView(
         removeZeroBorders.update()
     }
 
-    override fun bombCountUpdated() {
-        context.runOnUiThread {
-            bombsLeft.onDataChanged(
-                minesweeperController.gameLogic.bombsLeft
-            )
+    inner class GameEventsReceiver: IGameEventsReceiver {
+        override fun bombCountUpdated() {
+            context.runOnUiThread {
+                bombsLeft.onDataChanged(
+                    minesweeperController.gameLogic.bombsLeft
+                )
+            }
         }
-    }
 
-    override fun timeUpdated() {
-        context.runOnUiThread {
-            elapsedTime.onDataChanged(
-                minesweeperController.gameLogic.gameLogicStateHelper.getElapsed()
-            )
+        override fun timeUpdated() {
+            context.runOnUiThread {
+                elapsedTime.onDataChanged(
+                    minesweeperController.gameLogic.gameLogicStateHelper.getElapsed()
+                )
+            }
         }
-    }
 
-    override fun gameStatusUpdated(newStatus: GameStatus) {
-        context.runOnUiThread {
-            if (GameStatusHelper.isGameOver(newStatus)) {
-                showDialog.onDataChanged(true)
+        override fun gameStatusUpdated(newStatus: GameStatus) {
+            context.runOnUiThread {
+                if (GameStatusHelper.isGameOver(newStatus)) {
+                    showDialog.onDataChanged(true)
+                }
             }
         }
     }
