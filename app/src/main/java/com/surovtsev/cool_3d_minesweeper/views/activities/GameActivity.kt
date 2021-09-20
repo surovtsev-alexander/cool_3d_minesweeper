@@ -29,7 +29,8 @@ class GameActivity: ComponentActivity() {
     @Inject
     lateinit var modelView: GameActivityModelView
 
-    private var glSurfaceView: GLSurfaceView? = null
+    @Inject
+    lateinit var gLSurfaceView: GLSurfaceView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +48,7 @@ class GameActivity: ComponentActivity() {
             loadGame
         ).inject(this)
 
-        val gLSV =
-            GLSurfaceView(this).apply {
-                modelView.assignTouchListenerToGLSurfaceView(this)
-                setEGLContextClientVersion(2)
-                setRenderer(modelView.gameRenderer)
-            }
-        glSurfaceView = gLSV
+        modelView.prepareGlSurfaceView(gLSurfaceView)
 
         setContent {
             Test_composeTheme {
@@ -63,7 +58,7 @@ class GameActivity: ComponentActivity() {
                     Row(
                         modifier = Modifier.weight(1f)
                     ) {
-                        MinesweeperView(gLSV)
+                        MinesweeperView(gLSurfaceView)
                     }
                     Row(
 
@@ -78,13 +73,13 @@ class GameActivity: ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        glSurfaceView?.onPause()
+        gLSurfaceView.onPause()
         modelView.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        glSurfaceView?.onResume()
+        gLSurfaceView.onResume()
         modelView.onResume()
     }
 
@@ -103,11 +98,11 @@ class GameActivity: ComponentActivity() {
 
 @Composable
 fun MinesweeperView(
-    glSurfaceView: GLSurfaceView
+    gLSurfaceView: GLSurfaceView
 ) {
     AndroidView(
         factory = {
-            glSurfaceView
+            gLSurfaceView
         }
     )
 }

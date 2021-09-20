@@ -1,6 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.dagger
 
 import android.content.Context
+import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
@@ -13,7 +14,7 @@ import javax.inject.Scope
 @Subcomponent(modules = [GameModule::class])
 interface GameComponent {
     val gameActivityModelView: GameActivityModelView
-//    val minesweeperController: MinesweeperController
+    val gLSurfaceView: GLSurfaceView
 
     @Subcomponent.Builder
     interface Builder {
@@ -40,6 +41,14 @@ object GameModule {
             context,
             loadGame
         )
+    }
+
+    @Provides
+    @GameScope
+    fun provideGLSurfaceView(
+        context: Context
+    ): GLSurfaceView {
+        return GLSurfaceView(context)
     }
 }
 
