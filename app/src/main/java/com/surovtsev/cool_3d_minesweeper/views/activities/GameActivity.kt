@@ -15,12 +15,9 @@ import androidx.compose.ui.Modifier
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.appComponent
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.DaggerGameComponent
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 
 class GameActivity: ComponentActivity() {
@@ -28,17 +25,12 @@ class GameActivity: ComponentActivity() {
         const val LoadGame = "LoadGame"
     }
 
-    private val modelView: GameActivityModelView by lazy {
-        GameActivityModelView(
-            this, appComponent
-        )
-    }
+    private var modelView: GameActivityModelView? = null
 
     private var glSurfaceView: GLSurfaceView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         if (!OpenGLInfoHelper.isSupportEs2(this)) {
             Toast.makeText(this
@@ -47,17 +39,22 @@ class GameActivity: ComponentActivity() {
             return
         }
 
+        val mv = GameActivityModelView(
+            this
+        )
+        this.modelView = mv
+
         val loadGame = intent.getBooleanExtra(LoadGame, false)
 
         if (loadGame) {
-            modelView.minesweeperController.loadGame()
+            mv.minesweeperController.loadGame()
         }
 
         val gLSV =
-            GLSurfaceView(modelView.context).apply {
-                modelView.assignTouchListenerToGLSurfaceView(this)
+            GLSurfaceView(this).apply {
+                mv.assignTouchListenerToGLSurfaceView(this)
                 setEGLContextClientVersion(2)
-                setRenderer(modelView.minesweeperController.gameRenderer)
+                setRenderer(mv.minesweeperController.gameRenderer)
             }
         glSurfaceView = gLSV
 
@@ -74,10 +71,10 @@ class GameActivity: ComponentActivity() {
                     Row(
 
                     ) {
-                        Controls(modelView)
+                        Controls(mv)
                     }
                 }
-                GameStatusDialog(modelView)
+                GameStatusDialog(mv)
             }
         }
     }
@@ -85,22 +82,22 @@ class GameActivity: ComponentActivity() {
     override fun onPause() {
         super.onPause()
         glSurfaceView?.onPause()
-        modelView.onPause()
+        modelView?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
         glSurfaceView?.onResume()
-        modelView.onResume()
+        modelView?.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        modelView.onDestroy()
+        modelView?.onDestroy()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (modelView.onKeyDown(keyCode)) {
+        if (modelView?.onKeyDown(keyCode) == true) {
             return true
         }
         return super.onKeyDown(keyCode, event)

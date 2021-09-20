@@ -5,40 +5,55 @@ import android.opengl.GLSurfaceView
 import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.DaggerGameComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.GameComponent
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
 import org.jetbrains.anko.runOnUiThread
+import javax.inject.Inject
 
 class GameActivityModelView(
-    val context: Context,
-    private val appComponent: AppComponent
+    private val context: Context
 ):
     IGameEventsReceiver,
     IHandlePauseResumeDestroyKeyDown
 {
-
     val marking = MyLiveData(false)
     val elapsedTime = MyLiveData(0L)
     val bombsLeft = MyLiveData(0)
     val showDialog = MyLiveData(false)
 
 
-    val minesweeperController = MinesweeperController(
-        context,
-        this,
-    )
-    private val gameControls = minesweeperController.gameControls
-    private val removeBombs = gameControls.removeBombs
-    private val removeZeroBorders = gameControls.removeZeroBorders
-    private val markOnShortTap = gameControls.markOnShortTap
+   @Inject
+   lateinit var minesweeperController: MinesweeperController
+
+    private val gameControls: GameControls
+    private val removeBombs: Updatable
+    private val removeZeroBorders: Updatable
+    private val markOnShortTap: UpdatableOnOffSwitch
 
     init {
+        val daggerGameComponent = DaggerGameComponent
+            .builder()
+            .context(context)
+            .gameEventsReceiver(this)
+            .build()
+
+        daggerGameComponent.inject(this)
+
+        gameControls = minesweeperController.gameControls
+        removeBombs = gameControls.removeBombs
+        removeZeroBorders = gameControls.removeZeroBorders
+        markOnShortTap = gameControls.markOnShortTap
+
         (this as IGameEventsReceiver).init()
     }
 

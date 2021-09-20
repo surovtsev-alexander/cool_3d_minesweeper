@@ -7,10 +7,11 @@ import dagger.Module
 @Component(modules = [AppModule::class])
 interface AppComponent {
 
-    val gameLogicStateHelperFactory: GameLogicStateHelper.Factory
+//    val gameLogicStateHelperFactory: GameLogicStateHelper.Factory
 }
 
 @Module
 object AppModule {
 
 }
+
