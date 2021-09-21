@@ -18,8 +18,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
+import com.surovtsev.cool_3d_minesweeper.model_views.RemoveMarkedBombsAction
+import com.surovtsev.cool_3d_minesweeper.model_views.RemoveZeroBordersAction
+import com.surovtsev.cool_3d_minesweeper.model_views.SetMarkingAction
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import javax.inject.Inject
+import javax.inject.Named
 
 class GameActivity: ComponentActivity() {
     companion object {
@@ -31,6 +38,22 @@ class GameActivity: ComponentActivity() {
 
     @Inject
     lateinit var gLSurfaceView: GLSurfaceView
+
+    @Inject
+    @Named(GameViewEventsNames.Marking)
+    lateinit var markingEvent: MarkingEvent
+
+    @Inject
+    @Named(GameViewEventsNames.ElapsedTime)
+    lateinit var elapsedTimeEvent: ElapsedTimeEvent
+
+    @Inject
+    @Named(GameViewEventsNames.BombsLeft)
+    lateinit var bombsLeftEvent: BombsLeftEvent
+
+    @Inject
+    @Named(GameViewEventsNames.ShowDialog)
+    lateinit var showDialogEvent: ShowDialogEvent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +86,20 @@ class GameActivity: ComponentActivity() {
                     Row(
 
                     ) {
-                        Controls(modelView)
+                        Controls(
+                            markingEvent,
+                            modelView::setMarking,
+                            bombsLeftEvent,
+                            elapsedTimeEvent,
+                            modelView::removeMarkedBombs,
+                            modelView::removeZeroBorders
+                        )
                     }
                 }
-                GameStatusDialog(modelView)
+                GameStatusDialog(
+                    showDialogEvent,
+                    modelView
+                )
             }
         }
     }
@@ -89,7 +122,7 @@ class GameActivity: ComponentActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (modelView.onKeyDown(keyCode) == true) {
+        if (modelView.onKeyDown(keyCode)) {
             return true
         }
         return super.onKeyDown(keyCode, event)
@@ -109,7 +142,12 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    modelView: GameActivityModelView
+    markingEvent: MarkingEvent,
+    setMarkingAction: SetMarkingAction,
+    bombsLeftEvent: BombsLeftEvent,
+    elapsedTimeEvent: ElapsedTimeEvent,
+    removeMarkedBombsAction: RemoveMarkedBombsAction,
+    removeZeroBordersAction: RemoveZeroBordersAction
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -118,35 +156,39 @@ fun Controls(
             modifier = Modifier.weight(2f),
             Arrangement.Center
         ) {
-            ControlButtons(modelView)
+            ControlButtons(
+                removeMarkedBombsAction,
+                removeZeroBordersAction
+            )
         }
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Bottom
         ) {
-            ControlCheckBox(modelView)
+            ControlCheckBox(markingEvent, setMarkingAction)
         }
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            GameInfo(modelView)
+            GameInfo(bombsLeftEvent, elapsedTimeEvent)
         }
     }
 }
 
 @Composable
 fun ControlButtons(
-    modelView: GameActivityModelView
+    removeMarkedBombsAction: RemoveMarkedBombsAction,
+    removeZeroBordersAction: RemoveZeroBordersAction
 ) {
     Row() {
         Button(
-            onClick = modelView::removeMarkedBombs,
+            onClick = removeMarkedBombsAction,
             modifier = Modifier.fillMaxWidth(0.5f)
         ) {
             Text("V")
         }
         Button(
-            onClick = modelView::removeZeroBorders,
+            onClick = removeZeroBordersAction,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("O")
@@ -157,21 +199,22 @@ fun ControlButtons(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ControlCheckBox(
-    modelView: GameActivityModelView
+    markingEvent: MarkingEvent,
+    setMarkingAction: SetMarkingAction
 ) {
-    val checked: Boolean by modelView.marking.data.observeAsState(
-        modelView.marking.defaultValue
+    val checked: Boolean by markingEvent.data.observeAsState(
+        markingEvent.defaultValue
     )
     Surface(
         shape = MaterialTheme.shapes.large,
-        onClick = { modelView.setMarking(!checked) },
+        onClick = { setMarkingAction(!checked) },
     ) {
         Row(
             Modifier.fillMaxWidth(),
         ) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = modelView::setMarking
+                onCheckedChange = setMarkingAction
             )
             Text(
                 "marking"
@@ -182,23 +225,24 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    modelView: GameActivityModelView
+    bombsLeftEvent: BombsLeftEvent,
+    elapsedTimeEvent: ElapsedTimeEvent
 ) {
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        BombsLeft(modelView)
-        TimeElapsed(modelView)
+        BombsLeft(bombsLeftEvent)
+        TimeElapsed(elapsedTimeEvent)
     }
 }
 
 @Composable
 fun BombsLeft(
-    modelView: GameActivityModelView
+    bombsLeftEvent: BombsLeftEvent
 ) {
-    val bombsLeft: Int by modelView.bombsLeft.data.observeAsState(
-        modelView.bombsLeft.defaultValue
+    val bombsLeft: Int by bombsLeftEvent.data.observeAsState(
+        bombsLeftEvent.defaultValue
     )
     Text(
         bombsLeft.toString()
@@ -207,10 +251,10 @@ fun BombsLeft(
 
 @Composable
 fun TimeElapsed(
-    modelView: GameActivityModelView
+    elapsedTimeEvent: ElapsedTimeEvent
 ) {
-    val elapsed: Long by modelView.elapsedTime.data.observeAsState(
-        modelView.elapsedTime.defaultValue
+    val elapsed: Long by elapsedTimeEvent.data.observeAsState(
+        elapsedTimeEvent.defaultValue
     )
     Text(
         DateUtils.formatElapsedTime(
@@ -221,13 +265,14 @@ fun TimeElapsed(
 
 @Composable
 fun GameStatusDialog(
+    showDialogEvent: ShowDialogEvent,
     modelView: GameActivityModelView
 ) {
-    val showDialog: Boolean by modelView.showDialog.data.observeAsState(
-        modelView.showDialog.defaultValue
+    val showDialog: Boolean by showDialogEvent.data.observeAsState(
+        showDialogEvent.defaultValue
     )
     if (showDialog) {
-        val closeDialogAction = { modelView.showDialog.onDataChanged(false) }
+        val closeDialogAction = { showDialogEvent.onDataChanged(false) }
         AlertDialog(
             onDismissRequest = closeDialogAction,
             title = { Text(text = "Game status") },

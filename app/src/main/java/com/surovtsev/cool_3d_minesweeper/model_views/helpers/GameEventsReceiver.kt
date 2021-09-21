@@ -13,13 +13,16 @@ import javax.inject.Named
 @GameScope
 class GameEventsReceiver @Inject constructor(
     private val context: Context,
-    @Named(GameViewEventNames.BombsLeft)
-    private val bombsLeft: MyLiveData<Int>,
-    @Named(GameViewEventNames.ElapsedTime)
-    private val elapsedTime: MyLiveData<Long>,
-    @Named(GameViewEventNames.ShowDialog)
-    private val showDialog: MyLiveData<Boolean>
+    @Named(GameViewEventsNames.BombsLeft)
+    private val bombsLeft: BombsLeftEvent,
+    @Named(GameViewEventsNames.ElapsedTime)
+    private val elapsedTime: ElapsedTimeEvent,
+    @Named(GameViewEventsNames.ShowDialog)
+    private val showDialog: ShowDialogEvent
 ): IGameEventsReceiver {
+    init {
+        init()
+    }
 
     override fun bombCountUpdated(newValue: Int) {
         context.runOnUiThread {

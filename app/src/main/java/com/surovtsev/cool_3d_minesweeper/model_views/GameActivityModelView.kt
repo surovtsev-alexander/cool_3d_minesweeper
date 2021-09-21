@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventNames
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
@@ -19,27 +19,18 @@ import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import javax.inject.Inject
 import javax.inject.Named
 
+typealias RemoveMarkedBombsAction = () -> Unit
+typealias RemoveZeroBordersAction = () -> Unit
+typealias SetMarkingAction = (newValue: Boolean) -> Unit
+
 class GameActivityModelView(
     private val context: Context
 ):
     IHandlePauseResumeDestroyKeyDown
 {
     @Inject
-    @Named(GameViewEventNames.Marking)
+    @Named(GameViewEventsNames.Marking)
     lateinit var marking: MyLiveData<Boolean>
-
-    @Inject
-    @Named(GameViewEventNames.ElapsedTime)
-    lateinit var elapsedTime: MyLiveData<Long>
-
-    @Inject
-    @Named(GameViewEventNames.BombsLeft)
-    lateinit var bombsLeft: MyLiveData<Int>
-
-    @Inject
-    @Named(GameViewEventNames.ShowDialog)
-    lateinit var showDialog: MyLiveData<Boolean>
-
 
     @Inject
     lateinit var gameEventsReceiver: GameEventsReceiver
@@ -62,8 +53,6 @@ class GameActivityModelView(
         removeBombs = gameControls.removeBombs
         removeZeroBorders = gameControls.removeZeroBorders
         markOnShortTap = gameControls.markOnShortTap
-
-        gameEventsReceiver.init()
     }
 
     fun setMarking(newValue: Boolean) {

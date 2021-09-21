@@ -4,8 +4,7 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventNames
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import dagger.*
@@ -54,29 +53,29 @@ object GameModule {
 
     @Provides
     @GameScope
-    @Named(GameViewEventNames.Marking)
-    fun provideMarking(): MyLiveData<Boolean> {
+    @Named(GameViewEventsNames.Marking)
+    fun provideMarking(): MarkingEvent {
         return MyLiveData(false)
     }
 
     @Provides
     @GameScope
-    @Named(GameViewEventNames.ElapsedTime)
-    fun provideElapsedTime(): MyLiveData<Long> {
+    @Named(GameViewEventsNames.ElapsedTime)
+    fun provideElapsedTime(): ElapsedTimeEvent {
         return MyLiveData(0L)
     }
 
     @Provides
     @GameScope
-    @Named(GameViewEventNames.BombsLeft)
-    fun provideBombsLeft(): MyLiveData<Int> {
+    @Named(GameViewEventsNames.BombsLeft)
+    fun provideBombsLeft(): BombsLeftEvent {
         return MyLiveData(0)
     }
 
     @Provides
     @GameScope
-    @Named(GameViewEventNames.ShowDialog)
-    fun provideShowDialog(): MyLiveData<Boolean> {
+    @Named(GameViewEventsNames.ShowDialog)
+    fun provideShowDialog(): ShowDialogEvent {
         return MyLiveData(false)
     }
 }
