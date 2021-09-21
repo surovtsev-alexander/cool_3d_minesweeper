@@ -19,12 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
-import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import javax.inject.Inject
-import javax.inject.Named
 
 class GameActivity: ComponentActivity() {
     companion object {
@@ -33,20 +32,13 @@ class GameActivity: ComponentActivity() {
 
     @Inject
     lateinit var modelView: GameActivityModelView
-
     @Inject
     lateinit var gLSurfaceView: GLSurfaceView
 
     @Inject
     lateinit var gameViewEvents: GameViewEvents
-
     @Inject
-    @Named(GameControlsNames.RemoveZeroBorders)
-    lateinit var removeZeroBordersControl: RemoveZeroBordersControl
-
-    @Inject
-    @Named(GameControlsNames.RemoveMarkedBombs)
-    lateinit var removeMarkedBombsControl: RemoveMarkedBombsControl
+    lateinit var gameControls: GameControls
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +71,8 @@ class GameActivity: ComponentActivity() {
                     Row {
                         Controls(
                             gameViewEvents,
-                            removeMarkedBombsControl,
-                            removeZeroBordersControl
+                            gameControls.removeMarkedBombsControl,
+                            gameControls.removeZeroBordersControl
                         )
                     }
                 }
