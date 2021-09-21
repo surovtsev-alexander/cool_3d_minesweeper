@@ -7,23 +7,16 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.dagg
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventsNames
-import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.MarkingEvent
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
-import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import javax.inject.Inject
 import javax.inject.Named
-
-typealias RemoveMarkedBombsAction = () -> Unit
-typealias RemoveZeroBordersAction = () -> Unit
-typealias SetMarkingAction = (newValue: Boolean) -> Unit
 
 class GameActivityModelView(
     context: Context
@@ -31,8 +24,7 @@ class GameActivityModelView(
     IHandlePauseResumeDestroyKeyDown
 {
     @Inject
-    @Named(GameViewEventsNames.Marking)
-    lateinit var marking: MyLiveData<Boolean>
+    lateinit var markingEvent: MarkingEvent
 
     @Inject
     lateinit var gameEventsReceiver: GameEventsReceiver
@@ -42,22 +34,9 @@ class GameActivityModelView(
     @Inject
     lateinit var gameRenderer: GLESRenderer
 
-    @Inject
-    @Named(GameControlsNames.MarkOnShortTap)
-    lateinit var markOnShortTapControl: MarkOnShortTapControl
-
     init {
         context.daggerComponentsHolder.createAndGetGameControllerComponent()
             .inject(this)
-    }
-
-    fun setMarking(newValue: Boolean) {
-        marking.onDataChanged(newValue)
-        if (newValue) {
-            markOnShortTapControl.turnOn()
-        } else {
-            markOnShortTapControl.turnOff()
-        }
     }
 
     private fun assignTouchListenerToGLSurfaceView(
@@ -111,8 +90,8 @@ class GameActivityModelView(
             keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
             keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
         ) {
-            setMarking(
-                !(marking.data.value!!)
+            markingEvent.onDataChanged(
+                !(markingEvent.getValueOrDefault())
             )
 
             return true

@@ -18,9 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.model_views.RemoveMarkedBombsAction
-import com.surovtsev.cool_3d_minesweeper.model_views.RemoveZeroBordersAction
-import com.surovtsev.cool_3d_minesweeper.model_views.SetMarkingAction
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
@@ -41,7 +38,6 @@ class GameActivity: ComponentActivity() {
     lateinit var gLSurfaceView: GLSurfaceView
 
     @Inject
-    @Named(GameViewEventsNames.Marking)
     lateinit var markingEvent: MarkingEvent
 
     @Inject
@@ -97,7 +93,6 @@ class GameActivity: ComponentActivity() {
                     ) {
                         Controls(
                             markingEvent,
-                            modelView::setMarking,
                             bombsLeftEvent,
                             elapsedTimeEvent,
                             removeMarkedBombsControl,
@@ -152,7 +147,6 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     markingEvent: MarkingEvent,
-    setMarkingAction: SetMarkingAction,
     bombsLeftEvent: BombsLeftEvent,
     elapsedTimeEvent: ElapsedTimeEvent,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
@@ -174,7 +168,7 @@ fun Controls(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Bottom
         ) {
-            ControlCheckBox(markingEvent, setMarkingAction)
+            ControlCheckBox(markingEvent)
         }
         Column(
             modifier = Modifier.weight(1f)
@@ -209,21 +203,20 @@ fun ControlButtons(
 @Composable
 fun ControlCheckBox(
     markingEvent: MarkingEvent,
-    setMarkingAction: SetMarkingAction
 ) {
     val checked: Boolean by markingEvent.data.observeAsState(
         markingEvent.defaultValue
     )
     Surface(
         shape = MaterialTheme.shapes.large,
-        onClick = { setMarkingAction(!checked) },
+        onClick = { markingEvent.onDataChanged(!checked) },
     ) {
         Row(
             Modifier.fillMaxWidth(),
         ) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = setMarkingAction
+                onCheckedChange = markingEvent::onDataChanged
             )
             Text(
                 "marking"

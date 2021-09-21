@@ -23,6 +23,7 @@ interface GameComponent {
     val gameActivityModelView: GameActivityModelView
     val gLSurfaceView: GLSurfaceView
     val gameEventsReceiver: GameEventsReceiver
+    val markingEvent: MarkingEvent
 
     @Subcomponent.Builder
     interface Builder {
@@ -55,13 +56,6 @@ object GameModule {
         context: Context
     ): GLSurfaceView {
         return GLSurfaceView(context)
-    }
-
-    @Provides
-    @GameScope
-    @Named(GameViewEventsNames.Marking)
-    fun provideMarking(): MarkingEvent {
-        return MyLiveData(false)
     }
 
     @Provides

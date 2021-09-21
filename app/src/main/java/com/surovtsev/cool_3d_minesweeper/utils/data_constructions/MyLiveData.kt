@@ -3,13 +3,13 @@ package com.surovtsev.cool_3d_minesweeper.utils.data_constructions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class MyLiveData<T>(
+open class MyLiveData<T: Any>(
     val defaultValue: T
 ) {
     private val _data = MutableLiveData<T>(defaultValue)
     val data: LiveData<T> = _data
 
-    fun onDataChanged(newValue: T) {
+    open fun onDataChanged(newValue: T) {
         _data.value = newValue
     }
 
