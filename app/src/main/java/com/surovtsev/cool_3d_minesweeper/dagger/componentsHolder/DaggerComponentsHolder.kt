@@ -29,13 +29,10 @@ class DaggerComponentsHolder(
         return res
     }
 
-    fun createAndGetGameControllerComponent(
-        gameEventsReceiver: IGameEventsReceiver
-    ): GameControllerComponent {
+    fun createAndGetGameControllerComponent(): GameControllerComponent {
         emptyGameControllerComponent()
         val res = gameComponent!!
             .gameControllerComponent()
-            .gameEventsReceiver(gameEventsReceiver)
             .build()
         gameControllerComponent = res
         return res

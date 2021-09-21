@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResume
@@ -13,23 +14,29 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-class GameLogicStateHelper @AssistedInject constructor(
-    @Assisted private val gameEventsReceiver: IGameEventsReceiver,
-    @Assisted private val gameStatusReceiver: IGameStatusReceiver,
-    @Assisted timeSpanHelper: TimeSpanHelper
+//class GameLogicStateHelper @AssistedInject constructor(
+//    @Assisted private val gameEventsReceiver: GameEventsReceiver,
+//    @Assisted private val gameStatusReceiver: IGameStatusReceiver,
+//    @Assisted timeSpanHelper: TimeSpanHelper
+//):
+//    INeedToBeUpdated, IHandlePauseResume
+//{
+//    @AssistedFactory
+//    interface Factory {
+//        fun create(
+//            gameEventsReceiver: IGameEventsReceiver,
+//            gameStatusReceiver: IGameStatusReceiver,
+//            timeSpanHelper: TimeSpanHelper
+//        ): GameLogicStateHelper
+//    }
+
+class GameLogicStateHelper constructor(
+    private val gameEventsReceiver: GameEventsReceiver,
+    private val gameStatusReceiver: IGameStatusReceiver,
+    timeSpanHelper: TimeSpanHelper
 ):
     INeedToBeUpdated, IHandlePauseResume
 {
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            gameEventsReceiver: IGameEventsReceiver,
-            gameStatusReceiver: IGameStatusReceiver,
-            timeSpanHelper: TimeSpanHelper
-        ): GameLogicStateHelper
-    }
-
-
     var gameStatus: GameStatus
         private set
 
@@ -45,11 +52,15 @@ class GameLogicStateHelper @AssistedInject constructor(
         gameStatus = GameStatus.NO_BOBMS_PLACED
     }
 
+    fun notifyTimeUpdated() {
+        gameEventsReceiver.timeUpdated(getElapsed())
+    }
+
     override fun tick() {
         if (timeSpan.isOn()) {
             timeSpan.tick()
             if (timeSpan.getAndRelease()) {
-                gameEventsReceiver.timeUpdated()
+                notifyTimeUpdated()
             }
         }
     }

@@ -3,12 +3,11 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.AppComponent
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
@@ -21,7 +20,7 @@ class GameLogic(
     private val cubeSkin: CubeSkin,
     var textureUpdater: ICanUpdateTexture?,
     private val gameConfig: GameConfig,
-    val gameEventsReceiver: IGameEventsReceiver,
+    val gameEventsReceiver: GameEventsReceiver,
     gameStatusReceiver: IGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper,
 ) {
@@ -91,7 +90,16 @@ class GameLogic(
 
     fun setBombsLeft(v: Int) {
         bombsLeft = v
-        gameEventsReceiver.bombCountUpdated()
+        notifyBombsCountUpdated()
+    }
+
+    private fun decBombsLeft() {
+        bombsLeft--
+        notifyBombsCountUpdated()
+    }
+
+    fun notifyBombsCountUpdated() {
+        gameEventsReceiver.bombCountUpdated(bombsLeft)
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
@@ -124,8 +132,8 @@ class GameLogic(
 
             openNeighbours(pointedCell)
 
-            bombsLeft--
-            gameEventsReceiver.bombCountUpdated()
+
+            decBombsLeft()
         } else {
             if (skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)

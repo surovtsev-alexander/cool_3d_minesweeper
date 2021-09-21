@@ -17,6 +17,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -34,8 +35,7 @@ import javax.inject.Inject
 @GameControllerScope
 class MinesweeperController @Inject constructor(
     private val context: Context,
-    gameEventsReceiver: IGameEventsReceiver,
-    load: Boolean,
+    gameEventsReceiver: GameEventsReceiver,
     private val timeSpanHelper: TimeSpanHelper,
     val touchReceiver: TouchReceiver,
     val gameControls: GameControls,
@@ -148,8 +148,8 @@ class MinesweeperController @Inject constructor(
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()
 
-        gameLogic.gameEventsReceiver.bombCountUpdated()
-        gameLogic.gameEventsReceiver.timeUpdated()
+        gameLogic.notifyBombsCountUpdated()
+        gameLogic.gameLogicStateHelper.notifyTimeUpdated()
     }
 
     @Synchronized fun syncExecution(x: () -> Unit) {

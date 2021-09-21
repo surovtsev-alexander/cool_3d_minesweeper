@@ -24,9 +24,6 @@ interface GameControllerComponent {
     @Subcomponent.Builder
     interface Builder {
 
-        @BindsInstance
-        fun gameEventsReceiver(gameEventsReceiver: IGameEventsReceiver): Builder
-
         fun build(): GameControllerComponent
     }
 

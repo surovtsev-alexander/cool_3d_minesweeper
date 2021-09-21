@@ -5,9 +5,8 @@ import android.opengl.GLSurfaceView
 import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
-import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
@@ -17,7 +16,6 @@ import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDest
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
-import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,31 +24,26 @@ class GameActivityModelView(
 ):
     IHandlePauseResumeDestroyKeyDown
 {
-    companion object {
-        const val Marking = "marking"
-        const val ElapsedTime = "elapsedTime"
-        const val BombsLeft = "bombsLeft"
-        const val ShowDialog = "showDialog"
-    }
-
     @Inject
-    @Named(Marking)
+    @Named(GameViewEventNames.Marking)
     lateinit var marking: MyLiveData<Boolean>
 
     @Inject
-    @Named(ElapsedTime)
+    @Named(GameViewEventNames.ElapsedTime)
     lateinit var elapsedTime: MyLiveData<Long>
 
     @Inject
-    @Named(BombsLeft)
+    @Named(GameViewEventNames.BombsLeft)
     lateinit var bombsLeft: MyLiveData<Int>
 
     @Inject
-    @Named(ShowDialog)
+    @Named(GameViewEventNames.ShowDialog)
     lateinit var showDialog: MyLiveData<Boolean>
 
 
-    var gameEventsReceiver: IGameEventsReceiver = GameEventsReceiver()
+    @Inject
+    lateinit var gameEventsReceiver: GameEventsReceiver
+
     @Inject
     lateinit var minesweeperController: MinesweeperController
     @Inject
@@ -62,7 +55,7 @@ class GameActivityModelView(
     private val markOnShortTap: UpdatableOnOffSwitch
 
     init {
-        context.daggerComponentsHolder.createAndGetGameControllerComponent(gameEventsReceiver)
+        context.daggerComponentsHolder.createAndGetGameControllerComponent()
             .inject(this)
 
         gameControls = minesweeperController.gameControls
@@ -88,32 +81,6 @@ class GameActivityModelView(
 
     fun removeZeroBorders() {
         removeZeroBorders.update()
-    }
-
-    inner class GameEventsReceiver: IGameEventsReceiver {
-        override fun bombCountUpdated() {
-            context.runOnUiThread {
-                bombsLeft.onDataChanged(
-                    minesweeperController.gameLogic.bombsLeft
-                )
-            }
-        }
-
-        override fun timeUpdated() {
-            context.runOnUiThread {
-                elapsedTime.onDataChanged(
-                    minesweeperController.gameLogic.gameLogicStateHelper.getElapsed()
-                )
-            }
-        }
-
-        override fun gameStatusUpdated(newStatus: GameStatus) {
-            context.runOnUiThread {
-                if (GameStatusHelper.isGameOver(newStatus)) {
-                    showDialog.onDataChanged(true)
-                }
-            }
-        }
     }
 
     private fun assignTouchListenerToGLSurfaceView(
