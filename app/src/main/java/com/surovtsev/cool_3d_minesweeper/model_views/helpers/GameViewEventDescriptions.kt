@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.helpers
 
-import com.surovtsev.cool_3d_minesweeper.dagger.GameScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl

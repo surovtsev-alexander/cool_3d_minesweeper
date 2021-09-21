@@ -1,9 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.dagger.DaggerAppComponent
-import com.surovtsev.cool_3d_minesweeper.dagger.GameComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 
 class DaggerComponentsHolder(

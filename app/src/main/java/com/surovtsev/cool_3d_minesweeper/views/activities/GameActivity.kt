@@ -38,19 +38,7 @@ class GameActivity: ComponentActivity() {
     lateinit var gLSurfaceView: GLSurfaceView
 
     @Inject
-    lateinit var markingEvent: MarkingEvent
-
-    @Inject
-    @Named(GameViewEventsNames.ElapsedTime)
-    lateinit var elapsedTimeEvent: ElapsedTimeEvent
-
-    @Inject
-    @Named(GameViewEventsNames.BombsLeft)
-    lateinit var bombsLeftEvent: BombsLeftEvent
-
-    @Inject
-    @Named(GameViewEventsNames.ShowDialog)
-    lateinit var showDialogEvent: ShowDialogEvent
+    lateinit var gameViewEvents: GameViewEvents
 
     @Inject
     @Named(GameControlsNames.RemoveZeroBorders)
@@ -90,16 +78,14 @@ class GameActivity: ComponentActivity() {
                     }
                     Row {
                         Controls(
-                            markingEvent,
-                            bombsLeftEvent,
-                            elapsedTimeEvent,
+                            gameViewEvents,
                             removeMarkedBombsControl,
                             removeZeroBordersControl
                         )
                     }
                 }
                 GameStatusDialog(
-                    showDialogEvent,
+                    gameViewEvents.showDialogEvent,
                     modelView
                 )
             }
@@ -144,9 +130,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    markingEvent: MarkingEvent,
-    bombsLeftEvent: BombsLeftEvent,
-    elapsedTimeEvent: ElapsedTimeEvent,
+    gameViewEvents: GameViewEvents,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
 ) {
@@ -166,12 +150,15 @@ fun Controls(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Bottom
         ) {
-            ControlCheckBox(markingEvent)
+            ControlCheckBox(gameViewEvents.markingEvent)
         }
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            GameInfo(bombsLeftEvent, elapsedTimeEvent)
+            GameInfo(
+                gameViewEvents.bombsLeftEvent,
+                gameViewEvents.elapsedTimeEvent
+            )
         }
     }
 }

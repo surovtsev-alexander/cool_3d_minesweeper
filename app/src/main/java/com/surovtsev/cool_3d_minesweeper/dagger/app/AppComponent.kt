@@ -1,10 +1,9 @@
-package com.surovtsev.cool_3d_minesweeper.dagger
+package com.surovtsev.cool_3d_minesweeper.dagger.app
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
 import javax.inject.Scope
 
 @AppScope

@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.dagger
+package com.surovtsev.cool_3d_minesweeper.dagger.app.game
 
 import android.content.Context
 import android.opengl.GLSurfaceView
@@ -10,9 +10,6 @@ import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNam
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
-import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import dagger.*
 import javax.inject.Named
@@ -25,6 +22,7 @@ interface GameComponent {
     val gLSurfaceView: GLSurfaceView
     val gameEventsReceiver: GameEventsReceiver
     val markingEvent: MarkingEvent
+    val gameViewEvents: GameViewEvents
 
     @Subcomponent.Builder
     interface Builder {
