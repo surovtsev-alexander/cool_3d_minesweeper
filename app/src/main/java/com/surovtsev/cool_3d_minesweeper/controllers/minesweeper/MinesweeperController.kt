@@ -40,14 +40,13 @@ class MinesweeperController @Inject constructor(
     val touchReceiver: TouchReceiver,
     val gameControls: GameControls,
     val saveController: SaveController,
-    val save: Save?
+    val save: Save?,
+    private val gameConfig: GameConfig
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy,
     IGameStatusReceiver
 {
-    private var gameConfig: GameConfig
-
     private var gameObjectsHolder: GameObjectsHolder
 
     var gameLogic: GameLogic
@@ -61,14 +60,9 @@ class MinesweeperController @Inject constructor(
 
     init {
         if (save != null) {
-
-            Log.d("TEST+++", "MinesweeperController save != null")
-            Log.d("TEST+++", "save:\n${save.toString()}")
-
             saveController.emptyData(
                 SaveTypes.SaveGameJson
             )
-            gameConfig = save.gameConfig
 
             gameObjectsHolder = GameObjectsHolder(gameConfig)
 
@@ -93,7 +87,7 @@ class MinesweeperController @Inject constructor(
         } else {
 
             val loadedSettingsData = saveController.loadSettingDataOrDefault()
-            gameConfig = GameConfigFactory.createGameConfig(loadedSettingsData)
+
 
             gameObjectsHolder = GameObjectsHolder(gameConfig)
 

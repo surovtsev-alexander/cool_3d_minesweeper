@@ -4,7 +4,9 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
@@ -28,15 +30,6 @@ interface GameControllerComponent {
 
     fun inject(gameActivityModelView: GameActivityModelView)
 }
-
-//@Module
-//abstract class GameControllerSupportModule {
-//    @Binds
-//    @GameControllerScope
-//    abstract fun bindGameEventsReceiver(
-//        gameActivityModelView: GameActivityModelView
-//    ): IGameEventsReceiver
-//}
 
 @Module
 object GameControllerModule {
@@ -69,6 +62,18 @@ object GameControllerModule {
             null
         }
         return save
+    }
+
+    @GameControllerScope
+    @Provides
+    fun provideGameConfig(
+        save: Save?,
+        saveController: SaveController
+    ): GameConfig {
+        return save?.gameConfig
+            ?: GameConfigFactory.createGameConfig(
+                saveController.loadSettingDataOrDefault()
+            )
     }
 }
 
