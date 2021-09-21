@@ -1,6 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.helpers
 
 import com.surovtsev.cool_3d_minesweeper.dagger.GameScope
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
@@ -11,6 +12,7 @@ object GameViewEventsNames {
     const val ElapsedTime = "elapsedTime"
     const val BombsLeft = "bombsLeft"
     const val ShowDialog = "showDialog"
+    const val GameStatus = "gameStatus"
 }
 
 @GameScope
@@ -32,3 +34,4 @@ class MarkingEvent @Inject constructor(
 typealias ElapsedTimeEvent = MyLiveData<Long>
 typealias BombsLeftEvent = MyLiveData<Int>
 typealias ShowDialogEvent = MyLiveData<Boolean>
+typealias GameStatusEvent = MyLiveData<GameStatus>

@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
+import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
@@ -62,42 +63,49 @@ object GameModule {
     @GameScope
     @Named(GameViewEventsNames.ElapsedTime)
     fun provideElapsedTime(): ElapsedTimeEvent {
-        return MyLiveData(0L)
+        return ElapsedTimeEvent(0L)
     }
 
     @Provides
     @GameScope
     @Named(GameViewEventsNames.BombsLeft)
     fun provideBombsLeft(): BombsLeftEvent {
-        return MyLiveData(0)
+        return BombsLeftEvent(0)
     }
 
     @Provides
     @GameScope
     @Named(GameViewEventsNames.ShowDialog)
     fun provideShowDialog(): ShowDialogEvent {
-        return MyLiveData(false)
+        return ShowDialogEvent(false)
+    }
+
+    @Provides
+    @GameScope
+    @Named(GameViewEventsNames.GameStatus)
+    fun provideGameStatusEvent(): GameStatusEvent {
+        return GameStatusEvent(GameStatusHelper.initStatus)
     }
 
     @GameScope
     @Provides
     @Named(GameControlsNames.RemoveMarkedBombs)
     fun provideRemoveBombsControl(): RemoveMarkedBombsControl {
-        return Updatable(false)
+        return RemoveMarkedBombsControl(false)
     }
 
     @GameScope
     @Provides
     @Named(GameControlsNames.RemoveZeroBorders)
     fun provideRemoveZeroBordersControl(): RemoveZeroBordersControl {
-        return Updatable(false)
+        return RemoveZeroBordersControl(false)
     }
 
     @GameScope
     @Provides
     @Named(GameControlsNames.MarkOnShortTap)
     fun provideMarkOnShortTapControl(): MarkOnShortTapControl {
-        return UpdatableOnOffSwitch()
+        return MarkOnShortTapControl()
     }
 }
 

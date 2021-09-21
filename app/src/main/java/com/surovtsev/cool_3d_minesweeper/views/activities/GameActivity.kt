@@ -88,9 +88,7 @@ class GameActivity: ComponentActivity() {
                     ) {
                         MinesweeperView(gLSurfaceView)
                     }
-                    Row(
-
-                    ) {
+                    Row {
                         Controls(
                             markingEvent,
                             bombsLeftEvent,
@@ -183,7 +181,7 @@ fun ControlButtons(
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
 ) {
-    Row() {
+    Row {
         Button(
             onClick = { removeMarkedBombsControl.update() },
             modifier = Modifier.fillMaxWidth(0.5f)
@@ -279,6 +277,7 @@ fun GameStatusDialog(
             onDismissRequest = closeDialogAction,
             title = { Text(text = "Game status") },
             text = { Text(
+                /* TODO: replace with gameStatusEvent */
                 text = modelView.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
             ) },
 
