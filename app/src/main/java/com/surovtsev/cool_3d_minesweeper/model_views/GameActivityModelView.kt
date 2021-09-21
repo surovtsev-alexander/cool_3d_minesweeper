@@ -8,6 +8,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperCont
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
@@ -24,7 +26,7 @@ typealias RemoveZeroBordersAction = () -> Unit
 typealias SetMarkingAction = (newValue: Boolean) -> Unit
 
 class GameActivityModelView(
-    private val context: Context
+    context: Context
 ):
     IHandlePauseResumeDestroyKeyDown
 {
@@ -40,36 +42,22 @@ class GameActivityModelView(
     @Inject
     lateinit var gameRenderer: GLESRenderer
 
-    private val gameControls: GameControls
-    private val removeBombs: Updatable
-    private val removeZeroBorders: Updatable
-    private val markOnShortTap: UpdatableOnOffSwitch
+    @Inject
+    @Named(GameControlsNames.MarkOnShortTap)
+    lateinit var markOnShortTapControl: MarkOnShortTapControl
 
     init {
         context.daggerComponentsHolder.createAndGetGameControllerComponent()
             .inject(this)
-
-        gameControls = minesweeperController.gameControls
-        removeBombs = gameControls.removeBombs
-        removeZeroBorders = gameControls.removeZeroBorders
-        markOnShortTap = gameControls.markOnShortTap
     }
 
     fun setMarking(newValue: Boolean) {
         marking.onDataChanged(newValue)
         if (newValue) {
-            markOnShortTap.turnOn()
+            markOnShortTapControl.turnOn()
         } else {
-            markOnShortTap.turnOff()
+            markOnShortTapControl.turnOff()
         }
-    }
-
-    fun removeMarkedBombs() {
-        removeBombs.update()
-    }
-
-    fun removeZeroBorders() {
-        removeZeroBorders.update()
     }
 
     private fun assignTouchListenerToGLSurfaceView(

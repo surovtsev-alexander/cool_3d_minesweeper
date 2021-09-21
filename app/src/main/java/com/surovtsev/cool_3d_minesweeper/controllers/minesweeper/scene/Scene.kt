@@ -56,8 +56,8 @@ class Scene (
         val cameraMoved = cameraInfoHelper.getAndRelease()
         val clicked = touchHandler.getAndRelease()
 
-        if (gameControls.markOnShortTap.getAndRelease()) {
-            gameLogic.markingOnShotTap = gameControls.markOnShortTap.isOn()
+        if (gameControls.markOnShortTapControl.getAndRelease()) {
+            gameLogic.markingOnShotTap = gameControls.markOnShortTapControl.isOn()
         }
 
         val glPointerView = gameViewsHolder!!.glPointerView
@@ -96,10 +96,10 @@ class Scene (
 
         gameLogic.openCubes()
 
-        if (gameControls.removeBombs.getAndRelease()) {
+        if (gameControls.removeMarkedBombsControl.getAndRelease()) {
             gameLogic.storeSelectedBombs()
         }
-        if (gameControls.removeZeroBorders.getAndRelease()) {
+        if (gameControls.removeZeroBordersControl.getAndRelease()) {
             gameLogic.storeZeroBorders()
         }
         gameLogic.removeCubes()

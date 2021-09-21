@@ -22,8 +22,9 @@ import com.surovtsev.cool_3d_minesweeper.model_views.RemoveMarkedBombsAction
 import com.surovtsev.cool_3d_minesweeper.model_views.RemoveZeroBordersAction
 import com.surovtsev.cool_3d_minesweeper.model_views.SetMarkingAction
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
-import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
-import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
 import javax.inject.Inject
 import javax.inject.Named
@@ -54,6 +55,14 @@ class GameActivity: ComponentActivity() {
     @Inject
     @Named(GameViewEventsNames.ShowDialog)
     lateinit var showDialogEvent: ShowDialogEvent
+
+    @Inject
+    @Named(GameControlsNames.RemoveZeroBorders)
+    lateinit var removeZeroBordersControl: RemoveZeroBordersControl
+
+    @Inject
+    @Named(GameControlsNames.RemoveMarkedBombs)
+    lateinit var removeMarkedBombsControl: RemoveMarkedBombsControl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,8 +100,8 @@ class GameActivity: ComponentActivity() {
                             modelView::setMarking,
                             bombsLeftEvent,
                             elapsedTimeEvent,
-                            modelView::removeMarkedBombs,
-                            modelView::removeZeroBorders
+                            removeMarkedBombsControl,
+                            removeZeroBordersControl
                         )
                     }
                 }
@@ -146,8 +155,8 @@ fun Controls(
     setMarkingAction: SetMarkingAction,
     bombsLeftEvent: BombsLeftEvent,
     elapsedTimeEvent: ElapsedTimeEvent,
-    removeMarkedBombsAction: RemoveMarkedBombsAction,
-    removeZeroBordersAction: RemoveZeroBordersAction
+    removeMarkedBombsControl: RemoveMarkedBombsControl,
+    removeZeroBordersControl: RemoveZeroBordersControl
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -157,8 +166,8 @@ fun Controls(
             Arrangement.Center
         ) {
             ControlButtons(
-                removeMarkedBombsAction,
-                removeZeroBordersAction
+                removeMarkedBombsControl,
+                removeZeroBordersControl
             )
         }
         Column(
@@ -177,18 +186,18 @@ fun Controls(
 
 @Composable
 fun ControlButtons(
-    removeMarkedBombsAction: RemoveMarkedBombsAction,
-    removeZeroBordersAction: RemoveZeroBordersAction
+    removeMarkedBombsControl: RemoveMarkedBombsControl,
+    removeZeroBordersControl: RemoveZeroBordersControl
 ) {
     Row() {
         Button(
-            onClick = removeMarkedBombsAction,
+            onClick = { removeMarkedBombsControl.update() },
             modifier = Modifier.fillMaxWidth(0.5f)
         ) {
             Text("V")
         }
         Button(
-            onClick = removeZeroBordersAction,
+            onClick = { removeZeroBordersControl.update() },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("O")

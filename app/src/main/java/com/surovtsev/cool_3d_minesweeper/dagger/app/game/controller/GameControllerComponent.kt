@@ -7,6 +7,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.UpdatableOnOffSwitch
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import dagger.Module
 import dagger.Provides
@@ -47,12 +49,6 @@ object GameControllerModule {
 
     @GameControllerScope
     @Provides
-    fun provideGameControls(): GameControls {
-        return GameControls()
-    }
-
-    @GameControllerScope
-    @Provides
     fun provideSaveController(
         context: Context
     ): SaveController {
@@ -74,8 +70,6 @@ object GameControllerModule {
         }
         return save
     }
-
-
 }
 
 @Scope
