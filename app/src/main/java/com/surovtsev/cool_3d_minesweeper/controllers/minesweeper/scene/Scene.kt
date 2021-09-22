@@ -23,10 +23,9 @@ class Scene @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val gameControls: GameControls,
     private val gameViewsHolder: GameViewsHolder,
+    private val cameraInfoHelper: CameraInfoHelper,
+    private val pointer: Pointer
 ) {
-    private val cameraInfoHelper = CameraInfoHelper(cameraInfo)
-    private val pointer = Pointer()
-
     val moveHandler = MoveHandler(cameraInfoHelper)
     val touchHandler = TouchHandler(cameraInfoHelper, pointer)
 

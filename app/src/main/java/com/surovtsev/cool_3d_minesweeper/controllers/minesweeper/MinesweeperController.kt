@@ -28,7 +28,6 @@ import javax.inject.Inject
 class MinesweeperController @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     val touchReceiver: TouchReceiver,
-    private val gameControls: GameControls,
     val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
