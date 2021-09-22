@@ -18,15 +18,10 @@ class Scene (
     gameObjectsHolder: GameObjectsHolder,
     cameraInfo: CameraInfo,
     private val timeSpanHelper: TimeSpanHelper,
-    displaySize: Vec2i,
     private val gameControls: GameControls,
     private val gameViewsHolder: GameViewsHolder
 ) {
-    val cameraInfoHelper =
-        CameraInfoHelper(
-            cameraInfo,
-            displaySize
-        )
+    private val cameraInfoHelper = CameraInfoHelper(cameraInfo)
     private val pointer = Pointer()
 
     val moveHandler = MoveHandler(cameraInfoHelper)
@@ -39,17 +34,8 @@ class Scene (
             gameObjectsHolder.cubeBorder
         )
 
-    fun onSurfaceChanged() {
-        val mVPMatrix = cameraInfoHelper.cameraInfo.MVP
-        with(gameViewsHolder.cubeView.cubeGLESProgram!!) {
-            useProgram()
-            fillMVP(mVPMatrix)
-        }
-
-        with(gameViewsHolder.glPointerView.mGLESProgram!!) {
-            useProgram()
-            fillMVP(mVPMatrix)
-        }
+    fun onSurfaceChanged(newDisplaySize: Vec2i) {
+        cameraInfoHelper.onSurfaceChanged(newDisplaySize)
     }
 
     fun onDrawFrame() {

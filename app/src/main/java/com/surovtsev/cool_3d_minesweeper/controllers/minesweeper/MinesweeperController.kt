@@ -39,8 +39,14 @@ class MinesweeperController @Inject constructor(
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy
 {
-    var scene: Scene? = null
-        private set
+    val scene: Scene = Scene(
+        gameLogic,
+        gameObjectsHolder,
+        cameraInfo,
+        timeSpanHelper,
+        gameControls,
+        gameViewsHolder
+    )
 
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
@@ -49,24 +55,7 @@ class MinesweeperController @Inject constructor(
     override fun onSurfaceChanged(width: Int, height: Int) {
         val displaySize = Vec2i(width, height)
 
-        val createScene = (
-                scene == null ||
-                scene!!.cameraInfoHelper.displaySize != displaySize)
-
-        if (createScene) {
-            scene =
-                Scene(
-                    gameLogic,
-                    gameObjectsHolder,
-                    cameraInfo,
-                    timeSpanHelper,
-                    displaySize,
-                    gameControls,
-                    gameViewsHolder
-                )
-        }
-
-        scene!!.onSurfaceChanged()
+        scene.onSurfaceChanged(displaySize)
 
         gameViewsHolder.cubeView.updateTexture(gameObjectsHolder.cubeSkin)
 

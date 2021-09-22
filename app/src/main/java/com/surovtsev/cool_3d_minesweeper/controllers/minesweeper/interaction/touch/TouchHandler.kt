@@ -10,7 +10,7 @@ import glm_.vec2.Vec2
 
 
 class TouchHandler(
-    val cameraInfoHelper: CameraInfoHelper,
+    private val cameraInfoHelper: CameraInfoHelper,
     val pointer: Pointer
 ):
     Updatable(false)

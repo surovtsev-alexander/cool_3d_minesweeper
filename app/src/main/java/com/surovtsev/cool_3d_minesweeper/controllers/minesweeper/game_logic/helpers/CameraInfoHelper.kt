@@ -11,27 +11,39 @@ import glm_.vec3.Vec3
 
 class CameraInfoHelper(
     val cameraInfo: CameraInfo,
-    val displaySize: Vec2i,
-    zNear: Float = 2f,
-    zFar: Float = 20f
+    private val zNear: Float = 2f,
+    private val zFar: Float = 20f
 ):
     Updatable()
 {
-    val displayWidthF = displaySize[0].toFloat()
-    val displayHeightF = displaySize[1].toFloat()
+    private var _displaySize: Vec2i = Vec2i(-1, -1)
+    var displaySize: Vec2i
+        get() = _displaySize
+        private set(value) {
+            _displaySize = value
+            displayWidthF = displaySize[0].toFloat()
+            displayHeightF = displaySize[1].toFloat()
+        }
+    private var displayWidthF = displaySize[0].toFloat()
+    private var displayHeightF = displaySize[1].toFloat()
 
-    init {
-        glm.perspective(
-            cameraInfo.projectionMatrix,
-            45f,
-            displayWidthF / displayHeightF,
-            zNear, zFar
-        )
-        cameraInfo.invProjectionMatrix = cameraInfo.projectionMatrix.inverse()
+    fun onSurfaceChanged(newDisplaySize: Vec2i) {
+        if (displaySize != newDisplaySize) {
 
-        cameraInfo.viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
+            displaySize = newDisplaySize
 
-        cameraInfo.recalculateMVPMatrix()
+            glm.perspective(
+                cameraInfo.projectionMatrix,
+                45f,
+                displayWidthF / displayHeightF,
+                zNear, zFar
+            )
+            cameraInfo.invProjectionMatrix = cameraInfo.projectionMatrix.inverse()
+
+            cameraInfo.viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
+
+            cameraInfo.recalculateMVPMatrix()
+        }
 
         update()
     }
