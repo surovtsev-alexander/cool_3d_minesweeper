@@ -12,11 +12,12 @@ import kotlin.math.abs
 class ClickAndRotationHelper(
     private val touchReceiver: TouchReceiver,
     private val moveHandler: MoveHandler,
-    private val glSurfaceView: GLSurfaceView
 ) : TouchHelper(), IStoreMovement {
     init {
         getAndRelease()
     }
+
+    var gLSurfaceView: GLSurfaceView? = null
 
     private var prev = Vec2()
     private var movement = 0f
@@ -40,7 +41,7 @@ class ClickAndRotationHelper(
                 if (downed) {
                     val delta = curr - prev
 
-                    glSurfaceView.queueEvent(object : Runnable {
+                    gLSurfaceView?.queueEvent(object : Runnable {
                         val p = prev
                         val c = curr
                         override fun run() {

@@ -1,27 +1,21 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
-import android.content.Context
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperTouchListenerHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
-import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
-import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
@@ -36,7 +30,7 @@ class MinesweeperController @Inject constructor(
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     val scene: Scene,
-    val minesweeperTouchListenerHelper: MinesweeperTouchListenerHelper
+    val touchListener: TouchListener
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy

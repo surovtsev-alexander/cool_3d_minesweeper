@@ -18,11 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import javax.inject.Inject
 
 class GameActivity: ComponentActivity() {
@@ -39,6 +41,7 @@ class GameActivity: ComponentActivity() {
     lateinit var gameViewEvents: GameViewEvents
     @Inject
     lateinit var gameControls: GameControls
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +61,8 @@ class GameActivity: ComponentActivity() {
             loadGame
         ).inject(this)
 
-        modelView.prepareGlSurfaceView(gLSurfaceView)
+
+        modelView.prepareGlSurfaceView()
 
         setContent {
             Test_composeTheme {

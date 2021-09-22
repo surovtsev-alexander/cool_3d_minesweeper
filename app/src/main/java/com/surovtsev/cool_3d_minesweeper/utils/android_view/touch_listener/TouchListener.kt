@@ -5,27 +5,35 @@ import android.view.MotionEvent
 import android.view.View
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ScalingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.TouchHelper
+import javax.inject.Inject
 
-class TouchListener(
+@GameControllerScope
+class TouchListener @Inject constructor(
     touchReceiver: TouchReceiver,
-    moveHandler: MoveHandler,
-    glSurfaceView: GLSurfaceView
+    moveHandler: MoveHandler
 ): View.OnTouchListener {
-    val clickAndRotationHelper = ClickAndRotationHelper(
+    private val clickAndRotationHelper = ClickAndRotationHelper(
         touchReceiver,
-        moveHandler,
-        glSurfaceView
-    )
-    val scalingHelper = ScalingHelper(
         moveHandler
     )
-    val movingHelper = MovingHelper(
+    private val scalingHelper = ScalingHelper(
         moveHandler
     )
+    private val movingHelper = MovingHelper(
+        moveHandler
+    )
+
+    fun connectToGLSurfaceView(
+        gLSurfaceView: GLSurfaceView
+    ) {
+        clickAndRotationHelper.gLSurfaceView = gLSurfaceView
+        gLSurfaceView.setOnTouchListener(this)
+    }
 
 
     private var prevPointerCount = 0

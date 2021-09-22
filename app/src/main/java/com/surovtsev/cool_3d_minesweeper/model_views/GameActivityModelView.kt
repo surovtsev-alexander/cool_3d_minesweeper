@@ -27,15 +27,17 @@ class GameActivityModelView(
     @Inject
     lateinit var gameRenderer: GLESRenderer
 
+    @Inject
+    lateinit var gLSurfaceView: GLSurfaceView
+
     init {
         context.daggerComponentsHolder.createAndGetGameControllerComponent()
             .inject(this)
     }
 
-
-    fun prepareGlSurfaceView(gLSurfaceView: GLSurfaceView) {
+    fun prepareGlSurfaceView() {
         gLSurfaceView.apply {
-            minesweeperController.minesweeperTouchListenerHelper.assingListenerToGLSurfaceView(
+            minesweeperController.touchListener.connectToGLSurfaceView(
                 gLSurfaceView
             )
             setEGLContextClientVersion(2)
