@@ -39,35 +39,12 @@ class GameActivityModelView(
             .inject(this)
     }
 
-    private fun assignTouchListenerToGLSurfaceView(
-        gLSurfaceView: GLSurfaceView
-    ) {
-        val touchReceiverCalculator = object: ITouchReceiverCalculator {
-            override fun getReceiver(): ITouchReceiver = minesweeperController.touchReceiver
-        }
-        val rotationReceiverCalculator = object: IRotationReceiverCalculator {
-            override fun getReceiver(): IRotationReceiver = minesweeperController.scene.moveHandler
-        }
-        val scaleReceiverCalculator = object: IScaleReceiverCalculator {
-            override fun getReceiver(): IScaleReceiver = minesweeperController.scene.moveHandler
-        }
-        val moveReceiverCalculator = object: IMoveReceiverCalculator {
-            override fun getReceiver(): IMoveReceiver = minesweeperController.scene.moveHandler
-        }
-        val touchListenerReceiver = TouchListenerReceiver(
-            gLSurfaceView,
-            touchReceiverCalculator,
-            rotationReceiverCalculator,
-            scaleReceiverCalculator,
-            moveReceiverCalculator,
-        )
-        val touchListener = TouchListener(touchListenerReceiver)
-        gLSurfaceView.setOnTouchListener(touchListener)
-    }
 
     fun prepareGlSurfaceView(gLSurfaceView: GLSurfaceView) {
         gLSurfaceView.apply {
-            assignTouchListenerToGLSurfaceView(this)
+            minesweeperController.minesweeperTouchListenerHelper.assingListenerToGLSurfaceView(
+                gLSurfaceView
+            )
             setEGLContextClientVersion(2)
             setRenderer(gameRenderer)
         }

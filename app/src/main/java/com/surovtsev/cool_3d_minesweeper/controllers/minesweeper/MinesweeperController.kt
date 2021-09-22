@@ -6,6 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.dagg
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperTouchListenerHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
@@ -34,7 +35,8 @@ class MinesweeperController @Inject constructor(
     private val gameObjectsHolder: GameObjectsHolder,
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
-    val scene: Scene
+    val scene: Scene,
+    val minesweeperTouchListenerHelper: MinesweeperTouchListenerHelper
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy

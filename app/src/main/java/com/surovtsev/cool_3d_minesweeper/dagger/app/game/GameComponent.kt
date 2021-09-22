@@ -16,7 +16,8 @@ import javax.inject.Named
 import javax.inject.Scope
 
 @GameScope
-@Subcomponent(modules = [GameModule::class])
+@Subcomponent(
+    modules = [GameModule::class, GameEvents::class, GameControls::class])
 interface GameComponent {
     val gameActivityModelView: GameActivityModelView
     val gLSurfaceView: GLSurfaceView
@@ -56,7 +57,10 @@ object GameModule {
     ): GLSurfaceView {
         return GLSurfaceView(context)
     }
+}
 
+@Module
+object GameEvents {
     @Provides
     @GameScope
     @Named(GameViewEventsNames.ElapsedTime)
@@ -84,7 +88,10 @@ object GameModule {
     fun provideGameStatusEvent(): GameStatusEvent {
         return GameStatusEvent(GameStatusHelper.initStatus)
     }
+}
 
+@Module
+object GameControls {
     @GameScope
     @Provides
     @Named(GameControlsNames.RemoveMarkedBombs)
