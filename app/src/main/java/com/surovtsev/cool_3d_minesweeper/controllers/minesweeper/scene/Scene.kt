@@ -8,18 +8,21 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
+import javax.inject.Inject
 
-class Scene (
+@GameControllerScope
+class Scene @Inject constructor(
     private val gameLogic: GameLogic,
     gameObjectsHolder: GameObjectsHolder,
     cameraInfo: CameraInfo,
     private val timeSpanHelper: TimeSpanHelper,
     private val gameControls: GameControls,
-    private val gameViewsHolder: GameViewsHolder
+    private val gameViewsHolder: GameViewsHolder,
 ) {
     private val cameraInfoHelper = CameraInfoHelper(cameraInfo)
     private val pointer = Pointer()

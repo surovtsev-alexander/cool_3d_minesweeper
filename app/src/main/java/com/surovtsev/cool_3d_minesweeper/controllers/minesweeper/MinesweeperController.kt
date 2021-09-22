@@ -34,20 +34,12 @@ class MinesweeperController @Inject constructor(
     private val cameraInfo: CameraInfo,
     private val gameObjectsHolder: GameObjectsHolder,
     val gameLogic: GameLogic,
-    private val gameViewsHolder: GameViewsHolder
+    private val gameViewsHolder: GameViewsHolder,
+    val scene: Scene
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy
 {
-    val scene: Scene = Scene(
-        gameLogic,
-        gameObjectsHolder,
-        cameraInfo,
-        timeSpanHelper,
-        gameControls,
-        gameViewsHolder
-    )
-
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
     }
@@ -76,12 +68,12 @@ class MinesweeperController @Inject constructor(
         gameLogic.gameLogicStateHelper.tick()
 
         if (touchReceiver.isUpdated()) {
-            scene?.touchHandler?.handleTouch(touchReceiver.touchPos, touchReceiver.touchType)
+            scene.touchHandler.handleTouch(touchReceiver.touchPos, touchReceiver.touchType)
             touchReceiver.release()
         }
 
         syncExecution {
-            scene?.onDrawFrame()
+            scene.onDrawFrame()
         }
     }
 
