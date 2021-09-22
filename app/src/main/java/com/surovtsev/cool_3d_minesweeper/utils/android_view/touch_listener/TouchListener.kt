@@ -1,25 +1,30 @@
 package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener
 
+import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ScalingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.TouchHelper
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 
-class TouchListener(receiver: TouchListenerReceiver): View.OnTouchListener {
+class TouchListener(
+    touchReceiver: TouchReceiver,
+    moveHandler: MoveHandler,
+    glSurfaceView: GLSurfaceView
+): View.OnTouchListener {
     val clickAndRotationHelper = ClickAndRotationHelper(
-        receiver.touchReceiver,
-        receiver.rotationReceiver,
-        receiver.clickEventQueueHandler
+        touchReceiver,
+        moveHandler,
+        glSurfaceView
     )
     val scalingHelper = ScalingHelper(
-        receiver.scaleReceiver,
-        receiver.moveReceiver
+        moveHandler
     )
     val movingHelper = MovingHelper(
-        receiver.moveReceiver
+        moveHandler
     )
 
 

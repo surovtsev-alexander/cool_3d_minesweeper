@@ -6,17 +6,10 @@ import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameViewEventsNames
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.MarkingEvent
-import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
-import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.*
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.receiver.TouchListenerReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import javax.inject.Inject
-import javax.inject.Named
 
 class GameActivityModelView(
     context: Context

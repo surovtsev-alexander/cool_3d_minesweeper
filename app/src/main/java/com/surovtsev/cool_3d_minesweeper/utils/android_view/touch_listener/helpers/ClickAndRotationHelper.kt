@@ -2,18 +2,17 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.help
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
-import glm_.vec2.Vec2
+ import glm_.vec2.Vec2
 import kotlin.math.abs
 
 
 class ClickAndRotationHelper(
-    val touchReceiver: IReceiverCalculator<ITouchReceiver>,
-    val rotationReceiver: IReceiverCalculator<IRotationReceiver>,
-    val clickEventQueueHandler: GLSurfaceView
+    private val touchReceiver: TouchReceiver,
+    private val moveHandler: MoveHandler,
+    private val glSurfaceView: GLSurfaceView
 ) : TouchHelper(), IStoreMovement {
     init {
         getAndRelease()
@@ -34,18 +33,18 @@ class ClickAndRotationHelper(
                 prev = getVec(event)
                 movement = 0f
 
-                touchReceiver.getReceiver()?.donw(curr, this)
+                touchReceiver.donw(curr, this)
                 downed = true
             }
             MotionEvent.ACTION_MOVE -> {
                 if (downed) {
                     val delta = curr - prev
 
-                    clickEventQueueHandler.queueEvent(object : Runnable {
+                    glSurfaceView.queueEvent(object : Runnable {
                         val p = prev
                         val c = curr
                         override fun run() {
-                            rotationReceiver.getReceiver()?.rotateBetweenProjections(
+                            moveHandler.rotateBetweenProjections(
                                 p, c
                             )
                         }
@@ -58,7 +57,7 @@ class ClickAndRotationHelper(
             }
             MotionEvent.ACTION_UP -> {
                 if (downed) {
-                    touchReceiver.getReceiver()?.up()
+                    touchReceiver.up()
                     downed = false
                 }
             }
@@ -67,6 +66,6 @@ class ClickAndRotationHelper(
 
     override fun release() {
         downed = false
-        touchReceiver.getReceiver()?.release()
+        touchReceiver.release()
     }
 }

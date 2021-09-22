@@ -1,15 +1,12 @@
 package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers
 
 import android.view.MotionEvent
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IMoveReceiver
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IReceiverCalculator
-import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IScaleReceiver
 import glm_.vec2.Vec2
 
 class ScalingHelper(
-    val scaleReceiverCalculator: IReceiverCalculator<IScaleReceiver>,
-    val moveReceiverCalculator: IReceiverCalculator<IMoveReceiver>
+    private val moveHandler: MoveHandler
 ): TouchHelper() {
     private var prevDistance = 0f
     private var prevCenter = Vec2()
@@ -27,9 +24,9 @@ class ScalingHelper(
         if (!needToBeInitted) {
             if (!MyMath.isZero(prevDistance)) {
                 val factor = distance / prevDistance
-                scaleReceiverCalculator.getReceiver()?.scale(factor)
+                moveHandler.scale(factor)
             }
-            moveReceiverCalculator.getReceiver()?.move(prevCenter, center)
+            moveHandler.move(prevCenter, center)
         }
 
         prevDistance = distance
