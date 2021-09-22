@@ -3,10 +3,13 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import java.lang.Exception
+import javax.inject.Inject
 
-class SaveController(
+@GameControllerScope
+class SaveController @Inject constructor(
     context: Context
 ) {
     val gson by lazy {

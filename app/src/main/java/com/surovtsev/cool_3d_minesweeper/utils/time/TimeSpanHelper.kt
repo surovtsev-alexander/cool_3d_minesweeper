@@ -1,8 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.utils.time
 
 import android.os.SystemClock
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import javax.inject.Inject
 
-class TimeSpanHelper: INeedToBeUpdated {
+@GameControllerScope
+class TimeSpanHelper @Inject constructor(): INeedToBeUpdated {
 
     var timeAfterDeviceStartup = 0L
 

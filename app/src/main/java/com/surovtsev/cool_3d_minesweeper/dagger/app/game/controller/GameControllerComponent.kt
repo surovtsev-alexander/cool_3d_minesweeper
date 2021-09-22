@@ -4,6 +4,7 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
@@ -34,21 +35,6 @@ interface GameControllerComponent {
 
 @Module
 object GameControllerModule {
-
-    @GameControllerScope
-    @Provides
-    fun provideTimeSpanHelper(): TimeSpanHelper {
-        return TimeSpanHelper()
-    }
-
-    @GameControllerScope
-    @Provides
-    fun provideSaveController(
-        context: Context
-    ): SaveController {
-        return SaveController(context)
-    }
-
     @GameControllerScope
     @Provides
     fun provideSave(
@@ -97,9 +83,8 @@ object GameControllerModule {
         gameObjectsHolder: GameObjectsHolder,
         gameConfig: GameConfig,
         gameEventsReceiver: GameEventsReceiver,
-        minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-        timeSpanHelper: TimeSpanHelper,
-        cubeView: CubeView
+        cubeView: CubeView,
+        gameLogicStateHelper: GameLogicStateHelper
     ): GameLogic {
         val res  =
             GameLogic(
@@ -107,8 +92,7 @@ object GameControllerModule {
                 cubeView,
                 gameConfig,
                 gameEventsReceiver,
-                minesweeperGameStatusReceiver,
-                timeSpanHelper
+                gameLogicStateHelper
             )
         if (save != null) {
             save.gameLogicToSave.applySavedData(res)

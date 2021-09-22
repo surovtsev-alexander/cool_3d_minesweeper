@@ -3,6 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
@@ -13,6 +15,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import javax.inject.Inject
 
 //class GameLogicStateHelper @AssistedInject constructor(
 //    @Assisted private val gameEventsReceiver: GameEventsReceiver,
@@ -30,9 +33,10 @@ import dagger.assisted.AssistedInject
 //        ): GameLogicStateHelper
 //    }
 
-class GameLogicStateHelper constructor(
+@GameControllerScope
+class GameLogicStateHelper @Inject constructor(
     private val gameEventsReceiver: GameEventsReceiver,
-    private val gameStatusReceiver: IGameStatusReceiver,
+    private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper
 ):
     INeedToBeUpdated, IHandlePauseResume
@@ -79,7 +83,7 @@ class GameLogicStateHelper constructor(
 
     fun setGameState(newState: GameStatus) {
         gameStatus = newState
-        gameStatusReceiver.gameStatusUpdated(gameStatus)
+        minesweeperGameStatusReceiver.gameStatusUpdated(gameStatus)
         gameEventsReceiver.gameStatusUpdated(gameStatus)
 
         if (isGameInProgress()) {

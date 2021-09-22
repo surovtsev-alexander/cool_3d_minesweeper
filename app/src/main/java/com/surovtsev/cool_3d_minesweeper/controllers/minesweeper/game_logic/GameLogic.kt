@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.BombPlacer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
@@ -14,21 +13,14 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
-import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 
 class GameLogic(
     private val cubeSkin: CubeSkin,
     private val textureUpdater: ICanUpdateTexture,
     private val gameConfig: GameConfig,
     val gameEventsReceiver: GameEventsReceiver,
-    gameStatusReceiver: IGameStatusReceiver,
-    timeSpanHelper: TimeSpanHelper,
+    val gameLogicStateHelper: GameLogicStateHelper
 ) {
-    val gameLogicStateHelper = GameLogicStateHelper(
-        gameEventsReceiver,
-        gameStatusReceiver,
-        timeSpanHelper
-    )
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =
