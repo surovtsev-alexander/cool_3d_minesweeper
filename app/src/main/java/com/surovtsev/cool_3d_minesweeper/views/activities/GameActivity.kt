@@ -183,9 +183,9 @@ fun ControlButtons(
 fun ControlCheckBox(
     markingEvent: MarkingEvent,
 ) {
-    val checked: Boolean by markingEvent.data.observeAsState(
-        markingEvent.defaultValue
-    )
+    val checked: Boolean by markingEvent.run {
+        data.observeAsState(defaultValue)
+    }
     Surface(
         shape = MaterialTheme.shapes.large,
         onClick = { markingEvent.onDataChanged(!checked) },
@@ -203,6 +203,7 @@ fun ControlCheckBox(
         }
     }
 }
+
 
 @Composable
 fun GameInfo(
@@ -222,21 +223,22 @@ fun GameInfo(
 fun BombsLeft(
     bombsLeftEvent: BombsLeftEvent
 ) {
-    val bombsLeft: Int by bombsLeftEvent.data.observeAsState(
-        bombsLeftEvent.defaultValue
-    )
+    val bombsLeft: Int by bombsLeftEvent.run {
+        data.observeAsState(defaultValue)
+    }
     Text(
         bombsLeft.toString()
     )
 }
 
+
 @Composable
 fun TimeElapsed(
     elapsedTimeEvent: ElapsedTimeEvent
 ) {
-    val elapsed: Long by elapsedTimeEvent.data.observeAsState(
-        elapsedTimeEvent.defaultValue
-    )
+    val elapsed: Long by elapsedTimeEvent.run {
+        data.observeAsState(defaultValue)
+    }
     Text(
         DateUtils.formatElapsedTime(
             elapsed / 1000,
@@ -249,9 +251,9 @@ fun GameStatusDialog(
     showDialogEvent: ShowDialogEvent,
     modelView: GameActivityModelView
 ) {
-    val showDialog: Boolean by showDialogEvent.data.observeAsState(
-        showDialogEvent.defaultValue
-    )
+    val showDialog: Boolean by showDialogEvent.run {
+        data.observeAsState(defaultValue)
+    }
     if (showDialog) {
         val closeDialogAction = { showDialogEvent.onDataChanged(false) }
         AlertDialog(

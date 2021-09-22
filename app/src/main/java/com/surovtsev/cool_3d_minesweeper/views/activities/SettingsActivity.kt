@@ -169,9 +169,9 @@ fun Controls(
     LazyColumn {
         items(slidersInfo) { (name, bordersAndValue) ->
             val sV = bordersAndValue.second
-            val sliderValue: Float by sV.data.observeAsState(
-                sV.defaultValue
-            )
+            val sliderValue: Float by sV.run {
+                data.observeAsState(defaultValue)
+            }
             val borders = bordersAndValue.first
             MySlider(
                 name,

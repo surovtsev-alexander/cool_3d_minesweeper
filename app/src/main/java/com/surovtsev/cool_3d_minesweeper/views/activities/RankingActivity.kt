@@ -67,10 +67,12 @@ fun RankingControls(modelView: RankingActivityModelView) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(modelView: RankingActivityModelView) {
-    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
-        listOf()
-    )
-    val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
+    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.run {
+        data.observeAsState(defaultValue)
+    }
+    val selectedSettingsId: Int by modelView.selectedSettingsId.run {
+        data.observeAsState(defaultValue)
+    }
 
     Box(
         modifier = Modifier
@@ -157,8 +159,9 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(modelView: RankingActivityModelView) {
-    val filteredRankingList: List<RankingData> by modelView.filteredRankingList.data.observeAsState(
-        listOf<RankingData>())
+    val filteredRankingList: List<RankingData> by modelView.filteredRankingList.run {
+        data.observeAsState(defaultValue)
+    }
     Box (
         modifier = Modifier
             .fillMaxSize()

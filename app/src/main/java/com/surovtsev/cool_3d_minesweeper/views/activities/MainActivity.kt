@@ -44,7 +44,9 @@ class MainActivity: ComponentActivity() {
 
 @Composable
 fun MainMenuButtons(modelView: MainActivityModelView) {
-    val enabled: Boolean by modelView.hasSave.data.observeAsState(false)
+    val enabled: Boolean by modelView.hasSave.run {
+        data.observeAsState(defaultValue)
+    }
 
     Test_composeTheme {
         Surface(color = MaterialTheme.colors.background) {
@@ -82,7 +84,7 @@ fun MainMenuButton(
     Button(
         onClick = action,
         Modifier
-            .fillMaxWidth(fraction=0.75f)
+            .fillMaxWidth(fraction = 0.75f)
             .border(1.dp, Color.Black),
         enabled
     ) {
