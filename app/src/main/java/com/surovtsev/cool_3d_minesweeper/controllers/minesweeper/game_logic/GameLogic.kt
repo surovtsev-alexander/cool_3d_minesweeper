@@ -18,7 +18,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 
 class GameLogic(
     private val cubeSkin: CubeSkin,
-    var textureUpdater: ICanUpdateTexture?,
+    private val textureUpdater: ICanUpdateTexture,
     private val gameConfig: GameConfig,
     val gameEventsReceiver: GameEventsReceiver,
     gameStatusReceiver: IGameStatusReceiver,
@@ -313,7 +313,7 @@ class GameLogic(
 
         skin.setNumbers()
         skin.emptyIfZero()
-        textureUpdater?.updateTexture(pointedCell)
+        textureUpdater.updateTexture(pointedCell)
 
         openNeighbours(pointedCell)
     }
@@ -411,7 +411,7 @@ class GameLogic(
 
         skin.setNumbers()
         skin.emptyIfZero()
-        textureUpdater?.updateTexture(pointedCell)
+        textureUpdater.updateTexture(pointedCell)
     }
 
     private fun toggleMarkingCube(pointedCell: PointedCell) {
@@ -443,6 +443,6 @@ class GameLogic(
         pointedCell: PointedCell,
         textureType: TextureCoordinatesHelper.TextureType) {
         pointedCell.skin.setTexture(textureType)
-        textureUpdater?.updateTexture(pointedCell)
+        textureUpdater.updateTexture(pointedCell)
     }
 }

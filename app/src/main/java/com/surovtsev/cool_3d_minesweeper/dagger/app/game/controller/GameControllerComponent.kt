@@ -14,7 +14,9 @@ import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
+import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
@@ -103,12 +105,13 @@ object GameControllerModule {
         gameConfig: GameConfig,
         gameEventsReceiver: GameEventsReceiver,
         minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-        timeSpanHelper: TimeSpanHelper
+        timeSpanHelper: TimeSpanHelper,
+        cubeView: CubeView
     ): GameLogic {
         val res  =
             GameLogic(
                 gameObjectsHolder.cubeSkin,
-                null,
+                cubeView,
                 gameConfig,
                 gameEventsReceiver,
                 minesweeperGameStatusReceiver,

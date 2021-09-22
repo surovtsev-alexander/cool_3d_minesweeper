@@ -20,7 +20,7 @@ class Scene (
     private val timeSpanHelper: TimeSpanHelper,
     displaySize: Vec2i,
     private val gameControls: GameControls,
-    var gameViewsHolder: GameViewsHolder? = null
+    private val gameViewsHolder: GameViewsHolder
 ) {
     val cameraInfoHelper =
         CameraInfoHelper(
@@ -41,12 +41,12 @@ class Scene (
 
     fun onSurfaceChanged() {
         val mVPMatrix = cameraInfoHelper.cameraInfo.MVP
-        with(gameViewsHolder!!.cubeView.cubeGLESProgram!!) {
+        with(gameViewsHolder.cubeView.cubeGLESProgram!!) {
             useProgram()
             fillMVP(mVPMatrix)
         }
 
-        with(gameViewsHolder!!.glPointerView.mGLESProgram!!) {
+        with(gameViewsHolder.glPointerView.mGLESProgram!!) {
             useProgram()
             fillMVP(mVPMatrix)
         }
@@ -60,8 +60,8 @@ class Scene (
             gameLogic.markingOnShotTap = gameControls.markOnShortTapControl.isOn()
         }
 
-        val glPointerView = gameViewsHolder!!.glPointerView
-        val cubeView = gameViewsHolder!!.cubeView
+        val glPointerView = gameViewsHolder.glPointerView
+        val cubeView = gameViewsHolder.cubeView
 
         if (cameraMoved) {
             cameraInfoHelper.cameraInfo.recalculateMVPMatrix()

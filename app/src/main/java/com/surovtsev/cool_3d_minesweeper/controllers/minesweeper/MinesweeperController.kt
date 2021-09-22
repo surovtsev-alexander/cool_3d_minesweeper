@@ -26,13 +26,10 @@ import javax.inject.Inject
 
 @GameControllerScope
 class MinesweeperController @Inject constructor(
-    private val context: Context,
-    gameEventsReceiver: GameEventsReceiver,
     private val timeSpanHelper: TimeSpanHelper,
     val touchReceiver: TouchReceiver,
     private val gameControls: GameControls,
     val saveController: SaveController,
-    val save: Save?,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
     private val gameObjectsHolder: GameObjectsHolder,
@@ -64,13 +61,10 @@ class MinesweeperController @Inject constructor(
                     cameraInfo,
                     timeSpanHelper,
                     displaySize,
-                    gameControls
+                    gameControls,
+                    gameViewsHolder
                 )
         }
-
-        gameLogic.textureUpdater = gameViewsHolder.cubeView
-
-        scene!!.gameViewsHolder = gameViewsHolder
 
         scene!!.onSurfaceChanged()
 
