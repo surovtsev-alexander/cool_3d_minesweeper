@@ -14,19 +14,10 @@ import javax.inject.Inject
 
 @GameControllerScope
 class TouchListener @Inject constructor(
-    touchReceiver: TouchReceiver,
-    moveHandler: MoveHandler
+    private val clickAndRotationHelper: ClickAndRotationHelper,
+    private val scalingHelper: ScalingHelper,
+    private val movingHelper: MovingHelper
 ): View.OnTouchListener {
-    private val clickAndRotationHelper = ClickAndRotationHelper(
-        touchReceiver,
-        moveHandler
-    )
-    private val scalingHelper = ScalingHelper(
-        moveHandler
-    )
-    private val movingHelper = MovingHelper(
-        moveHandler
-    )
 
     fun connectToGLSurfaceView(
         gLSurfaceView: GLSurfaceView
@@ -34,7 +25,6 @@ class TouchListener @Inject constructor(
         clickAndRotationHelper.gLSurfaceView = gLSurfaceView
         gLSurfaceView.setOnTouchListener(this)
     }
-
 
     private var prevPointerCount = 0
     var currTouchHelper: TouchHelper = clickAndRotationHelper

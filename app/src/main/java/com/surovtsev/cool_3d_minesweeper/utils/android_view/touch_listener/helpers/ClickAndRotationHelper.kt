@@ -4,12 +4,15 @@ import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
  import glm_.vec2.Vec2
+import javax.inject.Inject
 import kotlin.math.abs
 
 
-class ClickAndRotationHelper(
+@GameControllerScope
+class ClickAndRotationHelper @Inject constructor(
     private val touchReceiver: TouchReceiver,
     private val moveHandler: MoveHandler,
 ) : TouchHelper(), IStoreMovement {

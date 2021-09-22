@@ -2,9 +2,12 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.help
 
 import android.view.MotionEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import glm_.vec2.Vec2
+import javax.inject.Inject
 
-class MovingHelper(
+@GameControllerScope
+class MovingHelper @Inject constructor(
     private val moveHandler: MoveHandler
 ): TouchHelper() {
 
