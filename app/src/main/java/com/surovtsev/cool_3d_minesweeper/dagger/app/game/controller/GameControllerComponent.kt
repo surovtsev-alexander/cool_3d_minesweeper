@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
@@ -123,6 +124,14 @@ object GameControllerModule {
         }
 
         return res
+    }
+
+    @GameControllerScope
+    @Provides
+    fun provideCubeCoordinates(
+        gameObjectsHolder: GameObjectsHolder
+    ): CubeCoordinates {
+        return gameObjectsHolder.cubeCoordinates
     }
 }
 

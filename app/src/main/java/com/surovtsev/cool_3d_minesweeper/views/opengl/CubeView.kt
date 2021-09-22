@@ -6,6 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
@@ -13,8 +14,10 @@ import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
+import javax.inject.Inject
 
-class CubeView(
+@GameControllerScope
+class CubeView @Inject constructor(
     private val context: Context,
     private val cubeCoordinates: CubeCoordinates
 ):

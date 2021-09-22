@@ -36,18 +36,14 @@ class MinesweeperController @Inject constructor(
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
     private val gameObjectsHolder: GameObjectsHolder,
-    val gameLogic: GameLogic
+    val gameLogic: GameLogic,
+    private val gameViewsHolder: GameViewsHolder
 ):
     IHandleOpenGLEvents,
     IHandlePauseResumeDestroy
 {
     var scene: Scene? = null
         private set
-
-    private var gameViewsHolder: GameViewsHolder = GameViewsHolder.createObject(
-        context,
-        gameObjectsHolder.cubeCoordinates
-    )
 
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
