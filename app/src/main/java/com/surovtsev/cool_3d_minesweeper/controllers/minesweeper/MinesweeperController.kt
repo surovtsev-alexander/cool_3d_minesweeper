@@ -2,34 +2,26 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper
 
 import android.content.Context
 import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
-import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.*
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
-import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
-import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
+import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroy
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 @GameControllerScope
@@ -38,72 +30,21 @@ class MinesweeperController @Inject constructor(
     gameEventsReceiver: GameEventsReceiver,
     private val timeSpanHelper: TimeSpanHelper,
     val touchReceiver: TouchReceiver,
-    val gameControls: GameControls,
+    private val gameControls: GameControls,
     val saveController: SaveController,
     val save: Save?,
-    private val gameConfig: GameConfig
+    private val gameConfig: GameConfig,
+    private val cameraInfo: CameraInfo,
+    private val gameObjectsHolder: GameObjectsHolder,
+    val gameLogic: GameLogic
 ):
     IHandleOpenGLEvents,
-    IHandlePauseResumeDestroy,
-    IGameStatusReceiver
+    IHandlePauseResumeDestroy
 {
-    private var gameObjectsHolder: GameObjectsHolder
-
-    var gameLogic: GameLogic
-        private set
-    private var cameraInfo: CameraInfo
-
     var scene: Scene? = null
         private set
 
     private var gameViewsHolder: GameViewsHolder? = null
-
-    init {
-        if (save != null) {
-            saveController.emptyData(
-                SaveTypes.SaveGameJson
-            )
-
-            gameObjectsHolder = GameObjectsHolder(gameConfig)
-
-            gameLogic =
-                GameLogic(
-                    gameObjectsHolder.cubeSkin,
-                    null,
-                    gameConfig,
-                    gameEventsReceiver,
-                    this,
-                    timeSpanHelper
-                )
-
-            cameraInfo = save.cameraInfoToSave.getCameraInfo()
-
-            save.gameLogicToSave.applySavedData(gameLogic)
-
-            save.cubeSkinToSave.applySavedData(
-                gameObjectsHolder.cubeSkin,
-                gameLogic
-            )
-        } else {
-
-            val loadedSettingsData = saveController.loadSettingDataOrDefault()
-
-
-            gameObjectsHolder = GameObjectsHolder(gameConfig)
-
-            gameLogic =
-                GameLogic(
-                    gameObjectsHolder.cubeSkin,
-                    null,
-                    gameConfig,
-                    gameEventsReceiver,
-                    this,
-                    timeSpanHelper
-                )
-
-            cameraInfo = CameraInfo()
-        }
-    }
 
     override fun onSurfaceCreated() {
         gameViewsHolder = GameViewsHolder.createObject(
@@ -193,30 +134,5 @@ class MinesweeperController @Inject constructor(
 
     override fun onDestroy() {
         Log.d("TEST+++", "MinesweeperController onResume")
-    }
-
-    override fun gameStatusUpdated(newStatus: GameStatus) {
-        if (newStatus == GameStatus.WIN ||
-            newStatus == GameStatus.LOSE) {
-            saveController.emptyData(
-                SaveTypes.SaveGameJson
-            )
-        }
-
-        if (newStatus != GameStatus.WIN) {
-            return
-        }
-
-        val dbHelper = DBHelper(context)
-        val settingsDBHelper = SettingsDBQueries(dbHelper)
-        val rankingDBQueries = RankingDBQueries(dbHelper)
-
-        val settingId = settingsDBHelper.insertIfNotPresent(gameConfig.settingsData)
-        val rankingData = RankingData(
-            settingId,
-            gameLogic.gameLogicStateHelper.getElapsed(),
-            LocalDateTime.now().toString()
-        )
-        rankingDBQueries.insert(rankingData)
     }
 }

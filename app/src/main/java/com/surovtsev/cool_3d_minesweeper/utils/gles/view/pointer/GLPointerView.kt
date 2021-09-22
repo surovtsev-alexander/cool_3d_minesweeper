@@ -2,14 +2,18 @@ package com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer
 
 import android.content.Context
 import android.opengl.GLES20.*
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.surface.GLSurfaceControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.program.PointerGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
+import javax.inject.Inject
 
-class GLPointerView(context: Context):
+class GLPointerView(
+    context: Context
+):
     IGLObject, ISwitch by Switch() {
     private val POSITION_COMPONENT_COUNT = 3
 

@@ -44,9 +44,11 @@ class GameActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         if (!OpenGLInfoHelper.isSupportEs2(this)) {
-            Toast.makeText(this
-                , "This device does not support OpenGL ES 2.0"
-                , Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "This device does not support OpenGL ES 2.0",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 

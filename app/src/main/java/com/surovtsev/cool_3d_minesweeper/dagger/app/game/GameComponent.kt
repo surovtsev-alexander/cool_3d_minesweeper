@@ -34,7 +34,7 @@ interface GameComponent {
 
     fun inject(gameActivity: GameActivity)
 
-    fun gameControllerComponent(): GameControllerComponent.Builder
+    fun gameControllerComponent(): GameControllerComponent
 }
 
 @Module

@@ -68,10 +68,12 @@ class SettingsActivity: ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(modelView: SettingsActivityModelView) {
-    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.data.observeAsState(
-        listOf()
-    )
-    val selectedSettingsId: Int by modelView.selectedSettingsId.data.observeAsState(-1)
+    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.run {
+        data.observeAsState(defaultValue)
+    }
+    val selectedSettingsId: Int by modelView.selectedSettingsId.run {
+        data.observeAsState(defaultValue)
+    }
 
     Box(
         modifier = Modifier

@@ -4,6 +4,7 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.surface.GLSurfaceComponent
 
 class DaggerComponentsHolder(
     context: Context
@@ -16,6 +17,9 @@ class DaggerComponentsHolder(
         private set
 
     var gameControllerComponent: GameControllerComponent? = null
+        private set
+
+    var gLSurfaceComponent: GLSurfaceComponent? = null
         private set
 
     fun createAndGetGameComponent(loadGame: Boolean): GameComponent {
@@ -32,8 +36,16 @@ class DaggerComponentsHolder(
         emptyGameControllerComponent()
         val res = gameComponent!!
             .gameControllerComponent()
-            .build()
         gameControllerComponent = res
+        return res
+    }
+
+    fun createAndGetGLSurfaceController(): GLSurfaceComponent {
+        emptyGLSurfaceComponent()
+        val res = gameControllerComponent!!
+            .gLSurfaceController()
+            .build()
+        gLSurfaceComponent = res
         return res
     }
 
@@ -43,6 +55,11 @@ class DaggerComponentsHolder(
     }
 
     private fun emptyGameControllerComponent() {
+        emptyGLSurfaceComponent()
         gameControllerComponent = null
+    }
+
+    private fun emptyGLSurfaceComponent() {
+        gLSurfaceComponent = null
     }
 }

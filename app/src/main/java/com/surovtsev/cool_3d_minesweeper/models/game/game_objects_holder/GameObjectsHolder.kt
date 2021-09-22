@@ -8,25 +8,14 @@ import com.surovtsev.cool_3d_minesweeper.models.game.border.cube.CubeBorder
 class GameObjectsHolder(
     gameConfig: GameConfig
 ) {
-    val cubeCoordinates: CubeCoordinates
-    val cubeBorder: CubeBorder
-    val cubeSkin: CubeSkin
-    init {
-        cubeCoordinates =
-            CubeCoordinates.createObject(
-                gameConfig
-            )
-
-
-        cubeBorder =
-            CubeBorder(
-                gameConfig,
-                cubeCoordinates.centers
-            )
-
-        cubeSkin =
-            CubeSkin(
-                gameConfig
-            )
-    }
+    val cubeCoordinates: CubeCoordinates = CubeCoordinates.createObject(
+        gameConfig
+    )
+    val cubeBorder: CubeBorder = CubeBorder(
+        gameConfig,
+        cubeCoordinates.centers
+    )
+    val cubeSkin: CubeSkin = CubeSkin(
+        gameConfig
+    )
 }
