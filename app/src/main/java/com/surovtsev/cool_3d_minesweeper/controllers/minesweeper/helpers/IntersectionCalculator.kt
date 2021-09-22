@@ -1,14 +1,16 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers
 
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.models.game.border.cube.CubeBorder
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCellWithBorder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
+import javax.inject.Inject
 
-
-class IntersectionCalculator(
+@GameControllerScope
+class IntersectionCalculator @Inject constructor(
     private val pointer: IPointer,
     private val cubeSkin: CubeSkin,
     cubeBorder: CubeBorder

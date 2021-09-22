@@ -24,17 +24,11 @@ class Scene @Inject constructor(
     private val gameControls: GameControls,
     private val gameViewsHolder: GameViewsHolder,
     private val cameraInfoHelper: CameraInfoHelper,
-    private val pointer: Pointer
+    private val pointer: Pointer,
+    val moveHandler: MoveHandler,
+    val touchHandler: TouchHandler,
+    private val intersectionCalculator: IntersectionCalculator
 ) {
-    val moveHandler = MoveHandler(cameraInfoHelper)
-    val touchHandler = TouchHandler(cameraInfoHelper, pointer)
-
-    private val intersectionCalculator =
-        IntersectionCalculator(
-            pointer,
-            gameObjectsHolder.cubeSkin,
-            gameObjectsHolder.cubeBorder
-        )
 
     fun onSurfaceChanged(newDisplaySize: Vec2i) {
         cameraInfoHelper.onSurfaceChanged(newDisplaySize)

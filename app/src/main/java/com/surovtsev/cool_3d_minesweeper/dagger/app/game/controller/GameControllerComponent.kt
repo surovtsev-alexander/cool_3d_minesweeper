@@ -15,6 +15,8 @@ import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import dagger.Module
@@ -26,7 +28,6 @@ import javax.inject.Scope
 @Subcomponent(modules = [GameControllerModule::class])
 interface GameControllerComponent {
     val minesweeperController: MinesweeperController
-    val gameObjectsHolder: GameObjectsHolder
 
     fun inject(gameActivityModelView: GameActivityModelView)
 }
@@ -91,14 +92,6 @@ object GameControllerModule {
 
     @GameControllerScope
     @Provides
-    fun provideGameObjectsHolder(
-        gameConfig: GameConfig
-    ): GameObjectsHolder {
-        return GameObjectsHolder(gameConfig)
-    }
-
-    @GameControllerScope
-    @Provides
     fun provideGameLogic(
         save: Save?,
         gameObjectsHolder: GameObjectsHolder,
@@ -132,10 +125,16 @@ object GameControllerModule {
     @GameControllerScope
     @Provides
     fun provideCubeCoordinates(
-        gameObjectsHolder: GameObjectsHolder
+        gameConfig: GameConfig
     ): CubeCoordinates {
-        return gameObjectsHolder.cubeCoordinates
+        return CubeCoordinates.createObject(gameConfig)
     }
+
+    @GameControllerScope
+    @Provides
+    fun provideIPointer(
+        pointer: Pointer
+    ): IPointer = pointer
 }
 
 @Scope
