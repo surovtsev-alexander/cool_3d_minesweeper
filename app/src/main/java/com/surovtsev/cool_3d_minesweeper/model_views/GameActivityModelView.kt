@@ -5,7 +5,6 @@ import android.opengl.GLSurfaceView
 import android.view.KeyEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.model_views.helpers.MarkingEvent
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
@@ -20,9 +19,6 @@ class GameActivityModelView(
     lateinit var markingEvent: MarkingEvent
 
     @Inject
-    lateinit var gameEventsReceiver: GameEventsReceiver
-
-    @Inject
     lateinit var minesweeperController: MinesweeperController
     @Inject
     lateinit var gameRenderer: GLESRenderer
@@ -31,7 +27,8 @@ class GameActivityModelView(
     lateinit var gLSurfaceView: GLSurfaceView
 
     init {
-        context.daggerComponentsHolder.createAndGetGameControllerComponent()
+        context.daggerComponentsHolder
+            .createAndGetGameControllerComponent()
             .inject(this)
     }
 

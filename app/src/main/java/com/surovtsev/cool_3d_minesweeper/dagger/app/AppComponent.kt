@@ -5,6 +5,8 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.HasSaveEvent
 import com.surovtsev.cool_3d_minesweeper.model_views.MainActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.activities.MainActivity
+import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
+import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -28,6 +30,8 @@ interface AppComponent {
     fun gameComponent(): GameComponent.Builder
 
     fun inject(mainActivity: MainActivity)
+    fun inject(settingsActivity: SettingsActivity)
+    fun inject(rankingActivity: RankingActivity)
 }
 
 @Module

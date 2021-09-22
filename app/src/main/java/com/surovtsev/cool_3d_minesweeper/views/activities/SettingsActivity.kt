@@ -19,18 +19,27 @@ import androidx.compose.ui.unit.sp
 import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.SettingsActivityModelView
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
+import javax.inject.Inject
 
 class SettingsActivity: ComponentActivity() {
 
-    private val modelView = SettingsActivityModelView(this::finish)
+    @Inject
+    lateinit var modelView: SettingsActivityModelView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        daggerComponentsHolder
+            .appComponent
+            .inject(this)
+
+        modelView.finishAction = this::finish
 
         setContent {
             Test_composeTheme {

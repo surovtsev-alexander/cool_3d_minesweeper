@@ -2,18 +2,22 @@ package com.surovtsev.cool_3d_minesweeper.model_views
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import javax.inject.Inject
 import kotlin.math.round
 
-class SettingsActivityModelView(
-    private val finishAction: () -> Unit
+@AppScope
+class SettingsActivityModelView @Inject constructor(
 ) {
     private val applicationController = ApplicationController.getInstance()
     private val settingsDBQueries = applicationController.settingsDBQueries.value
     private val saveController = applicationController.saveController
+
+    var finishAction: (() -> Unit)? = null
 
     companion object {
         private val borders = SettingsDataHelper.borders
@@ -81,7 +85,7 @@ class SettingsActivityModelView(
             settingsData
         )
 
-        finishAction()
+        finishAction?.invoke()
     }
 
     private fun setControlValues(settingsData: SettingsData) {

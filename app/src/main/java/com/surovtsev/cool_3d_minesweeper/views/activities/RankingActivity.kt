@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.RankingActivityModelView
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -25,13 +26,19 @@ import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
+import javax.inject.Inject
 
 
 class RankingActivity: ComponentActivity() {
-    private val modelView = RankingActivityModelView()
+    @Inject
+    lateinit var modelView: RankingActivityModelView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        daggerComponentsHolder
+            .appComponent
+            .inject(this)
 
         setContent {
             RankingControls(modelView)
