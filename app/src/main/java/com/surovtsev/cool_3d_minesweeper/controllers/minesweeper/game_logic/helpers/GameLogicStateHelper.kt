@@ -83,8 +83,14 @@ class GameLogicStateHelper @Inject constructor(
 
     fun setGameState(newState: GameStatus) {
         gameStatus = newState
-        minesweeperGameStatusReceiver.gameStatusUpdated(gameStatus)
-        gameEventsReceiver.gameStatusUpdated(gameStatus)
+        val elapsed = getElapsed()
+        minesweeperGameStatusReceiver.gameStatusUpdated(
+            gameStatus,
+            elapsed)
+        gameEventsReceiver.gameStatusUpdated(
+            gameStatus,
+            elapsed
+        )
 
         if (isGameInProgress()) {
             timeSpan.turnOn()

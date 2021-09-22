@@ -35,7 +35,10 @@ class GameEventsReceiver @Inject constructor(
         }
     }
 
-    override fun gameStatusUpdated(newStatus: GameStatus) {
+    override fun gameStatusUpdated(
+        newStatus: GameStatus,
+        elapsed: Long
+    ) {
         context.runOnUiThread {
             if (GameStatusHelper.isGameOver(newStatus)) {
                 showDialog.onDataChanged(true)

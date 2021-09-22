@@ -3,8 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.MovingHelper
@@ -42,15 +40,15 @@ class TouchListener @Inject constructor(
 
             prevPointerCount = pointerCount
 
-            when (pointerCount) {
+            currTouchHelper = when (pointerCount) {
                 1 -> {
-                    currTouchHelper = clickAndRotationHelper
+                    clickAndRotationHelper
                 }
                 2 -> {
-                    currTouchHelper = scalingHelper
+                    scalingHelper
                 }
                 else -> {
-                    currTouchHelper = movingHelper
+                    movingHelper
                 }
             }
 
