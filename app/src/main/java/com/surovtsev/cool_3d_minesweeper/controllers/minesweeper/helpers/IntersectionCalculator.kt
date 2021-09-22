@@ -22,7 +22,7 @@ class IntersectionCalculator @Inject constructor(
     fun getCell(): PointedCell? {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
-        var candidateCubes =
+        val candidateCubes =
             mutableListOf<Pair<Float, PointedCellWithBorder>>()
 
         cubeSkin.iterateCubes { xyz: CellIndex ->

@@ -11,23 +11,24 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
+import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
 @GameControllerScope
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
-    gameObjectsHolder: GameObjectsHolder,
-    cameraInfo: CameraInfo,
     private val timeSpanHelper: TimeSpanHelper,
     private val gameControls: GameControls,
-    private val gameViewsHolder: GameViewsHolder,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
     val moveHandler: MoveHandler,
     val touchHandler: TouchHandler,
-    private val intersectionCalculator: IntersectionCalculator
+    private val intersectionCalculator: IntersectionCalculator,
+    private val glPointerView: GLPointerView,
+    private val cubeView: CubeView
 ) {
 
     fun onSurfaceChanged(newDisplaySize: Vec2i) {
@@ -41,9 +42,6 @@ class Scene @Inject constructor(
         if (gameControls.markOnShortTapControl.getAndRelease()) {
             gameLogic.markingOnShotTap = gameControls.markOnShortTapControl.isOn()
         }
-
-        val glPointerView = gameViewsHolder.glPointerView
-        val cubeView = gameViewsHolder.cubeView
 
         if (cameraMoved) {
             cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
