@@ -51,10 +51,6 @@ class MinesweeperController @Inject constructor(
 
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
-
-        context.daggerComponentsHolder
-            .createAndGetGLSurfaceController()
-            .inject(this)
     }
 
     override fun onSurfaceChanged(width: Int, height: Int) {
