@@ -16,21 +16,35 @@ import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import com.surovtsev.cool_3d_minesweeper.model_views.MainActivityModelView
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
+import com.surovtsev.cool_3d_minesweeper.model_views.*
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
+import javax.inject.Inject
+import javax.inject.Named
 
 class MainActivity: ComponentActivity() {
+
+    @Inject
+    lateinit var modelView: MainActivityModelView
+    @Inject
+    @Named(MainActivityModelView.HasSaveEventName)
+    lateinit var hasSaveEvent: HasSaveEvent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        daggerComponentsHolder
+            .appComponent
+            .inject(this)
+
         setContent {
-            MainMenuButtons(modelView)
+            MainMenuButtons(
+                hasSaveEvent,
+                modelView.buttonsParameters,
+                modelView::isLoadGameAction
+            )
         }
     }
-
-    private val modelView = MainActivityModelView(this)
-
-
     override fun onResume() {
         super.onResume()
         modelView.invalidate()
@@ -43,8 +57,12 @@ class MainActivity: ComponentActivity() {
 }
 
 @Composable
-fun MainMenuButtons(modelView: MainActivityModelView) {
-    val enabled: Boolean by modelView.hasSave.run {
+fun MainMenuButtons(
+    hasSaveEvent: HasSaveEvent,
+    buttonParameters: ButtonParameters,
+    isLoadedGameAction: IsLoadedGameAction
+) {
+    val enabled: Boolean by hasSaveEvent.run {
         data.observeAsState(defaultValue)
     }
 
@@ -61,11 +79,10 @@ fun MainMenuButtons(modelView: MainActivityModelView) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(15.dp)
                     ) {
-                        modelView.buttonsParameters.map { (n, a) ->
+                        buttonParameters.map { bP ->
                             MainMenuButton(
-                                n,
-                                a,
-                                if (modelView.isLoadGameAction(a)) enabled else true
+                                bP,
+                                if (isLoadedGameAction(bP.second)) enabled else true
                             )
                         }
                     }
@@ -77,17 +94,16 @@ fun MainMenuButtons(modelView: MainActivityModelView) {
 
 @Composable
 fun MainMenuButton(
-    caption: String,
-    action: () -> Unit,
+    buttonParameter: ButtonParameter,
     enabled: Boolean
 ) {
     Button(
-        onClick = action,
+        onClick = buttonParameter.second,
         Modifier
             .fillMaxWidth(fraction = 0.75f)
             .border(1.dp, Color.Black),
         enabled
     ) {
-        Text(caption)
+        Text(buttonParameter.first)
     }
 }

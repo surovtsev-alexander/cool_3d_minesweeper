@@ -1,12 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.model_views
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import javax.inject.Inject
 
-class RankingActivityModelView {
+@AppScope
+class RankingActivityModelView @Inject constructor() {
     val settingsList = MyLiveData(
         listOf<DataWithId<SettingsData>>()
     )
