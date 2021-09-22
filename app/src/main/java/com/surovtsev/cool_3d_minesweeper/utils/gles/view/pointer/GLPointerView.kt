@@ -12,21 +12,24 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 import javax.inject.Inject
 
 class GLPointerView(
-    context: Context
+    private val context: Context
 ):
     IGLObject, ISwitch by Switch() {
     private val POSITION_COMPONENT_COUNT = 3
 
-    val mGLESProgram = PointerGLESProgram(context)
-    private val vertexArray = VertexArray(FloatArray(2 * 3))
+    var mGLESProgram: PointerGLESProgram? = null
+    private var vertexArray: VertexArray? = null
 
-    init {
-        mGLESProgram.prepareProgram()
-        glLineWidth(mGLESProgram.mLineWidth)
+    fun onSurfaceCreated() {
+        mGLESProgram = PointerGLESProgram(context)
+        vertexArray = VertexArray(FloatArray(2 * 3))
+        mGLESProgram!!.prepareProgram()
+        glLineWidth(mGLESProgram!!.mLineWidth)
+
     }
 
     override fun bindData() {
-        vertexArray.setVertexAttribPointer(0, mGLESProgram.mAPosition.location,
+        vertexArray!!.setVertexAttribPointer(0, mGLESProgram!!.mAPosition.location,
             POSITION_COMPONENT_COUNT, 0)
     }
 
@@ -36,12 +39,12 @@ class GLPointerView(
         val x = floatArrayOf(
             near[0], near[1], near[2],
             far[0], far[1], far[2])
-        vertexArray.updateBuffer(x, 0, x.count())
+        vertexArray!!.updateBuffer(x, 0, x.count())
     }
 
     override fun draw() {
         glDrawArrays(
             GL_LINES, 0,
-            vertexArray.floatBuffer.capacity() / POSITION_COMPONENT_COUNT)
+            vertexArray!!.floatBuffer.capacity() / POSITION_COMPONENT_COUNT)
     }
 }

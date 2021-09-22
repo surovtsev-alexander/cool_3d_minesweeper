@@ -28,7 +28,7 @@ interface GameControllerComponent {
 
     fun inject(gameActivityModelView: GameActivityModelView)
 
-    fun gLSurfaceController(): GLSurfaceComponent.Builder
+    fun gLSurfaceComponent(): GLSurfaceComponent.Builder
 }
 
 @Module

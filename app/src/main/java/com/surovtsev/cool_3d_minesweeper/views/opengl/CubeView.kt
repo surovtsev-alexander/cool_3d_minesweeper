@@ -15,25 +15,26 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 
 class CubeView(
-    context: Context,
-    cubeCoordinates: CubeCoordinates
+    private val context: Context,
+    private val cubeCoordinates: CubeCoordinates
 ):
     IGLObject,
     ICanUpdateTexture
 {
-    val cubeGLESProgram =
-        CubeGLESProgram(
-            context
-        )
-    private val textureId = TextureHelper.loadTexture(context, R.drawable.skin)
+    var cubeGLESProgram: CubeGLESProgram? = null
+
+    private var textureId: Int = -1
 
     private val POSITION_COMPONENT_COUNT = 3
 
-    private val vertexArray: VertexArray
-    private val isEmptyArray: VertexArray
-    private val textureCoordinatesArray: VertexArray
+    private var vertexArray: VertexArray? = null
+    private var isEmptyArray: VertexArray? = null
+    private var textureCoordinatesArray: VertexArray? = null
 
-    init {
+    fun onSurfaceCreated() {
+        cubeGLESProgram = CubeGLESProgram(context)
+        textureId = TextureHelper.loadTexture(context, R.drawable.skin)
+
         val cubeViewDataHelper = CubeViewDataHelper.createObject(
             cubeCoordinates
         )
@@ -43,7 +44,7 @@ class CubeView(
         textureCoordinatesArray = VertexArray(cubeViewDataHelper.textureCoordinates)
 
 
-        cubeGLESProgram.prepareProgram()
+        cubeGLESProgram!!.prepareProgram()
         setTexture()
     }
 
@@ -54,7 +55,6 @@ class CubeView(
             TextureCoordinatesHelper.textureToSquareTemplateCoordinates.count() * 6
 
         private val onesEmpty = FloatArray(cubeIndexesCount) { 1f }
-        private val zerosEmpty = FloatArray(cubeIndexesCount) { 0f }
     }
 
     override fun updateTexture(pointedCell: PointedCell) {
@@ -66,7 +66,7 @@ class CubeView(
         if (empty) {
             val startPos = cubeIndexesCount * id
 
-            isEmptyArray.updateBuffer(
+            isEmptyArray!!.updateBuffer(
                 onesEmpty,
                 startPos
             )
@@ -74,7 +74,7 @@ class CubeView(
             val startPos = textureIndexesCount * id
 
             val resArray = TextureCoordinatesHelper.getTextureCoordinates(skin.texture)
-            textureCoordinatesArray.updateBuffer(
+            textureCoordinatesArray!!.updateBuffer(
                 resArray,
                 startPos
             )
@@ -107,33 +107,33 @@ class CubeView(
             }
         }
 
-        isEmptyArray.updateBuffer(
+        isEmptyArray!!.updateBuffer(
             emptyCubes, 0
         )
-        textureCoordinatesArray.updateBuffer(
+        textureCoordinatesArray!!.updateBuffer(
             textureCoordinates, 0
         )
     }
 
     override fun bindData() {
-        vertexArray.setVertexAttribPointer(0, cubeGLESProgram.aPosition.location,
+        vertexArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aPosition.location,
             POSITION_COMPONENT_COUNT, 0)
-        isEmptyArray.setVertexAttribPointer(0, cubeGLESProgram.aIsEmpty.location,
+        isEmptyArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aIsEmpty.location,
             1, 0)
-        textureCoordinatesArray.setVertexAttribPointer(0,
-            cubeGLESProgram.aTextureCoordinates.location, 2, 0)
+        textureCoordinatesArray!!.setVertexAttribPointer(0,
+            cubeGLESProgram!!.aTextureCoordinates.location, 2, 0)
     }
 
     fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, textureId)
-        glUniform1i(cubeGLESProgram.mUTextureLocation.location, 0)
+        glUniform1i(cubeGLESProgram!!.mUTextureLocation.location, 0)
     }
 
     override fun draw() {
         glDrawArrays(
             GL_TRIANGLES, 0,
-            vertexArray.floatBuffer.capacity() / POSITION_COMPONENT_COUNT
+            vertexArray!!.floatBuffer.capacity() / POSITION_COMPONENT_COUNT
         )
     }
 }

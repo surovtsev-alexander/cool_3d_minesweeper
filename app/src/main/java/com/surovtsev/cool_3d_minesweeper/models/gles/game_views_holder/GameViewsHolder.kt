@@ -25,4 +25,9 @@ data class GameViewsHolder(
             )
         }
     }
+
+    fun onSurfaceCreated() {
+        glPointerView.onSurfaceCreated()
+        cubeView.onSurfaceCreated()
+    }
 }

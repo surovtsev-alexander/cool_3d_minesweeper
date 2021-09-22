@@ -44,13 +44,17 @@ class MinesweeperController @Inject constructor(
     var scene: Scene? = null
         private set
 
-    private var gameViewsHolder: GameViewsHolder? = null
+    private var gameViewsHolder: GameViewsHolder = GameViewsHolder.createObject(
+        context,
+        gameObjectsHolder.cubeCoordinates
+    )
 
     override fun onSurfaceCreated() {
-        gameViewsHolder = GameViewsHolder.createObject(
-            context,
-            gameObjectsHolder.cubeCoordinates
-        )
+        gameViewsHolder.onSurfaceCreated()
+
+        context.daggerComponentsHolder
+            .createAndGetGLSurfaceController()
+            .inject(this)
     }
 
     override fun onSurfaceChanged(width: Int, height: Int) {
@@ -72,13 +76,13 @@ class MinesweeperController @Inject constructor(
                 )
         }
 
-        gameLogic.textureUpdater = gameViewsHolder!!.cubeView
+        gameLogic.textureUpdater = gameViewsHolder.cubeView
 
         scene!!.gameViewsHolder = gameViewsHolder
 
         scene!!.onSurfaceChanged()
 
-        gameViewsHolder!!.cubeView.updateTexture(gameObjectsHolder.cubeSkin)
+        gameViewsHolder.cubeView.updateTexture(gameObjectsHolder.cubeSkin)
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()

@@ -43,7 +43,7 @@ class DaggerComponentsHolder(
     fun createAndGetGLSurfaceController(): GLSurfaceComponent {
         emptyGLSurfaceComponent()
         val res = gameControllerComponent!!
-            .gLSurfaceController()
+            .gLSurfaceComponent()
             .build()
         gLSurfaceComponent = res
         return res
