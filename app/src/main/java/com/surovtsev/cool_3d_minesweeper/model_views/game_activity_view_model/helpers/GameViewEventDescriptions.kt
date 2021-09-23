@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.helpers
+package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus

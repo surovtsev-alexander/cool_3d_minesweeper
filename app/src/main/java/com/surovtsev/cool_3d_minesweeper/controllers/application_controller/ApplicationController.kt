@@ -46,21 +46,6 @@ class ApplicationController : Application() {
 
     var logScene: LogSceneDelegate? = null
 
-
-    private var _saveController: SaveController? = null
-
-    val saveController: SaveController
-        get(): SaveController {
-            if (_saveController == null) {
-                _saveController = SaveController(this)
-            }
-            return _saveController!!
-        }
-
-    private val dbHelper = MyLazyVal { DBHelper(instance!!) }
-    val settingsDBQueries = MyLazyVal { SettingsDBQueries(dbHelper.value) }
-    val rankingDBQueries = MyLazyVal { RankingDBQueries(dbHelper.value) }
-
     init {
         if (instance != null) {
             throw Exception("Application controller instanced")

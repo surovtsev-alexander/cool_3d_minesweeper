@@ -1,7 +1,9 @@
 package com.surovtsev.cool_3d_minesweeper.model_views
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
@@ -12,10 +14,9 @@ import kotlin.math.round
 
 @AppScope
 class SettingsActivityModelView @Inject constructor(
+    private val settingsDBQueries: SettingsDBQueries,
+    private val saveController: SaveController
 ) {
-    private val applicationController = ApplicationController.getInstance()
-    private val settingsDBQueries = applicationController.settingsDBQueries.value
-    private val saveController = applicationController.saveController
 
     var finishAction: (() -> Unit)? = null
 

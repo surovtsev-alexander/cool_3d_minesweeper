@@ -11,6 +11,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
@@ -23,8 +24,7 @@ class Scene @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
-    private val pointer: Pointer,
-    val moveHandler: MoveHandler,
+    private val pointer: IPointer,
     val touchHandler: TouchHandler,
     private val intersectionCalculator: IntersectionCalculator,
     private val glPointerView: GLPointerView,

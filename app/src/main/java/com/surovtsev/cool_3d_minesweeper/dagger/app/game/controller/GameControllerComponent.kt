@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller
 
-import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
@@ -8,25 +7,26 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.cool_3d_minesweeper.model_views.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.model_views.helpers.GameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
-import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
 import javax.inject.Scope
 
 @GameControllerScope
-@Subcomponent(modules = [GameControllerModule::class])
+@Subcomponent(modules = [
+    GameControllerModule::class,
+    GameControllerBindModule::class
+])
 interface GameControllerComponent {
     val minesweeperController: MinesweeperController
 
@@ -113,12 +113,13 @@ object GameControllerModule {
     ): CubeCoordinates {
         return CubeCoordinates.createObject(gameConfig)
     }
+}
 
+@Module
+interface GameControllerBindModule {
     @GameControllerScope
-    @Provides
-    fun provideIPointer(
-        pointer: Pointer
-    ): IPointer = pointer
+    @Binds
+    fun getIPointer(pointer: Pointer): IPointer
 }
 
 @Scope

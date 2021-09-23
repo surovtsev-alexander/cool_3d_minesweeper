@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
@@ -22,7 +23,8 @@ typealias IsLoadedGameAction = (() -> Unit) -> Boolean
 class MainActivityModelView @Inject constructor(
     private val context: Context,
     @Named(HasSaveEventName)
-    private val hasSaveEvent: HasSaveEvent
+    private val hasSaveEvent: HasSaveEvent,
+    private val saveController: SaveController
 ) {
     companion object {
         const val HasSaveEventName = "hasSaveEvent"
@@ -37,7 +39,6 @@ class MainActivityModelView @Inject constructor(
 
     fun isLoadGameAction(action: () -> Unit): Boolean =
         action == this::loadGame
-
 
     private fun openRanking() {
         startActivityHelper(RankingActivity::class.java)
@@ -72,7 +73,7 @@ class MainActivityModelView @Inject constructor(
 
     fun invalidate() {
         hasSaveEvent.onDataChanged(
-            ApplicationController.getInstance().saveController.hasData(
+            saveController.hasData(
                 SaveTypes.SaveGameJson
             )
         )

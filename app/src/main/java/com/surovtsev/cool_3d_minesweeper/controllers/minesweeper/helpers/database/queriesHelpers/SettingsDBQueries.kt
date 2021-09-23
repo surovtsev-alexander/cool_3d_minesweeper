@@ -2,13 +2,16 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databa
 
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database.DBConfig
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.DatabaseAction
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
+import javax.inject.Inject
 
-class SettingsDBQueries(
+@AppScope
+class SettingsDBQueries @Inject constructor(
     private val dbHelper: IDBHelper
 )
 {
