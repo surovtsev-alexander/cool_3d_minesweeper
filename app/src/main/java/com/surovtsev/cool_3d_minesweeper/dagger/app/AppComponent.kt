@@ -2,11 +2,9 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
-import com.surovtsev.cool_3d_minesweeper.model_views.HasSaveEvent
-import com.surovtsev.cool_3d_minesweeper.model_views.MainActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.HasSaveEvent
+import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.MainActivityModelView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import com.surovtsev.cool_3d_minesweeper.views.activities.MainActivity
 import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity

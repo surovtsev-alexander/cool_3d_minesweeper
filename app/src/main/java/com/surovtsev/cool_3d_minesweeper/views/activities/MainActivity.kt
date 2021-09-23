@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.*
+import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.*
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import javax.inject.Inject
 import javax.inject.Named
