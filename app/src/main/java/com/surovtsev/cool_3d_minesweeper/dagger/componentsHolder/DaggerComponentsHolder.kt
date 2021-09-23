@@ -4,6 +4,7 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 
 class DaggerComponentsHolder(
     context: Context
@@ -12,6 +13,9 @@ class DaggerComponentsHolder(
         .builder()
         .context(context)
         .build()
+
+    var rankingComponent: RankingComponent? = null
+
     var gameComponent: GameComponent? = null
         private set
 
@@ -28,12 +32,24 @@ class DaggerComponentsHolder(
         return res
     }
 
+    fun createAndGetRankingComponent(): RankingComponent {
+        emptyRankingComponent()
+        val res = appComponent
+            .rankingComponent()
+        rankingComponent = res
+        return res
+    }
+
     fun createAndGetGameControllerComponent(): GameControllerComponent {
         emptyGameControllerComponent()
         val res = gameComponent!!
             .gameControllerComponent()
         gameControllerComponent = res
         return res
+    }
+
+    private fun emptyRankingComponent() {
+        rankingComponent = null
     }
 
     private fun emptyGameComponent() {

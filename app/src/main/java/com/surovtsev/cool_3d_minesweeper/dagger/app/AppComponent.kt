@@ -3,6 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.HasSaveEvent
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.MainActivityModelView
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
@@ -32,10 +33,10 @@ interface AppComponent {
     }
 
     fun gameComponent(): GameComponent.Builder
+    fun rankingComponent(): RankingComponent
 
     fun inject(mainActivity: MainActivity)
     fun inject(settingsActivity: SettingsActivity)
-    fun inject(rankingActivity: RankingActivity)
 }
 
 @Module

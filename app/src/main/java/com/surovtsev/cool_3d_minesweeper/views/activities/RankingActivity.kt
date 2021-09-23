@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.RankingActivityEvents
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.RankingActivityModelView
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
@@ -32,16 +33,18 @@ import javax.inject.Inject
 class RankingActivity: ComponentActivity() {
     @Inject
     lateinit var modelView: RankingActivityModelView
+    @Inject
+    lateinit var rankingActivityEvents: RankingActivityEvents
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         daggerComponentsHolder
-            .appComponent
+            .createAndGetRankingComponent()
             .inject(this)
 
         setContent {
-            RankingControls(modelView)
+            RankingControls(modelView, rankingActivityEvents)
         }
 
         modelView.loadData()
@@ -49,7 +52,10 @@ class RankingActivity: ComponentActivity() {
 }
 
 @Composable
-fun RankingControls(modelView: RankingActivityModelView) {
+fun RankingControls(
+    modelView: RankingActivityModelView,
+    rankingActivityEvents: RankingActivityEvents
+) {
     Test_composeTheme {
         Column(
             modifier = Modifier
@@ -60,12 +66,12 @@ fun RankingControls(modelView: RankingActivityModelView) {
             Row(
                 modifier = Modifier.fillMaxHeight(.3f)
             ) {
-                SettingsList(modelView)
+                SettingsList(modelView, rankingActivityEvents)
             }
             Row(
                 modifier = Modifier.fillMaxHeight(1f)
             ) {
-                RankingList(modelView)
+                RankingList(rankingActivityEvents)
             }
         }
     }
@@ -73,11 +79,17 @@ fun RankingControls(modelView: RankingActivityModelView) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsList(modelView: RankingActivityModelView) {
-    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.run {
+fun SettingsList(
+    modelView: RankingActivityModelView,
+    rankingActivityEvents: RankingActivityEvents
+) {
+    val settingsList: List<DataWithId<SettingsData>> by rankingActivityEvents.settingsListWithIds.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by modelView.selectedSettingsId.run {
+    val selectedSettingsId: Int by rankingActivityEvents.selectedSettingsId.run {
+        data.observeAsState(defaultValue)
+    }
+    val winsCountMap: Map<Int, Int> by rankingActivityEvents.winsCount.run {
         data.observeAsState(defaultValue)
     }
 
@@ -110,22 +122,25 @@ fun SettingsList(modelView: RankingActivityModelView) {
             LazyColumn {
                 items(settingsList) { item ->
                     val itemId = item.id
-                    if (selectedSettingsId == itemId) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    LightBlue
-                                )
+                    if (winsCountMap.containsKey(itemId)) {
+                        val winsCount = winsCountMap[itemId]!!
+                        if (selectedSettingsId == itemId) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        LightBlue
+                                    )
 
-                        ) {
-                            SettingsDataItem(modelView, item)
-                        }
-                    } else {
-                        Surface (
-                            shape = MaterialTheme.shapes.large,
-                            onClick = { modelView.loadRankingForSettingsId(itemId) },
-                        ) {
-                            SettingsDataItem(modelView, item)
+                            ) {
+                                SettingsDataItem(item, winsCount)
+                            }
+                        } else {
+                            Surface(
+                                shape = MaterialTheme.shapes.large,
+                                onClick = { modelView.loadRankingForSettingsId(itemId) },
+                            ) {
+                                SettingsDataItem(item, winsCount)
+                            }
                         }
                     }
                 }
@@ -136,8 +151,8 @@ fun SettingsList(modelView: RankingActivityModelView) {
 
 @Composable
 fun SettingsDataItem(
-    modelView: RankingActivityModelView,
-    settingDataWithId: DataWithId<SettingsData>
+    settingDataWithId: DataWithId<SettingsData>,
+    winsCount: Int
 ) {
     Row(
         modifier = Modifier
@@ -145,7 +160,6 @@ fun SettingsDataItem(
     ) {
         val settingsData = settingDataWithId.data
         val counts = settingsData.getCounts()
-        val wins = modelView.winsCount?.get(settingDataWithId.id)?:0
         Text(
             counts.toString(),
             Modifier.fillMaxWidth(0.33f),
@@ -157,7 +171,7 @@ fun SettingsDataItem(
             textAlign = TextAlign.Center
         )
         Text(
-            wins.toString(),
+            winsCount.toString(),
             Modifier.fillMaxWidth(1f),
             textAlign = TextAlign.End
         )
@@ -165,8 +179,10 @@ fun SettingsDataItem(
 }
 
 @Composable
-fun RankingList(modelView: RankingActivityModelView) {
-    val filteredRankingList: List<RankingData> by modelView.filteredRankingList.run {
+fun RankingList(
+    rankingActivityEvents: RankingActivityEvents
+) {
+    val filteredRankingList: List<RankingData> by rankingActivityEvents.filteredRankingList.run {
         data.observeAsState(defaultValue)
     }
     Box (
@@ -204,7 +220,9 @@ fun RankingList(modelView: RankingActivityModelView) {
 }
 
 @Composable
-fun RankingDataItem(indexedRankingData: IndexedValue<RankingData>) {
+fun RankingDataItem(
+    indexedRankingData: IndexedValue<RankingData>
+) {
     Box ()
     {
         Row(
