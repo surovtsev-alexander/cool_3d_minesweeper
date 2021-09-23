@@ -1,6 +1,5 @@
-package com.surovtsev.cool_3d_minesweeper.model_views
+package com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_model_view
 
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries

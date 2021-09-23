@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views
+package com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries

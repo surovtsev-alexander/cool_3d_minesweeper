@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views
+package com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view
 
 import android.content.Context
 import android.content.Intent

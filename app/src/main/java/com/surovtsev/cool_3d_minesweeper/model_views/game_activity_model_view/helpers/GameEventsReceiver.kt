@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers
+package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver

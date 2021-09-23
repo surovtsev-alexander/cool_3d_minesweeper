@@ -12,13 +12,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl

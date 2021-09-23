@@ -3,8 +3,8 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.game
 import android.content.Context
 import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
