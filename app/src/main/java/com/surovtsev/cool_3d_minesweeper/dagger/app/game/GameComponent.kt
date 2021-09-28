@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.game
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.*
@@ -13,7 +14,6 @@ import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBorde
 import com.surovtsev.cool_3d_minesweeper.views.activities.GameActivity
 import dagger.*
 import javax.inject.Named
-import javax.inject.Scope
 
 @GameScope
 @Subcomponent(
@@ -113,7 +113,3 @@ object GameControls {
         return MarkOnShortTapControl()
     }
 }
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class GameScope

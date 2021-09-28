@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save

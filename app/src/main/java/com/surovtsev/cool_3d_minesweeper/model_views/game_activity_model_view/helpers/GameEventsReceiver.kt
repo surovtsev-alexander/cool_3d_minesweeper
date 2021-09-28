@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.h
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import org.jetbrains.anko.runOnUiThread

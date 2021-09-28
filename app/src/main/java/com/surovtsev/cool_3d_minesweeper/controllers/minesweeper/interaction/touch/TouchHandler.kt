@@ -2,9 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.to
 
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer

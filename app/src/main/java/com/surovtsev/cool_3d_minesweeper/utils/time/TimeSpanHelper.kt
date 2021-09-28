@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.utils.time
 
 import android.os.SystemClock
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import javax.inject.Inject
 
 @GameControllerScope

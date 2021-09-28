@@ -7,6 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
@@ -121,7 +122,3 @@ interface GameControllerBindModule {
     @Binds
     fun getIPointer(pointer: Pointer): IPointer
 }
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class GameControllerScope

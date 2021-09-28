@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper

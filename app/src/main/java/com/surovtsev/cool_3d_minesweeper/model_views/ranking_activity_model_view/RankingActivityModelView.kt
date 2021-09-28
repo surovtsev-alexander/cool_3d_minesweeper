@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_vie
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
-import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
 import javax.inject.Inject
 
 

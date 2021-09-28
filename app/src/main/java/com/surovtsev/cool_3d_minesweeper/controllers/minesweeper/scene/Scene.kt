@@ -1,16 +1,11 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
-import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
-import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
-import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
-import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper

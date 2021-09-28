@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.skin.cube
-
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
