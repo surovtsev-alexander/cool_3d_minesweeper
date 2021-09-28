@@ -4,6 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.SettingsScope
 import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_model_view.*
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.Borders
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.SettingsDataHelper
 import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 import dagger.Module
@@ -16,8 +17,10 @@ import javax.inject.Named
 @SettingsScope
 @Subcomponent(
     modules = [
-        SettingsModule::class
-    ])
+        SettingsModule::class,
+        SettingsDataHelperModule::class
+    ]
+)
 interface SettingsComponent {
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
 
@@ -88,11 +91,49 @@ object SettingsModule {
     @Provides
     @SettingsScope
     fun provideSlidersInfo(
-        slidersWithNames: @JvmSuppressWildcards SlidersWithNames
+        slidersWithNames: @JvmSuppressWildcards SlidersWithNames,
+        borders: Borders
     ): @JvmSuppressWildcards SlidersInfo {
         return slidersWithNames.map { (name, value) ->
-            val border = SettingsDataHelper.borders[name]!!
+            val border = borders[name]!!
             name to (border to value)
         }
+    }
+
+}
+
+@Module
+object SettingsDataHelperModule {
+    @Provides
+    @SettingsScope
+    @Named(SettingsDataHelper.DimParamsCount)
+    fun provideDimParamsCount() = 3
+
+    @Provides
+    @SettingsScope
+    @Named(SettingsDataHelper.DimBorders)
+    fun provideDimBorders() = 3..25
+
+    @Provides
+    @SettingsScope
+    @Named(SettingsDataHelper.BombsPercentageBorders)
+    fun provideBombsPercentageBorders() = 10..99
+
+    @Provides
+    @SettingsScope
+    fun provideBorders(
+        @Named(SettingsDataHelper.DimParamsCount)
+        dimParamsCount: Int,
+        @Named(SettingsDataHelper.DimBorders)
+        dimBorders: IntRange,
+        @Named(SettingsDataHelper.BombsPercentageBorders)
+        bombsPercentageBorders: IntRange
+    ): Borders {
+        return (SettingsDataHelper.paramNames.take(dimParamsCount).map {
+                    it to dimBorders
+                } + SettingsDataHelper.paramNames.drop(dimParamsCount).map {
+                    it to bombsPercentageBorders
+                }).toMap()
+
     }
 }
