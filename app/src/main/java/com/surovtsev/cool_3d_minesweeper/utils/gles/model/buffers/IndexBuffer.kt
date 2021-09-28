@@ -6,6 +6,8 @@ import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+/* TODO: move to Dagger */
+
 class IndexBuffer(val vertexData: IntArray) {
     val bufferId: Int
 
@@ -25,7 +27,7 @@ class IndexBuffer(val vertexData: IntArray) {
 
         // Transfer data to native memory.
         val vertexArray = ByteBuffer
-            .allocateDirect(vertexData.count() * Constants.BYTES_PER_INT)
+            .allocateDirect(vertexData.count() * Constants.BytesPerInt)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer()
             .put(vertexData)
@@ -34,7 +36,7 @@ class IndexBuffer(val vertexData: IntArray) {
         // Transfer data from native memory to the GPU buffer.
         glBufferData(
             GL_ELEMENT_ARRAY_BUFFER,
-            vertexArray.capacity() * Constants.BYTES_PER_SHORT,
+            vertexArray.capacity() * Constants.BytesPerShort,
             vertexArray, GL_STATIC_DRAW)
 
         // IMPORTANT: Unbind from the buffer when we're done with it.

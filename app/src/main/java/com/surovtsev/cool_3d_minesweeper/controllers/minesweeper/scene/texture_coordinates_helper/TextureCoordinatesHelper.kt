@@ -17,8 +17,8 @@ object TextureCoordinatesHelper {
         0f, 1f,
     )
 
-    private val cols = 4
-    private val rows = 3
+    private const val cols = 4
+    private const val rows = 3
 
     enum class TextureType {
         EMPTY,
@@ -35,39 +35,43 @@ object TextureCoordinatesHelper {
         SEVEN
     }
 
-    val commonTexturesCount = 4
+    private const val commonTexturesCount = 4
 
     val numberTextures = TextureType.values().drop(commonTexturesCount)
 
-    val commonTexturesPositions = mapOf(
+    private val commonTexturesPositions = mapOf(
         TextureType.EMPTY to Vec2i(0, 0),
         TextureType.CLOSED to Vec2i(0, 0),
         TextureType.MARKED to Vec2i(1, 0),
         TextureType.EXPLODED_BOMB to Vec2i(2, 0)
     )
 
-    val numberTexturesPositions = numberTextures.mapIndexed { idx, elem ->
+    private val numberTexturesPositions = numberTextures.mapIndexed { idx, elem ->
         val col = idx % cols
         val row = idx / cols + 1
         elem to Vec2i(col, row)
     }
 
-    val texturesPositions = commonTexturesPositions + numberTexturesPositions
+    private val texturesPositions = commonTexturesPositions + numberTexturesPositions
 
-    fun getTextureCoordinates(pos: Vec2i): FloatArray {
+    private fun getTextureCoordinates(pos: Vec2i): FloatArray {
+        @Suppress("SpellCheckingInspection")
         val calcPointCoords = {p: Int, dim: Int ->
             Vec2(
                 1f * p / dim,
                 1f * (p + 1) / dim
             )
         }
+        @Suppress("SpellCheckingInspection")
         val xCoords = calcPointCoords(pos[0],
             cols
         )
+        @Suppress("SpellCheckingInspection")
         val yCoords = calcPointCoords(pos[1],
             rows
         )
 
+        @Suppress("SpellCheckingInspection")
         val getCoord = { point: Vec2, flag: Float ->
             if (MyMath.isZero(flag)) point[0] else point[1]
         }
@@ -85,7 +89,9 @@ object TextureCoordinatesHelper {
     }
 
 
-    val textureCoordinates: Map<TextureType, FloatArray>
+    val textureCoordinates: Map<TextureType, FloatArray> = texturesPositions.map { (t, p) ->
+        t to getTextureCoordinates(p)
+    }.toMap()
 
 
     private val textureTypeCount = TextureType.values().count()
@@ -95,13 +101,6 @@ object TextureCoordinatesHelper {
     private val possibleTextureCoordinates: Map<Int, FloatArray>
 
     init {
-        textureCoordinates = texturesPositions.map { (t, p) ->
-            t to getTextureCoordinates(
-                p
-            )
-        }.toMap()
-
-
         val numberTexturesRange = (commonTexturesCount until textureTypeCount)
 
         val c = (0 until commonTexturesCount).map {
@@ -118,7 +117,7 @@ object TextureCoordinatesHelper {
 
         possibleSkins = c + n
 
-        possibleTextureCoordinates = possibleSkins.map { it ->
+        possibleTextureCoordinates = possibleSkins.map {
             val id = it.id
             val s = it.getVec()
 

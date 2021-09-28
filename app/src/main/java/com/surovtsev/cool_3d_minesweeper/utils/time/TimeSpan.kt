@@ -1,6 +1,5 @@
 package com.surovtsev.cool_3d_minesweeper.utils.time
 
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
@@ -14,11 +13,11 @@ class TimeSpan(
 {
     private val switch: Switch = Switch()
 
-    var  elapsedTimeBeforePause = 0L
-    var onTime = timeAfterDeviceStartup()
-    var prev = onTime
+    private var  elapsedTimeBeforePause = 0L
+    private var onTime = timeAfterDeviceStartup()
+    private var prev = onTime
 
-    fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartup
+    private fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartup
 
     fun tick() {
         val currTime = timeAfterDeviceStartup()

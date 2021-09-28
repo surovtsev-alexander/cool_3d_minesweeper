@@ -40,15 +40,11 @@ class CubeViewDataHelper(
                 isEmpty[i] = -1f
             }
 
-
-            val res =
-                CubeViewDataHelper(
-                    trianglesCoordinates,
-                    isEmpty,
-                    textureCoordinates
-                )
-
-            return res
+            return CubeViewDataHelper(
+                trianglesCoordinates,
+                isEmpty,
+                textureCoordinates
+            )
         }
     }
 }

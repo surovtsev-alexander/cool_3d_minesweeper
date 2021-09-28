@@ -4,22 +4,29 @@ import android.opengl.GLES20
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
 
 
-abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadParameters) {
+/* TODO: move to Dagger */
+
+abstract class GLESProgram(
+    private val shaderLoadParameters: ShaderHelper.ShaderLoadParameters
+    ) {
     protected var programId = 0
         private set
 
-    protected val A_POSITION = "a_position"
-    protected val U_COLOR  = "u_color"
-    private val U_MVP = "u_MVP"
+    companion object {
+        const val aPositionName = "a_position"
+        const val uColorName = "u_color"
+        private const val uMVPName = "u_MVP"
 
-    private val mU_MVP_Matrix = Uniform(U_MVP)
+        private val floatBuffer = FloatBuffer.allocate(16)
+    }
+
+    private val uMVP = Uniform(uMVPName)
 
     abstract val fields: Array<GLESField>
 
@@ -42,7 +49,7 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
     }
 
     open fun loadLocations() {
-        mU_MVP_Matrix.getLocation()
+        uMVP.getLocation()
 
         fields.forEach { it.getLocation() }
 
@@ -57,13 +64,9 @@ abstract class GLESProgram(val shaderLoadParameters: ShaderHelper.ShaderLoadPara
          */
     }
 
-    companion object {
-        private val floatBuffer = FloatBuffer.allocate(16)
-    }
-
     fun fillMVP(mvpMatrix: Mat4) {
         GLES20.glUniformMatrix4fv(
-            mU_MVP_Matrix.location, 1,
+            uMVP.location, 1,
             false,
             mvpMatrix.to(floatBuffer, 0).array()
             , 0

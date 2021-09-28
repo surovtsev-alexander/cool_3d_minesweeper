@@ -6,129 +6,128 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.text_resource_reader.TextResourceReader
 
-class ShaderHelper {
+object ShaderHelper {
 
-    class ShaderLoadParameters(
+    data class ShaderLoadParameters(
         val context: Context,
         val vertexShaderResourceId: Int,
-        val fragmentShaderResouceId: Int)
+        val fragmentShaderResourceId: Int
+        )
 
-    companion object {
-        val TAG = "ShaderHelper"
+    private const val TAG = "ShaderHelper"
 
-        fun compileVertextShader(shaderCode: String) =
-            compileShader(GL_VERTEX_SHADER, shaderCode)
+    private fun compileVertexShader(shaderCode: String) =
+        compileShader(GL_VERTEX_SHADER, shaderCode)
 
-        fun compileFragmentShader(shaderCode: String) =
-            compileShader(GL_FRAGMENT_SHADER, shaderCode)
+    private fun compileFragmentShader(shaderCode: String) =
+        compileShader(GL_FRAGMENT_SHADER, shaderCode)
 
-        fun compileShader(type: Int, shaderCode: String): Int {
-            val shaderObjectId = glCreateShader(type)
+    private fun compileShader(type: Int, shaderCode: String): Int {
+        val shaderObjectId = glCreateShader(type)
 
-            if (shaderObjectId == 0) {
-                if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                    Log.w(TAG, "Coould not create new shader")
-                }
-
-                return 0
-            }
-
-            glShaderSource(shaderObjectId, shaderCode)
-            glCompileShader(shaderObjectId)
-
-            val compileStatus = intArrayOf(0)
-
-            glGetShaderiv(
-                shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
-
+        if (shaderObjectId == 0) {
             if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                Log.v(
-                    TAG, "Result of compiling source:"
-                        + "\n" + shaderCode
-                        + "\n" + glGetShaderInfoLog(shaderObjectId))
+                Log.w(TAG, "Could not create new shader")
             }
 
-            if (compileStatus[0] == 0) {
-                glDeleteShader(shaderObjectId)
-
-                if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                    Log.w(TAG, "Compilation of shader failed.")
-                }
-
-                return 0
-            }
-
-            return shaderObjectId
+            return 0
         }
 
-        fun linkProgram(params: ShaderLoadParameters) =
-            linkProgram(
-                compileVertextShader(
-                    TextResourceReader.readTextFileFromResource(
-                    params.context, params.vertexShaderResourceId)
-                ),
-                compileFragmentShader(
-                    TextResourceReader.readTextFileFromResource(
-                    params.context, params.fragmentShaderResouceId)
-                )
+        glShaderSource(shaderObjectId, shaderCode)
+        glCompileShader(shaderObjectId)
+
+        val compileStatus = intArrayOf(0)
+
+        glGetShaderiv(
+            shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
+
+        if (LoggerConfig.LOG_SHADER_COMPILATION) {
+            Log.v(
+                TAG, "Result of compiling source:"
+                    + "\n" + shaderCode
+                    + "\n" + glGetShaderInfoLog(shaderObjectId))
+        }
+
+        if (compileStatus[0] == 0) {
+            glDeleteShader(shaderObjectId)
+
+            if (LoggerConfig.LOG_SHADER_COMPILATION) {
+                Log.w(TAG, "Compilation of shader failed.")
+            }
+
+            return 0
+        }
+
+        return shaderObjectId
+    }
+
+    fun linkProgram(params: ShaderLoadParameters) =
+        linkProgram(
+            compileVertexShader(
+                TextResourceReader.readTextFileFromResource(
+                params.context, params.vertexShaderResourceId)
+            ),
+            compileFragmentShader(
+                TextResourceReader.readTextFileFromResource(
+                params.context, params.fragmentShaderResourceId)
             )
+        )
 
-        fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
-            val programObjectId = glCreateProgram()
+    private fun linkProgram(vertexShaderId: Int, fragmentShaderId: Int): Int {
+        val programObjectId = glCreateProgram()
 
-            if (programObjectId == 0) {
-                if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                    Log.w(TAG, "Could not create new program")
-                }
-
-                return 0
-            }
-
-            glAttachShader(programObjectId, vertexShaderId)
-            glAttachShader(programObjectId, fragmentShaderId)
-
-            glLinkProgram(programObjectId)
-
-            val linkStatus = intArrayOf(0)
-
-            glGetProgramiv(programObjectId, GL_LINK_STATUS
-                , linkStatus, 0)
-
+        if (programObjectId == 0) {
             if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                Log.v(
-                    TAG, "Result of linking program:\n"
-                        + glGetProgramInfoLog(programObjectId))
+                Log.w(TAG, "Could not create new program")
             }
 
-            if (linkStatus[0] == 0) {
-                glDeleteProgram(programObjectId)
-
-                if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                    Log.w(TAG, "Link of program failed.")
-                }
-
-                return 0
-            }
-
-            return programObjectId
+            return 0
         }
 
-        fun validateProgram(programObjecId: Int): Boolean {
-            glValidateProgram(programObjecId)
+        glAttachShader(programObjectId, vertexShaderId)
+        glAttachShader(programObjectId, fragmentShaderId)
 
-            val validateStatus = intArrayOf(0)
+        glLinkProgram(programObjectId)
 
-            glGetProgramiv(programObjecId, GL_VALIDATE_STATUS
-                , validateStatus, 0)
+        val linkStatus = intArrayOf(0)
+
+        glGetProgramiv(programObjectId, GL_LINK_STATUS
+            , linkStatus, 0)
+
+        if (LoggerConfig.LOG_SHADER_COMPILATION) {
+            Log.v(
+                TAG, "Result of linking program:\n"
+                    + glGetProgramInfoLog(programObjectId))
+        }
+
+        if (linkStatus[0] == 0) {
+            glDeleteProgram(programObjectId)
 
             if (LoggerConfig.LOG_SHADER_COMPILATION) {
-                Log.v(
-                    TAG, "Result of validating program: " + validateStatus[0] + "\n"
-                            + glGetProgramInfoLog(programObjecId)
-                )
+                Log.w(TAG, "Link of program failed.")
             }
 
-            return validateStatus[0] != 0
+            return 0
         }
+
+        return programObjectId
+    }
+
+    fun validateProgram(programObjectId: Int): Boolean {
+        glValidateProgram(programObjectId)
+
+        val validateStatus = intArrayOf(0)
+
+        glGetProgramiv(programObjectId, GL_VALIDATE_STATUS
+            , validateStatus, 0)
+
+        if (LoggerConfig.LOG_SHADER_COMPILATION) {
+            Log.v(
+                TAG, "Result of validating program: " + validateStatus[0] + "\n"
+                        + glGetProgramInfoLog(programObjectId)
+            )
+        }
+
+        return validateStatus[0] != 0
     }
 }

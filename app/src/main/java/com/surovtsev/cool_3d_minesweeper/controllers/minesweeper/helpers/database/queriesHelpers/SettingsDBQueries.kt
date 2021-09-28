@@ -28,12 +28,14 @@ class SettingsDBQueries @Inject constructor(
         }
     }
 
+    @Suppress("unused")
     fun isPresent(settingsData: SettingsData): Boolean {
         return dbHelper.actionWithDB { db ->
             getIsPresentAction(settingsData)(db)
         }
     }
 
+    @Suppress("unused")
     fun delete(settingsData: SettingsData) {
         dbHelper.actionWithDB { db ->
             getDeleteAction(settingsData)(db)
@@ -170,7 +172,7 @@ class SettingsDBQueries @Inject constructor(
                             c.getInt(zCountColIndex),
                             c.getInt(bombsPercentageColIndex)
                         )
-                    val settingDataWithId = DataWithId<SettingsData>(
+                    val settingDataWithId = DataWithId(
                         c.getInt(idColumnIndex),
                         settingsData
                     )

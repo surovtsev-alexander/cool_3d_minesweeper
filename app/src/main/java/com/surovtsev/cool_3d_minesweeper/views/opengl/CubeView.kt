@@ -28,8 +28,6 @@ class CubeView @Inject constructor(
 
     private var textureId: Int = -1
 
-    private val POSITION_COMPONENT_COUNT = 3
-
     private var vertexArray: VertexArray? = null
     private var isEmptyArray: VertexArray? = null
     private var textureCoordinatesArray: VertexArray? = null
@@ -52,6 +50,7 @@ class CubeView @Inject constructor(
     }
 
     companion object {
+        private const val positionComponentCount = 3
         private val cubeIndexesCount =
             CubeCoordinates.invExtendedIndexedArray.size
         private val textureIndexesCount =
@@ -120,14 +119,14 @@ class CubeView @Inject constructor(
 
     override fun bindData() {
         vertexArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aPosition.location,
-            POSITION_COMPONENT_COUNT, 0)
+            positionComponentCount, 0)
         isEmptyArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aIsEmpty.location,
             1, 0)
         textureCoordinatesArray!!.setVertexAttribPointer(0,
             cubeGLESProgram!!.aTextureCoordinates.location, 2, 0)
     }
 
-    fun setTexture() {
+    private fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, textureId)
         glUniform1i(cubeGLESProgram!!.mUTextureLocation.location, 0)
@@ -136,7 +135,7 @@ class CubeView @Inject constructor(
     override fun draw() {
         glDrawArrays(
             GL_TRIANGLES, 0,
-            vertexArray!!.floatBuffer.capacity() / POSITION_COMPONENT_COUNT
+            vertexArray!!.floatBuffer.capacity() / positionComponentCount
         )
     }
 }

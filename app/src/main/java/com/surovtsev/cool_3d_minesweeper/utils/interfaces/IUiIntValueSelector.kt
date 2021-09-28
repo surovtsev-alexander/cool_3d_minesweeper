@@ -5,11 +5,4 @@ interface IUiIntValueSelector {
     var value: Int
     var minValue: Int
     var maxValue: Int
-
-    fun isValueInBorders() =
-        value in minValue..maxValue
-
-    fun setMinValue(): Unit{
-        value = minValue
-    }
 }

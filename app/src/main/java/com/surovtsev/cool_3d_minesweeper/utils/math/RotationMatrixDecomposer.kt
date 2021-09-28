@@ -2,13 +2,14 @@ package com.surovtsev.cool_3d_minesweeper.utils.math
 
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
-import java.lang.Math
 import kotlin.math.acos
+import kotlin.math.sqrt
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 object RotationMatrixDecomposer {
-    fun conv_sin_cos(sc: Float) = Math.sqrt(1.0 - sc * sc).toFloat()
+    fun convSinCos(sc: Float) = sqrt(1.0f - sc * sc)
 
-    fun angle_by_sin_cos(sv: Float, cv: Float): Float {
+    fun angleBySinCos(sv: Float, cv: Float): Float {
         val res = acos(cv)
         if (sv < 0) {
             return -1f * res
@@ -19,16 +20,16 @@ object RotationMatrixDecomposer {
     fun getAngles(mat: Mat4): Vec3 {
         //transposed matrix
         val sy = mat[2][0]
-        val cy = conv_sin_cos(sy)
-        val y = angle_by_sin_cos(sy, cy)
+        val cy = convSinCos(sy)
+        val y = angleBySinCos(sy, cy)
 
 
-        var sx: Float
-        var cx: Float
-        var sz: Float
-        var cz: Float
-        var x: Float
-        var z: Float
+        val sx: Float
+        val cx: Float
+        val sz: Float
+        val cz: Float
+        val x: Float
+        val z: Float
 
         if (MyMath.isZero(cy)) {
             if (sy > 0.0f) {
@@ -38,7 +39,7 @@ object RotationMatrixDecomposer {
                 sx = mat[1, 2]
                 cx = mat[0, 2]
             }
-            x = angle_by_sin_cos(sx, cx)
+            x = angleBySinCos(sx, cx)
             z = 0f
         }
         else {
@@ -47,8 +48,8 @@ object RotationMatrixDecomposer {
             sz = -1 * mat[1, 0] / cy
             cz = mat[0, 0] / cy
 
-            x = angle_by_sin_cos(sx, cx)
-            z = angle_by_sin_cos(sz, cz)
+            x = angleBySinCos(sx, cx)
+            z = angleBySinCos(sz, cz)
         }
 
         return Vec3(x, y, z)

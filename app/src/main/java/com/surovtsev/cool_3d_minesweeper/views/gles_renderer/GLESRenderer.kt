@@ -2,8 +2,6 @@ package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import android.util.Log
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import javax.inject.Inject
@@ -32,8 +30,8 @@ class GLESRenderer @Inject constructor(
     override fun onDrawFrame(gl: GL10?) {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
 
-        glEnable (GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable (GL_BLEND)
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         openglEventsHandler.onDrawFrame()
     }

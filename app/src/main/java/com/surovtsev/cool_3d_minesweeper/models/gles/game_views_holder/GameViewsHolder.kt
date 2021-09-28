@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 @GameControllerScope
 class GameViewsHolder @Inject constructor(
-    val glPointerView: GLPointerView,
+    private val glPointerView: GLPointerView,
     val cubeView: CubeView
 ) {
     fun onSurfaceCreated() {

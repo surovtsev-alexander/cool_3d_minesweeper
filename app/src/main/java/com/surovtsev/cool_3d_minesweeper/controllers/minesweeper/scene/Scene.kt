@@ -58,7 +58,7 @@ class Scene @Inject constructor(
             glPointerView.mGLESProgram!!.useProgram()
             if (cameraMoved) {
                 with(glPointerView.mGLESProgram!!) {
-                    fillMVP(cameraInfoHelper.cameraInfo.MVP)
+                    fillMVP(cameraInfoHelper.cameraInfo.mVP)
                 }
             }
             glPointerView.bindData()
@@ -88,7 +88,7 @@ class Scene @Inject constructor(
         }
         if (cameraMoved) {
             with(cubeView.cubeGLESProgram!!) {
-                fillMVP(cameraInfoHelper.cameraInfo.MVP)
+                fillMVP(cameraInfoHelper.cameraInfo.mVP)
             }
         }
         cubeView.draw()

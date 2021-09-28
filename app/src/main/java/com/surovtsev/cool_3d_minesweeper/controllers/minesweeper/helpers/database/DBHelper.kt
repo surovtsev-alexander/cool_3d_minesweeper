@@ -26,7 +26,7 @@ open class DBHelper @Inject constructor(
     override fun onOpen(db: SQLiteDatabase?) {
         super.onOpen(db)
 
-        if (db != null && !db.isReadOnly()) {
+        if (db != null && !db.isReadOnly) {
             // Enable foreign key constraints
             db.setForeignKeyConstraintsEnabled(true)
         }

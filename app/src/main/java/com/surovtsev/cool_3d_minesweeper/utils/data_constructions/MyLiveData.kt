@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 open class MyLiveData<T: Any>(
     val defaultValue: T
 ) {
-    private val _data = MutableLiveData<T>(defaultValue)
+    private val _data = MutableLiveData(defaultValue)
     val data: LiveData<T> = _data
 
     open fun onDataChanged(newValue: T) {

@@ -29,10 +29,11 @@ class TouchReceiver @Inject constructor(
         private set
     private var downTime = 0L
 
+    @Suppress("SpellCheckingInspection")
     private var movementStorer: IStoreMovement? = null
 
     private val movementThreshold = 10f
-    private val touchDely = 100L
+    private val touchDelay = 100L
     private val longTouchDelay = 300L
 
     override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
@@ -54,7 +55,7 @@ class TouchReceiver @Inject constructor(
 
                 val currTime = customClock.timeAfterDeviceStartup
 
-                if (currTime - downTime > touchDely) {
+                if (currTime - downTime > touchDelay) {
                     release()
                     break
                 }

@@ -2,8 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.help
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler.MoveHandler
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
  import glm_.vec2.Vec2

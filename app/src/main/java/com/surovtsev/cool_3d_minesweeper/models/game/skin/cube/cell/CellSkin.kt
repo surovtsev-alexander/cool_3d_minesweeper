@@ -5,12 +5,12 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_c
 import glm_.vec3.Vec3i
 
 
-data class CellSkin(
+class CellSkin(
     var isBomb: Boolean = false,
     var neighbourBombs: Vec3i = Vec3i(),
-    var texture: Array<TextureType> = Array<TextureType>(3) { TextureType.CLOSED }
+    var texture: Array<TextureType> = Array(3) { TextureType.CLOSED }
 ) {
-    fun isTexture(t: TextureType) = texture[0] == t
+    private fun isTexture(t: TextureType) = texture[0] == t
 
     fun isEmpty() = isTexture(TextureType.EMPTY)
 
@@ -33,7 +33,7 @@ data class CellSkin(
         }
     }
 
-    fun isZero(): Boolean {
+    private fun isZero(): Boolean {
         for (t in texture)
             if (t != TextureType.ZERO) return false
 
@@ -46,15 +46,6 @@ data class CellSkin(
     }
 
     override fun toString() = "$isBomb $neighbourBombs"
-
-    fun hasZero(): Boolean {
-        for (i in 0 until 3) {
-            if (neighbourBombs[i] == 0) {
-                return true
-            }
-        }
-        return false
-    }
 
     fun getTextureCoordinates() = TextureCoordinatesHelper.getTextureCoordinates(texture)
 }

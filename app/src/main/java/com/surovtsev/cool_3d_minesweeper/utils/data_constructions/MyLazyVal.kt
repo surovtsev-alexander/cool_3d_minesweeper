@@ -1,5 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.utils.data_constructions
 
+@Suppress("unused")
 class MyLazyVal<T>(
     private val initAction: () -> T
 ) {

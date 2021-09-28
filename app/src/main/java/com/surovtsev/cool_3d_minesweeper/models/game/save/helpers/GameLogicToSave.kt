@@ -5,10 +5,10 @@ import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 
 class GameLogicToSave(
-    val elapsedTime: Long,
+    private val elapsedTime: Long,
     val gameStatus: GameStatus,
-    val cubesToOpen: List<CellIndex>,
-    val cubesToRemove: List<CellIndex>
+    private val cubesToOpen: List<CellIndex>,
+    private val cubesToRemove: List<CellIndex>
 ) {
 
     companion object {

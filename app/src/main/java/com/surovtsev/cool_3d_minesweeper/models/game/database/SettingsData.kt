@@ -57,6 +57,7 @@ data class SettingsData(
 
     fun getCounts() = Vec3i(xCount, yCount, zCount)
 
+    @Suppress("unused")
     fun getMap() = mapOf(
         xCountName to xCount,
         yCountName to yCount,

@@ -20,9 +20,9 @@ data class PointerDescriptor(
     val n = far - near
 
     fun calcProjection(p: Vec3): Vec3 {
-        val a_lambda = n.dot(n)
+        val aLambda = n.dot(n)
         val b = n.dot(near - p)
-        val l = -1 * b / a_lambda
+        val l = -1 * b / aLambda
         return near + n * l
     }
 }

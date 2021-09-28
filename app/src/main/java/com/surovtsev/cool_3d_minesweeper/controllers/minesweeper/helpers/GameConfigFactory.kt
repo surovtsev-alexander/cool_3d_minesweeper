@@ -13,6 +13,7 @@ object GameConfigFactory {
         val cellDim = 5f / maxDim
 
         val dimensions = Vec3(counts) * cellDim
+        @Suppress("ConstantConditionIf")
         val gaps = if (false) dimensions / counts / 40 else if (true) Vec3() else dimensions / counts / 10
         val bombsRate =  settingsData.bombsPercentage.toFloat() / 100f
 

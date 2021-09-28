@@ -10,6 +10,7 @@ import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 
 object NeighboursCalculator {
+    @Suppress("unused")
     fun iterateAllNeighbours(
         cubeSkin: CubeSkin, xyz: CellIndex,
         action: (PointedCell) -> Unit
@@ -18,7 +19,7 @@ object NeighboursCalculator {
             xyz,
             cubeSkin.counts
         ).getCellRange(
-            Vec3bool(false, false, false)
+            Vec3bool(x = false, y = false, z = false)
         )
 
         val fl = { c: PointedCell, _: Int ->
@@ -81,13 +82,13 @@ object NeighboursCalculator {
         return res
     }
 
-    private val rangeFlags = arrayOf<Vec3bool>(
-        Vec3bool(true, false, false),
-        Vec3bool(false, true, false),
-        Vec3bool(false, false, true)
+    private val rangeFlags = arrayOf(
+        Vec3bool(x = true, y = false, z = false),
+        Vec3bool(x = false, y = true, z = false),
+        Vec3bool(x = false, y = false, z = true)
     )
 
-    fun iterateNeightbours(
+    fun iterateNeighbours(
         cubeSkin: CubeSkin, xyz: CellIndex,
         action: (PointedCell, Int) -> Unit
     ) {
@@ -118,7 +119,7 @@ object NeighboursCalculator {
             if (pointedCell.skin.isEmpty()) {
                 continue
             }
-            iterateNeightbours(
+            iterateNeighbours(
                 cubeSkin,
                 b,
                 fl
@@ -132,7 +133,7 @@ object NeighboursCalculator {
         val xyzV = xyz.getVec()
         val counts = cubeSkin.counts
 
-        fun test_point(p: Vec3i): Boolean {
+        fun testPoint(p: Vec3i): Boolean {
 
             if (!MyMath.isPointInCounts(p, counts)) {
                 return true
@@ -148,19 +149,20 @@ object NeighboursCalculator {
             return s.skin.isEmpty()
         }
 
-        if (test_point(xyzV - r)) {
+        if (testPoint(xyzV - r)) {
             return true
         }
 
-        if (test_point(xyzV + r)) {
+        if (testPoint(xyzV + r)) {
             return true
         }
 
         return false
     }
 
+    @Suppress("unused")
     fun bombRemoved(cubeSkin: CubeSkin, index: CellIndex) {
-        iterateNeightbours(
+        iterateNeighbours(
             cubeSkin,
             index) { c, i -> c.skin.neighbourBombs[i]-- }
     }

@@ -18,7 +18,7 @@ class GameLogic(
     private val cubeSkin: CubeSkin,
     private val textureUpdater: ICanUpdateTexture,
     private val gameConfig: GameConfig,
-    val gameEventsReceiver: GameEventsReceiver,
+    private val gameEventsReceiver: GameEventsReceiver,
     val gameLogicStateHelper: GameLogicStateHelper
 ) {
 
@@ -35,8 +35,7 @@ class GameLogic(
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()
 
-    var bombsLeft = 0
-        private set
+    private var bombsLeft = 0
 
     fun applySavedData(
         cubesToOpen_: List<CellIndex>,
@@ -45,6 +44,7 @@ class GameLogic(
         cubesToRemove += cubesToRemove_
     }
 
+    @Suppress("SpellCheckingInspection")
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
 
@@ -52,12 +52,12 @@ class GameLogic(
             return
         }
 
-        if (gameLogicStateHelper.gameStatus == GameStatus.NO_BOBMS_PLACED) {
+        if (gameLogicStateHelper.isGameNotStarted()) {
             val bombsList = BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
             setBombsLeft(bombsList.size)
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
-            gameLogicStateHelper.setGameState(GameStatus.BOMBS_PLACED)
+            gameLogicStateHelper.setGameState(GameStatus.BombsPlaced)
         }
 
         val id = position.id
@@ -105,7 +105,7 @@ class GameLogic(
         if (isBomb) {
             if (!skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                gameLogicStateHelper.setGameState(GameStatus.LOSE)
+                gameLogicStateHelper.setGameState(GameStatus.Lose)
                 return
             }
 
@@ -119,7 +119,7 @@ class GameLogic(
                 } while (false)
             }
 
-            NeighboursCalculator.iterateNeightbours(
+            NeighboursCalculator.iterateNeighbours(
                 cubeSkin, pointedCell.index, action)
 
             openNeighbours(pointedCell)
@@ -129,7 +129,7 @@ class GameLogic(
         } else {
             if (skin.isMarked()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                gameLogicStateHelper.setGameState(GameStatus.LOSE)
+                gameLogicStateHelper.setGameState(GameStatus.Lose)
                 return
             }
         }
@@ -137,7 +137,7 @@ class GameLogic(
         setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EMPTY)
 
         if (bombsLeft == 0) {
-            gameLogicStateHelper.setGameState(GameStatus.WIN)
+            gameLogicStateHelper.setGameState(GameStatus.Win)
         }
     }
 
@@ -285,7 +285,7 @@ class GameLogic(
             } else {
                 if (skin.isBomb) {
                     setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    gameLogicStateHelper.setGameState(GameStatus.LOSE)
+                    gameLogicStateHelper.setGameState(GameStatus.Lose)
                 } else {
                     openCube(pointedCell)
                 }
@@ -344,6 +344,7 @@ class GameLogic(
         val neighbourBombs = pointedCell.skin.neighbourBombs
         val position = pointedCell.index
 
+        @Suppress("SpellCheckingInspection")
 //        sb.append("---\nopenNeighbours $position $neighbourBombs\n")
         for (i in 0 until 3) {
             val cubeNbhBombs = neighbourBombs[i]
@@ -375,7 +376,7 @@ class GameLogic(
 
                 if (s.isBomb) {
                     setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    gameLogicStateHelper.setGameState(GameStatus.LOSE)
+                    gameLogicStateHelper.setGameState(GameStatus.Lose)
                     return
                 }
 
@@ -412,17 +413,15 @@ class GameLogic(
         if (skin == TextureCoordinatesHelper.TextureType.CLOSED) {
             setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.MARKED)
 
-            if (true) {
-                for (i in 0 until 3) {
-                    val neighbours = NeighboursCalculator.getNeighbours(
-                        cubeSkin, pointedCell.index, i
-                    )
+            for (i in 0 until 3) {
+                val neighbours = NeighboursCalculator.getNeighbours(
+                    cubeSkin, pointedCell.index, i
+                )
 
-                    for (n in neighbours) {
-                        if (n.skin.isOpenedNumber()) {
-                            openNeighboursIfBombsMarked(n)
-                            openNeighbours(n)
-                        }
+                for (n in neighbours) {
+                    if (n.skin.isOpenedNumber()) {
+                        openNeighboursIfBombsMarked(n)
+                        openNeighbours(n)
                     }
                 }
             }

@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import glm_.mat4x4.Mat4
 import glm_.vec3.Vec3
 
-class CameraInfo() {
+class CameraInfo {
     companion object {
         private val identityMatrix = MatrixHelper::identityMatrix
     }
@@ -16,15 +16,15 @@ class CameraInfo() {
     var projectionMatrix = identityMatrix()
 
 
-    var MVP = identityMatrix()
+    var mVP = identityMatrix()
 
     var invProjectionMatrix = identityMatrix()
     var invRotMatrix = identityMatrix()
     var invMVP = identityMatrix()
 
     fun recalculateMVPMatrix() {
-        MVP = projectionMatrix * moveMatrix * viewMatrix * rotMatrix * scaleMatrix
-        invMVP = MVP.inverse()
+        mVP = projectionMatrix * moveMatrix * viewMatrix * rotMatrix * scaleMatrix
+        invMVP = mVP.inverse()
     }
 
     fun multiplyRotationMatrix(m: Mat4) {

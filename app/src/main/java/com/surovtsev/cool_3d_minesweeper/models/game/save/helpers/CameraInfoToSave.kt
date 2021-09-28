@@ -10,33 +10,30 @@ data class Mat4ToSave(
     val v3: Vec4,
     val v4: Vec4
 ) {
+    @Suppress("ReplaceGetOrSet")
     constructor(m: Mat4): this(
         m.get(0), m.get(1), m.get(2), m.get(3)
     )
-
-    constructor(): this(Mat4())
 
     fun getMatrix() = Mat4(v1, v2, v3, v4)
 }
 
 class CameraInfoToSave(
-    val scaleMatrix: Mat4ToSave ,
-    val rotMatrix: Mat4ToSave,
-    val viewMatrix: Mat4ToSave,
-    val moveMatrix: Mat4ToSave,
-    val projectionMatrix: Mat4ToSave
+    private val scaleMatrix: Mat4ToSave,
+    private val rotMatrix: Mat4ToSave,
+    private val viewMatrix: Mat4ToSave,
+    private val moveMatrix: Mat4ToSave,
+    private val projectionMatrix: Mat4ToSave
 ) {
     companion object {
         fun createObject(cameraInfo: CameraInfo): CameraInfoToSave {
-            val res = CameraInfoToSave(
+            return CameraInfoToSave(
                 Mat4ToSave(cameraInfo.scaleMatrix),
                 Mat4ToSave(cameraInfo.rotMatrix),
                 Mat4ToSave(cameraInfo.viewMatrix),
                 Mat4ToSave(cameraInfo.moveMatrix),
                 Mat4ToSave(cameraInfo.projectionMatrix)
             )
-
-            return res
         }
     }
 
@@ -51,7 +48,7 @@ class CameraInfoToSave(
         res.invProjectionMatrix = res.projectionMatrix.inverse()
         res.invRotMatrix = res.rotMatrix.inverse()
         res.recalculateMVPMatrix()
-        res.invMVP = res.MVP.inverse()
+        res.invMVP = res.mVP.inverse()
 
         return res
     }

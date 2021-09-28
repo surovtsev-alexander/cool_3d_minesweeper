@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 
-
+@Suppress("unused")
 class MyIntEdit : LinearLayout, IUiIntValueSelector {
 
     constructor(context: Context) : super(context) {
@@ -27,9 +27,9 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
         init(attrs, defStyle)
     }
 
-    var tvName: TextView? = null
-    var etValue: EditText? = null
-    var tvMinMax: TextView? = null
+    private var tvName: TextView? = null
+    private var etValue: EditText? = null
+    private var tvMinMax: TextView? = null
 
     private fun init(
         @Suppress("UNUSED_PARAMETER") attrs: AttributeSet?,
@@ -75,6 +75,6 @@ class MyIntEdit : LinearLayout, IUiIntValueSelector {
         }
 
     private fun borderUpdated() {
-        tvMinMax?.setText("(${minValueData..maxValueData})")
+        tvMinMax?.text = "${minValueData..maxValueData}"
     }
 }

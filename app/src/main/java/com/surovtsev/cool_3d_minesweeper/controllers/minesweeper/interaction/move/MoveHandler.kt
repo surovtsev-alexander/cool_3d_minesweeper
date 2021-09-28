@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_handler
+package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.move
 
 import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper

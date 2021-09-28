@@ -11,12 +11,16 @@ import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
 import javax.inject.Inject
 
+/* TODO: refactoring */
+
 @GameControllerScope
 class GLPointerView @Inject constructor(
     private val context: Context
 ):
     IGLObject, ISwitch by Switch() {
-    private val POSITION_COMPONENT_COUNT = 3
+    companion object {
+        private const val positionComponentCount = 3
+    }
 
     var mGLESProgram: PointerGLESProgram? = null
     private var vertexArray: VertexArray? = null
@@ -31,7 +35,7 @@ class GLPointerView @Inject constructor(
 
     override fun bindData() {
         vertexArray!!.setVertexAttribPointer(0, mGLESProgram!!.mAPosition.location,
-            POSITION_COMPONENT_COUNT, 0)
+            positionComponentCount, 0)
     }
 
     fun setPoints(pointer: IPointer) {
@@ -46,6 +50,6 @@ class GLPointerView @Inject constructor(
     override fun draw() {
         glDrawArrays(
             GL_LINES, 0,
-            vertexArray!!.floatBuffer.capacity() / POSITION_COMPONENT_COUNT)
+            vertexArray!!.floatBuffer.capacity() / positionComponentCount)
     }
 }

@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.utils.constants
 
 object Constants {
-    val BYTES_PER_FLOAT = 4
-    val BYTES_PER_INT   = 4
-    val BYTES_PER_SHORT = 2
+    const val BytesPerFloat = 4
+    const val BytesPerInt   = 4
+    const val BytesPerShort = 2
 }

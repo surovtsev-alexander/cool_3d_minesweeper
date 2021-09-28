@@ -6,16 +6,14 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 
-class VertexArray {
-    val floatBuffer: FloatBuffer
+/* TODO: move to Dagger */
 
-    constructor(vertexData: FloatArray) {
-        floatBuffer = ByteBuffer
-            .allocateDirect(vertexData.count() * Constants.BYTES_PER_FLOAT)
-            .order(ByteOrder.nativeOrder())
-            .asFloatBuffer()
-            .put(vertexData)
-    }
+class VertexArray(vertexData: FloatArray) {
+    val floatBuffer: FloatBuffer = ByteBuffer
+        .allocateDirect(vertexData.count() * Constants.BytesPerFloat)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .put(vertexData)
 
     fun setVertexAttribPointer(
         dataOffset: Int, attributeLocation: Int,

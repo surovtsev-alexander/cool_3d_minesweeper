@@ -4,7 +4,7 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
-import glm_.glm;
+import glm_.glm
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
@@ -21,7 +21,7 @@ class CameraInfoHelper @Inject constructor(
     private val zFar: Float = 20f
 
     private var _displaySize: Vec2i = Vec2i(-1, -1)
-    var displaySize: Vec2i
+    private var displaySize: Vec2i
         get() = _displaySize
         private set(value) {
             _displaySize = value
@@ -62,7 +62,7 @@ class CameraInfoHelper @Inject constructor(
     fun calcNearByProj(proj: Vec2) = calcPointByProj(-1f)(proj)
     fun calcFarByProj(proj: Vec2) = calcPointByProj(1f)(proj)
 
-    fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
+    private fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
         return fun(proj: Vec2): Vec3 = MatrixHelper.multMat4Vec3(
             cameraInfo.invMVP,
             Vec3(proj, z)

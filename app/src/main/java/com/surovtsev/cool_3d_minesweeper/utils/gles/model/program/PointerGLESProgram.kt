@@ -4,7 +4,6 @@ import android.content.Context
 import android.opengl.GLES20
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.ShaderHelper
-import com.surovtsev.cool_3d_minesweeper.utils.gles.model.program.GLESProgram
 
 open class PointerGLESProgram(
     context: Context
@@ -17,13 +16,15 @@ open class PointerGLESProgram(
         )
 ) {
 
-    private val U_POINT_SIZE = "u_pointSize"
+    companion object {
+        private const val uPointSize = "u_pointSize"
+    }
 
-    val mAPosition = Attribute(A_POSITION)
+    val mAPosition = Attribute(aPositionName)
 
-    private val mUPointSize = Uniform(U_POINT_SIZE)
-    private val mUColor = Uniform(U_COLOR)
-    val mLineWidth = 10f;
+    private val mUPointSize = Uniform(uPointSize)
+    private val mUColor = Uniform(uColorName)
+    val mLineWidth = 10f
 
     override val fields = arrayOf(
         mAPosition,

@@ -1,8 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers
 
 import android.content.Context
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.GameLogicStateHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
@@ -26,14 +24,14 @@ class MinesweeperGameStatusReceiver @Inject constructor(
         newStatus: GameStatus,
         elapsed: Long
     ) {
-        if (newStatus == GameStatus.WIN ||
-            newStatus == GameStatus.LOSE) {
+        if (newStatus == GameStatus.Win ||
+            newStatus == GameStatus.Lose) {
             saveController.emptyData(
                 SaveTypes.SaveGameJson
             )
         }
 
-        if (newStatus != GameStatus.WIN) {
+        if (newStatus != GameStatus.Win) {
             return
         }
 

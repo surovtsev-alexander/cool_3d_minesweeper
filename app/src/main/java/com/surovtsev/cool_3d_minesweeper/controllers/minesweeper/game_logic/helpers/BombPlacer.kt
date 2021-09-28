@@ -54,7 +54,7 @@ object BombPlacer {
                         continue
                     }
 
-                    if (xyz.equals(excludedIndex)) {
+                    if (xyz == excludedIndex) {
                         continue
                     }
 

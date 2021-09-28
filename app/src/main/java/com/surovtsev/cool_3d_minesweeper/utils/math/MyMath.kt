@@ -6,20 +6,21 @@ import kotlin.math.PI
 import kotlin.math.abs
 
 object MyMath {
-    val PIF = PI.toFloat()
+    private const val PIF = PI.toFloat()
+    @Suppress("unused")
     fun gradToRad(grad: Float) = grad * PIF / 180f
 
-    val XRay = Vec3(1f, 0f, 0f)
-    val YRay = Vec3(0f, 1f, 0f)
-    val ZRay = Vec3(0f, 0f, 1f)
+    private val XRay = Vec3(1f, 0f, 0f)
+    private val YRay = Vec3(0f, 1f, 0f)
+    private val ZRay = Vec3(0f, 0f, 1f)
 
-    val Rays = arrayOf<Vec3>(
+    val Rays = arrayOf(
         XRay,
         YRay,
         ZRay
     )
 
-    val THRESHOLD = 1e-4
+    private const val THRESHOLD = 1e-4
 
     fun isZero(x: Float) =
         abs(x) < THRESHOLD

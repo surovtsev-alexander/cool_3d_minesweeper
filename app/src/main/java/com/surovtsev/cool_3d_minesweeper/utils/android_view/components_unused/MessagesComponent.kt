@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.surovtsev.cool_3d_minesweeper.utils.android_view.components_unused
 
 import android.content.Context
@@ -28,7 +30,7 @@ class MessagesComponent: ScrollView {
 
     fun initView() {
         inflate(context, R.layout.messages_component, this)
-        tvMessages = findViewById<TextView>(R.id.tvMessages)
+        tvMessages = findViewById(R.id.tvMessages)
     }
 
     fun addMessage(message: String) {

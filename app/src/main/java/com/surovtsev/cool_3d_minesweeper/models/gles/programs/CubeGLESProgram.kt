@@ -17,14 +17,16 @@ open class CubeGLESProgram(
         )
     )
 {
-    private val A_IS_EMPTY = "a_isEmpty"
-    private val A_TEXTURE_COORDINATES = "a_textureCoordinates"
-    private val U_TEXTURE_UNIT = "u_textureUnit"
+    companion object {
+        private const val aIsEmptyName = "a_isEmpty"
+        private const val aTextureCoordinatesName = "a_textureCoordinates"
+        private const val uTextureUnitName = "u_textureUnit"
+    }
 
-    val aPosition = Attribute(A_POSITION)
-    val aIsEmpty = Attribute(A_IS_EMPTY)
-    val aTextureCoordinates = Attribute(A_TEXTURE_COORDINATES)
-    val mUTextureLocation = Uniform(U_TEXTURE_UNIT)
+    val aPosition = Attribute(aPositionName)
+    val aIsEmpty = Attribute(aIsEmptyName)
+    val aTextureCoordinates = Attribute(aTextureCoordinatesName)
+    val mUTextureLocation = Uniform(uTextureUnitName)
 
     override val fields = arrayOf(
         aPosition,
@@ -32,8 +34,4 @@ open class CubeGLESProgram(
         aTextureCoordinates,
         mUTextureLocation
     )
-
-    companion object {
-        private val floatBuffer = FloatBuffer.allocate(16)
-    }
 }

@@ -12,7 +12,7 @@ data class EdgeBorder(
     val p3: Vec3,
     val p4: Vec3
 ) {
-    val plane: Vec4
+    private val plane: Vec4
     val space: Float
 
     init {
@@ -20,12 +20,12 @@ data class EdgeBorder(
         val (bx, by, bz) = p2
         val (cx, cy, cz) = p3
 
-        val A = (by - ay) * cz + (az - bz) * cy + ay * bz - az * by
-        val B = (ax - bx) * cz + (bz - az) * cx - ax * bz + az * bx
-        val C = (bx - ax) * cy + (ay - by) * cx + ax * by - ay * bx
-        val D = (ay * bx - ax * by) * cz + (ax * bz - az * bx) * cy + (az * by - ay * bz) * cx
+        val a = (by - ay) * cz + (az - bz) * cy + ay * bz - az * by
+        val b = (ax - bx) * cz + (bz - az) * cx - ax * bz + az * bx
+        val c = (bx - ax) * cy + (ay - by) * cx + ax * by - ay * bx
+        val d = (ay * bx - ax * by) * cz + (ax * bz - az * bx) * cy + (az * by - ay * bz) * cx
 
-        plane = Vec4(A, B, C, D)
+        plane = Vec4(a, b, c, d)
 
         space = (p1 - p2).length() * (p1 - p4).length()
     }
@@ -35,7 +35,7 @@ data class EdgeBorder(
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]
         }
 
-        fun dist(p1: Vec3, p2: Vec3) = (p1 - p2).length()
+        private fun dist(p1: Vec3, p2: Vec3) = (p1 - p2).length()
 
         fun space(p1: Vec3, p2: Vec3, p3: Vec3): Float {
             val a =
@@ -77,12 +77,10 @@ data class EdgeBorder(
                 plane
             )
 
-        if (MyMath.isZero(denominator)) {
-            return null
+        return if (MyMath.isZero(denominator)) {
+            null
         } else {
-            val res = x1 - n * numerator / denominator
-
-            return res
+            x1 - n * numerator / denominator
         }
     }
 
@@ -111,10 +109,10 @@ data class EdgeBorder(
     fun testIntersection(pointerDescriptor: PointerDescriptor): Boolean {
         val p = calcLinePlaneIntersection(pointerDescriptor)
 
-        if (p == null) {
-            return false
+        return if (p == null) {
+            false
         } else {
-            return isIn(p)
+            isIn(p)
         }
     }
 }

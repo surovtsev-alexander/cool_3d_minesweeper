@@ -9,9 +9,9 @@ import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 
 object TextureHelper {
-    val TAG = "TextureHelper"
+    private const val TAG = "TextureHelper"
 
-    fun loadTexture(context: Context, resoureId: Int): Int {
+    fun loadTexture(context: Context, resourceId: Int): Int {
         val textureObjectIds = intArrayOf(0)
 
         glGenTextures(1, textureObjectIds, 0)
@@ -25,13 +25,13 @@ object TextureHelper {
         }
 
         val options = BitmapFactory.Options()
-        options.inScaled = false;
+        options.inScaled = false
 
-        val bitmap = BitmapFactory.decodeResource(context.resources, resoureId, options)
+        val bitmap = BitmapFactory.decodeResource(context.resources, resourceId, options)
 
         if (bitmap == null) {
             if (LoggerConfig.ON) {
-                Log.w(TAG, "Resource ID " + resoureId + " could not be decoded.")
+                Log.w(TAG, "Resource ID $resourceId could not be decoded.")
             }
 
             glDeleteTextures(1, textureObjectIds, 0)
@@ -49,7 +49,7 @@ object TextureHelper {
             GL_LINEAR
         )
 
-        GLUtils.texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
+        GLUtils.texImage2D(GL_TEXTURE_2D, 0, bitmap, 0)
 
         glGenerateMipmap(GL_TEXTURE_2D)
 
@@ -60,6 +60,7 @@ object TextureHelper {
         return textureObjectIds[0]
     }
 
+    @Suppress("unused")
     fun loadCubeMap(context: Context, cubeResources: IntArray): Int {
         val textureObjectIds = intArrayOf(0)
 
@@ -73,7 +74,7 @@ object TextureHelper {
         }
 
         val options = BitmapFactory.Options()
-        options.inScaled = false;
+        options.inScaled = false
 
         val cubeBitmaps = Array<Bitmap?>(6) { null }
 

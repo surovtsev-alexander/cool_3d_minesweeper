@@ -1,10 +1,8 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.ApplicationController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.logger_config.LoggerConfig
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import glm_.vec2.Vec2
@@ -24,14 +22,5 @@ class TouchHandler @Inject constructor(
         pointer.touchType = touchType
 
         update()
-
-        if (LoggerConfig.LOG_CLICK_HANDLER_DATA) {
-            val message = arrayOf<String>(
-                "proj:$proj",
-                "near:${pointer.near}",
-                "far:${pointer.far}"
-            ).reduce {acc, x -> "$acc\n$x"}
-            ApplicationController.getInstance().messagesComponent?.addMessageUI(message)
-        }
     }
 }

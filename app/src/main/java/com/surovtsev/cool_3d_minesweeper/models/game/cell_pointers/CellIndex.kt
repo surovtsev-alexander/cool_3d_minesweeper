@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers
 
 import glm_.vec3.Vec3i
 
+@Suppress("EqualsOrHashCode")
 class CellIndex(
     val x: Int,
     val y: Int,
@@ -45,10 +46,10 @@ class CellIndex(
     )
 
     override fun equals(other: Any?): Boolean {
-        if (other is CellIndex) {
-            return (x == other.x && y == other.y && z == other.z && id == other.id)
+        return if (other is CellIndex) {
+            (x == other.x && y == other.y && z == other.z && id == other.id)
         } else {
-            return super.equals(other)
+            super.equals(other)
         }
     }
 

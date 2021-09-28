@@ -8,14 +8,14 @@ class CellBorder(
     val center: Vec3,
     halfSpace: Vec3
 ) {
-    val up: EdgeBorder
-    val down: EdgeBorder
-    val left: EdgeBorder
-    val right: EdgeBorder
-    val near: EdgeBorder
-    val far: EdgeBorder
+    private val up: EdgeBorder
+    private val down: EdgeBorder
+    private val left: EdgeBorder
+    private val right: EdgeBorder
+    private val near: EdgeBorder
+    private val far: EdgeBorder
 
-    val edges: Array<EdgeBorder>
+    private val edges: Array<EdgeBorder>
 
     init {
         val p1 = center - halfSpace
@@ -24,57 +24,57 @@ class CellBorder(
         val (x1, y1, z1) = p1
         val (x2, y2, z2) = p2
 
-        val A = Vec3(x1, y2, z1)
-        val B = Vec3(x1, y2, z2)
-        val C = Vec3(x2, y2, z2)
-        val D = Vec3(x2, y2, z1)
+        val a = Vec3(x1, y2, z1)
+        val b = Vec3(x1, y2, z2)
+        val c = Vec3(x2, y2, z2)
+        val d = Vec3(x2, y2, z1)
 
-        val E = Vec3(x1, y1, z1)
-        val F = Vec3(x1, y1, z2)
-        val G = Vec3(x2, y1, z2)
-        val H = Vec3(x2, y1, z1)
+        val e = Vec3(x1, y1, z1)
+        val f = Vec3(x1, y1, z2)
+        val g = Vec3(x2, y1, z2)
+        val h = Vec3(x2, y1, z1)
 
         up =
             EdgeBorder(
-                A,
-                B,
-                C,
-                D
+                a,
+                b,
+                c,
+                d
             )
         down =
             EdgeBorder(
-                E,
-                F,
-                G,
-                H
+                e,
+                f,
+                g,
+                h
             )
         left =
             EdgeBorder(
-                A,
-                B,
-                F,
-                E
+                a,
+                b,
+                f,
+                e
             )
         right =
             EdgeBorder(
-                D,
-                C,
-                G,
-                H
+                d,
+                c,
+                g,
+                h
             )
         near =
             EdgeBorder(
-                A,
-                D,
-                H,
-                E
+                a,
+                d,
+                h,
+                e
             )
         far =
             EdgeBorder(
-                B,
-                C,
-                G,
-                F
+                b,
+                c,
+                g,
+                f
             )
 
         edges = arrayOf(

@@ -7,7 +7,6 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.HasSaveEvent
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.MainActivityModelView
-import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import com.surovtsev.cool_3d_minesweeper.views.activities.MainActivity
 import dagger.*
@@ -48,6 +47,7 @@ object AppModule {
 
 @Module
 interface AppBindModule {
+    @Suppress("unused")
     @AppScope
     @Binds
     fun bindIDBHelper(

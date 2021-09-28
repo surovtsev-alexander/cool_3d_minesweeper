@@ -40,14 +40,14 @@ class GameLogicStateHelper @Inject constructor(
 
     private val timeSpan = TimeSpan(1000L, timeSpanHelper)
 
-    fun isGameNotStarted() = (gameStatus == GameStatus.BOMBS_PLACED)
+    fun isGameNotStarted() = (gameStatus == GameStatus.BombsPlaced)
 
     fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus)
 
     fun isGameOver() = GameStatusHelper.isGameOver(gameStatus)
 
     init {
-        gameStatus = GameStatus.NO_BOBMS_PLACED
+        gameStatus = GameStatus.NoBombsPlaced
     }
 
     fun notifyTimeUpdated() {

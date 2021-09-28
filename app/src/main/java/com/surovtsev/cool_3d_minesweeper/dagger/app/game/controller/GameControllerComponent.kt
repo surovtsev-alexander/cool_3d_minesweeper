@@ -28,7 +28,6 @@ import dagger.Provides
 import dagger.Subcomponent
 import glm_.vec2.Vec2
 import javax.inject.Named
-import javax.inject.Scope
 
 @GameControllerScope
 @Subcomponent(modules = [
@@ -131,6 +130,7 @@ object GameControllerModule {
     fun providePrevPointerCount() = 0
 }
 
+@Suppress("unused")
 @Module
 interface GameControllerBindModule {
     @GameControllerScope

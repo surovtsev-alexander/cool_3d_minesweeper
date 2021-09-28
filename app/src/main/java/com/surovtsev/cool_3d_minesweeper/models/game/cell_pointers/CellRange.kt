@@ -40,5 +40,5 @@ data class CellRange(
         }
     }
 
-    override fun toString() = "${xRange.toString()} ${yRange.toString()} ${zRange.toString()}"
+    override fun toString() = "$xRange $yRange $zRange"
 }

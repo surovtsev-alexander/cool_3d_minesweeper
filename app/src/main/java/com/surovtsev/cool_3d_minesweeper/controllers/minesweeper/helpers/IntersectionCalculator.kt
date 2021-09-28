@@ -33,7 +33,7 @@ class IntersectionCalculator @Inject constructor(
                     continue
                 }
 
-                val spaceParameter = xyz.getValue(borders);
+                val spaceParameter = xyz.getValue(borders)
                 val center = spaceParameter.center
 
                 val projection = pointerDescriptor.calcProjection(center)

@@ -1,18 +1,18 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.game_status
 
 enum class GameStatus {
-    NO_BOBMS_PLACED,
-    BOMBS_PLACED,
-    WIN,
-    LOSE
+    NoBombsPlaced,
+    BombsPlaced,
+    Win,
+    Lose
 }
 
 object GameStatusHelper {
-    val initStatus = GameStatus.NO_BOBMS_PLACED
+    val initStatus = GameStatus.NoBombsPlaced
 
-    fun isGameNotStarted(gameStatus: GameStatus) = (gameStatus == GameStatus.NO_BOBMS_PLACED)
+    fun isGameNotStarted(gameStatus: GameStatus) = (gameStatus == GameStatus.NoBombsPlaced)
 
-    fun isGameInProgress(gameStatus: GameStatus) = (gameStatus == GameStatus.BOMBS_PLACED)
+    fun isGameInProgress(gameStatus: GameStatus) = (gameStatus == GameStatus.BombsPlaced)
 
-    fun isGameOver(gameStatus: GameStatus) = (gameStatus == GameStatus.WIN || gameStatus == GameStatus.LOSE)
+    fun isGameOver(gameStatus: GameStatus) = (gameStatus == GameStatus.Win || gameStatus == GameStatus.Lose)
 }
