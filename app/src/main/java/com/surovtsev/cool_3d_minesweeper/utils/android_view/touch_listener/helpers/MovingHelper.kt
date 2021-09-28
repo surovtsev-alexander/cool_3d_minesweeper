@@ -5,13 +5,14 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction_han
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import glm_.vec2.Vec2
 import javax.inject.Inject
+import javax.inject.Named
 
 @GameControllerScope
 class MovingHelper @Inject constructor(
-    private val moveHandler: MoveHandler
+    private val moveHandler: MoveHandler,
+    @Named(PrevCenter)
+    private var prevCenter: Vec2
 ): TouchHelper() {
-
-    private var prevCenter = Vec2()
 
     override fun onTouch(event: MotionEvent) {
         val pointerCount = event.pointerCount

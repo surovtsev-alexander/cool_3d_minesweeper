@@ -12,9 +12,8 @@ import javax.microedition.khronos.opengles.GL10
 
 @GameControllerScope
 class GLESRenderer @Inject constructor(
-    val minesweeperController: MinesweeperController,
+    private val openglEventsHandler: IHandleOpenGLEvents
 ): GLSurfaceView.Renderer {
-    private val openglEventsHandler = minesweeperController as IHandleOpenGLEvents
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(0.0f, 0.3f, 0.3f, 0.0f)
@@ -22,16 +21,12 @@ class GLESRenderer @Inject constructor(
         glEnable(GL_CULL_FACE)
 
         openglEventsHandler.onSurfaceCreated()
-
-        Log.d("TEST+++", "GLESRenderer onSurfaceCreated")
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
 
         openglEventsHandler.onSurfaceChanged(width, height)
-
-        Log.d("TEST+++", "GLESRenderer onSurfaceChanged $width $height")
     }
 
     override fun onDrawFrame(gl: GL10?) {

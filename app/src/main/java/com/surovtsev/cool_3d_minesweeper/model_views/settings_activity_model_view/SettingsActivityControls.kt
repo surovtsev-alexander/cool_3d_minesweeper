@@ -14,7 +14,7 @@ typealias SlidersInfo = List<Pair<String, Pair<IntRange, MyLiveData<Float>>>>
 @SettingsScope
 class SettingsActivityControls @Inject constructor(
     @Named(SelectedSettingsIdName)
-    val selectedSettingsId: MyLiveData<Int>,
+    val selectedSettingsId: SelectedSettingsId,
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames,
     val slidersInfo: @JvmSuppressWildcards SlidersInfo
 ) {

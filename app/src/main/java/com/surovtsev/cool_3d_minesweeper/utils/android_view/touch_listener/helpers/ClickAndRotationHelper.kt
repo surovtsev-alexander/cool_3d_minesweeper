@@ -8,6 +8,7 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
  import glm_.vec2.Vec2
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.math.abs
 
 
@@ -15,17 +16,25 @@ import kotlin.math.abs
 class ClickAndRotationHelper @Inject constructor(
     private val touchReceiver: TouchReceiver,
     private val moveHandler: MoveHandler,
+    @Named(Prev)
+    private var prev: Vec2,
+    @Named(Movement)
+    private var movement: Float,
+    @Named(Downed)
+    private var downed: Boolean,
 ) : TouchHelper(), IStoreMovement {
     init {
         getAndRelease()
     }
 
+    companion object {
+        const val Prev = "prev"
+        const val Movement = "movement"
+        const val Downed = "downed"
+    }
+
+    /* SEE: TouchListener::connectToGLSurfaceView */
     var gLSurfaceView: GLSurfaceView? = null
-
-    private var prev = Vec2()
-    private var movement = 0f
-
-    private var downed = false
 
     override fun getMovement(): Float = movement
 

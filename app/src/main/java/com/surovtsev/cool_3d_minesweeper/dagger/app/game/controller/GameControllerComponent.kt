@@ -14,6 +14,11 @@ import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ScalingHelper
+import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.TouchHelper
+import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
@@ -21,12 +26,17 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import glm_.vec2.Vec2
+import javax.inject.Named
 import javax.inject.Scope
 
 @GameControllerScope
 @Subcomponent(modules = [
     GameControllerModule::class,
-    GameControllerBindModule::class
+    GameControllerBindModule::class,
+    TouchHelperModule::class,
+    ScalingHelperModule::class,
+    ClickAndRotationHelperModule::class
 ])
 interface GameControllerComponent {
     val minesweeperController: MinesweeperController
@@ -114,6 +124,11 @@ object GameControllerModule {
     ): CubeCoordinates {
         return CubeCoordinates.createObject(gameConfig)
     }
+
+    @Named(TouchListener.PrevPointerCount)
+    @GameControllerScope
+    @Provides
+    fun providePrevPointerCount() = 0
 }
 
 @Module
@@ -121,4 +136,47 @@ interface GameControllerBindModule {
     @GameControllerScope
     @Binds
     fun getIPointer(pointer: Pointer): IPointer
+
+    @GameControllerScope
+    @Binds
+    fun getIHandleOpenGLEvent(
+        minesweeperController: MinesweeperController
+    ): IHandleOpenGLEvents
+
+    @GameControllerScope
+    @Binds
+    fun getCurrTouchHelper(
+        clickAndRotationHelper: ClickAndRotationHelper
+    ): TouchHelper
+}
+
+@Module
+object TouchHelperModule {
+    @GameControllerScope
+    @Provides
+    @Named(ScalingHelper.PrevDistance)
+    fun getPrevDistance() = 0f
+}
+
+@Module
+object ScalingHelperModule {
+    @Provides
+    @Named(TouchHelper.PrevCenter)
+    fun providePrevCenter() = Vec2()
+}
+
+@Module
+object ClickAndRotationHelperModule {
+    @Provides
+    @Named(ClickAndRotationHelper.Prev)
+    fun providePrev() = Vec2()
+
+    @Provides
+    @Named(ClickAndRotationHelper.Movement)
+    fun provideMovement() = 0f
+
+    @GameControllerScope
+    @Provides
+    @Named(ClickAndRotationHelper.Downed)
+    fun provideDowned() = false
 }

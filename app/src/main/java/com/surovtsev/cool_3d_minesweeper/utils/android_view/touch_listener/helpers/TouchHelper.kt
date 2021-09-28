@@ -8,6 +8,8 @@ abstract class TouchHelper:  Updatable() {
     abstract fun onTouch(event: MotionEvent)
 
     companion object {
+        const val PrevCenter = "prevCenter"
+
         fun getVec(event: MotionEvent) = Vec2(
             event.x,
             event.y

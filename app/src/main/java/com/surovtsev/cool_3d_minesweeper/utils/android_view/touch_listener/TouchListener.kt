@@ -4,18 +4,27 @@ import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.WinsCount
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ScalingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.TouchHelper
 import javax.inject.Inject
+import javax.inject.Named
 
 @GameControllerScope
 class TouchListener @Inject constructor(
     private val clickAndRotationHelper: ClickAndRotationHelper,
     private val scalingHelper: ScalingHelper,
-    private val movingHelper: MovingHelper
+    private val movingHelper: MovingHelper,
+    @Named(PrevPointerCount)
+    private var prevPointerCount: Int,
+    private var currTouchHelper: TouchHelper
 ): View.OnTouchListener {
+
+    companion object {
+        const val PrevPointerCount = "prevCounterCount"
+    }
 
     fun connectToGLSurfaceView(
         gLSurfaceView: GLSurfaceView
@@ -23,9 +32,6 @@ class TouchListener @Inject constructor(
         clickAndRotationHelper.gLSurfaceView = gLSurfaceView
         gLSurfaceView.setOnTouchListener(this)
     }
-
-    private var prevPointerCount = 0
-    var currTouchHelper: TouchHelper = clickAndRotationHelper
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event == null) {

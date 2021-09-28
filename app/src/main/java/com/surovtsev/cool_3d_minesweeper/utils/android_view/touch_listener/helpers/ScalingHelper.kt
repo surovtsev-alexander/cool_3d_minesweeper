@@ -6,13 +6,19 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
 import com.surovtsev.cool_3d_minesweeper.utils.math.MyMath
 import glm_.vec2.Vec2
 import javax.inject.Inject
+import javax.inject.Named
 
 @GameControllerScope
 class ScalingHelper @Inject constructor(
-    private val moveHandler: MoveHandler
+    private val moveHandler: MoveHandler,
+    @Named(PrevDistance)
+    private var prevDistance: Float,
+    @Named(PrevCenter)
+    private var prevCenter: Vec2
 ): TouchHelper() {
-    private var prevDistance = 0f
-    private var prevCenter = Vec2()
+    companion object {
+        const val PrevDistance = "prevDistance"
+    }
 
     override fun onTouch(event: MotionEvent) {
         val needToBeInitted = getAndRelease()
