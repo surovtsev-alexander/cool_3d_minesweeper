@@ -13,6 +13,6 @@ open class MyLiveData<T: Any>(
         _data.value = newValue
     }
 
-    fun getValueOrDefault() =
-        data.value ?: defaultValue
+    val valueOrDefault: T
+        get () = data.value ?: defaultValue
 }

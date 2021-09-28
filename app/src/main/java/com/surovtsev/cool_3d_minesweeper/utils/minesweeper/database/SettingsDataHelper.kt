@@ -2,6 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database
 
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 
+/* TODO: move to dagger */
 object SettingsDataHelper {
     val paramNames = arrayOf(
         SettingsData.xCountName,

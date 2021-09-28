@@ -60,7 +60,7 @@ class GameActivityModelView(
             keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
         ) {
             markingEvent.onDataChanged(
-                !(markingEvent.getValueOrDefault())
+                !(markingEvent.valueOrDefault)
             )
 
             return true

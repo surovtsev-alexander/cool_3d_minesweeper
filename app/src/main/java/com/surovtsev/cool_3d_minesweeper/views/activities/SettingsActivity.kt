@@ -26,8 +26,13 @@ import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
 import javax.inject.Inject
+import kotlin.math.round
 
 class SettingsActivity: ComponentActivity() {
+
+    companion object {
+        fun floatToInt(x: Float) = round(x).toInt()
+    }
 
     @Inject
     lateinit var modelView: SettingsActivityModelView
@@ -36,7 +41,7 @@ class SettingsActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         daggerComponentsHolder
-            .appComponent
+            .createAndGetSettingComponent()
             .inject(this)
 
         modelView.finishAction = this::finish
@@ -77,10 +82,10 @@ class SettingsActivity: ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(modelView: SettingsActivityModelView) {
-    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsList.run {
+    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsActivityEvents.settingsList.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by modelView.selectedSettingsId.run {
+    val selectedSettingsId: Int by modelView.settingsActivityControls.selectedSettingsId.run {
         data.observeAsState(defaultValue)
     }
 
@@ -173,7 +178,7 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 fun Controls(
     modelView: SettingsActivityModelView
 ) {
-    val slidersInfo = modelView.slidersInfo
+    val slidersInfo = modelView.settingsActivityControls.slidersInfo
 
     LazyColumn {
         items(slidersInfo) { (name, bordersAndValue) ->
@@ -209,7 +214,7 @@ fun MySlider(
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
             Text(
-                SettingsActivityModelView.floatToInt(value).toString(),
+                SettingsActivity.floatToInt(value).toString(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.5f)
             )
