@@ -6,30 +6,19 @@ import javax.inject.Inject
 import javax.inject.Named
 
 
+typealias SelectedSettingsId = MyLiveData<Int>
 typealias SettingsSlider = MyLiveData<Float>
 typealias SlidersWithNames = Map<String, SettingsSlider>
+typealias SlidersInfo = List<Pair<String, Pair<IntRange, MyLiveData<Float>>>>
 
 @SettingsScope
 class SettingsActivityControls @Inject constructor(
     @Named(SelectedSettingsIdName)
     val selectedSettingsId: MyLiveData<Int>,
-    @Named(XCountSliderValueName)
-    val xCountSliderValue: MyLiveData<Float>,
-    @Named(YCountSliderValueName)
-    val yCountSliderValue: MyLiveData<Float>,
-    @Named(ZCountSliderValueName)
-    val zCountSliderValue: MyLiveData<Float>,
-    @Named(BombsPercentageSliderValueName)
-    val bombsPercentageSliderValue: SettingsSlider,
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames,
-    val slidersInfo: @JvmSuppressWildcards List<Pair<String, Pair<IntRange, MyLiveData<Float>>>>
+    val slidersInfo: @JvmSuppressWildcards SlidersInfo
 ) {
     companion object {
         const val SelectedSettingsIdName = "selectedSettingsId"
-
-        const val XCountSliderValueName = "xCountSliderValue"
-        const val YCountSliderValueName = "yCountSliderValue"
-        const val ZCountSliderValueName = "zCountSliderValue"
-        const val BombsPercentageSliderValueName = "bombsPercentageSliderValue"
     }
 }

@@ -2,6 +2,8 @@ package com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database
 
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 
+typealias Borders = Map<String, IntRange>
+
 /* TODO: move to dagger */
 object SettingsDataHelper {
     val paramNames = arrayOf(
@@ -16,7 +18,7 @@ object SettingsDataHelper {
     private val dimBorders = 3 .. 25
     private val bombsPercentageBorders = 10 .. 90
 
-    val borders = (
+    val borders: Borders = (
             paramNames.take(dimParamsCount).map {
                 it to dimBorders
             } + paramNames.drop(dimParamsCount).map {

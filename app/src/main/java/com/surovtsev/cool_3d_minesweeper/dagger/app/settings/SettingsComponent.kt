@@ -9,6 +9,8 @@ import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import dagger.multibindings.IntoMap
+import dagger.multibindings.StringKey
 import javax.inject.Named
 
 @SettingsScope
@@ -17,6 +19,8 @@ import javax.inject.Named
         SettingsModule::class
     ])
 interface SettingsComponent {
+    val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
+
     fun inject(settingsActivity: SettingsActivity)
 }
 
@@ -26,8 +30,8 @@ object SettingsModule {
     @SettingsScope
     @Named(SettingsActivityControls.SelectedSettingsIdName)
     @Provides
-    fun provideSelectedSettingsId(): MyLiveData<Int> {
-        return MyLiveData(-1)
+    fun provideSelectedSettingsId(): SelectedSettingsId {
+        return SelectedSettingsId(-1)
     }
 
     @SettingsScope
@@ -38,66 +42,45 @@ object SettingsModule {
 
     private fun createMyLiveDataForSlider(defValue: Int) = MyLiveData(defValue.toFloat())
 
-//    @[IntoMap StringKey(SettingsData.xCountName)]
+    @[IntoMap StringKey(SettingsData.xCountName)]
     @Provides
     @SettingsScope
-    @Named(SettingsActivityControls.XCountSliderValueName)
     fun provideXCountSliderValue() = createMyLiveDataForSlider(
         SettingsData.xCountDefaultValue
     )
 
+    @[IntoMap StringKey(SettingsData.yCountName)]
     @Provides
     @SettingsScope
-    @Named(SettingsActivityControls.YCountSliderValueName)
     fun provideYCountSliderValue() = createMyLiveDataForSlider(
         SettingsData.yCountDefaultValue
     )
 
+    @[IntoMap StringKey(SettingsData.zCountName)]
     @Provides
     @SettingsScope
-    @Named(SettingsActivityControls.ZCountSliderValueName)
     fun provideZCountSliderValue() = createMyLiveDataForSlider(
         SettingsData.zCountDefaultValue
     )
 
+    @[IntoMap StringKey(SettingsData.bombsPercentageName)]
     @Provides
     @SettingsScope
-    @Named(SettingsActivityControls.BombsPercentageSliderValueName)
     fun provideBombsPercentageSliderValue() = createMyLiveDataForSlider(
         SettingsData.bombsPercentageDefaultValue
     )
 
     @Provides
     @SettingsScope
-    fun provideSlidersWithNames(
-        @Named(SettingsActivityControls.XCountSliderValueName)
-        xCountSliderValue: SettingsSlider,
-        @Named(SettingsActivityControls.YCountSliderValueName)
-        yCountSliderValue: SettingsSlider,
-        @Named(SettingsActivityControls.ZCountSliderValueName)
-        zCountSliderValue: SettingsSlider,
-        @Named(SettingsActivityControls.BombsPercentageSliderValueName)
-        bombsPercentageSliderValue: SettingsSlider
-    ): @JvmSuppressWildcards SlidersWithNames {
-        return mapOf(
-            SettingsData.xCountName to xCountSliderValue,
-            SettingsData.yCountName to yCountSliderValue,
-            SettingsData.zCountName to zCountSliderValue,
-            SettingsData.bombsPercentageName to bombsPercentageSliderValue
-        )
-    }
-
-    @Provides
-    @SettingsScope
     fun provideSettingsDataFactory(
-        settingsActivityControls: SettingsActivityControls
+        slidersWithNames: @JvmSuppressWildcards SlidersWithNames
     ): () -> SettingsData {
         return {
             SettingsData(
-                settingsActivityControls.xCountSliderValue.valueOrDefault.toInt(),
-                settingsActivityControls.yCountSliderValue.valueOrDefault.toInt(),
-                settingsActivityControls.zCountSliderValue.valueOrDefault.toInt(),
-                settingsActivityControls.bombsPercentageSliderValue.valueOrDefault.toInt()
+                slidersWithNames[SettingsData.xCountName]!!.valueOrDefault.toInt(),
+                slidersWithNames[SettingsData.yCountName]!!.valueOrDefault.toInt(),
+                slidersWithNames[SettingsData.zCountName]!!.valueOrDefault.toInt(),
+                slidersWithNames[SettingsData.bombsPercentageName]!!.valueOrDefault.toInt()
             )
         }
     }
@@ -106,7 +89,7 @@ object SettingsModule {
     @SettingsScope
     fun provideSlidersInfo(
         slidersWithNames: @JvmSuppressWildcards SlidersWithNames
-    ): @JvmSuppressWildcards List<Pair<String, Pair<IntRange, MyLiveData<Float>>>> {
+    ): @JvmSuppressWildcards SlidersInfo {
         return slidersWithNames.map { (name, value) ->
             val border = SettingsDataHelper.borders[name]!!
             name to (border to value)
