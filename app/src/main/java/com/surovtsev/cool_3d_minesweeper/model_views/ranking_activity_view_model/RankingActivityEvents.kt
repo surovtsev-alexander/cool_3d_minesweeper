@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view
+package com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId

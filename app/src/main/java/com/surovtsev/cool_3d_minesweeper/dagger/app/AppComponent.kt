@@ -5,8 +5,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.HasSaveEvent
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_model_view.MainActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.HasSaveEvent
+import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import com.surovtsev.cool_3d_minesweeper.views.activities.MainActivityOld
 import dagger.*
@@ -15,11 +15,12 @@ import javax.inject.Named
 @AppScope
 @Component(
     modules = [
-        AppModule::class,
         AppBindModule::class
     ]
 )
 interface AppComponent {
+    val mainActivityViewModel: MainActivityViewModel
+
 
     @Component.Builder
     interface Builder {
@@ -35,14 +36,6 @@ interface AppComponent {
     fun settingComponent(): SettingsComponent
 
     fun inject(mainActivityOld: MainActivityOld)
-}
-
-@Module
-object AppModule {
-    @AppScope
-    @Named(MainActivityModelView.HasSaveEventName)
-    @Provides
-    fun provideHasSaveEvent(): HasSaveEvent = HasSaveEvent(false)
 }
 
 @Module

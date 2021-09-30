@@ -12,13 +12,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
@@ -31,7 +31,7 @@ class GameActivity: ComponentActivity() {
     }
 
     @Inject
-    lateinit var modelView: GameActivityModelView
+    lateinit var viewModel: GameActivityViewModel
     @Inject
     lateinit var gLSurfaceView: GLSurfaceView
 
@@ -59,7 +59,7 @@ class GameActivity: ComponentActivity() {
         ).inject(this)
 
 
-        modelView.prepareGlSurfaceView()
+        viewModel.prepareGlSurfaceView()
 
         setContent {
             Test_composeTheme {
@@ -81,7 +81,7 @@ class GameActivity: ComponentActivity() {
                 }
                 GameStatusDialog(
                     gameViewEvents.showDialogEvent,
-                    modelView
+                    viewModel
                 )
             }
         }
@@ -90,22 +90,22 @@ class GameActivity: ComponentActivity() {
     override fun onPause() {
         super.onPause()
         gLSurfaceView.onPause()
-        modelView.onPause()
+        viewModel.onPause()
     }
 
     override fun onResume() {
         super.onResume()
         gLSurfaceView.onResume()
-        modelView.onResume()
+        viewModel.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        modelView.onDestroy()
+        viewModel.onDestroy()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (modelView.onKeyDown(keyCode)) {
+        if (viewModel.onKeyDown(keyCode)) {
             return true
         }
         return super.onKeyDown(keyCode, event)
@@ -250,7 +250,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     showDialogEvent: ShowDialogEvent,
-    modelView: GameActivityModelView
+    viewModel: GameActivityViewModel
 ) {
     val showDialog: Boolean by showDialogEvent.run {
         data.observeAsState(defaultValue)
@@ -262,7 +262,7 @@ fun GameStatusDialog(
             title = { Text(text = "Game status") },
             text = { Text(
                 /* TODO: replace with gameStatusEvent */
-                text = modelView.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
+                text = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
             ) },
 
             confirmButton = {

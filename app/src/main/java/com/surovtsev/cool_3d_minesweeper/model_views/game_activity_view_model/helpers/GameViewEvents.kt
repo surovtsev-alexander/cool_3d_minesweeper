@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers
+package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import javax.inject.Inject
 import javax.inject.Named

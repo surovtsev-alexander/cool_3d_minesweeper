@@ -4,8 +4,8 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.controller.GameControllerComponent
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.MarkOnShortTapControl
@@ -19,7 +19,7 @@ import javax.inject.Named
 @Subcomponent(
     modules = [GameModule::class, GameEvents::class, GameControls::class])
 interface GameComponent {
-    val gameActivityModelView: GameActivityModelView
+    val gameActivityViewModel: GameActivityViewModel
     val gLSurfaceView: GLSurfaceView
     val gameEventsReceiver: GameEventsReceiver
     val markingEvent: MarkingEvent
@@ -44,8 +44,8 @@ object GameModule {
     @GameScope
     fun provideGameActivityModelView(
         context: Context,
-    ): GameActivityModelView {
-        return GameActivityModelView(
+    ): GameActivityViewModel {
+        return GameActivityViewModel(
             context
         )
     }

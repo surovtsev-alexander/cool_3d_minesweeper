@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.app.ranking
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.*
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.*
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
 import dagger.Module

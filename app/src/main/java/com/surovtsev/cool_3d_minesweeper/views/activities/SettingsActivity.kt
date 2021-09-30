@@ -20,7 +20,7 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_model_view.SettingsActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.SettingsActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
@@ -35,7 +35,7 @@ class SettingsActivity: ComponentActivity() {
     }
 
     @Inject
-    lateinit var modelView: SettingsActivityModelView
+    lateinit var viewModel: SettingsActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class SettingsActivity: ComponentActivity() {
             .createAndGetSettingComponent()
             .inject(this)
 
-        modelView.finishAction = this::finish
+        viewModel.finishAction = this::finish
 
         setContent {
             Test_composeTheme {
@@ -59,33 +59,33 @@ class SettingsActivity: ComponentActivity() {
                                 .weight(1f)
                                 .border(1.dp, Color.Black)
                         ) {
-                            SettingsList(modelView)
+                            SettingsList(viewModel)
                         }
                         Column(
                             modifier = Modifier
                                 .border(1.dp, Color.Black)
                         ) {
-                            Controls(modelView)
+                            Controls(viewModel)
                         }
                         Column {
-                            UseButton(modelView)
+                            UseButton(viewModel)
                         }
                     }
                 }
             }
         }
 
-        modelView.loadData()
+        viewModel.loadData()
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsList(modelView: SettingsActivityModelView) {
-    val settingsList: List<DataWithId<SettingsData>> by modelView.settingsActivityEvents.settingsList.run {
+fun SettingsList(viewModel: SettingsActivityViewModel) {
+    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsActivityEvents.settingsList.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by modelView.settingsActivityControls.selectedSettingsId.run {
+    val selectedSettingsId: Int by viewModel.settingsActivityControls.selectedSettingsId.run {
         data.observeAsState(defaultValue)
     }
 
@@ -120,14 +120,14 @@ fun SettingsList(modelView: SettingsActivityModelView) {
                                 )
 
                         ) {
-                            SettingsDataItem(modelView,item)
+                            SettingsDataItem(viewModel,item)
                         }
                     } else {
                         Surface (
                             shape = MaterialTheme.shapes.large,
-                            onClick = { modelView.useSettings(item) },
+                            onClick = { viewModel.useSettings(item) },
                         ) {
-                            SettingsDataItem(modelView, item)
+                            SettingsDataItem(viewModel, item)
                         }
                     }
                 }
@@ -139,7 +139,7 @@ fun SettingsList(modelView: SettingsActivityModelView) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsDataItem(
-    modelView: SettingsActivityModelView,
+    viewModel: SettingsActivityViewModel,
     settingDataWithId: DataWithId<SettingsData>
 ) {
     Row(
@@ -160,7 +160,7 @@ fun SettingsDataItem(
         )
         Surface (
             shape = MaterialTheme.shapes.large,
-            onClick = { modelView.deleteSettings(settingDataWithId.id) },
+            onClick = { viewModel.deleteSettings(settingDataWithId.id) },
             color = PrimaryColor1
         ) {
             Text(
@@ -176,9 +176,9 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 
 @Composable
 fun Controls(
-    modelView: SettingsActivityModelView
+    viewModel: SettingsActivityViewModel
 ) {
-    val slidersInfo = modelView.settingsActivityControls.slidersInfo
+    val slidersInfo = viewModel.settingsActivityControls.slidersInfo
 
     LazyColumn {
         items(slidersInfo) { (name, bordersAndValue) ->
@@ -237,7 +237,7 @@ fun MySlider(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UseButton(
-    modelView: SettingsActivityModelView
+    viewModel: SettingsActivityViewModel
 ) {
     Surface (
         modifier = Modifier
@@ -245,7 +245,7 @@ fun UseButton(
             .border(1.dp, Color.Black),
         color = PrimaryColor1,
         shape = MaterialTheme.shapes.large,
-        onClick = { modelView.useSettings() },
+        onClick = { viewModel.useSettings() },
     ) {
         Text(
             "Use",

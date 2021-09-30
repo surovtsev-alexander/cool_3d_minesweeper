@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.RankingActivityEvents
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view.RankingActivityModelView
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityEvents
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class RankingActivity: ComponentActivity() {
     @Inject
-    lateinit var modelView: RankingActivityModelView
+    lateinit var viewModel: RankingActivityViewModel
     @Inject
     lateinit var rankingActivityEvents: RankingActivityEvents
 
@@ -44,16 +44,16 @@ class RankingActivity: ComponentActivity() {
             .inject(this)
 
         setContent {
-            RankingControls(modelView, rankingActivityEvents)
+            RankingControls(viewModel, rankingActivityEvents)
         }
 
-        modelView.loadData()
+        viewModel.loadData()
     }
 }
 
 @Composable
 fun RankingControls(
-    modelView: RankingActivityModelView,
+    viewModel: RankingActivityViewModel,
     rankingActivityEvents: RankingActivityEvents
 ) {
     Test_composeTheme {
@@ -66,7 +66,7 @@ fun RankingControls(
             Row(
                 modifier = Modifier.fillMaxHeight(.3f)
             ) {
-                SettingsList(modelView, rankingActivityEvents)
+                SettingsList(viewModel, rankingActivityEvents)
             }
             Row(
                 modifier = Modifier.fillMaxHeight(1f)
@@ -80,7 +80,7 @@ fun RankingControls(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(
-    modelView: RankingActivityModelView,
+    viewModel: RankingActivityViewModel,
     rankingActivityEvents: RankingActivityEvents
 ) {
     val settingsList: List<DataWithId<SettingsData>> by rankingActivityEvents.settingsListWithIds.run {
@@ -137,7 +137,7 @@ fun SettingsList(
                         } else {
                             Surface(
                                 shape = MaterialTheme.shapes.large,
-                                onClick = { modelView.loadRankingForSettingsId(itemId) },
+                                onClick = { viewModel.loadRankingForSettingsId(itemId) },
                             ) {
                                 SettingsDataItem(item, winsCount)
                             }

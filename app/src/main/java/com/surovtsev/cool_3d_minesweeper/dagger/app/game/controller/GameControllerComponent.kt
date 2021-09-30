@@ -8,8 +8,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.helpers.GameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
@@ -40,7 +40,7 @@ import javax.inject.Named
 interface GameControllerComponent {
     val minesweeperController: MinesweeperController
 
-    fun inject(gameActivityModelView: GameActivityModelView)
+    fun inject(gameActivityViewModel: GameActivityViewModel)
 }
 
 @Module

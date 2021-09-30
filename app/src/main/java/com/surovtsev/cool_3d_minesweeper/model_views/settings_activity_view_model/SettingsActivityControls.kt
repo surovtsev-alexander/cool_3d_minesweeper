@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_model_view
+package com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.SettingsScope
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
