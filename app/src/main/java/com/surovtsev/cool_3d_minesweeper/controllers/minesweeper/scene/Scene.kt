@@ -17,7 +17,7 @@ import javax.inject.Inject
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
     private val timeSpanHelper: TimeSpanHelper,
-    val gameControls: GameControls,
+    private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: IPointer,
     val touchHandler: TouchHandler,

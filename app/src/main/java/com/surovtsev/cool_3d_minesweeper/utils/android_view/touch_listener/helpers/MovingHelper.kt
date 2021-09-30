@@ -22,8 +22,8 @@ class MovingHelper @Inject constructor(
         val sum = points.fold(Vec2()) { sum, elem -> sum + elem }
         val currCenter = sum / pointerCount
 
-        val needToBeInited = getAndRelease()
-        if (!needToBeInited) {
+        val needToBeInitialized = getAndRelease()
+        if (!needToBeInitialized) {
             moveHandler.move(
                 prevCenter, currCenter
             )

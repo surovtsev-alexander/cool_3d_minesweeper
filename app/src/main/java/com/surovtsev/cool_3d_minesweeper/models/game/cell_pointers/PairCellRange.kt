@@ -2,12 +2,14 @@ package com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers
 
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
+import kotlin.math.max
+import kotlin.math.min
 
 typealias PairDimRange = Pair<IntRange, IntRange>
 
 
 fun getPairDimRange(pos: Int, dim: Int): PairDimRange =
-    IntRange(pos, pos) to IntRange(Math.max(pos - 1, 0), Math.min(pos + 1, dim - 1))
+    IntRange(pos, pos) to IntRange(max(pos - 1, 0), min(pos + 1, dim - 1))
 
 
 data class PairCellRange(

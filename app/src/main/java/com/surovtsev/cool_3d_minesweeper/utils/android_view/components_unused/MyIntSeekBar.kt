@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IUiIntValueSelector
 
+@Suppress("unused")
 class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
 
     constructor(context: Context) : super(context) {
@@ -26,10 +27,10 @@ class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
         init(attrs, defStyle)
     }
 
-    var tvName: TextView? = null
-    var tvValue: TextView? = null
-    var tvMinMax: TextView? = null
-    var sbValue: SeekBar? = null
+    private var tvName: TextView? = null
+    private var tvValue: TextView? = null
+    private var tvMinMax: TextView? = null
+    private var sbValue: SeekBar? = null
 
     private fun init(
         @Suppress("UNUSED_PARAMETER") attrs: AttributeSet?,
@@ -82,6 +83,6 @@ class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
         }
 
     private fun borderUpdated() {
-        tvMinMax?.setText("(${minValue..maxValue})")
+        tvMinMax?.text = "(${minValue..maxValue})"
     }
 }

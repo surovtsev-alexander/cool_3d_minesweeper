@@ -23,13 +23,13 @@ import javax.inject.Inject
 class MinesweeperController @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val touchReceiver: TouchReceiver,
-    val saveController: SaveController,
+    private val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
     private val gameObjectsHolder: GameObjectsHolder,
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
-    val scene: Scene,
+    private val scene: Scene,
     val touchListener: TouchListener
 ):
     IHandleOpenGLEvents,

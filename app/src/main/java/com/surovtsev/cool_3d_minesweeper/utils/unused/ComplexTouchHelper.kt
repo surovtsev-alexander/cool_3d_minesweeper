@@ -5,6 +5,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
 import glm_.vec2.Vec2
 
+@Suppress("unused")
 class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceiver {
     enum class TouchType {
         SHORT,
@@ -22,23 +23,21 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
     private var state =
         State.IDLE
 
-    var touchType =
+    private var touchType =
         TouchType.SHORT
-        private set
 
-    var touchPos = Vec2()
-        private set
+    private var touchPos = Vec2()
     private var downTime = 0L
     private var clickTime = 0L
 
-    private var movementStorer: IStoreMovement? = null
+    private var movementSaver: IStoreMovement? = null
 
-    val movementThreshold = 10f
-    val touchDelay = 100L
-    val doubleTouchDelay = 250L
-    val longTouchDelay = 300L
+    private val movementThreshold = 10f
+    private val touchDelay = 100L
+    private val doubleTouchDelay = 250L
+    private val longTouchDelay = 300L
 
-    override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
+    override fun down(pos: Vec2, movementSaver: IStoreMovement) {
         if (state == State.DELAY_BEFORE_DOUBLE_TOUCH) {
             state =
                 State.WAIT_FOR_RELEASE
@@ -48,7 +47,7 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
             touchPos = pos
             downTime = customClock.timeAfterDeviceStartup
 
-            movementStorer = movementStorer_
+            this.movementSaver = movementSaver
 
             state = State.DELAY_BEFORE_LONG_TOUCH
         }
@@ -82,7 +81,7 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
     }
 
     private fun isMoved(): Boolean =
-        (movementStorer?.getMovement()?:(movementThreshold + 1f)) >= movementThreshold
+        (movementSaver?.getMovement()?:(movementThreshold + 1f)) >= movementThreshold
 
     private fun releaseIfMovedOrPerform(action: () -> Unit) {
         if (isMoved()) {

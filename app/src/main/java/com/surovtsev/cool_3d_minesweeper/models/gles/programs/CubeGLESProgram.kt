@@ -4,7 +4,6 @@ import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.R
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.ShaderHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.program.GLESProgram
-import java.nio.FloatBuffer
 
 open class CubeGLESProgram(
     context: Context

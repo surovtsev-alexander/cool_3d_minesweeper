@@ -11,7 +11,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.math.abs
 
-
 @GameScope
 class ClickAndRotationHelper @Inject constructor(
     private val touchReceiver: TouchReceiver,
@@ -46,7 +45,7 @@ class ClickAndRotationHelper @Inject constructor(
                 prev = getVec(event)
                 movement = 0f
 
-                touchReceiver.donw(curr, this)
+                touchReceiver.down(curr, this)
                 downed = true
             }
             MotionEvent.ACTION_MOVE -> {

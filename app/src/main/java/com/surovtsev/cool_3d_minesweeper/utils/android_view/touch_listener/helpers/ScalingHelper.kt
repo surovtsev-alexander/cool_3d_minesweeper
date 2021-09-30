@@ -21,8 +21,7 @@ class ScalingHelper @Inject constructor(
     }
 
     override fun onTouch(event: MotionEvent) {
-        val needToBeInitted = getAndRelease()
-
+        val needToBeInitialized = getAndRelease()
 
         val a = getVec(event, 0)
         val b = getVec(event, 1)
@@ -30,7 +29,7 @@ class ScalingHelper @Inject constructor(
         val distance = (a - b).length()
         val center = (a + b) / 2
 
-        if (!needToBeInitted) {
+        if (!needToBeInitialized) {
             if (!MyMath.isZero(prevDistance)) {
                 val factor = distance / prevDistance
                 moveHandler.scale(factor)

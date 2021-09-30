@@ -35,7 +35,7 @@ class DaggerComponentsHolder(
             this.entry = entry
         }
 
-        fun forgotComponent() {
+        private fun forgotComponent() {
             this.component = null
             this.entry = null
         }

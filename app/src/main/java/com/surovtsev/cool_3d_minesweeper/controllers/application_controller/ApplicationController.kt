@@ -15,37 +15,7 @@ class ApplicationController : Application() {
 
         daggerComponentsHolder = DaggerComponentsHolder(this)
     }
-//    companion object {
-//        private var instance: ApplicationController? = null
-//
-//        fun getInstance() = instance!!
-//
-//        fun tryToAddMessageToComponent(msg: String) =
-//            instance!!.messagesComponent?.addMessageUI(msg)
-//
-//        private var startingActivity = false
-//
-//        fun startingActivityCode(action: () -> Unit) {
-//            if (startingActivity) return
-//            startingActivity = true
-//            action()
-//        }
-//
-//        fun activityStarted() { startingActivity = false }
-//    }
-//
-//    var messagesComponent: MessagesComponent? = null
-//
-//    var logScene: LogSceneDelegate? = null
-//    init {
-//        if (instance != null) {
-//            throw Exception("Application controller instanced")
-//        }
-//        instance = this
-//    }
 }
-
-//typealias LogSceneDelegate = () -> Unit
 
 val Context.daggerComponentsHolder:DaggerComponentsHolder
     get() = when (this) {

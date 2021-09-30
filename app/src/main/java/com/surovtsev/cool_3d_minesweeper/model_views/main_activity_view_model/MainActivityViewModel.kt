@@ -7,7 +7,6 @@ import com.surovtsev.cool_3d_minesweeper.presentation.Screen
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import javax.inject.Inject
 
-typealias HasSaveEvent = MyLiveData<Boolean>
 typealias ButtonsInfo = List<MainActivityViewModel.ButtonInfo>
 
 @AppScope

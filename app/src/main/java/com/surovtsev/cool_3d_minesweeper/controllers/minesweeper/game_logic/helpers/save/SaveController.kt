@@ -16,7 +16,7 @@ class SaveController @Inject constructor(
         Gson()
     }
 
-    val pref by lazy {
+    private val pref by lazy {
         context.getSharedPreferences("default", Context.MODE_PRIVATE)
     }
 
@@ -46,7 +46,7 @@ class SaveController @Inject constructor(
         }
         return try {
             val data = loadData(name)
-            val res = gson.fromJson<T>(
+            val res = gson.fromJson(
                 data,
                 T::class.java
             )
@@ -61,7 +61,7 @@ class SaveController @Inject constructor(
     }
 
     fun loadSettingDataOrDefault() =
-        tryToLoad<SettingsData>(
+        tryToLoad(
             SaveTypes.GameSettingsJson
         )?: SettingsData()
 

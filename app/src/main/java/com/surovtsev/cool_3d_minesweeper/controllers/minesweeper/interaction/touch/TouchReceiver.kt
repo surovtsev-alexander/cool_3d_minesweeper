@@ -36,11 +36,11 @@ class TouchReceiver @Inject constructor(
     private val touchDelay = 100L
     private val longTouchDelay = 300L
 
-    override fun donw(pos: Vec2, movementStorer_: IStoreMovement) {
+    override fun down(pos: Vec2, movementSaver: IStoreMovement) {
         touchPos = pos
         downTime = customClock.timeAfterDeviceStartup
 
-        movementStorer = movementStorer_
+        this.movementStorer = movementSaver
 
         state =
             State.DELAY_BEFORE_LONG_TOUCH

@@ -9,7 +9,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.IntBuffer
 
-/* TODO: move to Dagger */
 @Suppress("unused")
 class GLIntBuffer (data: IntArray) {
     val bufferId: Int

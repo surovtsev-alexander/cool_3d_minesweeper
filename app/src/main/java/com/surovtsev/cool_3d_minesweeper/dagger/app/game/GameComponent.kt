@@ -47,9 +47,6 @@ interface GameComponent {
     val gameViewEvents: GameViewEvents
     val gameControls: GameControls
     val gLSurfaceView: GLSurfaceView
-    val gameEventsReceiver: GameEventsReceiver
-    val markingEvent: MarkingEvent
-    val minesweeperController: MinesweeperController
 
     @Subcomponent.Builder
     interface Builder {

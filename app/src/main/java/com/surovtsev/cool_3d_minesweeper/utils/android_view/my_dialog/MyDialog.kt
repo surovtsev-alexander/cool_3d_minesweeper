@@ -6,7 +6,10 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.lang.IllegalStateException
 
-class MyDialog(val msg: String): DialogFragment() {
+@Suppress("unused")
+class MyDialog(
+    private val msg: String
+): DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

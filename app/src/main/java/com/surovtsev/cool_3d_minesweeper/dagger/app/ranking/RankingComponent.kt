@@ -27,7 +27,7 @@ object RankingModule {
     fun provideSettingsListWithIds(): SettingsListWithIds {
         return MyLiveData(
             listOf()
-        );
+        )
     }
 
     @RankingScope

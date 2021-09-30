@@ -98,7 +98,7 @@ class CubeCoordinates(
             val trianglesCoordinates = FloatArray(coordinatesCount)
             val indexes = IntArray(indexesCount)
 
-            val centers = Array<Vec3>(cubesCount) { Vec3() }
+            val centers = Array(cubesCount) { Vec3() }
 
             val cubesHalfDims = dimensions / 2
             val cellSpaceWithGaps = gameConfig.cellSpaceWithGaps
@@ -106,13 +106,13 @@ class CubeCoordinates(
             val cellSpace = gameConfig.cellSpace
             val halfGaps = gaps / 2
 
-            CubeSkin.iterateCubes(counts) { posision ->
-                val id = posision.id
+            CubeSkin.iterateCubes(counts) { position ->
+                val id = position.id
                 val startCoordinatesPos = cubeCoordinatesCount * id
                 val startIndexesPos = cubeIndexesCount * id
 
                 fun fillCoordinates() {
-                    val rra = cellSpaceWithGaps.times(posision.getVec())
+                    val rra = cellSpaceWithGaps.times(position.getVec())
                     val ra = rra - cubesHalfDims
 
                     centers[id] = ra + cellWithGapsHalfSpace
