@@ -5,12 +5,9 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.HasSaveEvent
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
-import com.surovtsev.cool_3d_minesweeper.views.activities.MainActivityOld
 import dagger.*
-import javax.inject.Named
 
 @AppScope
 @Component(
@@ -34,8 +31,6 @@ interface AppComponent {
     fun gameComponent(): GameComponent.Builder
     fun rankingComponent(): RankingComponent
     fun settingComponent(): SettingsComponent
-
-    fun inject(mainActivityOld: MainActivityOld)
 }
 
 @Module
