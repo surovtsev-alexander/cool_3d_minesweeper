@@ -24,7 +24,8 @@ class GameActivityViewModel @Inject constructor(
 {
     var glSurfaceViewPrepared: Boolean = false
 
-    fun prepareGlSurfaceView() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
         if (glSurfaceViewPrepared) {
             return
         }

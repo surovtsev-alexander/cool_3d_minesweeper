@@ -16,6 +16,7 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 
 @Composable
 fun MainScreen(
@@ -38,40 +39,43 @@ fun MainScreeControls(
     val buttonsInfo = viewModel.buttonsInfo
     val hasSave = viewModel.hasSave()
 
-    Text(text = "MainScreen")
-    Box(
-        Modifier.background(GrayBackground)//Color(0xFF48cae4))
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    Test_composeTheme {
+        Box(
+            Modifier.background(GrayBackground)//Color(0xFF48cae4))
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                buttonsInfo.forEach { bI ->
-                    val buttonType = bI.buttonType
-                    val isNewGameButton = buttonType == MainActivityViewModel.ButtonType.NewGameButton
-                    val isLoadGameButton = buttonType == MainActivityViewModel.ButtonType.LoadGameButton
-                    Button(
-                        onClick = {
-                            if (isNewGameButton || isLoadGameButton) {
-                                navController.navigate(
-                                    bI.screen.withArgs(
-                                        if (isNewGameButton) false.toString() else hasSave.toString()
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                ) {
+                    buttonsInfo.forEach { bI ->
+                        val buttonType = bI.buttonType
+                        val isNewGameButton =
+                            buttonType == MainActivityViewModel.ButtonType.NewGameButton
+                        val isLoadGameButton =
+                            buttonType == MainActivityViewModel.ButtonType.LoadGameButton
+                        Button(
+                            onClick = {
+                                if (isNewGameButton || isLoadGameButton) {
+                                    navController.navigate(
+                                        bI.screen.withArgs(
+                                            if (isNewGameButton) false.toString() else hasSave.toString()
+                                        )
                                     )
-                                )
-                            } else {
-                                navController.navigate(bI.screen.route)
-                            }
-                        },
-                        Modifier
-                            .fillMaxWidth(fraction = 0.75f)
-                            .border(1.dp, Color.Black),
-                        enabled = !isLoadGameButton || hasSave
-                    ) {
-                        Text(text = bI.caption)
+                                } else {
+                                    navController.navigate(bI.screen.route)
+                                }
+                            },
+                            Modifier
+                                .fillMaxWidth(fraction = 0.75f)
+                                .border(1.dp, Color.Black),
+                            enabled = !isLoadGameButton || hasSave
+                        ) {
+                            Text(text = bI.caption)
+                        }
                     }
                 }
             }

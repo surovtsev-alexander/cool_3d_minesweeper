@@ -30,11 +30,10 @@ fun GameScreen(
     activity: Activity
 ) {
     if (!OpenGLInfoHelper.isSupportEs2(activity)) {
-        Toast.makeText(
-            activity,
-            "This device does not support OpenGL ES 2.0",
-            Toast.LENGTH_LONG
-        ).show()
+        Text(
+            text = "This device does not support OpenGL ES 2.0",
+            modifier = Modifier.fillMaxSize()
+        )
         return
     }
 
@@ -42,10 +41,6 @@ fun GameScreen(
     val gLSurfaceView = gameComponent.gLSurfaceView
     val gameViewEvents = gameComponent.gameViewEvents
     val gameControls = gameComponent.gameControls
-
-    val x = viewModel.minesweeperController.scene.gameControls.markOnShortTapControl
-
-    viewModel.prepareGlSurfaceView()
 
     GameScreenControls(
         viewModel,
