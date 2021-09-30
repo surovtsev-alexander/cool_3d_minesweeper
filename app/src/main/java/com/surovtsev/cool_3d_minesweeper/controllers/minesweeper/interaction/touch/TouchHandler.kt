@@ -1,14 +1,14 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class TouchHandler @Inject constructor(
     private val cameraInfoHelper: CameraInfoHelper,
     val pointer: Pointer

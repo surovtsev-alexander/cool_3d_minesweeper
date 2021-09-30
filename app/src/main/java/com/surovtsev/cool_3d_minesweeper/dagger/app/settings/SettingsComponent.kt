@@ -6,7 +6,6 @@ import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.Borders
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.SettingsDataHelper
-import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
@@ -25,8 +24,6 @@ interface SettingsComponent {
     val settingsActivityViewModel: SettingsActivityViewModel
 
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
-
-    fun inject(settingsActivity: SettingsActivity)
 }
 
 @Module

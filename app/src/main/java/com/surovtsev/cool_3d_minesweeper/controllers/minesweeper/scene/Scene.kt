@@ -1,10 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.IntersectionCalculator
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchHandler
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.view.pointer.GLPointerView
@@ -13,11 +13,11 @@ import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
     private val timeSpanHelper: TimeSpanHelper,
-    private val gameControls: GameControls,
+    val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: IPointer,
     val touchHandler: TouchHandler,

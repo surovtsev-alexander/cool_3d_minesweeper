@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityEvents
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityViewModel
@@ -30,12 +31,9 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 
 @Composable
 fun RankingScreen(
-    daggerComponentsHolder: DaggerComponentsHolder
+    rankingComponent: RankingComponent
 ) {
-    val rankingComponent = daggerComponentsHolder
-        .createAndGetRankingComponent()
-
-    val viewModel = rankingComponent.viewModel
+    val viewModel = rankingComponent.rankingActivityViewModel
     val rankingActivityEvents = rankingComponent.rankingActivityEvents
 
     viewModel.loadData()

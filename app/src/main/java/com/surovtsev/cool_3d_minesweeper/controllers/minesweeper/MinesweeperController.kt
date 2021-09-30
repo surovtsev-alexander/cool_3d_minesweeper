@@ -4,12 +4,12 @@ import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.GameLogic
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.Scene
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
 import com.surovtsev.cool_3d_minesweeper.models.game.save.Save
 import com.surovtsev.cool_3d_minesweeper.models.gles.game_views_holder.GameViewsHolder
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.TouchListener
@@ -19,7 +19,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class MinesweeperController @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val touchReceiver: TouchReceiver,

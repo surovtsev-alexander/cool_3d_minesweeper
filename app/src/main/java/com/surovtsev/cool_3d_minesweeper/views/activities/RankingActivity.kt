@@ -30,221 +30,221 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.LightBlue
 import javax.inject.Inject
 
 
-class RankingActivity: ComponentActivity() {
-    @Inject
-    lateinit var viewModel: RankingActivityViewModel
-    @Inject
-    lateinit var rankingActivityEvents: RankingActivityEvents
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        daggerComponentsHolder
-            .createAndGetRankingComponent()
-            .inject(this)
-
-        setContent {
-            RankingControls(viewModel, rankingActivityEvents)
-        }
-
-        viewModel.loadData()
-    }
-}
-
-@Composable
-fun RankingControls(
-    viewModel: RankingActivityViewModel,
-    rankingActivityEvents: RankingActivityEvents
-) {
-    Test_composeTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .border(1.dp, Color.Black),
-            //verticalArrangement = Arrangement.spacedBy(15.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxHeight(.3f)
-            ) {
-                SettingsList(viewModel, rankingActivityEvents)
-            }
-            Row(
-                modifier = Modifier.fillMaxHeight(1f)
-            ) {
-                RankingList(rankingActivityEvents)
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun SettingsList(
-    viewModel: RankingActivityViewModel,
-    rankingActivityEvents: RankingActivityEvents
-) {
-    val settingsList: List<DataWithId<SettingsData>> by rankingActivityEvents.settingsListWithIds.run {
-        data.observeAsState(defaultValue)
-    }
-    val selectedSettingsId: Int by rankingActivityEvents.selectedSettingsId.run {
-        data.observeAsState(defaultValue)
-    }
-    val winsCountMap: Map<Int, Int> by rankingActivityEvents.winsCount.run {
-        data.observeAsState(defaultValue)
-    }
-
-    Box(
-        modifier = Modifier
-            .background(GrayBackground)
-            .border(1.dp, Color.Black)
-            .padding(horizontal = 1.dp),
-    ) {
-        Column(
-            Modifier.fillMaxSize()
-        ) {
-            Row {
-                Text(
-                    "counts",
-                    Modifier.fillMaxWidth(0.33f),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    "bombs %",
-                    Modifier.fillMaxWidth(0.5f),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    "wins",
-                    Modifier.fillMaxWidth(1f),
-                    textAlign = TextAlign.End
-                )
-            }
-            LazyColumn {
-                items(settingsList) { item ->
-                    val itemId = item.id
-                    if (winsCountMap.containsKey(itemId)) {
-                        val winsCount = winsCountMap[itemId]!!
-                        if (selectedSettingsId == itemId) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        LightBlue
-                                    )
-
-                            ) {
-                                SettingsDataItem(item, winsCount)
-                            }
-                        } else {
-                            Surface(
-                                shape = MaterialTheme.shapes.large,
-                                onClick = { viewModel.loadRankingForSettingsId(itemId) },
-                            ) {
-                                SettingsDataItem(item, winsCount)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsDataItem(
-    settingDataWithId: DataWithId<SettingsData>,
-    winsCount: Int
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        val settingsData = settingDataWithId.data
-        val counts = settingsData.getCounts()
-        Text(
-            counts.toString(),
-            Modifier.fillMaxWidth(0.33f),
-            textAlign = TextAlign.Start
-        )
-        Text(
-            settingsData.bombsPercentage.toString(),
-            Modifier.fillMaxWidth(0.5f),
-            textAlign = TextAlign.Center
-        )
-        Text(
-            winsCount.toString(),
-            Modifier.fillMaxWidth(1f),
-            textAlign = TextAlign.End
-        )
-    }
-}
-
-@Composable
-fun RankingList(
-    rankingActivityEvents: RankingActivityEvents
-) {
-    val filteredRankingList: List<RankingData> by rankingActivityEvents.filteredRankingList.run {
-        data.observeAsState(defaultValue)
-    }
-    Box (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DeepGray)
-            .border(1.dp, Color.Black)
-            .padding(horizontal = 1.dp),
-    ) {
-        Column {
-            Row {
-                Text(
-                    "#",
-                    Modifier.fillMaxWidth(0.2f),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    "date",
-                    Modifier.fillMaxWidth(0.5f),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    "seconds",
-                    Modifier.fillMaxWidth(1f),
-                    textAlign = TextAlign.End
-                )
-            }
-            LazyColumn {
-                items(filteredRankingList.withIndex().toList()) { item ->
-                    RankingDataItem(item)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun RankingDataItem(
-    indexedRankingData: IndexedValue<RankingData>
-) {
-    Box ()
-    {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                (indexedRankingData.index + 1).toString(),
-                Modifier.fillMaxWidth(0.2f),
-                textAlign = TextAlign.Start
-            )
-            Text(
-                indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
-                Modifier.fillMaxWidth(0.5f),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
-                Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End
-
-            )
-        }
-    }
-}
+//class RankingActivity: ComponentActivity() {
+//    @Inject
+//    lateinit var viewModel: RankingActivityViewModel
+//    @Inject
+//    lateinit var rankingActivityEvents: RankingActivityEvents
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        daggerComponentsHolder
+//            .createAndGetRankingComponent()
+//            .inject(this)
+//
+//        setContent {
+//            RankingControls(viewModel, rankingActivityEvents)
+//        }
+//
+//        viewModel.loadData()
+//    }
+//}
+//
+//@Composable
+//fun RankingControls(
+//    viewModel: RankingActivityViewModel,
+//    rankingActivityEvents: RankingActivityEvents
+//) {
+//    Test_composeTheme {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .border(1.dp, Color.Black),
+//            //verticalArrangement = Arrangement.spacedBy(15.dp),
+//        ) {
+//            Row(
+//                modifier = Modifier.fillMaxHeight(.3f)
+//            ) {
+//                SettingsList(viewModel, rankingActivityEvents)
+//            }
+//            Row(
+//                modifier = Modifier.fillMaxHeight(1f)
+//            ) {
+//                RankingList(rankingActivityEvents)
+//            }
+//        }
+//    }
+//}
+//
+//@OptIn(ExperimentalMaterialApi::class)
+//@Composable
+//fun SettingsList(
+//    viewModel: RankingActivityViewModel,
+//    rankingActivityEvents: RankingActivityEvents
+//) {
+//    val settingsList: List<DataWithId<SettingsData>> by rankingActivityEvents.settingsListWithIds.run {
+//        data.observeAsState(defaultValue)
+//    }
+//    val selectedSettingsId: Int by rankingActivityEvents.selectedSettingsId.run {
+//        data.observeAsState(defaultValue)
+//    }
+//    val winsCountMap: Map<Int, Int> by rankingActivityEvents.winsCount.run {
+//        data.observeAsState(defaultValue)
+//    }
+//
+//    Box(
+//        modifier = Modifier
+//            .background(GrayBackground)
+//            .border(1.dp, Color.Black)
+//            .padding(horizontal = 1.dp),
+//    ) {
+//        Column(
+//            Modifier.fillMaxSize()
+//        ) {
+//            Row {
+//                Text(
+//                    "counts",
+//                    Modifier.fillMaxWidth(0.33f),
+//                    textAlign = TextAlign.Start
+//                )
+//                Text(
+//                    "bombs %",
+//                    Modifier.fillMaxWidth(0.5f),
+//                    textAlign = TextAlign.Center
+//                )
+//                Text(
+//                    "wins",
+//                    Modifier.fillMaxWidth(1f),
+//                    textAlign = TextAlign.End
+//                )
+//            }
+//            LazyColumn {
+//                items(settingsList) { item ->
+//                    val itemId = item.id
+//                    if (winsCountMap.containsKey(itemId)) {
+//                        val winsCount = winsCountMap[itemId]!!
+//                        if (selectedSettingsId == itemId) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .background(
+//                                        LightBlue
+//                                    )
+//
+//                            ) {
+//                                SettingsDataItem(item, winsCount)
+//                            }
+//                        } else {
+//                            Surface(
+//                                shape = MaterialTheme.shapes.large,
+//                                onClick = { viewModel.loadRankingForSettingsId(itemId) },
+//                            ) {
+//                                SettingsDataItem(item, winsCount)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun SettingsDataItem(
+//    settingDataWithId: DataWithId<SettingsData>,
+//    winsCount: Int
+//) {
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//    ) {
+//        val settingsData = settingDataWithId.data
+//        val counts = settingsData.getCounts()
+//        Text(
+//            counts.toString(),
+//            Modifier.fillMaxWidth(0.33f),
+//            textAlign = TextAlign.Start
+//        )
+//        Text(
+//            settingsData.bombsPercentage.toString(),
+//            Modifier.fillMaxWidth(0.5f),
+//            textAlign = TextAlign.Center
+//        )
+//        Text(
+//            winsCount.toString(),
+//            Modifier.fillMaxWidth(1f),
+//            textAlign = TextAlign.End
+//        )
+//    }
+//}
+//
+//@Composable
+//fun RankingList(
+//    rankingActivityEvents: RankingActivityEvents
+//) {
+//    val filteredRankingList: List<RankingData> by rankingActivityEvents.filteredRankingList.run {
+//        data.observeAsState(defaultValue)
+//    }
+//    Box (
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(DeepGray)
+//            .border(1.dp, Color.Black)
+//            .padding(horizontal = 1.dp),
+//    ) {
+//        Column {
+//            Row {
+//                Text(
+//                    "#",
+//                    Modifier.fillMaxWidth(0.2f),
+//                    textAlign = TextAlign.Start
+//                )
+//                Text(
+//                    "date",
+//                    Modifier.fillMaxWidth(0.5f),
+//                    textAlign = TextAlign.Center
+//                )
+//                Text(
+//                    "seconds",
+//                    Modifier.fillMaxWidth(1f),
+//                    textAlign = TextAlign.End
+//                )
+//            }
+//            LazyColumn {
+//                items(filteredRankingList.withIndex().toList()) { item ->
+//                    RankingDataItem(item)
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun RankingDataItem(
+//    indexedRankingData: IndexedValue<RankingData>
+//) {
+//    Box ()
+//    {
+//        Row(
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Text(
+//                (indexedRankingData.index + 1).toString(),
+//                Modifier.fillMaxWidth(0.2f),
+//                textAlign = TextAlign.Start
+//            )
+//            Text(
+//                indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
+//                Modifier.fillMaxWidth(0.5f),
+//                textAlign = TextAlign.Center
+//            )
+//            Text(
+//                DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
+//                Modifier.fillMaxWidth(),
+//                textAlign = TextAlign.End
+//
+//            )
+//        }
+//    }
+//}
 

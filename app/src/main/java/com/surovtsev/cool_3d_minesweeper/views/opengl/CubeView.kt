@@ -3,20 +3,20 @@ package com.surovtsev.cool_3d_minesweeper.views.opengl
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool_3d_minesweeper.R
-import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
-import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool_3d_minesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
+import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class CubeView @Inject constructor(
     private val context: Context,
     private val cubeCoordinates: CubeCoordinates

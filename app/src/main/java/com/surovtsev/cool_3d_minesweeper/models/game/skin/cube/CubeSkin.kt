@@ -1,14 +1,14 @@
 package com.surovtsev.cool_3d_minesweeper.models.game.skin.cube
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
-import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellIndex
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.cell.CellSkin
 import glm_.vec3.Vec3i
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class CubeSkin @Inject constructor(
     gameConfig: GameConfig
 ) {

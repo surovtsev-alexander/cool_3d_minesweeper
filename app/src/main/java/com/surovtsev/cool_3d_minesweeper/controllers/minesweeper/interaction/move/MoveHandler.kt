@@ -1,15 +1,15 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.interaction.move
 
-import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IMoveReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IRotationReceiver
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.interfaces.IScaleReceiver
+import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class MoveHandler @Inject constructor(
     private val cameraInfoHelper: CameraInfoHelper
 ):

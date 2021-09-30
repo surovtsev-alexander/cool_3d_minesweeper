@@ -7,14 +7,14 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.inte
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
     private val context: Context,
     private val saveController: SaveController,

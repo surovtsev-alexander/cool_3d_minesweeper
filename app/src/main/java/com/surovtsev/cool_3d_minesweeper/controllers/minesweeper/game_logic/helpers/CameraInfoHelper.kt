@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.utils.math.MatrixHelper
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Updatable
@@ -11,7 +11,7 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 import javax.inject.Inject
 
-@GameControllerScope
+@GameScope
 class CameraInfoHelper @Inject constructor(
     val cameraInfo: CameraInfo,
 ):

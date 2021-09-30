@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
@@ -27,7 +27,7 @@ import javax.inject.Inject
 //        ): GameLogicStateHelper
 //    }
 
-@GameControllerScope
+@GameScope
 class GameLogicStateHelper @Inject constructor(
     private val gameEventsReceiver: GameEventsReceiver,
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
@@ -40,7 +40,7 @@ class GameLogicStateHelper @Inject constructor(
 
     private val timeSpan = TimeSpan(1000L, timeSpanHelper)
 
-    fun isGameNotStarted() = (gameStatus == GameStatus.BombsPlaced)
+    fun isGameNotStarted() = (gameStatus == GameStatus.NoBombsPlaced)
 
     fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus)
 

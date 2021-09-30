@@ -3,7 +3,6 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.ranking
 import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.*
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
-import com.surovtsev.cool_3d_minesweeper.views.activities.RankingActivity
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
@@ -16,10 +15,8 @@ import javax.inject.Named
     ]
 )
 interface RankingComponent {
-    var viewModel: RankingActivityViewModel
+    var rankingActivityViewModel: RankingActivityViewModel
     var rankingActivityEvents: RankingActivityEvents
-
-    fun inject(rankingActivity: RankingActivity)
 }
 
 @Module

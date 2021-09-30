@@ -1,6 +1,6 @@
 package com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer
 
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import glm_.vec3.Vec3
 import javax.inject.Inject
@@ -33,7 +33,7 @@ open class PointerData(
     open var touchType: TouchType
 )
 
-@GameControllerScope
+@GameScope
 open class Pointer @Inject constructor(): PointerData(Vec3(), Vec3(), TouchType.SHORT),
     IPointer {
     override var near: Vec3

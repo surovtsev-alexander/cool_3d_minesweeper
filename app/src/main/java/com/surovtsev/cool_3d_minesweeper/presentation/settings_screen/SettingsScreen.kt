@@ -24,16 +24,13 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
-import com.surovtsev.cool_3d_minesweeper.views.activities.SettingsActivity
+import kotlin.math.round
 
 @Composable
 fun SettingsScreen(
-    daggerComponentsHolder: DaggerComponentsHolder,
+    settingsComponent: SettingsComponent,
     navController: NavController
 ) {
-    val settingsComponent: SettingsComponent = daggerComponentsHolder
-        .createAndGetSettingComponent()
-
     val viewModel = settingsComponent.settingsActivityViewModel
     viewModel.loadData()
 
@@ -57,16 +54,16 @@ fun SettingsControls(
                         .weight(1f)
                         .border(1.dp, Color.Black)
                 ) {
-                    com.surovtsev.cool_3d_minesweeper.views.activities.SettingsList(viewModel)
+                    SettingsList(viewModel)
                 }
                 Column(
                     modifier = Modifier
                         .border(1.dp, Color.Black)
                 ) {
-                    com.surovtsev.cool_3d_minesweeper.views.activities.Controls(viewModel)
+                    Controls(viewModel)
                 }
                 Column {
-                    com.surovtsev.cool_3d_minesweeper.views.activities.UseButton(viewModel)
+                    UseButton(viewModel)
                 }
             }
         }
@@ -191,6 +188,8 @@ fun Controls(
     }
 }
 
+fun floatToInt(x: Float) = round(x).toInt()
+
 @Composable
 fun MySlider(
     name: String,
@@ -208,7 +207,7 @@ fun MySlider(
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
             Text(
-                SettingsActivity.floatToInt(value).toString(),
+                floatToInt(value).toString(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.5f)
             )

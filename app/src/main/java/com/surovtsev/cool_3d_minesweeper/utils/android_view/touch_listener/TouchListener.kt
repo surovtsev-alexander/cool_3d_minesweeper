@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameControllerScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.MovingHelper
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpers.ScalingHelper
@@ -11,7 +11,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import javax.inject.Inject
 import javax.inject.Named
 
-@GameControllerScope
+@GameScope
 class TouchListener @Inject constructor(
     private val clickAndRotationHelper: ClickAndRotationHelper,
     private val scalingHelper: ScalingHelper,
