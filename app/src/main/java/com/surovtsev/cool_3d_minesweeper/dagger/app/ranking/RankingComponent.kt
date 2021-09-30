@@ -16,6 +16,8 @@ import javax.inject.Named
     ]
 )
 interface RankingComponent {
+    var viewModel: RankingActivityViewModel
+    var rankingActivityEvents: RankingActivityEvents
 
     fun inject(rankingActivity: RankingActivity)
 }
