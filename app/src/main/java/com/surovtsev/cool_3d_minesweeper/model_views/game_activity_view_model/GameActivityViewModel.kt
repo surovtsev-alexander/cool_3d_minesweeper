@@ -1,8 +1,10 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model
 
 import android.opengl.GLSurfaceView
-import android.util.Log
 import android.view.KeyEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.MarkingEvent
@@ -17,7 +19,8 @@ class GameActivityViewModel @Inject constructor(
     var gameRenderer: GLESRenderer,
     var gLSurfaceView: GLSurfaceView
 ):
-    IHandlePauseResumeDestroyKeyDown
+    IHandlePauseResumeDestroyKeyDown,
+    LifecycleObserver
 {
     var glSurfaceViewPrepared: Boolean = false
 
@@ -37,14 +40,19 @@ class GameActivityViewModel @Inject constructor(
         }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     override fun onPause() {
+        gLSurfaceView.onPause()
         minesweeperController.onPause()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     override fun onResume() {
+        gLSurfaceView.onResume()
         minesweeperController.onResume()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     override fun onDestroy() {
         minesweeperController.onDestroy()
     }

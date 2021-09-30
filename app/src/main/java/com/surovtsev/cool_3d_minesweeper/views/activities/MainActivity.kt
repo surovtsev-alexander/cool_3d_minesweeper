@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool_3d_minesweeper.presentation.Screen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.GameScreen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
@@ -34,8 +32,6 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.MainScreen.route
                 ) { entry ->
-                    Log.d("TEST+++", "MainActivity MainScreen entry ${System.identityHashCode(entry)}")
-                    Log.d("TEST+++", "MainActivity start MainScreen")
                     val appComponent = daggerComponentsHolder.appComponent
                     MainScreen(
                         appComponent,
@@ -52,13 +48,13 @@ class MainActivity: ComponentActivity() {
                         }
                     )
                 ) { entry ->
-                    Log.d("TEST+++", "MainActivity GameScreen entry ${System.identityHashCode(entry)}")
-                    Log.d("TEST+++", "MainActivity start GameScreen")
                     val loadGame = entry.arguments?.getString(LoadGameParameterName).toBoolean()
-                    val gameComponent = daggerComponentsHolder.getGameComponent(
-                        loadGame,
-                        entry
-                    )
+                    if (daggerComponentsHolder.createGameComponentIfNeeded(loadGame, entry)) {
+                        val gameComponent = daggerComponentsHolder.gameComponentHolder.component!!
+                        val viewModel = gameComponent.gameActivityViewModel
+                        entry.lifecycle.addObserver(viewModel)
+                    }
+                    val gameComponent = daggerComponentsHolder.gameComponentHolder.component!!
                     GameScreen(
                         gameComponent,
                         this@MainActivity
@@ -66,20 +62,18 @@ class MainActivity: ComponentActivity() {
                 }
                 composable(
                     route = Screen.RankingScreen.route
-                ) {
-                    Log.d("TEST+++", "MainActivity start RankingScreen")
-                    val rankingComponent = daggerComponentsHolder
-                        .createAndGetRankingComponent()
+                ) { entry ->
+                    daggerComponentsHolder.createRankingComponentIfNeeded(entry)
+                    val rankingComponent = daggerComponentsHolder.rankingComponentHolder.component!!
                     RankingScreen(
                         rankingComponent
                     )
                 }
                 composable(
                     route = Screen.SettingsScreen.route
-                ) {
-                    Log.d("TEST+++", "MainActivity start SettingsScreen")
-                    val settingsComponent: SettingsComponent = daggerComponentsHolder
-                        .createAndGetSettingComponent()
+                ) { entry ->
+                    daggerComponentsHolder.createSettingsComponentIfNeeded(entry)
+                    val settingsComponent = daggerComponentsHolder.settingComponentHolder.component!!
                     SettingsScreen(
                         settingsComponent,
                         navController
@@ -88,20 +82,5 @@ class MainActivity: ComponentActivity() {
             }
 //            Navigation()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
     }
 }
