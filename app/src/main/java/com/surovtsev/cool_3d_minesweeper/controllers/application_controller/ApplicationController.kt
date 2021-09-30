@@ -3,17 +3,17 @@ package com.surovtsev.cool_3d_minesweeper.controllers.application_controller
 import android.app.Application
 import android.content.Context
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolderNew
+import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 
 class ApplicationController : Application() {
-    lateinit var daggerComponentsHolderNew: DaggerComponentsHolderNew
+    lateinit var daggerComponentsHolder: DaggerComponentsHolder
 
     override fun onCreate() {
         AndroidThreeTen.init(this)
 
         super.onCreate()
 
-        daggerComponentsHolderNew = DaggerComponentsHolderNew(this)
+        daggerComponentsHolder = DaggerComponentsHolder(this)
     }
 //    companion object {
 //        private var instance: ApplicationController? = null
@@ -47,8 +47,8 @@ class ApplicationController : Application() {
 
 //typealias LogSceneDelegate = () -> Unit
 
-val Context.daggerComponentsHolderNew:DaggerComponentsHolderNew
+val Context.daggerComponentsHolder:DaggerComponentsHolder
     get() = when (this) {
-        is ApplicationController -> daggerComponentsHolderNew
-        else -> this.applicationContext.daggerComponentsHolderNew
+        is ApplicationController -> daggerComponentsHolder
+        else -> this.applicationContext.daggerComponentsHolder
     }

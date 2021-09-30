@@ -7,7 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
 
-class DaggerComponentsHolderNew(
+class DaggerComponentsHolder(
     context: Context
 ) {
     val appComponent = DaggerAppComponent
