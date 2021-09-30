@@ -22,6 +22,8 @@ import javax.inject.Named
     ]
 )
 interface SettingsComponent {
+    val settingsActivityViewModel: SettingsActivityViewModel
+
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
 
     fun inject(settingsActivity: SettingsActivity)

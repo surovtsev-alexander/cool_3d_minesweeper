@@ -32,8 +32,8 @@ class MainActivity: ComponentActivity() {
                     route = Screen.MainScreen.route
                 ) {
                     MainScreen(
-                        navController,
-                        daggerComponentsHolder
+                        daggerComponentsHolder,
+                        navController
                     )
                 }
                 composable(
@@ -62,7 +62,8 @@ class MainActivity: ComponentActivity() {
                     route = Screen.SettingsScreen.route
                 ) {
                     SettingsScreen(
-                        daggerComponentsHolder
+                        daggerComponentsHolder,
+                        navController
                     )
                 }
             }

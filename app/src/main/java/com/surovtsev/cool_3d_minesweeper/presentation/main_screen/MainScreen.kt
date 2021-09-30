@@ -17,13 +17,24 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
 
 @Composable
 fun MainScreen(
-    navController: NavController,
-    daggerComponentsHolder: DaggerComponentsHolder
+    daggerComponentsHolder: DaggerComponentsHolder,
+    navController: NavController
 ) {
-    val modelView = daggerComponentsHolder.appComponent.mainActivityViewModel
+    val viewModel = daggerComponentsHolder.appComponent.mainActivityViewModel
 
-    val buttonsInfo = modelView.buttonsInfo
-    val hasSave = modelView.hasSave()
+    MainScreeControls(
+        viewModel,
+        navController
+    )
+}
+
+@Composable
+fun MainScreeControls(
+    viewModel: MainActivityViewModel,
+    navController: NavController
+) {
+    val buttonsInfo = viewModel.buttonsInfo
+    val hasSave = viewModel.hasSave()
 
     Text(text = "MainScreen")
     Box(
