@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_model_view.GameActivityModelView
-import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.viewinterop.AndroidView

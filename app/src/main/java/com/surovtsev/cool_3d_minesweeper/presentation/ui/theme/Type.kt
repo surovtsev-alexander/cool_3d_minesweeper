@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.theme
+package com.surovtsev.cool_3d_minesweeper.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -24,9 +24,9 @@ import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_model_view
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
-import com.surovtsev.cool_3d_minesweeper.views.theme.DeepGray
-import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
-import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.DeepGray
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.LightBlue
 import javax.inject.Inject
 
 

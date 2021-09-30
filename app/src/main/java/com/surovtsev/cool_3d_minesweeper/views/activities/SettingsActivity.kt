@@ -16,15 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.surovtsev.cool_3d_minesweeper.views.theme.PrimaryColor1
-import com.surovtsev.cool_3d_minesweeper.views.theme.Test_composeTheme
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.PrimaryColor1
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 import androidx.compose.runtime.getValue
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_model_view.SettingsActivityModelView
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
-import com.surovtsev.cool_3d_minesweeper.views.theme.GrayBackground
-import com.surovtsev.cool_3d_minesweeper.views.theme.LightBlue
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
+import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.LightBlue
 import javax.inject.Inject
 import kotlin.math.round
 
