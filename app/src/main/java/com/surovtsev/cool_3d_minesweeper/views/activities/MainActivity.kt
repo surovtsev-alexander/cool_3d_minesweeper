@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
+import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolderNew
 import com.surovtsev.cool_3d_minesweeper.presentation.Screen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.GameScreen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
@@ -22,7 +22,7 @@ class MainActivity: ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            val daggerComponentsHolder = daggerComponentsHolder
+            val daggerComponentsHolder = daggerComponentsHolderNew
 
             NavHost(
                 navController = navController,
@@ -30,7 +30,7 @@ class MainActivity: ComponentActivity() {
             ) {
                 composable(
                     route = Screen.MainScreen.route
-                ) { entry ->
+                ) {
                     val appComponent = daggerComponentsHolder.appComponent
                     MainScreen(
                         appComponent,
@@ -72,7 +72,7 @@ class MainActivity: ComponentActivity() {
                     route = Screen.SettingsScreen.route
                 ) { entry ->
                     daggerComponentsHolder.createSettingsComponentIfNeeded(entry)
-                    val settingsComponent = daggerComponentsHolder.settingComponentHolder.component!!
+                    val settingsComponent = daggerComponentsHolder.settingsComponentHolder.component!!
                     SettingsScreen(
                         settingsComponent,
                         navController

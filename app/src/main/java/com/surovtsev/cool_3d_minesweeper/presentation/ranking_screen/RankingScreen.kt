@@ -3,12 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.presentation.ranking_screen
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
-import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityEvents
 import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
@@ -70,7 +67,6 @@ fun RankingControls(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(
     viewModel: RankingActivityViewModel,
@@ -123,14 +119,12 @@ fun SettingsList(
                                     .background(
                                         LightBlue
                                     )
-
                             ) {
                                 SettingsDataItem(item, winsCount)
                             }
                         } else {
-                            Surface(
-                                shape = MaterialTheme.shapes.large,
-                                onClick = { viewModel.loadRankingForSettingsId(itemId) },
+                            Box (
+                                modifier = Modifier.clickable { viewModel.loadRankingForSettingsId(itemId) }
                             ) {
                                 SettingsDataItem(item, winsCount)
                             }

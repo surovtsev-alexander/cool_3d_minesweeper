@@ -3,14 +3,14 @@ package com.surovtsev.cool_3d_minesweeper.presentation.game_screen
 import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.text.format.DateUtils
-import android.util.Log
-import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
@@ -148,7 +148,6 @@ fun ControlButtons(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ControlCheckBox(
     markingEvent: MarkingEvent,
@@ -156,9 +155,8 @@ fun ControlCheckBox(
     val checked: Boolean by markingEvent.run {
         data.observeAsState(defaultValue)
     }
-    Surface(
-        shape = MaterialTheme.shapes.large,
-        onClick = { markingEvent.onDataChanged(!checked) },
+    Box(
+        modifier = Modifier.clickable { markingEvent.onDataChanged(!checked) }
     ) {
         Row(
             Modifier.fillMaxWidth(),
@@ -167,7 +165,8 @@ fun ControlCheckBox(
                 checked = checked,
                 onCheckedChange = {
                     markingEvent.onDataChanged(it)
-                }
+                },
+                modifier = Modifier.weight(1f)
             )
             Text(
                 "marking"
@@ -224,23 +223,24 @@ fun GameStatusDialog(
     val showDialog: Boolean by showDialogEvent.run {
         data.observeAsState(defaultValue)
     }
-    if (showDialog) {
-        val closeDialogAction = { showDialogEvent.onDataChanged(false) }
-        AlertDialog(
-            onDismissRequest = closeDialogAction,
-            title = { Text(text = "Game status") },
-            text = { Text(
-                /* TODO: replace with gameStatusEvent */
-                text = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
-            ) },
-
-            confirmButton = {
-                Button(
-                    onClick = closeDialogAction
-                ) {
-                    Text(text = "Ok")
-                }
-            }
-        )
+    if (!showDialog) {
+        return
     }
+    val closeDialogAction = { showDialogEvent.onDataChanged(false) }
+    AlertDialog(
+        onDismissRequest = closeDialogAction,
+        title = { Text(text = "Game status") },
+        text = { Text(
+            /* TODO: replace with gameStatusEvent */
+            text = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
+        ) },
+
+        confirmButton = {
+            Button(
+                onClick = closeDialogAction
+            ) {
+                Text(text = "Ok")
+            }
+        }
+    )
 }

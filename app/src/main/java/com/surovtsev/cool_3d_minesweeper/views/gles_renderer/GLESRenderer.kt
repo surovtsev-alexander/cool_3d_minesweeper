@@ -2,7 +2,6 @@ package com.surovtsev.cool_3d_minesweeper.views.gles_renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import android.util.Log
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import javax.inject.Inject

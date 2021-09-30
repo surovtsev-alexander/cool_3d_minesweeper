@@ -2,10 +2,12 @@ package com.surovtsev.cool_3d_minesweeper.presentation.settings_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
-import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.SettingsActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
@@ -70,7 +71,6 @@ fun SettingsControls(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsList(viewModel: SettingsActivityViewModel) {
     val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsActivityEvents.settingsList.run {
@@ -114,9 +114,8 @@ fun SettingsList(viewModel: SettingsActivityViewModel) {
                             SettingsDataItem(viewModel,item)
                         }
                     } else {
-                        Surface (
-                            shape = MaterialTheme.shapes.large,
-                            onClick = { viewModel.useSettings(item) },
+                        Box (
+                            modifier = Modifier.clickable { viewModel.useSettings(item) }
                         ) {
                             SettingsDataItem(viewModel, item)
                         }
@@ -127,7 +126,6 @@ fun SettingsList(viewModel: SettingsActivityViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SettingsDataItem(
     viewModel: SettingsActivityViewModel,
@@ -149,10 +147,10 @@ fun SettingsDataItem(
             Modifier.fillMaxWidth(0.5f),
             textAlign = TextAlign.Center
         )
-        Surface (
-            shape = MaterialTheme.shapes.large,
-            onClick = { viewModel.deleteSettings(settingDataWithId.id) },
-            color = PrimaryColor1
+        Box (
+            modifier = Modifier
+                .clickable { viewModel.deleteSettings(settingDataWithId.id) }
+                .background(PrimaryColor1)
         ) {
             Text(
                 "delete",
@@ -227,21 +225,20 @@ fun MySlider(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun UseButton(
     viewModel: SettingsActivityViewModel
 ) {
-    Surface (
+    Box (
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Black),
-        color = PrimaryColor1,
-        shape = MaterialTheme.shapes.large,
-        onClick = { viewModel.useSettings() },
+            .border(1.dp, Color.Black)
+            .clickable { viewModel.useSettings() }
+            .background(PrimaryColor1)
     ) {
         Text(
             "Use",
+            modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontSize = 25.sp
         )

@@ -12,8 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.surovtsev.cool_3d_minesweeper.dagger.app.AppComponent
-import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
-import com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder.DaggerComponentsHolder
 import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme

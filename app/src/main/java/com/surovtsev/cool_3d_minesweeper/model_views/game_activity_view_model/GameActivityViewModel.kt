@@ -14,14 +14,15 @@ import javax.inject.Inject
 
 @GameScope
 class GameActivityViewModel @Inject constructor(
-    var markingEvent: MarkingEvent,
+    private var markingEvent: MarkingEvent,
     var minesweeperController: MinesweeperController,
-    var gameRenderer: GLESRenderer,
-    var gLSurfaceView: GLSurfaceView
+    private var gameRenderer: GLESRenderer,
+    private var gLSurfaceView: GLSurfaceView
 ):
     IHandlePauseResumeDestroyKeyDown,
     LifecycleObserver
 {
+    @Suppress("Unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         gLSurfaceView.apply {
