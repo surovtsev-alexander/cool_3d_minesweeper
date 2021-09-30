@@ -22,15 +22,8 @@ class GameActivityViewModel @Inject constructor(
     IHandlePauseResumeDestroyKeyDown,
     LifecycleObserver
 {
-    var glSurfaceViewPrepared: Boolean = false
-
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        if (glSurfaceViewPrepared) {
-            return
-        }
-        glSurfaceViewPrepared = true
-
         gLSurfaceView.apply {
             minesweeperController.touchListener.connectToGLSurfaceView(
                 gLSurfaceView
