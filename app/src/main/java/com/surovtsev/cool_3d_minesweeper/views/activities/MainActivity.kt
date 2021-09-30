@@ -79,7 +79,6 @@ class MainActivity: ComponentActivity() {
                     )
                 }
             }
-//            Navigation()
         }
     }
 }
