@@ -10,7 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.R
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-@Suppress("Unused")
+@Suppress("unused")
 class MessagesComponent: ScrollView {
     private var lineCount = 0
 

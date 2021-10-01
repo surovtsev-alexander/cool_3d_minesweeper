@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.views.activities
+package com.surovtsev.cool_3d_minesweeper.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.surovtsev.cool_3d_minesweeper.controllers.application_controller.daggerComponentsHolder
-import com.surovtsev.cool_3d_minesweeper.presentation.Screen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.GameScreen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
 import com.surovtsev.cool_3d_minesweeper.presentation.main_screen.MainScreen
@@ -48,7 +47,7 @@ class MainActivity: ComponentActivity() {
                     )
                 ) { entry ->
                     val loadGame = entry.arguments?.getString(LoadGameParameterName).toBoolean()
-                    if (daggerComponentsHolder.createGameComponentIfNeeded(loadGame, entry)) {
+                    if (daggerComponentsHolder.createGameComponentIfNeeded(loadGame, entry.lifecycle)) {
                         val gameComponent = daggerComponentsHolder.gameComponentHolder.component!!
                         val viewModel = gameComponent.gameActivityViewModel
                         entry.lifecycle.addObserver(viewModel)
@@ -62,7 +61,7 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.RankingScreen.route
                 ) { entry ->
-                    daggerComponentsHolder.createRankingComponentIfNeeded(entry)
+                    daggerComponentsHolder.createRankingComponentIfNeeded(entry.lifecycle)
                     val rankingComponent = daggerComponentsHolder.rankingComponentHolder.component!!
                     RankingScreen(
                         rankingComponent
@@ -71,7 +70,7 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.SettingsScreen.route
                 ) { entry ->
-                    daggerComponentsHolder.createSettingsComponentIfNeeded(entry)
+                    daggerComponentsHolder.createSettingsComponentIfNeeded(entry.lifecycle)
                     val settingsComponent = daggerComponentsHolder.settingsComponentHolder.component!!
                     SettingsScreen(
                         settingsComponent,

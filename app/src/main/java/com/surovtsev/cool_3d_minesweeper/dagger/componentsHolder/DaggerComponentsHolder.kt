@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.componentsHolder
 
 import android.content.Context
-import androidx.navigation.NavBackStackEntry
+import androidx.lifecycle.Lifecycle
 import com.surovtsev.cool_3d_minesweeper.dagger.app.DaggerAppComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
@@ -18,26 +18,26 @@ class DaggerComponentsHolder(
     class ComponentHolder<T> {
         var component: T? = null
             private set
-        private var entry: NavBackStackEntry? = null
+        private var lifecycle: Lifecycle? = null
 
         fun isNeededToCreateComponent(
-            entry: NavBackStackEntry
+            lifecycle: Lifecycle
         ): Boolean {
-            return this.entry != entry || this.component == null
+            return this.lifecycle != lifecycle || this.component == null
         }
 
         fun storeComponent(
             component: T,
-            entry: NavBackStackEntry
+            lifecycle: Lifecycle
         ) {
             forgotComponent()
             this.component = component
-            this.entry = entry
+            this.lifecycle = lifecycle
         }
 
         private fun forgotComponent() {
             this.component = null
-            this.entry = null
+            this.lifecycle = null
         }
     }
 
@@ -46,28 +46,28 @@ class DaggerComponentsHolder(
     val gameComponentHolder = ComponentHolder<GameComponent>()
 
     fun createRankingComponentIfNeeded(
-        entry: NavBackStackEntry
+        lifecycle: Lifecycle
     ): Boolean {
-        val res = rankingComponentHolder.isNeededToCreateComponent(entry)
+        val res = rankingComponentHolder.isNeededToCreateComponent(lifecycle)
         if (res) {
             rankingComponentHolder.storeComponent(
                 appComponent
                     .rankingComponent(),
-                entry
+                lifecycle
             )
         }
         return res
     }
 
     fun createSettingsComponentIfNeeded(
-        entry: NavBackStackEntry
+        lifecycle: Lifecycle
     ): Boolean {
-        val res = settingsComponentHolder.isNeededToCreateComponent(entry)
+        val res = settingsComponentHolder.isNeededToCreateComponent(lifecycle)
         if (res) {
             settingsComponentHolder.storeComponent(
                 appComponent
                     .settingComponent(),
-                entry
+                lifecycle
             )
         }
         return res
@@ -75,19 +75,18 @@ class DaggerComponentsHolder(
 
     fun createGameComponentIfNeeded(
         loadGame: Boolean,
-        entry: NavBackStackEntry
+        lifecycle: Lifecycle
     ): Boolean {
-        val res = gameComponentHolder.isNeededToCreateComponent(entry)
+        val res = gameComponentHolder.isNeededToCreateComponent(lifecycle)
         if (res) {
             gameComponentHolder.storeComponent(
                 appComponent
                     .gameComponent()
                     .loadGame(loadGame)
                     .build(),
-                entry
+                lifecycle
             )
         }
         return res
     }
-
 }
