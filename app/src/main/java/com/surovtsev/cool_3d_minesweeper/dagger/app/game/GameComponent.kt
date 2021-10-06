@@ -10,7 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.game_objects_holder.GameObjectsHolder
@@ -60,7 +60,7 @@ interface GameComponentEntryPoint {
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
     val gLSurfaceView: GLSurfaceView
-    val gameViewEvents: GameViewEvents
+    val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
 }
 
@@ -83,28 +83,28 @@ object GameModule {
 object GameEventsModule {
     @GameScope
     @Provides
-    @Named(GameViewEventsNames.ElapsedTime)
+    @Named(GameScreenEventsNames.ElapsedTime)
     fun provideElapsedTime(): ElapsedTimeEvent {
         return ElapsedTimeEvent(0L)
     }
 
     @GameScope
     @Provides
-    @Named(GameViewEventsNames.BombsLeft)
+    @Named(GameScreenEventsNames.BombsLeft)
     fun provideBombsLeft(): BombsLeftEvent {
         return BombsLeftEvent(0)
     }
 
     @GameScope
     @Provides
-    @Named(GameViewEventsNames.ShowDialog)
+    @Named(GameScreenEventsNames.ShowDialog)
     fun provideShowDialog(): ShowDialogEvent {
         return ShowDialogEvent(false)
     }
 
     @GameScope
     @Provides
-    @Named(GameViewEventsNames.GameStatus)
+    @Named(GameScreenEventsNames.GameStatus)
     fun provideGameStatusEvent(): GameStatusEvent {
         return GameStatusEvent(GameStatusHelper.initStatus)
     }
@@ -185,7 +185,7 @@ object GameControllerModule {
         save: Save?,
         gameObjectsHolder: GameObjectsHolder,
         gameConfig: GameConfig,
-        gameEventsReceiver: GameEventsReceiver,
+        gameScreenEventsReceiver: GameScreenEventsReceiver,
         cubeView: CubeView,
         gameLogicStateHelper: GameLogicStateHelper
     ): GameLogic {
@@ -194,7 +194,7 @@ object GameControllerModule {
                 gameObjectsHolder.cubeSkin,
                 cubeView,
                 gameConfig,
-                gameEventsReceiver,
+                gameScreenEventsReceiver,
                 gameLogicStateHelper
             )
         if (save != null) {

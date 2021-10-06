@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model
+package com.surovtsev.cool_3d_minesweeper.model_views.main_screen_view_model
 
 import androidx.lifecycle.ViewModel
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
@@ -13,7 +13,7 @@ import javax.inject.Provider
 
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class MainScreenViewModel @Inject constructor(
     private val saveController: SaveController,
     mainScreenComponentProvider: Provider<MainScreenComponent.Builder>
 ): ViewModel() {

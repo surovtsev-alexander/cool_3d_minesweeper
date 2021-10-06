@@ -2,7 +2,7 @@ package com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.hel
 
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.GameScreenEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResume
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @GameScope
 class GameLogicStateHelper @Inject constructor(
-    private val gameEventsReceiver: GameEventsReceiver,
+    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper
 ):
@@ -51,7 +51,7 @@ class GameLogicStateHelper @Inject constructor(
     }
 
     fun notifyTimeUpdated() {
-        gameEventsReceiver.timeUpdated(getElapsed())
+        gameScreenEventsReceiver.timeUpdated(getElapsed())
     }
 
     override fun tick() {
@@ -81,7 +81,7 @@ class GameLogicStateHelper @Inject constructor(
         minesweeperGameStatusReceiver.gameStatusUpdated(
             gameStatus,
             elapsed)
-        gameEventsReceiver.gameStatusUpdated(
+        gameScreenEventsReceiver.gameStatusUpdated(
             gameStatus,
             elapsed
         )

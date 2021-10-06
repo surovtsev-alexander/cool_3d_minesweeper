@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model
+package com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model
 
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
@@ -8,8 +8,8 @@ import androidx.lifecycle.*
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponentEntryPoint
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameViewEvents
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.MarkingEvent
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.GameScreenEvents
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.MarkingEvent
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
@@ -21,7 +21,7 @@ import javax.inject.Provider
 
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
-class GameActivityViewModel @Inject constructor(
+class GameScreenViewModel @Inject constructor(
     gameComponentProvider: Provider<GameComponent.Builder>,
     savedStateHandle: SavedStateHandle
 ):
@@ -33,7 +33,7 @@ class GameActivityViewModel @Inject constructor(
     val minesweeperController: MinesweeperController
     private val gameRenderer: GLESRenderer
     val gLSurfaceView: GLSurfaceView
-    val gameViewEvents: GameViewEvents
+    val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
 
     init {
@@ -55,8 +55,8 @@ class GameActivityViewModel @Inject constructor(
             gameComponentEntryPoint.gameRenderer
         gLSurfaceView =
             gameComponentEntryPoint.gLSurfaceView
-        gameViewEvents =
-            gameComponentEntryPoint.gameViewEvents
+        gameScreenEvents =
+            gameComponentEntryPoint.gameScreenEvents
         gameControls =
             gameComponentEntryPoint.gameControls
 

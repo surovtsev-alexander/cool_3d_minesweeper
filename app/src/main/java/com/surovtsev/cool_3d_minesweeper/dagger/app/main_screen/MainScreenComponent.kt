@@ -1,7 +1,7 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.app.main_screen
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.MainScreenScope
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.main_screen_view_model.MainScreenViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.Screen
 import com.surovtsev.cool_3d_minesweeper.presentation.main_screen.ButtonsInfo
 import com.surovtsev.cool_3d_minesweeper.presentation.main_screen.MainScreenButtonInfo
@@ -37,41 +37,41 @@ interface MainScreenEntryPoint {
 @Module
 @InstallIn(MainScreenComponent::class)
 object MainScreenModule {
-    @[IntoMap StringKey(MainActivityViewModel.NewGame)]
+    @[IntoMap StringKey(MainScreenViewModel.NewGame)]
     @MainScreenScope
     @Provides
     fun provideNewGameButtonInfo() =
         MainScreenButtonInfo(
             Screen.GameScreen,
-            MainActivityViewModel.NewGame,
+            MainScreenViewModel.NewGame,
             MainScreenButtonType.NewGameButton
         )
 
-    @[IntoMap StringKey(MainActivityViewModel.LoadGame)]
+    @[IntoMap StringKey(MainScreenViewModel.LoadGame)]
     @MainScreenScope
     @Provides
     fun provideLoadGameButtonInfo() =
         MainScreenButtonInfo(
             Screen.GameScreen,
-            MainActivityViewModel.LoadGame,
+            MainScreenViewModel.LoadGame,
             MainScreenButtonType.LoadGameButton
         )
 
-    @[IntoMap StringKey(MainActivityViewModel.Ranking)]
+    @[IntoMap StringKey(MainScreenViewModel.Ranking)]
     @MainScreenScope
     @Provides
     fun provideRankingButtonInfo() =
         MainScreenButtonInfo(
             Screen.RankingScreen,
-            MainActivityViewModel.Ranking
+            MainScreenViewModel.Ranking
         )
 
-    @[IntoMap StringKey(MainActivityViewModel.Settings)]
+    @[IntoMap StringKey(MainScreenViewModel.Settings)]
     @MainScreenScope
     @Provides
     fun provideSettingsButtonInfo() =
         MainScreenButtonInfo(
             Screen.SettingsScreen,
-            MainActivityViewModel.Settings
+            MainScreenViewModel.Settings
         )
 }

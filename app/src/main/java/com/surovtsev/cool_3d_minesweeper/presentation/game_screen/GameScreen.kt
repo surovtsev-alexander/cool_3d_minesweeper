@@ -15,8 +15,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.GameScreenViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.RemoveZeroBordersControl
@@ -27,7 +27,7 @@ const val LoadGameParameterName = "load_game"
 
 @Composable
 fun GameScreen(
-    viewModel: GameActivityViewModel,
+    viewModel: GameScreenViewModel,
     activity: Activity
 ) {
     if (!OpenGLInfoHelper.isSupportEs2(activity)) {
@@ -39,7 +39,7 @@ fun GameScreen(
     }
 
     val gLSurfaceView = viewModel.gLSurfaceView
-    val gameViewEvents = viewModel.gameViewEvents
+    val gameViewEvents = viewModel.gameScreenEvents
     val gameControls = viewModel.gameControls
 
     GameScreenControls(
@@ -52,9 +52,9 @@ fun GameScreen(
 
 @Composable
 fun GameScreenControls(
-    viewModel: GameActivityViewModel,
+    viewModel: GameScreenViewModel,
     gLSurfaceView: GLSurfaceView,
-    gameViewEvents: GameViewEvents,
+    gameScreenEvents: GameScreenEvents,
     gameControls: GameControls
 ) {
     Test_composeTheme {
@@ -68,14 +68,14 @@ fun GameScreenControls(
             }
             Row {
                 Controls(
-                    gameViewEvents,
+                    gameScreenEvents,
                     gameControls.removeMarkedBombsControl,
                     gameControls.removeZeroBordersControl
                 )
             }
         }
         GameStatusDialog(
-            gameViewEvents.showDialogEvent,
+            gameScreenEvents.showDialogEvent,
             viewModel
         )
     }
@@ -94,7 +94,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    gameViewEvents: GameViewEvents,
+    gameScreenEvents: GameScreenEvents,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
 ) {
@@ -114,14 +114,14 @@ fun Controls(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Bottom
         ) {
-            ControlCheckBox(gameViewEvents.markingEvent)
+            ControlCheckBox(gameScreenEvents.markingEvent)
         }
         Column(
             modifier = Modifier.weight(1f)
         ) {
             GameInfo(
-                gameViewEvents.bombsLeftEvent,
-                gameViewEvents.elapsedTimeEvent
+                gameScreenEvents.bombsLeftEvent,
+                gameScreenEvents.elapsedTimeEvent
             )
         }
     }
@@ -218,7 +218,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     showDialogEvent: ShowDialogEvent,
-    viewModel: GameActivityViewModel
+    viewModel: GameScreenViewModel
 ) {
     val showDialog: Boolean by showDialogEvent.run {
         data.observeAsState(defaultValue)

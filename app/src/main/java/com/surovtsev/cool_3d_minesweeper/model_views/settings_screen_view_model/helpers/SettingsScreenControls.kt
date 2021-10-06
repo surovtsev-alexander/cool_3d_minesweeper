@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model
+package com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.helpers
 
 import com.surovtsev.cool_3d_minesweeper.dagger.app.SettingsScope
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
@@ -12,7 +12,7 @@ typealias SlidersWithNames = Map<String, SettingsSlider>
 typealias SlidersInfo = List<Pair<String, Pair<IntRange, MyLiveData<Float>>>>
 
 @SettingsScope
-class SettingsActivityControls @Inject constructor(
+class SettingsScreenControls @Inject constructor(
     @Named(SelectedSettingsIdName)
     val selectedSettingsId: SelectedSettingsId,
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames,

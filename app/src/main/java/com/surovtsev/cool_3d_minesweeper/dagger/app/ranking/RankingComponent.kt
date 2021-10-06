@@ -3,10 +3,10 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.ranking
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityEvents
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingList
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.SelectedSettingsId
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.WinsCount
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.RankingList
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.RankingScreenEvents
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.SelectedSettingsId
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.WinsCount
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import dagger.Module
 import dagger.Provides
@@ -34,7 +34,7 @@ interface RankingComponent {
 interface RankingComponentEntryPoint {
     val settingsDBQueries: SettingsDBQueries
     val rankingDBQueries: RankingDBQueries
-    val rankingActivityEvents: RankingActivityEvents
+    val rankingScreenEvents: RankingScreenEvents
 }
 
 @Module
@@ -43,7 +43,7 @@ object RankingModule {
 
     @RankingScope
     @Provides
-    @Named(RankingActivityEvents.RankingListName)
+    @Named(RankingScreenEvents.RankingListName)
     fun provideRankingList(): RankingList {
         return MyLiveData(
             listOf()
@@ -52,7 +52,7 @@ object RankingModule {
 
     @RankingScope
     @Provides
-    @Named(RankingActivityEvents.FilteredRankingListName)
+    @Named(RankingScreenEvents.FilteredRankingListName)
     fun provideFilteredRankingList(): RankingList {
         return MyLiveData(
             listOf()

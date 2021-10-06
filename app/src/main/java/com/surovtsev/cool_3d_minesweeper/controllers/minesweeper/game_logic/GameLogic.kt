@@ -6,7 +6,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.utils.android_view.interaction.TouchType
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameEventsReceiver
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers.GameScreenEventsReceiver
 import com.surovtsev.cool_3d_minesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
 import com.surovtsev.cool_3d_minesweeper.models.game.cell_pointers.CellRange
@@ -18,7 +18,7 @@ class GameLogic(
     private val cubeSkin: CubeSkin,
     private val textureUpdater: ICanUpdateTexture,
     private val gameConfig: GameConfig,
-    private val gameEventsReceiver: GameEventsReceiver,
+    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     val gameLogicStateHelper: GameLogicStateHelper
 ) {
 
@@ -91,7 +91,7 @@ class GameLogic(
     }
 
     fun notifyBombsCountUpdated() {
-        gameEventsReceiver.bombCountUpdated(bombsLeft)
+        gameScreenEventsReceiver.bombCountUpdated(bombsLeft)
     }
 
     private fun emptyCube(pointedCell: PointedCell) {

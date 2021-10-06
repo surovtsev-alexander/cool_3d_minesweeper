@@ -3,7 +3,7 @@ package com.surovtsev.cool_3d_minesweeper.dagger.app.settings
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.SettingsScope
-import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.*
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDataFactory
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
@@ -38,10 +38,10 @@ interface SettingsComponent {
 interface SettingsComponentEntryPoint {
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
 
-    val settingsActivityControls: SettingsActivityControls
+    val settingsScreenComponent: SettingsScreenControls
     val settingsDBQueries: SettingsDBQueries
     val saveController: SaveController
-    val settingsActivityEvents: SettingsActivityEvents
+    val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
 }
 
@@ -50,7 +50,7 @@ interface SettingsComponentEntryPoint {
 object SettingsModule {
 
     @SettingsScope
-    @Named(SettingsActivityControls.SelectedSettingsIdName)
+    @Named(SettingsScreenControls.SelectedSettingsIdName)
     @Provides
     fun provideSelectedSettingsId(): SelectedSettingsId {
         return SelectedSettingsId(-1)

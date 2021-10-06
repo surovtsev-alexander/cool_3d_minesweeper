@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.main_screen_view_model.MainScreenViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 
 @Composable
 fun MainScreen(
-    viewModel: MainActivityViewModel,
+    viewModel: MainScreenViewModel,
     navController: NavController
 ) {
     MainScreeControls(
@@ -28,7 +28,7 @@ fun MainScreen(
 
 @Composable
 fun MainScreeControls(
-    viewModel: MainActivityViewModel,
+    viewModel: MainScreenViewModel,
     navController: NavController
 ) {
     val buttonsInfo = viewModel.buttonsInfo
@@ -46,7 +46,7 @@ fun MainScreeControls(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
-                    buttonsInfo.forEach { (bN, bI ) ->
+                    buttonsInfo.forEach { (_, bI ) ->
                         val buttonType = bI.buttonType
                         val isNewGameButton =
                             buttonType == MainScreenButtonType.NewGameButton

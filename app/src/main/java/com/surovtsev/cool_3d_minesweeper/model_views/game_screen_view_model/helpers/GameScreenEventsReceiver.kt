@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers
+package com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers
 
 import android.content.Context
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.interfaces.IGameEventsReceiver
@@ -11,13 +11,13 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @GameScope
-class GameEventsReceiver @Inject constructor(
+class GameScreenEventsReceiver @Inject constructor(
     @ApplicationContext private val context: Context,
-    @Named(GameViewEventsNames.BombsLeft)
+    @Named(GameScreenEventsNames.BombsLeft)
     private val bombsLeft: BombsLeftEvent,
-    @Named(GameViewEventsNames.ElapsedTime)
+    @Named(GameScreenEventsNames.ElapsedTime)
     private val elapsedTime: ElapsedTimeEvent,
-    @Named(GameViewEventsNames.ShowDialog)
+    @Named(GameScreenEventsNames.ShowDialog)
     private val showDialog: ShowDialogEvent
 ): IGameEventsReceiver {
     init {

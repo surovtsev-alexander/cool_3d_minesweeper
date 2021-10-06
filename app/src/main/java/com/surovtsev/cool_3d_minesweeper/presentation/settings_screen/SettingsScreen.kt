@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.SettingsActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.SettingsScreenViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.GrayBackground
@@ -28,7 +28,7 @@ import kotlin.math.round
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsActivityViewModel,
+    viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
     viewModel.finishAction = { navController.navigateUp() }
@@ -37,7 +37,7 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsControls(
-    viewModel: SettingsActivityViewModel
+    viewModel: SettingsScreenViewModel
 ) {
     Test_composeTheme {
         Box(
@@ -68,11 +68,11 @@ fun SettingsControls(
 }
 
 @Composable
-fun SettingsList(viewModel: SettingsActivityViewModel) {
-    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsActivityEvents.settingsList.run {
+fun SettingsList(viewModel: SettingsScreenViewModel) {
+    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsScreenEvents.settingsListWithIds.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by viewModel.settingsActivityControls.selectedSettingsId.run {
+    val selectedSettingsId: Int by viewModel.settingsScreenControls.selectedSettingsId.run {
         data.observeAsState(defaultValue)
     }
 
@@ -124,7 +124,7 @@ fun SettingsList(viewModel: SettingsActivityViewModel) {
 
 @Composable
 fun SettingsDataItem(
-    viewModel: SettingsActivityViewModel,
+    viewModel: SettingsScreenViewModel,
     settingDataWithId: DataWithId<SettingsData>
 ) {
     Row(
@@ -161,9 +161,9 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 
 @Composable
 fun Controls(
-    viewModel: SettingsActivityViewModel
+    viewModel: SettingsScreenViewModel
 ) {
-    val slidersInfo = viewModel.settingsActivityControls.slidersInfo
+    val slidersInfo = viewModel.settingsScreenControls.slidersInfo
 
     LazyColumn {
         items(slidersInfo) { (name, bordersAndValue) ->
@@ -223,7 +223,7 @@ fun MySlider(
 
 @Composable
 fun UseButton(
-    viewModel: SettingsActivityViewModel
+    viewModel: SettingsScreenViewModel
 ) {
     Box (
         modifier = Modifier

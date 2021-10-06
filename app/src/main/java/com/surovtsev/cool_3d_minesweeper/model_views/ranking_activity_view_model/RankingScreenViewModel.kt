@@ -10,6 +10,7 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.databas
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponentEntryPoint
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.RankingScreenEvents
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,14 +18,14 @@ import javax.inject.Provider
 
 
 @HiltViewModel
-class RankingActivityViewModel @Inject constructor(
+class RankingScreenViewModel @Inject constructor(
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController
 ): ViewModel(), LifecycleObserver {
 
     private val settingsDBQueries: SettingsDBQueries
     private val rankingDBQueries: RankingDBQueries
-    val rankingActivityEvents: RankingActivityEvents
+    val rankingScreenEvents: RankingScreenEvents
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -40,8 +41,8 @@ class RankingActivityViewModel @Inject constructor(
             rankingComponentEntryPoint.settingsDBQueries
         rankingDBQueries =
             rankingComponentEntryPoint.rankingDBQueries
-        rankingActivityEvents =
-            rankingComponentEntryPoint.rankingActivityEvents
+        rankingScreenEvents =
+            rankingComponentEntryPoint.rankingScreenEvents
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -51,14 +52,14 @@ class RankingActivityViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        rankingActivityEvents.settingsListWithIds.onDataChanged(
+        rankingScreenEvents.settingsListWithIds.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
 
-        rankingActivityEvents.rankingList.onDataChanged(
+        rankingScreenEvents.rankingList.onDataChanged(
             let {
                 val res = rankingDBQueries.getRankingList()
-                rankingActivityEvents.winsCount.onDataChanged(
+                rankingScreenEvents.winsCount.onDataChanged(
                     res.map{ it.settingId }.groupingBy { it }.eachCount()
                 )
                 res
@@ -75,13 +76,13 @@ class RankingActivityViewModel @Inject constructor(
     fun loadRankingForSettingsId(
         settingsId: Int
     ) {
-        rankingActivityEvents.rankingList.let { rl ->
-            rankingActivityEvents.filteredRankingList.onDataChanged(
+        rankingScreenEvents.rankingList.let { rl ->
+            rankingScreenEvents.filteredRankingList.onDataChanged(
                 rl.data.value!!.filter {
                     it.settingId == settingsId
                 }
             )
-            rankingActivityEvents.selectedSettingsId.onDataChanged(settingsId)
+            rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
         }
     }
 }

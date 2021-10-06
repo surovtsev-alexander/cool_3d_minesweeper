@@ -5,7 +5,8 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.SettingsListWithIds
+import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import dagger.Binds
@@ -15,6 +16,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
+typealias SettingsListWithIds = MyLiveData<List<DataWithId<SettingsData>>>
 
 @Module
 @InstallIn(SingletonComponent::class)

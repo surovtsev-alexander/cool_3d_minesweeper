@@ -1,4 +1,4 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model
+package com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model
 
 import android.util.Log
 import androidx.lifecycle.Lifecycle
@@ -10,6 +10,9 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponentEntryPoint
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.helpers.SettingsScreenControls
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.helpers.SettingsScreenEvents
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.helpers.SlidersWithNames
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDataFactory
@@ -19,15 +22,15 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @HiltViewModel
-class SettingsActivityViewModel @Inject constructor(
+class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
 ): ViewModel(), LifecycleObserver {
 
     private val slidersWithNames: SlidersWithNames
-    val settingsActivityControls: SettingsActivityControls
+    val settingsScreenControls: SettingsScreenControls
     private val settingsDBQueries: SettingsDBQueries
     private val saveController: SaveController
-    val settingsActivityEvents: SettingsActivityEvents
+    val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
 
     var finishAction: (() -> Unit)? = null
@@ -45,14 +48,14 @@ class SettingsActivityViewModel @Inject constructor(
 
         slidersWithNames =
             settingsComponentEntryPoint.slidersWithNames
-        settingsActivityControls =
-            settingsComponentEntryPoint.settingsActivityControls
+        settingsScreenControls =
+            settingsComponentEntryPoint.settingsScreenComponent
         settingsDBQueries =
             settingsComponentEntryPoint.settingsDBQueries
         saveController =
             settingsComponentEntryPoint.saveController
-        settingsActivityEvents =
-            settingsComponentEntryPoint.settingsActivityEvents
+        settingsScreenEvents =
+            settingsComponentEntryPoint.settingsScreenEvents
         settingsDataFactory =
             settingsComponentEntryPoint.settingsDataFactory
     }
@@ -63,8 +66,8 @@ class SettingsActivityViewModel @Inject constructor(
         loadData()
     }
 
-    fun loadData() {
-        settingsActivityEvents.settingsList.onDataChanged(
+    private fun loadData() {
+        settingsScreenEvents.settingsListWithIds.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
 
@@ -74,7 +77,7 @@ class SettingsActivityViewModel @Inject constructor(
         settingsDBQueries.getId(
             loadedSettingsData
         )?.let {
-            settingsActivityControls.selectedSettingsId.onDataChanged(it)
+            settingsScreenControls.selectedSettingsId.onDataChanged(it)
         }
     }
 
@@ -93,7 +96,7 @@ class SettingsActivityViewModel @Inject constructor(
     }
 
     private fun setControlValues(settingsData: SettingsData) {
-        settingsActivityControls.slidersWithNames.let {
+        settingsScreenControls.slidersWithNames.let {
             it[SettingsData.xCountName]!!.onDataChanged(
                 settingsData.xCount.toFloat())
             it[SettingsData.yCountName]!!.onDataChanged(
@@ -107,13 +110,13 @@ class SettingsActivityViewModel @Inject constructor(
     }
 
     fun useSettings(settingsDataWithId: DataWithId<SettingsData>) {
-        settingsActivityControls.selectedSettingsId.onDataChanged(settingsDataWithId.id)
+        settingsScreenControls.selectedSettingsId.onDataChanged(settingsDataWithId.id)
         setControlValues(settingsDataWithId.data)
     }
 
     fun deleteSettings(settingsId: Int) {
         settingsDBQueries.delete(settingsId)
-        settingsActivityEvents.settingsList.onDataChanged(
+        settingsScreenEvents.settingsListWithIds.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
     }

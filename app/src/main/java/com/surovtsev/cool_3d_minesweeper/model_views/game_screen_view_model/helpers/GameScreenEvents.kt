@@ -1,15 +1,15 @@
-package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers
+package com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.helpers
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import javax.inject.Inject
 import javax.inject.Named
 
 @GameScope
-class GameViewEvents @Inject constructor(
+class GameScreenEvents @Inject constructor(
     var markingEvent: MarkingEvent,
-    @Named(GameViewEventsNames.ElapsedTime)
+    @Named(GameScreenEventsNames.ElapsedTime)
     var elapsedTimeEvent: ElapsedTimeEvent,
-    @Named(GameViewEventsNames.BombsLeft)
+    @Named(GameScreenEventsNames.BombsLeft)
     var bombsLeftEvent: BombsLeftEvent,
-    @Named(GameViewEventsNames.ShowDialog)
+    @Named(GameScreenEventsNames.ShowDialog)
     var showDialogEvent: ShowDialogEvent
 )

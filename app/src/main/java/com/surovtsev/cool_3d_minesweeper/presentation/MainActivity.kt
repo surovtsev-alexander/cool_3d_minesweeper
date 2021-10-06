@@ -10,10 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
-import com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model.MainActivityViewModel
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityViewModel
-import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.SettingsActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.game_screen_view_model.GameScreenViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.main_screen_view_model.MainScreenViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingScreenViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.settings_screen_view_model.SettingsScreenViewModel
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.GameScreen
 import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
 import com.surovtsev.cool_3d_minesweeper.presentation.main_screen.MainScreen
@@ -35,7 +35,7 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.MainScreen.route
                 ) {
-                    val viewModel: MainActivityViewModel by viewModels()
+                    val viewModel: MainScreenViewModel by viewModels()
                     MainScreen(
                         viewModel,
                         navController
@@ -51,7 +51,7 @@ class MainActivity: ComponentActivity() {
                         }
                     )
                 ) { entry ->
-                    val viewModel: GameActivityViewModel = hiltViewModel()
+                    val viewModel: GameScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     GameScreen(
                         viewModel,
@@ -61,7 +61,7 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.RankingScreen.route
                 ) { entry ->
-                    val viewModel: RankingActivityViewModel = hiltViewModel()
+                    val viewModel: RankingScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     RankingScreen(
                         viewModel
@@ -70,7 +70,7 @@ class MainActivity: ComponentActivity() {
                 composable(
                     route = Screen.SettingsScreen.route
                 ) { entry ->
-                    val viewModel: SettingsActivityViewModel = hiltViewModel()
+                    val viewModel: SettingsScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     SettingsScreen(
                         viewModel,

@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityEvents
-import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingActivityViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.RankingScreenViewModel
+import com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model.helpers.RankingScreenEvents
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.RankingData
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
@@ -27,20 +27,20 @@ import com.surovtsev.cool_3d_minesweeper.presentation.ui.theme.Test_composeTheme
 
 @Composable
 fun RankingScreen(
-    viewModel: RankingActivityViewModel
+    viewModel: RankingScreenViewModel
 ) {
-    val rankingActivityEvents = viewModel.rankingActivityEvents
+    val rankingActivityEvents = viewModel.rankingScreenEvents
 
     RankingControls(
         viewModel = viewModel,
-        rankingActivityEvents = rankingActivityEvents
+        rankingScreenEvents = rankingActivityEvents
     )
 }
 
 @Composable
 fun RankingControls(
-    viewModel: RankingActivityViewModel,
-    rankingActivityEvents: RankingActivityEvents
+    viewModel: RankingScreenViewModel,
+    rankingScreenEvents: RankingScreenEvents
 ) {
     Test_composeTheme {
         Column(
@@ -52,12 +52,12 @@ fun RankingControls(
             Row(
                 modifier = Modifier.fillMaxHeight(.3f)
             ) {
-                SettingsList(viewModel, rankingActivityEvents)
+                SettingsList(viewModel, rankingScreenEvents)
             }
             Row(
                 modifier = Modifier.fillMaxHeight(1f)
             ) {
-                RankingList(rankingActivityEvents)
+                RankingList(rankingScreenEvents)
             }
         }
     }
@@ -65,16 +65,16 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    viewModel: RankingActivityViewModel,
-    rankingActivityEvents: RankingActivityEvents
+    viewModel: RankingScreenViewModel,
+    rankingScreenEvents: RankingScreenEvents
 ) {
-    val settingsList: List<DataWithId<SettingsData>> by rankingActivityEvents.settingsListWithIds.run {
+    val settingsList: List<DataWithId<SettingsData>> by rankingScreenEvents.settingsListWithIds.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by rankingActivityEvents.selectedSettingsId.run {
+    val selectedSettingsId: Int by rankingScreenEvents.selectedSettingsId.run {
         data.observeAsState(defaultValue)
     }
-    val winsCountMap: Map<Int, Int> by rankingActivityEvents.winsCount.run {
+    val winsCountMap: Map<Int, Int> by rankingScreenEvents.winsCount.run {
         data.observeAsState(defaultValue)
     }
 
@@ -163,9 +163,9 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    rankingActivityEvents: RankingActivityEvents
+    rankingScreenEvents: RankingScreenEvents
 ) {
-    val filteredRankingList: List<RankingData> by rankingActivityEvents.filteredRankingList.run {
+    val filteredRankingList: List<RankingData> by rankingScreenEvents.filteredRankingList.run {
         data.observeAsState(defaultValue)
     }
     Box (
