@@ -45,20 +45,6 @@ interface SettingsComponentEntryPoint {
     val settingsDataFactory: SettingsDataFactory
 }
 
-//@SettingsScope
-//@Subcomponent(
-//    modules = [
-//        SettingsModule::class,
-//        SettingsDataHelperModule::class
-//    ]
-//)
-//interface SettingsComponent {
-//    val settingsActivityViewModel: SettingsActivityViewModel
-//
-//    val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
-//}
-//
-
 @Module
 @InstallIn(SettingsComponent::class)
 object SettingsModule {

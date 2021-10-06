@@ -64,33 +64,6 @@ interface GameComponentEntryPoint {
     val gameControls: GameControls
 }
 
-//@GameScope
-//@Subcomponent(
-//    modules = [
-//        GameModule::class,
-//        GameEventsModule::class,
-//        GameControlsModule::class,
-//        GameControllerModule::class,
-//        GameControllerBindModule::class,
-//        TouchHelperModule::class,
-//        ScalingHelperModule::class,
-//        ClickAndRotationHelperModule::class
-//    ])
-//interface GameComponent {
-//    val gameActivityViewModel: GameActivityViewModel
-//    val gameViewEvents: GameViewEvents
-//    val gameControls: GameControls
-//    val gLSurfaceView: GLSurfaceView
-//
-//    @Subcomponent.Builder
-//    interface Builder {
-//        @BindsInstance
-//        fun loadGame(loadGame: Boolean): Builder
-//
-//        fun build(): GameComponent
-//    }
-//}
-//
 
 @Module
 @InstallIn(GameComponent::class)
@@ -103,6 +76,11 @@ object GameModule {
         return GLSurfaceView(context)
     }
 
+}
+
+@Module
+@InstallIn(GameComponent::class)
+object GameEventsModule {
     @GameScope
     @Provides
     @Named(GameViewEventsNames.ElapsedTime)
