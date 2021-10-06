@@ -3,35 +3,40 @@ package com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model
 import androidx.lifecycle.ViewModel
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.presentation.Screen
+import com.surovtsev.cool_3d_minesweeper.dagger.app.main_screen.MainScreenComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.main_screen.MainScreenEntryPoint
+import com.surovtsev.cool_3d_minesweeper.presentation.main_screen.ButtonsInfo
+import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Provider
 
-typealias ButtonsInfo = List<MainActivityViewModel.ButtonInfo>
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val saveController: SaveController
+    private val saveController: SaveController,
+    mainScreenComponentProvider: Provider<MainScreenComponent.Builder>
 ): ViewModel() {
-    enum class ButtonType {
-        OrdinaryButton,
-        NewGameButton,
-        LoadGameButton
+
+    companion object {
+        const val NewGame = "new game"
+        const val LoadGame = "load game"
+        const val Ranking = "ranking"
+        const val Settings = "settings"
     }
 
-    /* TODO: move to hilt */
-    data class ButtonInfo(
-        val screen: Screen,
-        val caption: String,
-        val buttonType: ButtonType = ButtonType.OrdinaryButton
-    )
+    val buttonsInfo: ButtonsInfo
 
-    val buttonsInfo: ButtonsInfo = listOf(
-        ButtonInfo(Screen.GameScreen, "new game", ButtonType.NewGameButton),
-        ButtonInfo(Screen.GameScreen,"load game", ButtonType.LoadGameButton),
-        ButtonInfo(Screen.RankingScreen, "ranking"),
-        ButtonInfo(Screen.SettingsScreen, "settings")
-    )
+    init {
+        val mainScreenComponent = mainScreenComponentProvider
+            .get()
+            .build()
+        val mainScreenEntryPoint = EntryPoints.get(
+            mainScreenComponent, MainScreenEntryPoint::class.java
+        )
+
+        buttonsInfo = mainScreenEntryPoint.buttonsInfo
+    }
 
     fun hasSave() =
         saveController.hasData(

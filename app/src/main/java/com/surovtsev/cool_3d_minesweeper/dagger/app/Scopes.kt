@@ -12,6 +12,10 @@ annotation class GameScope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
+annotation class MainScreenScope
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
 annotation class RankingScope
 
 @Scope

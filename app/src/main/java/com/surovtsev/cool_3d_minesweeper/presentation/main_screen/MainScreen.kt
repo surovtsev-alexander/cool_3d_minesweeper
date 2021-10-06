@@ -46,12 +46,12 @@ fun MainScreeControls(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
-                    buttonsInfo.forEach { bI ->
+                    buttonsInfo.forEach { (bN, bI ) ->
                         val buttonType = bI.buttonType
                         val isNewGameButton =
-                            buttonType == MainActivityViewModel.ButtonType.NewGameButton
+                            buttonType == MainScreenButtonType.NewGameButton
                         val isLoadGameButton =
-                            buttonType == MainActivityViewModel.ButtonType.LoadGameButton
+                            buttonType == MainScreenButtonType.LoadGameButton
                         Button(
                             onClick = {
                                 if (isNewGameButton || isLoadGameButton) {
