@@ -17,8 +17,8 @@ object TextureCoordinatesHelper {
         0f, 1f,
     )
 
-    private const val cols = 4
-    private const val rows = 3
+    private const val cols = 3
+    private const val rows = 4
 
     enum class TextureType {
         EMPTY,
@@ -32,7 +32,8 @@ object TextureCoordinatesHelper {
         FOUR,
         FIVE,
         SIX,
-        SEVEN
+        SEVEN,
+        EIGHT
     }
 
     private const val commonTexturesCount = 4
