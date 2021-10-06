@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.surovtsev.cool_3d_minesweeper">
+    package="com.surovtsev.cool3dminesweeper">
 
     <application
-        android:name=".controllers.application_controller.ApplicationController"
+        android:name="com.surovtsev.cool3dminesweeper.controllers.application_controller.ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_coll_3d_minesweeper"
         android:label="@string/app_name"
@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Cool_3d_minesweeper">
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
