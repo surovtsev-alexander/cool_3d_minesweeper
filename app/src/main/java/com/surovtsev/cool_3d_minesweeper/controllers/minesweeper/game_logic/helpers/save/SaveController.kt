@@ -5,11 +5,10 @@ import android.util.Log
 import com.google.gson.Gson
 import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
-import java.lang.Exception
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-@AppScope
-class SaveController @Inject constructor(
+class SaveController(
     context: Context
 ) {
     val gson by lazy {

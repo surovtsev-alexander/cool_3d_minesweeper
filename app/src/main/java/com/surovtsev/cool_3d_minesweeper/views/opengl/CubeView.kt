@@ -14,11 +14,12 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.ICanUpdateTexture
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IGLObject
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.buffers.VertexArray
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @GameScope
 class CubeView @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val cubeCoordinates: CubeCoordinates
 ):
     IGLObject,

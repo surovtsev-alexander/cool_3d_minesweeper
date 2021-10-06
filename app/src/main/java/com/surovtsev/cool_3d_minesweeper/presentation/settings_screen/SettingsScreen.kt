@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.surovtsev.cool_3d_minesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.SettingsActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.models.game.database.DataWithId
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
@@ -29,12 +28,9 @@ import kotlin.math.round
 
 @Composable
 fun SettingsScreen(
-    settingsComponent: SettingsComponent,
+    viewModel: SettingsActivityViewModel,
     navController: NavController
 ) {
-    val viewModel = settingsComponent.settingsActivityViewModel
-    viewModel.loadData()
-
     viewModel.finishAction = { navController.navigateUp() }
     SettingsControls(viewModel = viewModel)
 }

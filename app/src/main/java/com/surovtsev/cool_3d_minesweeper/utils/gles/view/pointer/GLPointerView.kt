@@ -9,13 +9,14 @@ import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.program.PointerGLESProgram
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.ISwitch
 import com.surovtsev.cool_3d_minesweeper.utils.state_helpers.Switch
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /* TODO: refactoring */
 
 @GameScope
 class GLPointerView @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ):
     IGLObject, ISwitch by Switch() {
     companion object {

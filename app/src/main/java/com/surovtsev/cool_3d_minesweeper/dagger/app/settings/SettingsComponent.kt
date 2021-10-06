@@ -1,32 +1,66 @@
 package com.surovtsev.cool_3d_minesweeper.dagger.app.settings
 
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
+import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool_3d_minesweeper.dagger.app.SettingsScope
 import com.surovtsev.cool_3d_minesweeper.model_views.settings_activity_view_model.*
 import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsData
+import com.surovtsev.cool_3d_minesweeper.models.game.database.SettingsDataFactory
 import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.Borders
 import com.surovtsev.cool_3d_minesweeper.utils.minesweeper.database.SettingsDataHelper
 import dagger.Module
 import dagger.Provides
-import dagger.Subcomponent
+import dagger.hilt.DefineComponent
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 import javax.inject.Named
 
-@SettingsScope
-@Subcomponent(
-    modules = [
-        SettingsModule::class,
-        SettingsDataHelperModule::class
-    ]
+@DefineComponent(
+    parent = ViewModelComponent::class
 )
+@SettingsScope
 interface SettingsComponent {
-    val settingsActivityViewModel: SettingsActivityViewModel
 
-    val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
+
+    @DefineComponent.Builder
+    interface Builder {
+        fun build(): SettingsComponent
+    }
 }
 
+@InstallIn(SettingsComponent::class)
+@EntryPoint
+@SettingsScope
+interface SettingsComponentEntryPoint {
+    val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
+
+    val settingsActivityControls: SettingsActivityControls
+    val settingsDBQueries: SettingsDBQueries
+    val saveController: SaveController
+    val settingsActivityEvents: SettingsActivityEvents
+    val settingsDataFactory: SettingsDataFactory
+}
+
+//@SettingsScope
+//@Subcomponent(
+//    modules = [
+//        SettingsModule::class,
+//        SettingsDataHelperModule::class
+//    ]
+//)
+//interface SettingsComponent {
+//    val settingsActivityViewModel: SettingsActivityViewModel
+//
+//    val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
+//}
+//
+
 @Module
+@InstallIn(SettingsComponent::class)
 object SettingsModule {
 
     @SettingsScope
@@ -34,12 +68,6 @@ object SettingsModule {
     @Provides
     fun provideSelectedSettingsId(): SelectedSettingsId {
         return SelectedSettingsId(-1)
-    }
-
-    @SettingsScope
-    @Provides
-    fun provideSettingsList(): SettingsList {
-        return SettingsList(listOf())
     }
 
     private fun createMyLiveDataForSlider(defValue: Int) = MyLiveData(defValue.toFloat())
@@ -76,7 +104,7 @@ object SettingsModule {
     @SettingsScope
     fun provideSettingsDataFactory(
         slidersWithNames: @JvmSuppressWildcards SlidersWithNames
-    ): () -> SettingsData {
+    ): SettingsDataFactory {
         return {
             SettingsData(
                 slidersWithNames[SettingsData.xCountName]!!.valueOrDefault.toInt(),
@@ -102,6 +130,7 @@ object SettingsModule {
 }
 
 @Module
+@InstallIn(SettingsComponent::class)
 object SettingsDataHelperModule {
     @Provides
     @SettingsScope

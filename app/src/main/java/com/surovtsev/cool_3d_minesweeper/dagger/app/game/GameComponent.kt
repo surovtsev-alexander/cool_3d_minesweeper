@@ -10,7 +10,6 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.help
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
-import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.camera_info.CameraInfo
 import com.surovtsev.cool_3d_minesweeper.models.game.config.GameConfig
@@ -25,51 +24,85 @@ import com.surovtsev.cool_3d_minesweeper.utils.android_view.touch_listener.helpe
 import com.surovtsev.cool_3d_minesweeper.utils.gles.interfaces.IHandleOpenGLEvents
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool_3d_minesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
 import com.surovtsev.cool_3d_minesweeper.views.opengl.CubeView
-import dagger.*
+import dagger.Binds
+import dagger.BindsInstance
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.DefineComponent
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import glm_.vec2.Vec2
 import javax.inject.Named
 
 @GameScope
-@Subcomponent(
-    modules = [
-        GameModule::class,
-        GameEventsModule::class,
-        GameControlsModule::class,
-        GameControllerModule::class,
-        GameControllerBindModule::class,
-        TouchHelperModule::class,
-        ScalingHelperModule::class,
-        ClickAndRotationHelperModule::class
-    ])
+@DefineComponent(
+    parent = ViewModelComponent::class
+)
 interface GameComponent {
-    val gameActivityViewModel: GameActivityViewModel
-    val gameViewEvents: GameViewEvents
-    val gameControls: GameControls
-    val gLSurfaceView: GLSurfaceView
 
-    @Subcomponent.Builder
+    @DefineComponent.Builder
     interface Builder {
-        @BindsInstance
-        fun loadGame(loadGame: Boolean): Builder
-
+        fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun build(): GameComponent
     }
 }
 
+@InstallIn(GameComponent::class)
+@EntryPoint
+@GameScope
+interface GameComponentEntryPoint {
+    val loadGame: Boolean
+    val markingEvent: MarkingEvent
+    val minesweeperController: MinesweeperController
+    val gameRenderer: GLESRenderer
+    val gLSurfaceView: GLSurfaceView
+    val gameViewEvents: GameViewEvents
+    val gameControls: GameControls
+}
+
+//@GameScope
+//@Subcomponent(
+//    modules = [
+//        GameModule::class,
+//        GameEventsModule::class,
+//        GameControlsModule::class,
+//        GameControllerModule::class,
+//        GameControllerBindModule::class,
+//        TouchHelperModule::class,
+//        ScalingHelperModule::class,
+//        ClickAndRotationHelperModule::class
+//    ])
+//interface GameComponent {
+//    val gameActivityViewModel: GameActivityViewModel
+//    val gameViewEvents: GameViewEvents
+//    val gameControls: GameControls
+//    val gLSurfaceView: GLSurfaceView
+//
+//    @Subcomponent.Builder
+//    interface Builder {
+//        @BindsInstance
+//        fun loadGame(loadGame: Boolean): Builder
+//
+//        fun build(): GameComponent
+//    }
+//}
+//
+
 @Module
+@InstallIn(GameComponent::class)
 object GameModule {
     @GameScope
     @Provides
     fun provideGLSurfaceView(
-        context: Context
+        @ApplicationContext context: Context
     ): GLSurfaceView {
         return GLSurfaceView(context)
     }
-}
 
-@Module
-object GameEventsModule {
     @GameScope
     @Provides
     @Named(GameViewEventsNames.ElapsedTime)
@@ -100,6 +133,7 @@ object GameEventsModule {
 }
 
 @Module
+@InstallIn(GameComponent::class)
 object GameControlsModule {
     @GameScope
     @Provides
@@ -124,6 +158,7 @@ object GameControlsModule {
 }
 
 @Module
+@InstallIn(GameComponent::class)
 object GameControllerModule {
     @GameScope
     @Provides
@@ -210,8 +245,8 @@ object GameControllerModule {
     fun providePrevPointerCount() = 0
 }
 
-@Suppress("unused")
 @Module
+@InstallIn(GameComponent::class)
 interface GameControllerBindModule {
     @GameScope
     @Binds
@@ -231,6 +266,7 @@ interface GameControllerBindModule {
 }
 
 @Module
+@InstallIn(GameComponent::class)
 object TouchHelperModule {
     @GameScope
     @Provides
@@ -239,6 +275,7 @@ object TouchHelperModule {
 }
 
 @Module
+@InstallIn(GameComponent::class)
 object ScalingHelperModule {
     @Provides
     @Named(TouchHelper.PrevCenter)
@@ -246,6 +283,7 @@ object ScalingHelperModule {
 }
 
 @Module
+@InstallIn(GameComponent::class)
 object ClickAndRotationHelperModule {
     @Provides
     @Named(ClickAndRotationHelper.Prev)

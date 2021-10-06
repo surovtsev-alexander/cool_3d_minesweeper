@@ -4,6 +4,8 @@ import android.content.ContentValues
 import com.surovtsev.cool_3d_minesweeper.utils.constants.minesweeper.database.DBConfig
 import glm_.vec3.Vec3i
 
+typealias SettingsDataFactory = () -> SettingsData
+
 data class SettingsData(
     val xCount: Int,
     val yCount: Int,

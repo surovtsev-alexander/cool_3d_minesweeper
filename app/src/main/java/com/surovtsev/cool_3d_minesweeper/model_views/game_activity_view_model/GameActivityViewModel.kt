@@ -1,27 +1,69 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model
 
+import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
+import android.util.Log
 import android.view.KeyEvent
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.MinesweeperController
-import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponentEntryPoint
+import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.GameViewEvents
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.MarkingEvent
+import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
+import com.surovtsev.cool_3d_minesweeper.presentation.game_screen.LoadGameParameterName
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
 import com.surovtsev.cool_3d_minesweeper.views.gles_renderer.GLESRenderer
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Provider
 
-@GameScope
+@SuppressLint("StaticFieldLeak")
+@HiltViewModel
 class GameActivityViewModel @Inject constructor(
-    private var markingEvent: MarkingEvent,
-    var minesweeperController: MinesweeperController,
-    private var gameRenderer: GLESRenderer,
-    private var gLSurfaceView: GLSurfaceView
+    gameComponentProvider: Provider<GameComponent.Builder>,
+    savedStateHandle: SavedStateHandle
 ):
+    ViewModel(),
     IHandlePauseResumeDestroyKeyDown,
     LifecycleObserver
 {
+    private val markingEvent: MarkingEvent
+    val minesweeperController: MinesweeperController
+    private val gameRenderer: GLESRenderer
+    val gLSurfaceView: GLSurfaceView
+    val gameViewEvents: GameViewEvents
+    val gameControls: GameControls
+
+    init {
+        val loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
+
+        val gameComponent = gameComponentProvider
+            .get()
+            .loadGame(loadGame)
+            .build()
+        val gameComponentEntryPoint = EntryPoints.get(
+            gameComponent, GameComponentEntryPoint::class.java
+        )
+
+        markingEvent =
+            gameComponentEntryPoint.markingEvent
+        minesweeperController =
+            gameComponentEntryPoint.minesweeperController
+        gameRenderer =
+            gameComponentEntryPoint.gameRenderer
+        gLSurfaceView =
+            gameComponentEntryPoint.gLSurfaceView
+        gameViewEvents =
+            gameComponentEntryPoint.gameViewEvents
+        gameControls =
+            gameComponentEntryPoint.gameControls
+
+        Log.d("TEST+++", "GameActivityViewModel loadGame ${gameComponentEntryPoint.loadGame}")
+
+    }
+
     @Suppress("Unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {

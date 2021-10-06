@@ -15,7 +15,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.cool_3d_minesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.GameActivityViewModel
 import com.surovtsev.cool_3d_minesweeper.model_views.game_activity_view_model.helpers.*
 import com.surovtsev.cool_3d_minesweeper.models.game.interaction.GameControls
@@ -28,7 +27,7 @@ const val LoadGameParameterName = "load_game"
 
 @Composable
 fun GameScreen(
-    gameComponent: GameComponent,
+    viewModel: GameActivityViewModel,
     activity: Activity
 ) {
     if (!OpenGLInfoHelper.isSupportEs2(activity)) {
@@ -39,10 +38,9 @@ fun GameScreen(
         return
     }
 
-    val viewModel = gameComponent.gameActivityViewModel
-    val gLSurfaceView = gameComponent.gLSurfaceView
-    val gameViewEvents = gameComponent.gameViewEvents
-    val gameControls = gameComponent.gameControls
+    val gLSurfaceView = viewModel.gLSurfaceView
+    val gameViewEvents = viewModel.gameViewEvents
+    val gameControls = viewModel.gameControls
 
     GameScreenControls(
         viewModel,

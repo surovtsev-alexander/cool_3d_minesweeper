@@ -1,24 +1,25 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.main_activity_view_model
 
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool_3d_minesweeper.dagger.app.AppScope
 import com.surovtsev.cool_3d_minesweeper.presentation.Screen
-import com.surovtsev.cool_3d_minesweeper.utils.data_constructions.MyLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 typealias ButtonsInfo = List<MainActivityViewModel.ButtonInfo>
 
-@AppScope
+@HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val saveController: SaveController
-) {
+): ViewModel() {
     enum class ButtonType {
         OrdinaryButton,
         NewGameButton,
         LoadGameButton
     }
 
+    /* TODO: move to hilt */
     data class ButtonInfo(
         val screen: Screen,
         val caption: String,

@@ -5,13 +5,14 @@ import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.inte
 import com.surovtsev.cool_3d_minesweeper.dagger.app.GameScope
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatus
 import com.surovtsev.cool_3d_minesweeper.models.game.game_status.GameStatusHelper
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Named
 
 @GameScope
 class GameEventsReceiver @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     @Named(GameViewEventsNames.BombsLeft)
     private val bombsLeft: BombsLeftEvent,
     @Named(GameViewEventsNames.ElapsedTime)

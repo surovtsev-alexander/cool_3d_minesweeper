@@ -7,8 +7,7 @@ import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.D
 import com.surovtsev.cool_3d_minesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import javax.inject.Inject
 
-@AppScope
-class RankingDBQueries @Inject constructor(
+class RankingDBQueries (
     private val dBHelper: IDBHelper
 ) {
 

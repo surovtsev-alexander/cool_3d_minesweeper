@@ -1,20 +1,56 @@
 package com.surovtsev.cool_3d_minesweeper.model_views.ranking_activity_view_model
 
+import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool_3d_minesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
-import com.surovtsev.cool_3d_minesweeper.dagger.app.RankingScope
+import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponent
+import com.surovtsev.cool_3d_minesweeper.dagger.app.ranking.RankingComponentEntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import javax.inject.Provider
 
 
-@RankingScope
+@HiltViewModel
 class RankingActivityViewModel @Inject constructor(
-    private val settingsDBQueries: SettingsDBQueries,
-    private val rankingDBQueries: RankingDBQueries,
-    private val saveController: SaveController,
-    private val rankingActivityEvents: RankingActivityEvents
-) {
-    fun loadData() {
+    rankingComponentProvider: Provider<RankingComponent.Builder>,
+    private val saveController: SaveController
+): ViewModel(), LifecycleObserver {
+
+    private val settingsDBQueries: SettingsDBQueries
+    private val rankingDBQueries: RankingDBQueries
+    val rankingActivityEvents: RankingActivityEvents
+
+    init {
+        val rankingComponent = rankingComponentProvider
+            .get()
+            .build()
+        val rankingComponentEntryPoint =
+            EntryPoints.get(
+                rankingComponent,
+                RankingComponentEntryPoint::class.java
+            )
+
+        settingsDBQueries =
+            rankingComponentEntryPoint.settingsDBQueries
+        rankingDBQueries =
+            rankingComponentEntryPoint.rankingDBQueries
+        rankingActivityEvents =
+            rankingComponentEntryPoint.rankingActivityEvents
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+        Log.d("TEST+++", "RankingActivityViewModel onCreate")
+        loadData()
+    }
+
+    private fun loadData() {
         rankingActivityEvents.settingsListWithIds.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
