@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.android_view.touch_listener.helpers.interfaces.IMoveReceiver
-import com.surovtsev.cool3dminesweeper.utils.android_view.touch_listener.helpers.interfaces.IRotationReceiver
-import com.surovtsev.cool3dminesweeper.utils.android_view.touch_listener.helpers.interfaces.IScaleReceiver
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IMoveReceiver
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IRotationReceiver
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IScaleReceiver
 import com.surovtsev.cool3dminesweeper.utils.math.MatrixHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject

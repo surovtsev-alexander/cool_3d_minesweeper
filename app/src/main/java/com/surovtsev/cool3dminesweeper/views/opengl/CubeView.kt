@@ -3,11 +3,11 @@ package com.surovtsev.cool3dminesweeper.views.opengl
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool3dminesweeper.R
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.CubeCoordinates
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.PointedCell
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.TextureHelper

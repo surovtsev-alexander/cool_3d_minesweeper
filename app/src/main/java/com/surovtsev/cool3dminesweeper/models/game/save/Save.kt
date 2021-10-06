@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.models.game.save
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool3dminesweeper.models.game.camera_info.CameraInfo
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
+import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.save.helpers.CameraInfoToSave
 import com.surovtsev.cool3dminesweeper.models.game.save.helpers.CubeSkinToSave

@@ -2,9 +2,9 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.border.cube.CubeBorder
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.CellIndex
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.PointedCell
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.PointedCellWithBorder
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCellWithBorder
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
 import javax.inject.Inject

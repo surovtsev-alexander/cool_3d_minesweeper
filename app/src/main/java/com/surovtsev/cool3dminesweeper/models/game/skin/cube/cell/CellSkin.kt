@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.models.game.skin.cube.cell
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper.TextureType
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper.TextureType
 import glm_.vec3.Vec3i
 
 

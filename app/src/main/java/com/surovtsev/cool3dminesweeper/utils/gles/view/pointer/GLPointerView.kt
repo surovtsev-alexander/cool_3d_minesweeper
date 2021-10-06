@@ -7,8 +7,8 @@ import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.IGLObject
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.program.PointerGLESProgram
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.ISwitch
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.Switch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.ISwitch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.Switch
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

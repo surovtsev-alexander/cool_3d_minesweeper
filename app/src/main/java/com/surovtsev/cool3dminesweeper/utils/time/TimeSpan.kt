@@ -1,8 +1,8 @@
 package com.surovtsev.cool3dminesweeper.utils.time
 
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.Updatable
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.ISwitch
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.Switch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.Updatable
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.ISwitch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.Switch
 
 class TimeSpan(
     private val interval: Long,

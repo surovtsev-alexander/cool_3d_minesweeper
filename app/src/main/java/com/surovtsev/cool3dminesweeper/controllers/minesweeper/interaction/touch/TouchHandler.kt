@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.android_view.interaction.TouchType
+import com.surovtsev.cool3dminesweeper.utils.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool3dminesweeper.utils.state_helpers.Updatable
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.Updatable
 import glm_.vec2.Vec2
 import javax.inject.Inject
 

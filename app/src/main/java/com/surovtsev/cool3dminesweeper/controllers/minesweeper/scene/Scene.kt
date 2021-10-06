@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.CameraInfoHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope

@@ -1,8 +1,8 @@
 package com.surovtsev.cool3dminesweeper.models.game.save.helpers
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.CellIndex
-import com.surovtsev.cool3dminesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
+import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 
 class GameLogicToSave(
     private val elapsedTime: Long,

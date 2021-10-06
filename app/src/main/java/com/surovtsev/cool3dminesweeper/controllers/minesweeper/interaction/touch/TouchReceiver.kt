@@ -1,9 +1,9 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.android_view.interaction.TouchType
-import com.surovtsev.cool3dminesweeper.utils.android_view.touch_listener.helpers.interfaces.IStoreMovement
-import com.surovtsev.cool3dminesweeper.utils.android_view.touch_listener.helpers.interfaces.ITouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.androidview.interaction.TouchType
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IStoreMovement
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.ITouchReceiver
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject

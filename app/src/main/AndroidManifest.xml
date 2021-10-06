@@ -3,7 +3,7 @@
     package="com.surovtsev.cool3dminesweeper">
 
     <application
-        android:name="com.surovtsev.cool3dminesweeper.controllers.application_controller.ApplicationController"
+        android:name="com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_coll_3d_minesweeper"
         android:label="@string/app_name"

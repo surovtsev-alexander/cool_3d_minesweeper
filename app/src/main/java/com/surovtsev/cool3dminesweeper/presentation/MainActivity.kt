@@ -10,15 +10,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.surovtsev.cool3dminesweeper.model_views.game_screen_view_model.GameScreenViewModel
-import com.surovtsev.cool3dminesweeper.model_views.main_screen_view_model.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.model_views.ranking_activity_view_model.RankingScreenViewModel
-import com.surovtsev.cool3dminesweeper.model_views.settings_screen_view_model.SettingsScreenViewModel
-import com.surovtsev.cool3dminesweeper.presentation.game_screen.GameScreen
-import com.surovtsev.cool3dminesweeper.presentation.game_screen.LoadGameParameterName
-import com.surovtsev.cool3dminesweeper.presentation.main_screen.MainScreen
-import com.surovtsev.cool3dminesweeper.presentation.ranking_screen.RankingScreen
-import com.surovtsev.cool3dminesweeper.presentation.settings_screen.SettingsScreen
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
+import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
+import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
+import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
+import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
+import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

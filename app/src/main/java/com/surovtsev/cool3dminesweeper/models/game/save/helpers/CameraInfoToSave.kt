@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.models.game.save.helpers
 
-import com.surovtsev.cool3dminesweeper.models.game.camera_info.CameraInfo
+import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import glm_.mat4x4.Mat4
 import glm_.vec4.Vec4
 

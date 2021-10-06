@@ -1,9 +1,9 @@
 package com.surovtsev.cool3dminesweeper.models.game.save.helpers
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.GameLogic
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.NeighboursCalculator
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texture_coordinates_helper.TextureCoordinatesHelper
-import com.surovtsev.cool3dminesweeper.models.game.cell_pointers.CellIndex
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.NeighboursCalculator
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
+import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.cell.CellSkin
 

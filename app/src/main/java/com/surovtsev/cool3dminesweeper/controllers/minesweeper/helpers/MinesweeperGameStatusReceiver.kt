@@ -1,16 +1,16 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
 import android.content.Context
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.game_logic.interfaces.IGameStatusReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.IGameStatusReceiver
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
-import com.surovtsev.cool3dminesweeper.models.game.game_status.GameStatus
+import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject

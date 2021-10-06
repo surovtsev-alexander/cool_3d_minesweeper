@@ -3,11 +3,11 @@ package com.surovtsev.cool3dminesweeper.dagger.app.ranking
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
-import com.surovtsev.cool3dminesweeper.model_views.ranking_activity_view_model.helpers.RankingList
-import com.surovtsev.cool3dminesweeper.model_views.ranking_activity_view_model.helpers.RankingScreenEvents
-import com.surovtsev.cool3dminesweeper.model_views.ranking_activity_view_model.helpers.SelectedSettingsId
-import com.surovtsev.cool3dminesweeper.model_views.ranking_activity_view_model.helpers.WinsCount
-import com.surovtsev.cool3dminesweeper.utils.data_constructions.MyLiveData
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingList
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.SelectedSettingsId
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.WinsCount
+import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
