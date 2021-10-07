@@ -99,22 +99,17 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
             LazyColumn {
                 items(settingsList) { item ->
                     val itemId = item.id
-                    if (selectedSettingsId == itemId) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    LightBlue
-                                )
-
-                        ) {
-                            SettingsDataItem(viewModel,item)
+                    var modifier = Modifier.clickable { viewModel.useSettings(item) }.let {
+                        if (selectedSettingsId == itemId) {
+                            it.background(LightBlue)
+                        } else {
+                            it
                         }
-                    } else {
-                        Box (
-                            modifier = Modifier.clickable { viewModel.useSettings(item) }
-                        ) {
-                            SettingsDataItem(viewModel, item)
-                        }
+                    }
+                    Box (
+                        modifier
+                    ) {
+                        SettingsDataItem(viewModel = viewModel, settingDataWithId = item)
                     }
                 }
             }
