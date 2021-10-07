@@ -14,7 +14,7 @@ import java.nio.FloatBuffer
 
 abstract class GLESProgram(
     private val shaderLoadParameters: ShaderHelper.ShaderLoadParameters
-    ) {
+) {
     protected var programId = 0
         private set
 
@@ -52,16 +52,6 @@ abstract class GLESProgram(
         uMVP.getLocation()
 
         fields.forEach { it.getLocation() }
-
-        /*
-        if (LoggerConfig.LOG_SHADER_FIELDS_LOCATIONS) {
-            Log.d("TEST", "{")
-            fields.forEach {
-                Log.d("TEST", "${it.name}: ${it.location}")
-            }
-            Log.d("TEST", "}")
-        }
-         */
     }
 
     fun fillMVP(mvpMatrix: Mat4) {

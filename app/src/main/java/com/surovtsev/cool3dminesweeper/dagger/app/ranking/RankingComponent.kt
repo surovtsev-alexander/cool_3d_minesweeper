@@ -46,7 +46,7 @@ object RankingModule {
     @Named(RankingScreenEvents.RankingListName)
     fun provideRankingList(): RankingList {
         return MyLiveData(
-            listOf()
+            emptyList()
         )
     }
 
@@ -55,7 +55,7 @@ object RankingModule {
     @Named(RankingScreenEvents.FilteredRankingListName)
     fun provideFilteredRankingList(): RankingList {
         return MyLiveData(
-            listOf()
+            emptyList()
         )
     }
 
@@ -69,7 +69,7 @@ object RankingModule {
     @Provides
     fun provideWinsCount(): WinsCount {
         return MyLiveData(
-            mapOf()
+            emptyMap()
         )
     }
 }

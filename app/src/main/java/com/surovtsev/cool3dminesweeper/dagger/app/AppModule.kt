@@ -51,7 +51,7 @@ object AppModule {
     @Provides
     fun provideSettingsListWithIds(): SettingsListWithIds {
         return MyLiveData(
-            listOf()
+            emptyList()
         )
     }
 }

@@ -6,7 +6,7 @@ import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-/* TODO: move to Dagger */
+/* TODO: do not process. unused */
 
 class IndexBuffer(val vertexData: IntArray) {
     val bufferId: Int

@@ -18,7 +18,8 @@ import javax.inject.Inject
 class GLPointerView @Inject constructor(
     @ApplicationContext private val context: Context
 ):
-    IGLObject, ISwitch by Switch() {
+    IGLObject, ISwitch by Switch()
+{
     companion object {
         private const val positionComponentCount = 3
     }
