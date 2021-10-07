@@ -76,41 +76,38 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
         data.observeAsState(defaultValue)
     }
 
-    Box(
-        modifier = Modifier
+    Column(
+        Modifier
+            .fillMaxSize()
             .background(GrayBackground)
             .border(1.dp, Color.Black),
     ) {
-        Column(
-            Modifier.fillMaxSize()
-        ) {
-            Row {
-                Text(
-                    "counts",
-                    Modifier.fillMaxWidth(0.33f),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    "bombs %",
-                    Modifier.fillMaxWidth(0.5f),
-                    textAlign = TextAlign.Center
-                )
-            }
-            LazyColumn {
-                items(settingsList) { item ->
-                    val itemId = item.id
-                    val modifier = Modifier.clickable { viewModel.useSettings(item) }.let {
-                        if (selectedSettingsId == itemId) {
-                            it.background(LightBlue)
-                        } else {
-                            it
-                        }
+        Row {
+            Text(
+                "counts",
+                Modifier.fillMaxWidth(0.33f),
+                textAlign = TextAlign.Start
+            )
+            Text(
+                "bombs %",
+                Modifier.fillMaxWidth(0.5f),
+                textAlign = TextAlign.Center
+            )
+        }
+        LazyColumn {
+            items(settingsList) { item ->
+                val itemId = item.id
+                val modifier = Modifier.clickable { viewModel.useSettings(item) }.let {
+                    if (selectedSettingsId == itemId) {
+                        it.background(LightBlue)
+                    } else {
+                        it
                     }
-                    Box (
-                        modifier
-                    ) {
-                        SettingsDataItem(viewModel = viewModel, settingDataWithId = item)
-                    }
+                }
+                Box (
+                    modifier
+                ) {
+                    SettingsDataItem(viewModel = viewModel, settingDataWithId = item)
                 }
             }
         }
