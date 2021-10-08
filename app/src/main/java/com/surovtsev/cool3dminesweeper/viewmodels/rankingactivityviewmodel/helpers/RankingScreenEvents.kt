@@ -19,11 +19,14 @@ class RankingScreenEvents @Inject constructor(
     val rankingList: RankingList,
     @Named(FilteredRankingListName)
     val filteredRankingList: RankingList,
+    @Named(RankingListToDisplay)
+    val rankingListToDisplay: RankingList,
     val selectedSettingsId: SelectedSettingsId,
     val winsCount: WinsCount
 ) {
     companion object {
         const val RankingListName = "rankingList"
         const val FilteredRankingListName = "filteredRankingList"
+        const val RankingListToDisplay = "rankingListToDisplay"
     }
 }

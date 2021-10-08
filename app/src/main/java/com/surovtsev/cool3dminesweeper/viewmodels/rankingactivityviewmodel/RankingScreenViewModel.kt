@@ -10,7 +10,8 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class RankingScreenViewModel @Inject constructor(
     private val settingsDBQueries: SettingsDBQueries
     private val rankingDBQueries: RankingDBQueries
     val rankingScreenEvents: RankingScreenEvents
+    val rankingTableSortTypeData: RankingTableSortTypeData
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -43,6 +45,8 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingDBQueries
         rankingScreenEvents =
             rankingComponentEntryPoint.rankingScreenEvents
+        rankingTableSortTypeData =
+            rankingComponentEntryPoint.rankingTableSortTypeData
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -83,6 +87,52 @@ class RankingScreenViewModel @Inject constructor(
                 }
             )
             rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
+            prepareRankingListToDisplay()
         }
+    }
+
+    private fun prepareRankingListToDisplay() {
+        val currSortType = rankingTableSortTypeData.data.value!!
+        val filteredRankingList = rankingScreenEvents.filteredRankingList.data.value!!
+
+        val sortingSelector = { x: RankingData ->
+            when (currSortType.rankingColumn) {
+                RankingColumn.SortableColumn.DateColumn -> x.dateTime
+                RankingColumn.SortableColumn.SolvingTimeColumn -> x.elapsed
+            } as Comparable<Any>
+        }
+
+        rankingScreenEvents.rankingListToDisplay.onDataChanged(
+            if (currSortType.sortDirection == SortDirection.Ascending) {
+                filteredRankingList.sortedBy {
+                    sortingSelector(it)
+                }
+            } else {
+                filteredRankingList.sortedByDescending {
+                    sortingSelector(it)
+                }
+            }
+        )
+    }
+
+    fun selectSortColumn(
+        selectedColumn: RankingColumn.SortableColumn
+    ) {
+        val currSortType = rankingTableSortTypeData.data.value!!
+        rankingTableSortTypeData.onDataChanged(
+            if (currSortType.rankingColumn != selectedColumn) {
+                RankingTableSortType(
+                    selectedColumn,
+                    SortDirection.Ascending
+                )
+            } else {
+                RankingTableSortType(
+                    selectedColumn,
+                    nextSortType(currSortType.sortDirection)
+                )
+            }
+        )
+
+        prepareRankingListToDisplay()
     }
 }

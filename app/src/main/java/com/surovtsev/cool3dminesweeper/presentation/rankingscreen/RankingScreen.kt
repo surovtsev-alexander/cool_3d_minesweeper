@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingScreenEvents
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
@@ -24,24 +23,24 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 
 @Composable
 fun RankingScreen(
     viewModel: RankingScreenViewModel
 ) {
-    val rankingActivityEvents = viewModel.rankingScreenEvents
-
     RankingControls(
-        viewModel = viewModel,
-        rankingScreenEvents = rankingActivityEvents
+        viewModel
     )
 }
 
 @Composable
 fun RankingControls(
     viewModel: RankingScreenViewModel,
-    rankingScreenEvents: RankingScreenEvents
 ) {
+    val rankingScreenEvents = viewModel.rankingScreenEvents
+    val sortTypeData = viewModel.rankingTableSortTypeData
+
     Test_composeTheme {
         Column(
             modifier = Modifier
@@ -57,7 +56,7 @@ fun RankingControls(
             Row(
                 modifier = Modifier.fillMaxHeight(1f)
             ) {
-                RankingList(rankingScreenEvents)
+                RankingList(viewModel)
             }
         }
     }
@@ -163,11 +162,21 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    rankingScreenEvents: RankingScreenEvents
+    viewModel: RankingScreenViewModel,
 ) {
-    val filteredRankingList: List<RankingData> by rankingScreenEvents.filteredRankingList.run {
+    val rankingListToDisplay: List<RankingData> by viewModel.rankingScreenEvents.rankingListToDisplay.run {
         data.observeAsState(defaultValue)
     }
+    val rankingTableSortType: RankingTableSortType by viewModel.rankingTableSortTypeData.run {
+        data.observeAsState(defaultValue)
+    }
+
+    val columnsWidth = mapOf(
+        RankingColumn.IdColumn to 0.2f,
+        RankingColumn.SortableColumn.DateColumn to 0.5f,
+        RankingColumn.SortableColumn.SolvingTimeColumn to 1f
+    )
+
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -177,26 +186,51 @@ fun RankingList(
     ) {
         Column {
             Row {
-                Text(
-                    "#",
-                    Modifier.fillMaxWidth(0.2f),
-                    textAlign = TextAlign.Start
-                )
-                Text(
-                    "date",
-                    Modifier.fillMaxWidth(0.5f),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    "seconds",
-                    Modifier.fillMaxWidth(1f),
-                    textAlign = TextAlign.End
-                )
+                for ((columnType, modifierWidth) in columnsWidth) {
+                    RankingListColumnTitle(
+                        viewModel, columnType, modifierWidth, rankingTableSortType
+                    )
+                }
             }
             LazyColumn {
-                items(filteredRankingList.withIndex().toList()) { item ->
+                items(rankingListToDisplay.withIndex().toList()) { item ->
                     RankingDataItem(item)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun RankingListColumnTitle(
+    viewModel: RankingScreenViewModel,
+    columnType: RankingColumn,
+    modifierWidth: Float,
+    rankingTableSortType: RankingTableSortType
+) {
+    Row (
+        Modifier.fillMaxWidth(modifierWidth),
+    ) {
+        Text(
+            columnType.columnName,
+            modifier = Modifier.fillMaxWidth(0.5f),
+        )
+        if (columnType is RankingColumn.SortableColumn) {
+            val isColumnSelected = rankingTableSortType.rankingColumn == columnType
+            val buttonColor = if (isColumnSelected) Color.Green else Color.Gray
+            val buttonText =
+                if (!(isColumnSelected && rankingTableSortType.sortDirection == SortDirection.Descending)) "u" else "d"
+            Box(
+                modifier = Modifier
+                    .width(30.dp)
+                    .background(buttonColor)
+                    .clickable { viewModel.selectSortColumn(columnType) }
+            ) {
+                Text(
+                    text = buttonText,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -219,13 +253,12 @@ fun RankingDataItem(
             Text(
                 indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
                 Modifier.fillMaxWidth(0.5f),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Left
             )
             Text(
                 DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
                 Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
-
             )
         }
     }
