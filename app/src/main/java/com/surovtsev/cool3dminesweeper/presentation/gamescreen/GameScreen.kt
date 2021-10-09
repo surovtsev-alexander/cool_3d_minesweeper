@@ -99,11 +99,14 @@ fun Controls(
     removeZeroBordersControl: RemoveZeroBordersControl
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
     ) {
         Column(
-            modifier = Modifier.weight(2f),
-            Arrangement.Center
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(2f)
         ) {
             ControlButtons(
                 removeMarkedBombsControl,
@@ -111,13 +114,16 @@ fun Controls(
             )
         }
         Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Bottom
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
         ) {
             ControlCheckBox(gameScreenEvents.markingEvent)
         }
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f)
         ) {
             GameInfo(
                 gameScreenEvents.bombsLeftEvent,
@@ -132,7 +138,11 @@ fun ControlButtons(
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
 ) {
-    Row {
+    Row (
+        modifier = Modifier
+            .fillMaxHeight(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Button(
             onClick = { removeMarkedBombsControl.update() },
             modifier = Modifier.fillMaxWidth(0.5f)
@@ -156,10 +166,14 @@ fun ControlCheckBox(
         data.observeAsState(defaultValue)
     }
     Box(
-        modifier = Modifier.clickable { markingEvent.onDataChanged(!checked) }
+        modifier = Modifier
+            .fillMaxHeight()
+            .clickable { markingEvent.onDataChanged(!checked) }
     ) {
         Row(
-            Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = checked,

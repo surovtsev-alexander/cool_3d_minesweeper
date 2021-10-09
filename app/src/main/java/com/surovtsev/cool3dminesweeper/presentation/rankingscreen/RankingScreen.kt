@@ -223,7 +223,7 @@ fun RankingListColumnTitle(
                 modifier = Modifier
                     .width(30.dp)
                     .background(buttonColor)
-                    .clickable { viewModel.selectSortColumn(columnType) }
+                    .clickable { viewModel.selectColumnToSortBy(columnType) }
             ) {
                 Text(
                     text = buttonText,

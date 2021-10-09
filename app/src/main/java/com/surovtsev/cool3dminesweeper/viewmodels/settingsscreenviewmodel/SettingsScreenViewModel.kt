@@ -62,7 +62,6 @@ class SettingsScreenViewModel @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        Log.d("TEST+++", "SettingsActivityViewModel onCreate")
         loadData()
     }
 

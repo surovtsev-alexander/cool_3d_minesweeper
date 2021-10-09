@@ -1,6 +1,5 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -49,9 +48,9 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingTableSortTypeData
     }
 
+    @SuppressWarnings("UNUSED")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        Log.d("TEST+++", "RankingActivityViewModel onCreate")
         loadData()
     }
 
@@ -114,7 +113,7 @@ class RankingScreenViewModel @Inject constructor(
         )
     }
 
-    fun selectSortColumn(
+    fun selectColumnToSortBy(
         selectedColumn: RankingColumn.SortableColumn
     ) {
         val currSortType = rankingTableSortTypeData.data.value!!

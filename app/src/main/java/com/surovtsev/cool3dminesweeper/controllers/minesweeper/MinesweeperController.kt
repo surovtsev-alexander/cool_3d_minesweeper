@@ -73,7 +73,6 @@ class MinesweeperController @Inject constructor(
     }
 
     override fun onPause() {
-        Log.d("TEST+++", "MinesweeperController onPause")
         if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
             return
         }
@@ -95,10 +94,8 @@ class MinesweeperController @Inject constructor(
     }
 
     override fun onResume() {
-        Log.d("TEST+++", "MinesweeperController onResume")
     }
 
     override fun onDestroy() {
-        Log.d("TEST+++", "MinesweeperController onResume")
     }
 }

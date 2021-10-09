@@ -59,9 +59,6 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.gameScreenEvents
         gameControls =
             gameComponentEntryPoint.gameControls
-
-        Log.d("TEST+++", "GameActivityViewModel loadGame ${gameComponentEntryPoint.loadGame}")
-
     }
 
     @Suppress("Unused")
