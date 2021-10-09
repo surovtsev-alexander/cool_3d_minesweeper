@@ -2,6 +2,6 @@ package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.
 
 import glm_.vec2.Vec2
 
-interface IMoveReceiver: IReceiver {
+interface MoveReceiver: TouchListenerReceiver {
     fun move(proj1: Vec2, proj2: Vec2)
 }

@@ -26,19 +26,19 @@ object BombPlacer {
         fun placeBomb() {
             for (i in 0 until tryCount) {
                 val rId = Random.nextInt(allCubesCount)
-                val xyz = positionCalculator(rId)
-                val d = xyz.getValue(skins)
+                val cellIndex = positionCalculator(rId)
+                val d = cellIndex.getValue(skins)
 
                 if (d.isBomb) {
                     continue
                 }
 
-                if (xyz == excludedIndex) {
+                if (cellIndex == excludedIndex) {
                     continue
                 }
 
                 d.isBomb = true
-                bombsList.add(xyz)
+                bombsList.add(cellIndex)
 
                 freeCubes--
                 return
@@ -47,21 +47,21 @@ object BombPlacer {
             fun tryToSetSequentially(n: Int): Boolean {
                 var nn = n
                 for (id in 0 until allCubesCount) {
-                    val xyz = positionCalculator(id)
-                    val s = xyz.getValue(skins)
+                    val cellIndex = positionCalculator(id)
+                    val s = cellIndex.getValue(skins)
 
                     if (s.isBomb) {
                         continue
                     }
 
-                    if (xyz == excludedIndex) {
+                    if (cellIndex == excludedIndex) {
                         continue
                     }
 
                     nn--
                     if (nn == 0) {
                         s.isBomb = true
-                        bombsList.add(xyz)
+                        bombsList.add(cellIndex)
 
                         freeCubes--
                         return true

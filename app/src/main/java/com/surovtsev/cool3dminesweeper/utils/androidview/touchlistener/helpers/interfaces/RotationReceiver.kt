@@ -2,7 +2,7 @@ package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.
 
 import glm_.vec2.Vec2
 
-interface IRotationReceiver:
-    IReceiver {
+interface RotationReceiver:
+    TouchListenerReceiver {
     fun rotateBetweenProjections(prev: Vec2, curr: Vec2)
 }

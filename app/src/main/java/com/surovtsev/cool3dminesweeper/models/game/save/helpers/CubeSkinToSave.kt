@@ -69,9 +69,9 @@ class CubeSkinToSave(
 
 
             val skins = cubeSkin.skins
-            cubeSkin.iterateCubes { xyz ->
-                val skin = xyz.getValue(skins)
-                val id = xyz.id
+            cubeSkin.iterateCubes { cellIndex ->
+                val skin = cellIndex.getValue(skins)
+                val id = cellIndex.id
 
                 val skinSaverHelper = SkinSaverHelper.createObject(skin)
                 bombs[id] = skinSaverHelper.getBombChar()
@@ -93,9 +93,9 @@ class CubeSkinToSave(
 
         var openedBombCount = 0
         val skins = cubeSkin.skins
-        cubeSkin.iterateCubes { xyz ->
-            val skin = xyz.getValue(skins)
-            val id = xyz.id
+        cubeSkin.iterateCubes { cellIndex ->
+            val skin = cellIndex.getValue(skins)
+            val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(
                 bombs[id], markedClosedEmpty[id]
@@ -103,7 +103,7 @@ class CubeSkinToSave(
 
             if (skinSaverHelper.isBomb) {
                 skin.isBomb = true
-                bombsList.add(xyz)
+                bombsList.add(cellIndex)
             }
 
             if (skinSaverHelper.isEmpty) {
@@ -117,9 +117,9 @@ class CubeSkinToSave(
         NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
 
         val closedBombs = bombsList.count() - openedBombCount
-        cubeSkin.iterateCubes { xyz ->
-            val skin = xyz.getValue(skins)
-            val id = xyz.id
+        cubeSkin.iterateCubes { cellIndex ->
+            val skin = cellIndex.getValue(skins)
+            val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(
                 bombs[id], markedClosedEmpty[id]

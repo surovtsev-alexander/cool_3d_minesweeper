@@ -23,7 +23,7 @@ class CubeSkin @Inject constructor(
 
     companion object {
 
-        fun iterateCubes(counts: Vec3i, action: (xyz: CellIndex) -> Unit) {
+        fun iterateCubes(counts: Vec3i, action: (cellIndex: CellIndex) -> Unit) {
             for (x in 0 until counts[0]) {
                 for (y in 0 until counts[1]) {
                     for (z in 0 until counts[2]) {
@@ -56,7 +56,7 @@ class CubeSkin @Inject constructor(
             p.getValue(skins)
         )
 
-    fun iterateCubes(action: (xyz: CellIndex) -> Unit) =
+    fun iterateCubes(action: (cellIndex: CellIndex) -> Unit) =
         iterateCubes(
             counts,
             action

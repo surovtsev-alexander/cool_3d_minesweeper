@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.utils.androidview.interaction.TouchType
 import glm_.vec3.Vec3
 import javax.inject.Inject
 
-interface IPointer {
+interface Pointer {
     val near: Vec3
     val far: Vec3
     val touchType: TouchType
@@ -34,8 +34,8 @@ open class PointerData(
 )
 
 @GameScope
-open class Pointer @Inject constructor(): PointerData(Vec3(), Vec3(), TouchType.SHORT),
-    IPointer {
+open class PointerImp @Inject constructor(): PointerData(Vec3(), Vec3(), TouchType.SHORT),
+    Pointer {
     override var near: Vec3
         get() = super.near
         set(value) {

@@ -12,7 +12,7 @@ import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Ga
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
-import com.surovtsev.cool3dminesweeper.utils.interfaces.IHandlePauseResumeDestroyKeyDown
+import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyKeyDownHandler
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +26,7 @@ class GameScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ):
     ViewModel(),
-    IHandlePauseResumeDestroyKeyDown,
+    PauseResumeDestroyKeyDownHandler,
     LifecycleObserver
 {
     private val markingEvent: MarkingEvent

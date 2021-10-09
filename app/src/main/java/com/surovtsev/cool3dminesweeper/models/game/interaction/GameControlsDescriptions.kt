@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.models.game.interaction
 
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.Updatable
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableOnOffSwitch
 
 object GameControlsNames {
@@ -9,6 +9,6 @@ object GameControlsNames {
     const val MarkOnShortTap = "markOnShortTap"
 }
 
-typealias RemoveMarkedBombsControl = Updatable
-typealias RemoveZeroBordersControl = Updatable
+typealias RemoveMarkedBombsControl = UpdatableImp
+typealias RemoveZeroBordersControl = UpdatableImp
 typealias MarkOnShortTapControl = UpdatableOnOffSwitch

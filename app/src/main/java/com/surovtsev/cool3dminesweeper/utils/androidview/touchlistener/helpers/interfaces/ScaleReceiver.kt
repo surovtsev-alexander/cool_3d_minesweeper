@@ -1,5 +1,5 @@
 package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces
 
-interface IScaleReceiver: IReceiver {
+interface ScaleReceiver: TouchListenerReceiver {
     fun scale(factor: Float)
 }

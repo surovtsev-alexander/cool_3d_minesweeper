@@ -3,8 +3,8 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 import android.content.Context
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.IGameStatusReceiver
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.GameStatusReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelperImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
@@ -19,8 +19,10 @@ import javax.inject.Inject
 class MinesweeperGameStatusReceiver @Inject constructor(
     @ApplicationContext private val context: Context,
     private val saveController: SaveController,
-    private val gameConfig: GameConfig
-): IGameStatusReceiver {
+    private val gameConfig: GameConfig,
+    private val settingsDBQueries: SettingsDBQueries,
+    private val rankingDBQueries: RankingDBQueries,
+): GameStatusReceiver {
     override fun gameStatusUpdated(
         newStatus: GameStatus,
         elapsed: Long
@@ -36,11 +38,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             return
         }
 
-        val dbHelper = DBHelper(context)
-        val settingsDBHelper = SettingsDBQueries(dbHelper)
-        val rankingDBQueries = RankingDBQueries(dbHelper)
-
-        val settingId = settingsDBHelper.insertIfNotPresent(gameConfig.settingsData)
+        val settingId = settingsDBQueries.insertIfNotPresent(gameConfig.settingsData)
         val rankingData = RankingData(
             settingId,
             elapsed,

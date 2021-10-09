@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers
 
 import android.content.Context
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.IGameEventsReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.GameEventsReceiver
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
@@ -19,7 +19,7 @@ class GameScreenEventsReceiver @Inject constructor(
     private val elapsedTime: ElapsedTimeEvent,
     @Named(GameScreenEventsNames.ShowDialog)
     private val showDialog: ShowDialogEvent
-): IGameEventsReceiver {
+): GameEventsReceiver {
     init {
         init()
     }

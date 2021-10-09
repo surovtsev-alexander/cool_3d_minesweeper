@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces
 
-interface IStoreMovement {
+interface MovementHolder {
     fun getMovement(): Float
 }
 

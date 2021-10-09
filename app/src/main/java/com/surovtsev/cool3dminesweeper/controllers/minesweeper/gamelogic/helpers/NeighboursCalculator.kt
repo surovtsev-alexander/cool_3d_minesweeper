@@ -12,11 +12,12 @@ import glm_.vec3.Vec3i
 object NeighboursCalculator {
     @Suppress("unused")
     fun iterateAllNeighbours(
-        cubeSkin: CubeSkin, xyz: CellIndex,
+        cubeSkin: CubeSkin,
+        cellIndex: CellIndex,
         action: (PointedCell) -> Unit
     ) {
         val range = PairCellRange(
-            xyz,
+            cellIndex,
             cubeSkin.counts
         ).getCellRange(
             Vec3bool(x = false, y = false, z = false)
@@ -29,7 +30,7 @@ object NeighboursCalculator {
         }
         iterate(
             cubeSkin,
-            xyz,
+            cellIndex,
             range,
             fl,
             0
@@ -37,16 +38,17 @@ object NeighboursCalculator {
     }
 
     private fun iterate(
-        cubeSkin: CubeSkin, xyz: CellIndex,
+        cubeSkin: CubeSkin,
+        cellIndex: CellIndex,
         range: CellRange,
         action: (PointedCell, Int) -> Unit, i: Int
     ) {
         val counts = cubeSkin.counts
 
-        val xyzVec = xyz.getVec()
+        val cellIndexVec = cellIndex.getVec()
         range.iterate(counts) {
             do {
-                if (it.getVec() == xyzVec) {
+                if (it.getVec() == cellIndexVec) {
                     break
                 }
 
@@ -60,18 +62,18 @@ object NeighboursCalculator {
         }
     }
 
-    fun getNeighbours(cubeSkin: CubeSkin, xyz: CellIndex, dim: Int): List<PointedCell> {
+    fun getNeighbours(cubeSkin: CubeSkin, cellIndex: CellIndex, dim: Int): List<PointedCell> {
         val res = mutableListOf<PointedCell>()
 
         val pairCellRange =
             PairCellRange(
-                xyz,
+                cellIndex,
                 cubeSkin.counts
             )
 
         iterate(
             cubeSkin,
-            xyz,
+            cellIndex,
             pairCellRange.getCellRange(rangeFlags[dim]),
             { pointedCell, _ ->
                 res.add(pointedCell)
@@ -89,19 +91,20 @@ object NeighboursCalculator {
     )
 
     fun iterateNeighbours(
-        cubeSkin: CubeSkin, xyz: CellIndex,
+        cubeSkin: CubeSkin,
+        cellIndex: CellIndex,
         action: (PointedCell, Int) -> Unit
     ) {
         val pairCellRange =
             PairCellRange(
-                xyz,
+                cellIndex,
                 cubeSkin.counts
             )
 
         for (i in 0 until 3) {
             iterate(
                 cubeSkin,
-                xyz,
+                cellIndex,
                 pairCellRange.getCellRange(rangeFlags[i]),
                 action,
                 i
@@ -128,9 +131,12 @@ object NeighboursCalculator {
     }
 
     fun hasPosEmptyNeighbours(
-        cubeSkin: CubeSkin, xyz: CellIndex, direction: Int): Boolean {
+        cubeSkin: CubeSkin,
+        cellIndex: CellIndex,
+        direction: Int
+    ): Boolean {
         val r = MyMath.Rays[direction]
-        val xyzV = xyz.getVec()
+        val cellIndexVec = cellIndex.getVec()
         val counts = cubeSkin.counts
 
         fun testPoint(p: Vec3i): Boolean {
@@ -149,11 +155,11 @@ object NeighboursCalculator {
             return s.skin.isEmpty()
         }
 
-        if (testPoint(xyzV - r)) {
+        if (testPoint(cellIndexVec - r)) {
             return true
         }
 
-        if (testPoint(xyzV + r)) {
+        if (testPoint(cellIndexVec + r)) {
             return true
         }
 

@@ -6,7 +6,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.Intersect
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
+import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.GLPointerView
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeView
@@ -19,7 +19,7 @@ class Scene @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
-    private val pointer: IPointer,
+    private val pointer: Pointer,
     val touchHandler: TouchHandler,
     private val intersectionCalculator: IntersectionCalculator,
     private val glPointerView: GLPointerView,

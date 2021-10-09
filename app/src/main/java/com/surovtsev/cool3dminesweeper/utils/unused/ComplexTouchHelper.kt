@@ -1,12 +1,12 @@
 package com.surovtsev.cool3dminesweeper.utils.unused
 
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IStoreMovement
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.ITouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.MovementHolder
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.TouchReceiver
 import glm_.vec2.Vec2
 
 @Suppress("unused")
-class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceiver {
+class ComplexTouchHelper(private val customClock: TimeSpanHelper): TouchReceiver {
     enum class TouchType {
         SHORT,
         LONG,
@@ -30,14 +30,14 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
     private var downTime = 0L
     private var clickTime = 0L
 
-    private var movementSaver: IStoreMovement? = null
+    private var movementHolder: MovementHolder? = null
 
     private val movementThreshold = 10f
     private val touchDelay = 100L
     private val doubleTouchDelay = 250L
     private val longTouchDelay = 300L
 
-    override fun down(pos: Vec2, movementSaver: IStoreMovement) {
+    override fun down(pos: Vec2, movementHolderSaver: MovementHolder) {
         if (state == State.DELAY_BEFORE_DOUBLE_TOUCH) {
             state =
                 State.WAIT_FOR_RELEASE
@@ -47,7 +47,7 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
             touchPos = pos
             downTime = customClock.timeAfterDeviceStartup
 
-            this.movementSaver = movementSaver
+            this.movementHolder = movementHolderSaver
 
             state = State.DELAY_BEFORE_LONG_TOUCH
         }
@@ -81,7 +81,7 @@ class ComplexTouchHelper(private val customClock: TimeSpanHelper): ITouchReceive
     }
 
     private fun isMoved(): Boolean =
-        (movementSaver?.getMovement()?:(movementThreshold + 1f)) >= movementThreshold
+        (movementHolder?.getMovement()?:(movementThreshold + 1f)) >= movementThreshold
 
     private fun releaseIfMovedOrPerform(action: () -> Unit) {
         if (isMoved()) {

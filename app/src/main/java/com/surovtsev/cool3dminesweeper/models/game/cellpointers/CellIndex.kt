@@ -21,11 +21,11 @@ class CellIndex(
         fun calcId(counts: Vec3i, x: Int, y: Int, z: Int) =
             x + counts[0] * (y + counts[1] * z)
 
-        fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { xyz ->
+        fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
             val countX = counts[0]
             val countY = counts[1]
-            val x = xyz % countX
-            val yz = (xyz - x) / countX
+            val x = cellIndex % countX
+            val yz = (cellIndex - x) / countX
             val y = yz % countY
             val z = (yz - y) / countY
             CellIndex(

@@ -6,12 +6,12 @@ import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCellWithBorder
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
+import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import javax.inject.Inject
 
 @GameScope
 class IntersectionCalculator @Inject constructor(
-    private val pointer: IPointer,
+    private val pointer: Pointer,
     private val cubeSkin: CubeSkin,
     cubeBorder: CubeBorder
 ) {
@@ -25,15 +25,15 @@ class IntersectionCalculator @Inject constructor(
         val candidateCubes =
             mutableListOf<Pair<Float, PointedCellWithBorder>>()
 
-        cubeSkin.iterateCubes { xyz: CellIndex ->
+        cubeSkin.iterateCubes { cellIndex: CellIndex ->
             do {
-                val skin = xyz.getValue(skins)
+                val skin = cellIndex.getValue(skins)
 
                 if (skin.isEmpty()) {
                     continue
                 }
 
-                val spaceParameter = xyz.getValue(borders)
+                val spaceParameter = cellIndex.getValue(borders)
                 val center = spaceParameter.center
 
                 val projection = pointerDescriptor.calcProjection(center)
@@ -45,7 +45,7 @@ class IntersectionCalculator @Inject constructor(
 
                     candidateCubes.add(
                         fromNear to PointedCellWithBorder(
-                            xyz, skin, spaceParameter
+                            cellIndex, skin, spaceParameter
                         )
                     )
                 }

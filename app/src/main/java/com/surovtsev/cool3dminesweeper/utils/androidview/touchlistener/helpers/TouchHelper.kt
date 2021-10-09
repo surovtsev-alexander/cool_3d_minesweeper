@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers
 
 import android.view.MotionEvent
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.Updatable
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
 import glm_.vec2.Vec2
 
-abstract class TouchHelper:  Updatable() {
+abstract class TouchHelper:  UpdatableImp() {
     abstract fun onTouch(event: MotionEvent)
 
     companion object {

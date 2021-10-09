@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.utils.statehelpers
 
 class UpdatableOnOffSwitch(
-    private val updatable: Updatable = Updatable(false)
+    private val updatable: UpdatableImp = UpdatableImp(false)
 ):
-    Switch(),
-    ICanBeSmartUpdated by updatable {
+    SwitchImp(),
+    SmartUpdatable by updatable {
 
     override fun turnOn() {
         super.turnOn()

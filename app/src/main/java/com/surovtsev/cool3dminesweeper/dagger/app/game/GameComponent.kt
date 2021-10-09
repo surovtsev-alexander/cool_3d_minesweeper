@@ -9,6 +9,8 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -21,9 +23,9 @@ import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchList
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ScalingHelper
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.TouchHelper
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.IHandleOpenGLEvents
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeView
 import dagger.Binds
@@ -62,6 +64,9 @@ interface GameComponentEntryPoint {
     val gLSurfaceView: GLSurfaceView
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
+
+    val settingsDBQueries: SettingsDBQueries
+    val rankingDBQueries: RankingDBQueries
 }
 
 
@@ -228,17 +233,17 @@ object GameControllerModule {
 interface GameControllerBindModule {
     @GameScope
     @Binds
-    fun getIPointer(pointer: Pointer): IPointer
+    fun bindPointer(pointer: PointerImp): Pointer
 
     @GameScope
     @Binds
-    fun getIHandleOpenGLEvent(
+    fun bindOpenGLEventsHandler(
         minesweeperController: MinesweeperController
-    ): IHandleOpenGLEvents
+    ): OpenGLEventsHandler
 
     @GameScope
     @Binds
-    fun getCurrTouchHelper(
+    fun bindTouchHelper(
         clickAndRotationHelper: ClickAndRotationHelper
     ): TouchHelper
 }

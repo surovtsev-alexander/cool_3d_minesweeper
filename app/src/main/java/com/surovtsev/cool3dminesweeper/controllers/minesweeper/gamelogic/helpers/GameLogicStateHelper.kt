@@ -5,8 +5,8 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.cool3dminesweeper.utils.interfaces.IHandlePauseResume
-import com.surovtsev.cool3dminesweeper.utils.time.INeedToBeUpdated
+import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeHandler
+import com.surovtsev.cool3dminesweeper.utils.time.Tickable
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpan
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class GameLogicStateHelper @Inject constructor(
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     timeSpanHelper: TimeSpanHelper
 ):
-    INeedToBeUpdated, IHandlePauseResume
+    Tickable, PauseResumeHandler
 {
     var gameStatus: GameStatus
         private set

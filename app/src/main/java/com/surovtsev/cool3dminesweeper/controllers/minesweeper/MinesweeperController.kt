@@ -13,8 +13,8 @@ import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.GameObjects
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.IHandleOpenGLEvents
-import com.surovtsev.cool3dminesweeper.utils.interfaces.IHandlePauseResumeDestroy
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyHandler
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
 import glm_.vec2.Vec2i
 import javax.inject.Inject
@@ -32,8 +32,8 @@ class MinesweeperController @Inject constructor(
     private val scene: Scene,
     val touchListener: TouchListener
 ):
-    IHandleOpenGLEvents,
-    IHandlePauseResumeDestroy
+    OpenGLEventsHandler,
+    PauseResumeDestroyHandler
 {
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()

@@ -1,18 +1,18 @@
 package com.surovtsev.cool3dminesweeper.utils.interfaces
 
-interface IHandlePauseResume {
+interface PauseResumeHandler {
     fun onPause()
     fun onResume()
 }
 
-interface IHandlePauseResumeDestroy:
-        IHandlePauseResume
+interface PauseResumeDestroyHandler:
+        PauseResumeHandler
 {
     fun onDestroy()
 }
 
-interface IHandlePauseResumeDestroyKeyDown:
-        IHandlePauseResumeDestroy
+interface PauseResumeDestroyKeyDownHandler:
+        PauseResumeDestroyHandler
 {
     fun onKeyDown(keyCode: Int): Boolean
 }

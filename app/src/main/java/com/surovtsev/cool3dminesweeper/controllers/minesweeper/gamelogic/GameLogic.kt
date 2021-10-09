@@ -12,11 +12,11 @@ import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellRange
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.ICanUpdateTexture
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.TextureUpdater
 
 class GameLogic(
     private val cubeSkin: CubeSkin,
-    private val textureUpdater: ICanUpdateTexture,
+    private val textureUpdater: TextureUpdater,
     private val gameConfig: GameConfig,
     private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     val gameLogicStateHelper: GameLogicStateHelper
@@ -165,12 +165,12 @@ class GameLogic(
     }
 
     fun storeSelectedBombs() {
-        cubeSkin.iterateCubes { xyz ->
+        cubeSkin.iterateCubes { cellIndex ->
             do {
-                val p = cubeSkin.getPointedCell(xyz)
+                val p = cubeSkin.getPointedCell(cellIndex)
                 val s = p.skin
                 if (s.isMarked()) {
-                    cubesToRemove.add(xyz)
+                    cubesToRemove.add(cellIndex)
                 }
             } while (false)
         }

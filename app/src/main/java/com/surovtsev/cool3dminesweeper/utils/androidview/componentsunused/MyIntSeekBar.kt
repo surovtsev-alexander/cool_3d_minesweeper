@@ -6,10 +6,10 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import com.surovtsev.cool3dminesweeper.R
-import com.surovtsev.cool3dminesweeper.utils.interfaces.IUiIntValueSelector
+import com.surovtsev.cool3dminesweeper.utils.interfaces.UIIntValueSelector
 
 @Suppress("unused")
-class MyIntSeekBar : LinearLayout, IUiIntValueSelector {
+class MyIntSeekBar : LinearLayout, UIIntValueSelector {
 
     constructor(context: Context) : super(context) {
         init(null, 0)

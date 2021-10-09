@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.IStoreMovement
+import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.MovementHolder
 import glm_.vec2.Vec2
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,7 +21,7 @@ class ClickAndRotationHelper @Inject constructor(
     private var movement: Float,
     @Named(Downed)
     private var downed: Boolean,
-) : TouchHelper(), IStoreMovement {
+) : TouchHelper(), MovementHolder {
     init {
         getAndRelease()
     }

@@ -3,12 +3,12 @@ package com.surovtsev.cool3dminesweeper.utils.gles.view.pointer
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.IGLObject
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLObject
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.IPointer
+import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.program.PointerGLESProgram
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.ISwitch
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.Switch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.SwitchImp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class GLPointerView @Inject constructor(
     @ApplicationContext private val context: Context
 ):
-    IGLObject, ISwitch by Switch()
+    OpenGLObject, Switch by SwitchImp()
 {
     companion object {
         private const val positionComponentCount = 3
@@ -40,7 +40,7 @@ class GLPointerView @Inject constructor(
             positionComponentCount, 0)
     }
 
-    fun setPoints(pointer: IPointer) {
+    fun setPoints(pointer: Pointer) {
         val near = pointer.near
         val far = pointer.far
         val x = floatArrayOf(

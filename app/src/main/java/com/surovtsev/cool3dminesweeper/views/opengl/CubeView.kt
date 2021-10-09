@@ -11,8 +11,8 @@ import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.TextureHelper
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.ICanUpdateTexture
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.IGLObject
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.TextureUpdater
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLObject
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -22,8 +22,8 @@ class CubeView @Inject constructor(
     @ApplicationContext private val context: Context,
     private val cubeCoordinates: CubeCoordinates
 ):
-    IGLObject,
-    ICanUpdateTexture
+    OpenGLObject,
+    TextureUpdater
 {
     var cubeGLESProgram: CubeGLESProgram? = null
 
@@ -93,9 +93,9 @@ class CubeView @Inject constructor(
             FloatArray(textureIndexesCount * cubesCount)
 
         val skins = cubeSkin.skins
-        cubeSkin.iterateCubes { xyz ->
-            val skin = xyz.getValue(skins)
-            val id = xyz.id
+        cubeSkin.iterateCubes { cellIndex ->
+            val skin = cellIndex.getValue(skins)
+            val id = cellIndex.id
 
             if (skin.isEmpty()) {
                 onesEmpty.copyInto(

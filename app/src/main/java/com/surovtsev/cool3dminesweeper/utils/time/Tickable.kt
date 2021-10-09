@@ -1,5 +1,5 @@
 package com.surovtsev.cool3dminesweeper.utils.time
 
-interface INeedToBeUpdated {
+interface Tickable {
     fun tick()
 }

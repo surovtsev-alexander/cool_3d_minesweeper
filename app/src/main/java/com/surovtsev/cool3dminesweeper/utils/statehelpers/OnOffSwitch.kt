@@ -1,15 +1,15 @@
 package com.surovtsev.cool3dminesweeper.utils.statehelpers
 
-interface ISwitch {
+interface Switch {
     fun turnOn()
     fun turnOff()
 
     fun isOn(): Boolean
 }
 
-open class Switch(
+open class SwitchImp(
     private var on: Boolean = false
-): ISwitch {
+): Switch {
 
     override fun turnOn() {
         on = true

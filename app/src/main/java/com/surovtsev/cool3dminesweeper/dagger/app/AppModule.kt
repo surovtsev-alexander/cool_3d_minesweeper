@@ -3,12 +3,12 @@ package com.surovtsev.cool3dminesweeper.dagger.app
 import android.content.Context
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelperImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
-import com.surovtsev.cool3dminesweeper.utils.interfaces.minesweeper.database.IDBHelper
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,9 +25,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDBHelper(
+    fun provideDBHelperImp(
         @ApplicationContext context: Context
-    ) = DBHelper(context)
+    ) = DBHelperImp(context)
 
     @Singleton
     @Provides
@@ -62,7 +62,7 @@ interface AppModuleBind {
 
     @Binds
     @Singleton
-    fun bindIDBHelper(
-        dbHelper: DBHelper
-    ): IDBHelper
+    fun bindDBHelper(
+        dbHelper: DBHelperImp
+    ): DBHelper
 }

@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces
 
-interface IGameEventsReceiver: IGameStatusReceiver {
+interface GameEventsReceiver: GameStatusReceiver {
     fun bombCountUpdated(newValue: Int)
     fun timeUpdated(newValue: Long)
 

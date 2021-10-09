@@ -1,23 +1,23 @@
 package com.surovtsev.cool3dminesweeper.utils.statehelpers
 
-interface ICanBeReleased {
+interface Releasable {
     fun release()
 }
 
-interface IHaveUpdatableState:
-    ICanBeReleased
+interface UpdatedStateHolder:
+    Releasable
 {
     fun isUpdated(): Boolean
 }
 
-interface ICanBeUpdated:
-    IHaveUpdatableState
+interface Updatable:
+    UpdatedStateHolder
 {
     fun update()
 }
 
-interface ICanBeSmartUpdated:
-    ICanBeUpdated
+interface SmartUpdatable:
+    Updatable
 {
     fun getAndRelease(): Boolean {
         val res = isUpdated()
@@ -26,10 +26,10 @@ interface ICanBeSmartUpdated:
     }
 }
 
-open class Updatable(
+open class UpdatableImp(
     private var updated: Boolean = true
 ):
-    ICanBeSmartUpdated
+    SmartUpdatable
 {
     override fun release() {
         updated = false

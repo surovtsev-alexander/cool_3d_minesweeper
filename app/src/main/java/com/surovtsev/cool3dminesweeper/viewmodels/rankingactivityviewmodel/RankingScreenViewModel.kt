@@ -99,19 +99,18 @@ class RankingScreenViewModel @Inject constructor(
             when (currSortType.rankingColumn) {
                 RankingColumn.SortableColumn.DateColumn -> x.dateTime
                 RankingColumn.SortableColumn.SolvingTimeColumn -> x.elapsed
-            } as Comparable<Any>
+            }
+        }
+        val comparator: Comparator<RankingData> = if (currSortType.sortDirection == SortDirection.Ascending) {
+            Comparator { a, b -> compareValuesBy(a, b, sortingSelector) }
+        } else {
+            Comparator { a, b -> compareValuesBy(b, a, sortingSelector)}
         }
 
         rankingScreenEvents.rankingListToDisplay.onDataChanged(
-            if (currSortType.sortDirection == SortDirection.Ascending) {
-                filteredRankingList.sortedBy {
-                    sortingSelector(it)
-                }
-            } else {
-                filteredRankingList.sortedByDescending {
-                    sortingSelector(it)
-                }
-            }
+            filteredRankingList.sortedWith(
+                comparator
+            )
         )
     }
 

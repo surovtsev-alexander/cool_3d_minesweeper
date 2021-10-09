@@ -1,17 +1,17 @@
 package com.surovtsev.cool3dminesweeper.utils.time
 
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.Updatable
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.ISwitch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.Switch
+import com.surovtsev.cool3dminesweeper.utils.statehelpers.SwitchImp
 
 class TimeSpan(
     private val interval: Long,
     private val timeSpanHelper: TimeSpanHelper,
 ):
-    Updatable(),
-    ISwitch
+    UpdatableImp(),
+    Switch
 {
-    private val switch: Switch = Switch()
+    private val switch: SwitchImp = SwitchImp()
 
     private var  elapsedTimeBeforePause = 0L
     private var onTime = timeAfterDeviceStartup()

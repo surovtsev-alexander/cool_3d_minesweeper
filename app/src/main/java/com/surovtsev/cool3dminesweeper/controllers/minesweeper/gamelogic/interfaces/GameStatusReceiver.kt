@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interf
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 
-interface IGameStatusReceiver {
+interface GameStatusReceiver {
     fun gameStatusUpdated(
         newStatus: GameStatus,
         elapsed: Long

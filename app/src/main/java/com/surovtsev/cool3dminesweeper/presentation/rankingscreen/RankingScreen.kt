@@ -39,7 +39,6 @@ fun RankingControls(
     viewModel: RankingScreenViewModel,
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
-    val sortTypeData = viewModel.rankingTableSortTypeData
 
     Test_composeTheme {
         Column(

@@ -1,12 +1,12 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers
 
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelper
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DatabaseAction
 import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.utils.constants.minesweeper.database.DBConfig
-import com.surovtsev.cool3dminesweeper.utils.interfaces.minesweeper.database.DatabaseAction
-import com.surovtsev.cool3dminesweeper.utils.interfaces.minesweeper.database.IDBHelper
 
 class RankingDBQueries (
-    private val dBHelper: IDBHelper
+    private val dBHelper: DBHelper
 ) {
 
     fun insert(rankingData: RankingData) {
