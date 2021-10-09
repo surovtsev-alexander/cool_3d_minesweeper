@@ -1,8 +1,10 @@
 package com.surovtsev.cool3dminesweeper.presentation.mainscreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Shapes
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
 
 @Composable
@@ -36,7 +39,7 @@ fun MainScreeControls(
 
     Test_composeTheme {
         Box(
-            Modifier.background(GrayBackground)//Color(0xFF48cae4))
+            Modifier.background(GrayBackground)
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -65,8 +68,9 @@ fun MainScreeControls(
                                 }
                             },
                             Modifier
-                                .fillMaxWidth(fraction = 0.75f)
-                                .border(1.dp, Color.Black),
+                                .fillMaxWidth(fraction = 0.75f),
+                            border = BorderStroke(1.dp, Color.Black),
+                            shape = Shapes.small,
                             enabled = !isLoadGameButton || hasSave
                         ) {
                             Text(text = bI.caption)

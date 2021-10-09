@@ -3,6 +3,7 @@ package com.surovtsev.cool3dminesweeper.presentation.gamescreen
 import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.text.format.DateUtils
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
@@ -20,6 +21,7 @@ import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBordersControl
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.OpenGLInfoHelper
 
@@ -102,6 +104,7 @@ fun Controls(
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
+            .background(Teal200)
     ) {
         Column(
             modifier = Modifier
