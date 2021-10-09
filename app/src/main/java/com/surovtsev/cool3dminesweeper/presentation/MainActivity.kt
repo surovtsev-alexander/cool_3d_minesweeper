@@ -16,9 +16,11 @@ import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.Ranki
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
+import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
 import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
+import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,6 +78,13 @@ class MainActivity: ComponentActivity() {
                         viewModel,
                         navController
                     )
+                }
+                composable(
+                    route = Screen.HelpScreen.route
+                ) { entry ->
+                    val viewModel: HelpScreenViewModel = hiltViewModel()
+                    entry.lifecycle.addObserver(viewModel)
+                    HelpScreen(viewModel)
                 }
             }
         }

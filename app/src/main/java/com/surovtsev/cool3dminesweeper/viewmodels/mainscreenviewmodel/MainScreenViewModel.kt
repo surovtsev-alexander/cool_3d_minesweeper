@@ -23,6 +23,7 @@ class MainScreenViewModel @Inject constructor(
         const val LoadGame = "load game"
         const val Ranking = "ranking"
         const val Settings = "settings"
+        const val Help = "help"
     }
 
     val buttonsInfo: ButtonsInfo

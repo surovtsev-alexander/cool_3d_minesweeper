@@ -74,4 +74,13 @@ object MainScreenModule {
             Screen.SettingsScreen,
             MainScreenViewModel.Settings
         )
+
+    @[IntoMap StringKey(MainScreenViewModel.Help)]
+    @MainScreenScope
+    @Provides
+    fun provideHelpButtonInfo() =
+        MainScreenButtonInfo(
+            Screen.HelpScreen,
+            MainScreenViewModel.Help
+        )
 }
