@@ -22,7 +22,7 @@ import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 
 @Composable
@@ -40,7 +40,7 @@ fun RankingControls(
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
 
-    Test_composeTheme {
+    MinesweeperTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
@@ -25,7 +24,7 @@ import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import kotlin.math.round
 
 @Composable
@@ -41,7 +40,7 @@ fun SettingsScreen(
 fun SettingsControls(
     viewModel: SettingsScreenViewModel
 ) {
-    Test_composeTheme {
+    MinesweeperTheme {
         Box(
             Modifier.background(GrayBackground)
         ) {

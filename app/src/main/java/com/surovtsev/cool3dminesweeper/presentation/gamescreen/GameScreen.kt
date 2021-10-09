@@ -22,7 +22,7 @@ import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Test_composeTheme
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.OpenGLInfoHelper
 
 const val LoadGameParameterName = "load_game"
@@ -59,7 +59,7 @@ fun GameScreenControls(
     gameScreenEvents: GameScreenEvents,
     gameControls: GameControls
 ) {
-    Test_composeTheme {
+    MinesweeperTheme {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
