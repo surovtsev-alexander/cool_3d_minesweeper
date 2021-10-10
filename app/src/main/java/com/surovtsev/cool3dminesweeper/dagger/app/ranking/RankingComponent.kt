@@ -86,7 +86,7 @@ object RankingModule {
         MyLiveData(
             RankingTableSortType(
                 RankingColumn.SortableColumn.DateColumn,
-                SortDirection.Ascending
+                SortDirection.Descending
             )
         )
 }

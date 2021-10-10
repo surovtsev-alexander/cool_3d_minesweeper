@@ -23,8 +23,8 @@ sealed class RankingColumn(
 }
 
 enum class SortDirection {
-    Ascending,
-    Descending
+    Descending,
+    Ascending
 }
 
 val SortDirectionValuesCount = SortDirection.values().count()

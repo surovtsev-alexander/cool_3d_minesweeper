@@ -218,7 +218,7 @@ fun RankingListColumnTitle(
             val isColumnSelected = rankingTableSortType.rankingColumn == columnType
             val buttonColor = if (isColumnSelected) Color.Green else Color.Gray
             val buttonText =
-                if (!(isColumnSelected && rankingTableSortType.sortDirection == SortDirection.Descending)) "u" else "d"
+                if (isColumnSelected && rankingTableSortType.sortDirection == SortDirection.Ascending) "u" else "d"
             Box(
                 modifier = Modifier
                     .width(30.dp)

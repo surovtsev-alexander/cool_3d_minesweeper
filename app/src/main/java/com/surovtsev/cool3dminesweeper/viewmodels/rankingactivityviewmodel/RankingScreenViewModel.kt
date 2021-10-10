@@ -121,7 +121,7 @@ class RankingScreenViewModel @Inject constructor(
             if (currSortType.rankingColumn != selectedColumn) {
                 RankingTableSortType(
                     selectedColumn,
-                    SortDirection.Ascending
+                    SortDirection.Descending
                 )
             } else {
                 RankingTableSortType(
