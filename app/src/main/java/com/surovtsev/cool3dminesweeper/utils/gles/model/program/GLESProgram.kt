@@ -4,15 +4,15 @@ import android.opengl.GLES20
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
+import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
 import com.surovtsev.cool3dminesweeper.utils.loggerconfig.LoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
+import javax.inject.Inject
 
 
-/* TODO: move to Dagger */
-
-abstract class GLESProgram(
+abstract class GLESProgram (
     private val shaderLoadParameters: ShaderHelper.ShaderLoadParameters
 ) {
     protected var programId = 0
@@ -23,7 +23,7 @@ abstract class GLESProgram(
         const val uColorName = "u_color"
         private const val uMVPName = "u_MVP"
 
-        private val floatBuffer = FloatBuffer.allocate(16)
+        private var mvpBuffer: FloatBuffer? = null
     }
 
     private val uMVP = Uniform(uMVPName)
@@ -34,6 +34,7 @@ abstract class GLESProgram(
         loadProgram()
         useProgram()
         loadLocations()
+        createMVPBuffer()
     }
 
     private fun loadProgram() {
@@ -54,11 +55,15 @@ abstract class GLESProgram(
         fields.forEach { it.getLocation() }
     }
 
+    private fun createMVPBuffer() {
+        mvpBuffer = FloatBuffer.allocate(16)
+    }
+
     fun fillMVP(mvpMatrix: Mat4) {
         GLES20.glUniformMatrix4fv(
             uMVP.location, 1,
             false,
-            mvpMatrix.to(floatBuffer, 0).array()
+            mvpMatrix.to(mvpBuffer!!, 0).array()
             , 0
         )
     }

@@ -15,7 +15,7 @@ open class GLIndexedObject(
         private const val positionComponentCount = 3
     }
 
-    private val vertexArray = VertexArray(coordinates)
+    private val vertexArray = VertexArray().apply {  allocateBuffer(coordinates) }
     private val indexBuffer = IndexBuffer(indexes)
 
 

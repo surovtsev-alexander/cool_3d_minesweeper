@@ -7,11 +7,12 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.GLPointerModel
+import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
-import com.surovtsev.cool3dminesweeper.views.opengl.CubeView
+import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import glm_.vec2.Vec2i
 import javax.inject.Inject
+import javax.inject.Named
 
 @GameScope
 class Scene @Inject constructor(
@@ -22,9 +23,15 @@ class Scene @Inject constructor(
     private val pointer: Pointer,
     val touchHandler: TouchHandler,
     private val intersectionCalculator: IntersectionCalculator,
-    private val glPointerModel: GLPointerModel,
-    private val cubeView: CubeView
+    private val pointerOpenGLModel: PointerOpenGLModel,
+    private val cubeOpenGLModel: CubeOpenGLModel,
+    @Named(PointerEnabledName)
+    private val pointerEnabled: Boolean,
 ) {
+
+    companion object {
+        const val PointerEnabledName = "pointerEnabled"
+    }
 
     fun onSurfaceChanged(newDisplaySize: Vec2i) {
         cameraInfoHelper.onSurfaceChanged(newDisplaySize)
@@ -43,31 +50,35 @@ class Scene @Inject constructor(
         }
 
         do {
-//            if (clicked) {
-//                gameObjectsHolder.glPointerView.turnOn()
-//            }
-
-            if (!glPointerModel.isOn()) {
+            if (!pointerEnabled) {
                 break
             }
 
             if (clicked) {
-                glPointerModel.updatePoints()
+                pointerOpenGLModel.turnOn()
             }
 
-            glPointerModel.mGLESProgram!!.useProgram()
+            if (!pointerOpenGLModel.isOn()) {
+                break
+            }
+
+            if (clicked) {
+                pointerOpenGLModel.updatePoints()
+            }
+
+            pointerOpenGLModel.mGLESProgram.useProgram()
             if (cameraMoved) {
-                with(glPointerModel.mGLESProgram!!) {
+                with(pointerOpenGLModel.mGLESProgram) {
                     fillMVP(cameraInfoHelper.cameraInfo.mVP)
                 }
             }
-            glPointerModel.bindData()
-            glPointerModel.draw()
+            pointerOpenGLModel.bindData()
+            pointerOpenGLModel.draw()
         } while (false)
 
-        cubeView.cubeGLESProgram!!.useProgram()
+        cubeOpenGLModel.cubeGLESProgram.useProgram()
 
-        cubeView.bindData()
+        cubeOpenGLModel.bindData()
 
         gameLogic.openCubes()
 
@@ -87,10 +98,10 @@ class Scene @Inject constructor(
 
         }
         if (cameraMoved) {
-            with(cubeView.cubeGLESProgram!!) {
+            with(cubeOpenGLModel.cubeGLESProgram) {
                 fillMVP(cameraInfoHelper.cameraInfo.mVP)
             }
         }
-        cubeView.draw()
+        cubeOpenGLModel.draw()
     }
 }

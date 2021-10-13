@@ -3,12 +3,14 @@ package com.surovtsev.cool3dminesweeper.utils.gles.model.program
 import android.content.Context
 import android.opengl.GLES20
 import com.surovtsev.cool3dminesweeper.R
+import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-
-/* TODO: move to hilt */
-open class PointerGLESProgram(
-    context: Context
+@GameScope
+open class PointerGLESProgram @Inject constructor(
+    @ApplicationContext private val context: Context
 ):
     GLESProgram(
         ShaderHelper.ShaderLoadParameters(

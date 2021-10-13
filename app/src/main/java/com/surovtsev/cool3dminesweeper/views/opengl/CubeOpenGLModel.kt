@@ -18,35 +18,35 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @GameScope
-class CubeView @Inject constructor(
+class CubeOpenGLModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val cubeCoordinates: CubeCoordinates
+    private val cubeCoordinates: CubeCoordinates,
+    val cubeGLESProgram: CubeGLESProgram,
 ):
     OpenGLModel,
     TextureUpdater
 {
-    var cubeGLESProgram: CubeGLESProgram? = null
 
     private var textureId: Int = -1
 
-    private var vertexArray: VertexArray? = null
-    private var isEmptyArray: VertexArray? = null
-    private var textureCoordinatesArray: VertexArray? = null
+    /* TODO: refactor */
+    private var vertexArray: VertexArray = VertexArray()
+    private var isEmptyArray: VertexArray = VertexArray()
+    private var textureCoordinatesArray: VertexArray = VertexArray()
 
     fun onSurfaceCreated() {
-        cubeGLESProgram = CubeGLESProgram(context)
         textureId = TextureHelper.loadTexture(context, R.drawable.skin)
 
         val cubeViewDataHelper = CubeViewDataHelper.createObject(
             cubeCoordinates
         )
 
-        vertexArray = VertexArray(cubeViewDataHelper.triangleCoordinates)
-        isEmptyArray = VertexArray(cubeViewDataHelper.isEmpty)
-        textureCoordinatesArray = VertexArray(cubeViewDataHelper.textureCoordinates)
+        vertexArray.allocateBuffer(cubeViewDataHelper.triangleCoordinates)
+        isEmptyArray.allocateBuffer(cubeViewDataHelper.isEmpty)
+        textureCoordinatesArray.allocateBuffer(cubeViewDataHelper.textureCoordinates)
 
 
-        cubeGLESProgram!!.prepareProgram()
+        cubeGLESProgram.prepareProgram()
         setTexture()
     }
 
@@ -69,7 +69,7 @@ class CubeView @Inject constructor(
         if (empty) {
             val startPos = cubeIndexesCount * id
 
-            isEmptyArray!!.updateBuffer(
+            isEmptyArray.updateBuffer(
                 onesEmpty,
                 startPos
             )
@@ -77,7 +77,7 @@ class CubeView @Inject constructor(
             val startPos = textureIndexesCount * id
 
             val resArray = TextureCoordinatesHelper.getTextureCoordinates(skin.texture)
-            textureCoordinatesArray!!.updateBuffer(
+            textureCoordinatesArray.updateBuffer(
                 resArray,
                 startPos
             )
@@ -110,33 +110,33 @@ class CubeView @Inject constructor(
             }
         }
 
-        isEmptyArray!!.updateBuffer(
+        isEmptyArray.updateBuffer(
             emptyCubes, 0
         )
-        textureCoordinatesArray!!.updateBuffer(
+        textureCoordinatesArray.updateBuffer(
             textureCoordinates, 0
         )
     }
 
     override fun bindData() {
-        vertexArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aPosition.location,
+        vertexArray.setVertexAttribPointer(0, cubeGLESProgram.aPosition.location,
             positionComponentCount, 0)
-        isEmptyArray!!.setVertexAttribPointer(0, cubeGLESProgram!!.aIsEmpty.location,
+        isEmptyArray.setVertexAttribPointer(0, cubeGLESProgram.aIsEmpty.location,
             1, 0)
-        textureCoordinatesArray!!.setVertexAttribPointer(0,
-            cubeGLESProgram!!.aTextureCoordinates.location, 2, 0)
+        textureCoordinatesArray.setVertexAttribPointer(0,
+            cubeGLESProgram.aTextureCoordinates.location, 2, 0)
     }
 
     private fun setTexture() {
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, textureId)
-        glUniform1i(cubeGLESProgram!!.mUTextureLocation.location, 0)
+        glUniform1i(cubeGLESProgram.mUTextureLocation.location, 0)
     }
 
     override fun draw() {
         glDrawArrays(
             GL_TRIANGLES, 0,
-            vertexArray!!.floatBuffer.capacity() / positionComponentCount
+            vertexArray.floatBuffer.capacity() / positionComponentCount
         )
     }
 }

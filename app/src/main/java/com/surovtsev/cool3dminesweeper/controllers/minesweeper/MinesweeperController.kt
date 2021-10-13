@@ -43,7 +43,7 @@ class MinesweeperController @Inject constructor(
 
         scene.onSurfaceChanged(displaySize)
 
-        gameViewsHolder.cubeView.updateTexture(cubeInfo.cubeSkin)
+        gameViewsHolder.cubeOpenGLModel.updateTexture(cubeInfo.cubeSkin)
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()

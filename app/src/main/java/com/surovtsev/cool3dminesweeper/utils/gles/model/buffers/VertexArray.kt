@@ -8,12 +8,27 @@ import java.nio.FloatBuffer
 
 /* TODO: move to Dagger */
 
-class VertexArray(vertexData: FloatArray) {
-    val floatBuffer: FloatBuffer = ByteBuffer
-        .allocateDirect(vertexData.count() * Constants.BytesPerFloat)
-        .order(ByteOrder.nativeOrder())
-        .asFloatBuffer()
-        .put(vertexData)
+class VertexArray() {
+    var floatBuffer: FloatBuffer = FloatBuffer.allocate(0)
+        private set
+
+    fun allocateBuffer(
+        capacity: Int
+    ) {
+        allocateBuffer(
+            FloatArray(capacity)
+        )
+    }
+
+    fun allocateBuffer(
+        vertexData: FloatArray
+    ) {
+        floatBuffer = ByteBuffer
+            .allocateDirect(vertexData.count() * Constants.BytesPerFloat)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+            .put(vertexData)
+    }
 
     fun setVertexAttribPointer(
         dataOffset: Int, attributeLocation: Int,

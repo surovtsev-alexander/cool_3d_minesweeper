@@ -11,6 +11,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -27,7 +28,7 @@ import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
-import com.surovtsev.cool3dminesweeper.views.opengl.CubeView
+import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
@@ -191,13 +192,13 @@ object GameControllerModule {
         cubeInfo: CubeInfo,
         gameConfig: GameConfig,
         gameScreenEventsReceiver: GameScreenEventsReceiver,
-        cubeView: CubeView,
+        cubeOpenGLModel: CubeOpenGLModel,
         gameLogicStateHelper: GameLogicStateHelper
     ): GameLogic {
         val res  =
             GameLogic(
                 cubeInfo.cubeSkin,
-                cubeView,
+                cubeOpenGLModel,
                 gameConfig,
                 gameScreenEventsReceiver,
                 gameLogicStateHelper
@@ -280,4 +281,12 @@ object ClickAndRotationHelperModule {
     @Provides
     @Named(ClickAndRotationHelper.Downed)
     fun provideDowned() = false
+}
+
+@Module
+@InstallIn(GameComponent::class)
+object SceneSettingsModule {
+    @Provides
+    @Named(Scene.PointerEnabledName)
+    fun providePointerEnabled() = false
 }

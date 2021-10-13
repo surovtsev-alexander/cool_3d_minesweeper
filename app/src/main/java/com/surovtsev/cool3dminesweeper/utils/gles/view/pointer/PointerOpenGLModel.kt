@@ -15,9 +15,10 @@ import javax.inject.Inject
 /* TODO: refactoring */
 
 @GameScope
-class GLPointerModel @Inject constructor(
+class PointerOpenGLModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val pointer: Pointer
+    private val pointer: Pointer,
+    val mGLESProgram: PointerGLESProgram,
 ):
     OpenGLModel, Switch by SwitchImp()
 {
@@ -25,19 +26,17 @@ class GLPointerModel @Inject constructor(
         private const val positionComponentCount = 3
     }
 
-    var mGLESProgram: PointerGLESProgram? = null
-    private var vertexArray: VertexArray? = null
+    private var vertexArray: VertexArray = VertexArray()
 
     fun onSurfaceCreated() {
-        mGLESProgram = PointerGLESProgram(context)
-        vertexArray = VertexArray(FloatArray(2 * 3))
-        mGLESProgram!!.prepareProgram()
-        glLineWidth(mGLESProgram!!.mLineWidth)
+        vertexArray.allocateBuffer(2 * 3)
+        mGLESProgram.prepareProgram()
+        glLineWidth(mGLESProgram.mLineWidth)
 
     }
 
     override fun bindData() {
-        vertexArray!!.setVertexAttribPointer(0, mGLESProgram!!.mAPosition.location,
+        vertexArray.setVertexAttribPointer(0, mGLESProgram.mAPosition.location,
             positionComponentCount, 0)
     }
 
@@ -47,12 +46,12 @@ class GLPointerModel @Inject constructor(
         val x = floatArrayOf(
             near[0], near[1], near[2],
             far[0], far[1], far[2])
-        vertexArray!!.updateBuffer(x, 0, x.count())
+        vertexArray.updateBuffer(x, 0, x.count())
     }
 
     override fun draw() {
         glDrawArrays(
             GL_LINES, 0,
-            vertexArray!!.floatBuffer.capacity() / positionComponentCount)
+            vertexArray.floatBuffer.capacity() / positionComponentCount)
     }
 }
