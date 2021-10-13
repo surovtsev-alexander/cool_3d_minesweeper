@@ -1,15 +1,15 @@
-package com.surovtsev.cool3dminesweeper.utils.androidview.componentsunused
+package com.surovtsev.cool3dminesweeper.utils.unused.componentsunused
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.SeekBar
 import android.widget.TextView
 import com.surovtsev.cool3dminesweeper.R
 import com.surovtsev.cool3dminesweeper.utils.interfaces.UIIntValueSelector
 
 @Suppress("unused")
-class MyIntSeekBar : LinearLayout, UIIntValueSelector {
+class MyIntEdit : LinearLayout, UIIntValueSelector {
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -28,32 +28,18 @@ class MyIntSeekBar : LinearLayout, UIIntValueSelector {
     }
 
     private var tvName: TextView? = null
-    private var tvValue: TextView? = null
+    private var etValue: EditText? = null
     private var tvMinMax: TextView? = null
-    private var sbValue: SeekBar? = null
 
     private fun init(
         @Suppress("UNUSED_PARAMETER") attrs: AttributeSet?,
         @Suppress("UNUSED_PARAMETER") defStyle: Int
     ) {
-        inflate(context, R.layout.my_int_seek_bar, this)
+        inflate(context, R.layout.my_int_edit, this)
 
         tvName = findViewById(R.id.tvName)
-        tvValue = findViewById(R.id.tvValue)
+        etValue = findViewById(R.id.etValue)
         tvMinMax = findViewById(R.id.tvMinMax)
-        sbValue = findViewById(R.id.sbValue)
-
-        sbValue!!.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvValue!!.text = progress.toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
     }
 
     override var name: String
@@ -62,27 +48,33 @@ class MyIntSeekBar : LinearLayout, UIIntValueSelector {
             tvName?.text = value
         }
 
+    private var minValueData = 0
+
     override var minValue: Int
-        get() = sbValue?.min?:0
+        get() = minValueData
         set(value) {
-            sbValue?.min = value
+            minValueData = value
+
             borderUpdated()
         }
 
+    private var maxValueData = 0
+
     override var maxValue: Int
-        get() = sbValue?.max?:0
+        get() = maxValueData
         set(value) {
-            sbValue?.max = value
+            maxValueData = value
+
             borderUpdated()
         }
 
     override var value: Int
-        get() = sbValue?.progress?:0
+        get() = Integer.parseInt(etValue?.text.toString())
         set(v) {
-            sbValue?.progress = v
+            etValue?.setText(v.toString())
         }
 
     private fun borderUpdated() {
-        tvMinMax?.text = "(${minValue..maxValue})"
+        tvMinMax?.text = "${minValueData..maxValueData}"
     }
 }

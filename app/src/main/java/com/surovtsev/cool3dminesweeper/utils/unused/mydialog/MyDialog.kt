@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.androidview.mydialog
+package com.surovtsev.cool3dminesweeper.utils.unused.mydialog
 
 import android.app.AlertDialog
 import android.app.Dialog

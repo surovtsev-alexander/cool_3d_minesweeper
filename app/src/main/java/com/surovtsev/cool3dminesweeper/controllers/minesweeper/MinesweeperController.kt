@@ -1,6 +1,5 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper
 
-import android.util.Log
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
@@ -9,7 +8,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
-import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.GameObjectsHolder
+import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
@@ -26,7 +25,7 @@ class MinesweeperController @Inject constructor(
     private val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
-    private val gameObjectsHolder: GameObjectsHolder,
+    private val cubeInfo: CubeInfo,
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     private val scene: Scene,
@@ -44,7 +43,7 @@ class MinesweeperController @Inject constructor(
 
         scene.onSurfaceChanged(displaySize)
 
-        gameViewsHolder.cubeView.updateTexture(gameObjectsHolder.cubeSkin)
+        gameViewsHolder.cubeView.updateTexture(cubeInfo.cubeSkin)
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.onResume()
@@ -84,7 +83,7 @@ class MinesweeperController @Inject constructor(
                 gameConfig,
                 cameraInfo,
                 gameLogic,
-                gameObjectsHolder.cubeSkin
+                cubeInfo.cubeSkin
             )
             saveController.save(
                 SaveTypes.SaveGameJson,

@@ -15,7 +15,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
-import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.GameObjectsHolder
+import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.cool3dminesweeper.models.game.interaction.*
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
@@ -188,7 +188,7 @@ object GameControllerModule {
     @Provides
     fun provideGameLogic(
         save: Save?,
-        gameObjectsHolder: GameObjectsHolder,
+        cubeInfo: CubeInfo,
         gameConfig: GameConfig,
         gameScreenEventsReceiver: GameScreenEventsReceiver,
         cubeView: CubeView,
@@ -196,7 +196,7 @@ object GameControllerModule {
     ): GameLogic {
         val res  =
             GameLogic(
-                gameObjectsHolder.cubeSkin,
+                cubeInfo.cubeSkin,
                 cubeView,
                 gameConfig,
                 gameScreenEventsReceiver,
@@ -206,7 +206,7 @@ object GameControllerModule {
             save.gameLogicToSave.applySavedData(res)
 
             save.cubeSkinToSave.applySavedData(
-                gameObjectsHolder.cubeSkin,
+                cubeInfo.cubeSkin,
                 res
             )
         }

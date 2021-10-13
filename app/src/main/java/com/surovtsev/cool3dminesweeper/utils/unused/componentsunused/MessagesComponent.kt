@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package com.surovtsev.cool3dminesweeper.utils.androidview.componentsunused
+package com.surovtsev.cool3dminesweeper.utils.unused.componentsunused
 
 import android.content.Context
 import android.util.AttributeSet

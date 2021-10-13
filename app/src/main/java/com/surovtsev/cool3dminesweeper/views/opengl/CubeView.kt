@@ -12,7 +12,7 @@ import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.TextureUpdater
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLObject
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLModel
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class CubeView @Inject constructor(
     @ApplicationContext private val context: Context,
     private val cubeCoordinates: CubeCoordinates
 ):
-    OpenGLObject,
+    OpenGLModel,
     TextureUpdater
 {
     var cubeGLESProgram: CubeGLESProgram? = null

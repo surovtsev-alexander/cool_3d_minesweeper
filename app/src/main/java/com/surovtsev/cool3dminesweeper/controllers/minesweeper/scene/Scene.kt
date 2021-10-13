@@ -7,7 +7,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.GLPointerView
+import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.GLPointerModel
 import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeView
 import glm_.vec2.Vec2i
@@ -22,7 +22,7 @@ class Scene @Inject constructor(
     private val pointer: Pointer,
     val touchHandler: TouchHandler,
     private val intersectionCalculator: IntersectionCalculator,
-    private val glPointerView: GLPointerView,
+    private val glPointerModel: GLPointerModel,
     private val cubeView: CubeView
 ) {
 
@@ -47,22 +47,22 @@ class Scene @Inject constructor(
 //                gameObjectsHolder.glPointerView.turnOn()
 //            }
 
-            if (!glPointerView.isOn()) {
+            if (!glPointerModel.isOn()) {
                 break
             }
 
             if (clicked) {
-                glPointerView.setPoints(touchHandler.pointer)
+                glPointerModel.updatePoints()
             }
 
-            glPointerView.mGLESProgram!!.useProgram()
+            glPointerModel.mGLESProgram!!.useProgram()
             if (cameraMoved) {
-                with(glPointerView.mGLESProgram!!) {
+                with(glPointerModel.mGLESProgram!!) {
                     fillMVP(cameraInfoHelper.cameraInfo.mVP)
                 }
             }
-            glPointerView.bindData()
-            glPointerView.draw()
+            glPointerModel.bindData()
+            glPointerModel.draw()
         } while (false)
 
         cubeView.cubeGLESProgram!!.useProgram()

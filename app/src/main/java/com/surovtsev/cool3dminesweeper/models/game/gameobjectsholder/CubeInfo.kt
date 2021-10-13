@@ -6,7 +6,7 @@ import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import javax.inject.Inject
 
 @GameScope
-class GameObjectsHolder @Inject constructor(
+class CubeInfo @Inject constructor(
     val cubeCoordinates: CubeCoordinates,
     val cubeSkin: CubeSkin
 )

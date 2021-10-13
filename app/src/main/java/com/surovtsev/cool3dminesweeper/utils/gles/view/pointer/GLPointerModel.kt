@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.utils.gles.view.pointer
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLObject
+import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLModel
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.program.PointerGLESProgram
@@ -15,10 +15,11 @@ import javax.inject.Inject
 /* TODO: refactoring */
 
 @GameScope
-class GLPointerView @Inject constructor(
-    @ApplicationContext private val context: Context
+class GLPointerModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val pointer: Pointer
 ):
-    OpenGLObject, Switch by SwitchImp()
+    OpenGLModel, Switch by SwitchImp()
 {
     companion object {
         private const val positionComponentCount = 3
@@ -40,7 +41,7 @@ class GLPointerView @Inject constructor(
             positionComponentCount, 0)
     }
 
-    fun setPoints(pointer: Pointer) {
+    fun updatePoints() {
         val near = pointer.near
         val far = pointer.far
         val x = floatArrayOf(

@@ -5,6 +5,8 @@ import android.opengl.GLES20
 import com.surovtsev.cool3dminesweeper.R
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
 
+
+/* TODO: move to hilt */
 open class PointerGLESProgram(
     context: Context
 ):
