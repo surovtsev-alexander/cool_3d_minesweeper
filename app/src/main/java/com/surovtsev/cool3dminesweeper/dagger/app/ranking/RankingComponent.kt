@@ -51,7 +51,7 @@ object RankingModule {
     @RankingScope
     @Provides
     @Named(RankingScreenEvents.FilteredRankingListName)
-    fun provideFilteredRankingList(): RankingList {
+    fun provideFilteredRankingList(): RankingListWithPlacesData {
         return MyLiveData(
             emptyList()
         )
@@ -60,7 +60,7 @@ object RankingModule {
     @RankingScope
     @Provides
     @Named(RankingScreenEvents.RankingListToDisplay)
-    fun provideRankingListToDisplay(): RankingList {
+    fun provideRankingListToDisplay(): RankingListWithPlacesData {
         return MyLiveData(
             emptyList()
         )

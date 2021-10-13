@@ -18,7 +18,7 @@ sealed class RankingColumn(
         columnName: String
     ): RankingColumn(columnName) {
         object DateColumn: SortableColumn("date")
-        object SolvingTimeColumn: SortableColumn("seconds")
+        object SolvingTimeColumn: SortableColumn("seconds (place)")
     }
 }
 

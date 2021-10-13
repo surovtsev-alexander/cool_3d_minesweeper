@@ -9,7 +9,6 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
-import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -80,10 +79,12 @@ class RankingScreenViewModel @Inject constructor(
         settingsId: Int
     ) {
         rankingScreenEvents.rankingList.let { rl ->
+            val filteredData = rl.data.value!!.filter {
+                it.settingId == settingsId
+            }
+            val rankingListWithPlaces = RankingListWithPlacesHelper.create(filteredData)
             rankingScreenEvents.filteredRankingList.onDataChanged(
-                rl.data.value!!.filter {
-                    it.settingId == settingsId
-                }
+                rankingListWithPlaces
             )
             rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
             prepareRankingListToDisplay()
@@ -94,13 +95,13 @@ class RankingScreenViewModel @Inject constructor(
         val currSortType = rankingTableSortTypeData.data.value!!
         val filteredRankingList = rankingScreenEvents.filteredRankingList.data.value!!
 
-        val sortingSelector = { x: RankingData ->
+        val sortingSelector = { x: RankingDataWithPlaces ->
             when (currSortType.rankingColumn) {
-                RankingColumn.SortableColumn.DateColumn -> x.dateTime
-                RankingColumn.SortableColumn.SolvingTimeColumn -> x.elapsed
+                RankingColumn.SortableColumn.DateColumn -> x.rankingData.dateTime
+                RankingColumn.SortableColumn.SolvingTimeColumn -> x.rankingData.elapsed
             }
         }
-        val comparator: Comparator<RankingData> = if (currSortType.sortDirection == SortDirection.Ascending) {
+        val comparator: Comparator<RankingDataWithPlaces> = if (currSortType.sortDirection == SortDirection.Ascending) {
             Comparator { a, b -> compareValuesBy(a, b, sortingSelector) }
         } else {
             Comparator { a, b -> compareValuesBy(b, a, sortingSelector)}

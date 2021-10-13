@@ -163,7 +163,7 @@ fun SettingsDataItem(
 fun RankingList(
     viewModel: RankingScreenViewModel,
 ) {
-    val rankingListToDisplay: List<RankingData> by viewModel.rankingScreenEvents.rankingListToDisplay.run {
+    val rankingListToDisplay: List<RankingDataWithPlaces> by viewModel.rankingScreenEvents.rankingListToDisplay.run {
         data.observeAsState(defaultValue)
     }
     val rankingTableSortType: RankingTableSortType by viewModel.rankingTableSortTypeData.run {
@@ -237,8 +237,15 @@ fun RankingListColumnTitle(
 
 @Composable
 fun RankingDataItem(
-    indexedRankingData: IndexedValue<RankingData>
+    indexedRankingData: IndexedValue<RankingDataWithPlaces>
 ) {
+    val rankingData = indexedRankingData.value.rankingData
+    val place = indexedRankingData.value.place
+
+    val elapsedAndPlaceString = "${
+        DateUtils.formatElapsedTime(indexedRankingData.value.rankingData.elapsed / 1000)
+    } (${place + 1})"
+
     Box ()
     {
         Row(
@@ -250,12 +257,12 @@ fun RankingDataItem(
                 textAlign = TextAlign.Start
             )
             Text(
-                indexedRankingData.value.dateTime.replace('T', ' ').split('.')[0],
+                rankingData.dateTime.replace('T', ' ').split('.')[0],
                 Modifier.fillMaxWidth(0.5f),
                 textAlign = TextAlign.Left
             )
             Text(
-                DateUtils.formatElapsedTime(indexedRankingData.value.elapsed / 1000),
+                elapsedAndPlaceString,
                 Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
             )

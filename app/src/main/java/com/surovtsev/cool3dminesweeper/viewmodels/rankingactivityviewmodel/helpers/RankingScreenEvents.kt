@@ -8,6 +8,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 typealias RankingList = MyLiveData<List<RankingData>>
+typealias RankingListWithPlacesData = MyLiveData<RankingListWithPlaces>
 typealias SelectedSettingsId = MyLiveData<Int>
 typealias WinsCount = MyLiveData<Map<Int, Int>>
 
@@ -18,9 +19,9 @@ class RankingScreenEvents @Inject constructor(
     @Named(RankingListName)
     val rankingList: RankingList,
     @Named(FilteredRankingListName)
-    val filteredRankingList: RankingList,
+    val filteredRankingList: RankingListWithPlacesData,
     @Named(RankingListToDisplay)
-    val rankingListToDisplay: RankingList,
+    val rankingListToDisplay: RankingListWithPlacesData,
     val selectedSettingsId: SelectedSettingsId,
     val winsCount: WinsCount
 ) {
