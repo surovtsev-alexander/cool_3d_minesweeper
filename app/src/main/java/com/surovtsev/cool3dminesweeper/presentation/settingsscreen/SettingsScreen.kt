@@ -82,7 +82,7 @@ fun SettingsControls(
 
 @Composable
 fun SettingsList(viewModel: SettingsScreenViewModel) {
-    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsScreenEvents.settingsListWithIds.run {
+    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsScreenEvents.settingsDataWithIdsListData.run {
         data.observeAsState(defaultValue)
     }
     val selectedSettingsId: Int by viewModel.settingsScreenControls.selectedSettingsId.run {

@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
-import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
@@ -66,7 +65,7 @@ fun SettingsList(
     viewModel: RankingScreenViewModel,
     rankingScreenEvents: RankingScreenEvents
 ) {
-    val settingsList: List<DataWithId<SettingsData>> by rankingScreenEvents.settingsListWithIds.run {
+    val settingsList: List<DataWithId<SettingsData>> by rankingScreenEvents.settingsDataWithIdsListData.run {
         data.observeAsState(defaultValue)
     }
     val selectedSettingsId: Int by rankingScreenEvents.selectedSettingsId.run {

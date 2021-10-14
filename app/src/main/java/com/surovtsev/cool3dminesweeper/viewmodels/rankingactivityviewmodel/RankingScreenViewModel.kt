@@ -26,6 +26,7 @@ class RankingScreenViewModel @Inject constructor(
     private val rankingDBQueries: RankingDBQueries
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
+    private val rankingListHelper: RankingListHelper
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -45,22 +46,24 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingScreenEvents
         rankingTableSortTypeData =
             rankingComponentEntryPoint.rankingTableSortTypeData
+        rankingListHelper =
+            rankingComponentEntryPoint.rankingListHelper
     }
 
-    @SuppressWarnings("UNUSED")
+    @Suppress("unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         loadData()
     }
 
     private fun loadData() {
-        rankingScreenEvents.settingsListWithIds.onDataChanged(
+        rankingScreenEvents.settingsDataWithIdsListData.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
 
-        rankingScreenEvents.rankingList.onDataChanged(
+        rankingScreenEvents.rankingDataListData.onDataChanged(
             let {
-                val res = rankingDBQueries.getRankingList()
+                val res = rankingListHelper.loadData()
                 rankingScreenEvents.winsCount.onDataChanged(
                     res.map{ it.settingId }.groupingBy { it }.eachCount()
                 )
@@ -78,38 +81,25 @@ class RankingScreenViewModel @Inject constructor(
     fun loadRankingForSettingsId(
         settingsId: Int
     ) {
-        rankingScreenEvents.rankingList.let { rl ->
-            val filteredData = rl.data.value!!.filter {
-                it.settingId == settingsId
-            }
-            val rankingListWithPlaces = RankingListWithPlacesHelper.create(filteredData)
-            rankingScreenEvents.filteredRankingList.onDataChanged(
-                rankingListWithPlaces
+        rankingScreenEvents.filteredRankingList.onDataChanged(
+            rankingListHelper.filterData(
+                rankingScreenEvents.rankingDataListData.data.value!!,
+                settingsId
             )
-            rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
-            prepareRankingListToDisplay()
-        }
+        )
+        rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
+        prepareRankingListToDisplay()
+
     }
 
     private fun prepareRankingListToDisplay() {
         val currSortType = rankingTableSortTypeData.data.value!!
         val filteredRankingList = rankingScreenEvents.filteredRankingList.data.value!!
 
-        val sortingSelector = { x: RankingDataWithPlaces ->
-            when (currSortType.rankingColumn) {
-                RankingColumn.SortableColumn.DateColumn -> x.rankingData.dateTime
-                RankingColumn.SortableColumn.SolvingTimeColumn -> x.rankingData.elapsed
-            }
-        }
-        val comparator: Comparator<RankingDataWithPlaces> = if (currSortType.sortDirection == SortDirection.Ascending) {
-            Comparator { a, b -> compareValuesBy(a, b, sortingSelector) }
-        } else {
-            Comparator { a, b -> compareValuesBy(b, a, sortingSelector)}
-        }
-
         rankingScreenEvents.rankingListToDisplay.onDataChanged(
-            filteredRankingList.sortedWith(
-                comparator
+            rankingListHelper.sortData(
+                filteredRankingList,
+                currSortType
             )
         )
     }

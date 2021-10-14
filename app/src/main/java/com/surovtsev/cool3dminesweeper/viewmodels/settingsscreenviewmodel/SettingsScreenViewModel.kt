@@ -1,6 +1,5 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -66,7 +65,7 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        settingsScreenEvents.settingsListWithIds.onDataChanged(
+        settingsScreenEvents.settingsDataWithIdsListData.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
 
@@ -115,7 +114,7 @@ class SettingsScreenViewModel @Inject constructor(
 
     fun deleteSettings(settingsId: Int) {
         settingsDBQueries.delete(settingsId)
-        settingsScreenEvents.settingsListWithIds.onDataChanged(
+        settingsScreenEvents.settingsDataWithIdsListData.onDataChanged(
             settingsDBQueries.getSettingsList()
         )
     }

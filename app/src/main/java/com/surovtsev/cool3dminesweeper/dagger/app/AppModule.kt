@@ -17,7 +17,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-typealias SettingsListWithIds = MyLiveData<List<DataWithId<SettingsData>>>
+typealias SettingsDataWithIdsList = List<DataWithId<SettingsData>>
+typealias SettingsDataWithIdsListData = MyLiveData<SettingsDataWithIdsList>
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -49,7 +50,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSettingsListWithIds(): SettingsListWithIds {
+    fun provideSettingsListWithIds(): SettingsDataWithIdsListData {
         return MyLiveData(
             emptyList()
         )

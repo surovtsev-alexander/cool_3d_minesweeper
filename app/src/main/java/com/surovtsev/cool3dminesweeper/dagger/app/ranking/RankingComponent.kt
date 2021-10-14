@@ -33,6 +33,7 @@ interface RankingComponentEntryPoint {
     val rankingDBQueries: RankingDBQueries
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
+    val rankingListHelper: RankingListHelper
 }
 
 @Module
@@ -42,7 +43,7 @@ object RankingModule {
     @RankingScope
     @Provides
     @Named(RankingScreenEvents.RankingListName)
-    fun provideRankingList(): RankingList {
+    fun provideRankingList(): RankingDataListData {
         return MyLiveData(
             emptyList()
         )
