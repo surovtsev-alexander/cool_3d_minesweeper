@@ -16,6 +16,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
@@ -24,6 +25,7 @@ import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBorders
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.Place
 
 const val LoadGameParameterName = "load_game"
 
@@ -244,12 +246,17 @@ fun GameStatusDialog(
         return
     }
     val closeDialogAction = { showDialogEvent.onDataChanged(false) }
+
+    val gameStatus = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus
+    val place = if (gameStatus == GameStatus.Win) viewModel.getLastWinPlace() else Place.NoPlace
+
+    val text = "$gameStatus ${ if (place is Place.WinPlace) "\nplace: ${place.place + 1}" else ""}"
     AlertDialog(
         onDismissRequest = closeDialogAction,
         title = { Text(text = "Game status") },
         text = { Text(
             /* TODO: replace with gameStatusEvent */
-            text = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus.toString()
+            text = text
         ) },
 
         confirmButton = {

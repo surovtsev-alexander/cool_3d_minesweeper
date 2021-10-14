@@ -1,11 +1,9 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
 import javax.inject.Inject
 
 
-@RankingScope
 class RankingListHelper @Inject constructor(
     private val rankingDBQueries: RankingDBQueries
 ) {

@@ -9,6 +9,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -53,6 +54,16 @@ object AppModule {
     fun provideSettingsListWithIds(): SettingsDataWithIdsListData {
         return MyLiveData(
             emptyList()
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideRankingListHelper(
+        rankingDBQueries: RankingDBQueries
+    ): RankingListHelper {
+        return RankingListHelper(
+            rankingDBQueries
         )
     }
 }

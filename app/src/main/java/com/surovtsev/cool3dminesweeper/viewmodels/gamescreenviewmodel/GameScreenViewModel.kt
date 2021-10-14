@@ -6,13 +6,19 @@ import android.util.Log
 import android.view.KeyEvent
 import androidx.lifecycle.*
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.MinesweeperController
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponentEntryPoint
+import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
 import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyKeyDownHandler
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingColumn
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingTableSortType
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.SortDirection
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +41,9 @@ class GameScreenViewModel @Inject constructor(
     val gLSurfaceView: GLSurfaceView
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
+    private val gameConfig: GameConfig
+    private val rankingListHelper: RankingListHelper
+    private val settingsDBQueries: SettingsDBQueries
 
     init {
         val loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
@@ -59,6 +68,12 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.gameScreenEvents
         gameControls =
             gameComponentEntryPoint.gameControls
+        gameConfig =
+            gameComponentEntryPoint.gameConfig
+        rankingListHelper =
+            gameComponentEntryPoint.rankingListHelper
+        settingsDBQueries =
+            gameComponentEntryPoint.settingsDBQueries
     }
 
     @Suppress("Unused")
@@ -105,4 +120,34 @@ class GameScreenViewModel @Inject constructor(
 
         return false
     }
+
+    fun getLastWinPlace(): Place {
+        val settingsId = settingsDBQueries.getId(
+            gameConfig.settingsData
+        ) ?: return Place.NoPlace
+
+        val x = rankingListHelper.loadData().let { data ->
+            rankingListHelper.filterData(
+                data, settingsId
+            ).let { filteredData ->
+                rankingListHelper.sortData(
+                    filteredData, RankingTableSortType(
+                        RankingColumn.SortableColumn.DateColumn,
+                        SortDirection.Descending
+                    )
+                )
+            }
+        }
+
+        if (x.isEmpty()) {
+            return Place.NoPlace
+        }
+
+        return Place.WinPlace(x.first().place)
+    }
+}
+
+sealed class Place {
+    object NoPlace : Place()
+    class WinPlace(val place: Int): Place()
 }
