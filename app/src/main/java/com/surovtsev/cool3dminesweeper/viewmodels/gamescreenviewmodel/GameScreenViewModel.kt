@@ -126,24 +126,24 @@ class GameScreenViewModel @Inject constructor(
             gameConfig.settingsData
         ) ?: return Place.NoPlace
 
-        val x = rankingListHelper.loadData().let { data ->
-            rankingListHelper.filterData(
-                data, settingsId
-            ).let { filteredData ->
-                rankingListHelper.sortData(
-                    filteredData, RankingTableSortType(
-                        RankingColumn.SortableColumn.DateColumn,
-                        SortDirection.Descending
-                    )
-                )
-            }
-        }
+        val loadedData = rankingListHelper.loadData()
+        val filteredData = rankingListHelper.filterData(
+            loadedData, settingsId
+        )
+        val rankingTableSortType = RankingTableSortType(
+            RankingColumn.SortableColumn.DateColumn,
+            SortDirection.Descending
+        )
+        val sortedData = rankingListHelper.sortData(
+            filteredData,
+            rankingTableSortType
+        )
 
-        if (x.isEmpty()) {
+        if (sortedData.isEmpty()) {
             return Place.NoPlace
         }
 
-        return Place.WinPlace(x.first().place)
+        return Place.WinPlace(sortedData.first().place)
     }
 }
 
