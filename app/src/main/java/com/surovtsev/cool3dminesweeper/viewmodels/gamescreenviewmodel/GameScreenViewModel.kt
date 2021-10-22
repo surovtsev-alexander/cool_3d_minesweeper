@@ -2,7 +2,6 @@ package com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel
 
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
-import android.util.Log
 import android.view.KeyEvent
 import androidx.lifecycle.*
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.MinesweeperController
@@ -10,11 +9,11 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponentEntryPoint
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
 import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyKeyDownHandler
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingColumn
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingTableSortType
