@@ -236,7 +236,7 @@ fun UseButton(
             .fillMaxWidth(fraction = 0.75f)
     ) {
         Text(
-            "Use",
+            "use",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
