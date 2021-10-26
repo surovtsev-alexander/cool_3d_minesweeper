@@ -69,6 +69,7 @@ object RankingModule {
         )
     }
 
+    @Named(RankingScreenEvents.SelectedSettingsIdName)
     @RankingScope
     @Provides
     fun provideSelectedSettingsId(): SelectedSettingsId {

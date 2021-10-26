@@ -1,34 +1,37 @@
 package com.surovtsev.cool3dminesweeper.presentation
 
-import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
 import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
+import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import logcat.logcat
 
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
+
+    var requestPermissionsResultReceiver: RequestPermissionsResultReceiver? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,9 +96,6 @@ class MainActivity: ComponentActivity() {
                 }
             }
         }
-
-        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        ActivityCompat.requestPermissions(this, permissions, 1)
     }
 
     override fun onRequestPermissionsResult(
@@ -104,6 +104,14 @@ class MainActivity: ComponentActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        requestPermissionsResultReceiver?.handleRequestPermissionsResult(
+            RequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults
+            )
+        )
 
         logcat { "onRequestPermissionsResult. requestCode: $requestCode, permissions: $permissions, grantResults: $grantResults" }
     }

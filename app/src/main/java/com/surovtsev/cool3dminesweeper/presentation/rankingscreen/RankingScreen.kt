@@ -17,30 +17,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.utils.constants.Constants
+import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 
 @Composable
 fun RankingScreen(
-    context: Context,
+    mainActivity: MainActivity,
     viewModel: RankingScreenViewModel
 ) {
     RankingControls(
-        context,
+        mainActivity,
         viewModel
     )
 }
 
 @Composable
 fun RankingControls(
-    context: Context,
+    mainActivity: MainActivity,
     viewModel: RankingScreenViewModel,
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
@@ -65,10 +66,10 @@ fun RankingControls(
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                ExportDataButton(viewModel)
+                ExportDataButton(mainActivity, viewModel)
             }
 
-            Toast(context, viewModel)
+            Toast(mainActivity, viewModel)
         }
     }
 }
@@ -284,6 +285,7 @@ fun RankingDataItem(
 
 @Composable
 fun ExportDataButton(
+    mainActivity: MainActivity,
     viewModel: RankingScreenViewModel
 ) {
     Box(
@@ -297,7 +299,7 @@ fun ExportDataButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = { viewModel.exportData() },
+                onClick = { viewModel.triggerRequestingPermissions(mainActivity) },
                 modifier = Modifier.fillMaxWidth(fraction = 0.75f),
             ) {
                 Text(text = "exportData")

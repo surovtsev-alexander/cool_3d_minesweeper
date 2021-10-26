@@ -1,13 +1,20 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel
 
-import androidx.compose.ui.platform.AndroidUiDispatcher
-import androidx.lifecycle.*
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
+import com.surovtsev.cool3dminesweeper.presentation.MainActivity
+import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
 import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.hilt.EntryPoints
@@ -21,7 +28,7 @@ import javax.inject.Provider
 class RankingScreenViewModel @Inject constructor(
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController,
-): ViewModel(), DefaultLifecycleObserver, CoroutineScope {
+): ViewModel(), DefaultLifecycleObserver, CoroutineScope, RequestPermissionsResultReceiver {
 
     private val settingsDBQueries: SettingsDBQueries
     private val rankingDBQueries: RankingDBQueries
@@ -35,6 +42,10 @@ class RankingScreenViewModel @Inject constructor(
 
     private val coroutineJob = Job()
     override val coroutineContext = uiDispatcher + coroutineJob
+
+    companion object {
+        const val requestWriteExternalStorageCode = 100
+    }
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -145,8 +156,23 @@ class RankingScreenViewModel @Inject constructor(
         prepareRankingListToDisplay()
     }
 
-    fun exportData() {
-        exportDBToCSVFiles()
+    fun triggerRequestingPermissions(mainActivity: MainActivity) {
+        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        mainActivity.requestPermissionsResultReceiver = this
+        ActivityCompat.requestPermissions(
+            mainActivity, permissions, requestWriteExternalStorageCode
+        )
+    }
+
+    override fun handleRequestPermissionsResult(rPR: RequestPermissionsResult) {
+        if (rPR.requestCode == requestWriteExternalStorageCode) {
+            if (rPR.grantResults.isNotEmpty() && rPR.grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                exportDBToCSVFiles()
+            } else {
+                toastMessageData.onDataChanged("Please, provide permission in order to export files")
+            }
+        }
     }
 
     private fun exportDBToCSVFiles() {
