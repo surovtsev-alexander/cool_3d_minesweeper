@@ -7,6 +7,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.utils.constants.minesweeper.database.DBConfig
+import com.surovtsev.cool3dminesweeper.utils.listhelper.ListHelper.joinToCSVLine
 
 class SettingsDBQueries(
     private val dbHelper: DBHelper
@@ -181,5 +182,60 @@ class SettingsDBQueries(
         }
 
         return res
+    }
+
+    fun getTableStringData(): String {
+        val res = StringBuilder()
+
+        dbHelper.actionWithDB { db ->
+            val query = db.query(
+                DBConfig.settingsTableName,
+                null, null,
+                null, null,
+                null, null
+            )
+
+            if (query.moveToFirst()) {
+                val columnNames = SettingsData.columnNames
+                val tableColumnNames = columnNames.joinToCSVLine()
+                res.appendLine(tableColumnNames)
+
+
+                val idColumnIndex = query.getColumnIndex(SettingsData.settingsIdColumnName)
+                val xCountColIndex = query.getColumnIndex(SettingsData.xCountColumnName)
+                val yCountColIndex = query.getColumnIndex(SettingsData.yCountColumnName)
+                val zCountColIndex = query.getColumnIndex(SettingsData.zCountColumnName)
+                val bombsPercentageColIndex =
+                    query.getColumnIndex(SettingsData.bombsPercentageColumnName)
+
+                do {
+                    val settingsData  =
+                        SettingsData(
+                            query.getInt(xCountColIndex),
+                            query.getInt(yCountColIndex),
+                            query.getInt(zCountColIndex),
+                            query.getInt(bombsPercentageColIndex)
+                        )
+                    val settingDataWithId = DataWithId(
+                        query.getInt(idColumnIndex),
+                        settingsData
+                    )
+                    val row = listOf(
+                        query.getInt(idColumnIndex),
+                        query.getInt(xCountColIndex),
+                        query.getInt(yCountColIndex),
+                        query.getInt(zCountColIndex),
+                        query.getInt(bombsPercentageColIndex)
+                    )
+
+                    val rowString = row.joinToCSVLine()
+                    res.appendLine(rowString)
+                } while (query.moveToNext())
+            }
+
+            query.close()
+        }
+
+        return res.toString()
     }
 }

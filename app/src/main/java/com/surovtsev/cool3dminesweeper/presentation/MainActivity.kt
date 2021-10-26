@@ -1,9 +1,11 @@
 package com.surovtsev.cool3dminesweeper.presentation
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -22,6 +24,8 @@ import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
 import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import logcat.logcat
+
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
@@ -66,6 +70,7 @@ class MainActivity: ComponentActivity() {
                     val viewModel: RankingScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     RankingScreen(
+                        this@MainActivity,
                         viewModel
                     )
                 }
@@ -88,5 +93,18 @@ class MainActivity: ComponentActivity() {
                 }
             }
         }
+
+        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        ActivityCompat.requestPermissions(this, permissions, 1)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        logcat { "onRequestPermissionsResult. requestCode: $requestCode, permissions: $permissions, grantResults: $grantResults" }
     }
 }

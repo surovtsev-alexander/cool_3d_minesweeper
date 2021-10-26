@@ -25,6 +25,14 @@ data class SettingsData(
         val zCountColumnName = DBConfig.glueWithUnderscores(zCountName)
         val bombsPercentageColumnName = DBConfig.glueWithUnderscores(bombsPercentageName)
 
+        val columnNames = listOf(
+            settingsIdColumnName,
+            xCountColumnName,
+            yCountColumnName,
+            zCountColumnName,
+            bombsPercentageColumnName
+        )
+
         const val xCountDefaultValue = 12
         const val yCountDefaultValue = 12
         const val zCountDefaultValue = 12

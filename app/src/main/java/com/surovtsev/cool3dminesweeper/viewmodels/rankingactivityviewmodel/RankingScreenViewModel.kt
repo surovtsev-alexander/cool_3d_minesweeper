@@ -1,17 +1,18 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.platform.AndroidUiDispatcher
+import androidx.lifecycle.*
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
+import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
+import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -19,14 +20,21 @@ import javax.inject.Provider
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
     rankingComponentProvider: Provider<RankingComponent.Builder>,
-    private val saveController: SaveController
-): ViewModel(), LifecycleObserver {
+    private val saveController: SaveController,
+): ViewModel(), DefaultLifecycleObserver, CoroutineScope {
 
     private val settingsDBQueries: SettingsDBQueries
     private val rankingDBQueries: RankingDBQueries
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
     private val rankingListHelper: RankingListHelper
+    val toastMessageData: ToastMessageData
+
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+
+    private val coroutineJob = Job()
+    override val coroutineContext = uiDispatcher + coroutineJob
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -48,12 +56,24 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingTableSortTypeData
         rankingListHelper =
             rankingComponentEntryPoint.rankingListHelper
+        toastMessageData =
+            rankingComponentEntryPoint.toastMessageData
     }
 
-    @Suppress("unused")
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+
         loadData()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        cleanup()
+
+        super.onDestroy(owner)
+    }
+
+    private fun cleanup() {
+        coroutineContext.cancel()
     }
 
     private fun loadData() {
@@ -123,5 +143,57 @@ class RankingScreenViewModel @Inject constructor(
         )
 
         prepareRankingListToDisplay()
+    }
+
+    fun exportData() {
+        exportDBToCSVFiles()
+    }
+
+    private fun exportDBToCSVFiles() {
+        launch {
+            var errorMessage: String? = null
+
+            val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+                errorMessage = exception.message
+            }
+            launch(ioDispatcher + exceptionHandler) {
+                val rankingTableStoringJob = launch {
+                    try {
+                        val rankingTableStringData = rankingDBQueries.getTableStringsData()
+                        ExternalFileWriter.writeFile(
+                            "rankingTable.csv",
+                            rankingTableStringData
+                        )
+                    } catch (e: Exception) {
+                        errorMessage = e.message
+                    }
+                }
+
+                val settingsTableStoringJob = launch {
+                    try {
+                        val settingsTableStringData = settingsDBQueries.getTableStringData()
+                        ExternalFileWriter.writeFile(
+                            "settingsTable.csv",
+                            settingsTableStringData
+                        )
+                    } catch (e: Exception) {
+                        errorMessage = e.message
+                    }
+                }
+                rankingTableStoringJob.join()
+                settingsTableStoringJob.join()
+
+            }.join()
+
+            val toastMessage = if (errorMessage == null) {
+                "Data is exported successfully"
+            } else {
+                "Error while exporting data: $errorMessage"
+            }
+
+            withContext(uiDispatcher) {
+                toastMessageData.onDataChanged(toastMessage)
+            }
+        }
     }
 }

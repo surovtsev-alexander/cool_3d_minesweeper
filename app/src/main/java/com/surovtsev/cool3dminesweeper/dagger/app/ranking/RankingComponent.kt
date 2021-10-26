@@ -3,6 +3,7 @@ package com.surovtsev.cool3dminesweeper.dagger.app.ranking
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
+import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.Module
@@ -34,6 +35,7 @@ interface RankingComponentEntryPoint {
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
     val rankingListHelper: RankingListHelper
+    val toastMessageData: ToastMessageData
 }
 
 @Module

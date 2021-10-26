@@ -100,6 +100,11 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
 
+    //region Lifecycle
+    final lifecycleVersion = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+
     // Square logcat
     implementation 'com.squareup.logcat:logcat:0.1'
 }

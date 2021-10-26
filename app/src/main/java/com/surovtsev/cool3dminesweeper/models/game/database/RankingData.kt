@@ -1,6 +1,7 @@
 package com.surovtsev.cool3dminesweeper.models.game.database
 
 import android.content.ContentValues
+import android.database.Cursor
 import com.surovtsev.cool3dminesweeper.utils.constants.minesweeper.database.DBConfig
 
 data class RankingData(
@@ -18,6 +19,13 @@ data class RankingData(
         val settingsIdColumnName = DBConfig.glueWithUnderscores(settingsIdName)
         val elapsedColumnName = DBConfig.glueWithUnderscores(elapsedName)
         val dateTimeColumnName = DBConfig.glueWithUnderscores(dateTimeName)
+
+        val columnNames = listOf(
+            rankingIdColumnName,
+            settingsIdColumnName,
+            elapsedColumnName,
+            dateTimeColumnName
+        )
     }
 
     fun getContentValues() = ContentValues().apply {

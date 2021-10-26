@@ -4,6 +4,8 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DatabaseAction
 import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.utils.constants.minesweeper.database.DBConfig
+import com.surovtsev.cool3dminesweeper.utils.listhelper.ListHelper.joinToCSVLine
+import java.lang.StringBuilder
 
 class RankingDBQueries (
     private val dBHelper: DBHelper
@@ -27,32 +29,72 @@ class RankingDBQueries (
         val res = mutableListOf<RankingData>()
 
         dBHelper.actionWithDB { db ->
-            val c = db.query(
+            val query = db.query(
                 DBConfig.rankingTableName,
                 null, null,
                 null, null,
                 null, null
             )
 
-            if (c.moveToFirst()) {
-                val settingsIdColIndex = c.getColumnIndex(RankingData.settingsIdColumnName)
-                val elapsedColIndex = c.getColumnIndex(RankingData.elapsedColumnName)
-                val dateTimeColIndex = c.getColumnIndex(RankingData.dateTimeColumnName)
+            if (query.moveToFirst()) {
+                val settingsIdColIndex = query.getColumnIndex(RankingData.settingsIdColumnName)
+                val elapsedColIndex = query.getColumnIndex(RankingData.elapsedColumnName)
+                val dateTimeColIndex = query.getColumnIndex(RankingData.dateTimeColumnName)
 
                 do {
                     res.add(
                         RankingData(
-                            c.getInt(settingsIdColIndex),
-                            c.getLong(elapsedColIndex),
-                            c.getString(dateTimeColIndex),
+                            query.getInt(settingsIdColIndex),
+                            query.getLong(elapsedColIndex),
+                            query.getString(dateTimeColIndex),
                         )
                     )
-                } while (c.moveToNext())
+                } while (query.moveToNext())
             }
 
-            c.close()
+            query.close()
         }
 
         return res
+    }
+
+    fun getTableStringsData(): String {
+        val res = StringBuilder()
+
+        dBHelper.actionWithDB { db ->
+            val query = db.query(
+                DBConfig.rankingTableName,
+                null, null,
+                null, null,
+                null, null
+            )
+
+            val columnNames = RankingData.columnNames
+
+            val tableColumnNames = columnNames.joinToCSVLine()
+            res.appendLine(tableColumnNames)
+
+            if (query.moveToFirst()) {
+                val columnIndexes = columnNames.map {
+                    it to query.getColumnIndex(it)
+                }.toMap()
+
+                do {
+                    val row = listOf(
+                        query.getInt(columnIndexes[RankingData.rankingIdColumnName]!!),
+                        query.getInt(columnIndexes[RankingData.settingsIdColumnName]!!),
+                        query.getInt(columnIndexes[RankingData.elapsedColumnName]!!),
+                        query.getString(columnIndexes[RankingData.dateTimeColumnName]!!)
+                    )
+                    val rowString = row.joinToCSVLine()
+                    res.appendLine(rowString)
+
+                } while (query.moveToNext())
+            }
+
+            query.close()
+        }
+
+        return res.toString()
     }
 }

@@ -1,5 +1,6 @@
 package com.surovtsev.cool3dminesweeper.presentation.rankingscreen
 
+import android.content.Context
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,19 +24,23 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import com.surovtsev.cool3dminesweeper.utils.constants.Constants
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 
 @Composable
 fun RankingScreen(
+    context: Context,
     viewModel: RankingScreenViewModel
 ) {
     RankingControls(
+        context,
         viewModel
     )
 }
 
 @Composable
 fun RankingControls(
+    context: Context,
     viewModel: RankingScreenViewModel,
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
@@ -47,15 +53,22 @@ fun RankingControls(
             //verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
             Row(
-                modifier = Modifier.fillMaxHeight(.3f)
+                modifier = Modifier.weight(3f)
             ) {
                 SettingsList(viewModel, rankingScreenEvents)
             }
             Row(
-                modifier = Modifier.fillMaxHeight(1f)
+                modifier = Modifier.weight(10f)
             ) {
                 RankingList(viewModel)
             }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                ExportDataButton(viewModel)
+            }
+
+            Toast(context, viewModel)
         }
     }
 }
@@ -267,4 +280,46 @@ fun RankingDataItem(
             )
         }
     }
+}
+
+@Composable
+fun ExportDataButton(
+    viewModel: RankingScreenViewModel
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(GrayBackground),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = { viewModel.exportData() },
+                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+            ) {
+                Text(text = "exportData")
+            }
+        }
+    }
+}
+
+@Composable
+fun Toast(
+    context: Context,
+    viewModel: RankingScreenViewModel
+) {
+    val toastMessage: String by viewModel.toastMessageData.run {
+        data.observeAsState(defaultValue)
+    }
+
+    if (toastMessage == Constants.emptyString) {
+        return
+    }
+
+    android.widget.Toast.makeText(
+        context, toastMessage, android.widget.Toast.LENGTH_LONG
+    ).show()
 }

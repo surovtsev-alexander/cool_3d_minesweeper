@@ -8,6 +8,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.utils.constants.Constants
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
 import dagger.Binds
@@ -20,6 +21,7 @@ import javax.inject.Singleton
 
 typealias SettingsDataWithIdsList = List<DataWithId<SettingsData>>
 typealias SettingsDataWithIdsListData = MyLiveData<SettingsDataWithIdsList>
+typealias ToastMessageData = MyLiveData<String>
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -66,6 +68,10 @@ object AppModule {
             rankingDBQueries
         )
     }
+
+    @Singleton
+    @Provides
+    fun provideToastMessageData(): ToastMessageData = MyLiveData(Constants.emptyString)
 }
 
 @Module
