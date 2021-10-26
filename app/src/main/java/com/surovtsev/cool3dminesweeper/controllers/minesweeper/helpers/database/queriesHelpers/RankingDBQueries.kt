@@ -84,7 +84,7 @@ class RankingDBQueries (
                         query.getInt(columnIndexes[RankingData.rankingIdColumnName]!!),
                         query.getInt(columnIndexes[RankingData.settingsIdColumnName]!!),
                         query.getInt(columnIndexes[RankingData.elapsedColumnName]!!),
-                        query.getString(columnIndexes[RankingData.dateTimeColumnName]!!)
+                        "\"${query.getString(columnIndexes[RankingData.dateTimeColumnName]!!)}\""
                     )
                     val rowString = row.joinToCSVLine()
                     res.appendLine(rowString)

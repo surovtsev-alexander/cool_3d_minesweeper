@@ -9,6 +9,6 @@ data class RequestPermissionsResult(
 
 
 interface RequestPermissionsResultReceiver {
-    fun handleRequestPermissionsResult(rPR: RequestPermissionsResult)
+    fun handleRequestPermissionsResult(requestPermissionsResult: RequestPermissionsResult)
 }
 

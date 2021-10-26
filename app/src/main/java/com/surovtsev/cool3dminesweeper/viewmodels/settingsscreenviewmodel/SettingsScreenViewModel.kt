@@ -9,12 +9,12 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.settings.SettingsComponentEntryPoint
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenControls
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenEvents
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SlidersWithNames
 import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsDataFactory
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenControls
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenEvents
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SlidersWithNames
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

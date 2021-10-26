@@ -1,6 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -19,13 +20,16 @@ import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWrit
 import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
+import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Provider
 
 
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController,
 ): ViewModel(), DefaultLifecycleObserver, CoroutineScope, RequestPermissionsResultReceiver {
@@ -165,9 +169,9 @@ class RankingScreenViewModel @Inject constructor(
         )
     }
 
-    override fun handleRequestPermissionsResult(rPR: RequestPermissionsResult) {
-        if (rPR.requestCode == requestWriteExternalStorageCode) {
-            if (rPR.grantResults.isNotEmpty() && rPR.grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    override fun handleRequestPermissionsResult(requestPermissionsResult: RequestPermissionsResult) {
+        if (requestPermissionsResult.requestCode == requestWriteExternalStorageCode) {
+            if (requestPermissionsResult.grantResults.let { it.isNotEmpty() && it[0] == PackageManager.PERMISSION_GRANTED }) {
                 exportDBToCSVFiles()
             } else {
                 toastMessageData.onDataChanged("Please, provide permission in order to export files")
@@ -176,47 +180,39 @@ class RankingScreenViewModel @Inject constructor(
     }
 
     private fun exportDBToCSVFiles() {
-        launch {
-            var errorMessage: String? = null
+        val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+            val errorMessage = exception.message
 
-            val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-                errorMessage = exception.message
+            val toastMessage = "Error while exporting data: $errorMessage"
+
+            context.runOnUiThread {
+                toastMessageData.onDataChanged(toastMessage)
             }
-            launch(ioDispatcher + exceptionHandler) {
-                val rankingTableStoringJob = launch {
-                    try {
-                        val rankingTableStringData = rankingDBQueries.getTableStringsData()
-                        ExternalFileWriter.writeFile(
-                            "rankingTable.csv",
-                            rankingTableStringData
-                        )
-                    } catch (e: Exception) {
-                        errorMessage = e.message
-                    }
-                }
+        }
 
-                val settingsTableStoringJob = launch {
-                    try {
-                        val settingsTableStringData = settingsDBQueries.getTableStringData()
-                        ExternalFileWriter.writeFile(
-                            "settingsTable.csv",
-                            settingsTableStringData
-                        )
-                    } catch (e: Exception) {
-                        errorMessage = e.message
-                    }
-                }
-                rankingTableStoringJob.join()
-                settingsTableStoringJob.join()
+        launch(ioDispatcher + exceptionHandler) {
+            val tablesInfo = listOf(
+                { rankingDBQueries.getTableStringsData() } to "rankingTable.csv",
+                { settingsDBQueries.getTableStringData() } to "settingsTable.csv"
+            )
 
-            }.join()
-
-            val toastMessage = if (errorMessage == null) {
-                "Data is exported successfully"
-            } else {
-                "Error while exporting data: $errorMessage"
+            val storeAction = { getTableStringDataAction:() -> String, fileName: String ->
+                val tableStringData = getTableStringDataAction()
+                ExternalFileWriter.writeFile(
+                    fileName,
+                    tableStringData
+                )
             }
 
+            val jobs = tablesInfo.map { (sA, fN) ->
+                launch {
+                    storeAction(sA, fN)
+                }
+            }
+
+            jobs.forEach { it.join() }
+
+            val toastMessage = "Data is exported successfully"
             withContext(uiDispatcher) {
                 toastMessageData.onDataChanged(toastMessage)
             }
