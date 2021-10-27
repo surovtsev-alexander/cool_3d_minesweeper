@@ -16,14 +16,14 @@ object LocalDateTimeHelper {
         get() = timeZone.rules.getOffset(Instant.now())
 
     val epochMilli: Long
-        get() = localDateTimeToEpochMilli(localDateTime, zoneOffset)
+        get() = localDateTimeToEpochMilli()
 
     fun localDateTimeToEpochMilli(
-        localDateTime: LocalDateTime,
-        zoneOffset: ZoneOffset
+        localDateTime: LocalDateTime = this.localDateTime,
+        zoneOffset: ZoneOffset = this.zoneOffset
     ) = localDateTime.atOffset(zoneOffset).toInstant().toEpochMilli()
 
-    fun restoreLocalDateTime(
+    fun restoreLocalDateTimeFromEpochMilli(
         epochMilli: Long
     ): LocalDateTime {
         val instant = Instant.ofEpochMilli(epochMilli)
