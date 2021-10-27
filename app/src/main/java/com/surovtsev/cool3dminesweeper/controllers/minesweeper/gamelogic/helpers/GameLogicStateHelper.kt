@@ -6,9 +6,9 @@ import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Ga
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeHandler
-import com.surovtsev.cool3dminesweeper.utils.time.Tickable
-import com.surovtsev.cool3dminesweeper.utils.time.TimeSpan
-import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.Tickable
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import javax.inject.Inject
 
 //class GameLogicStateHelper @AssistedInject constructor(

@@ -14,7 +14,7 @@ import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHold
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyHandler
-import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 

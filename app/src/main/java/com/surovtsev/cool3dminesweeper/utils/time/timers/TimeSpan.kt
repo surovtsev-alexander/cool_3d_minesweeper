@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.time
+package com.surovtsev.cool3dminesweeper.utils.time.timers
 
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.Switch

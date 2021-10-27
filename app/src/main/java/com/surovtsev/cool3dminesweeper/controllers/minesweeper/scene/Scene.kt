@@ -8,7 +8,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
-import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import glm_.vec2.Vec2i
 import javax.inject.Inject

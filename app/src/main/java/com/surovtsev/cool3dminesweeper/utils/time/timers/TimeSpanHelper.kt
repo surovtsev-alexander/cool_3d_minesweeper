@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.time
+package com.surovtsev.cool3dminesweeper.utils.time.timers
 
 import android.os.SystemClock
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope

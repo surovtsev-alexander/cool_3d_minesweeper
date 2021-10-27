@@ -103,6 +103,7 @@ class MainActivity: ComponentActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        /* TODO: refactor obsolete request permissions code */
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         requestPermissionsResultReceiver?.handleRequestPermissionsResult(

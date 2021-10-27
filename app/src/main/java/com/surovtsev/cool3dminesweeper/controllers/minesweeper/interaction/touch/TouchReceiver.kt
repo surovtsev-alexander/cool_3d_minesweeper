@@ -4,7 +4,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.MovementHolder
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.TouchReceiver
-import com.surovtsev.cool3dminesweeper.utils.time.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
