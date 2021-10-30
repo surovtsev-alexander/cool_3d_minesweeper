@@ -17,12 +17,15 @@ import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
 import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import org.jetbrains.anko.runOnUiThread
+import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -32,7 +35,11 @@ class RankingScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController,
-): ViewModel(), DefaultLifecycleObserver, CoroutineScope, RequestPermissionsResultReceiver {
+): ViewModel(),
+    DefaultLifecycleObserver,
+    RequestPermissionsResultReceiver,
+    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
+{
 
     private val settingsDBQueries: SettingsDBQueries
     private val rankingDBQueries: RankingDBQueries
@@ -40,12 +47,6 @@ class RankingScreenViewModel @Inject constructor(
     val rankingTableSortTypeData: RankingTableSortTypeData
     private val rankingListHelper: RankingListHelper
     val toastMessageData: ToastMessageData
-
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-
-    private val coroutineJob = Job()
-    override val coroutineContext = uiDispatcher + coroutineJob
 
     companion object {
         const val requestWriteExternalStorageCode = 100
@@ -79,16 +80,6 @@ class RankingScreenViewModel @Inject constructor(
         super.onCreate(owner)
 
         loadData()
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        cleanup()
-
-        super.onDestroy(owner)
-    }
-
-    private fun cleanup() {
-        coroutineContext.cancel()
     }
 
     private fun loadData() {
@@ -190,7 +181,10 @@ class RankingScreenViewModel @Inject constructor(
             }
         }
 
-        launch(ioDispatcher + exceptionHandler) {
+        launchWithExceptionHandler(
+            ViewModelCoroutineScopeHelper.ioDispatcher,
+            exceptionHandler
+        ) {
             val tablesInfo = listOf(
                 { rankingDBQueries.getTableStringsData() } to "rankingTable.csv",
                 { settingsDBQueries.getTableStringData() } to "settingsTable.csv"
@@ -213,7 +207,7 @@ class RankingScreenViewModel @Inject constructor(
             jobs.forEach { it.join() }
 
             val toastMessage = "Data is exported successfully"
-            withContext(uiDispatcher) {
+            withContext(ViewModelCoroutineScopeHelper.uiDispatcher) {
                 toastMessageData.onDataChanged(toastMessage)
             }
         }
