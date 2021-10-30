@@ -10,7 +10,7 @@ import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
 import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.utils.constants.Constants
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

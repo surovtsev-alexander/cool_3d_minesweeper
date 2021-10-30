@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers
+package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
 import com.surovtsev.cool3dminesweeper.dagger.app.SettingsDataWithIdsListData

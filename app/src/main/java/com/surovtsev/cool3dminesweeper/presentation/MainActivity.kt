@@ -21,7 +21,7 @@ import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresul
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.RankingScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import logcat.logcat

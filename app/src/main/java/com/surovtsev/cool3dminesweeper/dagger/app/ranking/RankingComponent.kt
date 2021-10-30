@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
 import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
+import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent

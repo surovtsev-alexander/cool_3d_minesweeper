@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel
+package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel
 
 import android.Manifest
 import android.content.Context
@@ -17,7 +17,7 @@ import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
 import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.*
+import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

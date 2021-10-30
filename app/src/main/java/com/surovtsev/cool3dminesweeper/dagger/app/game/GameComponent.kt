@@ -27,7 +27,7 @@ import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.T
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
-import com.surovtsev.cool3dminesweeper.viewmodels.rankingactivityviewmodel.helpers.RankingListHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import dagger.Binds
