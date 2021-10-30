@@ -1,14 +1,14 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeHandler
 import com.surovtsev.cool3dminesweeper.utils.time.timers.Tickable
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
 import javax.inject.Inject
 
 //class GameLogicStateHelper @AssistedInject constructor(
@@ -31,14 +31,13 @@ import javax.inject.Inject
 class GameLogicStateHelper @Inject constructor(
     private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-    timeSpanHelper: TimeSpanHelper
+    private val timeSpan: TimeSpan
 ):
-    Tickable, PauseResumeHandler
+    Tickable,
+    DefaultLifecycleObserver
 {
     var gameStatus: GameStatus
         private set
-
-    private val timeSpan = TimeSpan(1000L, timeSpanHelper)
 
     fun isGameNotStarted() = (gameStatus == GameStatus.NoBombsPlaced)
 
@@ -63,13 +62,25 @@ class GameLogicStateHelper @Inject constructor(
         }
     }
 
-    override fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+
+        pauseIfNeeded()
+    }
+
+    fun pauseIfNeeded() {
         if (isGameInProgress()) {
             timeSpan.turnOff()
         }
     }
 
-    override fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+
+        resumeIfNeeded()
+    }
+
+    fun resumeIfNeeded() {
         if (isGameInProgress()) {
             timeSpan.turnOn()
         }

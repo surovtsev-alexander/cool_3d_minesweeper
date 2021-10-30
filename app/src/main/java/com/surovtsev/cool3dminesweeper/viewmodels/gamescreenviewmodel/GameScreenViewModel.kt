@@ -2,8 +2,10 @@ package com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel
 
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
-import android.view.KeyEvent
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.MinesweeperController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponent
@@ -11,7 +13,6 @@ import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponentEntryPoint
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
-import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyKeyDownHandler
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingColumn
@@ -31,11 +32,11 @@ class GameScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ):
     ViewModel(),
-    PauseResumeDestroyKeyDownHandler,
-    LifecycleObserver
+    DefaultLifecycleObserver
 {
     private val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
+
     private val gameRenderer: GLESRenderer
     val gLSurfaceView: GLSurfaceView
     val gameScreenEvents: GameScreenEvents
@@ -75,9 +76,8 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.settingsDBQueries
     }
 
-    @Suppress("Unused")
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
         gLSurfaceView.apply {
             minesweeperController.touchListener.connectToGLSurfaceView(
                 gLSurfaceView
@@ -88,37 +88,37 @@ class GameScreenViewModel @Inject constructor(
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    override fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         gLSurfaceView.onPause()
-        minesweeperController.onPause()
+        minesweeperController.onPause(owner)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    override fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         gLSurfaceView.onResume()
-        minesweeperController.onResume()
+        minesweeperController.onResume(owner)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    override fun onDestroy() {
-        minesweeperController.onDestroy()
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        minesweeperController.onDestroy(owner)
     }
 
-    override fun onKeyDown(keyCode: Int): Boolean {
-        if (
-            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-        ) {
-            markingEvent.onDataChanged(
-                !(markingEvent.valueOrDefault)
-            )
-
-            return true
-        }
-
-        return false
-    }
+//    override fun onKeyDown(keyCode: Int): Boolean {
+//        if (
+//            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+//            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+//        ) {
+//            markingEvent.onDataChanged(
+//                !(markingEvent.valueOrDefault)
+//            )
+//
+//            return true
+//        }
+//
+//        return false
+//    }
 
     fun getLastWinPlace(): Place {
         val settingsId = settingsDBQueries.getId(

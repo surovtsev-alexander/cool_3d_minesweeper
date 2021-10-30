@@ -27,6 +27,8 @@ import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.T
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
@@ -59,7 +61,6 @@ interface GameComponent {
 @EntryPoint
 @GameScope
 interface GameComponentEntryPoint {
-    val loadGame: Boolean
     val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
@@ -293,4 +294,16 @@ object SceneSettingsModule {
     @Provides
     @Named(Scene.PointerEnabledName)
     fun providePointerEnabled() = false
+}
+
+@Module
+@InstallIn(GameComponent::class)
+object GameLogicStateHelperModule {
+    @GameScope
+    @Provides
+    fun provideTimeSpan(
+        timeSpanHelper: TimeSpanHelper
+    ): TimeSpan {
+        return TimeSpan(1000L, timeSpanHelper)
+    }
 }

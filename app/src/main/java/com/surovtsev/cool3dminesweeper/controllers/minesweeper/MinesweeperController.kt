@@ -1,5 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
@@ -13,7 +15,6 @@ import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.cool3dminesweeper.utils.interfaces.PauseResumeDestroyHandler
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import glm_.vec2.Vec2i
 import javax.inject.Inject
@@ -32,12 +33,15 @@ class MinesweeperController @Inject constructor(
     val touchListener: TouchListener
 ):
     OpenGLEventsHandler,
-    PauseResumeDestroyHandler
+    DefaultLifecycleObserver
 {
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
     }
 
+    /*
+     * Init GameLogic
+     */
     override fun onSurfaceChanged(width: Int, height: Int) {
         val displaySize = Vec2i(width, height)
 
@@ -46,14 +50,10 @@ class MinesweeperController @Inject constructor(
         gameViewsHolder.cubeOpenGLModel.updateTexture(cubeInfo.cubeSkin)
 
         timeSpanHelper.tick()
-        gameLogic.gameLogicStateHelper.onResume()
+        gameLogic.gameLogicStateHelper.resumeIfNeeded()
 
         gameLogic.notifyBombsCountUpdated()
         gameLogic.gameLogicStateHelper.notifyTimeUpdated()
-    }
-
-    @Synchronized fun syncExecution(x: () -> Unit) {
-        x()
     }
 
     override fun onDrawFrame() {
@@ -71,13 +71,23 @@ class MinesweeperController @Inject constructor(
         }
     }
 
-    override fun onPause() {
+    @Synchronized fun syncExecution(x: () -> Unit) {
+        x()
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+
+        storeGameIfNeeded()
+    }
+
+    private fun storeGameIfNeeded() {
         if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
             return
         }
 
         syncExecution {
-            gameLogic.gameLogicStateHelper.onPause()
+            gameLogic.gameLogicStateHelper.pauseIfNeeded()
 
             val save = Save.createObject(
                 gameConfig,
@@ -90,11 +100,5 @@ class MinesweeperController @Inject constructor(
                 save
             )
         }
-    }
-
-    override fun onResume() {
-    }
-
-    override fun onDestroy() {
     }
 }
