@@ -216,10 +216,6 @@ class SettingsDBQueries(
                             query.getInt(zCountColIndex),
                             query.getInt(bombsPercentageColIndex)
                         )
-                    val settingDataWithId = DataWithId(
-                        query.getInt(idColumnIndex),
-                        settingsData
-                    )
                     val row = listOf(
                         query.getInt(idColumnIndex),
                         query.getInt(xCountColIndex),
