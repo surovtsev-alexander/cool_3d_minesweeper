@@ -1,9 +1,6 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
@@ -23,7 +20,10 @@ import javax.inject.Provider
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
-): ViewModel(), LifecycleObserver {
+):
+    ViewModel(),
+    DefaultLifecycleObserver
+{
 
     private val slidersWithNames: SlidersWithNames
     val settingsScreenControls: SettingsScreenControls
@@ -59,8 +59,9 @@ class SettingsScreenViewModel @Inject constructor(
             settingsComponentEntryPoint.settingsDataFactory
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+
         loadData()
     }
 

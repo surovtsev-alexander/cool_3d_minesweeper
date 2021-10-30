@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.interfaces
+package com.surovtsev.cool3dminesweeper.utils.unused.interfaces
 
 interface UIIntValueSelector {
     var name: String

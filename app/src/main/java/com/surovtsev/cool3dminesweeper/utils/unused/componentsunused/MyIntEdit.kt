@@ -6,7 +6,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.surovtsev.cool3dminesweeper.R
-import com.surovtsev.cool3dminesweeper.utils.interfaces.UIIntValueSelector
+import com.surovtsev.cool3dminesweeper.utils.unused.interfaces.UIIntValueSelector
 
 @Suppress("unused")
 class MyIntEdit : LinearLayout, UIIntValueSelector {
