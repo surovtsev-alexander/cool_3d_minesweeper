@@ -7,9 +7,9 @@ import javax.inject.Named
 
 
 typealias SelectedSettingsId = MyLiveData<Int>
-typealias SettingsSlider = MyLiveData<Float>
+typealias SettingsSlider = MyLiveData<Int>
 typealias SlidersWithNames = Map<String, SettingsSlider>
-typealias SlidersInfo = List<Pair<String, Pair<IntRange, MyLiveData<Float>>>>
+typealias SlidersInfo = List<Pair<String, Pair<IntRange, SettingsSlider>>>
 
 @SettingsScope
 class SettingsScreenControls @Inject constructor(

@@ -97,13 +97,13 @@ class SettingsScreenViewModel @Inject constructor(
     private fun setControlValues(settingsData: SettingsData) {
         settingsScreenControls.slidersWithNames.let {
             it[SettingsData.xCountName]!!.onDataChanged(
-                settingsData.xCount.toFloat())
+                settingsData.xCount)
             it[SettingsData.yCountName]!!.onDataChanged(
-                settingsData.yCount.toFloat())
+                settingsData.yCount)
             it[SettingsData.zCountName]!!.onDataChanged(
-                settingsData.zCount.toFloat())
+                settingsData.zCount)
             it[SettingsData.bombsPercentageName]!!.onDataChanged(
-                settingsData.bombsPercentage.toFloat())
+                settingsData.bombsPercentage)
 
         }
     }

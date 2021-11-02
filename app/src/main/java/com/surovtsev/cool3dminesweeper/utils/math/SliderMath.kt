@@ -7,6 +7,8 @@ import kotlin.math.round
 object SliderMath {
     fun floatToInt(x: Float) = round(x).toInt()
 
+    fun intToFloat(x: Int) = x.toFloat()
+
     fun getRateByPosition(
         sliderPosition: Float,
         borders: IntRange

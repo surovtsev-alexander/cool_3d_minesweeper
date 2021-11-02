@@ -56,7 +56,7 @@ object SettingsModule {
         return SelectedSettingsId(-1)
     }
 
-    private fun createMyLiveDataForSlider(defValue: Int) = MyLiveData(defValue.toFloat())
+    private fun createMyLiveDataForSlider(defValue: Int) = SettingsSlider(defValue)
 
     @[IntoMap StringKey(SettingsData.xCountName)]
     @Provides
@@ -93,10 +93,10 @@ object SettingsModule {
     ): SettingsDataFactory {
         return {
             SettingsData(
-                slidersWithNames[SettingsData.xCountName]!!.valueOrDefault.toInt(),
-                slidersWithNames[SettingsData.yCountName]!!.valueOrDefault.toInt(),
-                slidersWithNames[SettingsData.zCountName]!!.valueOrDefault.toInt(),
-                slidersWithNames[SettingsData.bombsPercentageName]!!.valueOrDefault.toInt()
+                slidersWithNames[SettingsData.xCountName]!!.valueOrDefault,
+                slidersWithNames[SettingsData.yCountName]!!.valueOrDefault,
+                slidersWithNames[SettingsData.zCountName]!!.valueOrDefault,
+                slidersWithNames[SettingsData.bombsPercentageName]!!.valueOrDefault
             )
         }
     }

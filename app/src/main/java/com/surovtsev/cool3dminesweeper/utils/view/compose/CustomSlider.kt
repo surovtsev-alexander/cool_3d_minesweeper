@@ -18,13 +18,13 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool3dminesweeper.utils.math.SliderMath
 
-typealias OnChangeAction = (newSliderPosition: Float) -> Unit
+typealias OnChangeAction = (newSliderPosition: Int) -> Unit
 
 @Composable
 fun CustomSliderWithCaption(
     name: String,
     borders: IntRange,
-    value: Float,
+    value: Int,
     onChangeAction: OnChangeAction,
 ) {
     Column {
@@ -35,7 +35,7 @@ fun CustomSliderWithCaption(
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
             Text(
-                SliderMath.floatToInt(value).toString(),
+                value.toString(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.5f)
             )
@@ -54,10 +54,17 @@ fun CustomSliderWithCaption(
 @Composable
 fun CustomSlider(
     borders: IntRange,
-    value: Float,
-    onChangeAction: (Float) -> Unit,
+    value: Int,
+    onChangeAction: OnChangeAction,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
+    var prevValue by remember { mutableStateOf(value) }
+    var actualFloatValue by remember { mutableStateOf(SliderMath.intToFloat(value)) }
+
+    if (prevValue != value) {
+        prevValue = value
+        actualFloatValue = value.toFloat()
+    }
 
     Box(
         modifier = Modifier
@@ -75,20 +82,26 @@ fun CustomSlider(
                     val diffSliderPosition = SliderMath.getDiffByRate(
                         normalizedDelta, borders
                     )
-                    val newSliderPosition =
+                    actualFloatValue =
                         SliderMath.clipPosition(
-                            value + diffSliderPosition,
+                            actualFloatValue + diffSliderPosition,
                             borders
                         )
-                    onChangeAction(
-                        newSliderPosition
-                    )
+
+                    val newSliderValue = SliderMath.floatToInt(actualFloatValue)
+
+                    if (newSliderValue != value) {
+                        prevValue = newSliderValue
+                        onChangeAction(
+                            newSliderValue
+                        )
+                    }
                     delta
                 }
             )
     ) {
         SliderLine(
-            value, borders
+            actualFloatValue, borders
         )
     }
 }
