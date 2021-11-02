@@ -24,7 +24,7 @@ typealias OnChangeAction = (newSliderPosition: Int) -> Unit
 fun CustomSliderWithCaption(
     name: String,
     borders: IntRange,
-    value: Int,
+    sliderPosition: Int,
     onChangeAction: OnChangeAction,
 ) {
     Column {
@@ -35,7 +35,7 @@ fun CustomSliderWithCaption(
                 modifier = Modifier.fillMaxWidth(0.33f)
             )
             Text(
-                value.toString(),
+                sliderPosition.toString(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.5f)
             )
@@ -46,7 +46,7 @@ fun CustomSliderWithCaption(
             )
         }
         CustomSlider(
-            borders, value, onChangeAction
+            borders, sliderPosition, onChangeAction
         )
     }
 }
@@ -54,16 +54,16 @@ fun CustomSliderWithCaption(
 @Composable
 fun CustomSlider(
     borders: IntRange,
-    value: Int,
+    sliderPosition: Int,
     onChangeAction: OnChangeAction,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
-    var prevValue by remember { mutableStateOf(value) }
-    var actualFloatValue by remember { mutableStateOf(SliderMath.intToFloat(value)) }
+    var prevPosition by remember { mutableStateOf(sliderPosition) }
+    var actualFloatPosition by remember { mutableStateOf(SliderMath.intToFloat(sliderPosition)) }
 
-    if (prevValue != value) {
-        prevValue = value
-        actualFloatValue = value.toFloat()
+    if (prevPosition != sliderPosition) {
+        prevPosition = sliderPosition
+        actualFloatPosition = sliderPosition.toFloat()
     }
 
     Box(
@@ -82,18 +82,18 @@ fun CustomSlider(
                     val diffSliderPosition = SliderMath.getDiffByRate(
                         normalizedDelta, borders
                     )
-                    actualFloatValue =
+                    actualFloatPosition =
                         SliderMath.clipPosition(
-                            actualFloatValue + diffSliderPosition,
+                            actualFloatPosition + diffSliderPosition,
                             borders
                         )
 
-                    val newSliderValue = SliderMath.floatToInt(actualFloatValue)
+                    val newSliderPosition = SliderMath.floatToInt(actualFloatPosition)
 
-                    if (newSliderValue != value) {
-                        prevValue = newSliderValue
+                    if (newSliderPosition != prevPosition) {
+                        prevPosition = newSliderPosition
                         onChangeAction(
-                            newSliderValue
+                            newSliderPosition
                         )
                     }
                     delta
@@ -101,14 +101,14 @@ fun CustomSlider(
             )
     ) {
         SliderLine(
-            actualFloatValue, borders
+            actualFloatPosition, borders
         )
     }
 }
 
 @Composable
 fun SliderLine(
-    value: Float,
+    sliderPosition: Float,
     borders: IntRange
 ) {
     Box(
@@ -116,7 +116,7 @@ fun SliderLine(
             .fillMaxHeight()
             .fillMaxWidth(
                 SliderMath.getRateByPosition(
-                    value,
+                    sliderPosition,
                     borders
                 )
             )
