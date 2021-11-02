@@ -131,7 +131,7 @@ object SettingsDataHelperModule {
     @Provides
     @SettingsScope
     @Named(SettingsDataHelper.BombsPercentageBorders)
-    fun provideBombsPercentageBorders() = 10..99
+    fun provideBombsPercentageBorders() = 10..40
 
     @Provides
     @SettingsScope
