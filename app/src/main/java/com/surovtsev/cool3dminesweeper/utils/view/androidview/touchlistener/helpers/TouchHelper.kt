@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers
+package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers
 
 import android.view.MotionEvent
 import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp

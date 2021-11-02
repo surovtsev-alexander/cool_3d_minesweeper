@@ -28,6 +28,7 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import com.surovtsev.cool3dminesweeper.utils.view.compose.CustomSliderWithCaption
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
@@ -192,130 +193,6 @@ fun Controls(
     }
 }
 
-fun floatToInt(x: Float) = round(x).toInt()
-
-/* TODO: move to separate file. */
-object SliderMath {
-    fun getRateByPosition(
-        sliderPosition: Float,
-        borders: IntRange
-    ): Float {
-        val first = borders.first
-        val last = borders.last
-        return (sliderPosition - first) / (last - first)
-    }
-
-    fun getDiffByRate(
-        rate: Float,
-        borders: IntRange
-    ): Float {
-        val first = borders.first
-        val last = borders.last
-        return rate * (last - first)
-    }
-
-    fun clipPosition(
-        sliderPosition: Float,
-        borders: IntRange
-    ) = max(
-        borders.first.toFloat(),
-        min(
-            borders.last.toFloat(),
-            sliderPosition
-        )
-    )
-}
-
-@Composable
-fun CustomSliderWithCaption(
-    name: String,
-    borders: IntRange,
-    value: Float,
-    onChangeAction: (Float) -> Unit,
-) {
-    Column {
-        Row {
-            Text(
-                name,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth(0.33f)
-            )
-            Text(
-                floatToInt(value).toString(),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.5f)
-            )
-            Text(
-                "(${borders})",
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        CustomSlider(
-            borders, value, onChangeAction
-        )
-    }
-}
-
-@Composable
-fun CustomSlider(
-    borders: IntRange,
-    value: Float,
-    onChangeAction: (Float) -> Unit,
-) {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(30.dp)
-            .border(1.dp, Color.Black)
-            .background(LightBlue)
-            .onGloballyPositioned { coordinates ->
-                size = coordinates.size
-            }
-            .scrollable(
-                orientation = Orientation.Horizontal,
-                state = rememberScrollableState { delta ->
-                    val normalizedDelta = delta / size.width
-                    val diffSliderPosition = SliderMath.getDiffByRate(
-                        normalizedDelta, borders
-                    )
-                    val newSliderPosition =
-                        SliderMath.clipPosition(
-                            value + diffSliderPosition,
-                            borders
-                        )
-                    onChangeAction(
-                        newSliderPosition
-                    )
-                    delta
-                }
-            )
-    ) {
-        SliderLine(
-            value, borders
-        )
-    }
-}
-
-@Composable
-fun SliderLine(
-    value: Float,
-    borders: IntRange
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(
-                SliderMath.getRateByPosition(
-                    value,
-                    borders
-                )
-            )
-            .background(PrimaryColor1)
-    )
-}
 
 @Composable
 fun UseButton(

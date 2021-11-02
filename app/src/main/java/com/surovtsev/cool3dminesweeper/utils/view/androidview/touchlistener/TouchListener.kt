@@ -1,13 +1,13 @@
-package com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener
+package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.MovingHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ScalingHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.TouchHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.MovingHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
 import javax.inject.Inject
 import javax.inject.Named
 

@@ -14,8 +14,8 @@ import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
-import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
-import com.surovtsev.cool3dminesweeper.utils.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
 import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
@@ -25,7 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import org.jetbrains.anko.runOnUiThread
-import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Provider
 

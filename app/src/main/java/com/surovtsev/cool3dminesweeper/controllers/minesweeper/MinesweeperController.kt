@@ -13,7 +13,7 @@ import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
 import glm_.vec2.Vec2i

@@ -20,10 +20,10 @@ import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.cool3dminesweeper.models.game.interaction.*
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.TouchListener
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.ScalingHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.TouchHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp

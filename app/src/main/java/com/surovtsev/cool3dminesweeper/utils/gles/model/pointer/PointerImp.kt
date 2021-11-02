@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.utils.gles.model.pointer
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.androidview.interaction.TouchType
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.interaction.TouchType
 import glm_.vec3.Vec3
 import javax.inject.Inject
 

@@ -1,8 +1,8 @@
 package com.surovtsev.cool3dminesweeper.utils.unused
 
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.MovementHolder
-import com.surovtsev.cool3dminesweeper.utils.androidview.touchlistener.helpers.interfaces.TouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MovementHolder
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
 import glm_.vec2.Vec2
 
 @Suppress("unused")
