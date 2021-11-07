@@ -15,12 +15,17 @@ typealias SettingsDataFactory = () -> Settings.SettingsData
             ),
             unique = true
         )
-    ]
+    ],
+    tableName = Settings.TableName.name
 )
 data class Settings (
     @Embedded val settingsData: SettingsData
 ) {
     @[PrimaryKey(autoGenerate = true) ColumnInfo(name = ColumnNames.id)] var id: Long = 0
+
+    object TableName {
+        const val name = "settings"
+    }
 
     object ColumnNames {
         const val id = "id"

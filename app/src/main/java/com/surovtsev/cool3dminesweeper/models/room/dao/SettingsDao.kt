@@ -11,13 +11,17 @@ import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 @Dao
 interface SettingsDao  {
 
-    @Query("SELECT * FROM settings")
+    companion object {
+        const val settingsTableName = Settings.TableName.name
+    }
+
+    @Query("SELECT * FROM $settingsTableName")
     fun getAll(): List<Settings>
 
     @Insert
     fun insert(settings: Settings)
 
-    @Query("DELETE FROM settings WHERE ${Settings.ColumnNames.id} = :settingsId")
+    @Query("DELETE FROM $settingsTableName WHERE ${Settings.ColumnNames.id} = :settingsId")
     fun delete(settingsId: Long)
 
     fun getOrCreate(
@@ -44,7 +48,7 @@ interface SettingsDao  {
 
     @Query(
         "SELECT *\n" +
-             "from settings\n" +
+             "from  $settingsTableName\n" +
              "where ${Settings.SettingsData.Dimensions.ColumnNames.xCount} = :xCount\n" +
              "AND   ${Settings.SettingsData.Dimensions.ColumnNames.yCount} = :yCount\n" +
              "AND   ${Settings.SettingsData.Dimensions.ColumnNames.zCount} = :zCount\n" +

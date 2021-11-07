@@ -11,12 +11,17 @@ import androidx.room.ForeignKey.CASCADE
             childColumns = arrayOf(Ranking.RankingData.ColumnNames.settingsId),
             onDelete = CASCADE
         )
-    ]
+    ],
+    tableName = Ranking.TableName.name
 )
 data class Ranking (
     @Embedded val rankingData: RankingData,
 ) {
     @[PrimaryKey(autoGenerate = true) ColumnInfo(name = ColumnNames.id)] var id: Long = 0
+
+    object TableName {
+        const val name =  "ranking"
+    }
 
     object ColumnNames {
         const val id = "id"

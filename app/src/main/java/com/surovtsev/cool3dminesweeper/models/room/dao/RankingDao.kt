@@ -16,7 +16,11 @@ typealias RankingListWithPlaces = List<RankingDataWithPlaces>
 @Dao
 interface RankingDao {
 
-    @Query("SELECT * FROM ranking")
+    companion object {
+        const val rankingTableName = Ranking.TableName.name
+    }
+
+    @Query("SELECT * FROM $rankingTableName")
     fun getAll(): RankingList
 
     @Insert
@@ -29,7 +33,7 @@ interface RankingDao {
 
     @Query(
         "SELECT ${Ranking.RankingData.ColumnNames.settingsId} as settingsId, COUNT(*) as count\n" +
-                "FROM ranking\n" +
+                "FROM $rankingTableName\n" +
                 "GROUP BY ${Ranking.RankingData.ColumnNames.settingsId}"
     )
     fun getWinsCount(): List<WinsCount>
@@ -43,7 +47,7 @@ interface RankingDao {
 
     @Query(
         "SELECT *\n" +
-                "FROM ranking\n" +
+                "FROM $rankingTableName\n" +
                 "WHERE ${Ranking.RankingData.ColumnNames.settingsId} = :settingsId"
     )
     fun getRankingListForSettingsId(
