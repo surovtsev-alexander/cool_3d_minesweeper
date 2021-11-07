@@ -83,25 +83,14 @@ class RankingScreenViewModel @Inject constructor(
     private fun loadData() {
         launchOnIOThread {
             val settingsList = settingsDao.getAll()
-            val rankingList = rankingListHelper.loadData()
-            val winsCountList = rankingList
-                .map { it.rankingData.settingsId }
-                .groupingBy { it }
-                .eachCount()
-                .map {
-                    it.key to it.value.toLong()
-                }
-                .toMap()
+            val winsCountMap = rankingDao.getWinsCountMap()
 
             withUIContext {
                 rankingScreenEvents.settingsListData.onDataChanged(
                     settingsList
                 )
-                rankingScreenEvents.rankingListData.onDataChanged(
-                    rankingList
-                )
-                rankingScreenEvents.winsCountListData.onDataChanged(
-                    winsCountList
+                rankingScreenEvents.winsCountMapData.onDataChanged(
+                    winsCountMap
                 )
             }
 
@@ -117,60 +106,45 @@ class RankingScreenViewModel @Inject constructor(
         settingsId: Long
     ) {
         launchOnIOThread {
-//            val filteredData = rankingDao
-//                .getRankingListForSettingsId(
-//                    settingsId
-//                )
-//
-//            withUIContext {
-//                rankingScreenEvents
-//                    .filteredRankingList
-//                    .onDataChanged(
-//                        filteredData
-//                    )
-//            }
+            val rankingListWithPlaces = rankingListHelper
+                .createRankingListWithPlaces(
+                    settingsId
+                )
 
-            loadRankingForSettingsIdAction(
-                settingsId
-            )
-        }
-    }
-
-    private suspend fun loadRankingForSettingsIdAction(
-        settingsId: Long
-    ) {
-        val filteredData = rankingListHelper.filterData(
-            rankingScreenEvents.rankingListData.data.value!!,
-            settingsId
-        )
-
-        withUIContext {
-            rankingScreenEvents.filteredRankingList.onDataChanged(
-                filteredData
-            )
-            rankingScreenEvents.selectedSettingsIdData.onDataChanged(settingsId)
+            withUIContext {
+                rankingScreenEvents.filteredRankingList.onDataChanged(
+                    rankingListWithPlaces
+                )
+                rankingScreenEvents.selectedSettingsIdData.onDataChanged(
+                    settingsId
+                )
+            }
             prepareRankingListToDisplay()
         }
     }
 
-    private fun prepareRankingListToDisplay() {
-        val currSortType = rankingTableSortTypeData.data.value!!
+    private suspend fun prepareRankingListToDisplay() {
         val filteredRankingList = rankingScreenEvents.filteredRankingList.data.value!!
+        val currSortType = rankingTableSortTypeData.data.value!!
 
-        rankingScreenEvents.rankingListToDisplay.onDataChanged(
-            rankingListHelper.sortData(
-                filteredRankingList,
-                currSortType
-            )
+        val sortedData = rankingListHelper.sortData(
+            filteredRankingList,
+            currSortType
         )
+
+        withUIContext {
+            rankingScreenEvents.rankingListToDisplay.onDataChanged(
+                sortedData
+            )
+        }
     }
 
     fun selectColumnToSortBy(
         selectedColumn: RankingColumn.SortableColumn
     ) {
-        val currSortType = rankingTableSortTypeData.data.value!!
-        rankingTableSortTypeData.onDataChanged(
-            if (currSortType.rankingColumn != selectedColumn) {
+        launchOnIOThread {
+            val currSortType = rankingTableSortTypeData.data.value!!
+            val tableSortType = if (currSortType.rankingColumn != selectedColumn) {
                 RankingTableSortType(
                     selectedColumn,
                     SortDirection.Descending
@@ -181,9 +155,15 @@ class RankingScreenViewModel @Inject constructor(
                     nextSortType(currSortType.sortDirection)
                 )
             }
-        )
 
-        prepareRankingListToDisplay()
+            withUIContext {
+                rankingTableSortTypeData.onDataChanged(
+                    tableSortType
+                )
+            }
+
+            prepareRankingListToDisplay()
+        }
     }
 
     fun triggerRequestingPermissions(mainActivity: MainActivity) {

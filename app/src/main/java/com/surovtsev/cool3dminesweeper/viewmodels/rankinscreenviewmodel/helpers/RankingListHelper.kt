@@ -2,22 +2,18 @@ package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingListWithPlaces
 
 
 class RankingListHelper(
     private val rankingDao: RankingDao
 ) {
-    fun loadData(): RankingList {
-        return rankingDao.getAll()
-    }
-
-    fun filterData(
-        data: RankingList,
+    fun createRankingListWithPlaces(
         settingsId: Long
     ): RankingListWithPlaces {
-        val filteredData =  data.filter {
-            it.rankingData.settingsId == settingsId
-        }
+        val filteredData = rankingDao.getRankingListForSettingsId(
+            settingsId
+        )
 
         return RankingListWithPlacesHelper.create(filteredData)
     }

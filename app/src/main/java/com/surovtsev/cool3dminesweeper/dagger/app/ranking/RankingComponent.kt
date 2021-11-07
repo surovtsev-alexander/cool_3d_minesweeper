@@ -44,15 +44,6 @@ object RankingModule {
 
     @RankingScope
     @Provides
-    @Named(RankingScreenEvents.RankingListName)
-    fun provideRankingList(): RankingListData {
-        return RankingListData(
-            emptyList()
-        )
-    }
-
-    @RankingScope
-    @Provides
     @Named(RankingScreenEvents.FilteredRankingListName)
     fun provideFilteredRankingList(): RankingListWithPlacesData {
         return MyLiveData(

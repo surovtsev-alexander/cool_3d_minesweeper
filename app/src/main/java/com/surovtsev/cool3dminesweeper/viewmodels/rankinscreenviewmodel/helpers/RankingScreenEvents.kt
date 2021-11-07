@@ -18,18 +18,15 @@ typealias WinsCountMapData = MyLiveData<WinsCountMap>
 @RankingScope
 class RankingScreenEvents @Inject constructor(
     val settingsListData: SettingsListData,
-    @Named(RankingListName)
-    val rankingListData: RankingListData,
     @Named(FilteredRankingListName)
     val filteredRankingList: RankingListWithPlacesData,
     @Named(RankingListToDisplay)
     val rankingListToDisplay: RankingListWithPlacesData,
     @Named(SelectedSettingsIdName)
     val selectedSettingsIdData: SelectedSettingsIdData,
-    val winsCountListData: WinsCountMapData,
+    val winsCountMapData: WinsCountMapData,
 ) {
     companion object {
-        const val RankingListName = "rankingList"
         const val FilteredRankingListName = "filteredRankingList"
         const val RankingListToDisplay = "rankingListToDisplay"
         const val SelectedSettingsIdName = "selectedSettingsId"

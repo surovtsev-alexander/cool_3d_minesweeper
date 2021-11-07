@@ -40,17 +40,13 @@ interface RankingDao {
             it.settingsId to it.count
         }.toMap()
     }
-//
-//    @Query(
-//        "SELECT\n" +
-//                "${Ranking.RankingData.ColumnNames.settingsId},\n" +
-//                "${Ranking.RankingData.ColumnNames.elapsed},\n" +
-//                "${Ranking.RankingData.ColumnNames.dateTime},\n" +
-//                "ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS place" +
-//                "FROM ranking\n" +
-//                "WHERE ${Ranking.RankingData.ColumnNames.settingsId} = :settingsId"
-//    )
-//    fun getRankingListForSettingsId(
-//        settingsId: Long
-//    ): RankingListWithPlaces
+
+    @Query(
+        "SELECT *\n" +
+                "FROM ranking\n" +
+                "WHERE ${Ranking.RankingData.ColumnNames.settingsId} = :settingsId"
+    )
+    fun getRankingListForSettingsId(
+        settingsId: Long
+    ): List<Ranking>
 }

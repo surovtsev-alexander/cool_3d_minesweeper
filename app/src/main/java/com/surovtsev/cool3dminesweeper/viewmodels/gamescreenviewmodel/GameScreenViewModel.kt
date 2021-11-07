@@ -135,9 +135,8 @@ class GameScreenViewModel @Inject constructor(
                     gameConfig.settingsData
                 ) ?: break
 
-                val loadedData = rankingDao.getAll()
-                val filteredData = rankingListHelper.filterData(
-                    loadedData, settings.id
+                val filteredData = rankingListHelper.createRankingListWithPlaces(
+                    settings.id
                 )
                 val rankingTableSortType = RankingTableSortType(
                     RankingColumn.SortableColumn.DateColumn,

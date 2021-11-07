@@ -87,7 +87,7 @@ fun SettingsList(
     val selectedSettingsId: Long by rankingScreenEvents.selectedSettingsIdData.run {
         data.observeAsState(defaultValue)
     }
-    val winsCountList: WinsCountMap by rankingScreenEvents.winsCountListData.run {
+    val winsCountMap: WinsCountMap by rankingScreenEvents.winsCountMapData.run {
         data.observeAsState(defaultValue)
     }
 
@@ -120,7 +120,7 @@ fun SettingsList(
             LazyColumn {
                 items(settingsList) { item ->
                     val itemId = item.id
-                    val winsCount = winsCountList[itemId] ?: 0
+                    val winsCount = winsCountMap[itemId] ?: 0
                     if (selectedSettingsId == itemId) {
                         Box(
                             modifier = Modifier
