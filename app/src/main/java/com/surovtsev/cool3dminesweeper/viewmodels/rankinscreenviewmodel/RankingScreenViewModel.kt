@@ -8,22 +8,21 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryPoint
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
-import com.surovtsev.cool3dminesweeper.utils.externalfilewriter.ExternalFileWriter
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Provider
@@ -39,9 +38,8 @@ class RankingScreenViewModel @Inject constructor(
     RequestPermissionsResultReceiver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
-
-    private val settingsDBQueries: SettingsDBQueries
-    private val rankingDBQueries: RankingDBQueries
+    private val settingsDao: SettingsDao
+    private val rankingDao: RankingDao
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
     private val rankingListHelper: RankingListHelper
@@ -61,10 +59,10 @@ class RankingScreenViewModel @Inject constructor(
                 RankingComponentEntryPoint::class.java
             )
 
-        settingsDBQueries =
-            rankingComponentEntryPoint.settingsDBQueries
-        rankingDBQueries =
-            rankingComponentEntryPoint.rankingDBQueries
+        settingsDao =
+            rankingComponentEntryPoint.settingsDao
+        rankingDao =
+            rankingComponentEntryPoint.rankingDao
         rankingScreenEvents =
             rankingComponentEntryPoint.rankingScreenEvents
         rankingTableSortTypeData =
@@ -82,39 +80,59 @@ class RankingScreenViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        rankingScreenEvents.settingsDataWithIdsListData.onDataChanged(
-            settingsDBQueries.getSettingsList()
-        )
+        launchOnIOThread {
+            val settingsList = settingsDao.getAll()
+            val rankingList = rankingListHelper.loadData()
+            val winsCountList = rankingList
+                .map { it.rankingData.settingsId }
+                .groupingBy { it }
+                .eachCount()
 
-        rankingScreenEvents.rankingDataListData.onDataChanged(
-            let {
-                val res = rankingListHelper.loadData()
-                rankingScreenEvents.winsCount.onDataChanged(
-                    res.map{ it.settingId }.groupingBy { it }.eachCount()
+            withUIContext {
+                rankingScreenEvents.settingsListData.onDataChanged(
+                    settingsList
                 )
-                res
+                rankingScreenEvents.rankingListData.onDataChanged(
+                    rankingList
+                )
+                rankingScreenEvents.winsCountListData.onDataChanged(
+                    winsCountList
+                )
             }
-        )
 
-        settingsDBQueries.getId(
-            saveController.loadSettingDataOrDefault()
-        )?.let {
-            loadRankingForSettingsId(it)
+            settingsDao.getBySettingsData(
+                saveController.loadSettingDataOrDefault()
+            )?.let {
+                loadRankingForSettingsId(it.id)
+            }
         }
     }
 
     fun loadRankingForSettingsId(
-        settingsId: Int
+        settingsId: Long
     ) {
-        rankingScreenEvents.filteredRankingList.onDataChanged(
-            rankingListHelper.filterData(
-                rankingScreenEvents.rankingDataListData.data.value!!,
+        launchOnIOThread {
+            loadRankingForSettingsIdAction(
                 settingsId
             )
-        )
-        rankingScreenEvents.selectedSettingsId.onDataChanged(settingsId)
-        prepareRankingListToDisplay()
+        }
+    }
 
+    private suspend fun loadRankingForSettingsIdAction(
+        settingsId: Long
+    ) {
+        val filteredData = rankingListHelper.filterData(
+            rankingScreenEvents.rankingListData.data.value!!,
+            settingsId
+        )
+
+        withUIContext {
+            rankingScreenEvents.filteredRankingList.onDataChanged(
+                filteredData
+            )
+            rankingScreenEvents.selectedSettingsIdData.onDataChanged(settingsId)
+            prepareRankingListToDisplay()
+        }
     }
 
     private fun prepareRankingListToDisplay() {
@@ -184,31 +202,31 @@ class RankingScreenViewModel @Inject constructor(
             ViewModelCoroutineScopeHelper.ioDispatcher,
             exceptionHandler
         ) {
-            val tablesInfo = listOf(
-                { rankingDBQueries.getTableStringsData() } to "rankingTable.csv",
-                { settingsDBQueries.getTableStringData() } to "settingsTable.csv"
-            )
-
-            val storeAction = { getTableStringDataAction:() -> String, fileName: String ->
-                val tableStringData = getTableStringDataAction()
-                ExternalFileWriter.writeFile(
-                    fileName,
-                    tableStringData
-                )
-            }
-
-            val jobs = tablesInfo.map { (sA, fN) ->
-                launch {
-                    storeAction(sA, fN)
-                }
-            }
-
-            jobs.forEach { it.join() }
-
-            val toastMessage = "Data is exported successfully"
-            withContext(ViewModelCoroutineScopeHelper.uiDispatcher) {
-                toastMessageData.onDataChanged(toastMessage)
-            }
+//            val tablesInfo = listOf(
+//                { rankingDBQueries.getTableStringsData() } to "rankingTable.csv",
+//                { settingsDBQueries.getTableStringData() } to "settingsTable.csv"
+//            )
+//
+//            val storeAction = { getTableStringDataAction:() -> String, fileName: String ->
+//                val tableStringData = getTableStringDataAction()
+//                ExternalFileWriter.writeFile(
+//                    fileName,
+//                    tableStringData
+//                )
+//            }
+//
+//            val jobs = tablesInfo.map { (sA, fN) ->
+//                launch {
+//                    storeAction(sA, fN)
+//                }
+//            }
+//
+//            jobs.forEach { it.join() }
+//
+//            val toastMessage = "Data is exported successfully"
+//            withContext(ViewModelCoroutineScopeHelper.uiDispatcher) {
+//                toastMessageData.onDataChanged(toastMessage)
+//            }
         }
     }
 }

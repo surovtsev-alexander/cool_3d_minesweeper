@@ -110,6 +110,6 @@ dependencies {
     implementation 'com.squareup.logcat:logcat:0.1'
 
     def roomVersion = "2.3.0"
-    implementation "android.room:room-ktx:$roomVersion"
-    kapt "anrdoidx.room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 }

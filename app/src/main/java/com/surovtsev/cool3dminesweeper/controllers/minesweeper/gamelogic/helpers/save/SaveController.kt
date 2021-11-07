@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helper
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 
 class SaveController(
     context: Context
@@ -59,7 +59,7 @@ class SaveController(
     fun loadSettingDataOrDefault() =
         tryToLoad(
             SaveTypes.GameSettingsJson
-        )?: SettingsData()
+        )?: Settings.SettingsData()
 
     fun <T: Any> save(name: String, data: T) {
         val text = gson.toJson(data)

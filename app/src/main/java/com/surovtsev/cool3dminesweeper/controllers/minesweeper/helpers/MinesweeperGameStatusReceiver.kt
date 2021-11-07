@@ -1,23 +1,24 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction.GameStatusReceiver
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction.GameStatusReceiver
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
-import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
-import org.threeten.bp.LocalDateTime
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
+import com.surovtsev.cool3dminesweeper.models.room.entities.Ranking
+import com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper.LocalDateTimeHelper
+import logcat.logcat
 import javax.inject.Inject
 
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
     private val saveController: SaveController,
     private val gameConfig: GameConfig,
-    private val settingsDBQueries: SettingsDBQueries,
-    private val rankingDBQueries: RankingDBQueries,
+    private val settingsDao: SettingsDao,
+    private val rankingDao: RankingDao,
 ): GameStatusReceiver {
     override fun gameStatusUpdated(
         newStatus: GameStatus,
@@ -34,12 +35,23 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             return
         }
 
-        val settingId = settingsDBQueries.insertIfNotPresent(gameConfig.settingsData)
-        val rankingData = RankingData(
-            settingId,
-            elapsed,
-            LocalDateTime.now().toString()
+        val settings = settingsDao.getOrCreate(
+            gameConfig.settingsData
         )
-        rankingDBQueries.insert(rankingData)
+
+        if (true) {
+            logcat { "TEST+++ AA ${settings.id}" }
+        }
+
+        val rankingData = Ranking.RankingData(
+            settings.id,
+            elapsed,
+            LocalDateTimeHelper.epochMilli
+        )
+        rankingDao.insert(
+            Ranking(
+                rankingData
+            )
+        )
     }
 }

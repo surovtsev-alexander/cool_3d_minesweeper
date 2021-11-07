@@ -17,15 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBordersControl
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.OpenGLInfoHelper
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.Place
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 
 const val LoadGameParameterName = "load_game"
 
@@ -245,10 +244,23 @@ fun GameStatusDialog(
     if (!showDialog) {
         return
     }
-    val closeDialogAction = { showDialogEvent.onDataChanged(false) }
-
+    val lastWinPlaceEvent = viewModel.gameScreenEvents.lastWinPlaceEvent
+    val lastWinPlace: Place by lastWinPlaceEvent.run {
+        data.observeAsState(defaultValue)
+    }
     val gameStatus = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus
-    val place = if (gameStatus == GameStatus.Win) viewModel.getLastWinPlace() else Place.NoPlace
+    val win = gameStatus == GameStatus.Win
+    if (win && lastWinPlace == Place.NoPlace) {
+        viewModel.requestLastWinPlace()
+        return
+    }
+
+    val closeDialogAction = {
+        showDialogEvent.onDataChanged(false)
+        lastWinPlaceEvent.onDataChanged(Place.NoPlace)
+    }
+
+    val place = if (win) lastWinPlace else Place.NoPlace
 
     val text = "$gameStatus ${ if (place is Place.WinPlace) "\nplace: ${place.place + 1}" else ""}"
     AlertDialog(

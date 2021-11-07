@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.models.game.config
 
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import kotlin.math.ceil
@@ -8,9 +8,9 @@ import kotlin.math.max
 import kotlin.math.min
 
 data class GameConfig(
-    val settingsData: SettingsData,
+    val settingsData: Settings.SettingsData,
     val counts: Vec3i,
-    val dimensions: Vec3,
+    val space: Vec3,
     val gaps: Vec3,
     val bombsRate: Float
 ) {
@@ -32,7 +32,7 @@ data class GameConfig(
             )
         )
 
-    val cellSpaceWithGaps = dimensions / counts
+    val cellSpaceWithGaps = space / counts
     val cellSpace = cellSpaceWithGaps - gaps
     val halfCellSpace = cellSpace / 2
     val cellSphereRadius = cellSpace.length() / 2

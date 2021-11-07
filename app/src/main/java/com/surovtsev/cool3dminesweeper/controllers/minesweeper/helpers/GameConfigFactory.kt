@@ -1,26 +1,27 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import glm_.vec3.Vec3
 import kotlin.math.max
 
 object GameConfigFactory {
-    fun createGameConfig(settingsData: SettingsData): GameConfig {
-        val counts = settingsData.getCounts()
+    fun createGameConfig(settingsData: Settings.SettingsData): GameConfig {
+        val dimensions = settingsData.dimensions
+        val counts = dimensions.toVec3i()
 
-        val maxDim = max(max(counts[0], counts[1]), counts[2])
+        val maxDim = max(max(dimensions.x, dimensions.y), dimensions.z)
         val cellDim = 5f / maxDim
 
-        val dimensions = Vec3(counts) * cellDim
+        val space = Vec3(counts) * cellDim
         @Suppress("ConstantConditionIf")
-        val gaps = if (false) dimensions / counts / 40 else if (true) Vec3() else dimensions / counts / 10
+        val gaps = if (false) space / counts / 40 else if (true) Vec3() else space / counts / 10
         val bombsRate =  settingsData.bombsPercentage.toFloat() / 100f
 
         return GameConfig(
             settingsData,
             counts,
-            dimensions,
+            space,
             gaps,
             bombsRate
         )

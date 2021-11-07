@@ -21,7 +21,7 @@ object LocalDateTimeHelper {
     fun localDateTimeToEpochMilli(
         localDateTime: LocalDateTime = this.localDateTime,
         zoneOffset: ZoneOffset = this.zoneOffset
-    ) = localDateTime.atOffset(zoneOffset).toInstant().toEpochMilli()
+    ): Long = localDateTime.atOffset(zoneOffset).toInstant().toEpochMilli()
 
     fun restoreLocalDateTimeFromEpochMilli(
         epochMilli: Long

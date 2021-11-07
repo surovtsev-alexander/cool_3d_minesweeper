@@ -3,9 +3,6 @@ package com.surovtsev.cool3dminesweeper.presentation.settingsscreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,22 +13,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.surovtsev.cool3dminesweeper.dagger.app.SettingsList
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
-import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.utils.view.compose.CustomSliderWithCaption
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.round
 
 @Composable
 fun SettingsScreen(
@@ -88,10 +80,10 @@ fun SettingsControls(
 
 @Composable
 fun SettingsList(viewModel: SettingsScreenViewModel) {
-    val settingsList: List<DataWithId<SettingsData>> by viewModel.settingsScreenEvents.settingsDataWithIdsListData.run {
+    val settingsList: SettingsList by viewModel.settingsScreenEvents.settingsListData.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by viewModel.settingsScreenControls.selectedSettingsId.run {
+    val selectedSettingsId: Long by viewModel.settingsScreenControls.selectedSettingsId.run {
         data.observeAsState(defaultValue)
     }
 
@@ -116,7 +108,7 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
         LazyColumn {
             items(settingsList) { item ->
                 val itemId = item.id
-                val modifier = Modifier.clickable { viewModel.useSettings(item) }.let {
+                val modifier = Modifier.clickable { viewModel.selectSettings(item) }.let {
                     if (selectedSettingsId == itemId) {
                         it.background(LightBlue)
                     } else {
@@ -126,7 +118,7 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
                 Box (
                     modifier
                 ) {
-                    SettingsDataItem(viewModel = viewModel, settingDataWithId = item)
+                    SettingsDataItem(viewModel = viewModel, item)
                 }
             }
         }
@@ -136,14 +128,14 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
 @Composable
 fun SettingsDataItem(
     viewModel: SettingsScreenViewModel,
-    settingDataWithId: DataWithId<SettingsData>
+    settings: Settings
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        val settingsData = settingDataWithId.data
-        val counts = settingsData.getCounts()
+        val settingsData = settings.settingsData
+        val counts = settingsData.dimensions.toVec3i()
         Text(
             counts.toString(),
             Modifier.fillMaxWidth(0.33f),
@@ -156,7 +148,7 @@ fun SettingsDataItem(
         )
         Box (
             modifier = Modifier
-                .clickable { viewModel.deleteSettings(settingDataWithId.id) }
+                .clickable { viewModel.deleteSettings(settings.id) }
                 .background(PrimaryColor1)
         ) {
             Text(
@@ -199,7 +191,7 @@ fun UseButton(
     viewModel: SettingsScreenViewModel
 ) {
     Button (
-        { viewModel.useSettings() },
+        { viewModel.selectSettings() },
         modifier = Modifier
             .fillMaxWidth(fraction = 0.75f)
     ) {

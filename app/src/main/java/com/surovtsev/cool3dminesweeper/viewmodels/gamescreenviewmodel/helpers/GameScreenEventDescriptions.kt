@@ -12,6 +12,7 @@ object GameScreenEventsNames {
     const val BombsLeft = "bombsLeft"
     const val ShowDialog = "showDialog"
     const val GameStatus = "gameStatus"
+    const val LastWinPlace = "lastWinPlace"
 }
 
 @GameScope
@@ -30,7 +31,13 @@ class MarkingEvent @Inject constructor(
     }
 }
 
+sealed class Place {
+    object NoPlace : Place()
+    class WinPlace(val place: Int): Place()
+}
+
 typealias ElapsedTimeEvent = MyLiveData<Long>
 typealias BombsLeftEvent = MyLiveData<Int>
 typealias ShowDialogEvent = MyLiveData<Boolean>
 typealias GameStatusEvent = MyLiveData<GameStatus>
+typealias LastWinPlaceEvent = MyLiveData<Place>

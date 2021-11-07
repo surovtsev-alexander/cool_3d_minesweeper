@@ -11,5 +11,7 @@ class GameScreenEvents @Inject constructor(
     @Named(GameScreenEventsNames.BombsLeft)
     var bombsLeftEvent: BombsLeftEvent,
     @Named(GameScreenEventsNames.ShowDialog)
-    var showDialogEvent: ShowDialogEvent
+    var showDialogEvent: ShowDialogEvent,
+    @Named(GameScreenEventsNames.LastWinPlace)
+    val lastWinPlaceEvent: LastWinPlaceEvent,
 )

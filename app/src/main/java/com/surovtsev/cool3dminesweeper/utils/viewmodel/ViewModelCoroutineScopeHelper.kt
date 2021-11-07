@@ -25,6 +25,23 @@ interface ViewModelCoroutineScopeHelper {
             block
         )
     }
+
+    fun ViewModel.launchOnIOThread(
+        block: suspend CoroutineScope.() -> Unit
+    ): Job {
+        return viewModelScope.launch(
+            ioDispatcher,
+            block = block
+        )
+    }
+
+    suspend fun <T> ViewModel.withUIContext(
+        block: suspend CoroutineScope.() -> T
+    ): T {
+        return withContext(
+            uiDispatcher,
+            block = block)
+    }
 }
 
 class ViewModelCoroutineScopeHelperImpl(

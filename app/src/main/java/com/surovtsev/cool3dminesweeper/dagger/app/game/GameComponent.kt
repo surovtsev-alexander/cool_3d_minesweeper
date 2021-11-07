@@ -9,26 +9,26 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfigFactory
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.cool3dminesweeper.models.game.interaction.*
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
@@ -67,11 +67,9 @@ interface GameComponentEntryPoint {
     val gLSurfaceView: GLSurfaceView
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
-
-    val settingsDBQueries: SettingsDBQueries
-    val rankingDBQueries: RankingDBQueries
-
     val gameConfig: GameConfig
+    val settingsDao: SettingsDao
+    val rankingDao: RankingDao
     val rankingListHelper: RankingListHelper
 }
 
@@ -118,6 +116,13 @@ object GameEventsModule {
     @Named(GameScreenEventsNames.GameStatus)
     fun provideGameStatusEvent(): GameStatusEvent {
         return GameStatusEvent(GameStatusHelper.initStatus)
+    }
+
+    @GameScope
+    @Provides
+    @Named(GameScreenEventsNames.LastWinPlace)
+    fun provideLastWindPlaceEvent(): LastWinPlaceEvent {
+        return LastWinPlaceEvent(Place.NoPlace)
     }
 }
 

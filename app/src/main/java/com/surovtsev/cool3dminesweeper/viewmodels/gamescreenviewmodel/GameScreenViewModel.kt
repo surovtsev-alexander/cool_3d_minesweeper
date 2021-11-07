@@ -7,14 +7,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.MinesweeperController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.game.GameComponentEntryPoint
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
+import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Place
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingColumn
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingTableSortType
@@ -32,9 +36,9 @@ class GameScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ):
     ViewModel(),
-    DefaultLifecycleObserver
+    DefaultLifecycleObserver,
+    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
-    private val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
 
     private val gameRenderer: GLESRenderer
@@ -42,10 +46,12 @@ class GameScreenViewModel @Inject constructor(
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
     private val gameConfig: GameConfig
+    private val settingsDao: SettingsDao
+    private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
-    private val settingsDBQueries: SettingsDBQueries
 
     init {
+
         val loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
         val gameComponent = gameComponentProvider
@@ -56,8 +62,6 @@ class GameScreenViewModel @Inject constructor(
             gameComponent, GameComponentEntryPoint::class.java
         )
 
-        markingEvent =
-            gameComponentEntryPoint.markingEvent
         minesweeperController =
             gameComponentEntryPoint.minesweeperController
         gameRenderer =
@@ -70,10 +74,12 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.gameControls
         gameConfig =
             gameComponentEntryPoint.gameConfig
+        settingsDao =
+            gameComponentEntryPoint.settingsDao
+        rankingDao =
+            gameComponentEntryPoint.rankingDao
         rankingListHelper =
             gameComponentEntryPoint.rankingListHelper
-        settingsDBQueries =
-            gameComponentEntryPoint.settingsDBQueries
     }
 
     override fun onCreate(owner: LifecycleOwner) {
@@ -120,33 +126,40 @@ class GameScreenViewModel @Inject constructor(
 //        return false
 //    }
 
-    fun getLastWinPlace(): Place {
-        val settingsId = settingsDBQueries.getId(
-            gameConfig.settingsData
-        ) ?: return Place.NoPlace
+    fun requestLastWinPlace() {
+        launchOnIOThread {
+            var res: Place = Place.NoPlace
 
-        val loadedData = rankingListHelper.loadData()
-        val filteredData = rankingListHelper.filterData(
-            loadedData, settingsId
-        )
-        val rankingTableSortType = RankingTableSortType(
-            RankingColumn.SortableColumn.DateColumn,
-            SortDirection.Descending
-        )
-        val sortedData = rankingListHelper.sortData(
-            filteredData,
-            rankingTableSortType
-        )
+            do {
+                val settings = settingsDao.getBySettingsData(
+                    gameConfig.settingsData
+                ) ?: break
 
-        if (sortedData.isEmpty()) {
-            return Place.NoPlace
+                val loadedData = rankingDao.getAll()
+                val filteredData = rankingListHelper.filterData(
+                    loadedData, settings.id
+                )
+                val rankingTableSortType = RankingTableSortType(
+                    RankingColumn.SortableColumn.DateColumn,
+                    SortDirection.Descending
+                )
+                val sortedData = rankingListHelper.sortData(
+                    filteredData,
+                    rankingTableSortType
+                )
+
+                if (sortedData.isEmpty()) {
+                    break
+                }
+
+                res = Place.WinPlace(sortedData.first().place)
+            } while (false)
+
+            withUIContext {
+                gameScreenEvents.lastWinPlaceEvent.onDataChanged(
+                    res
+                )
+            }
         }
-
-        return Place.WinPlace(sortedData.first().place)
     }
-}
-
-sealed class Place {
-    object NoPlace : Place()
-    class WinPlace(val place: Int): Place()
 }

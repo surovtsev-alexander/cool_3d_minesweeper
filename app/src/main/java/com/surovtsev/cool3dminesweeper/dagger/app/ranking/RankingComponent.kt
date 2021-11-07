@@ -1,9 +1,9 @@
 package com.surovtsev.cool3dminesweeper.dagger.app.ranking
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
 import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.Module
@@ -30,8 +30,8 @@ interface RankingComponent {
 @EntryPoint
 @RankingScope
 interface RankingComponentEntryPoint {
-    val settingsDBQueries: SettingsDBQueries
-    val rankingDBQueries: RankingDBQueries
+    val settingsDao: SettingsDao
+    val rankingDao: RankingDao
     val rankingScreenEvents: RankingScreenEvents
     val rankingTableSortTypeData: RankingTableSortTypeData
     val rankingListHelper: RankingListHelper
@@ -45,8 +45,8 @@ object RankingModule {
     @RankingScope
     @Provides
     @Named(RankingScreenEvents.RankingListName)
-    fun provideRankingList(): RankingDataListData {
-        return MyLiveData(
+    fun provideRankingList(): RankingListData {
+        return RankingListData(
             emptyList()
         )
     }
@@ -72,14 +72,14 @@ object RankingModule {
     @Named(RankingScreenEvents.SelectedSettingsIdName)
     @RankingScope
     @Provides
-    fun provideSelectedSettingsId(): SelectedSettingsId {
+    fun provideSelectedSettingsIdData(): SelectedSettingsIdData {
         return MyLiveData(-1)
     }
 
     @RankingScope
     @Provides
-    fun provideWinsCount(): WinsCount {
-        return MyLiveData(
+    fun provideWinsCount(): WinsCountListData {
+        return WinsCountListData(
             emptyMap()
         )
     }

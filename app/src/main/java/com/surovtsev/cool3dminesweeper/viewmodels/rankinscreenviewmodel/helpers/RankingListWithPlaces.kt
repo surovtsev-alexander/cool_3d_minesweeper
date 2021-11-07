@@ -1,9 +1,10 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
-import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
+import com.surovtsev.cool3dminesweeper.models.room.entities.Ranking
 
 class RankingDataWithPlaces(
-    val rankingData: RankingData,
+    val rankingData: Ranking.RankingData,
     val place: Int
 )
 
@@ -11,17 +12,17 @@ typealias RankingListWithPlaces = List<RankingDataWithPlaces>
 
 object RankingListWithPlacesHelper {
     fun create(
-        rankingData: List<RankingData>
+        rankingList: RankingList
     ): RankingListWithPlaces {
-        val comparator: Comparator<Pair<RankingData, Int>> =
+        val comparator: Comparator<Pair<Ranking, Int>> =
             Comparator { a, b ->
                 compareValues(
-                    a.first.elapsed,
-                    b.first.elapsed
+                    a.first.rankingData.elapsed,
+                    b.first.rankingData.elapsed
                 )
             }
 
-        val unsortedPairs = rankingData
+        val unsortedPairs = rankingList
             .mapIndexed { idx, rD ->
                 rD to idx
             }
@@ -31,15 +32,15 @@ object RankingListWithPlacesHelper {
                 comparator
             )
 
-        val indexes = IntArray(rankingData.size)
+        val indexes = IntArray(rankingList.size)
 
         sortedPairs.mapIndexed { index, pair ->
             indexes[pair.second] = index
         }
 
-        val res = rankingData.indices.toList().map { idx ->
+        val res = rankingList.indices.toList().map { idx ->
             RankingDataWithPlaces(
-                rankingData[idx],
+                rankingList[idx].rankingData,
                 indexes[idx]
             )
         }

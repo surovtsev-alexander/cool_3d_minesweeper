@@ -1,17 +1,15 @@
 package com.surovtsev.cool3dminesweeper.dagger.app
 
 import android.content.Context
+import androidx.room.Room
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelper
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.DBHelperImp
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
-import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
+import com.surovtsev.cool3dminesweeper.models.room.databases.RankingDatabase
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.utils.constants.Constants
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +17,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-typealias SettingsDataWithIdsList = List<DataWithId<SettingsData>>
-typealias SettingsDataWithIdsListData = MyLiveData<SettingsDataWithIdsList>
+typealias SettingsList = List<Settings>
+typealias SettingsListData = MyLiveData<SettingsList>
 typealias ToastMessageData = MyLiveData<String>
 
 @Module
@@ -29,21 +27,27 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDBHelperImp(
-        @ApplicationContext context: Context
-    ) = DBHelperImp(context)
+    fun provideRankingDatabase(
+    @ApplicationContext context: Context,
+    ): RankingDatabase {
+        return Room.databaseBuilder(
+            context,
+            RankingDatabase::class.java,
+            RankingDatabase.DatabaseInfo.name
+        ).build()
+    }
 
     @Singleton
     @Provides
-    fun provideRankingDBQueries(
-        dbHelper: DBHelper
-    ) = RankingDBQueries(dbHelper)
+    fun provideSettingsDao(
+        rankingDatabase: RankingDatabase
+    ): SettingsDao = rankingDatabase.settingsDao()
 
     @Singleton
     @Provides
-    fun provideSettingsDBQueries(
-        dbHelper: DBHelper
-    ) = SettingsDBQueries(dbHelper)
+    fun provideRankingDao(
+        rankingDatabase: RankingDatabase
+    ): RankingDao = rankingDatabase.rankingDao()
 
     @Singleton
     @Provides
@@ -53,8 +57,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSettingsListWithIds(): SettingsDataWithIdsListData {
-        return MyLiveData(
+    fun provideSettingsListData(): SettingsListData {
+        return SettingsListData(
             emptyList()
         )
     }
@@ -62,25 +66,14 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRankingListHelper(
-        rankingDBQueries: RankingDBQueries
+        rankingDao: RankingDao
     ): RankingListHelper {
         return RankingListHelper(
-            rankingDBQueries
+            rankingDao
         )
     }
 
     @Singleton
     @Provides
-    fun provideToastMessageData(): ToastMessageData = MyLiveData(Constants.emptyString)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface AppModuleBind {
-
-    @Binds
-    @Singleton
-    fun bindDBHelper(
-        dbHelper: DBHelperImp
-    ): DBHelper
+    fun provideToastMessageData(): ToastMessageData = ToastMessageData(Constants.emptyString)
 }

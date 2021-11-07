@@ -1,15 +1,15 @@
 package com.surovtsev.cool3dminesweeper.utils.minesweeper.database
 
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 
 typealias Borders = Map<String, IntRange>
 
 object SettingsDataHelper {
     val paramNames = arrayOf(
-        SettingsData.xCountName,
-        SettingsData.yCountName,
-        SettingsData.zCountName,
-        SettingsData.bombsPercentageName
+        Settings.SettingsData.Dimensions.ColumnNames.xCount,
+        Settings.SettingsData.Dimensions.ColumnNames.yCount,
+        Settings.SettingsData.Dimensions.ColumnNames.zCount,
+        Settings.SettingsData.ColumnNames.bombsPercentage
     )
 
     const val DimParamsCount = "dimParamsCount"

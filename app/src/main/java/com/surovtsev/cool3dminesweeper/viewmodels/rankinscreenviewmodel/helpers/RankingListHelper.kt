@@ -1,22 +1,22 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.RankingDBQueries
-import javax.inject.Inject
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
 
 
-class RankingListHelper @Inject constructor(
-    private val rankingDBQueries: RankingDBQueries
+class RankingListHelper(
+    private val rankingDao: RankingDao
 ) {
-    fun loadData(): RankingDataList {
-        return rankingDBQueries.getRankingList()
+    fun loadData(): RankingList {
+        return rankingDao.getAll()
     }
 
     fun filterData(
-        data: RankingDataList,
-        settingsId: Int
+        data: RankingList,
+        settingsId: Long
     ): RankingListWithPlaces {
         val filteredData =  data.filter {
-            it.settingId == settingsId
+            it.rankingData.settingsId == settingsId
         }
 
         return RankingListWithPlacesHelper.create(filteredData)

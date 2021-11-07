@@ -87,7 +87,7 @@ class CubeCoordinates(
                 invExtendedIndexedArray
 
             val counts = gameConfig.counts
-            val dimensions = gameConfig.dimensions
+            val dimensions = gameConfig.space
             val gaps = gameConfig.gaps
             val cubesCount = gameConfig.cubesCount
             val cubeCoordinatesCount = coordinatesTemplateArray.size

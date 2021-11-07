@@ -17,14 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
+import com.surovtsev.cool3dminesweeper.dagger.app.SettingsList
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.utils.constants.Constants
+import com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 
@@ -79,13 +80,13 @@ fun SettingsList(
     viewModel: RankingScreenViewModel,
     rankingScreenEvents: RankingScreenEvents
 ) {
-    val settingsList: List<DataWithId<SettingsData>> by rankingScreenEvents.settingsDataWithIdsListData.run {
+    val settingsList: SettingsList by rankingScreenEvents.settingsListData.run {
         data.observeAsState(defaultValue)
     }
-    val selectedSettingsId: Int by rankingScreenEvents.selectedSettingsId.run {
+    val selectedSettingsId: Long by rankingScreenEvents.selectedSettingsIdData.run {
         data.observeAsState(defaultValue)
     }
-    val winsCountMap: Map<Int, Int> by rankingScreenEvents.winsCount.run {
+    val winsCountList: WinsCountList by rankingScreenEvents.winsCountListData.run {
         data.observeAsState(defaultValue)
     }
 
@@ -118,23 +119,21 @@ fun SettingsList(
             LazyColumn {
                 items(settingsList) { item ->
                     val itemId = item.id
-                    if (winsCountMap.containsKey(itemId)) {
-                        val winsCount = winsCountMap[itemId]!!
-                        if (selectedSettingsId == itemId) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        LightBlue
-                                    )
-                            ) {
-                                SettingsDataItem(item, winsCount)
-                            }
-                        } else {
-                            Box (
-                                modifier = Modifier.clickable { viewModel.loadRankingForSettingsId(itemId) }
-                            ) {
-                                SettingsDataItem(item, winsCount)
-                            }
+                    val winsCount = winsCountList[itemId] ?: 0
+                    if (selectedSettingsId == itemId) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    LightBlue
+                                )
+                        ) {
+                            SettingsDataItem(item.settingsData, winsCount)
+                        }
+                    } else {
+                        Box (
+                            modifier = Modifier.clickable { viewModel.loadRankingForSettingsId(itemId) }
+                        ) {
+                            SettingsDataItem(item.settingsData, winsCount)
                         }
                     }
                 }
@@ -145,15 +144,14 @@ fun SettingsList(
 
 @Composable
 fun SettingsDataItem(
-    settingDataWithId: DataWithId<SettingsData>,
+    settingsData: Settings.SettingsData,
     winsCount: Int
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        val settingsData = settingDataWithId.data
-        val counts = settingsData.getCounts()
+        val counts = settingsData.dimensions.toVec3i()
         Text(
             counts.toString(),
             Modifier.fillMaxWidth(0.33f),
@@ -270,7 +268,11 @@ fun RankingDataItem(
                 textAlign = TextAlign.Start
             )
             Text(
-                rankingData.dateTime.replace('T', ' ').split('.')[0],
+                LocalDateTimeHelper
+                    .restoreLocalDateTimeFromEpochMilli(rankingData.dateTime)
+                    .toString()
+                    .replace('T', ' ')
+                    .split('.')[0],
                 Modifier.fillMaxWidth(0.5f),
                 textAlign = TextAlign.Left
             )

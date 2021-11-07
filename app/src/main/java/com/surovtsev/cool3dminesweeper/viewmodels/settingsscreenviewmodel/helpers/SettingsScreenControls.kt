@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 
-typealias SelectedSettingsId = MyLiveData<Int>
+typealias SelectedSettingsId = MyLiveData<Long>
 typealias SettingsSlider = MyLiveData<Int>
 typealias SlidersWithNames = Map<String, SettingsSlider>
 typealias SlidersInfo = List<Pair<String, Pair<IntRange, SettingsSlider>>>

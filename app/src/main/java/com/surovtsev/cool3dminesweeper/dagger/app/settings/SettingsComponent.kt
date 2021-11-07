@@ -1,14 +1,13 @@
 package com.surovtsev.cool3dminesweeper.dagger.app.settings
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.*
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsDataFactory
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.cool3dminesweeper.models.room.entities.SettingsDataFactory
 import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.Borders
 import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.SettingsDataHelper
+import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -39,7 +38,7 @@ interface SettingsComponentEntryPoint {
     val slidersWithNames: @JvmSuppressWildcards SlidersWithNames
 
     val settingsScreenComponent: SettingsScreenControls
-    val settingsDBQueries: SettingsDBQueries
+    val settingsDao: SettingsDao
     val saveController: SaveController
     val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
@@ -58,32 +57,32 @@ object SettingsModule {
 
     private fun createMyLiveDataForSlider(defValue: Int) = SettingsSlider(defValue)
 
-    @[IntoMap StringKey(SettingsData.xCountName)]
+    @[IntoMap StringKey(Settings.SettingsData.Dimensions.ColumnNames.xCount)]
     @Provides
     @SettingsScope
     fun provideXCountSliderValue() = createMyLiveDataForSlider(
-        SettingsData.xCountDefaultValue
+        Settings.SettingsData.Dimensions.DefaultValues.xCount
     )
 
-    @[IntoMap StringKey(SettingsData.yCountName)]
+    @[IntoMap StringKey(Settings.SettingsData.Dimensions.ColumnNames.yCount)]
     @Provides
     @SettingsScope
     fun provideYCountSliderValue() = createMyLiveDataForSlider(
-        SettingsData.yCountDefaultValue
+        Settings.SettingsData.Dimensions.DefaultValues.yCount
     )
 
-    @[IntoMap StringKey(SettingsData.zCountName)]
+    @[IntoMap StringKey(Settings.SettingsData.Dimensions.ColumnNames.zCount)]
     @Provides
     @SettingsScope
     fun provideZCountSliderValue() = createMyLiveDataForSlider(
-        SettingsData.zCountDefaultValue
+        Settings.SettingsData.Dimensions.DefaultValues.zCount
     )
 
-    @[IntoMap StringKey(SettingsData.bombsPercentageName)]
+    @[IntoMap StringKey(Settings.SettingsData.ColumnNames.bombsPercentage)]
     @Provides
     @SettingsScope
     fun provideBombsPercentageSliderValue() = createMyLiveDataForSlider(
-        SettingsData.bombsPercentageDefaultValue
+        Settings.SettingsData.DefaultValues.bombsPercentage
     )
 
     @Provides
@@ -92,11 +91,13 @@ object SettingsModule {
         slidersWithNames: @JvmSuppressWildcards SlidersWithNames
     ): SettingsDataFactory {
         return {
-            SettingsData(
-                slidersWithNames[SettingsData.xCountName]!!.valueOrDefault,
-                slidersWithNames[SettingsData.yCountName]!!.valueOrDefault,
-                slidersWithNames[SettingsData.zCountName]!!.valueOrDefault,
-                slidersWithNames[SettingsData.bombsPercentageName]!!.valueOrDefault
+            Settings.SettingsData(
+                Settings.SettingsData.Dimensions(
+                    slidersWithNames[Settings.SettingsData.Dimensions.ColumnNames.xCount]!!.valueOrDefault,
+                    slidersWithNames[Settings.SettingsData.Dimensions.ColumnNames.yCount]!!.valueOrDefault,
+                    slidersWithNames[Settings.SettingsData.Dimensions.ColumnNames.zCount]!!.valueOrDefault,
+                ),
+                slidersWithNames[Settings.SettingsData.ColumnNames.bombsPercentage]!!.valueOrDefault
             )
         }
     }

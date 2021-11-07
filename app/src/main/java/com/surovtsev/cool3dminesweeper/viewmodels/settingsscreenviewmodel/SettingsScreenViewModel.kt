@@ -1,19 +1,23 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.database.queriesHelpers.SettingsDBQueries
 import com.surovtsev.cool3dminesweeper.dagger.app.settings.SettingsComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.settings.SettingsComponentEntryPoint
-import com.surovtsev.cool3dminesweeper.models.game.database.DataWithId
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsData
-import com.surovtsev.cool3dminesweeper.models.game.database.SettingsDataFactory
+import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
+import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.cool3dminesweeper.models.room.entities.SettingsDataFactory
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenControls
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SlidersWithNames
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
+import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -22,12 +26,13 @@ class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
 ):
     ViewModel(),
-    DefaultLifecycleObserver
+    DefaultLifecycleObserver,
+    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
 
     private val slidersWithNames: SlidersWithNames
     val settingsScreenControls: SettingsScreenControls
-    private val settingsDBQueries: SettingsDBQueries
+    private val settingsDao: SettingsDao
     private val saveController: SaveController
     val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
@@ -49,8 +54,8 @@ class SettingsScreenViewModel @Inject constructor(
             settingsComponentEntryPoint.slidersWithNames
         settingsScreenControls =
             settingsComponentEntryPoint.settingsScreenComponent
-        settingsDBQueries =
-            settingsComponentEntryPoint.settingsDBQueries
+        settingsDao =
+            settingsComponentEntryPoint.settingsDao
         saveController =
             settingsComponentEntryPoint.saveController
         settingsScreenEvents =
@@ -65,58 +70,77 @@ class SettingsScreenViewModel @Inject constructor(
         loadData()
     }
 
-    private fun loadData() {
-        settingsScreenEvents.settingsDataWithIdsListData.onDataChanged(
-            settingsDBQueries.getSettingsList()
-        )
+    private suspend fun reloadSettingsList() {
+        val settingsList = settingsDao.getAll()
 
-        val loadedSettingsData = saveController.loadSettingDataOrDefault()
-        setControlValues(loadedSettingsData)
-
-        settingsDBQueries.getId(
-            loadedSettingsData
-        )?.let {
-            settingsScreenControls.selectedSettingsId.onDataChanged(it)
+        withUIContext {
+            settingsScreenEvents.settingsListData.onDataChanged(
+                settingsList
+            )
         }
     }
 
-    fun useSettings() {
-        val settingsData = settingsDataFactory()
-        settingsDBQueries.insertIfNotPresent(
-            settingsData
-        )
+    private fun loadData() {
+        launchOnIOThread {
+            reloadSettingsList()
 
-        saveController.save(
-            SaveTypes.GameSettingsJson,
-            settingsData
-        )
+            val loadedSettingsData = saveController.loadSettingDataOrDefault()
+            withUIContext {
+                setControlValues(loadedSettingsData)
+            }
 
-        finishAction?.invoke()
+            settingsDao.getBySettingsData(
+                loadedSettingsData
+            )?.let {
+                withUIContext {
+                    settingsScreenControls.selectedSettingsId.onDataChanged(it.id)
+                }
+            }
+        }
     }
 
-    private fun setControlValues(settingsData: SettingsData) {
+    fun selectSettings() {
+        launchOnIOThread {
+            val settingsData = settingsDataFactory()
+            settingsDao.getOrCreate(
+                settingsData
+            )
+
+            saveController.save(
+                SaveTypes.GameSettingsJson,
+                settingsData
+            )
+
+            withUIContext {
+                finishAction?.invoke()
+            }
+        }
+    }
+
+    private fun setControlValues(settingsData: Settings.SettingsData) {
         settingsScreenControls.slidersWithNames.let {
-            it[SettingsData.xCountName]!!.onDataChanged(
-                settingsData.xCount)
-            it[SettingsData.yCountName]!!.onDataChanged(
-                settingsData.yCount)
-            it[SettingsData.zCountName]!!.onDataChanged(
-                settingsData.zCount)
-            it[SettingsData.bombsPercentageName]!!.onDataChanged(
+            it[Settings.SettingsData.Dimensions.ColumnNames.xCount]!!.onDataChanged(
+                settingsData.dimensions.x)
+            it[Settings.SettingsData.Dimensions.ColumnNames.yCount]!!.onDataChanged(
+                settingsData.dimensions.y)
+            it[Settings.SettingsData.Dimensions.ColumnNames.zCount]!!.onDataChanged(
+                settingsData.dimensions.z)
+            it[Settings.SettingsData.ColumnNames.bombsPercentage]!!.onDataChanged(
                 settingsData.bombsPercentage)
 
         }
     }
 
-    fun useSettings(settingsDataWithId: DataWithId<SettingsData>) {
-        settingsScreenControls.selectedSettingsId.onDataChanged(settingsDataWithId.id)
-        setControlValues(settingsDataWithId.data)
+    fun selectSettings(settings: Settings) {
+        settingsScreenControls.selectedSettingsId.onDataChanged(settings.id)
+        setControlValues(settings.settingsData)
     }
 
-    fun deleteSettings(settingsId: Int) {
-        settingsDBQueries.delete(settingsId)
-        settingsScreenEvents.settingsDataWithIdsListData.onDataChanged(
-            settingsDBQueries.getSettingsList()
-        )
+    fun deleteSettings(settingsId: Long) {
+        launchOnIOThread {
+            settingsDao.delete(settingsId)
+
+            reloadSettingsList()
+        }
     }
 }

@@ -1,31 +1,31 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
-import com.surovtsev.cool3dminesweeper.dagger.app.SettingsDataWithIdsListData
-import com.surovtsev.cool3dminesweeper.models.game.database.RankingData
+import com.surovtsev.cool3dminesweeper.dagger.app.SettingsListData
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
 import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
 import javax.inject.Inject
 import javax.inject.Named
 
-typealias RankingDataList = List<RankingData>
-typealias RankingDataListData = MyLiveData<RankingDataList>
+typealias RankingListData = MyLiveData<RankingList>
 typealias RankingListWithPlacesData = MyLiveData<RankingListWithPlaces>
-typealias SelectedSettingsId = MyLiveData<Int>
-typealias WinsCount = MyLiveData<Map<Int, Int>>
+typealias SelectedSettingsIdData = MyLiveData<Long>
+typealias WinsCountList = Map<Long, Int>
+typealias WinsCountListData = MyLiveData<WinsCountList>
 
 
 @RankingScope
 class RankingScreenEvents @Inject constructor(
-    val settingsDataWithIdsListData: SettingsDataWithIdsListData,
+    val settingsListData: SettingsListData,
     @Named(RankingListName)
-    val rankingDataListData: RankingDataListData,
+    val rankingListData: RankingListData,
     @Named(FilteredRankingListName)
     val filteredRankingList: RankingListWithPlacesData,
     @Named(RankingListToDisplay)
     val rankingListToDisplay: RankingListWithPlacesData,
     @Named(SelectedSettingsIdName)
-    val selectedSettingsId: SelectedSettingsId,
-    val winsCount: WinsCount,
+    val selectedSettingsIdData: SelectedSettingsIdData,
+    val winsCountListData: WinsCountListData,
 ) {
     companion object {
         const val RankingListName = "rankingList"
