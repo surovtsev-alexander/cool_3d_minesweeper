@@ -78,8 +78,8 @@ object RankingModule {
 
     @RankingScope
     @Provides
-    fun provideWinsCount(): WinsCountListData {
-        return WinsCountListData(
+    fun provideWinsCount(): WinsCountMapData {
+        return WinsCountMapData(
             emptyMap()
         )
     }

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool3dminesweeper.dagger.app.SettingsList
+import com.surovtsev.cool3dminesweeper.models.room.dao.WinsCountMap
 import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
@@ -86,7 +87,7 @@ fun SettingsList(
     val selectedSettingsId: Long by rankingScreenEvents.selectedSettingsIdData.run {
         data.observeAsState(defaultValue)
     }
-    val winsCountList: WinsCountList by rankingScreenEvents.winsCountListData.run {
+    val winsCountList: WinsCountMap by rankingScreenEvents.winsCountListData.run {
         data.observeAsState(defaultValue)
     }
 
@@ -145,7 +146,7 @@ fun SettingsList(
 @Composable
 fun SettingsDataItem(
     settingsData: Settings.SettingsData,
-    winsCount: Int
+    winsCount: Long
 ) {
     Row(
         modifier = Modifier

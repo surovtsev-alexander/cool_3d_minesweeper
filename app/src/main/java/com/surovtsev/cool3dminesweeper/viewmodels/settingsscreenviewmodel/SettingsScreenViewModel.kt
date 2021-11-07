@@ -99,7 +99,7 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    fun selectSettings() {
+    fun applySettings() {
         launchOnIOThread {
             val settingsData = settingsDataFactory()
             settingsDao.getOrCreate(

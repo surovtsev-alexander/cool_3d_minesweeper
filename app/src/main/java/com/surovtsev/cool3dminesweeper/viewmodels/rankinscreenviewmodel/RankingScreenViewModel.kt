@@ -23,6 +23,7 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
+import logcat.logcat
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Provider
@@ -87,6 +88,10 @@ class RankingScreenViewModel @Inject constructor(
                 .map { it.rankingData.settingsId }
                 .groupingBy { it }
                 .eachCount()
+                .map {
+                    it.key to it.value.toLong()
+                }
+                .toMap()
 
             withUIContext {
                 rankingScreenEvents.settingsListData.onDataChanged(
@@ -112,6 +117,19 @@ class RankingScreenViewModel @Inject constructor(
         settingsId: Long
     ) {
         launchOnIOThread {
+//            val filteredData = rankingDao
+//                .getRankingListForSettingsId(
+//                    settingsId
+//                )
+//
+//            withUIContext {
+//                rankingScreenEvents
+//                    .filteredRankingList
+//                    .onDataChanged(
+//                        filteredData
+//                    )
+//            }
+
             loadRankingForSettingsIdAction(
                 settingsId
             )

@@ -191,7 +191,7 @@ fun UseButton(
     viewModel: SettingsScreenViewModel
 ) {
     Button (
-        { viewModel.selectSettings() },
+        { viewModel.applySettings() },
         modifier = Modifier
             .fillMaxWidth(fraction = 0.75f)
     ) {

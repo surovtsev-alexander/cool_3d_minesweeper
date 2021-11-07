@@ -39,10 +39,6 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             gameConfig.settingsData
         )
 
-        if (true) {
-            logcat { "TEST+++ AA ${settings.id}" }
-        }
-
         val rankingData = Ranking.RankingData(
             settings.id,
             elapsed,

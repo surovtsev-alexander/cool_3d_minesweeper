@@ -1,6 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
+import com.surovtsev.cool3dminesweeper.models.room.dao.RankingListWithPlaces
 import com.surovtsev.cool3dminesweeper.models.room.entities.Ranking
 
 class RankingDataWithPlaces(
@@ -8,7 +9,6 @@ class RankingDataWithPlaces(
     val place: Int
 )
 
-typealias RankingListWithPlaces = List<RankingDataWithPlaces>
 
 object RankingListWithPlacesHelper {
     fun create(
