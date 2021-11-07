@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces
+package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction
 
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper

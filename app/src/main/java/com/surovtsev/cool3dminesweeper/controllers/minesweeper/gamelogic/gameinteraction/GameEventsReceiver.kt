@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces
+package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction
 
 interface GameEventsReceiver: GameStatusReceiver {
     fun bombCountUpdated(newValue: Int)

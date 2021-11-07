@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers
 
 import android.content.Context
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.interfaces.GameEventsReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction.GameEventsReceiver
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
