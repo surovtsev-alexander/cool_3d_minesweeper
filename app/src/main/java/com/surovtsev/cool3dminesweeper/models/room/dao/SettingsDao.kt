@@ -18,6 +18,9 @@ interface SettingsDao  {
     @Query("SELECT * FROM $settingsTableName")
     fun getAll(): List<Settings>
 
+    @Query("SELECT COUNT(*) FROM $settingsTableName")
+    fun getCount(): Int
+
     @Insert
     fun insert(settings: Settings)
 

@@ -12,6 +12,7 @@ typealias SettingsDataFactory = () -> Settings.SettingsData
                 Settings.SettingsData.Dimensions.ColumnNames.xCount,
                 Settings.SettingsData.Dimensions.ColumnNames.yCount,
                 Settings.SettingsData.Dimensions.ColumnNames.zCount,
+                Settings.SettingsData.ColumnNames.bombsPercentage
             ),
             unique = true
         )
@@ -39,6 +40,14 @@ data class Settings (
         ),
         @ColumnInfo(name = ColumnNames.bombsPercentage) val bombsPercentage: Int = DefaultValues.bombsPercentage,
     ) {
+        constructor(
+            dim: Int,
+            bombsPercentage: Int
+        ): this(
+            Dimensions(dim),
+            bombsPercentage
+        )
+
         object ColumnNames {
             const val bombsPercentage = "bombs_percentage"
         }
@@ -52,6 +61,10 @@ data class Settings (
             @ColumnInfo(name = ColumnNames.yCount) val y: Int,
             @ColumnInfo(name = ColumnNames.zCount) val z: Int
         ) {
+            constructor(
+                dim: Int
+            ): this(dim, dim, dim)
+
             fun toVec3i(): Vec3i {
                 return Vec3i(
                     x, y, z
