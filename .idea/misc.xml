@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/drawable/ic_launcher.xml" value="0.2638888888888889" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/activity_game.xml" value="0.294478527607362" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/activity_main.xml" value="0.11594202898550725" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/activity_ranking.xml" value="0.1337386018237082" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/activity_settings.xml" value="0.1337386018237082" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/my_int_edit.xml" value="0.1" />
         <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/layout/settings.xml" value="0.1337386018237082" />
+        <entry key="..\:/projects/java/android/cool_3d_minesweeper/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2611111111111111" />
       </map>
     </option>
   </component>
