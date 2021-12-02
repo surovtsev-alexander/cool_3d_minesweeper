@@ -17,7 +17,6 @@ import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameter
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.MarkingEvent
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Place
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingColumn
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
