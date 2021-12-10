@@ -1,4 +1,4 @@
-package com.surovtsev.utils.view.compose.navigationanimationhelper
+package com.surovtsev.utils.compose.navigationanimationhelper
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

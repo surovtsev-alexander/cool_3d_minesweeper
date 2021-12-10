@@ -179,7 +179,9 @@ fun Controls(
                 name,
                 borders,
                 sliderValue,
-                sV::onDataChanged
+                sV::onDataChanged,
+                LightBlue,
+                PrimaryColor1
             )
         }
     }

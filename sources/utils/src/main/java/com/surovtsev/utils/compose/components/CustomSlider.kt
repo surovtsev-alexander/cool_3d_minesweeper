@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.view.compose.components
+package com.surovtsev.utils.compose.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,8 +14,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.utils.math.SliderMath
 
 typealias OnChangeAction = (newSliderPosition: Int) -> Unit
@@ -26,6 +24,8 @@ fun CustomSliderWithCaption(
     borders: IntRange,
     sliderPosition: Int,
     onChangeAction: OnChangeAction,
+    backgroundColor: Color,
+    lineColor: Color,
 ) {
     Column {
         Row {
@@ -46,7 +46,7 @@ fun CustomSliderWithCaption(
             )
         }
         CustomSlider(
-            borders, sliderPosition, onChangeAction
+            borders, sliderPosition, onChangeAction, backgroundColor, lineColor
         )
     }
 }
@@ -56,6 +56,8 @@ fun CustomSlider(
     borders: IntRange,
     sliderPosition: Int,
     onChangeAction: OnChangeAction,
+    backgroundColor: Color,
+    lineColor: Color,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     var prevPosition by remember { mutableStateOf(sliderPosition) }
@@ -71,7 +73,7 @@ fun CustomSlider(
             .fillMaxWidth()
             .height(30.dp)
             .border(1.dp, Color.Black)
-            .background(LightBlue)
+            .background(backgroundColor)
             .onGloballyPositioned { coordinates ->
                 size = coordinates.size
             }
@@ -101,7 +103,7 @@ fun CustomSlider(
             )
     ) {
         SliderLine(
-            actualFloatPosition, borders
+            actualFloatPosition, borders, lineColor
         )
     }
 }
@@ -109,7 +111,8 @@ fun CustomSlider(
 @Composable
 fun SliderLine(
     sliderPosition: Float,
-    borders: IntRange
+    borders: IntRange,
+    lineColor: Color,
 ) {
     Box(
         modifier = Modifier
@@ -120,6 +123,6 @@ fun SliderLine(
                     borders
                 )
             )
-            .background(PrimaryColor1)
+            .background(lineColor)
     )
 }
