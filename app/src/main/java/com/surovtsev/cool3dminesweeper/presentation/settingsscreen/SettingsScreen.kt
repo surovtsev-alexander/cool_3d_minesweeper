@@ -23,7 +23,7 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
-import com.surovtsev.cool3dminesweeper.utils.view.compose.components.CustomSliderWithCaption
+import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
 @Composable
 fun SettingsScreen(
