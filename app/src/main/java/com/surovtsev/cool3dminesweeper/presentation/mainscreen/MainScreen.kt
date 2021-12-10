@@ -145,7 +145,7 @@ class MainScreenUI(
             {
                 navController.navigate(
                     buttonInfo.screen.withArgs(
-                        isNewGameButton.toString()
+                        isLoadGameButton.toString()
                     )
                 )
             }
