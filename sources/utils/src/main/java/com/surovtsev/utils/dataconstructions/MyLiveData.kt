@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.dataconstructions
+package com.surovtsev.utils.dataconstructions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers
 
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.utils.dataconstructions.MyLiveData
 
 typealias RankingTableSortTypeData = MyLiveData<RankingTableSortType>
 

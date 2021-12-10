@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.externalfilewriter
+package com.surovtsev.utils.externalfilewriter
 
 import android.os.Environment
 import android.util.Log

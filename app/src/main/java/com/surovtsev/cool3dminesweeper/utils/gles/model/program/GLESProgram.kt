@@ -4,12 +4,10 @@ import android.opengl.GLES20
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
-import com.surovtsev.cool3dminesweeper.utils.loggerconfig.LoggerConfig
+import com.surovtsev.utils.loggerconfig.LoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
-import javax.inject.Inject
 
 
 abstract class GLESProgram (

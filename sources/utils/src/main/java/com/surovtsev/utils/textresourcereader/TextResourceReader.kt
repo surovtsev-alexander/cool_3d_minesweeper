@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.textresourcereader
+package com.surovtsev.utils.textresourcereader
 
 import android.content.Context
 import android.content.res.Resources

@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.opengl.GLUtils
 import android.util.Log
 import android.opengl.GLES20.*
-import com.surovtsev.cool3dminesweeper.utils.loggerconfig.LoggerConfig
+import com.surovtsev.utils.loggerconfig.LoggerConfig
 
 object TextureHelper {
     private const val TAG = "TextureHelper"

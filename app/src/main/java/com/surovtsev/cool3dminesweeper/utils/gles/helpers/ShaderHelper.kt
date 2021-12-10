@@ -3,8 +3,8 @@ package com.surovtsev.cool3dminesweeper.utils.gles.helpers
 import android.content.Context
 import android.opengl.GLES20.*
 import android.util.Log
-import com.surovtsev.cool3dminesweeper.utils.loggerconfig.LoggerConfig
-import com.surovtsev.cool3dminesweeper.utils.textresourcereader.TextResourceReader
+import com.surovtsev.utils.loggerconfig.LoggerConfig
+import com.surovtsev.utils.textresourcereader.TextResourceReader
 
 object ShaderHelper {
 

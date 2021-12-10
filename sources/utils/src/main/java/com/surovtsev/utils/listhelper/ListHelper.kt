@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.listhelper
+package com.surovtsev.utils.listhelper
 
 object ListHelper {
     const val cSVSeparator = ";"

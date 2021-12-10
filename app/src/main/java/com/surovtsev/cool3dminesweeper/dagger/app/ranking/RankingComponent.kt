@@ -4,7 +4,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.RankingScope
 import com.surovtsev.cool3dminesweeper.dagger.app.ToastMessageData
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
 import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.Module
 import dagger.Provides

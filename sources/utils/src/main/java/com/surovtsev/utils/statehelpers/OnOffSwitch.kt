@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.statehelpers
+package com.surovtsev.utils.statehelpers
 
 interface Switch {
     fun turnOn()

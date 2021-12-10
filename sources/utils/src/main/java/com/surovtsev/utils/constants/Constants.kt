@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.constants
+package com.surovtsev.utils.constants
 
 object Constants {
     const val BytesPerFloat = 4

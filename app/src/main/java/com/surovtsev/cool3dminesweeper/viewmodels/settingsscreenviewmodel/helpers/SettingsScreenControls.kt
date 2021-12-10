@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.utils.dataconstructions.MyLiveData
 import javax.inject.Inject
 import javax.inject.Named
 

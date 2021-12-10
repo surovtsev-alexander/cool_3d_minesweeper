@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.dataconstructions
+package com.surovtsev.utils.dataconstructions
 
 @Suppress("unused")
 class MyLazyVal<T>(

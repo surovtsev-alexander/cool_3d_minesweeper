@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.SettingsListData
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingList
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingListWithPlaces
 import com.surovtsev.cool3dminesweeper.models.room.dao.WinsCountMap
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.utils.dataconstructions.MyLiveData
 import javax.inject.Inject
 import javax.inject.Named
 

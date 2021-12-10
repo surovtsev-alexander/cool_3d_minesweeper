@@ -4,7 +4,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
+import com.surovtsev.utils.statehelpers.UpdatableImp
 import glm_.vec2.Vec2
 import javax.inject.Inject
 

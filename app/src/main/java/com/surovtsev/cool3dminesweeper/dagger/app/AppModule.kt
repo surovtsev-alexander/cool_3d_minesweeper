@@ -7,9 +7,9 @@ import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
 import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.models.room.databases.RankingDatabase
 import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
-import com.surovtsev.cool3dminesweeper.utils.constants.Constants
-import com.surovtsev.cool3dminesweeper.utils.coroutines.CustomScope
-import com.surovtsev.cool3dminesweeper.utils.dataconstructions.MyLiveData
+import com.surovtsev.utils.constants.Constants
+import com.surovtsev.utils.coroutines.CustomScope
+import com.surovtsev.utils.dataconstructions.MyLiveData
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import dagger.Module
 import dagger.Provides

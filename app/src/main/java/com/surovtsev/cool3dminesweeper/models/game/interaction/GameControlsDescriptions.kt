@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.models.game.interaction
 
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableImp
-import com.surovtsev.cool3dminesweeper.utils.statehelpers.UpdatableOnOffSwitch
+import com.surovtsev.utils.statehelpers.UpdatableImp
+import com.surovtsev.utils.statehelpers.UpdatableOnOffSwitch
 
 object GameControlsNames {
     const val RemoveMarkedBombs = "removeMarkedBombs"

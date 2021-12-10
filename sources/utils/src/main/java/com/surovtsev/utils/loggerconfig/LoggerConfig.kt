@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.loggerconfig
+package com.surovtsev.utils.loggerconfig
 
 @Suppress("unused")
 class LoggerConfig {

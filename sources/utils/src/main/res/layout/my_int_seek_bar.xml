@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Name"
+            android:text="@string/name"
             />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:textAlignment="viewEnd"
-            android:text="(min..max)"
+            android:text="@string/min_max"
             />
 
     </RelativeLayout>

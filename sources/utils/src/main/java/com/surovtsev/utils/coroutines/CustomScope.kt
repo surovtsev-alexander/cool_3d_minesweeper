@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.coroutines
+package com.surovtsev.utils.coroutines
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

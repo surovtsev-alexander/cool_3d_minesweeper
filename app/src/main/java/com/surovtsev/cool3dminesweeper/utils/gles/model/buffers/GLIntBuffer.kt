@@ -3,7 +3,7 @@
 package com.surovtsev.cool3dminesweeper.utils.gles.model.buffers
 
 import android.opengl.GLES20
-import com.surovtsev.cool3dminesweeper.utils.constants.Constants
+import com.surovtsev.utils.constants.Constants
 import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
