@@ -14,8 +14,8 @@ import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
 import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Place
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingColumn

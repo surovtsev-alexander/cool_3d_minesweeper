@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.viewmodel
+package com.surovtsev.utils.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

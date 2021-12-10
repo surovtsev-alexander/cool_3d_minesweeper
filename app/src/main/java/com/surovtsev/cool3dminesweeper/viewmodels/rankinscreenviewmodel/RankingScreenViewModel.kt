@@ -16,14 +16,13 @@ import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
-import logcat.logcat
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Provider

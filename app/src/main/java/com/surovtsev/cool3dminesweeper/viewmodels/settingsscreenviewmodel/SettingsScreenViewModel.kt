@@ -10,14 +10,13 @@ import com.surovtsev.cool3dminesweeper.dagger.app.settings.SettingsComponentEntr
 import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.models.room.entities.SettingsDataFactory
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.cool3dminesweeper.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenControls
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SettingsScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.SlidersWithNames
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
-import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
 

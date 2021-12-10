@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.view.compose.NavigationAnimationHelpers
+package com.surovtsev.utils.view.compose.navigationanimationhelper
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

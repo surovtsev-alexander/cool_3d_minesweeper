@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.view.compose
+package com.surovtsev.cool3dminesweeper.utils.view.compose.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
