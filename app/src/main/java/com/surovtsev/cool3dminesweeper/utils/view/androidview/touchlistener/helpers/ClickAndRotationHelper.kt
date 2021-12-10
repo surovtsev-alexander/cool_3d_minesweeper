@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.hel
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchReceiverImp
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MovementHolder
 import glm_.vec2.Vec2
@@ -13,7 +13,7 @@ import kotlin.math.abs
 
 @GameScope
 class ClickAndRotationHelper @Inject constructor(
-    private val touchReceiver: TouchReceiver,
+    private val touchReceiver: TouchReceiverImp,
     private val moveHandler: MoveHandler,
     @Named(Prev)
     private var prev: Vec2,

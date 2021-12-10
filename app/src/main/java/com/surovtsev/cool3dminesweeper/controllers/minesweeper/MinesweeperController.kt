@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchReceiver
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchReceiverImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperController @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
-    private val touchReceiver: TouchReceiver,
+    private val touchReceiver: TouchReceiverImp,
     private val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,

@@ -9,7 +9,7 @@ import glm_.vec2.Vec2
 import javax.inject.Inject
 
 @GameScope
-class TouchReceiver @Inject constructor(
+class TouchReceiverImp @Inject constructor(
     private val customClock: TimeSpanHelper
 ): TouchReceiver
 {
