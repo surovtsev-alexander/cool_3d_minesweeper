@@ -1,2 +1,6 @@
-include ':app'
 rootProject.name = "cool_3d_minesweeper"
+
+include ":app"
+
+include ":utils"
+project(":utils").projectDir = new File(rootDir, "sources/utils")

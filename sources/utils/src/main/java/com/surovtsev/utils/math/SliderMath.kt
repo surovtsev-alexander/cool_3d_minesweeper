@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.math
+package com.surovtsev.utils.math
 
 import kotlin.math.max
 import kotlin.math.min

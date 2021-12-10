@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
-import com.surovtsev.cool3dminesweeper.utils.math.SliderMath
+import com.surovtsev.utils.math.SliderMath
 
 typealias OnChangeAction = (newSliderPosition: Int) -> Unit
 

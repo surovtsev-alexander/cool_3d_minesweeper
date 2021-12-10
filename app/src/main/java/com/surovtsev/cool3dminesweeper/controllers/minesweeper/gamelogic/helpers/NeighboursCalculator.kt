@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellRange
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PairCellRange
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
-import com.surovtsev.cool3dminesweeper.utils.math.MyMath
+import com.surovtsev.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 

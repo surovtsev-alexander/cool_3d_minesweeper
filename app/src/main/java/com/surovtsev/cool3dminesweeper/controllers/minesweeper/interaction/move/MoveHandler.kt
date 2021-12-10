@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.RotationReceiver
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
-import com.surovtsev.cool3dminesweeper.utils.math.MatrixHelper
+import com.surovtsev.utils.math.MatrixHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject
 

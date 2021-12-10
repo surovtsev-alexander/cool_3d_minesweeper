@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.hel
 import android.view.MotionEvent
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.math.MyMath
+import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import javax.inject.Inject
 import javax.inject.Named

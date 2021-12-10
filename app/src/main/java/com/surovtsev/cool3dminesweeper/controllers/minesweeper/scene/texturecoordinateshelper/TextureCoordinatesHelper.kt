@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper
 
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
-import com.surovtsev.cool3dminesweeper.utils.math.MyMath
+import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
