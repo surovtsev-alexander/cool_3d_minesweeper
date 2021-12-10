@@ -1,6 +1,7 @@
 package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
+import com.surovtsev.cool3dminesweeper.utils.time.timers.Tickable
 import com.surovtsev.utils.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.holders.MovementHolder
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.TouchReceiver
@@ -13,8 +14,12 @@ import javax.inject.Inject
 class TouchReceiverImp @Inject constructor(
     private val customClock: TimeSpanHelper,
     private val touchHandler: TouchHandler,
-): TouchReceiver
+): TouchReceiver, Tickable
 {
+
+    init {
+        customClock.subscribe(this)
+    }
 
     private enum class State {
         IDLE,
@@ -79,7 +84,7 @@ class TouchReceiverImp @Inject constructor(
         }
     }
 
-    fun tick() {
+    override fun tick() {
         val currTime = customClock.timeAfterDeviceStartup
         if (state == State.DELAY_BEFORE_LONG_TOUCH) {
             releaseIfMovedOrPerform {

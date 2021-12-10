@@ -58,9 +58,6 @@ class MinesweeperController @Inject constructor(
 
     override fun onDrawFrame() {
         timeSpanHelper.tick()
-        touchReceiver.tick()
-        gameLogic.gameLogicStateHelper.tick()
-
 
         syncExecution {
             scene.onDrawFrame()

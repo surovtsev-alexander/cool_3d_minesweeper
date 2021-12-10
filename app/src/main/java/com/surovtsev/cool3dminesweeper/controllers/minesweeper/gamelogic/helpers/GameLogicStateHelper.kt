@@ -36,6 +36,10 @@ class GameLogicStateHelper @Inject constructor(
     Tickable,
     DefaultLifecycleObserver
 {
+    init {
+        timeSpan.subscribe(this)
+    }
+
     var gameStatus: GameStatus
         private set
 

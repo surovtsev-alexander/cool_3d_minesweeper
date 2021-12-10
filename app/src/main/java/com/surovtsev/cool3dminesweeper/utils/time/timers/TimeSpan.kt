@@ -8,9 +8,14 @@ class TimeSpan(
     private val interval: Long,
     private val timeSpanHelper: TimeSpanHelper,
 ):
+    TimeUpdater,
     UpdatableImp(),
     Switch
 {
+    override fun subscribe(x: Tickable) {
+        timeSpanHelper.subscribe(x)
+    }
+
     private val switch: SwitchImp = SwitchImp()
 
     private var  elapsedTimeBeforePause = 0L
