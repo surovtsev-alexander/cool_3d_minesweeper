@@ -5,10 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -22,6 +19,7 @@ import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
 import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.compose.NavigationAnimationHelpers.SimpleNavigationAnimationHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
@@ -42,78 +40,6 @@ class MainActivity: ComponentActivity() {
         initUI()
     }
 
-    /* TODO: move to a separate file. */
-    @ExperimentalAnimationApi
-    private class SimpleComposeNavigationAnimationHelpers(
-        private val offsetX: Int,
-        private val offsetY: Int,
-        animationDuration: Int = 500
-    ) {
-        val fadingTween = tween<Float>(
-            animationDuration
-        )
-        val slidingTween = tween<IntOffset>(
-            animationDuration
-        )
-
-        val enterSliding = EnterSliding()
-        val exitSliding = ExitSliding()
-
-        inner class ConcreteEnterSliding {
-            val fromTop = enterSliding.vertically(-offsetY)
-            val fromBottom = enterSliding.vertically(offsetY)
-
-            val fromLeft = enterSliding.horizontally(-offsetX)
-            val fromRight = enterSliding.horizontally(offsetX)
-        }
-
-        inner class ConcreteExitSliding {
-            val toTop = exitSliding.vertically(-offsetY)
-            val toBottom = exitSliding.vertically(offsetY)
-
-            val toLeft = exitSliding.horizontally(-offsetX)
-            val toRight = exitSliding.horizontally(offsetX)
-        }
-
-        val concreteEnterSliding = ConcreteEnterSliding()
-        val concreteExitException = ConcreteExitSliding()
-
-        inner class EnterSliding {
-            fun horizontally(initialOffsetX: Int) =
-                { _: AnimatedContentScope<NavBackStackEntry> ->
-                    slideInHorizontally(
-                        initialOffsetX = { initialOffsetX },
-                        animationSpec = slidingTween
-                    )
-                }
-
-            fun vertically(initialOffsetY: Int) =
-                { _: AnimatedContentScope<NavBackStackEntry> ->
-                    slideInVertically(
-                        initialOffsetY = { initialOffsetY },
-                        animationSpec = slidingTween
-                    )
-                }
-        }
-
-        inner class ExitSliding {
-            fun horizontally(targetOffsetX: Int) =
-                { _: AnimatedContentScope<NavBackStackEntry> ->
-                    slideOutHorizontally(
-                        targetOffsetX = { targetOffsetX },
-                        animationSpec = slidingTween
-                    )
-                }
-
-            fun vertically(targetOffsetY: Int) =
-                { _: AnimatedContentScope<NavBackStackEntry> ->
-                    slideOutVertically(
-                        targetOffsetY = { targetOffsetY },
-                        animationSpec = slidingTween
-                    )
-                }
-        }
-    }
 
     @OptIn(ExperimentalAnimationApi::class)
     private fun initUI() {
@@ -122,7 +48,7 @@ class MainActivity: ComponentActivity() {
         val activityHeight = metrics.heightPixels
 
         setContent {
-            val navAnimHelper = SimpleComposeNavigationAnimationHelpers(
+            val navAnimHelper = SimpleNavigationAnimationHelper(
                 offsetX = activityWidth,
                 offsetY = activityHeight
             )
