@@ -2,9 +2,10 @@ package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.hel
 
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MovementHolder
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.RotationReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
 import glm_.vec2.Vec2
 import javax.inject.Inject
 import javax.inject.Named
@@ -12,8 +13,8 @@ import kotlin.math.abs
 
 @GameScope
 class ClickAndRotationHelper @Inject constructor(
-    private val touchReceiver: TouchReceiverImp,
-    private val moveHandler: MoveHandler,
+    private val touchReceiver: TouchReceiver,
+    private val rotationReceiver: RotationReceiver,
     @Named(Prev)
     private var prev: Vec2,
     @Named(Movement)
@@ -55,7 +56,7 @@ class ClickAndRotationHelper @Inject constructor(
                         val p = prev
                         val c = curr
                         override fun run() {
-                            moveHandler.rotateBetweenProjections(
+                            rotationReceiver.rotateBetweenProjections(
                                 p, c
                             )
                         }

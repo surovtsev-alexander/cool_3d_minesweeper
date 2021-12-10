@@ -3,6 +3,8 @@ package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.hel
 import android.view.MotionEvent
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
 import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import javax.inject.Inject
@@ -10,7 +12,8 @@ import javax.inject.Named
 
 @GameScope
 class ScalingHelper @Inject constructor(
-    private val moveHandler: MoveHandler,
+    private val scaleReceiver: ScaleReceiver,
+    private val moveReceiver: MoveReceiver,
     @Named(PrevDistance)
     private var prevDistance: Float,
     @Named(PrevCenter)
@@ -32,9 +35,9 @@ class ScalingHelper @Inject constructor(
         if (!needToBeInitialized) {
             if (!MyMath.isZero(prevDistance)) {
                 val factor = distance / prevDistance
-                moveHandler.scale(factor)
+                scaleReceiver.scale(factor)
             }
-            moveHandler.move(prevCenter, center)
+            moveReceiver.move(prevCenter, center)
         }
 
         prevDistance = distance

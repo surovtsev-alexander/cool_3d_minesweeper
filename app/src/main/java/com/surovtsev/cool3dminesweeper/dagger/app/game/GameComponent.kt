@@ -9,6 +9,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -28,6 +29,11 @@ import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.Touc
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchReceiverImp
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.RotationReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
@@ -311,4 +317,32 @@ object GameLogicStateHelperModule {
     ): TimeSpan {
         return TimeSpan(1000L, timeSpanHelper)
     }
+}
+
+@Module
+@InstallIn(GameComponent::class)
+interface touchListenerBindModule {
+    @GameScope
+    @Binds
+    fun bindRotationReceiver(
+        moveHandler: MoveHandler
+    ): RotationReceiver
+
+    @GameScope
+    @Binds
+    fun bindScaleReceiver(
+        moveHandler: MoveHandler
+    ): ScaleReceiver
+
+    @GameScope
+    @Binds
+    fun bindMoveReceiver(
+        moveHandler: MoveHandler
+    ): MoveReceiver
+
+    @GameScope
+    @Binds
+    fun bindTouchReceiver(
+        touchReceiver: TouchReceiverImp
+    ): TouchReceiver
 }
