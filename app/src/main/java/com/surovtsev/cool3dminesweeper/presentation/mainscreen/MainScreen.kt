@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,67 +16,159 @@ import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreen
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Shapes
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import logcat.logcat
 
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel,
     navController: NavController
 ) {
-    MainScreeControls(
-        viewModel,
-        navController
-    )
+    val mainScreenUI = remember {
+        MainScreenUI(
+            viewModel = viewModel,
+            navController = navController
+        )
+    }
+
+    mainScreenUI.MainScreeControls()
 }
 
-@Composable
-fun MainScreeControls(
-    viewModel: MainScreenViewModel,
-    navController: NavController
+class MainScreenUI(
+    private val viewModel: MainScreenViewModel,
+    private val navController: NavController,
 ) {
-    val buttonsInfo = viewModel.buttonsInfo
-    val hasSave = viewModel.hasSave()
 
-    MinesweeperTheme {
-        Box(
-            Modifier.background(GrayBackground)
-        ) {
+    init {
+        logcat { "MainScreenUI constructor is called" }
+    }
+
+    @Composable
+    fun MainScreeControls() {
+        MinesweeperTheme {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(GrayBackground),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight(0.5f)
                 ) {
-                    buttonsInfo.forEach { (_, bI ) ->
-                        val buttonType = bI.buttonType
-                        val isNewGameButton =
-                            buttonType == MainScreenButtonType.NewGameButton
-                        val isLoadGameButton =
-                            buttonType == MainScreenButtonType.LoadGameButton
-                        Button(
-                            onClick = {
-                                if (isNewGameButton || isLoadGameButton) {
-                                    navController.navigate(
-                                        bI.screen.withArgs(
-                                            if (isNewGameButton) false.toString() else hasSave.toString()
-                                        )
-                                    )
-                                } else {
-                                    navController.navigate(bI.screen.route)
-                                }
-                            },
-                            Modifier
-                                .fillMaxWidth(fraction = 0.75f),
-                            border = BorderStroke(1.dp, Color.Black),
-                            shape = Shapes.small,
-                            enabled = !isLoadGameButton || hasSave
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        TwoButtonsInRow(
+                            firstButtonName = MainScreenViewModel.NewGame,
+                            secondButtonName = MainScreenViewModel.LoadGame,
+                            rowScope = this,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TwoButtonsInRow(
+                            firstButtonName = MainScreenViewModel.Ranking,
+                            secondButtonName = MainScreenViewModel.Settings,
+                            rowScope = this,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f)
                         ) {
-                            Text(text = bI.caption)
+                            MainScreenButton(
+                                MainScreenViewModel.Help,
+                            )
                         }
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun TwoButtonsInRow(
+        firstButtonName: String,
+        secondButtonName: String,
+        rowScope: RowScope,
+    ) {
+        rowScope.apply {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+            ) {
+                MainScreenButton(
+                    firstButtonName,
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+            ) {
+                MainScreenButton(
+                    secondButtonName,
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun MainScreenButton(
+        buttonName: String,
+    ) {
+        val buttonInfo = viewModel.buttonsInfo[buttonName]!!
+
+        val buttonType = buttonInfo.buttonType
+        val isNewGameButton =
+            buttonType == MainScreenButtonType.NewGameButton
+        val isLoadGameButton =
+            buttonType == MainScreenButtonType.LoadGameButton
+
+        val onClickAction = if (isNewGameButton || isLoadGameButton) {
+            {
+                navController.navigate(
+                    buttonInfo.screen.withArgs(
+                        isNewGameButton.toString()
+                    )
+                )
+            }
+        } else {
+            {
+                navController.navigate(buttonInfo.screen.route)
+            }
+        }
+
+        val enabled = !isLoadGameButton || viewModel.hasSave()
+
+        Button(
+            onClick = onClickAction,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(5.dp, 10.dp),
+            border = BorderStroke(1.dp, Color.Black),
+            shape = Shapes.small,
+            enabled = enabled
+        ) {
+            Text(
+                text = buttonInfo.caption
+            )
         }
     }
 }
