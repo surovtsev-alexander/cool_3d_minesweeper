@@ -61,10 +61,6 @@ class MinesweeperController @Inject constructor(
         touchReceiver.tick()
         gameLogic.gameLogicStateHelper.tick()
 
-        if (touchReceiver.isUpdated()) {
-            scene.touchHandler.handleTouch(touchReceiver.touchPos, touchReceiver.touchType)
-            touchReceiver.release()
-        }
 
         syncExecution {
             scene.onDrawFrame()

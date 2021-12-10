@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.IntersectionCalculator
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandler
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
@@ -21,7 +21,7 @@ class Scene @Inject constructor(
     private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
-    val touchHandler: TouchHandler,
+    val touchHandler: TouchHandlerImp,
     private val intersectionCalculator: IntersectionCalculator,
     private val pointerOpenGLModel: PointerOpenGLModel,
     private val cubeOpenGLModel: CubeOpenGLModel,

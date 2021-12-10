@@ -1,10 +1,9 @@
 package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers
 
 import android.view.MotionEvent
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.MoveReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.ScaleReceiver
 import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import javax.inject.Inject

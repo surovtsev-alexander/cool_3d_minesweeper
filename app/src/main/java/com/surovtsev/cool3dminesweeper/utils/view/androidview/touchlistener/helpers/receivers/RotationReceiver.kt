@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces
+package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers
 
 import glm_.vec2.Vec2
 

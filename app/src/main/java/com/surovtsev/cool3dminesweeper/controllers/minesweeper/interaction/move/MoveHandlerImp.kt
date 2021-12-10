@@ -2,20 +2,16 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.RotationReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.MoveHandler
 import com.surovtsev.utils.math.MatrixHelper
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
 @GameScope
-class MoveHandler @Inject constructor(
+class MoveHandlerImp @Inject constructor(
     private val cameraInfoHelper: CameraInfoHelper
 ):
-    RotationReceiver,
-    ScaleReceiver,
-    MoveReceiver
+    MoveHandler
 {
     override fun rotateBetweenProjections(prev: Vec2, curr: Vec2) {
         val nPrev = cameraInfoHelper.normalizedDisplayCoordinates(prev)

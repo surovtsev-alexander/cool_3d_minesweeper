@@ -9,7 +9,8 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfigFactory
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandler
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandlerImp
+import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -30,10 +31,12 @@ import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.help
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchReceiverImp
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MoveReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.RotationReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.ScaleReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.MoveHandler
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.TouchHandler
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.MoveReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.RotationReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.ScaleReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
@@ -322,6 +325,18 @@ object GameLogicStateHelperModule {
 @Module
 @InstallIn(GameComponent::class)
 interface touchListenerBindModule {
+    @GameScope
+    @Binds
+    fun bindTouchHandler(
+        touchHandler: TouchHandlerImp
+    ): TouchHandler
+
+    @GameScope
+    @Binds
+    fun bindMoveHandler(
+        moveHandler: MoveHandlerImp
+    ): MoveHandler
+
     @GameScope
     @Binds
     fun bindRotationReceiver(

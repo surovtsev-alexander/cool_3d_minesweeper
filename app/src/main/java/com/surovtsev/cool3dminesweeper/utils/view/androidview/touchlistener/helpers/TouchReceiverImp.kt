@@ -2,22 +2,23 @@ package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.hel
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.utils.androidview.interaction.TouchType
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MovementHolder
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.holders.MovementHolder
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.TouchHandler
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
 @GameScope
 class TouchReceiverImp @Inject constructor(
-    private val customClock: TimeSpanHelper
+    private val customClock: TimeSpanHelper,
+    private val touchHandler: TouchHandler,
 ): TouchReceiver
 {
 
     private enum class State {
         IDLE,
-        DELAY_BEFORE_LONG_TOUCH,
-        WAIT_FOR_RELEASE
+        DELAY_BEFORE_LONG_TOUCH
     }
 
     private var state = State.IDLE
@@ -32,9 +33,11 @@ class TouchReceiverImp @Inject constructor(
     @Suppress("SpellCheckingInspection")
     private var movementHolderStorer: MovementHolder? = null
 
-    private val movementThreshold = 10f
-    private val touchDelay = 100L
-    private val longTouchDelay = 300L
+    companion object {
+        private const val MOVEMENT_THRESHOLD = 10f
+        private const val TOUCH_DELAY = 100L
+        private const val LONG_TOUCH_DELAY = 300L
+    }
 
     override fun down(pos: Vec2, movementHolderSaver: MovementHolder) {
         touchPos = pos
@@ -49,21 +52,15 @@ class TouchReceiverImp @Inject constructor(
     override fun up() {
         releaseIfMovedOrPerform {
             do {
-                if (state == State.WAIT_FOR_RELEASE) {
-                    break
-                }
-
                 val currTime = customClock.timeAfterDeviceStartup
 
-                if (currTime - downTime > touchDelay) {
+                if (currTime - downTime > TOUCH_DELAY) {
                     release()
                     break
                 }
 
                 if (state == State.DELAY_BEFORE_LONG_TOUCH) {
-                    state =
-                        State.WAIT_FOR_RELEASE
-                    touchType = TouchType.SHORT
+                    notifyHandler(TouchType.SHORT)
                 } else {
                     state = State.IDLE
                 }
@@ -72,7 +69,7 @@ class TouchReceiverImp @Inject constructor(
     }
 
     private fun isMoved(): Boolean =
-        (movementHolderStorer?.getMovement() ?: (movementThreshold + 1f)) >= movementThreshold
+        (movementHolderStorer?.getMovement() ?: (MOVEMENT_THRESHOLD + 1f)) >= MOVEMENT_THRESHOLD
 
     private fun releaseIfMovedOrPerform(action: () -> Unit) {
         if (isMoved()) {
@@ -86,17 +83,25 @@ class TouchReceiverImp @Inject constructor(
         val currTime = customClock.timeAfterDeviceStartup
         if (state == State.DELAY_BEFORE_LONG_TOUCH) {
             releaseIfMovedOrPerform {
-                if (currTime - downTime > longTouchDelay) {
-                    state = State.WAIT_FOR_RELEASE
-                    touchType = TouchType.LONG
+                if (currTime - downTime > LONG_TOUCH_DELAY) {
+                    notifyHandler(TouchType.LONG)
                 }
             }
         }
     }
 
+    private fun notifyHandler(
+        touchType: TouchType
+    ) {
+        touchHandler.handleTouch(
+            touchPos,
+            touchType
+        )
+
+        this.release()
+    }
+
     override fun release() {
         state = State.IDLE
     }
-
-    override fun isUpdated() = state == State.WAIT_FOR_RELEASE
 }
