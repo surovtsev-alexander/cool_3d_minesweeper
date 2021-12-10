@@ -1,7 +1,7 @@
-package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
+package com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers
 
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.interaction.TouchType
+import com.surovtsev.utils.view.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.MovementHolder
 import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.interfaces.TouchReceiver
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper

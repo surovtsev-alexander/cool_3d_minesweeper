@@ -14,8 +14,8 @@ import com.surovtsev.cool3dminesweeper.dagger.app.ranking.RankingComponentEntryP
 import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
 import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.MainActivity
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
+import com.surovtsev.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.utils.view.androidview.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
 import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*

@@ -4,7 +4,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.GameLogicStateHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.NeighboursCalculator
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.interaction.TouchType
+import com.surovtsev.utils.view.androidview.interaction.TouchType
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin

@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.view.androidview.requestpermissionsresultreceiver
+package com.surovtsev.utils.view.androidview.requestpermissionsresultreceiver
 
 
 data class RequestPermissionsResult(
