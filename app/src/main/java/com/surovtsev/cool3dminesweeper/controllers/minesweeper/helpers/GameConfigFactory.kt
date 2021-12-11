@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.core.room.entities.Settings
 import glm_.vec3.Vec3
 import kotlin.math.max
 

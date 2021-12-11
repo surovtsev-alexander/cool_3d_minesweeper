@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.utils.minesweeper.database
 
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.core.room.entities.Settings
 
 typealias Borders = Map<String, IntRange>
 

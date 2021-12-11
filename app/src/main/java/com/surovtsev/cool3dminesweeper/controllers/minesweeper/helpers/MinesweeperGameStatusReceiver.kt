@@ -1,16 +1,15 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction.GameStatusReceiver
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
+import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
-import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
-import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
-import com.surovtsev.cool3dminesweeper.models.room.entities.Ranking
+import com.surovtsev.core.room.dao.RankingDao
+import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.room.entities.Ranking
 import com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper.LocalDateTimeHelper
-import logcat.logcat
 import javax.inject.Inject
 
 @GameScope

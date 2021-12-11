@@ -2,15 +2,16 @@ package com.surovtsev.cool3dminesweeper.dagger.app
 
 import android.content.Context
 import androidx.room.Room
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.models.room.dao.RankingDao
-import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
-import com.surovtsev.cool3dminesweeper.models.room.databases.RankingDatabase
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.core.ranking.RankingListHelper
+import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.room.dao.RankingDao
+import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.room.databases.RankingDatabase
+import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.ranking.dagger.ToastMessageData
 import com.surovtsev.utils.constants.Constants
 import com.surovtsev.utils.coroutines.CustomScope
-import com.surovtsev.utils.dataconstructions.MyLiveData
-import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,9 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
 
-typealias SettingsList = List<Settings>
-typealias SettingsListData = MyLiveData<SettingsList>
-typealias ToastMessageData = MyLiveData<String>
 
 @Module
 @InstallIn(SingletonComponent::class)

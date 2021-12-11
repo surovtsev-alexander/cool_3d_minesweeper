@@ -1,8 +1,8 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel
 
 import androidx.lifecycle.ViewModel
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
+import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.MainScreenComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.MainScreenEntryPoint
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo

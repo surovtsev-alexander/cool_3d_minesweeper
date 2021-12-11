@@ -11,28 +11,32 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.cool3dminesweeper.dagger.app.SettingsList
-import com.surovtsev.cool3dminesweeper.models.room.dao.WinsCountMap
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
-import com.surovtsev.cool3dminesweeper.presentation.MainActivity
+import com.surovtsev.core.room.dao.WinsCountMap
+import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.cool3dminesweeper.presentation.MainActivityImp
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.utils.constants.Constants
 import com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper.LocalDateTimeHelper
-import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.*
+import com.surovtsev.core.settings.SettingsList
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import com.surovtsev.core.ranking.RankingColumn
+import com.surovtsev.core.ranking.RankingDataWithPlaces
+import com.surovtsev.core.ranking.RankingTableSortType
+import com.surovtsev.core.ranking.SortDirection
 
 @Composable
 fun RankingScreen(
-    mainActivity: MainActivity,
+    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel
 ) {
     RankingControls(
@@ -43,7 +47,7 @@ fun RankingScreen(
 
 @Composable
 fun RankingControls(
-    mainActivity: MainActivity,
+    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel,
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
@@ -288,7 +292,7 @@ fun RankingDataItem(
 
 @Composable
 fun ExportDataButton(
-    mainActivity: MainActivity,
+    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel
 ) {
     Box(

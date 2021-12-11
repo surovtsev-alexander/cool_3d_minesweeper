@@ -48,6 +48,7 @@ dependencies {
     implementation project(":core")
     implementation project(":utils")
     implementation project(":touchlistener")
+    implementation project(":ranking")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -117,7 +118,6 @@ dependencies {
     // Square logcat
     implementation 'com.squareup.logcat:logcat:0.1'
 
-    def roomVersion = "2.4.0-rc01"
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 }

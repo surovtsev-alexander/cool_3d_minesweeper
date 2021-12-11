@@ -16,8 +16,4 @@ annotation class MainScreenScope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RankingScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
 annotation class SettingsScope

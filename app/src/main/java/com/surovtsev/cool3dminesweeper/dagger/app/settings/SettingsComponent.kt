@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.dagger.app.settings
 
-import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
+import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
-import com.surovtsev.cool3dminesweeper.models.room.dao.SettingsDao
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
-import com.surovtsev.cool3dminesweeper.models.room.entities.SettingsDataFactory
+import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.core.room.entities.SettingsDataFactory
 import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.Borders
 import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.SettingsDataHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.*

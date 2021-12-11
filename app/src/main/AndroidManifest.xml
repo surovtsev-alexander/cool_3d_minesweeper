@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Cool_3d_minesweeper">
 
         <activity
-            android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivity"
+            android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivityImp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

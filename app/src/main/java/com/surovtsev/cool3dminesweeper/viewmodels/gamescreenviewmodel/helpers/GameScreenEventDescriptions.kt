@@ -3,7 +3,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControlsNames
 import com.surovtsev.cool3dminesweeper.models.game.interaction.MarkOnShortTapControl
-import com.surovtsev.utils.dataconstructions.MyLiveData
+import com.surovtsev.core.dataconstructions.MyLiveData
 import javax.inject.Inject
 import javax.inject.Named
 

@@ -6,6 +6,8 @@ buildscript {
         compose_version = '1.1.0-beta04'
         fragment_version = "1.4.0"
         nav_version = "2.3.5"
+        daggerVersion = "2.38.1"
+        roomVersion = "2.4.0-rc01"
     }
     repositories {
         google()

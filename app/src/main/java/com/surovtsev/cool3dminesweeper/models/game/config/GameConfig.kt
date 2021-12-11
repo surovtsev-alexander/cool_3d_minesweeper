@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.models.game.config
 
-import com.surovtsev.cool3dminesweeper.models.room.entities.Settings
+import com.surovtsev.core.room.entities.Settings
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
 import kotlin.math.ceil
