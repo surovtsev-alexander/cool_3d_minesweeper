@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.minesweeper.database
+package com.surovtsev.core.database
 
 import com.surovtsev.core.room.entities.Settings
 

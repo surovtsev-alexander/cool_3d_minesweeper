@@ -21,9 +21,9 @@ import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAni
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
+import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import logcat.logcat
 

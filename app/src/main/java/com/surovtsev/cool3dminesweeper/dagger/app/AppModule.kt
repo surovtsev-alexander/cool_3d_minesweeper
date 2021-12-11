@@ -21,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
-
+import com.surovtsev.core.viewmodel.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -123,4 +123,8 @@ object AppModule {
     @Singleton
     @Provides
     fun provideToastMessageData(): ToastMessageData = ToastMessageData(Constants.emptyString)
+
+    @Provides
+    fun provideViewModelCoroutineScopeHelper(): ViewModelCoroutineScopeHelper =
+        ViewModelCoroutineScopeHelperImpl()
 }

@@ -18,8 +18,8 @@ import com.surovtsev.ranking.dagger.ToastMessageData
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
-import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

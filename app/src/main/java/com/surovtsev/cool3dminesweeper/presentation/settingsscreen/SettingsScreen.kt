@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.SettingsScreenViewModel
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
@@ -24,6 +23,7 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.PrimaryColor1
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.core.settings.SettingsList
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
+import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 
 @Composable
 fun SettingsScreen(

@@ -14,8 +14,6 @@ import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.LoadGameParameterName
-import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.utils.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEvents
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.Place
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
@@ -23,6 +21,8 @@ import com.surovtsev.core.ranking.RankingColumn
 import com.surovtsev.core.ranking.RankingListHelper
 import com.surovtsev.core.ranking.RankingTableSortType
 import com.surovtsev.core.ranking.SortDirection
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint

@@ -1,6 +1,6 @@
-package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers
-import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
+package com.surovtsev.settings.viewmodel.helpers
 import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.settings.dagger.SettingsScope
 import javax.inject.Inject
 
 @SettingsScope

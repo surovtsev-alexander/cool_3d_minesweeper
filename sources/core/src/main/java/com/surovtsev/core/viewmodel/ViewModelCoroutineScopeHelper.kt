@@ -1,4 +1,4 @@
-package com.surovtsev.utils.viewmodel
+package com.surovtsev.core.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

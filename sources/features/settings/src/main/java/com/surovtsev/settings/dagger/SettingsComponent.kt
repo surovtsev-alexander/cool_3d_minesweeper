@@ -1,13 +1,14 @@
-package com.surovtsev.cool3dminesweeper.dagger.app.settings
+package com.surovtsev.settings.dagger
 
+import com.surovtsev.core.database.Borders
+import com.surovtsev.core.database.SettingsDataHelper
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.room.entities.SettingsDataFactory
-import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.Borders
-import com.surovtsev.cool3dminesweeper.utils.minesweeper.database.SettingsDataHelper
-import com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers.*
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.settings.viewmodel.helpers.*
+import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -27,6 +28,7 @@ interface SettingsComponent {
 
     @DefineComponent.Builder
     interface Builder {
+
         fun build(): SettingsComponent
     }
 }

@@ -48,6 +48,7 @@ dependencies {
     implementation project(":core")
     implementation project(":utils")
     implementation project(":touchlistener")
+    implementation project(":settings")
     implementation project(":ranking")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

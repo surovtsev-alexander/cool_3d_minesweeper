@@ -1,10 +1,9 @@
-package com.surovtsev.cool3dminesweeper.viewmodels.settingsscreenviewmodel.helpers
+package com.surovtsev.settings.viewmodel.helpers
 
-import com.surovtsev.cool3dminesweeper.dagger.app.SettingsScope
 import com.surovtsev.core.dataconstructions.MyLiveData
+import com.surovtsev.settings.dagger.SettingsScope
 import javax.inject.Inject
 import javax.inject.Named
-
 
 typealias SelectedSettingsId = MyLiveData<Long>
 typealias SettingsSlider = MyLiveData<Int>

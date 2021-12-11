@@ -6,6 +6,7 @@ def coreModule = ":core"
 def utilsModule = ":utils"
 def touchListenerModule = ":touchlistener"
 def rankingModule = ":ranking"
+def settingsModule = ":settings"
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/core")
@@ -18,3 +19,6 @@ project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlisten
 
 include rankingModule
 project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking")
+
+include settingsModule
+project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
