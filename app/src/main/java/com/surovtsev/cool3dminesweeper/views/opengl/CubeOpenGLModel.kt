@@ -9,10 +9,10 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoor
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
-import com.surovtsev.cool3dminesweeper.utils.gles.helpers.TextureHelper
+import com.surovtsev.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.TextureUpdater
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLModel
-import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
+import com.surovtsev.game.utils.gles.model.buffers.VertexArray
 import com.surovtsev.game.dagger.GameScope
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

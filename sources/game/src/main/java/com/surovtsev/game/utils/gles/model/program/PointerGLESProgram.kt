@@ -1,10 +1,10 @@
-package com.surovtsev.cool3dminesweeper.utils.gles.model.program
+package com.surovtsev.game.utils.gles.model.program
 
 import android.content.Context
 import android.opengl.GLES20
-import com.surovtsev.cool3dminesweeper.R
-import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
+import com.surovtsev.game.R
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.utils.gles.helpers.ShaderHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

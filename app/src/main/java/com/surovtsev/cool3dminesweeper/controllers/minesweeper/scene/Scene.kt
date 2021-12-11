@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.game.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.game.utils.time.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel

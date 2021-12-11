@@ -1,8 +1,8 @@
 package com.surovtsev.cool3dminesweeper.utils.unused.indexedobject
 
 import android.opengl.GLES20.*
-import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.IndexBuffer
-import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
+import com.surovtsev.game.utils.gles.model.buffers.IndexBuffer
+import com.surovtsev.game.utils.gles.model.buffers.VertexArray
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
 
 @Suppress("unused")

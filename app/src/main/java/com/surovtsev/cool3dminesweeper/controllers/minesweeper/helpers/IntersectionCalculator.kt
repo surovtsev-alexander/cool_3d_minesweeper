@@ -5,7 +5,7 @@ import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCellWithBorder
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
+import com.surovtsev.game.utils.gles.model.pointer.Pointer
 import com.surovtsev.game.dagger.GameScope
 import javax.inject.Inject
 

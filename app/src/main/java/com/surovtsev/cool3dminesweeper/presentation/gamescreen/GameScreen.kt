@@ -22,7 +22,7 @@ import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveMarkedBombs
 import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
-import com.surovtsev.cool3dminesweeper.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 

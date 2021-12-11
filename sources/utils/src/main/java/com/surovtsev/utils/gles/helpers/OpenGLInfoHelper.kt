@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.gles.helpers
+package com.surovtsev.utils.gles.helpers
 
 import android.annotation.SuppressLint
 import android.app.Activity

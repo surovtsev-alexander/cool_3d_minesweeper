@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.gles.model.pointer
+package com.surovtsev.game.utils.gles.model.pointer
 
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.utils.androidview.interaction.TouchType

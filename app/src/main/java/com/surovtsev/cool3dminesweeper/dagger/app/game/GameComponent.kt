@@ -21,8 +21,8 @@ import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
+import com.surovtsev.game.utils.gles.model.pointer.Pointer
+import com.surovtsev.game.utils.gles.model.pointer.PointerImp
 import com.surovtsev.game.utils.time.TimeSpan
 import com.surovtsev.game.utils.time.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*

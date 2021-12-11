@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.models.game.border.cube.cell.edge
 
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerDescriptor
+import com.surovtsev.game.utils.gles.model.pointer.PointerDescriptor
 import com.surovtsev.utils.math.MyMath
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4

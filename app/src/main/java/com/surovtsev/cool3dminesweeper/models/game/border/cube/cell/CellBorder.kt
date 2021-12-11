@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.models.game.border.cube.cell
 
 import com.surovtsev.cool3dminesweeper.models.game.border.cube.cell.edge.EdgeBorder
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerDescriptor
+import com.surovtsev.game.utils.gles.model.pointer.PointerDescriptor
 import glm_.vec3.Vec3
 
 class CellBorder(

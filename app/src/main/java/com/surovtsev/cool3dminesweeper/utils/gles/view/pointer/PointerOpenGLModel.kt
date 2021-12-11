@@ -3,9 +3,9 @@ package com.surovtsev.cool3dminesweeper.utils.gles.view.pointer
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLModel
-import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
-import com.surovtsev.cool3dminesweeper.utils.gles.model.program.PointerGLESProgram
+import com.surovtsev.game.utils.gles.model.buffers.VertexArray
+import com.surovtsev.game.utils.gles.model.pointer.Pointer
+import com.surovtsev.game.utils.gles.model.program.PointerGLESProgram
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.core.utils.statehelpers.Switch
 import com.surovtsev.core.utils.statehelpers.SwitchImp

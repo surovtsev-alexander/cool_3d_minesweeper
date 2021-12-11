@@ -2,7 +2,7 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touc
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.utils.androidview.interaction.TouchType
-import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
+import com.surovtsev.game.utils.gles.model.pointer.PointerImp
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
 import com.surovtsev.core.utils.statehelpers.UpdatableImp

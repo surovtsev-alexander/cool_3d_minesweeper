@@ -1,10 +1,10 @@
-package com.surovtsev.cool3dminesweeper.utils.gles.model.program
+package com.surovtsev.game.utils.gles.model.program
 
 import android.opengl.GLES20
 import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
-import com.surovtsev.cool3dminesweeper.utils.gles.helpers.ShaderHelper
+import com.surovtsev.utils.gles.helpers.ShaderHelper
 import com.surovtsev.utils.loggerconfig.LoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
