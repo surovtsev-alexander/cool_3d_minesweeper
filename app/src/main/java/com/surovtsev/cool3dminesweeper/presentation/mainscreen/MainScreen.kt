@@ -37,11 +37,6 @@ class MainScreenUI(
     private val viewModel: MainScreenViewModel,
     private val navController: NavController,
 ) {
-
-    init {
-        logcat { "MainScreenUI constructor is called" }
-    }
-
     @Composable
     fun MainScreeControls() {
         MinesweeperTheme {

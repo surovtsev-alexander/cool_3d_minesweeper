@@ -1,23 +1,23 @@
 package com.surovtsev.cool3dminesweeper.dagger.app.mainscreen
 
 import com.surovtsev.cool3dminesweeper.dagger.app.MainScreenScope
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.cool3dminesweeper.presentation.Screen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonInfo
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonType
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 
 @MainScreenScope
 @DefineComponent(
-    parent = ViewModelComponent::class
+    parent = SingletonComponent::class
 )
 interface MainScreenComponent {
 
