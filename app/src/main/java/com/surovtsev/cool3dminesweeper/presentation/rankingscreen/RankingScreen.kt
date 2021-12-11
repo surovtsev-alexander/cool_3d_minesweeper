@@ -23,7 +23,7 @@ import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.utils.constants.Constants
-import com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper.LocalDateTimeHelper
+import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.core.settings.SettingsList
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents

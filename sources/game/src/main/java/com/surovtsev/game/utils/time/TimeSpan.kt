@@ -1,10 +1,11 @@
-package com.surovtsev.cool3dminesweeper.utils.time.timers
+package com.surovtsev.game.utils.time
 
-import com.surovtsev.core.timers.Tickable
-import com.surovtsev.core.timers.TimeUpdater
-import com.surovtsev.utils.statehelpers.UpdatableImp
-import com.surovtsev.utils.statehelpers.Switch
-import com.surovtsev.utils.statehelpers.SwitchImp
+import com.surovtsev.core.utils.statehelpers.Switch
+import com.surovtsev.core.utils.statehelpers.SwitchImp
+import com.surovtsev.core.utils.statehelpers.UpdatableImp
+import com.surovtsev.utils.timers.Tickable
+import com.surovtsev.utils.timers.TimeUpdater
+
 
 class TimeSpan(
     private val interval: Long,

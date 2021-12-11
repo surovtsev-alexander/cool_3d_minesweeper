@@ -7,7 +7,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
+import com.surovtsev.game.utils.time.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import com.surovtsev.game.dagger.GameScope
 import glm_.vec2.Vec2i

@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.utils.unused
 
-//import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
+//import com.surovtsev.game.utils.time.TimeSpanHelperImp
 //import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 //import glm_.vec2.Vec2
 //

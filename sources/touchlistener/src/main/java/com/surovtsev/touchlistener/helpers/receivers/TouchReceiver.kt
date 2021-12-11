@@ -1,7 +1,7 @@
 package com.surovtsev.touchlistener.helpers.receivers
 
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
-import com.surovtsev.utils.statehelpers.Releasable
+import com.surovtsev.core.utils.statehelpers.Releasable
 import glm_.vec2.Vec2
 
 interface TouchReceiver: TouchListenerReceiver, Releasable {

@@ -1,7 +1,7 @@
 package com.surovtsev.touchlistener.helpers
 
-import com.surovtsev.core.timers.Tickable
-import com.surovtsev.core.timers.TimeSpanHelper
+import com.surovtsev.utils.timers.Tickable
+import com.surovtsev.utils.timers.TimeSpanHelper
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder

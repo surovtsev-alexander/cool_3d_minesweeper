@@ -1,4 +1,4 @@
-package com.surovtsev.utils.statehelpers
+package com.surovtsev.core.utils.statehelpers
 
 interface Releasable {
     fun release()

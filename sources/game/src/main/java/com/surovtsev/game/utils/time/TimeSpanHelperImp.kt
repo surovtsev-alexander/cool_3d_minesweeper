@@ -1,9 +1,9 @@
-package com.surovtsev.cool3dminesweeper.utils.time.timers
+package com.surovtsev.game.utils.time
 
 import android.os.SystemClock
-import com.surovtsev.core.timers.Tickable
-import com.surovtsev.core.timers.TimeSpanHelper
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.utils.timers.Tickable
+import com.surovtsev.utils.timers.TimeSpanHelper
 import javax.inject.Inject
 
 @GameScope

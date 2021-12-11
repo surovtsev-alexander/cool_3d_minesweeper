@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.utils.time.localdatetimehelper
+package com.surovtsev.utils.time.localdatetimehelper
 
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime

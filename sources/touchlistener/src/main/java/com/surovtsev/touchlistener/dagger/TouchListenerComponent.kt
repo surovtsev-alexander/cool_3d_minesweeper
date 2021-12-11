@@ -1,6 +1,6 @@
 package com.surovtsev.touchlistener.dagger
 
-import com.surovtsev.core.timers.TimeSpanHelper
+import com.surovtsev.utils.timers.TimeSpanHelper
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.touchlistener.helpers.ScalingHelper

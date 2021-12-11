@@ -12,7 +12,7 @@ import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
+import com.surovtsev.game.utils.time.TimeSpanHelperImp
 import com.surovtsev.game.dagger.GameScope
 import glm_.vec2.Vec2i
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helper
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.utils.math.MatrixHelper
-import com.surovtsev.utils.statehelpers.UpdatableImp
+import com.surovtsev.core.utils.statehelpers.UpdatableImp
 import glm_.glm
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2

@@ -1,4 +1,4 @@
-package com.surovtsev.core.timers
+package com.surovtsev.utils.timers
 
 interface TimeUpdater {
     fun subscribe(
