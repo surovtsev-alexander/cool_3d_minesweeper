@@ -6,7 +6,6 @@ import com.surovtsev.cool3dminesweeper.R
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.CubeSkin
 import com.surovtsev.cool3dminesweeper.models.gles.programs.CubeGLESProgram
@@ -14,6 +13,7 @@ import com.surovtsev.cool3dminesweeper.utils.gles.helpers.TextureHelper
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.TextureUpdater
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLModel
 import com.surovtsev.cool3dminesweeper.utils.gles.model.buffers.VertexArray
+import com.surovtsev.game.dagger.GameScope
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

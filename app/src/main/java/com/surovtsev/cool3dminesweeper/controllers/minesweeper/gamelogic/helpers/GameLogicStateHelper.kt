@@ -3,12 +3,12 @@ package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.core.timers.Tickable
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
+import com.surovtsev.game.dagger.GameScope
 import javax.inject.Inject
 
 //class GameLogicStateHelper @AssistedInject constructor(

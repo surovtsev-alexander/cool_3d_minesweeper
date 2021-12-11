@@ -6,7 +6,6 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLog
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
@@ -14,6 +13,7 @@ import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
+import com.surovtsev.game.dagger.GameScope
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
+import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
 import com.surovtsev.utils.math.MatrixHelper
 import glm_.vec2.Vec2

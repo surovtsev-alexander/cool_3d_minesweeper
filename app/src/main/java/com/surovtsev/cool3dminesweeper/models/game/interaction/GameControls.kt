@@ -1,5 +1,5 @@
 package com.surovtsev.cool3dminesweeper.models.game.interaction
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
+import com.surovtsev.game.dagger.GameScope
 import javax.inject.Inject
 import javax.inject.Named
 

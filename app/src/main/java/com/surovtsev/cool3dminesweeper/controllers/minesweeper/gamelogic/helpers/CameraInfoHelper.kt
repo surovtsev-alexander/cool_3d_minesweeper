@@ -1,7 +1,7 @@
 package com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers
 
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
+import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.utils.math.MatrixHelper
 import com.surovtsev.utils.statehelpers.UpdatableImp
 import glm_.glm

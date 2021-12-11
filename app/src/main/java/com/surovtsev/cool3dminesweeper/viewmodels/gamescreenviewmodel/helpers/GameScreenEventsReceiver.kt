@@ -2,9 +2,9 @@ package com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers
 
 import android.content.Context
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.gameinteraction.GameEventsReceiver
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
+import com.surovtsev.game.dagger.GameScope
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject

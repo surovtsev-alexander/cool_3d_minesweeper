@@ -1,10 +1,11 @@
 package com.surovtsev.cool3dminesweeper.models.game.skin.cube
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
+
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellRange
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.PointedCell
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.skin.cube.cell.CellSkin
+import com.surovtsev.game.dagger.GameScope
 import glm_.vec3.Vec3i
 import javax.inject.Inject
 

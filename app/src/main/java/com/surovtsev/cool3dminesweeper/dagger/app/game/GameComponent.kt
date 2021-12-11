@@ -12,7 +12,6 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.GameConfi
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
@@ -30,6 +29,7 @@ import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import com.surovtsev.core.ranking.RankingListHelper
+import com.surovtsev.game.dagger.GameScope
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module

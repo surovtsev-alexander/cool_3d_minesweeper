@@ -1,10 +1,10 @@
 package com.surovtsev.cool3dminesweeper.models.game.border.cube
 
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CubeCoordinates
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.border.cube.cell.CellBorder
 import com.surovtsev.cool3dminesweeper.models.game.cellpointers.CellIndex
 import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
+import com.surovtsev.game.dagger.GameScope
 import javax.inject.Inject
 
 @GameScope

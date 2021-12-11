@@ -4,12 +4,12 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLog
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.interaction.touch.TouchHandlerImp
-import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
+import com.surovtsev.game.dagger.GameScope
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 import javax.inject.Named
