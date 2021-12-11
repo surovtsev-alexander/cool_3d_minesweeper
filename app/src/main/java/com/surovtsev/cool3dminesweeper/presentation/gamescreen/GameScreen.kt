@@ -16,17 +16,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
-import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
-import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveMarkedBombsControl
-import com.surovtsev.cool3dminesweeper.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Teal200
+import com.surovtsev.game.models.game.gamestatus.GameStatus
+import com.surovtsev.game.models.game.interaction.GameControls
+import com.surovtsev.game.models.game.interaction.RemoveMarkedBombsControl
+import com.surovtsev.game.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.GameScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
-
-const val LoadGameParameterName = "load_game"
+import com.surovtsev.game.viewmodel.GameScreenViewModel
+import com.surovtsev.game.viewmodel.helpers.*
 
 @Composable
 fun GameScreen(
