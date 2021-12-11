@@ -74,25 +74,6 @@ interface GameComponentEntryPoint {
     val timeSpanHelperImp: TimeSpanHelperImp
 }
 
-//@Module
-//@InstallIn(GameComponent::class)
-//object TouchListenerCreator {
-//    @GameScope
-//    @Provides
-//    fun provideTouchListenerComponent(
-//        timeSpanHelper: TimeSpanHelperImp,
-//        moveHandlerImp: MoveHandlerImp,
-//        touchHandlerImp: TouchHandlerImp,
-//    ): TouchListenerComponent {
-//        return DaggerTouchListenerComponent
-//            .builder()
-//            .timeSpanHelper(timeSpanHelper)
-//            .moveHandler(moveHandlerImp)
-//            .touchHandler(touchHandlerImp)
-//            .build()
-//    }
-//}
-
 @Module
 @InstallIn(GameComponent::class)
 object GameModule {
