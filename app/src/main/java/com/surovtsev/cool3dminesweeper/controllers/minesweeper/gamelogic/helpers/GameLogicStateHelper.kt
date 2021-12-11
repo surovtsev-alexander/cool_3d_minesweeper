@@ -6,7 +6,7 @@ import com.surovtsev.cool3dminesweeper.controllers.minesweeper.helpers.Minesweep
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatus
 import com.surovtsev.cool3dminesweeper.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.cool3dminesweeper.utils.time.timers.Tickable
+import com.surovtsev.core.timers.Tickable
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.GameScreenEventsReceiver
 import javax.inject.Inject

@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.GameLogic
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveController
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.gamelogic.helpers.save.SaveTypes
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchReceiverImp
 import com.surovtsev.cool3dminesweeper.controllers.minesweeper.scene.Scene
 import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.camerainfo.CameraInfo
@@ -13,16 +12,14 @@ import com.surovtsev.cool3dminesweeper.models.game.config.GameConfig
 import com.surovtsev.cool3dminesweeper.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.cool3dminesweeper.models.game.save.Save
 import com.surovtsev.cool3dminesweeper.models.gles.gameviewsholder.GameViewsHolder
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
 import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
 @GameScope
 class MinesweeperController @Inject constructor(
-    private val timeSpanHelper: TimeSpanHelper,
-    private val touchReceiver: TouchReceiverImp,
+    private val timeSpanHelper: TimeSpanHelperImp,
     private val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
@@ -30,7 +27,6 @@ class MinesweeperController @Inject constructor(
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     private val scene: Scene,
-    val touchListener: TouchListener
 ):
     OpenGLEventsHandler,
     DefaultLifecycleObserver

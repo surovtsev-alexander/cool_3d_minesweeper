@@ -45,7 +45,9 @@ android {
 
 dependencies {
 
+    implementation project(":core")
     implementation project(":utils")
+    implementation project(":touchlistener")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'

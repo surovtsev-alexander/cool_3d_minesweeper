@@ -8,7 +8,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.GameScope
 import com.surovtsev.cool3dminesweeper.models.game.interaction.GameControls
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.view.pointer.PointerOpenGLModel
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.views.opengl.CubeOpenGLModel
 import glm_.vec2.Vec2i
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Named
 @GameScope
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
-    private val timeSpanHelper: TimeSpanHelper,
+    private val timeSpanHelper: TimeSpanHelperImp,
     private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
@@ -39,6 +39,7 @@ class Scene @Inject constructor(
 
     fun onDrawFrame() {
         val cameraMoved = cameraInfoHelper.getAndRelease()
+
         val clicked = touchHandler.getAndRelease()
 
         if (gameControls.markOnShortTapControl.getAndRelease()) {

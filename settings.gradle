@@ -2,5 +2,16 @@ rootProject.name = "cool_3d_minesweeper"
 
 include ":app"
 
-include ":utils"
-project(":utils").projectDir = new File(rootDir, "sources/utils")
+def coreModule = ":core"
+def utilsModule = ":utils"
+def touchListenerModule = ":touchlistener"
+
+include coreModule
+project(coreModule).projectDir = new File(rootDir, "sources/core")
+
+include utilsModule
+project(utilsModule).projectDir = new File(rootDir, "sources/utils")
+
+include touchListenerModule
+project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
+include ':core'

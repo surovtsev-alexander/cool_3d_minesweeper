@@ -1,12 +1,14 @@
 package com.surovtsev.cool3dminesweeper.utils.time.timers
 
+import com.surovtsev.core.timers.Tickable
+import com.surovtsev.core.timers.TimeUpdater
 import com.surovtsev.utils.statehelpers.UpdatableImp
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
 
 class TimeSpan(
     private val interval: Long,
-    private val timeSpanHelper: TimeSpanHelper,
+    private val timeSpanHelper: TimeSpanHelperImp,
 ):
     TimeUpdater,
     UpdatableImp(),

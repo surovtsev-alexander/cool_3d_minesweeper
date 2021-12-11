@@ -23,6 +23,9 @@ import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingTableSortType
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.SortDirection
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
+import com.surovtsev.touchlistener.TouchListener
+import com.surovtsev.touchlistener.dagger.TouchListenerComponent
+import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -32,6 +35,7 @@ import javax.inject.Provider
 @HiltViewModel
 class GameScreenViewModel @Inject constructor(
     gameComponentProvider: Provider<GameComponent.Builder>,
+    touchListenerComponentProvider: Provider<TouchListenerComponent.Builder>,
     savedStateHandle: SavedStateHandle
 ):
     ViewModel(),
@@ -48,6 +52,7 @@ class GameScreenViewModel @Inject constructor(
     private val settingsDao: SettingsDao
     private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
+    private val touchListener: TouchListener
 
     init {
 
@@ -79,12 +84,30 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.rankingDao
         rankingListHelper =
             gameComponentEntryPoint.rankingListHelper
+
+        val touchListenerComponent = touchListenerComponentProvider
+            .get()
+            .touchHandler(
+                gameComponentEntryPoint.touchHandlerImp)
+            .moveHandler(
+                gameComponentEntryPoint.moveHandlerImp)
+            .timeSpanHelper(
+                gameComponentEntryPoint.timeSpanHelperImp
+            )
+            .build()
+
+        val touchListenerEntryPoint = EntryPoints.get(
+            touchListenerComponent, TouchListenerEntryPoint::class.java
+        )
+
+        touchListener = touchListenerEntryPoint.touchListener
     }
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         gLSurfaceView.apply {
-            minesweeperController.touchListener.connectToGLSurfaceView(
+            /* TODO. add back */
+            touchListener.connectToGLSurfaceView(
                 gLSurfaceView
             )
 

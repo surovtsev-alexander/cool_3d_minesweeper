@@ -25,18 +25,7 @@ import com.surovtsev.cool3dminesweeper.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.Pointer
 import com.surovtsev.cool3dminesweeper.utils.gles.model.pointer.PointerImp
 import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpan
-import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.TouchListener
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ClickAndRotationHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.ScalingHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchHelper
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.TouchReceiverImp
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.MoveHandler
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.handlers.TouchHandler
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.MoveReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.RotationReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.ScaleReceiver
-import com.surovtsev.cool3dminesweeper.utils.view.androidview.touchlistener.helpers.receivers.TouchReceiver
+import com.surovtsev.cool3dminesweeper.utils.time.timers.TimeSpanHelperImp
 import com.surovtsev.cool3dminesweeper.viewmodels.gamescreenviewmodel.helpers.*
 import com.surovtsev.cool3dminesweeper.viewmodels.rankinscreenviewmodel.helpers.RankingListHelper
 import com.surovtsev.cool3dminesweeper.views.glesrenderer.GLESRenderer
@@ -50,7 +39,6 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import glm_.vec2.Vec2
 import javax.inject.Named
 
 @GameScope
@@ -80,8 +68,30 @@ interface GameComponentEntryPoint {
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
     val rankingListHelper: RankingListHelper
+
+    val touchHandlerImp: TouchHandlerImp
+    val moveHandlerImp: MoveHandlerImp
+    val timeSpanHelperImp: TimeSpanHelperImp
 }
 
+//@Module
+//@InstallIn(GameComponent::class)
+//object TouchListenerCreator {
+//    @GameScope
+//    @Provides
+//    fun provideTouchListenerComponent(
+//        timeSpanHelper: TimeSpanHelperImp,
+//        moveHandlerImp: MoveHandlerImp,
+//        touchHandlerImp: TouchHandlerImp,
+//    ): TouchListenerComponent {
+//        return DaggerTouchListenerComponent
+//            .builder()
+//            .timeSpanHelper(timeSpanHelper)
+//            .moveHandler(moveHandlerImp)
+//            .touchHandler(touchHandlerImp)
+//            .build()
+//    }
+//}
 
 @Module
 @InstallIn(GameComponent::class)
@@ -241,11 +251,6 @@ object GameControllerModule {
     ): CubeCoordinates {
         return CubeCoordinates.createObject(gameConfig)
     }
-
-    @Named(TouchListener.PrevPointerCount)
-    @GameScope
-    @Provides
-    fun providePrevPointerCount() = 0
 }
 
 @Module
@@ -260,46 +265,6 @@ interface GameControllerBindModule {
     fun bindOpenGLEventsHandler(
         minesweeperController: MinesweeperController
     ): OpenGLEventsHandler
-
-    @GameScope
-    @Binds
-    fun bindTouchHelper(
-        clickAndRotationHelper: ClickAndRotationHelper
-    ): TouchHelper
-}
-
-@Module
-@InstallIn(GameComponent::class)
-object TouchHelperModule {
-    @GameScope
-    @Provides
-    @Named(ScalingHelper.PrevDistance)
-    fun getPrevDistance() = 0f
-}
-
-@Module
-@InstallIn(GameComponent::class)
-object ScalingHelperModule {
-    @Provides
-    @Named(TouchHelper.PrevCenter)
-    fun providePrevCenter() = Vec2()
-}
-
-@Module
-@InstallIn(GameComponent::class)
-object ClickAndRotationHelperModule {
-    @Provides
-    @Named(ClickAndRotationHelper.Prev)
-    fun providePrev() = Vec2()
-
-    @Provides
-    @Named(ClickAndRotationHelper.Movement)
-    fun provideMovement() = 0f
-
-    @GameScope
-    @Provides
-    @Named(ClickAndRotationHelper.Downed)
-    fun provideDowned() = false
 }
 
 @Module
@@ -316,48 +281,9 @@ object GameLogicStateHelperModule {
     @GameScope
     @Provides
     fun provideTimeSpan(
-        timeSpanHelper: TimeSpanHelper
+        timeSpanHelper: TimeSpanHelperImp
     ): TimeSpan {
         return TimeSpan(1000L, timeSpanHelper)
     }
 }
 
-@Module
-@InstallIn(GameComponent::class)
-interface touchListenerBindModule {
-    @GameScope
-    @Binds
-    fun bindTouchHandler(
-        touchHandler: TouchHandlerImp
-    ): TouchHandler
-
-    @GameScope
-    @Binds
-    fun bindMoveHandler(
-        moveHandler: MoveHandlerImp
-    ): MoveHandler
-
-    @GameScope
-    @Binds
-    fun bindRotationReceiver(
-        moveHandler: MoveHandler
-    ): RotationReceiver
-
-    @GameScope
-    @Binds
-    fun bindScaleReceiver(
-        moveHandler: MoveHandler
-    ): ScaleReceiver
-
-    @GameScope
-    @Binds
-    fun bindMoveReceiver(
-        moveHandler: MoveHandler
-    ): MoveReceiver
-
-    @GameScope
-    @Binds
-    fun bindTouchReceiver(
-        touchReceiver: TouchReceiverImp
-    ): TouchReceiver
-}
