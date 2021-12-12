@@ -7,20 +7,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.surovtsev.core.ranking.*
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.ui.theme.DeepGray
-import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.core.ui.theme.LightBlue
-import com.surovtsev.core.ui.theme.MinesweeperTheme
+import com.surovtsev.core.ui.theme.*
 import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
@@ -46,31 +45,34 @@ fun RankingControls(
     rankingScreenStateValue: RankingScreenStateValue,
     rankingScreenCommandsHandler: RankingScreenCommandsHandler
 ) {
-    //val rankingScreenEvents = viewModel.rankingScreenEvents
     MinesweeperTheme {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .border(1.dp, Color.Black)
-                .background(GrayBackground),
-            //verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
-            Row(
-                modifier = Modifier.weight(3f)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(1.dp, Color.Black)
+                    .background(GrayBackground),
+                //verticalArrangement = Arrangement.spacedBy(15.dp),
             ) {
-                SettingsList(
-                    rankingScreenStateValue,
-                    rankingScreenCommandsHandler
-                )
-            }
-            Row(
-                modifier = Modifier.weight(10f)
-            ) {
-                RankingList(
-                    rankingScreenStateValue,
-                    rankingScreenCommandsHandler
-                )
-            }
+                Row(
+                    modifier = Modifier.weight(3f)
+                ) {
+                    SettingsList(
+                        rankingScreenStateValue,
+                        rankingScreenCommandsHandler
+                    )
+                }
+                Row(
+                    modifier = Modifier.weight(10f)
+                ) {
+                    RankingList(
+                        rankingScreenStateValue,
+                        rankingScreenCommandsHandler
+                    )
+                }
 //            Row(
 //                modifier = Modifier.fillMaxWidth(),
 //            ) {
@@ -78,6 +80,13 @@ fun RankingControls(
 //            }
 //
 //            Toast(mainActivity, viewModel)
+            }
+
+            DisplayCircularIndicatorIfNeeded(
+                rankingScreenStateValue,
+                this
+            )
+
         }
     }
 }
@@ -88,9 +97,7 @@ fun SettingsList(
     rankingScreenCommandsHandler: RankingScreenCommandsHandler
 ) {
     val rankingScreenState = rankingScreenStateValue.observeAsState(
-        RankingScreenState.Idle(
-            RankingScreenData.NoData
-        )
+        RankingScreenInitialState
     ).value
 
     val rankingScreenData = rankingScreenState.rankingScreenData
@@ -278,16 +285,19 @@ fun RankingListColumnTitle(
                 modifier = Modifier
                     .width(30.dp)
                     .background(buttonColor)
-                    .clickable { rankingScreenCommandsHandler.handleCommand(
-                        CommandFromRankingScreen.SortList(
-                            RankingTableSortType(
-                                columnType,
-                                if (isColumnSelected) {
-                                    sortDirection.nextSortType()
-                                } else {
-                                    sortDirection
-                                }
-                            )))
+                    .clickable {
+                        rankingScreenCommandsHandler.handleCommand(
+                            CommandFromRankingScreen.SortList(
+                                RankingTableSortType(
+                                    columnType,
+                                    if (isColumnSelected) {
+                                        sortDirection.nextSortType()
+                                    } else {
+                                        sortDirection
+                                    }
+                                )
+                            )
+                        )
                     }
             ) {
                 Text(
@@ -334,6 +344,27 @@ fun RankingDataItem(
                 elapsedAndPlaceString,
                 Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
+            )
+        }
+    }
+}
+
+@Composable
+fun DisplayCircularIndicatorIfNeeded(
+    rankingScreenStateValue: RankingScreenStateValue,
+    boxScope: BoxScope,
+) {
+    val rankingScreenState = rankingScreenStateValue.observeAsState(
+        RankingScreenInitialState
+    ).value
+
+    if (rankingScreenState is RankingScreenState.Loading) {
+        with(boxScope) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(40.dp),
+                color = PrimaryColor1
             )
         }
     }
