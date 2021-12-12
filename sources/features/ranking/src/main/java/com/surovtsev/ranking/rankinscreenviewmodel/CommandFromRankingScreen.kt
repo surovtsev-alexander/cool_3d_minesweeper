@@ -2,16 +2,16 @@ package com.surovtsev.ranking.rankinscreenviewmodel
 
 import com.surovtsev.core.ranking.RankingTableSortType
 
-sealed class CommandsToRankingScreenViewModel {
-    object LoadData: CommandsToRankingScreenViewModel()
+sealed class CommandFromRankingScreen {
+    object LoadData: CommandFromRankingScreen()
 
-    object CloseError: CommandsToRankingScreenViewModel()
+    object CloseError: CommandFromRankingScreen()
 
     class FilterList(
         val selectedSettingsId: Long
-    ): CommandsToRankingScreenViewModel()
+    ): CommandFromRankingScreen()
 
     class SortList(
         val rankingTableSortType: RankingTableSortType
-    ): CommandsToRankingScreenViewModel()
+    ): CommandFromRankingScreen()
 }

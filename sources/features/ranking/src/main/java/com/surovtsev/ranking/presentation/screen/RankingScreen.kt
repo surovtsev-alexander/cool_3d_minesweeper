@@ -30,7 +30,7 @@ fun RankingScreen(
 ) {
     LaunchedEffect(key1 = Unit, block = {
         viewModel.handleCommand(
-            CommandsToRankingScreenViewModel
+            CommandFromRankingScreen
                 .LoadData
         )
     })
@@ -151,7 +151,7 @@ fun SettingsList(
                     } else {
                         Box (
                                 modifier = Modifier.clickable { rankingScreenCommandsHandler.handleCommand(
-                                    CommandsToRankingScreenViewModel.FilterList(itemId))
+                                    CommandFromRankingScreen.FilterList(itemId))
                                 }
                         ) {
                             SettingsDataItem(item.settingsData, winsCount)
@@ -279,7 +279,7 @@ fun RankingListColumnTitle(
                     .width(30.dp)
                     .background(buttonColor)
                     .clickable { rankingScreenCommandsHandler.handleCommand(
-                        CommandsToRankingScreenViewModel.SortList(
+                        CommandFromRankingScreen.SortList(
                             RankingTableSortType(
                                 columnType,
                                 if (isColumnSelected) {

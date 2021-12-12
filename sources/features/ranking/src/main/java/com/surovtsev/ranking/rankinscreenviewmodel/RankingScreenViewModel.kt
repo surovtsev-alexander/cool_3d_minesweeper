@@ -26,7 +26,7 @@ import javax.inject.Provider
 typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
 typealias RankingScreenStateValue = LiveData<RankingScreenState>
 
-typealias RankingScreenCommandsHandler = ScreenCommandsHandler<CommandsToRankingScreenViewModel>
+typealias RankingScreenCommandsHandler = ScreenCommandsHandler<CommandFromRankingScreen>
 
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
@@ -81,16 +81,16 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingScreenStateValue
     }
 
-    override fun handleCommand(event: CommandsToRankingScreenViewModel) {
+    override fun handleCommand(event: CommandFromRankingScreen) {
         launchOnIOThread {
 
             setLoadingState()
 
             when (event) {
-                is CommandsToRankingScreenViewModel.LoadData    -> loadData()
-                is CommandsToRankingScreenViewModel.FilterList  -> filterList(event.selectedSettingsId)
-                is CommandsToRankingScreenViewModel.SortList    -> sortList(event.rankingTableSortType)
-                is CommandsToRankingScreenViewModel.CloseError  -> closeError()
+                is CommandFromRankingScreen.LoadData    -> loadData()
+                is CommandFromRankingScreen.FilterList  -> filterList(event.selectedSettingsId)
+                is CommandFromRankingScreen.SortList    -> sortList(event.rankingTableSortType)
+                is CommandFromRankingScreen.CloseError  -> closeError()
             }
         }
     }
@@ -124,7 +124,7 @@ class RankingScreenViewModel @Inject constructor(
             saveController.loadSettingDataOrDefault()
         )?.let {
             return handleCommand(
-                CommandsToRankingScreenViewModel
+                CommandFromRankingScreen
                     .FilterList(it.id)
             )
         }
@@ -157,7 +157,7 @@ class RankingScreenViewModel @Inject constructor(
         }
 
         return handleCommand(
-            CommandsToRankingScreenViewModel.SortList(
+            CommandFromRankingScreen.SortList(
                 DefaultRankingTableSortType
             )
         )
