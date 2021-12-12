@@ -16,8 +16,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.surovtsev.core.theme.MinesweeperTheme
-import com.surovtsev.core.theme.Teal200
+import com.surovtsev.core.ui.theme.MinesweeperTheme
+import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControls
 import com.surovtsev.game.models.game.interaction.RemoveMarkedBombsControl

@@ -1,4 +1,4 @@
-package com.surovtsev.core.theme
+package com.surovtsev.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

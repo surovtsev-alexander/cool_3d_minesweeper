@@ -1,6 +1,5 @@
-package com.surovtsev.cool3dminesweeper.presentation.rankingscreen
+package com.surovtsev.ranking.presentation.screen
 
-import android.content.Context
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,46 +7,43 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.core.room.dao.WinsCountMap
-import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.cool3dminesweeper.presentation.MainActivityImp
-import com.surovtsev.core.theme.DeepGray
-import com.surovtsev.core.theme.GrayBackground
-import com.surovtsev.core.theme.LightBlue
-import com.surovtsev.core.theme.MinesweeperTheme
-import com.surovtsev.utils.constants.Constants
-import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
-import com.surovtsev.core.settings.SettingsList
-import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import com.surovtsev.core.ranking.RankingColumn
 import com.surovtsev.core.ranking.RankingDataWithPlaces
 import com.surovtsev.core.ranking.RankingTableSortType
 import com.surovtsev.core.ranking.SortDirection
+import com.surovtsev.core.room.dao.WinsCountMap
+import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.core.settings.SettingsList
+import com.surovtsev.core.ui.theme.DeepGray
+import com.surovtsev.core.ui.theme.GrayBackground
+import com.surovtsev.core.ui.theme.LightBlue
+import com.surovtsev.core.ui.theme.MinesweeperTheme
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
 @Composable
 fun RankingScreen(
-    mainActivity: MainActivityImp,
+//    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel
 ) {
     RankingControls(
-        mainActivity,
+//        mainActivity,
         viewModel
     )
 }
 
 @Composable
 fun RankingControls(
-    mainActivity: MainActivityImp,
+//    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel,
 ) {
     val rankingScreenEvents = viewModel.rankingScreenEvents
@@ -69,13 +65,13 @@ fun RankingControls(
             ) {
                 RankingList(viewModel)
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                ExportDataButton(mainActivity, viewModel)
-            }
-
-            Toast(mainActivity, viewModel)
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//            ) {
+//                ExportDataButton(mainActivity, viewModel)
+//            }
+//
+//            Toast(mainActivity, viewModel)
         }
     }
 }
@@ -290,45 +286,45 @@ fun RankingDataItem(
     }
 }
 
-@Composable
-fun ExportDataButton(
-    mainActivity: MainActivityImp,
-    viewModel: RankingScreenViewModel
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(GrayBackground),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { viewModel.triggerRequestingPermissions(mainActivity) },
-                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
-            ) {
-                Text(text = "exportData")
-            }
-        }
-    }
-}
-
-@Composable
-fun Toast(
-    context: Context,
-    viewModel: RankingScreenViewModel
-) {
-    val toastMessage: String by viewModel.toastMessageData.run {
-        data.observeAsState(defaultValue)
-    }
-
-    if (toastMessage == Constants.emptyString) {
-        return
-    }
-
-    android.widget.Toast.makeText(
-        context, toastMessage, android.widget.Toast.LENGTH_LONG
-    ).show()
-}
+//@Composable
+//fun ExportDataButton(
+//    mainActivity: MainActivityImp,
+//    viewModel: RankingScreenViewModel
+//) {
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .background(GrayBackground),
+//    ) {
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            horizontalArrangement = Arrangement.Center
+//        ) {
+//            Button(
+//                onClick = { viewModel.triggerRequestingPermissions(mainActivity) },
+//                modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+//            ) {
+//                Text(text = "exportData")
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun Toast(
+//    context: Context,
+//    viewModel: RankingScreenViewModel
+//) {
+//    val toastMessage: String by viewModel.toastMessageData.run {
+//        data.observeAsState(defaultValue)
+//    }
+//
+//    if (toastMessage == Constants.emptyString) {
+//        return
+//    }
+//
+//    android.widget.Toast.makeText(
+//        context, toastMessage, android.widget.Toast.LENGTH_LONG
+//    ).show()
+//}

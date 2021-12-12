@@ -13,7 +13,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
-import com.surovtsev.cool3dminesweeper.presentation.rankingscreen.RankingScreen
+import com.surovtsev.ranking.presentation.screen.RankingScreen
 import com.surovtsev.cool3dminesweeper.presentation.settingsscreen.SettingsScreen
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
@@ -100,7 +100,6 @@ class MainActivityImp: MainActivity() {
                     val viewModel: RankingScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     RankingScreen(
-                        this@MainActivityImp,
                         viewModel
                     )
                 }

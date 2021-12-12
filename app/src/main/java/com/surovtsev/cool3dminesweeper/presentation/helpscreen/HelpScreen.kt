@@ -2,7 +2,7 @@ package com.surovtsev.cool3dminesweeper.presentation.helpscreen
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.surovtsev.core.theme.MinesweeperTheme
+import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 
 @Composable
