@@ -41,17 +41,11 @@ class RankingScreenViewModel @Inject constructor(
 {
     private val settingsDao: SettingsDao
     private val rankingDao: RankingDao
-    val rankingScreenEvents: RankingScreenEvents
-    val rankingTableSortTypeData: RankingTableSortTypeData
+
     private val rankingListHelper: RankingListHelper
-    val toastMessageData: ToastMessageData
 
     private val rankingScreenStateHolder: RankingScreenStateHolder
     val rankingScreenStateValue: RankingScreenStateValue
-
-    companion object {
-        const val requestWriteExternalStorageCode = 100
-    }
 
     init {
         val rankingComponent = rankingComponentProvider
@@ -67,14 +61,9 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.settingsDao
         rankingDao =
             rankingComponentEntryPoint.rankingDao
-        rankingScreenEvents =
-            rankingComponentEntryPoint.rankingScreenEvents
-        rankingTableSortTypeData =
-            rankingComponentEntryPoint.rankingTableSortTypeData
         rankingListHelper =
             rankingComponentEntryPoint.rankingListHelper
-        toastMessageData =
-            rankingComponentEntryPoint.toastMessageData
+
         rankingScreenStateHolder =
             rankingComponentEntryPoint.rankingScreenStateHolder
         rankingScreenStateValue =
@@ -222,43 +211,10 @@ class RankingScreenViewModel @Inject constructor(
         }
     }
 
-    fun loadRankingForSettingsId(
-        settingsId: Long
-    ) {
-        launchOnIOThread {
-            val rankingListWithPlaces = rankingListHelper
-                .createRankingListWithPlaces(
-                    settingsId
-                )
 
-            withUIContext {
-                rankingScreenEvents.filteredRankingList.onDataChanged(
-                    rankingListWithPlaces
-                )
-                rankingScreenEvents.selectedSettingsIdData.onDataChanged(
-                    settingsId
-                )
-            }
-            prepareRankingListToDisplay()
-        }
-    }
-
-    private suspend fun prepareRankingListToDisplay() {
-        val filteredRankingList = rankingScreenEvents.filteredRankingList.data.value!!
-        val currSortType = rankingTableSortTypeData.data.value!!
-
-        val sortedData = rankingListHelper.sortData(
-            filteredRankingList,
-            currSortType
-        )
-
-        withUIContext {
-            rankingScreenEvents.rankingListToDisplay.onDataChanged(
-                sortedData
-            )
-        }
-    }
-
+//    companion object {
+//        const val requestWriteExternalStorageCode = 100
+//    }
 //    fun triggerRequestingPermissions(mainActivity: MainActivity) {
 //        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //

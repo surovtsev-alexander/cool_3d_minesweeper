@@ -260,6 +260,13 @@ object SceneSettingsModule {
 object GameLogicStateHelperModule {
     @GameScope
     @Provides
+    fun provideTimeSpanHelperImp(
+    ): TimeSpanHelperImp {
+        return TimeSpanHelperImp()
+    }
+
+    @GameScope
+    @Provides
     fun provideTimeSpan(
         timeSpanHelper: TimeSpanHelperImp
     ): TimeSpan {

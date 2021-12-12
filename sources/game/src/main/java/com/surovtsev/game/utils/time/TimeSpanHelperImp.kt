@@ -6,8 +6,7 @@ import com.surovtsev.utils.timers.Tickable
 import com.surovtsev.utils.timers.TimeSpanHelper
 import javax.inject.Inject
 
-@GameScope
-class TimeSpanHelperImp @Inject constructor(): TimeSpanHelper {
+class TimeSpanHelperImp: TimeSpanHelper {
 
     override var timeAfterDeviceStartup: Long = 0L
         private set
