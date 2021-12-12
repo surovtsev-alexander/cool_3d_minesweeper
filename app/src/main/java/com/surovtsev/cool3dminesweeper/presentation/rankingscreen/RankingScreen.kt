@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.cool3dminesweeper.presentation.MainActivityImp
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.DeepGray
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.LightBlue
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import com.surovtsev.core.theme.DeepGray
+import com.surovtsev.core.theme.GrayBackground
+import com.surovtsev.core.theme.LightBlue
+import com.surovtsev.core.theme.MinesweeperTheme
 import com.surovtsev.utils.constants.Constants
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.core.settings.SettingsList

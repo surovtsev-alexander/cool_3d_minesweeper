@@ -17,6 +17,13 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion kotlin_version
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -56,4 +63,6 @@ dependencies {
 
     // Square logcat
     implementation 'com.squareup.logcat:logcat:0.1'
+
+    implementation "androidx.compose.material:material:$compose_version"
 }

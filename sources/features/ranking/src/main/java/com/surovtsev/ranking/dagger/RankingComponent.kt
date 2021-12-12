@@ -1,10 +1,15 @@
 package com.surovtsev.ranking.dagger
 
-import com.surovtsev.core.room.dao.RankingDao
-import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.ranking.rankinscreenviewmodel.helpers.*
 import com.surovtsev.core.dataconstructions.MyLiveData
 import com.surovtsev.core.ranking.*
+import com.surovtsev.core.room.dao.RankingDao
+import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateHolder
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateValue
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingListWithPlacesData
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.SelectedSettingsIdData
+import com.surovtsev.ranking.rankinscreenviewmodel.helpers.WinsCountMapData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -37,11 +42,29 @@ interface RankingComponentEntryPoint {
     val rankingTableSortTypeData: RankingTableSortTypeData
     val rankingListHelper: RankingListHelper
     val toastMessageData: ToastMessageData
+
+    val rankingScreenStateHolder: RankingScreenStateHolder
+    val rankingScreenStateValue: RankingScreenStateValue
 }
 
 @Module
 @InstallIn(RankingComponent::class)
 object RankingModule {
+
+    @RankingScope
+    @Provides
+    fun provideRankingScreenStateHolder(
+    ): RankingScreenStateHolder {
+        return RankingScreenStateHolder()
+    }
+
+    @RankingScope
+    @Provides
+    fun provideRankingScreenStateValue(
+        rankingScreenStateHolder: RankingScreenStateHolder
+    ): RankingScreenStateValue {
+        return rankingScreenStateHolder
+    }
 
     @RankingScope
     @Provides

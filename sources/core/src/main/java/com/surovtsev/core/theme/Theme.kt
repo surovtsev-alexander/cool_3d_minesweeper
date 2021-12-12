@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.ui.theme
+package com.surovtsev.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.ranking.*
 import com.surovtsev.core.room.dao.RankingDao
@@ -18,6 +16,7 @@ import com.surovtsev.ranking.dagger.ToastMessageData
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResultReceiver
+import com.surovtsev.core.viewmodel.ScreenCommandsHandler
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import dagger.hilt.EntryPoints
@@ -28,6 +27,8 @@ import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 import javax.inject.Provider
 
+typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
+typealias RankingScreenStateValue = LiveData<RankingScreenState>
 
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
@@ -35,6 +36,7 @@ class RankingScreenViewModel @Inject constructor(
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController,
 ): ViewModel(),
+    ScreenCommandsHandler<CommandsToRankingScreen>,
     DefaultLifecycleObserver,
     RequestPermissionsResultReceiver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
@@ -45,6 +47,9 @@ class RankingScreenViewModel @Inject constructor(
     val rankingTableSortTypeData: RankingTableSortTypeData
     private val rankingListHelper: RankingListHelper
     val toastMessageData: ToastMessageData
+
+    private val rankingScreenStateHolder: RankingScreenStateHolder
+    val rankingScreenStateValue: RankingScreenStateValue
 
     companion object {
         const val requestWriteExternalStorageCode = 100
@@ -72,12 +77,20 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingListHelper
         toastMessageData =
             rankingComponentEntryPoint.toastMessageData
+        rankingScreenStateHolder =
+            rankingComponentEntryPoint.rankingScreenStateHolder
+        rankingScreenStateValue =
+            rankingComponentEntryPoint.rankingScreenStateValue
     }
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
 
         loadData()
+    }
+
+    override fun handleEvent(event: CommandsToRankingScreen) {
+
     }
 
     private fun loadData() {

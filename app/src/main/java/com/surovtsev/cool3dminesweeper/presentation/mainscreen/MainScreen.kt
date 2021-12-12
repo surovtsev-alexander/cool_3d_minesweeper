@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.GrayBackground
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.Shapes
-import com.surovtsev.cool3dminesweeper.presentation.ui.theme.MinesweeperTheme
+import com.surovtsev.core.theme.GrayBackground
+import com.surovtsev.core.theme.Shapes
+import com.surovtsev.core.theme.MinesweeperTheme
 import logcat.logcat
 
 @Composable
