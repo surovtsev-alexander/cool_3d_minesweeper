@@ -1,7 +1,14 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
+import com.surovtsev.core.ranking.DirectionOfSortableColumns
+import com.surovtsev.core.ranking.RankingListWithPlaces
 import com.surovtsev.core.ranking.RankingTableSortType
+import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.settings.SettingsList
+
+val RankingScreenInitialState = RankingScreenState.Idle(
+    RankingScreenData.NoData)
+
 
 sealed class RankingScreenState(
     val rankingScreenData: RankingScreenData
@@ -25,27 +32,29 @@ sealed class RankingScreenData() {
 
     object NoData: RankingScreenData()
 
-    sealed class SettingsListLoaded(
-        val settingsList: SettingsList
-    ): RankingScreenData() {
+    open class SettingsListIsLoaded(
+        val settingsList: SettingsList,
+        val winsCountMap: WinsCountMap,
+    ): RankingScreenData()
 
-        sealed class SettingsListIsFiltered(
-            settingsListLoaded: SettingsListLoaded,
-            val selectedSettingsId: Int,
-            val filteredSettingsList: SettingsList,
-        ): SettingsListLoaded(
-            settingsListLoaded.settingsList
-        ) {
+    open class RankingListIsPrepared(
+        settingsListIsLoaded: SettingsListIsLoaded,
+        val selectedSettingsId: Long,
+        val rankingListWithPlaces: RankingListWithPlaces,
+    ) : SettingsListIsLoaded(
+        settingsListIsLoaded.settingsList,
+        settingsListIsLoaded.winsCountMap
+    )
 
-            sealed class RankingListIsPrepared(
-                settingsListIsFiltered: SettingsListIsFiltered,
-                val rankingTableSortType: RankingTableSortType,
-                val sortedSettingsList: SettingsList,
-            ): SettingsListIsFiltered(
-                settingsListIsFiltered,
-                settingsListIsFiltered.selectedSettingsId,
-                settingsListIsFiltered.filteredSettingsList
-            )
-        }
-    }
+    class RankingListIsSorted(
+        rankingListIsPrepared: RankingListIsPrepared,
+        val rankingTableSortType: RankingTableSortType,
+        val sortedRankingList: RankingListWithPlaces,
+        val directionOfSortableColumns: DirectionOfSortableColumns,
+    ): RankingListIsPrepared(
+        rankingListIsPrepared,
+        rankingListIsPrepared.selectedSettingsId,
+        rankingListIsPrepared.rankingListWithPlaces
+    )
 }
+

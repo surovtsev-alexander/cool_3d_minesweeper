@@ -4,10 +4,34 @@ import com.surovtsev.core.dataconstructions.MyLiveData
 
 typealias RankingTableSortTypeData = MyLiveData<RankingTableSortType>
 
+typealias DirectionOfSortableColumns = Map<RankingColumn.SortableColumn, SortDirection>
+
+val DefaultSortDirectionForSortableColumns: DirectionOfSortableColumns = mapOf(
+    RankingColumn.SortableColumn.DateColumn to SortDirection.Descending,
+    RankingColumn.SortableColumn.SolvingTimeColumn to SortDirection.Ascending
+)
+
+fun defaultRankingTableSortType(
+    sortableColumn: RankingColumn.SortableColumn
+) = RankingTableSortType(
+    sortableColumn,
+    DefaultSortDirectionForSortableColumns[sortableColumn]!!
+)
+
+val DefaultRankingTableSortType = defaultRankingTableSortType(
+    RankingColumn.SortableColumn.DateColumn
+)
+
 data class RankingTableSortType(
     val rankingColumn: RankingColumn.SortableColumn,
     val sortDirection: SortDirection
-)
+) {
+    fun nextSortType(): RankingTableSortType {
+        return this.copy(
+            sortDirection = sortDirection.nextSortType()
+        )
+    }
+}
 
 sealed class RankingColumn(
     val columnName: String
@@ -22,15 +46,15 @@ sealed class RankingColumn(
     }
 }
 
-enum class SortDirection {
-    Descending,
-    Ascending
+enum class SortDirection(val symbol: Char) {
+    Descending('d'),
+    Ascending('a')
 }
 
 val SortDirectionValuesCount = SortDirection.values().count()
 
-fun nextSortType(sortDirection: SortDirection): SortDirection {
+fun SortDirection.nextSortType(): SortDirection {
     return SortDirection.values()[
-            (sortDirection.ordinal + 1).mod(SortDirectionValuesCount)
+            (ordinal + 1).mod(SortDirectionValuesCount)
     ]
 }

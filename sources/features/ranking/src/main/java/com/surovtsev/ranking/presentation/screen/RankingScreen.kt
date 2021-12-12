@@ -9,61 +9,67 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.core.ranking.RankingColumn
-import com.surovtsev.core.ranking.RankingDataWithPlaces
-import com.surovtsev.core.ranking.RankingTableSortType
-import com.surovtsev.core.ranking.SortDirection
-import com.surovtsev.core.room.dao.WinsCountMap
+import com.surovtsev.core.ranking.*
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.settings.SettingsList
 import com.surovtsev.core.ui.theme.DeepGray
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
-import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
 @Composable
 fun RankingScreen(
-//    mainActivity: MainActivityImp,
     viewModel: RankingScreenViewModel
 ) {
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.handleCommand(
+            CommandsToRankingScreenViewModel
+                .LoadData
+        )
+    })
+
     RankingControls(
-//        mainActivity,
+        viewModel.rankingScreenStateValue,
         viewModel
     )
 }
 
 @Composable
 fun RankingControls(
-//    mainActivity: MainActivityImp,
-    viewModel: RankingScreenViewModel,
+    rankingScreenStateValue: RankingScreenStateValue,
+    rankingScreenCommandsHandler: RankingScreenCommandsHandler
 ) {
-    val rankingScreenEvents = viewModel.rankingScreenEvents
-
+    //val rankingScreenEvents = viewModel.rankingScreenEvents
     MinesweeperTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .border(1.dp, Color.Black),
+                .border(1.dp, Color.Black)
+                .background(GrayBackground),
             //verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
             Row(
                 modifier = Modifier.weight(3f)
             ) {
-                SettingsList(viewModel, rankingScreenEvents)
+                SettingsList(
+                    rankingScreenStateValue,
+                    rankingScreenCommandsHandler
+                )
             }
             Row(
                 modifier = Modifier.weight(10f)
             ) {
-                RankingList(viewModel)
+                RankingList(
+                    rankingScreenStateValue,
+                    rankingScreenCommandsHandler
+                )
             }
 //            Row(
 //                modifier = Modifier.fillMaxWidth(),
@@ -78,18 +84,30 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    viewModel: RankingScreenViewModel,
-    rankingScreenEvents: RankingScreenEvents
+    rankingScreenStateValue: RankingScreenStateValue,
+    rankingScreenCommandsHandler: RankingScreenCommandsHandler
 ) {
-    val settingsList: SettingsList by rankingScreenEvents.settingsListData.run {
-        data.observeAsState(defaultValue)
+    val rankingScreenState = rankingScreenStateValue.observeAsState(
+        RankingScreenState.Idle(
+            RankingScreenData.NoData
+        )
+    ).value
+
+    val rankingScreenData = rankingScreenState.rankingScreenData
+
+    if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+        return
     }
-    val selectedSettingsId: Long by rankingScreenEvents.selectedSettingsIdData.run {
-        data.observeAsState(defaultValue)
-    }
-    val winsCountMap: WinsCountMap by rankingScreenEvents.winsCountMapData.run {
-        data.observeAsState(defaultValue)
-    }
+
+    val settingsList = rankingScreenData.settingsList
+    val winsCountMap = rankingScreenData.winsCountMap
+
+
+    val selectedSettingsId =
+        if (rankingScreenData is RankingScreenData.RankingListIsPrepared)
+            rankingScreenData.selectedSettingsId
+        else
+            -1L
 
     Box(
         modifier = Modifier
@@ -132,7 +150,9 @@ fun SettingsList(
                         }
                     } else {
                         Box (
-                            modifier = Modifier.clickable { viewModel.loadRankingForSettingsId(itemId) }
+                                modifier = Modifier.clickable { rankingScreenCommandsHandler.handleCommand(
+                                    CommandsToRankingScreenViewModel.FilterList(itemId))
+                                }
                         ) {
                             SettingsDataItem(item.settingsData, winsCount)
                         }
@@ -173,13 +193,26 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    viewModel: RankingScreenViewModel,
+    rankingScreenStateValue: RankingScreenStateValue,
+    rankingScreenCommandsHandler: RankingScreenCommandsHandler
 ) {
-    val rankingListToDisplay: List<RankingDataWithPlaces> by viewModel.rankingScreenEvents.rankingListToDisplay.run {
-        data.observeAsState(defaultValue)
-    }
-    val rankingTableSortType: RankingTableSortType by viewModel.rankingTableSortTypeData.run {
-        data.observeAsState(defaultValue)
+    val rankingScreenState = rankingScreenStateValue.observeAsState(
+        RankingScreenInitialState
+    ).value
+
+    val rankingScreenData = rankingScreenState.rankingScreenData
+
+    val rankingListWithPlaces: RankingListWithPlaces
+    val rankingTableSortType: RankingTableSortType
+    val directionOfSortableColumns: DirectionOfSortableColumns
+    if (rankingScreenData !is RankingScreenData.RankingListIsSorted) {
+        rankingListWithPlaces = emptyList()
+        rankingTableSortType = DefaultRankingTableSortType
+        directionOfSortableColumns = DefaultSortDirectionForSortableColumns
+    } else {
+        rankingListWithPlaces = rankingScreenData.sortedRankingList
+        rankingTableSortType = rankingScreenData.rankingTableSortType
+        directionOfSortableColumns = rankingScreenData.directionOfSortableColumns
     }
 
     val columnsWidth = mapOf(
@@ -199,12 +232,16 @@ fun RankingList(
             Row {
                 for ((columnType, modifierWidth) in columnsWidth) {
                     RankingListColumnTitle(
-                        viewModel, columnType, modifierWidth, rankingTableSortType
+                        rankingScreenCommandsHandler,
+                        columnType,
+                        modifierWidth,
+                        rankingTableSortType,
+                        directionOfSortableColumns
                     )
                 }
             }
             LazyColumn {
-                items(rankingListToDisplay.withIndex().toList()) { item ->
+                items(rankingListWithPlaces.withIndex().toList()) { item ->
                     RankingDataItem(item)
                 }
             }
@@ -214,10 +251,11 @@ fun RankingList(
 
 @Composable
 fun RankingListColumnTitle(
-    viewModel: RankingScreenViewModel,
+    rankingScreenCommandsHandler: RankingScreenCommandsHandler,
     columnType: RankingColumn,
     modifierWidth: Float,
-    rankingTableSortType: RankingTableSortType
+    rankingTableSortType: RankingTableSortType,
+    directionOfSortableColumns: DirectionOfSortableColumns,
 ) {
     Row (
         Modifier.fillMaxWidth(modifierWidth),
@@ -229,13 +267,28 @@ fun RankingListColumnTitle(
         if (columnType is RankingColumn.SortableColumn) {
             val isColumnSelected = rankingTableSortType.rankingColumn == columnType
             val buttonColor = if (isColumnSelected) Color.Green else Color.Gray
-            val buttonText =
-                if (isColumnSelected && rankingTableSortType.sortDirection == SortDirection.Ascending) "u" else "d"
+            val sortDirection =
+                if (isColumnSelected)
+                    rankingTableSortType.sortDirection
+                else
+                    directionOfSortableColumns[columnType]!!
+
+            val buttonText = sortDirection.symbol.toString()
             Box(
                 modifier = Modifier
                     .width(30.dp)
                     .background(buttonColor)
-                    .clickable { viewModel.selectColumnToSortBy(columnType) }
+                    .clickable { rankingScreenCommandsHandler.handleCommand(
+                        CommandsToRankingScreenViewModel.SortList(
+                            RankingTableSortType(
+                                columnType,
+                                if (isColumnSelected) {
+                                    sortDirection.nextSortType()
+                                } else {
+                                    sortDirection
+                                }
+                            )))
+                    }
             ) {
                 Text(
                     text = buttonText,
