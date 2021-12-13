@@ -1,14 +1,13 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
-import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surovtsev.core.ranking.DefaultRankingTableSortType
-import com.surovtsev.core.ranking.DefaultSortDirectionForSortableColumns
-import com.surovtsev.core.ranking.RankingListHelper
-import com.surovtsev.core.ranking.RankingTableSortType
+import com.surovtsev.core.helpers.RankingListHelper
+import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
+import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
@@ -20,7 +19,6 @@ import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
 import com.surovtsev.utils.timers.TimeSpan
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import logcat.logcat
 import javax.inject.Inject
@@ -33,7 +31,6 @@ typealias RankingScreenCommandsHandler = ScreenCommandsHandler<CommandFromRankin
 
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     rankingComponentProvider: Provider<RankingComponent.Builder>,
     private val saveController: SaveController,
 ): ViewModel(),
@@ -91,8 +88,8 @@ class RankingScreenViewModel @Inject constructor(
             when (event) {
                 is CommandFromRankingScreen.LoadData            -> loadData()
                 is CommandFromRankingScreen.FilterList          -> filterList(event.selectedSettingsId)
-                is CommandFromRankingScreen.SortListWithNoDelay -> sortList(event.rankingTableSortType, false)
-                is CommandFromRankingScreen.SortList            -> sortList(event.rankingTableSortType, true)
+                is CommandFromRankingScreen.SortListWithNoDelay -> sortList(event.rankingTableSortParameters, false)
+                is CommandFromRankingScreen.SortList            -> sortList(event.rankingTableSortParameters, true)
                 is CommandFromRankingScreen.CloseError          -> closeError()
             }
         }
@@ -166,13 +163,13 @@ class RankingScreenViewModel @Inject constructor(
 
         return handleCommand(
             CommandFromRankingScreen.SortList(
-                DefaultRankingTableSortType
+                DefaultRankingTableSortParameters
             )
         )
     }
 
     private suspend fun sortList(
-        rankingTableSortType: RankingTableSortType,
+        rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ) {
         val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
@@ -190,12 +187,12 @@ class RankingScreenViewModel @Inject constructor(
 
         val filteredRankingList = rankingScreenData.rankingListWithPlaces
 
-        logcat { "rankingTableSortType: $rankingTableSortType" }
+        logcat { "rankingTableSortType: $rankingTableSortParameters" }
 
         val sortingAction = {
             rankingListHelper.sortData(
                 filteredRankingList,
-                rankingTableSortType
+                rankingTableSortParameters
             )
         }
 
@@ -211,8 +208,8 @@ class RankingScreenViewModel @Inject constructor(
             } else {
                 DefaultSortDirectionForSortableColumns
             }).map { (k, v) ->
-                k to if (k == rankingTableSortType.rankingColumn) {
-                    rankingTableSortType.sortDirection
+                k to if (k == rankingTableSortParameters.rankingTableColumn) {
+                    rankingTableSortParameters.sortDirection
                 } else {
                     v
                 }
@@ -222,7 +219,7 @@ class RankingScreenViewModel @Inject constructor(
             rankingScreenStateHolder.value = RankingScreenState.Idle(
                 RankingScreenData.RankingListIsSorted(
                     rankingScreenData,
-                    rankingTableSortType,
+                    rankingTableSortParameters,
                     sortedData,
                     directionOfSortableColumns
                 )

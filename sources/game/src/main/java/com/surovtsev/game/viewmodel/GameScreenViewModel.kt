@@ -6,10 +6,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.surovtsev.core.ranking.RankingColumn
-import com.surovtsev.core.ranking.RankingListHelper
-import com.surovtsev.core.ranking.RankingTableSortType
-import com.surovtsev.core.ranking.SortDirection
+import com.surovtsev.core.helpers.RankingListHelper
+import com.surovtsev.core.helpers.sorting.RankingTableColumn
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
@@ -164,8 +164,8 @@ class GameScreenViewModel @Inject constructor(
                 val filteredData = rankingListHelper.createRankingListWithPlaces(
                     settings.id
                 )
-                val rankingTableSortType = RankingTableSortType(
-                    RankingColumn.SortableColumn.DateColumn,
+                val rankingTableSortType = RankingTableSortParameters(
+                    RankingTableColumn.SortableTableColumn.DateTableColumn,
                     SortDirection.Descending
                 )
                 val sortedData = rankingListHelper.sortData(

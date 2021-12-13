@@ -1,5 +1,8 @@
-package com.surovtsev.core.ranking
+package com.surovtsev.core.helpers
 
+import com.surovtsev.core.helpers.sorting.RankingTableColumn
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 
 typealias RankingListWithPlaces = List<RankingDataWithPlaces>
@@ -20,16 +23,16 @@ class RankingListHelper(
 
     fun sortData(
         rankingListWithPlaces: RankingListWithPlaces,
-        rankingTableSortType: RankingTableSortType,
+        rankingTableSortParameters: RankingTableSortParameters,
     ): RankingListWithPlaces {
         val sortingSelector = { x: RankingDataWithPlaces ->
-            when (rankingTableSortType.rankingColumn) {
-                RankingColumn.SortableColumn.DateColumn -> x.rankingData.dateTime
-                RankingColumn.SortableColumn.SolvingTimeColumn -> x.rankingData.elapsed
+            when (rankingTableSortParameters.rankingTableColumn) {
+                RankingTableColumn.SortableTableColumn.DateTableColumn -> x.rankingData.dateTime
+                RankingTableColumn.SortableTableColumn.SolvingTimeTableColumn -> x.rankingData.elapsed
             }
         }
         val comparator: Comparator<RankingDataWithPlaces> =
-            if (rankingTableSortType.sortDirection == SortDirection.Ascending) {
+            if (rankingTableSortParameters.sortDirection == SortDirection.Ascending) {
                 Comparator { a, b -> compareValuesBy(a, b, sortingSelector) }
             } else {
                 Comparator { a, b -> compareValuesBy(b, a, sortingSelector)}

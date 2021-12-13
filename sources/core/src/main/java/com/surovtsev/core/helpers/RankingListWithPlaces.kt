@@ -1,4 +1,4 @@
-package com.surovtsev.core.ranking
+package com.surovtsev.core.helpers
 
 import com.surovtsev.core.room.dao.RankingList
 import com.surovtsev.core.room.entities.Ranking

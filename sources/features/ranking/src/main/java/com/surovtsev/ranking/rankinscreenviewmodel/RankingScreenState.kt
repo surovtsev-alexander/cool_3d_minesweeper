@@ -1,8 +1,8 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
-import com.surovtsev.core.ranking.DirectionOfSortableColumns
-import com.surovtsev.core.ranking.RankingListWithPlaces
-import com.surovtsev.core.ranking.RankingTableSortType
+import com.surovtsev.core.helpers.RankingListWithPlaces
+import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.settings.SettingsList
 
@@ -48,7 +48,7 @@ sealed class RankingScreenData() {
 
     class RankingListIsSorted(
         rankingListIsPrepared: RankingListIsPrepared,
-        val rankingTableSortType: RankingTableSortType,
+        val rankingTableSortParameters: RankingTableSortParameters,
         val sortedRankingList: RankingListWithPlaces,
         val directionOfSortableColumns: DirectionOfSortableColumns,
     ): RankingListIsPrepared(

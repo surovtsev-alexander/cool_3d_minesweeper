@@ -18,7 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.surovtsev.core.ranking.*
+import com.surovtsev.core.helpers.*
+import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.ranking.rankinscreenviewmodel.*
@@ -212,22 +213,22 @@ fun RankingList(
     val rankingScreenData = rankingScreenState.rankingScreenData
 
     val rankingListWithPlaces: RankingListWithPlaces
-    val rankingTableSortType: RankingTableSortType
+    val rankingTableSortParameters: RankingTableSortParameters
     val directionOfSortableColumns: DirectionOfSortableColumns
     if (rankingScreenData !is RankingScreenData.RankingListIsSorted) {
         rankingListWithPlaces = emptyList()
-        rankingTableSortType = DefaultRankingTableSortType
+        rankingTableSortParameters = DefaultRankingTableSortParameters
         directionOfSortableColumns = DefaultSortDirectionForSortableColumns
     } else {
         rankingListWithPlaces = rankingScreenData.sortedRankingList
-        rankingTableSortType = rankingScreenData.rankingTableSortType
+        rankingTableSortParameters = rankingScreenData.rankingTableSortParameters
         directionOfSortableColumns = rankingScreenData.directionOfSortableColumns
     }
 
     val columnsWidth = mapOf(
-        RankingColumn.IdColumn to 0.2f,
-        RankingColumn.SortableColumn.DateColumn to 0.5f,
-        RankingColumn.SortableColumn.SolvingTimeColumn to 1f
+        RankingTableColumn.IdTableColumn to 0.2f,
+        RankingTableColumn.SortableTableColumn.DateTableColumn to 0.5f,
+        RankingTableColumn.SortableTableColumn.SolvingTimeTableColumn to 1f
     )
 
     Box (
@@ -244,7 +245,7 @@ fun RankingList(
                         rankingScreenCommandsHandler,
                         columnType,
                         modifierWidth,
-                        rankingTableSortType,
+                        rankingTableSortParameters,
                         directionOfSortableColumns
                     )
                 }
@@ -261,26 +262,26 @@ fun RankingList(
 @Composable
 fun RankingListColumnTitle(
     rankingScreenCommandsHandler: RankingScreenCommandsHandler,
-    columnType: RankingColumn,
+    tableColumnType: RankingTableColumn,
     modifierWidth: Float,
-    rankingTableSortType: RankingTableSortType,
+    rankingTableSortParameters: RankingTableSortParameters,
     directionOfSortableColumns: DirectionOfSortableColumns,
 ) {
     Row (
         Modifier.fillMaxWidth(modifierWidth),
     ) {
         Text(
-            columnType.columnName,
+            tableColumnType.columnName,
             modifier = Modifier.fillMaxWidth(0.5f),
         )
-        if (columnType is RankingColumn.SortableColumn) {
-            val isColumnSelected = rankingTableSortType.rankingColumn == columnType
+        if (tableColumnType is RankingTableColumn.SortableTableColumn) {
+            val isColumnSelected = rankingTableSortParameters.rankingTableColumn == tableColumnType
             val buttonColor = if (isColumnSelected) Color.Green else Color.Gray
             val sortDirection =
                 if (isColumnSelected)
-                    rankingTableSortType.sortDirection
+                    rankingTableSortParameters.sortDirection
                 else
-                    directionOfSortableColumns[columnType]!!
+                    directionOfSortableColumns[tableColumnType]!!
 
             val buttonText = sortDirection.symbol.toString()
             Box(
@@ -290,10 +291,10 @@ fun RankingListColumnTitle(
                     .clickable {
                         rankingScreenCommandsHandler.handleCommand(
                             CommandFromRankingScreen.SortListWithNoDelay(
-                                RankingTableSortType(
-                                    columnType,
+                                RankingTableSortParameters(
+                                    tableColumnType,
                                     if (isColumnSelected) {
-                                        sortDirection.nextSortType()
+                                        sortDirection.nextSortDirection()
                                     } else {
                                         sortDirection
                                     }

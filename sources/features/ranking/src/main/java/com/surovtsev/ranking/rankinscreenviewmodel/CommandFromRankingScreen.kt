@@ -1,6 +1,6 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
-import com.surovtsev.core.ranking.RankingTableSortType
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 
 sealed class CommandFromRankingScreen {
     object LoadData: CommandFromRankingScreen()
@@ -12,12 +12,12 @@ sealed class CommandFromRankingScreen {
     ): CommandFromRankingScreen()
 
     open class SortList(
-        val rankingTableSortType: RankingTableSortType
+        val rankingTableSortParameters: RankingTableSortParameters
     ): CommandFromRankingScreen()
 
     class SortListWithNoDelay(
-        rankingTableSortType: RankingTableSortType
+        rankingTableSortParameters: RankingTableSortParameters
     ): SortList(
-        rankingTableSortType
+        rankingTableSortParameters
     )
 }

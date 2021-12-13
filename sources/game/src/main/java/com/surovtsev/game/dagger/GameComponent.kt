@@ -2,7 +2,7 @@ package com.surovtsev.game.dagger
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import com.surovtsev.core.ranking.RankingListHelper
+import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
