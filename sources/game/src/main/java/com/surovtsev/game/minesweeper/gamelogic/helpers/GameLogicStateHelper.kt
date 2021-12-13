@@ -51,6 +51,7 @@ class GameLogicStateHelper @Inject constructor(
 
     init {
         gameStatus = GameStatus.NoBombsPlaced
+        timeSpan.flush()
     }
 
     fun notifyTimeUpdated() {
@@ -111,7 +112,6 @@ class GameLogicStateHelper @Inject constructor(
     fun getElapsed() = timeSpan.getElapsed()
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
-        timeSpan.flush()
         timeSpan.setElapsed(elapsedTime)
         setGameState(gameStatus)
     }
