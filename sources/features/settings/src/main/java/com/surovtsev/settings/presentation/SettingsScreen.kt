@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.settingsscreen
+package com.surovtsev.settings.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

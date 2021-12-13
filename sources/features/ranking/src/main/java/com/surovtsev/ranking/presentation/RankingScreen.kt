@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.presentation.screen
+package com.surovtsev.ranking.presentation
 
 import android.text.format.DateUtils
 import androidx.compose.animation.*
