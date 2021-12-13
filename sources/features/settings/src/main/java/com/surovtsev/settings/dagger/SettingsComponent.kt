@@ -6,9 +6,9 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.room.entities.SettingsDataFactory
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.settings.viewmodel.SettingsScreenStateHolder
+import com.surovtsev.settings.viewmodel.SettingsScreenStateValue
 import com.surovtsev.settings.viewmodel.helpers.*
-import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -44,11 +44,29 @@ interface SettingsComponentEntryPoint {
     val saveController: SaveController
     val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
+
+    val settingsScreenStateHolder: SettingsScreenStateHolder
+    val settingsScreenStateValue: SettingsScreenStateValue
 }
 
 @Module
 @InstallIn(SettingsComponent::class)
 object SettingsModule {
+
+    @SettingsScope
+    @Provides
+    fun provideSettingsScreenStateHolder(
+    ): SettingsScreenStateHolder {
+        return SettingsScreenStateHolder()
+    }
+
+    @SettingsScope
+    @Provides
+    fun provideSettingsScreenStateValue(
+        settingsScreenStateHolder: SettingsScreenStateHolder
+    ): SettingsScreenStateValue {
+        return settingsScreenStateHolder
+    }
 
     @SettingsScope
     @Named(SettingsScreenControls.SelectedSettingsIdName)

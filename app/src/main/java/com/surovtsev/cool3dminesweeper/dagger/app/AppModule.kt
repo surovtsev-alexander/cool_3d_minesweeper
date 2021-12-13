@@ -9,8 +9,8 @@ import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.settings.SettingsListData
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.coroutines.CustomScope
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp

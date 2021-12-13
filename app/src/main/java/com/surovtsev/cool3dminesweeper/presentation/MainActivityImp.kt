@@ -13,20 +13,19 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
-import com.surovtsev.ranking.presentation.RankingScreen
-import com.surovtsev.settings.presentation.SettingsScreen
-import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
-import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
-import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.mainactivity.MainActivity
+import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.game.viewmodel.LoadGameParameterName
 import com.surovtsev.ranking.presentation.RankingScreen
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
+import com.surovtsev.settings.presentation.SettingsScreen
+import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
+import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
 import dagger.hilt.android.AndroidEntryPoint
 import logcat.logcat
-import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 
 
 @AndroidEntryPoint

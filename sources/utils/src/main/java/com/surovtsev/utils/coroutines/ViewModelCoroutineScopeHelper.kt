@@ -1,4 +1,4 @@
-package com.surovtsev.core.viewmodel
+package com.surovtsev.utils.coroutines
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,7 +50,7 @@ class ViewModelCoroutineScopeHelperImpl(
     companion object {
         val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
             val exceptionMessage = exception.message
-            val logMessage = "Error in viewModelCoroutineScope: ${exceptionMessage}"
+            val logMessage = "Error in viewModelCoroutineScope: $exceptionMessage"
             logcat { logMessage }
         }
     }

@@ -1,7 +1,6 @@
 package com.surovtsev.utils.loggerconfig
 
-@Suppress("unused")
-class LoggerConfig {
+class UtilsLoggerConfig {
     companion object {
         const val ON = true
         const val LOG_SHADER_COMPILATION = false

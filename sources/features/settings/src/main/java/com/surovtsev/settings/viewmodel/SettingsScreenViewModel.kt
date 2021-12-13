@@ -1,15 +1,14 @@
 package com.surovtsev.settings.viewmodel
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.room.entities.SettingsDataFactory
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.core.viewmodel.ScreenCommandsHandler
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.settings.dagger.SettingsComponent
 import com.surovtsev.settings.dagger.SettingsComponentEntryPoint
 import com.surovtsev.settings.viewmodel.helpers.SettingsScreenControls
@@ -20,11 +19,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 
+typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
+typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
+
+typealias SettingsScreenCommandsHandler = ScreenCommandsHandler<CommandFromSettingsScreen>
+
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
 ):
     ViewModel(),
+    SettingsScreenCommandsHandler,
     DefaultLifecycleObserver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
@@ -35,6 +40,9 @@ class SettingsScreenViewModel @Inject constructor(
     private val saveController: SaveController
     val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
+
+    private val settingsScreenStateHolder: SettingsScreenStateHolder
+    val settingsScreenStateValue: SettingsScreenStateValue
 
     var finishAction: (() -> Unit)? = null
 
@@ -61,12 +69,22 @@ class SettingsScreenViewModel @Inject constructor(
             settingsComponentEntryPoint.settingsScreenEvents
         settingsDataFactory =
             settingsComponentEntryPoint.settingsDataFactory
+
+        settingsScreenStateHolder =
+            settingsComponentEntryPoint.settingsScreenStateHolder
+
+        settingsScreenStateValue =
+            settingsComponentEntryPoint.settingsScreenStateValue
     }
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
 
         loadData()
+    }
+
+    override fun handleCommand(event: CommandFromSettingsScreen) {
+        TODO("Not yet implemented")
     }
 
     private suspend fun reloadSettingsList() {

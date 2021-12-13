@@ -24,6 +24,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
+import com.surovtsev.utils.viewmodel.ScreenState
 import logcat.logcat
 
 @Composable
@@ -364,7 +365,7 @@ fun DisplayCircularIndicatorIfNeeded(
 
     var showLoadingElements by remember { mutableStateOf(false) }
 
-    showLoadingElements = rankingScreenState is RankingScreenState.Loading
+    showLoadingElements = rankingScreenState is ScreenState.Loading
 
     with(boxScope) {
         AnimatedVisibility(
@@ -394,7 +395,7 @@ fun DisplayCircularIndicatorIfNeeded(
         }
     }
 
-    if (rankingScreenState is RankingScreenState.Loading) {
+    if (rankingScreenState is ScreenState.Loading) {
 
         with(boxScope) {
 

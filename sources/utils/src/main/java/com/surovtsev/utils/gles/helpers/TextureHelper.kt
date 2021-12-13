@@ -3,10 +3,10 @@ package com.surovtsev.utils.gles.helpers
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.opengl.GLES20.*
 import android.opengl.GLUtils
 import android.util.Log
-import android.opengl.GLES20.*
-import com.surovtsev.utils.loggerconfig.LoggerConfig
+import com.surovtsev.utils.loggerconfig.UtilsLoggerConfig
 
 object TextureHelper {
     private const val TAG = "TextureHelper"
@@ -17,7 +17,7 @@ object TextureHelper {
         glGenTextures(1, textureObjectIds, 0)
 
         if (textureObjectIds[0] == 0) {
-            if (LoggerConfig.ON) {
+            if (UtilsLoggerConfig.ON) {
                 Log.w(TAG, "Could not generate a new OpenGL texture for object.")
             }
 
@@ -30,7 +30,7 @@ object TextureHelper {
         val bitmap = BitmapFactory.decodeResource(context.resources, resourceId, options)
 
         if (bitmap == null) {
-            if (LoggerConfig.ON) {
+            if (UtilsLoggerConfig.ON) {
                 Log.w(TAG, "Resource ID $resourceId could not be decoded.")
             }
 
@@ -67,7 +67,7 @@ object TextureHelper {
         glGenTextures(1, textureObjectIds, 0)
 
         if (textureObjectIds[0] == 0) {
-            if (LoggerConfig.ON) {
+            if (UtilsLoggerConfig.ON) {
                 Log.w(TAG, "Could not generate a new OpenGL texture object.")
             }
             return 0
@@ -84,7 +84,7 @@ object TextureHelper {
             )
 
             if (cubeBitmaps[i] == null) {
-                if (LoggerConfig.ON) {
+                if (UtilsLoggerConfig.ON) {
                     Log.w(
                         TAG,
                         "Resource ID ${cubeResources[i]} could not be decoded"

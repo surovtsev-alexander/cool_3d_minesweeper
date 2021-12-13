@@ -12,8 +12,8 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
 import com.surovtsev.game.minesweeper.MinesweeperController

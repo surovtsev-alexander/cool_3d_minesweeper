@@ -12,11 +12,12 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.viewmodel.ScreenCommandsHandler
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
-import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.ranking.dagger.RankingComponent
 import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -97,7 +98,7 @@ class RankingScreenViewModel @Inject constructor(
 
     private suspend fun setLoadingState() {
         withUIContext {
-            rankingScreenStateHolder.value = RankingScreenState.Loading(
+            rankingScreenStateHolder.value = ScreenState.Loading(
                 getCurrentRankingScreenDataOrDefault()
             )
         }
@@ -118,7 +119,7 @@ class RankingScreenViewModel @Inject constructor(
         }
 
         withUIContext {
-            rankingScreenStateHolder.value = RankingScreenState.Idle(
+            rankingScreenStateHolder.value = ScreenState.Idle(
                 settingsListIsLoaded
             )
         }
@@ -145,13 +146,13 @@ class RankingScreenViewModel @Inject constructor(
         withUIContext {
             val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
             rankingScreenStateHolder.value = if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-                RankingScreenState.Error(
+                ScreenState.Error(
                     getCurrentRankingScreenDataOrDefault(),
                     "error while filtering ranking list"
                 )
             } else {
                 // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-                RankingScreenState.Loading(
+                ScreenState.Loading(
                     RankingScreenData.RankingListIsPrepared(
                         rankingScreenData,
                         selectedSettingsId,
@@ -176,7 +177,7 @@ class RankingScreenViewModel @Inject constructor(
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             withUIContext {
-                rankingScreenStateHolder.value = RankingScreenState.Error(
+                rankingScreenStateHolder.value = ScreenState.Error(
                     getCurrentRankingScreenDataOrDefault(),
                     "error while sorting ranking list"
                 )
@@ -216,7 +217,7 @@ class RankingScreenViewModel @Inject constructor(
             }.toMap()
 
         withUIContext {
-            rankingScreenStateHolder.value = RankingScreenState.Idle(
+            rankingScreenStateHolder.value = ScreenState.Idle(
                 RankingScreenData.RankingListIsSorted(
                     rankingScreenData,
                     rankingTableSortParameters,
@@ -230,7 +231,7 @@ class RankingScreenViewModel @Inject constructor(
     private suspend fun closeError() {
         withUIContext {
             rankingScreenStateHolder.value =
-                RankingScreenState.Idle(
+                ScreenState.Idle(
                     getCurrentRankingScreenDataOrDefault()
                 )
         }

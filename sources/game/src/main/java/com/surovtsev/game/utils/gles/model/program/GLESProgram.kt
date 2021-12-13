@@ -5,7 +5,7 @@ import android.opengl.GLES20.glGetAttribLocation
 import android.opengl.GLES20.glGetUniformLocation
 import android.opengl.GLES20.glUseProgram
 import com.surovtsev.utils.gles.helpers.ShaderHelper
-import com.surovtsev.utils.loggerconfig.LoggerConfig
+import com.surovtsev.utils.loggerconfig.UtilsLoggerConfig
 import glm_.mat4x4.Mat4
 import java.nio.FloatBuffer
 
@@ -38,7 +38,7 @@ abstract class GLESProgram (
     private fun loadProgram() {
         programId = ShaderHelper.linkProgram(shaderLoadParameters)
 
-        if (LoggerConfig.ON) {
+        if (UtilsLoggerConfig.ON) {
             ShaderHelper.validateProgram(programId)
         }
     }
