@@ -2,33 +2,32 @@ package com.surovtsev.game.dagger
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import com.surovtsev.core.ranking.RankingListHelper
+import com.surovtsev.core.room.dao.RankingDao
+import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.minesweeper.gamelogic.GameLogic
 import com.surovtsev.game.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.game.minesweeper.gamelogic.helpers.GameLogicStateHelper
-import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.game.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.game.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.game.minesweeper.scene.Scene
-import com.surovtsev.core.room.dao.RankingDao
-import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.game.utils.gles.model.pointer.Pointer
-import com.surovtsev.game.utils.gles.model.pointer.PointerImp
-import com.surovtsev.game.utils.time.TimeSpan
-import com.surovtsev.game.utils.time.TimeSpanHelperImp
-import com.surovtsev.core.ranking.RankingListHelper
-import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.models.game.camerainfo.CameraInfo
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.game.models.game.interaction.*
 import com.surovtsev.game.models.game.save.Save
+import com.surovtsev.game.utils.gles.model.pointer.Pointer
+import com.surovtsev.game.utils.gles.model.pointer.PointerImp
+import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
@@ -254,23 +253,3 @@ object SceneSettingsModule {
     @Named(Scene.PointerEnabledName)
     fun providePointerEnabled() = false
 }
-
-@Module
-@InstallIn(GameComponent::class)
-object GameLogicStateHelperModule {
-    @GameScope
-    @Provides
-    fun provideTimeSpanHelperImp(
-    ): TimeSpanHelperImp {
-        return TimeSpanHelperImp()
-    }
-
-    @GameScope
-    @Provides
-    fun provideTimeSpan(
-        timeSpanHelper: TimeSpanHelperImp
-    ): TimeSpan {
-        return TimeSpan(1000L, timeSpanHelper)
-    }
-}
-

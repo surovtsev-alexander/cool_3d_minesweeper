@@ -3,15 +3,19 @@ package com.surovtsev.cool3dminesweeper.dagger.app
 import android.content.Context
 import androidx.room.Room
 import com.surovtsev.core.ranking.RankingListHelper
-import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
+import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.ranking.dagger.ToastMessageData
 import com.surovtsev.utils.constants.Constants
 import com.surovtsev.utils.coroutines.CustomScope
+import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
-import com.surovtsev.core.viewmodel.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -127,4 +130,19 @@ object AppModule {
     @Provides
     fun provideViewModelCoroutineScopeHelper(): ViewModelCoroutineScopeHelper =
         ViewModelCoroutineScopeHelperImpl()
+
+    @Singleton
+    @Provides
+    fun provideTimeSpanHelperImp(
+    ): TimeSpanHelperImp {
+        return TimeSpanHelperImp()
+    }
+
+    @Singleton
+    @Provides
+    fun provideTimeSpan(
+        timeSpanHelper: TimeSpanHelperImp
+    ): TimeSpan {
+        return TimeSpan(1000L, timeSpanHelper)
+    }
 }

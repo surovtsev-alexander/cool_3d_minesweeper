@@ -5,7 +5,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surovtsev.core.ranking.*
+import com.surovtsev.core.ranking.DefaultRankingTableSortType
+import com.surovtsev.core.ranking.DefaultSortDirectionForSortableColumns
+import com.surovtsev.core.ranking.RankingListHelper
+import com.surovtsev.core.ranking.RankingTableSortType
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
@@ -14,11 +17,11 @@ import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.ranking.dagger.RankingComponent
 import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
-import com.surovtsev.ranking.dagger.ToastMessageData
-import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
+import com.surovtsev.utils.timers.TimeSpan
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
@@ -47,6 +50,12 @@ class RankingScreenViewModel @Inject constructor(
     private val rankingScreenStateHolder: RankingScreenStateHolder
     val rankingScreenStateValue: RankingScreenStateValue
 
+    private val timeSpan: TimeSpan
+
+    companion object {
+        const val MINIMAL_UI_ACTION_DELAY = 1000L
+    }
+
     init {
         val rankingComponent = rankingComponentProvider
             .get()
@@ -68,18 +77,23 @@ class RankingScreenViewModel @Inject constructor(
             rankingComponentEntryPoint.rankingScreenStateHolder
         rankingScreenStateValue =
             rankingComponentEntryPoint.rankingScreenStateValue
+
+        timeSpan =
+            rankingComponentEntryPoint.timeSpan
+
+        timeSpan.flush()
     }
 
     override fun handleCommand(event: CommandFromRankingScreen) {
         launchOnIOThread {
-
             setLoadingState()
 
             when (event) {
-                is CommandFromRankingScreen.LoadData    -> loadData()
-                is CommandFromRankingScreen.FilterList  -> filterList(event.selectedSettingsId)
-                is CommandFromRankingScreen.SortList    -> sortList(event.rankingTableSortType)
-                is CommandFromRankingScreen.CloseError  -> closeError()
+                is CommandFromRankingScreen.LoadData            -> loadData()
+                is CommandFromRankingScreen.FilterList          -> filterList(event.selectedSettingsId)
+                is CommandFromRankingScreen.SortListWithNoDelay -> sortList(event.rankingTableSortType, false)
+                is CommandFromRankingScreen.SortList            -> sortList(event.rankingTableSortType, true)
+                is CommandFromRankingScreen.CloseError          -> closeError()
             }
         }
     }
@@ -97,15 +111,18 @@ class RankingScreenViewModel @Inject constructor(
     }
 
     private suspend fun loadData() {
-        val settingsList = settingsDao.getAll()
-        val winsCountMap = rankingDao.getWinsCountMap()
+        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal {
+            val settingsList = settingsDao.getAll()
+            val winsCountMap = rankingDao.getWinsCountMap()
+            RankingScreenData.SettingsListIsLoaded(
+                settingsList,
+                winsCountMap
+            )
+        }
 
         withUIContext {
             rankingScreenStateHolder.value = RankingScreenState.Idle(
-                RankingScreenData.SettingsListIsLoaded(
-                    settingsList,
-                    winsCountMap
-                )
+                settingsListIsLoaded
             )
         }
 
@@ -122,10 +139,11 @@ class RankingScreenViewModel @Inject constructor(
     private suspend fun filterList(
         selectedSettingsId: Long
     ) {
-        val rankingListWithPlaces = rankingListHelper
-            .createRankingListWithPlaces(
-                selectedSettingsId
-            )
+        val rankingListWithPlaces =
+            rankingListHelper
+                .createRankingListWithPlaces(
+                    selectedSettingsId
+                )
 
         withUIContext {
             val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
@@ -135,7 +153,8 @@ class RankingScreenViewModel @Inject constructor(
                     "error while filtering ranking list"
                 )
             } else {
-                RankingScreenState.Idle(
+                // Do not set state to IDLE in order to avoid blinking loading ui attributes.
+                RankingScreenState.Loading(
                     RankingScreenData.RankingListIsPrepared(
                         rankingScreenData,
                         selectedSettingsId,
@@ -153,7 +172,8 @@ class RankingScreenViewModel @Inject constructor(
     }
 
     private suspend fun sortList(
-        rankingTableSortType: RankingTableSortType
+        rankingTableSortType: RankingTableSortType,
+        doDelay: Boolean
     ) {
         val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
 
@@ -172,10 +192,18 @@ class RankingScreenViewModel @Inject constructor(
 
         logcat { "rankingTableSortType: $rankingTableSortType" }
 
-        val sortedData = rankingListHelper.sortData(
-            filteredRankingList,
-            rankingTableSortType
-        )
+        val sortingAction = {
+            rankingListHelper.sortData(
+                filteredRankingList,
+                rankingTableSortType
+            )
+        }
+
+        val sortedData = if (doDelay) {
+            doActionWithDelayUpToDefaultMinimal(sortingAction)
+        } else {
+            sortingAction.invoke()
+        }
 
         val directionOfSortableColumns =
             (if (rankingScreenData is RankingScreenData.RankingListIsSorted) {
@@ -209,6 +237,23 @@ class RankingScreenViewModel @Inject constructor(
                     getCurrentRankingScreenDataOrDefault()
                 )
         }
+    }
+
+    private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
+        block: () -> T
+    ): T {
+        timeSpan.turnOn()
+
+        val res = block.invoke()
+
+        timeSpan.turnOff()
+        val timeToDelay = MINIMAL_UI_ACTION_DELAY - timeSpan.getElapsed()
+
+        if (timeToDelay > 0) {
+            delay(timeToDelay)
+        }
+
+        return res
     }
 
 

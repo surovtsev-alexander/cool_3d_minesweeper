@@ -2,13 +2,13 @@ package com.surovtsev.game.minesweeper.gamelogic.helpers
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.game.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.utils.timers.Tickable
-import com.surovtsev.game.utils.time.TimeSpan
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.game.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
+import com.surovtsev.utils.timers.Tickable
+import com.surovtsev.utils.timers.TimeSpan
 import javax.inject.Inject
 
 //class GameLogicStateHelper @AssistedInject constructor(
@@ -111,6 +111,7 @@ class GameLogicStateHelper @Inject constructor(
     fun getElapsed() = timeSpan.getElapsed()
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
+        timeSpan.flush()
         timeSpan.setElapsed(elapsedTime)
         setGameState(gameStatus)
     }

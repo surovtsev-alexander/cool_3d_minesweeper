@@ -1,4 +1,4 @@
-package com.surovtsev.core.utils.statehelpers
+package com.surovtsev.utils.statehelpers
 
 interface Switch {
     fun turnOn()

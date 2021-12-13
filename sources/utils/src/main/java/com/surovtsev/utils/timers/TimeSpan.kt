@@ -1,10 +1,8 @@
-package com.surovtsev.game.utils.time
+package com.surovtsev.utils.timers
 
-import com.surovtsev.core.utils.statehelpers.Switch
-import com.surovtsev.core.utils.statehelpers.SwitchImp
-import com.surovtsev.core.utils.statehelpers.UpdatableImp
-import com.surovtsev.utils.timers.Tickable
-import com.surovtsev.utils.timers.TimeUpdater
+import com.surovtsev.utils.statehelpers.Switch
+import com.surovtsev.utils.statehelpers.SwitchImp
+import com.surovtsev.utils.statehelpers.UpdatableImp
 
 
 class TimeSpan(
@@ -25,7 +23,19 @@ class TimeSpan(
     private var onTime = timeAfterDeviceStartup()
     private var prev = onTime
 
+    init {
+        flush()
+    }
+
     private fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartup
+
+    fun flush() {
+        turnOff()
+
+        elapsedTimeBeforePause = 0L
+        onTime = timeAfterDeviceStartup()
+        prev = onTime
+    }
 
     fun tick() {
         val currTime = timeAfterDeviceStartup()

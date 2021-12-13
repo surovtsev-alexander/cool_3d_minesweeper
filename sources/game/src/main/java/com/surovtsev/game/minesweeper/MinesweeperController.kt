@@ -6,7 +6,7 @@ import com.surovtsev.game.minesweeper.gamelogic.GameLogic
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.minesweeper.scene.Scene
-import com.surovtsev.game.utils.time.TimeSpanHelperImp
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.camerainfo.CameraInfo
 import com.surovtsev.game.models.game.config.GameConfig

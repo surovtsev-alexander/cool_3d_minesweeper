@@ -5,7 +5,7 @@ import com.surovtsev.game.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.game.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.game.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.game.utils.gles.model.pointer.Pointer
-import com.surovtsev.game.utils.time.TimeSpanHelperImp
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.interaction.GameControls
 import com.surovtsev.game.utils.utils.gles.view.pointer.PointerOpenGLModel

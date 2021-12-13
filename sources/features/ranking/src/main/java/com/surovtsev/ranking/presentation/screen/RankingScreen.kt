@@ -1,6 +1,8 @@
 package com.surovtsev.ranking.presentation.screen
 
 import android.text.format.DateUtils
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,8 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
+import logcat.logcat
 
 @Composable
 fun RankingScreen(
@@ -287,7 +289,7 @@ fun RankingListColumnTitle(
                     .background(buttonColor)
                     .clickable {
                         rankingScreenCommandsHandler.handleCommand(
-                            CommandFromRankingScreen.SortList(
+                            CommandFromRankingScreen.SortListWithNoDelay(
                                 RankingTableSortType(
                                     columnType,
                                     if (isColumnSelected) {
@@ -349,6 +351,7 @@ fun RankingDataItem(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DisplayCircularIndicatorIfNeeded(
     rankingScreenStateValue: RankingScreenStateValue,
@@ -358,12 +361,79 @@ fun DisplayCircularIndicatorIfNeeded(
         RankingScreenInitialState
     ).value
 
+    var showLoadingElements by remember { mutableStateOf(false) }
+
+    showLoadingElements = rankingScreenState is RankingScreenState.Loading
+
+    with(boxScope) {
+        AnimatedVisibility(
+            modifier = Modifier.fillMaxSize(),
+            visible = showLoadingElements,
+            enter = fadeIn(animationSpec = tween(durationMillis = 150, delayMillis = 50, easing = LinearEasing)),
+        ) {
+            val transparency by transition.animateFloat(
+                transitionSpec = {
+                    when {
+                        EnterExitState.Visible isTransitioningTo EnterExitState.PostExit ->
+                            tween(durationMillis = 100, easing = FastOutLinearInEasing)
+                        else ->
+                            tween(
+                                durationMillis = 250,
+                                delayMillis = 250,
+                                easing = LinearOutSlowInEasing
+                            )
+                    }
+                },
+                label = "transparency"
+            ) {
+                if (it == EnterExitState.Visible) 0.5f else 0.0f
+            }
+            logcat { "scale: $transparency" }
+            Box(Modifier.fillMaxSize().background(TransparentGray.copy(alpha = transparency)))
+        }
+    }
+
     if (rankingScreenState is RankingScreenState.Loading) {
+
         with(boxScope) {
+
+//            AnimatedVisibility(
+//                modifier = Modifier.fillMaxSize(),
+//                visible = showLoadingElements,
+//                enter = fadeIn(animationSpec = tween(durationMillis = 500, delayMillis=140, easing = LinearEasing)),
+//                exit = fadeOut(animationSpec = tween(durationMillis = 500, easing = LinearEasing))
+//            ) {
+//
+//                Box(Modifier.background(TransparentGray.copy(alpha = 0.87f)))
+//            }
+//            AnimatedVisibility(
+//                visible = true,
+//                enter = fadeIn(
+//                    animationSpec = tween(
+//                        10000,
+//                        easing = LinearOutSlowInEasing
+//                    ),
+//                    initialAlpha = 0.0f
+//                )
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(TransparentGray)
+//                )
+//                Text(
+//                    text = "ADFDFDAFDAFDFDSFDASFDFADFDAFD"
+//                )
+//            }
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(TransparentGray)
+//            )
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(40.dp),
+                    .size(100.dp),
                 color = PrimaryColor1
             )
         }

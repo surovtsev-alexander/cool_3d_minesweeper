@@ -1,7 +1,7 @@
 package com.surovtsev.game.models.game.interaction
 
-import com.surovtsev.core.utils.statehelpers.UpdatableImp
-import com.surovtsev.core.utils.statehelpers.UpdatableOnOffSwitch
+import com.surovtsev.utils.statehelpers.UpdatableImp
+import com.surovtsev.utils.statehelpers.UpdatableOnOffSwitch
 
 object GameControlsNames {
     const val RemoveMarkedBombs = "removeMarkedBombs"

@@ -11,7 +11,13 @@ sealed class CommandFromRankingScreen {
         val selectedSettingsId: Long
     ): CommandFromRankingScreen()
 
-    class SortList(
+    open class SortList(
         val rankingTableSortType: RankingTableSortType
     ): CommandFromRankingScreen()
+
+    class SortListWithNoDelay(
+        rankingTableSortType: RankingTableSortType
+    ): SortList(
+        rankingTableSortType
+    )
 }

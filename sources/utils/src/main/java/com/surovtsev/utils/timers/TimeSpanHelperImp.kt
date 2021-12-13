@@ -1,10 +1,6 @@
-package com.surovtsev.game.utils.time
+package com.surovtsev.utils.timers
 
 import android.os.SystemClock
-import com.surovtsev.game.dagger.GameScope
-import com.surovtsev.utils.timers.Tickable
-import com.surovtsev.utils.timers.TimeSpanHelper
-import javax.inject.Inject
 
 class TimeSpanHelperImp: TimeSpanHelper {
 
@@ -16,6 +12,10 @@ class TimeSpanHelperImp: TimeSpanHelper {
 
     init {
         tick()
+    }
+
+    fun forgetSubscribers() {
+        subscribers.clear()
     }
 
     override fun tick() {

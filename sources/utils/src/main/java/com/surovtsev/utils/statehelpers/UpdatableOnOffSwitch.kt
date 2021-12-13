@@ -1,4 +1,4 @@
-package com.surovtsev.core.utils.statehelpers
+package com.surovtsev.utils.statehelpers
 
 class UpdatableOnOffSwitch(
     private val updatable: UpdatableImp = UpdatableImp(false)

@@ -6,25 +6,26 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.surovtsev.game.minesweeper.MinesweeperController
-import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
-import com.surovtsev.game.viewmodel.helpers.Place
 import com.surovtsev.core.ranking.RankingColumn
 import com.surovtsev.core.ranking.RankingListHelper
 import com.surovtsev.core.ranking.RankingTableSortType
 import com.surovtsev.core.ranking.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
+import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelper
 import com.surovtsev.core.viewmodel.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
+import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.interaction.GameControls
+import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
+import com.surovtsev.game.viewmodel.helpers.Place
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,7 +38,8 @@ const val LoadGameParameterName = "load_game"
 class GameScreenViewModel @Inject constructor(
     gameComponentProvider: Provider<GameComponent.Builder>,
     touchListenerComponentProvider: Provider<TouchListenerComponent.Builder>,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val timeSpanHelperImp: TimeSpanHelperImp,
 ):
     ViewModel(),
     DefaultLifecycleObserver,
@@ -132,6 +134,7 @@ class GameScreenViewModel @Inject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         minesweeperController.onDestroy(owner)
+        timeSpanHelperImp.forgetSubscribers()
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {

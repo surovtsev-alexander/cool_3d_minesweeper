@@ -10,6 +10,7 @@ import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingListWithPlaces
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.RankingScreenEvents
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.SelectedSettingsIdData
 import com.surovtsev.ranking.rankinscreenviewmodel.helpers.WinsCountMapData
+import com.surovtsev.utils.timers.TimeSpan
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -45,6 +46,8 @@ interface RankingComponentEntryPoint {
 
     val rankingScreenStateHolder: RankingScreenStateHolder
     val rankingScreenStateValue: RankingScreenStateValue
+
+    val timeSpan: TimeSpan
 }
 
 @Module

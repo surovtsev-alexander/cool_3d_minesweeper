@@ -5,7 +5,7 @@ import com.surovtsev.utils.androidview.interaction.TouchType
 import com.surovtsev.game.utils.gles.model.pointer.PointerImp
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
-import com.surovtsev.core.utils.statehelpers.UpdatableImp
+import com.surovtsev.utils.statehelpers.UpdatableImp
 import glm_.vec2.Vec2
 import javax.inject.Inject
 
