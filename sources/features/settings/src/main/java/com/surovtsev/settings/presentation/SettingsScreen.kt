@@ -23,6 +23,7 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.settings.viewmodel.*
+import com.surovtsev.settings.viewmodel.helpers.SettingsUIInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
 @Composable
@@ -216,69 +217,31 @@ fun Controls(
 
     val settingsData = screenData.settingsData
 
-    Column {
-        CustomSliderWithCaption(
-            name = "x",
-            borders = 3..25,
-            sliderPosition = settingsData.dimensions.x,
-            onChangeAction = {
-                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(x = it))
-                settingsScreenCommandsHandler.handleCommand(
-                    CommandFromSettingsScreen.RememberSettingsData(
-                        newData
-                    )
-                )
-             },
-            backgroundColor = LightBlue,
-            lineColor = PrimaryColor1,
+    val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
+        settingsScreenCommandsHandler.handleCommand(
+            CommandFromSettingsScreen.RememberSettingsData(
+                updatedSettingsData
+            )
         )
-        CustomSliderWithCaption(
-            name = "y",
-            borders = 3..25,
-            sliderPosition = settingsData.dimensions.y,
-            onChangeAction = {
-                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(y = it))
-                settingsScreenCommandsHandler.handleCommand(
-                    CommandFromSettingsScreen.RememberSettingsData(
-                        newData
-                    )
-                )
-            },
-            backgroundColor = LightBlue,
-            lineColor = PrimaryColor1,
-        )
-        CustomSliderWithCaption(
-            name = "z",
-            borders = 3..25,
-            sliderPosition = settingsData.dimensions.z,
-            onChangeAction = {
-                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(z = it))
-                settingsScreenCommandsHandler.handleCommand(
-                    CommandFromSettingsScreen.RememberSettingsData(
-                        newData
-                    )
-                )
-            },
-            backgroundColor = LightBlue,
-            lineColor = PrimaryColor1,
-        )
+    }
 
-        CustomSliderWithCaption(
-            name = "bombs %",
-            borders = 10..40,
-            sliderPosition = settingsData.bombsPercentage,
-            onChangeAction = {
-                val newData = settingsData.copy(bombsPercentage = it)
-                settingsScreenCommandsHandler.handleCommand(
-                    CommandFromSettingsScreen.RememberSettingsData(
-                        newData
-                    )
-                )
-            },
-            backgroundColor = LightBlue,
-            lineColor = PrimaryColor1,
-        )
-        /*
+    LazyColumn {
+        items(SettingsUIInfo.info) { item ->
+            CustomSliderWithCaption(
+                name = item.title,
+                borders = item.borders,
+                sliderPosition = item.valueCalculator(settingsData),
+                onChangeAction = {
+                    val updatedSettingsData = item.settingsDataCalculator(settingsData, it)
+                    rememberSettingsAction(updatedSettingsData)
+                },
+                backgroundColor = LightBlue,
+                lineColor = PrimaryColor1,
+            )
+        }
+
+    }
+     /*
         items(slidersInfo) { (name, bordersAndValue) ->
             val sV = bordersAndValue.second
             val sliderValue: Int by sV.run {
@@ -295,7 +258,6 @@ fun Controls(
             )
         }
          */
-    }
 }
 
 
