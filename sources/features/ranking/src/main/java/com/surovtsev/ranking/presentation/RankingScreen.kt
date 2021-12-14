@@ -31,12 +31,12 @@ import logcat.logcat
 fun RankingScreen(
     viewModel: RankingScreenViewModel
 ) {
-    LaunchedEffect(key1 = Unit, block = {
+    LaunchedEffect(key1 = Unit) {
         viewModel.handleCommand(
             CommandFromRankingScreen
                 .LoadData
         )
-    })
+    }
 
     RankingControls(
         viewModel.rankingScreenStateValue,
@@ -104,7 +104,7 @@ fun SettingsList(
         RankingScreenInitialState
     ).value
 
-    val rankingScreenData = rankingScreenState.rankingScreenData
+    val rankingScreenData = rankingScreenState.screenData
 
     if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
         return
@@ -211,7 +211,7 @@ fun RankingList(
         RankingScreenInitialState
     ).value
 
-    val rankingScreenData = rankingScreenState.rankingScreenData
+    val rankingScreenData = rankingScreenState.screenData
 
     val rankingListWithPlaces: RankingListWithPlaces
     val rankingTableSortParameters: RankingTableSortParameters

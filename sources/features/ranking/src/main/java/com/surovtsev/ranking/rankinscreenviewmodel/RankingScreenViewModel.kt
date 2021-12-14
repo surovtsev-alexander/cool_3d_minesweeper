@@ -82,30 +82,50 @@ class RankingScreenViewModel @Inject constructor(
         timeSpan.flush()
     }
 
-    override fun handleCommand(event: CommandFromRankingScreen) {
+    override fun handleCommand(command: CommandFromRankingScreen) {
         launchOnIOThread {
             setLoadingState()
 
-            when (event) {
+            when (command) {
                 is CommandFromRankingScreen.LoadData            -> loadData()
-                is CommandFromRankingScreen.FilterList          -> filterList(event.selectedSettingsId)
-                is CommandFromRankingScreen.SortListWithNoDelay -> sortList(event.rankingTableSortParameters, false)
-                is CommandFromRankingScreen.SortList            -> sortList(event.rankingTableSortParameters, true)
+                is CommandFromRankingScreen.FilterList          -> filterList(command.selectedSettingsId)
+                is CommandFromRankingScreen.SortListWithNoDelay -> sortList(command.rankingTableSortParameters, false)
+                is CommandFromRankingScreen.SortList            -> sortList(command.rankingTableSortParameters, true)
                 is CommandFromRankingScreen.CloseError          -> closeError()
+                else                                            -> publishError("error while processing commands from screen")
             }
         }
     }
 
     private suspend fun setLoadingState() {
-        withUIContext {
-            rankingScreenStateHolder.value = ScreenState.Loading(
+        publishState(
+            ScreenState.Loading(
                 getCurrentRankingScreenDataOrDefault()
             )
-        }
+        )
     }
 
     private fun getCurrentRankingScreenDataOrDefault(): RankingScreenData {
-        return rankingScreenStateHolder.value?.rankingScreenData ?: RankingScreenData.NoData
+        return rankingScreenStateHolder.value?.screenData ?: RankingScreenData.NoData
+    }
+
+    private suspend fun publishState(
+        rankingScreenState: RankingScreenState
+    ) {
+        withUIContext {
+            rankingScreenStateHolder.value = rankingScreenState
+        }
+    }
+
+    private suspend fun publishError(
+        message: String
+    ) {
+        publishState(
+            ScreenState.Error(
+                getCurrentRankingScreenDataOrDefault(),
+                message
+            )
+        )
     }
 
     private suspend fun loadData() {
@@ -118,11 +138,11 @@ class RankingScreenViewModel @Inject constructor(
             )
         }
 
-        withUIContext {
-            rankingScreenStateHolder.value = ScreenState.Idle(
+        publishState(
+            ScreenState.Idle(
                 settingsListIsLoaded
             )
-        }
+        )
 
         settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
@@ -143,24 +163,24 @@ class RankingScreenViewModel @Inject constructor(
                     selectedSettingsId
                 )
 
-        withUIContext {
-            val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
-            rankingScreenStateHolder.value = if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-                ScreenState.Error(
-                    getCurrentRankingScreenDataOrDefault(),
-                    "error while filtering ranking list"
+        val rankingScreenData = rankingScreenStateHolder.value?.screenData
+        val newState = if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+            ScreenState.Error(
+                getCurrentRankingScreenDataOrDefault(),
+                "error while filtering ranking list"
+            )
+        } else {
+            // Do not set state to IDLE in order to avoid blinking loading ui attributes.
+            ScreenState.Loading(
+                RankingScreenData.RankingListIsPrepared(
+                    rankingScreenData,
+                    selectedSettingsId,
+                    rankingListWithPlaces
                 )
-            } else {
-                // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-                ScreenState.Loading(
-                    RankingScreenData.RankingListIsPrepared(
-                        rankingScreenData,
-                        selectedSettingsId,
-                        rankingListWithPlaces
-                    )
-                )
-            }
+            )
         }
+
+        publishState(newState)
 
         return handleCommand(
             CommandFromRankingScreen.SortList(
@@ -173,15 +193,12 @@ class RankingScreenViewModel @Inject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ) {
-        val rankingScreenData = rankingScreenStateHolder.value?.rankingScreenData
+        val rankingScreenData = rankingScreenStateHolder.value?.screenData
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            withUIContext {
-                rankingScreenStateHolder.value = ScreenState.Error(
-                    getCurrentRankingScreenDataOrDefault(),
-                    "error while sorting ranking list"
-                )
-            }
+            publishError(
+                "error while sorting ranking list"
+            )
 
             return
         }
@@ -216,25 +233,24 @@ class RankingScreenViewModel @Inject constructor(
                 }
             }.toMap()
 
-        withUIContext {
-            rankingScreenStateHolder.value = ScreenState.Idle(
-                RankingScreenData.RankingListIsSorted(
-                    rankingScreenData,
-                    rankingTableSortParameters,
-                    sortedData,
-                    directionOfSortableColumns
-                )
+        val newState = ScreenState.Idle(
+            RankingScreenData.RankingListIsSorted(
+                rankingScreenData,
+                rankingTableSortParameters,
+                sortedData,
+                directionOfSortableColumns
             )
-        }
+        )
+
+        publishState(newState)
     }
 
     private suspend fun closeError() {
-        withUIContext {
-            rankingScreenStateHolder.value =
-                ScreenState.Idle(
-                    getCurrentRankingScreenDataOrDefault()
-                )
-        }
+        publishState(
+            ScreenState.Idle(
+                getCurrentRankingScreenDataOrDefault()
+            )
+        )
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(

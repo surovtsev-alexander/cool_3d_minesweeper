@@ -3,8 +3,8 @@ package com.surovtsev.ranking.rankinscreenviewmodel
 import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
-import com.surovtsev.core.settings.SettingsList
 
 sealed class RankingScreenData() {
 

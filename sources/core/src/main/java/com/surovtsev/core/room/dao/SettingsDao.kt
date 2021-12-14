@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.surovtsev.core.room.entities.Settings
 
+typealias SettingsList = List<Settings>
+
 @Dao
 interface SettingsDao  {
 
@@ -13,7 +15,7 @@ interface SettingsDao  {
     }
 
     @Query("SELECT * FROM $settingsTableName")
-    fun getAll(): List<Settings>
+    fun getAll(): SettingsList
 
     @Query("SELECT COUNT(*) FROM $settingsTableName")
     fun getCount(): Int

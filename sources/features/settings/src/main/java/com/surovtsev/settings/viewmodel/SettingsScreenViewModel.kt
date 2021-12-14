@@ -14,6 +14,7 @@ import com.surovtsev.settings.dagger.SettingsComponentEntryPoint
 import com.surovtsev.settings.viewmodel.helpers.SettingsScreenControls
 import com.surovtsev.settings.viewmodel.helpers.SettingsScreenEvents
 import com.surovtsev.settings.viewmodel.helpers.SlidersWithNames
+import com.surovtsev.utils.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -80,11 +81,153 @@ class SettingsScreenViewModel @Inject constructor(
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
 
-        loadData()
+        loadDataOld()
     }
 
-    override fun handleCommand(event: CommandFromSettingsScreen) {
-        TODO("Not yet implemented")
+    override fun handleCommand(command: CommandFromSettingsScreen) {
+        launchOnIOThread {
+            setLoadingState()
+
+            when (command) {
+                is CommandFromSettingsScreen.CloseError             -> closeError()
+                is CommandFromSettingsScreen.LoadSettings           -> loadSettings()
+                is CommandFromSettingsScreen.LoadSelectedSettings   -> loadSelectedSettings()
+                is CommandFromSettingsScreen.SelectSettings         -> selectSettings(command.settings)
+                is CommandFromSettingsScreen.ApplySettings          -> applySettings()
+                else                                                -> publishError("error while processing commands")
+            }
+        }
+    }
+
+    private suspend fun setLoadingState() {
+        publishNewState(
+            ScreenState.Loading(
+                getCurrentSettingsScreenStateOrDefault()
+            )
+        )
+    }
+
+    private fun getCurrentSettingsScreenStateOrDefault(): SettingsScreenData {
+        return settingsScreenStateHolder.value?.screenData ?: SettingsScreenData.NoData
+    }
+
+    private suspend fun publishNewState(
+        settingsScreenState: SettingsScreenState
+    ) {
+        withUIContext {
+            settingsScreenStateHolder.value = settingsScreenState
+        }
+    }
+
+    private suspend fun publishError(
+        message: String
+    ) {
+        publishNewState(
+            ScreenState.Error(
+                getCurrentSettingsScreenStateOrDefault(),
+                message
+            )
+        )
+    }
+
+    private suspend fun closeError() {
+        publishNewState(
+            ScreenState.Idle(
+                getCurrentSettingsScreenStateOrDefault()
+            )
+        )
+    }
+
+    private suspend fun loadSettings() {
+        val settingsList = settingsDao.getAll()
+
+        publishNewState(
+            ScreenState.Idle(
+                SettingsScreenData.SettingsLoaded(
+                    settingsList
+                )
+            )
+        )
+
+        return handleCommand(
+            CommandFromSettingsScreen.LoadSelectedSettings
+        )
+    }
+
+    private suspend fun updateSettings(
+        settingsData: Settings.SettingsData
+    ) {
+
+    }
+
+    private suspend fun applySettings() {
+        doActionIfStateIsChildOf<SettingsScreenData.SelectedSettings>(
+            "error while attempting to apply settings"
+        ) { screenData ->
+            val settingsData = screenData.settingsData
+            settingsDao.getOrCreate(
+                settingsData
+            )
+
+            saveController.save(
+                SaveTypes.GameSettingsJson,
+                settingsData
+            )
+
+            withUIContext {
+                finishAction?.invoke()
+            }
+        }
+    }
+
+    private suspend fun loadSelectedSettings() {
+        val selectedSettingsData = saveController.loadSettingDataOrDefault()
+
+        val selectedSettings = settingsDao.getBySettingsData(
+            selectedSettingsData
+        )?: Settings(selectedSettingsData, -1)
+
+        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+            "error while loading selected settings"
+        ) { screenData ->
+            publishNewState(
+                ScreenState.Idle(
+                    SettingsScreenData.SelectedSettingsWithId(
+                        screenData,
+                        selectedSettings
+                    )
+                )
+            )
+        }
+    }
+
+    private suspend fun selectSettings(
+        settings: Settings
+    ) {
+        doActionIfStateIsChildOf<SettingsScreenData.SelectedSettings>(
+            "internal error: can not select settings"
+        ) { screenData ->
+            publishNewState(
+                ScreenState.Idle(
+                    SettingsScreenData.SelectedSettingsWithId(
+                        screenData,
+                        settings
+                    )
+                )
+            )
+        }
+    }
+
+    private suspend inline fun <reified T: SettingsScreenData> doActionIfStateIsChildOf(
+        errorMessage: String, action: (screenData: T) -> Unit
+    ) {
+        val screenData = settingsScreenStateHolder.value?.screenData
+
+        if (screenData == null || screenData !is T) {
+            publishError(errorMessage)
+        } else {
+            action.invoke(screenData)
+        }
     }
 
     private suspend fun reloadSettingsList() {
@@ -97,7 +240,7 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun loadData() {
+    private fun loadDataOld() {
         launchOnIOThread {
             reloadSettingsList()
 
@@ -116,7 +259,7 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    fun applySettings() {
+    fun applySettingsOld() {
         launchOnIOThread {
             val settingsData = settingsDataFactory()
             settingsDao.getOrCreate(
@@ -148,7 +291,7 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    fun selectSettings(settings: Settings) {
+    fun selectSettingsOld(settings: Settings) {
         settingsScreenControls.selectedSettingsId.onDataChanged(settings.id)
         setControlValues(settings.settingsData)
     }

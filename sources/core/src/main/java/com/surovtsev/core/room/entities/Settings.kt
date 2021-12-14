@@ -24,6 +24,13 @@ data class Settings (
 ) {
     @[PrimaryKey(autoGenerate = true) ColumnInfo(name = ColumnNames.id)] var id: Long = 0
 
+    constructor(
+        settingsData: SettingsData,
+        id: Long
+    ) : this(settingsData) {
+        this.id = id
+    }
+
     object TableName {
         const val name = "settings"
     }

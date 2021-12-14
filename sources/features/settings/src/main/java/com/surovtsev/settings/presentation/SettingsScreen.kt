@@ -8,7 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,24 +20,33 @@ import androidx.navigation.NavController
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
-import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.core.ui.theme.MinesweeperTheme
-import com.surovtsev.core.settings.SettingsList
-import com.surovtsev.utils.compose.components.CustomSliderWithCaption
-import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
+import com.surovtsev.core.ui.theme.PrimaryColor1
+import com.surovtsev.settings.viewmodel.*
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    viewModel.finishAction = { navController.navigateUp() }
-    SettingsControls(viewModel = viewModel)
+    val settingsScreenCommandsHandler: SettingsScreenCommandsHandler = viewModel
+    LaunchedEffect(key1 = Unit) {
+        viewModel.finishAction = { navController.navigateUp() }
+        settingsScreenCommandsHandler.handleCommand(
+            CommandFromSettingsScreen.LoadSettings
+        )
+    }
+
+    SettingsControls(
+        viewModel.settingsScreenStateValue,
+        settingsScreenCommandsHandler
+    )
 }
 
 @Composable
 fun SettingsControls(
-    viewModel: SettingsScreenViewModel
+    settingsScreenStateValue: SettingsScreenStateValue,
+    settingsScreenCommandsHandler: SettingsScreenCommandsHandler,
 ) {
     MinesweeperTheme {
         Box(
@@ -50,13 +60,19 @@ fun SettingsControls(
                         .weight(1f)
                         .border(1.dp, Color.Black)
                 ) {
-                    SettingsList(viewModel)
+                    SettingsList(
+                        settingsScreenStateValue,
+                        settingsScreenCommandsHandler
+                    )
                 }
                 Column(
                     modifier = Modifier
                         .border(1.dp, Color.Black)
                 ) {
-                    Controls(viewModel)
+                    Controls(
+                        settingsScreenStateValue,
+                        settingsScreenCommandsHandler
+                    )
                 }
                 Spacer(
                     modifier = Modifier
@@ -67,7 +83,9 @@ fun SettingsControls(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    UseButton(viewModel)
+                    ApplyButton(
+                        settingsScreenCommandsHandler
+                    )
                 }
                 Spacer(
                     modifier = Modifier
@@ -79,13 +97,13 @@ fun SettingsControls(
 }
 
 @Composable
-fun SettingsList(viewModel: SettingsScreenViewModel) {
-    val settingsList: SettingsList by viewModel.settingsScreenEvents.settingsListData.run {
-        data.observeAsState(defaultValue)
-    }
-    val selectedSettingsId: Long by viewModel.settingsScreenControls.selectedSettingsId.run {
-        data.observeAsState(defaultValue)
-    }
+fun SettingsList(
+    settingsScreenStateValue: SettingsScreenStateValue,
+    settingsScreenCommandsHandler: SettingsScreenCommandsHandler
+) {
+    val state = settingsScreenStateValue.observeAsState(
+        SettingsScreenInitialState
+    ).value
 
     Column(
         Modifier
@@ -106,10 +124,25 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
             )
         }
         LazyColumn {
-            items(settingsList) { item ->
+            val screenData = state.screenData
+            val settingsList = if (screenData is SettingsScreenData.SettingsLoaded) {
+                screenData.settingsList
+            } else {
+                emptyList()
+            }
+
+            items(settingsList) { item: Settings ->
                 val itemId = item.id
-                val modifier = Modifier.clickable { viewModel.selectSettings(item) }.let {
-                    if (selectedSettingsId == itemId) {
+                val modifier = Modifier.clickable {
+                    settingsScreenCommandsHandler.handleCommand(
+                        CommandFromSettingsScreen.SelectSettings(
+                            item
+                        )
+                    )
+                }.let {
+                    if (screenData is SettingsScreenData.SelectedSettingsWithId &&
+                        screenData.settingsId == itemId
+                    ) {
                         it.background(LightBlue)
                     } else {
                         it
@@ -118,7 +151,7 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
                 Box (
                     modifier
                 ) {
-                    SettingsDataItem(viewModel = viewModel, item)
+                    SettingsDataItem(settingsScreenCommandsHandler, item)
                 }
             }
         }
@@ -127,7 +160,7 @@ fun SettingsList(viewModel: SettingsScreenViewModel) {
 
 @Composable
 fun SettingsDataItem(
-    viewModel: SettingsScreenViewModel,
+    settingsScreenCommandsHandler: SettingsScreenCommandsHandler,
     settings: Settings
 ) {
     Row(
@@ -148,7 +181,11 @@ fun SettingsDataItem(
         )
         Box (
             modifier = Modifier
-                .clickable { viewModel.deleteSettings(settings.id) }
+                .clickable {
+                    settingsScreenCommandsHandler.handleCommand(
+                        CommandFromSettingsScreen.DeleteSettings(settings.id)
+                    )
+                }
                 .background(PrimaryColor1)
         ) {
             Text(
@@ -164,8 +201,10 @@ private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
 
 @Composable
 fun Controls(
-    viewModel: SettingsScreenViewModel
+    settingsScreenStateValue: SettingsScreenStateValue,
+    settingsScreenCommandsHandler: SettingsScreenCommandsHandler
 ) {
+    /*
     val slidersInfo = viewModel.settingsScreenControls.slidersInfo
 
     LazyColumn {
@@ -185,20 +224,26 @@ fun Controls(
             )
         }
     }
+
+     */
 }
 
 
 @Composable
-fun UseButton(
-    viewModel: SettingsScreenViewModel
+fun ApplyButton(
+    screenStateCommandsHandler: SettingsScreenCommandsHandler
 ) {
     Button (
-        { viewModel.applySettings() },
+        {
+            screenStateCommandsHandler.handleCommand(
+                CommandFromSettingsScreen.ApplySettings
+            )
+        },
         modifier = Modifier
             .fillMaxWidth(fraction = 0.75f)
     ) {
         Text(
-            "use",
+            "apply",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )

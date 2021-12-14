@@ -1,18 +1,18 @@
 package com.surovtsev.utils.viewmodel
 
 sealed class ScreenState<T>(
-    val rankingScreenData: T
+    val screenData: T
 ) {
     class Loading<T>(
-        rankingScreenData: T
-    ): ScreenState<T>(rankingScreenData)
+        screenData: T
+    ): ScreenState<T>(screenData)
 
     class Error<T>(
-        rankingScreenData: T,
+        screenData: T,
         val message: String
-    ): ScreenState<T>(rankingScreenData)
+    ): ScreenState<T>(screenData)
 
     class Idle<T>(
-        rankingScreenData: T
-    ): ScreenState<T>(rankingScreenData)
+        screenData: T
+    ): ScreenState<T>(screenData)
 }
