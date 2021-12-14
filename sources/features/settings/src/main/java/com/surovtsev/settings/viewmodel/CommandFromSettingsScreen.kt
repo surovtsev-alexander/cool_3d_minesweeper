@@ -9,8 +9,12 @@ sealed class CommandFromSettingsScreen {
 
     object LoadSelectedSettings: CommandFromSettingsScreen()
 
-    data class SelectSettings(
+    data class RememberSettings(
         val settings: Settings
+    ): CommandFromSettingsScreen()
+
+    data class RememberSettingsData(
+        val settingsData: Settings.SettingsData
     ): CommandFromSettingsScreen()
 
     data class DeleteSettings(

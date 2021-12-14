@@ -11,25 +11,25 @@ sealed class SettingsScreenData {
         val settingsList: SettingsList,
     ): SettingsScreenData()
 
-    open class SelectedSettings(
+    open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
         val settingsData: Settings.SettingsData
     ): SettingsLoaded(
         settingsLoaded.settingsList
     )
 
-    open class SelectedSettingsWithId(
-        selectedSettings: SelectedSettings,
-        val settingsId: Long,
-    ): SelectedSettings(
-        selectedSettings,
-        selectedSettings.settingsData
+    open class SettingsIsSelected(
+        settingsDataIsSelected: SettingsDataIsSelected,
+        val settingsId: Long
+    ): SettingsDataIsSelected(
+        settingsDataIsSelected,
+        settingsDataIsSelected.settingsData
     ) {
         constructor(
             settingsLoaded: SettingsLoaded,
             settings: Settings
         ): this(
-            SelectedSettings(
+            SettingsDataIsSelected(
                 settingsLoaded,
                 settings.settingsData
             ),

@@ -92,8 +92,10 @@ class SettingsScreenViewModel @Inject constructor(
                 is CommandFromSettingsScreen.CloseError             -> closeError()
                 is CommandFromSettingsScreen.LoadSettings           -> loadSettings()
                 is CommandFromSettingsScreen.LoadSelectedSettings   -> loadSelectedSettings()
-                is CommandFromSettingsScreen.SelectSettings         -> selectSettings(command.settings)
+                is CommandFromSettingsScreen.RememberSettings       -> rememberSettings(command.settings)
+                is CommandFromSettingsScreen.RememberSettingsData   -> rememberSettingsData(command.settingsData)
                 is CommandFromSettingsScreen.ApplySettings          -> applySettings()
+                is CommandFromSettingsScreen.DeleteSettings         -> deleteSettings(command.settingsId)
                 else                                                -> publishError("error while processing commands")
             }
         }
@@ -154,17 +156,29 @@ class SettingsScreenViewModel @Inject constructor(
         )
     }
 
-    private suspend fun updateSettings(
+    private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData
     ) {
-
+        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+            "error while updating settings"
+        ) { screenData ->
+            publishNewState(
+                ScreenState.Idle(
+                    SettingsScreenData.SettingsDataIsSelected(
+                        screenData,
+                        settingsData
+                    )
+                )
+            )
+        }
     }
 
     private suspend fun applySettings() {
-        doActionIfStateIsChildOf<SettingsScreenData.SelectedSettings>(
-            "error while attempting to apply settings"
+        doActionIfStateIsChildOf<SettingsScreenData.SettingsDataIsSelected>(
+            "error while applying settings"
         ) { screenData ->
             val settingsData = screenData.settingsData
+
             settingsDao.getOrCreate(
                 settingsData
             )
@@ -180,6 +194,20 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
+    private suspend fun deleteSettings(
+        settingsId: Long
+    ) {
+        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+            "error while deleting settings"
+        ) { screenData ->
+            settingsDao.delete(settingsId)
+
+            return handleCommand(
+                CommandFromSettingsScreen.LoadSettings
+            )
+        }
+    }
+
     private suspend fun loadSelectedSettings() {
         val selectedSettingsData = saveController.loadSettingDataOrDefault()
 
@@ -187,29 +215,18 @@ class SettingsScreenViewModel @Inject constructor(
             selectedSettingsData
         )?: Settings(selectedSettingsData, -1)
 
-        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
-            "error while loading selected settings"
-        ) { screenData ->
-            publishNewState(
-                ScreenState.Idle(
-                    SettingsScreenData.SelectedSettingsWithId(
-                        screenData,
-                        selectedSettings
-                    )
-                )
-            )
-        }
+        rememberSettings(selectedSettings)
     }
 
-    private suspend fun selectSettings(
-        settings: Settings
+    private suspend fun rememberSettings(
+        settings: Settings,
     ) {
-        doActionIfStateIsChildOf<SettingsScreenData.SelectedSettings>(
+        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
             publishNewState(
                 ScreenState.Idle(
-                    SettingsScreenData.SelectedSettingsWithId(
+                    SettingsScreenData.SettingsIsSelected(
                         screenData,
                         settings
                     )
@@ -296,7 +313,7 @@ class SettingsScreenViewModel @Inject constructor(
         setControlValues(settings.settingsData)
     }
 
-    fun deleteSettings(settingsId: Long) {
+    fun deleteSettingsOld(settingsId: Long) {
         launchOnIOThread {
             settingsDao.delete(settingsId)
 

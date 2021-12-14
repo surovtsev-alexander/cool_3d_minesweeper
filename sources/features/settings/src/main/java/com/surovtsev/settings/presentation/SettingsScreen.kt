@@ -23,6 +23,7 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.settings.viewmodel.*
+import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
 @Composable
 fun SettingsScreen(
@@ -135,12 +136,12 @@ fun SettingsList(
                 val itemId = item.id
                 val modifier = Modifier.clickable {
                     settingsScreenCommandsHandler.handleCommand(
-                        CommandFromSettingsScreen.SelectSettings(
+                        CommandFromSettingsScreen.RememberSettings(
                             item
                         )
                     )
                 }.let {
-                    if (screenData is SettingsScreenData.SelectedSettingsWithId &&
+                    if (screenData is SettingsScreenData.SettingsIsSelected &&
                         screenData.settingsId == itemId
                     ) {
                         it.background(LightBlue)
@@ -204,10 +205,80 @@ fun Controls(
     settingsScreenStateValue: SettingsScreenStateValue,
     settingsScreenCommandsHandler: SettingsScreenCommandsHandler
 ) {
-    /*
-    val slidersInfo = viewModel.settingsScreenControls.slidersInfo
+    val state = settingsScreenStateValue.observeAsState(
+        SettingsScreenInitialState
+    ).value
+    val screenData = state.screenData
 
-    LazyColumn {
+    if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
+        return
+    }
+
+    val settingsData = screenData.settingsData
+
+    Column {
+        CustomSliderWithCaption(
+            name = "x",
+            borders = 3..25,
+            sliderPosition = settingsData.dimensions.x,
+            onChangeAction = {
+                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(x = it))
+                settingsScreenCommandsHandler.handleCommand(
+                    CommandFromSettingsScreen.RememberSettingsData(
+                        newData
+                    )
+                )
+             },
+            backgroundColor = LightBlue,
+            lineColor = PrimaryColor1,
+        )
+        CustomSliderWithCaption(
+            name = "y",
+            borders = 3..25,
+            sliderPosition = settingsData.dimensions.y,
+            onChangeAction = {
+                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(y = it))
+                settingsScreenCommandsHandler.handleCommand(
+                    CommandFromSettingsScreen.RememberSettingsData(
+                        newData
+                    )
+                )
+            },
+            backgroundColor = LightBlue,
+            lineColor = PrimaryColor1,
+        )
+        CustomSliderWithCaption(
+            name = "z",
+            borders = 3..25,
+            sliderPosition = settingsData.dimensions.z,
+            onChangeAction = {
+                val newData = settingsData.copy(dimensions = settingsData.dimensions.copy(z = it))
+                settingsScreenCommandsHandler.handleCommand(
+                    CommandFromSettingsScreen.RememberSettingsData(
+                        newData
+                    )
+                )
+            },
+            backgroundColor = LightBlue,
+            lineColor = PrimaryColor1,
+        )
+
+        CustomSliderWithCaption(
+            name = "bombs %",
+            borders = 10..40,
+            sliderPosition = settingsData.bombsPercentage,
+            onChangeAction = {
+                val newData = settingsData.copy(bombsPercentage = it)
+                settingsScreenCommandsHandler.handleCommand(
+                    CommandFromSettingsScreen.RememberSettingsData(
+                        newData
+                    )
+                )
+            },
+            backgroundColor = LightBlue,
+            lineColor = PrimaryColor1,
+        )
+        /*
         items(slidersInfo) { (name, bordersAndValue) ->
             val sV = bordersAndValue.second
             val sliderValue: Int by sV.run {
@@ -223,9 +294,8 @@ fun Controls(
                 PrimaryColor1
             )
         }
+         */
     }
-
-     */
 }
 
 
