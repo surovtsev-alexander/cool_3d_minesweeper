@@ -10,7 +10,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.surovtsev.cool3dminesweeper.presentation.gamescreen.GameScreen
+import com.surovtsev.game.presentation.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel

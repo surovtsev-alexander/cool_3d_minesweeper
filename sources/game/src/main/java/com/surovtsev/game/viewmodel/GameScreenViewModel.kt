@@ -2,18 +2,14 @@ package com.surovtsev.game.viewmodel
 
 import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.core.viewmodel.ScreenCommandsHandler
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
 import com.surovtsev.game.minesweeper.MinesweeperController
@@ -25,6 +21,8 @@ import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
+import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +30,11 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 const val LoadGameParameterName = "load_game"
+
+typealias GameScreenStateHolder = MutableLiveData<GameScreenState>
+typealias GameScreenStateValue = LiveData<GameScreenState>
+
+typealias GameScreenCommandsHandler = ScreenCommandsHandler<CommandsFromGameScreen>
 
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
@@ -42,6 +45,7 @@ class GameScreenViewModel @Inject constructor(
     private val timeSpanHelperImp: TimeSpanHelperImp,
 ):
     ViewModel(),
+    GameScreenCommandsHandler,
     DefaultLifecycleObserver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
@@ -56,6 +60,9 @@ class GameScreenViewModel @Inject constructor(
     private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
+
+    private val gameScreenStateHolder: GameScreenStateHolder
+    val gameScreenStateValue: GameScreenStateValue
 
     init {
 
@@ -88,6 +95,11 @@ class GameScreenViewModel @Inject constructor(
         rankingListHelper =
             gameComponentEntryPoint.rankingListHelper
 
+        gameScreenStateHolder =
+            gameComponentEntryPoint.gameScreenStateHolder
+        gameScreenStateValue =
+            gameComponentEntryPoint.gameScreenStateValue
+
         val touchListenerComponent = touchListenerComponentProvider
             .get()
             .touchHandler(
@@ -117,6 +129,99 @@ class GameScreenViewModel @Inject constructor(
             setEGLContextClientVersion(2)
             setRenderer(gameRenderer)
         }
+    }
+
+    override fun handleCommand(command: CommandsFromGameScreen) {
+        launchOnIOThread {
+            setLoadingState()
+
+            when (command) {
+                is CommandsFromGameScreen.NewGame       -> newGame()
+                is CommandsFromGameScreen.LoadGame      -> loadGame()
+                is CommandsFromGameScreen.CloseError    -> closeError()
+                is CommandsFromGameScreen.Pause         -> pause()
+                is CommandsFromGameScreen.Resume        -> resume()
+                is CommandsFromGameScreen.OpenMenu      -> openMenu()
+                is CommandsFromGameScreen.CloseMenu     -> closeMenu()
+                else                                    -> publishError("error while processing commands")
+            }
+        }
+    }
+
+    private suspend fun setLoadingState() {
+        publishNewState(
+            GameScreenState.Loading(
+                getGameScreenDataOrDefault()
+            )
+        )
+    }
+
+    private suspend inline fun <reified T: GameScreenData> doActionIfStateIsChildOf(
+        errorMessage: String,
+        action: (gameScreenData: GameScreenData) -> Unit
+    ) {
+        val gameScreenData = gameScreenStateHolder.value?.screenData
+
+        if (gameScreenData == null || gameScreenData !is T) {
+            publishError(errorMessage)
+        } else {
+            action.invoke(gameScreenData)
+        }
+    }
+
+    private suspend fun closeError() {
+        publishNewState(
+            GameScreenState.MainMenu(
+                getGameScreenDataOrDefault()
+            )
+        )
+    }
+
+    private suspend fun publishNewState(
+        gameScreenState: GameScreenState
+    ) {
+        withUIContext {
+            gameScreenStateHolder.value = gameScreenState
+        }
+    }
+
+    private suspend fun publishError(
+        message: String
+    ) {
+        publishNewState(
+            GameScreenState.Error(
+                getGameScreenDataOrDefault(),
+                message
+            )
+        )
+    }
+
+    private fun getGameScreenDataOrDefault(): GameScreenData {
+        return gameScreenStateHolder.value?.screenData ?: GameScreenData.NoData
+    }
+
+    private suspend fun newGame() {
+
+    }
+
+    private suspend fun loadGame() {
+
+    }
+
+    private suspend fun pause() {
+
+    }
+
+    private suspend fun resume() {
+
+    }
+
+    private suspend fun openMenu() {
+
+    }
+
+    private suspend fun closeMenu() {
+
     }
 
     override fun onPause(owner: LifecycleOwner) {

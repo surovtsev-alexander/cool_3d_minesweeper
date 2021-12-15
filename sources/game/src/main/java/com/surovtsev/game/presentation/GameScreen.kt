@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.gamescreen
+package com.surovtsev.game.presentation
 
 import android.app.Activity
 import android.opengl.GLSurfaceView
