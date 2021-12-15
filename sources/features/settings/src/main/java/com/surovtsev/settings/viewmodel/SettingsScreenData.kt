@@ -2,9 +2,10 @@ package com.surovtsev.settings.viewmodel
 
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.core.viewmodel.ScreenData
 
 
-sealed class SettingsScreenData {
+sealed class SettingsScreenData: ScreenData {
     object NoData: SettingsScreenData()
 
     open class SettingsLoaded(

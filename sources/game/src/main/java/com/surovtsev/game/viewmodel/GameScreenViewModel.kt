@@ -24,7 +24,7 @@ import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import com.surovtsev.utils.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import logcat.logcat

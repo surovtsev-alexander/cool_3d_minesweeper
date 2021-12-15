@@ -1,8 +1,9 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.viewmodel.CommandsFromScreen
 
-sealed class CommandFromRankingScreen {
+sealed class CommandFromRankingScreen: CommandsFromScreen {
     object LoadData: CommandFromRankingScreen()
 
     object CloseError: CommandFromRankingScreen()

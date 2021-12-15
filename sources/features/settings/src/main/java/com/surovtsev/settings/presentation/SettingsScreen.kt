@@ -39,7 +39,7 @@ fun SettingsScreen(
     }
 
     SettingsControls(
-        viewModel.settingsScreenStateValue,
+        viewModel.dataValue,
         settingsScreenCommandsHandler
     )
 }

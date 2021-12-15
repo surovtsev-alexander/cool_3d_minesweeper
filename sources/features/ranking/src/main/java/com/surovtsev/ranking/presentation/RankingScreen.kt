@@ -4,7 +4,6 @@ import android.text.format.DateUtils
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +24,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
-import com.surovtsev.utils.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.ScreenState
 import logcat.logcat
 
 @Composable

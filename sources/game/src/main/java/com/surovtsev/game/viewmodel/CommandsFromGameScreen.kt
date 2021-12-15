@@ -1,6 +1,8 @@
 package com.surovtsev.game.viewmodel
 
-sealed class CommandsFromGameScreen {
+import com.surovtsev.core.viewmodel.CommandsFromScreen
+
+sealed class CommandsFromGameScreen: CommandsFromScreen {
     object LoadGame: CommandsFromGameScreen()
 
     object NewGame: CommandsFromGameScreen()

@@ -1,6 +1,6 @@
 package com.surovtsev.settings.viewmodel
 
-import com.surovtsev.utils.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.ScreenState
 
 typealias SettingsScreenState = ScreenState<out SettingsScreenData>
 

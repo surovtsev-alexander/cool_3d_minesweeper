@@ -1,6 +1,6 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
-import com.surovtsev.utils.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.ScreenState
 
 typealias RankingScreenState = ScreenState<out RankingScreenData>
 

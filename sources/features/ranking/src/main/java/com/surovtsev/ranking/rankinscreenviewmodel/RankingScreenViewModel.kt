@@ -17,7 +17,7 @@ import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpan
-import com.surovtsev.utils.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

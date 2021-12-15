@@ -1,4 +1,4 @@
-package com.surovtsev.utils.viewmodel
+package com.surovtsev.core.viewmodel
 
 sealed class ScreenState<T>(
     val screenData: T

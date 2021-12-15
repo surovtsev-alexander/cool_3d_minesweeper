@@ -1,20 +1,22 @@
 package com.surovtsev.settings.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.room.entities.SettingsDataFactory
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.ScreenCommandsHandler
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
+import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.TemplateViewModel
 import com.surovtsev.settings.dagger.SettingsComponent
 import com.surovtsev.settings.dagger.SettingsComponentEntryPoint
 import com.surovtsev.settings.viewmodel.helpers.SettingsScreenControls
 import com.surovtsev.settings.viewmodel.helpers.SettingsScreenEvents
 import com.surovtsev.settings.viewmodel.helpers.SlidersWithNames
-import com.surovtsev.utils.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -29,10 +31,8 @@ typealias SettingsScreenCommandsHandler = ScreenCommandsHandler<CommandFromSetti
 class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
 ):
-    ViewModel(),
-    SettingsScreenCommandsHandler,
-    DefaultLifecycleObserver,
-    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
+    TemplateViewModel<CommandFromSettingsScreen, SettingsScreenData>(SettingsScreenData.NoData),
+    DefaultLifecycleObserver
 {
 
     private val slidersWithNames: SlidersWithNames
@@ -42,8 +42,9 @@ class SettingsScreenViewModel @Inject constructor(
     val settingsScreenEvents: SettingsScreenEvents
     val settingsDataFactory: SettingsDataFactory
 
-    private val settingsScreenStateHolder: SettingsScreenStateHolder
-    val settingsScreenStateValue: SettingsScreenStateValue
+
+    override val dataHolder: MutableLiveData<ScreenState<out SettingsScreenData>>
+    override val dataValue: LiveData<ScreenState<out SettingsScreenData>>
 
     var finishAction: (() -> Unit)? = null
 
@@ -71,10 +72,10 @@ class SettingsScreenViewModel @Inject constructor(
         settingsDataFactory =
             settingsComponentEntryPoint.settingsDataFactory
 
-        settingsScreenStateHolder =
+        dataHolder =
             settingsComponentEntryPoint.settingsScreenStateHolder
 
-        settingsScreenStateValue =
+        dataValue =
             settingsComponentEntryPoint.settingsScreenStateValue
     }
 
@@ -101,44 +102,6 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setLoadingState() {
-        publishNewState(
-            ScreenState.Loading(
-                getCurrentSettingsScreenStateOrDefault()
-            )
-        )
-    }
-
-    private fun getCurrentSettingsScreenStateOrDefault(): SettingsScreenData {
-        return settingsScreenStateHolder.value?.screenData ?: SettingsScreenData.NoData
-    }
-
-    private suspend fun publishNewState(
-        settingsScreenState: SettingsScreenState
-    ) {
-        withUIContext {
-            settingsScreenStateHolder.value = settingsScreenState
-        }
-    }
-
-    private suspend fun publishError(
-        message: String
-    ) {
-        publishNewState(
-            ScreenState.Error(
-                getCurrentSettingsScreenStateOrDefault(),
-                message
-            )
-        )
-    }
-
-    private suspend fun closeError() {
-        publishNewState(
-            ScreenState.Idle(
-                getCurrentSettingsScreenStateOrDefault()
-            )
-        )
-    }
 
     private suspend fun loadSettings() {
         val settingsList = settingsDao.getAll()
@@ -160,7 +123,7 @@ class SettingsScreenViewModel @Inject constructor(
         settingsData: Settings.SettingsData,
         fromUI: Boolean
     ) {
-        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
             publishNewState(
@@ -176,7 +139,7 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     private suspend fun applySettings() {
-        doActionIfStateIsChildOf<SettingsScreenData.SettingsDataIsSelected>(
+        doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
             "error while applying settings"
         ) { screenData ->
             val settingsData = screenData.settingsData
@@ -199,7 +162,7 @@ class SettingsScreenViewModel @Inject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ) {
-        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while deleting settings"
         ) { screenData ->
             settingsDao.delete(settingsId)
@@ -223,7 +186,7 @@ class SettingsScreenViewModel @Inject constructor(
     private suspend fun rememberSettings(
         settings: Settings,
     ) {
-        doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
+        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
             publishNewState(
@@ -234,18 +197,6 @@ class SettingsScreenViewModel @Inject constructor(
                     )
                 )
             )
-        }
-    }
-
-    private suspend inline fun <reified T: SettingsScreenData> doActionIfStateIsChildOf(
-        errorMessage: String, action: (screenData: T) -> Unit
-    ) {
-        val screenData = settingsScreenStateHolder.value?.screenData
-
-        if (screenData == null || screenData !is T) {
-            publishError(errorMessage)
-        } else {
-            action.invoke(screenData)
         }
     }
 
