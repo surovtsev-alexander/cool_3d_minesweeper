@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -57,7 +58,6 @@ fun RankingControls(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .border(1.dp, Color.Black)
                     .background(GrayBackground),
                 //verticalArrangement = Arrangement.spacedBy(15.dp),
             ) {
@@ -69,6 +69,10 @@ fun RankingControls(
                         rankingScreenCommandsHandler
                     )
                 }
+                Divider(
+                    color = Color.Black,
+                    thickness = 1.dp
+                )
                 Row(
                     modifier = Modifier.weight(10f)
                 ) {
@@ -123,7 +127,6 @@ fun SettingsList(
     Box(
         modifier = Modifier
             .background(GrayBackground)
-            .border(1.dp, Color.Black)
             .padding(horizontal = 1.dp),
     ) {
         Column(
@@ -236,7 +239,6 @@ fun RankingList(
         modifier = Modifier
             .fillMaxSize()
             .background(DeepGray)
-            .border(1.dp, Color.Black)
             .padding(horizontal = 1.dp),
     ) {
         Column {
@@ -391,7 +393,10 @@ fun DisplayCircularIndicatorIfNeeded(
                 if (it == EnterExitState.Visible) 0.5f else 0.0f
             }
             logcat { "scale: $transparency" }
-            Box(Modifier.fillMaxSize().background(TransparentGray.copy(alpha = transparency)))
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(TransparentGray.copy(alpha = transparency)))
         }
     }
 
