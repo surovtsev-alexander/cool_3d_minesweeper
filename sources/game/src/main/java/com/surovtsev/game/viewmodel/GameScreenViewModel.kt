@@ -26,6 +26,7 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
+import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -49,6 +50,8 @@ class GameScreenViewModel @Inject constructor(
     DefaultLifecycleObserver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
+    val loadGame: Boolean
+
     val minesweeperController: MinesweeperController
 
     private val gameRenderer: GLESRenderer
@@ -66,7 +69,7 @@ class GameScreenViewModel @Inject constructor(
 
     init {
 
-        val loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
+        loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
         val gameComponent = gameComponentProvider
             .get()
@@ -156,17 +159,44 @@ class GameScreenViewModel @Inject constructor(
         )
     }
 
-    private suspend inline fun <reified T: GameScreenData> doActionIfStateIsChildOf(
+    private suspend fun doActionIfStateIsCorrect(
+        isStateCorrect: (gameScreenState: GameScreenState) -> Boolean,
+        errorMessage: String,
+        action: suspend (gameScreenData: GameScreenData) -> Unit
+    ) {
+        val gameScreenState = gameScreenStateHolder.value
+        val gameScreenData = gameScreenState?.screenData
+
+        if (gameScreenState == null || gameScreenData == null || !isStateCorrect(gameScreenState)) {
+            publishError(errorMessage)
+        } else {
+            action.invoke(gameScreenData)
+        }
+    }
+
+    private suspend fun doActionIfDataIsCorrect(
+        isDataCorrect: (gameScreeData: GameScreenData) -> Boolean,
         errorMessage: String,
         action: (gameScreenData: GameScreenData) -> Unit
     ) {
         val gameScreenData = gameScreenStateHolder.value?.screenData
 
-        if (gameScreenData == null || gameScreenData !is T) {
+        if (gameScreenData == null || isDataCorrect(gameScreenData)) {
             publishError(errorMessage)
         } else {
             action.invoke(gameScreenData)
         }
+    }
+
+    private suspend inline fun <reified T: GameScreenData> doActionIfDataIsChildOf(
+        errorMessage: String,
+        noinline action: (gameScreenData: GameScreenData) -> Unit
+    ) {
+        doActionIfDataIsCorrect(
+            { it is T },
+            errorMessage,
+            action
+        )
     }
 
     private suspend fun closeError() {
@@ -217,11 +247,31 @@ class GameScreenViewModel @Inject constructor(
     }
 
     private suspend fun openMenu() {
-
+        logcat { "open menu" }
+        doActionIfStateIsCorrect(
+            { it !is GameScreenState.Error },
+            "can not open menu",
+        ) { gameScreenData ->
+            publishNewState(
+                GameScreenState.MainMenu(
+                    getGameScreenDataOrDefault()
+                )
+            )
+            logcat { "done" }
+        }
     }
 
     private suspend fun closeMenu() {
-
+        doActionIfStateIsCorrect(
+            { it is GameScreenState.MainMenu },
+            "main menu is not opened"
+        ) { gameScreenData ->
+            publishNewState(
+                GameScreenState.IDLE(
+                    getGameScreenDataOrDefault()
+                )
+            )
+        }
     }
 
     override fun onPause(owner: LifecycleOwner) {

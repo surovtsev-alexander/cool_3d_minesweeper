@@ -14,4 +14,8 @@ sealed class CommandsFromGameScreen {
     object OpenMenu: CommandsFromGameScreen()
 
     object CloseMenu: CommandsFromGameScreen()
+
+    object GoToMainMenu: CommandsFromGameScreen()
+
+    object ExitGame: CommandsFromGameScreen()
 }
