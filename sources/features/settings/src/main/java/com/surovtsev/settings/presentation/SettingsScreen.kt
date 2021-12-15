@@ -1,12 +1,12 @@
 package com.surovtsev.settings.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -55,22 +55,28 @@ fun SettingsControls(
             Modifier.background(GrayBackground)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp, 15.dp),
             ) {
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .border(1.dp, Color.Black)
                 ) {
                     SettingsList(
                         settingsScreenStateValue,
                         settingsScreenCommandsHandler
                     )
                 }
-                Column(
+
+                Divider(
                     modifier = Modifier
-                        .border(1.dp, Color.Black)
-                ) {
+                        .padding(10.dp),
+                    color = Color.Black,
+                    thickness = 1.dp
+                )
+
+                Column {
                     Controls(
                         settingsScreenStateValue,
                         settingsScreenCommandsHandler
@@ -89,10 +95,6 @@ fun SettingsControls(
                         settingsScreenCommandsHandler
                     )
                 }
-                Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                )
             }
         }
     }
@@ -110,20 +112,22 @@ fun SettingsList(
     Column(
         Modifier
             .fillMaxSize()
-            .background(GrayBackground)
-            .border(1.dp, Color.Black),
+            .background(GrayBackground),
     ) {
         Row {
             Text(
                 "counts",
-                Modifier.fillMaxWidth(0.33f),
+                Modifier.weight(4f),
                 textAlign = TextAlign.Start
             )
             Text(
                 "bombs %",
-                Modifier.fillMaxWidth(0.5f),
+                Modifier.weight(4f),
                 textAlign = TextAlign.Center
             )
+            Box(
+                modifier = Modifier
+                    .weight(2f))
         }
         LazyColumn {
             val screenData = state.screenData
@@ -168,21 +172,23 @@ fun SettingsDataItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(0.dp, 2.dp)
     ) {
         val settingsData = settings.settingsData
         val counts = settingsData.dimensions.toVec3i()
         Text(
             counts.toString(),
-            Modifier.fillMaxWidth(0.33f),
+            Modifier.weight(4f),
             textAlign = TextAlign.Start
         )
         Text(
             settingsData.bombsPercentage.toString(),
-            Modifier.fillMaxWidth(0.5f),
+            Modifier.weight(4f),
             textAlign = TextAlign.Center
         )
         Box (
             modifier = Modifier
+                .weight(2f)
                 .clickable {
                     settingsScreenCommandsHandler.handleCommand(
                         CommandFromSettingsScreen.DeleteSettings(settings.id)
@@ -192,7 +198,9 @@ fun SettingsDataItem(
         ) {
             Text(
                 "delete",
-                textAlign = TextAlign.End
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -232,25 +240,7 @@ fun Controls(
                 lineColor = PrimaryColor1,
             )
         }
-
     }
-     /*
-        items(slidersInfo) { (name, bordersAndValue) ->
-            val sV = bordersAndValue.second
-            val sliderValue: Int by sV.run {
-                data.observeAsState(defaultValue)
-            }
-            val borders = bordersAndValue.first
-            CustomSliderWithCaption(
-                name,
-                borders,
-                sliderValue,
-                sV::onDataChanged,
-                LightBlue,
-                PrimaryColor1
-            )
-        }
-         */
 }
 
 @Composable
