@@ -1,6 +1,8 @@
 package com.surovtsev.settings.presentation
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,10 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.core.ui.theme.LightBlue
-import com.surovtsev.core.ui.theme.MinesweeperTheme
-import com.surovtsev.core.ui.theme.PrimaryColor1
+import com.surovtsev.core.ui.theme.*
 import com.surovtsev.settings.viewmodel.*
 import com.surovtsev.settings.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settings.viewmodel.helpers.SettingsUIInfo
@@ -91,7 +90,7 @@ fun SettingsControls(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ApplyButton(
+                    OkButton(
                         settingsScreenCommandsHandler
                     )
                 }
@@ -172,36 +171,62 @@ fun SettingsDataItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(0.dp, 2.dp)
+            .height(IntrinsicSize.Min)
+            .padding(3.dp)
     ) {
         val settingsData = settings.settingsData
         val counts = settingsData.dimensions.toVec3i()
-        Text(
-            counts.toString(),
-            Modifier.weight(4f),
-            textAlign = TextAlign.Start
-        )
-        Text(
-            settingsData.bombsPercentage.toString(),
-            Modifier.weight(4f),
-            textAlign = TextAlign.Center
-        )
-        Box (
+        Column(
             modifier = Modifier
-                .weight(2f)
-                .clickable {
-                    settingsScreenCommandsHandler.handleCommand(
-                        CommandFromSettingsScreen.DeleteSettings(settings.id)
-                    )
-                }
-                .background(PrimaryColor1)
+                .fillMaxHeight()
+                .weight(4f),
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                "delete",
-                modifier = Modifier
+                counts.toString(),
+                Modifier
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start,
             )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(4f),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                settingsData.bombsPercentage.toString(),
+                Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(2f),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        settingsScreenCommandsHandler.handleCommand(
+                            CommandFromSettingsScreen.DeleteSettings(settings.id)
+                        )
+                    }
+                    .border(1.dp, Color.Black)
+                    .background(PrimaryColor1),
+            ) {
+                Text(
+                    "delete",
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = Color.White
+                )
+            }
         }
     }
 }
@@ -288,7 +313,7 @@ fun BindViewModelAndUI(
 }
 
 @Composable
-fun ApplyButton(
+fun OkButton(
     screenStateCommandsHandler: SettingsScreenCommandsHandler
 ) {
     Button (
@@ -298,10 +323,11 @@ fun ApplyButton(
             )
         },
         modifier = Modifier
-            .fillMaxWidth(fraction = 0.75f)
+            .fillMaxWidth(fraction = 0.75f),
+        border = BorderStroke(1.dp, Color.Black)
     ) {
         Text(
-            "apply",
+            "ok",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
