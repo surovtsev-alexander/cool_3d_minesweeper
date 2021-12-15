@@ -89,7 +89,8 @@ class MainActivityImp: MainActivity() {
                     entry.lifecycle.addObserver(viewModel)
                     GameScreen(
                         viewModel,
-                        this@MainActivityImp
+                        this@MainActivityImp,
+                        navController,
                     )
                 }
                 composable(

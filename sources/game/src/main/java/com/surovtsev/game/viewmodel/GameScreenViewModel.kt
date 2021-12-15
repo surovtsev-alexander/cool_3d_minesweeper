@@ -24,6 +24,7 @@ import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
+import com.surovtsev.utils.viewmodel.ScreenState
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import logcat.logcat
@@ -50,7 +51,9 @@ class GameScreenViewModel @Inject constructor(
     DefaultLifecycleObserver,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
-    val loadGame: Boolean
+    var finishAction: (() -> Unit)? = null
+
+    val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
     val minesweeperController: MinesweeperController
 
@@ -68,8 +71,6 @@ class GameScreenViewModel @Inject constructor(
     val gameScreenStateValue: GameScreenStateValue
 
     init {
-
-        loadGame = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
         val gameComponent = gameComponentProvider
             .get()
@@ -146,6 +147,7 @@ class GameScreenViewModel @Inject constructor(
                 is CommandsFromGameScreen.Resume        -> resume()
                 is CommandsFromGameScreen.OpenMenu      -> openMenu()
                 is CommandsFromGameScreen.CloseMenu     -> closeMenu()
+                is CommandsFromGameScreen.GoToMainMenu  -> goToMainMenu()
                 else                                    -> publishError("error while processing commands")
             }
         }
@@ -153,7 +155,7 @@ class GameScreenViewModel @Inject constructor(
 
     private suspend fun setLoadingState() {
         publishNewState(
-            GameScreenState.Loading(
+            ScreenState.Loading(
                 getGameScreenDataOrDefault()
             )
         )
@@ -177,11 +179,11 @@ class GameScreenViewModel @Inject constructor(
     private suspend fun doActionIfDataIsCorrect(
         isDataCorrect: (gameScreeData: GameScreenData) -> Boolean,
         errorMessage: String,
-        action: (gameScreenData: GameScreenData) -> Unit
+        action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
         val gameScreenData = gameScreenStateHolder.value?.screenData
 
-        if (gameScreenData == null || isDataCorrect(gameScreenData)) {
+        if (gameScreenData == null || !isDataCorrect(gameScreenData)) {
             publishError(errorMessage)
         } else {
             action.invoke(gameScreenData)
@@ -201,8 +203,10 @@ class GameScreenViewModel @Inject constructor(
 
     private suspend fun closeError() {
         publishNewState(
-            GameScreenState.MainMenu(
-                getGameScreenDataOrDefault()
+            ScreenState.Idle(
+                GameScreenData.MainMenu(
+                    getGameScreenDataOrDefault()
+                )
             )
         )
     }
@@ -219,9 +223,19 @@ class GameScreenViewModel @Inject constructor(
         message: String
     ) {
         publishNewState(
-            GameScreenState.Error(
+            ScreenState.Error(
                 getGameScreenDataOrDefault(),
                 message
+            )
+        )
+    }
+
+    private suspend fun publishIdleState(
+        gameScreenData: GameScreenData
+    ) {
+        publishNewState(
+            ScreenState.Idle(
+                gameScreenData
             )
         )
     }
@@ -248,29 +262,51 @@ class GameScreenViewModel @Inject constructor(
 
     private suspend fun openMenu() {
         logcat { "open menu" }
-        doActionIfStateIsCorrect(
-            { it !is GameScreenState.Error },
-            "can not open menu",
+        doActionIfDataIsCorrect(
+            { it !is GameScreenData.MainMenu },
+            "can not open menu twice sequentially",
         ) { gameScreenData ->
-            publishNewState(
-                GameScreenState.MainMenu(
-                    getGameScreenDataOrDefault()
+            publishIdleState(
+                GameScreenData.MainMenu(
+                    gameScreenData
                 )
             )
             logcat { "done" }
         }
     }
 
-    private suspend fun closeMenu() {
-        doActionIfStateIsCorrect(
-            { it is GameScreenState.MainMenu },
-            "main menu is not opened"
-        ) { gameScreenData ->
+    private suspend fun tryUnstackState(
+        gameScreenData: GameScreenData
+    ) {
+        val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
+
+        if (prevData == null) {
             publishNewState(
-                GameScreenState.IDLE(
-                    getGameScreenDataOrDefault()
+                ScreenState.Error(
+                    GameScreenData.NoData,
+                    "critical error. reloading"
                 )
             )
+            return
+        }
+
+        publishIdleState(
+            prevData
+        )
+    }
+
+    private suspend fun closeMenu() {
+        doActionIfDataIsCorrect(
+            { it is GameScreenData.MainMenu },
+            "main menu is not opened"
+        ) { gameScreenData ->
+            tryUnstackState(gameScreenData)
+        }
+    }
+
+    private suspend fun goToMainMenu() {
+        withUIContext {
+            finishAction?.invoke()
         }
     }
 

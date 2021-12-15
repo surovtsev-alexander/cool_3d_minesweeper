@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
@@ -37,7 +38,8 @@ import com.surovtsev.game.viewmodel.helpers.*
 @Composable
 fun GameScreen(
     viewModel: GameScreenViewModel,
-    activity: Activity
+    activity: Activity,
+    navController: NavController,
 ) {
     if (!OpenGLInfoHelper.isSupportEs2(activity)) {
         Text(
@@ -48,6 +50,7 @@ fun GameScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.finishAction = { navController.navigateUp() }
         viewModel.handleCommand(
             if (viewModel.loadGame) {
                 CommandsFromGameScreen.LoadGame
@@ -83,9 +86,10 @@ fun GameScreenControls(
     gameScreenCommandsHandler: GameScreenCommandsHandler,
 ) {
     val gameScreenState by gameScreenStateValue.observeAsState(GameScreenInitialState)
+    val gameScreenData = gameScreenState.screenData
 
     MinesweeperTheme {
-        if (gameScreenState is GameScreenState.MainMenu) {
+        if (gameScreenData is GameScreenData.MainMenu) {
             MainMenu(gameScreenStateValue, gameScreenCommandsHandler)
         } else {
             Column(
@@ -138,7 +142,6 @@ fun MainMenu(
     val mainMenuButtons = arrayOf(
         "new game" to CommandsFromGameScreen.NewGame,
         "main menu" to CommandsFromGameScreen.GoToMainMenu,
-        "exit" to CommandsFromGameScreen.ExitGame,
     )
 
     Box(
