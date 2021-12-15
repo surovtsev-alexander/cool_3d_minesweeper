@@ -14,7 +14,8 @@ sealed class CommandFromSettingsScreen {
     ): CommandFromSettingsScreen()
 
     data class RememberSettingsData(
-        val settingsData: Settings.SettingsData
+        val settingsData: Settings.SettingsData,
+        val fromUI: Boolean = false
     ): CommandFromSettingsScreen()
 
     data class DeleteSettings(

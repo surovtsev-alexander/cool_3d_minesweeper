@@ -93,7 +93,7 @@ class SettingsScreenViewModel @Inject constructor(
                 is CommandFromSettingsScreen.LoadSettings           -> loadSettings()
                 is CommandFromSettingsScreen.LoadSelectedSettings   -> loadSelectedSettings()
                 is CommandFromSettingsScreen.RememberSettings       -> rememberSettings(command.settings)
-                is CommandFromSettingsScreen.RememberSettingsData   -> rememberSettingsData(command.settingsData)
+                is CommandFromSettingsScreen.RememberSettingsData   -> rememberSettingsData(command.settingsData, command.fromUI)
                 is CommandFromSettingsScreen.ApplySettings          -> applySettings()
                 is CommandFromSettingsScreen.DeleteSettings         -> deleteSettings(command.settingsId)
                 else                                                -> publishError("error while processing commands")
@@ -157,7 +157,8 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     private suspend fun rememberSettingsData(
-        settingsData: Settings.SettingsData
+        settingsData: Settings.SettingsData,
+        fromUI: Boolean
     ) {
         doActionIfStateIsChildOf<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
@@ -166,7 +167,8 @@ class SettingsScreenViewModel @Inject constructor(
                 ScreenState.Idle(
                     SettingsScreenData.SettingsDataIsSelected(
                         screenData,
-                        settingsData
+                        settingsData,
+                        fromUI
                     )
                 )
             )

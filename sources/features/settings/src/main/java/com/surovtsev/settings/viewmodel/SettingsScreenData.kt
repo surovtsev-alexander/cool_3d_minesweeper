@@ -13,25 +13,28 @@ sealed class SettingsScreenData {
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
-        val settingsData: Settings.SettingsData
+        val settingsData: Settings.SettingsData,
+        val fromUI: Boolean
     ): SettingsLoaded(
         settingsLoaded.settingsList
     )
 
     open class SettingsIsSelected(
         settingsDataIsSelected: SettingsDataIsSelected,
-        val settingsId: Long
+        val settingsId: Long,
     ): SettingsDataIsSelected(
         settingsDataIsSelected,
-        settingsDataIsSelected.settingsData
+        settingsDataIsSelected.settingsData,
+        settingsDataIsSelected.fromUI
     ) {
         constructor(
             settingsLoaded: SettingsLoaded,
-            settings: Settings
+            settings: Settings,
         ): this(
             SettingsDataIsSelected(
                 settingsLoaded,
-                settings.settingsData
+                settings.settingsData,
+                false
             ),
             settings.id
         )

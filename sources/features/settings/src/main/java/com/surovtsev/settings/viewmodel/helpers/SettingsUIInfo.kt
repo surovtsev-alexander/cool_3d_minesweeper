@@ -1,8 +1,10 @@
 package com.surovtsev.settings.viewmodel.helpers
 
+import androidx.lifecycle.MutableLiveData
 import com.surovtsev.core.room.entities.Settings
 
-object SettingsUIInfo {
+
+class SettingsUIInfo {
     private val dimBorders = 3..25
     private val bombsPercentageBorders = 10..40
 
@@ -19,6 +21,7 @@ object SettingsUIInfo {
         SettingUIControl(
             "x",
             dimBorders,
+            MutableLiveData<Int>(0),
             { it.dimensions.x },
             { settingsData, newValue ->
                 updateDimensions(
@@ -30,6 +33,7 @@ object SettingsUIInfo {
         SettingUIControl(
             "y",
             dimBorders,
+            MutableLiveData<Int>(0),
             { it.dimensions.y },
             { settingsData, newValue ->
                 updateDimensions(
@@ -41,6 +45,7 @@ object SettingsUIInfo {
         SettingUIControl(
             "z",
             dimBorders,
+            MutableLiveData<Int>(0),
             { it.dimensions.z },
             { settingsData, newValue ->
                 updateDimensions(
@@ -52,6 +57,7 @@ object SettingsUIInfo {
         SettingUIControl(
             "bombs %",
             bombsPercentageBorders,
+            MutableLiveData<Int>(0),
             { it.bombsPercentage },
             { settingsData, newValue ->
                 settingsData.copy( bombsPercentage = newValue )

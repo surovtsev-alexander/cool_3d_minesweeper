@@ -8,25 +8,27 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
 import com.surovtsev.utils.math.SliderMath
 
-typealias OnChangeAction = (newSliderPosition: Int) -> Unit
+typealias SliderPositionData = MutableLiveData<Int>
 
 @Composable
 fun CustomSliderWithCaption(
     name: String,
     borders: IntRange,
-    sliderPosition: Int,
-    onChangeAction: OnChangeAction,
+    sliderPositionData: SliderPositionData,
     backgroundColor: Color,
     lineColor: Color,
 ) {
+    val sliderPosition: Int by sliderPositionData.observeAsState(0)
     Column {
         Row {
             Text(
@@ -46,7 +48,7 @@ fun CustomSliderWithCaption(
             )
         }
         CustomSlider(
-            borders, sliderPosition, onChangeAction, backgroundColor, lineColor
+            borders, sliderPositionData, backgroundColor, lineColor
         )
     }
 }
@@ -54,16 +56,18 @@ fun CustomSliderWithCaption(
 @Composable
 fun CustomSlider(
     borders: IntRange,
-    sliderPosition: Int,
-    onChangeAction: OnChangeAction,
+    sliderPositionData: SliderPositionData,
     backgroundColor: Color,
-    lineColor: Color,
+    lineColor: Color
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
+    val sliderPosition: Int by sliderPositionData.observeAsState(0)
     var prevPosition by remember { mutableStateOf(sliderPosition) }
     var actualFloatPosition by remember { mutableStateOf(SliderMath.intToFloat(sliderPosition)) }
 
-    if (prevPosition != sliderPosition) {
+    val samePosition = prevPosition == sliderPosition
+
+    if (!samePosition) {
         prevPosition = sliderPosition
         actualFloatPosition = sliderPosition.toFloat()
     }
@@ -94,9 +98,8 @@ fun CustomSlider(
 
                     if (newSliderPosition != prevPosition) {
                         prevPosition = newSliderPosition
-                        onChangeAction(
-                            newSliderPosition
-                        )
+
+                        sliderPositionData.value = newSliderPosition
                     }
                     delta
                 }

@@ -8,8 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.settings.viewmodel.*
+import com.surovtsev.settings.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settings.viewmodel.helpers.SettingsUIInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
@@ -198,9 +198,6 @@ fun SettingsDataItem(
     }
 }
 
-private fun toFloatRange(x: IntRange): ClosedFloatingPointRange<Float> =
-    x.first.toFloat()..x.last.toFloat()
-
 @Composable
 fun Controls(
     settingsScreenStateValue: SettingsScreenStateValue,
@@ -215,26 +212,22 @@ fun Controls(
         return
     }
 
-    val settingsData = screenData.settingsData
+    val settingsUIInfo by remember { mutableStateOf(SettingsUIInfo()) }
 
-    val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
-        settingsScreenCommandsHandler.handleCommand(
-            CommandFromSettingsScreen.RememberSettingsData(
-                updatedSettingsData
-            )
+    settingsUIInfo.info.map { settingUIControl ->
+        BindViewModelAndUI(
+            screenData = screenData,
+            settingsScreenCommandsHandler = settingsScreenCommandsHandler,
+            settingsUIControl = settingUIControl
         )
     }
 
     LazyColumn {
-        items(SettingsUIInfo.info) { item ->
+        items(settingsUIInfo.info) { item ->
             CustomSliderWithCaption(
                 name = item.title,
                 borders = item.borders,
-                sliderPosition = item.valueCalculator(settingsData),
-                onChangeAction = {
-                    val updatedSettingsData = item.settingsDataCalculator(settingsData, it)
-                    rememberSettingsAction(updatedSettingsData)
-                },
+                sliderPositionData = item.sliderPositionData,
                 backgroundColor = LightBlue,
                 lineColor = PrimaryColor1,
             )
@@ -260,6 +253,49 @@ fun Controls(
          */
 }
 
+@Composable
+fun BindViewModelAndUI(
+    screenData: SettingsScreenData.SettingsDataIsSelected,
+    settingsScreenCommandsHandler: SettingsScreenCommandsHandler,
+    settingsUIControl: SettingUIControl
+) {
+    val settingsData = screenData.settingsData
+
+    val uiValue = settingsUIControl.sliderPositionData.observeAsState().value!!
+    val viewModelValue = settingsUIControl.valueCalculator(settingsData)
+
+    var prevUIValue by remember { mutableStateOf(-1) }
+    var prevViewModelValue by remember { mutableStateOf(-1) }
+
+    val uiAndViewModelValuesSame = uiValue == viewModelValue
+
+    val uiUpdated = uiValue != prevUIValue
+    val viewModelValueUpdated = viewModelValue != prevViewModelValue
+
+    val fromUI = screenData.fromUI
+
+    if (viewModelValueUpdated) {
+        prevViewModelValue = viewModelValue
+        if (!fromUI && !uiAndViewModelValuesSame) {
+            settingsUIControl.sliderPositionData.value = viewModelValue
+            prevUIValue = viewModelValue
+        }
+    } else if (uiUpdated) {
+        prevUIValue = uiValue
+
+        val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
+            settingsScreenCommandsHandler.handleCommand(
+                CommandFromSettingsScreen.RememberSettingsData(
+                    updatedSettingsData, fromUI = true
+                )
+            )
+        }
+
+        rememberSettingsAction(
+            settingsUIControl.settingsDataCalculator(settingsData, uiValue)
+        )
+    }
+}
 
 @Composable
 fun ApplyButton(

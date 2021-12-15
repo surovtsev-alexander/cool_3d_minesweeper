@@ -72,4 +72,8 @@ dependencies {
 
 
     implementation 'com.github.kotlin-graphics:glm:v1.0.1'
+
+
+    // Square logcat
+    implementation 'com.squareup.logcat:logcat:0.1'
 }
