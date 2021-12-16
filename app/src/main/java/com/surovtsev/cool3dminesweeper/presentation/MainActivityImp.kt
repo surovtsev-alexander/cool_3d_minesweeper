@@ -10,13 +10,13 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.surovtsev.game.presentation.GameScreen
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.game.presentation.GameScreen
 import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.game.viewmodel.LoadGameParameterName
 import com.surovtsev.ranking.presentation.RankingScreen
@@ -101,7 +101,8 @@ class MainActivityImp: MainActivity() {
                     val viewModel: RankingScreenViewModel = hiltViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     RankingScreen(
-                        viewModel
+                        viewModel,
+                        navController
                     )
                 }
                 composable(

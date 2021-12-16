@@ -16,7 +16,7 @@ sealed class SettingsScreenData: ScreenData {
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
         val settingsData: Settings.SettingsData,
-        val fromUI: Boolean
+        val fromSlider: Boolean
     ): SettingsLoaded(
         settingsLoaded.settingsList
     )
@@ -27,7 +27,7 @@ sealed class SettingsScreenData: ScreenData {
     ): SettingsDataIsSelected(
         settingsDataIsSelected,
         settingsDataIsSelected.settingsData,
-        settingsDataIsSelected.fromUI
+        settingsDataIsSelected.fromSlider
     ) {
         constructor(
             settingsLoaded: SettingsLoaded,

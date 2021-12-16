@@ -12,11 +12,10 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.ranking.dagger.RankingComponent
 import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
 import com.surovtsev.utils.timers.TimeSpan
-import com.surovtsev.core.viewmodel.ScreenState
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -28,8 +27,6 @@ typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
 typealias RankingScreenStateValue = LiveData<RankingScreenState>
 
 typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
-
-typealias RankingScreenCommandProcessor = CommandProcessor<CommandFromRankingScreen>
 
 @HiltViewModel
 class RankingScreenViewModel @Inject constructor(
@@ -47,8 +44,8 @@ class RankingScreenViewModel @Inject constructor(
 
     private val rankingListHelper: RankingListHelper
 
-    override val dataHolder: RankingScreenStateHolder
-    override val dataValue: RankingScreenStateValue
+    override val stateHolder: RankingScreenStateHolder
+    override val stateValue: RankingScreenStateValue
 
     private val timeSpan: TimeSpan
 
@@ -73,9 +70,9 @@ class RankingScreenViewModel @Inject constructor(
         rankingListHelper =
             rankingComponentEntryPoint.rankingListHelper
 
-        dataHolder =
+        stateHolder =
             rankingComponentEntryPoint.rankingScreenStateHolder
-        dataValue =
+        stateValue =
             rankingComponentEntryPoint.rankingScreenStateValue
 
         timeSpan =
@@ -84,7 +81,7 @@ class RankingScreenViewModel @Inject constructor(
         timeSpan.flush()
     }
 
-    override suspend fun getCommandProcessor(command: CommandFromRankingScreen): RankingScreenCommandProcessor? {
+    override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
             is CommandFromRankingScreen.LoadData            -> ::loadData
             is CommandFromRankingScreen.FilterList          -> suspend { filterList(command.selectedSettingsId) }
@@ -94,20 +91,6 @@ class RankingScreenViewModel @Inject constructor(
             else                                            -> null
         }
     }
-
-
-    //
-//    override suspend fun getCommandHandler(command: CommandFromRankingScreen):  {
-//        val res: CommandHandler<> = when (command) {
-//            is CommandFromRankingScreen.LoadData            -> { loadData() }
-//            is CommandFromRankingScreen.FilterList          -> { filterList(it.selectedSettingsId) }
-//            is CommandFromRankingScreen.SortListWithNoDelay -> { sortList(it.rankingTableSortParameters, false) }
-//            is CommandFromRankingScreen.SortList            -> { sortList(it.rankingTableSortParameters, true) }
-//            is CommandFromRankingScreen.CloseError          -> { closeError() }
-//        }
-//
-//        return res
-//    }
 
     private suspend fun loadData() {
         val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal {
@@ -119,10 +102,8 @@ class RankingScreenViewModel @Inject constructor(
             )
         }
 
-        publishNewState(
-            ScreenState.Idle(
-                settingsListIsLoaded
-            )
+        publishIdleState(
+            settingsListIsLoaded
         )
 
         settingsDao.getBySettingsData(
@@ -144,15 +125,15 @@ class RankingScreenViewModel @Inject constructor(
                     selectedSettingsId
                 )
 
-        val rankingScreenData = dataHolder.value?.screenData
-        val newState = if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            ScreenState.Error(
-                getCurrentScreenDataOrNoData(),
+        val rankingScreenData = stateHolder.value?.screenData
+
+        if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+            publishErrorState(
                 "error while filtering ranking list"
             )
         } else {
             // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-            ScreenState.Loading(
+            publishIdleState(
                 RankingScreenData.RankingListIsPrepared(
                     rankingScreenData,
                     selectedSettingsId,
@@ -161,7 +142,6 @@ class RankingScreenViewModel @Inject constructor(
             )
         }
 
-        publishNewState(newState)
 
         return handleCommand(
             CommandFromRankingScreen.SortList(
@@ -174,10 +154,10 @@ class RankingScreenViewModel @Inject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ) {
-        val rankingScreenData = dataHolder.value?.screenData
+        val rankingScreenData = stateHolder.value?.screenData
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            publishError(
+            publishErrorState(
                 "error while sorting ranking list"
             )
 
@@ -214,7 +194,7 @@ class RankingScreenViewModel @Inject constructor(
                 }
             }.toMap()
 
-        val newState = ScreenState.Idle(
+        publishIdleState(
             RankingScreenData.RankingListIsSorted(
                 rankingScreenData,
                 rankingTableSortParameters,
@@ -222,8 +202,6 @@ class RankingScreenViewModel @Inject constructor(
                 directionOfSortableColumns
             )
         )
-
-        publishNewState(newState)
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(

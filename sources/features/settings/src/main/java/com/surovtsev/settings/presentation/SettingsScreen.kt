@@ -39,7 +39,7 @@ fun SettingsScreen(
     }
 
     SettingsControls(
-        viewModel.dataValue,
+        viewModel.stateValue,
         commandHandler
     )
 }
@@ -287,7 +287,7 @@ fun BindViewModelAndUI(
     val uiUpdated = uiValue != prevUIValue
     val viewModelValueUpdated = viewModelValue != prevViewModelValue
 
-    val fromUI = screenData.fromUI
+    val fromUI = screenData.fromSlider
 
     if (viewModelValueUpdated) {
         prevViewModelValue = viewModelValue
@@ -301,7 +301,7 @@ fun BindViewModelAndUI(
         val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
             commandHandler.handleCommand(
                 CommandFromSettingsScreen.RememberSettingsData(
-                    updatedSettingsData, fromUI = true
+                    updatedSettingsData, fromSlider = true
                 )
             )
         }

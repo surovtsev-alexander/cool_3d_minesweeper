@@ -31,8 +31,8 @@ import com.surovtsev.game.models.game.interaction.GameControls
 import com.surovtsev.game.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.game.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.game.viewmodel.*
-import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.game.viewmodel.helpers.*
+import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 
 @Composable
 fun GameScreen(
@@ -68,7 +68,7 @@ fun GameScreen(
         gLSurfaceView,
         gameViewEvents,
         gameControls,
-        viewModel.gameScreenStateValue,
+        viewModel.stateValue,
         viewModel
     )
 }
@@ -81,15 +81,15 @@ fun GameScreenControls(
     gLSurfaceView: GLSurfaceView,
     gameScreenEvents: GameScreenEvents,
     gameControls: GameControls,
-    gameScreenStateValue: GameScreenStateValue,
-    gameScreenCommandsHandler: GameScreenCommandsHandler,
+    stateValue: GameScreenStateValue,
+    commandHandler: GameScreenCommandHandler,
 ) {
-    val gameScreenState by gameScreenStateValue.observeAsState(GameScreenInitialState)
+    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
     val gameScreenData = gameScreenState.screenData
 
     MinesweeperTheme {
         if (gameScreenData is GameScreenData.MainMenu) {
-            MainMenu(gameScreenStateValue, gameScreenCommandsHandler)
+            MainMenu(stateValue, commandHandler)
         } else {
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -116,7 +116,7 @@ fun GameScreenControls(
                     modifier = Modifier
                         .width(pauseResumeButtonWidth),
                     onClick = {
-                        gameScreenCommandsHandler.handleCommand(
+                        commandHandler.handleCommand(
                             CommandFromGameScreen.OpenMenu
                         )
                     },
@@ -135,8 +135,8 @@ fun GameScreenControls(
 
 @Composable
 fun MainMenu(
-    gameScreenStateValue: GameScreenStateValue,
-    gameScreenCommandsHandler: GameScreenCommandsHandler,
+    stateValue: GameScreenStateValue,
+    commandHandler: GameScreenCommandHandler,
 ) {
     val mainMenuButtons = arrayOf(
         "new game" to CommandFromGameScreen.NewGame,
@@ -157,7 +157,7 @@ fun MainMenu(
                 modifier = Modifier
                     .width(pauseResumeButtonWidth),
                 onClick = {
-                    gameScreenCommandsHandler.handleCommand(
+                    commandHandler.handleCommand(
                         CommandFromGameScreen.CloseMenu
                     )
                 },
@@ -203,7 +203,7 @@ fun MainMenu(
                                 .fillMaxWidth()
                                 .height(80.dp),
                             onClick = {
-                                gameScreenCommandsHandler.handleCommand(command)
+                                commandHandler.handleCommand(command)
                             },
                             border = BorderStroke(1.dp, Color.Black)
                         ) {

@@ -9,6 +9,7 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
@@ -21,10 +22,8 @@ import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
-import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import logcat.logcat
@@ -36,7 +35,7 @@ const val LoadGameParameterName = "load_game"
 typealias GameScreenStateHolder = MutableLiveData<GameScreenState>
 typealias GameScreenStateValue = LiveData<GameScreenState>
 
-typealias GameScreenCommandsHandler = ScreenCommandHandler<CommandFromGameScreen>
+typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
@@ -46,13 +45,13 @@ class GameScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val timeSpanHelperImp: TimeSpanHelperImp,
 ):
-    ViewModel(),
-    GameScreenCommandsHandler,
-    DefaultLifecycleObserver,
-    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
+    TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
+        CommandFromGameScreen.LoadGame,
+        GameScreenData.NoData
+    ),
+    GameScreenCommandHandler,
+    DefaultLifecycleObserver
 {
-    var finishAction: (() -> Unit)? = null
-
     val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
     val minesweeperController: MinesweeperController
@@ -67,8 +66,8 @@ class GameScreenViewModel @Inject constructor(
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
 
-    private val gameScreenStateHolder: GameScreenStateHolder
-    val gameScreenStateValue: GameScreenStateValue
+    override val stateHolder: GameScreenStateHolder
+    override val stateValue: GameScreenStateValue
 
     init {
 
@@ -99,9 +98,9 @@ class GameScreenViewModel @Inject constructor(
         rankingListHelper =
             gameComponentEntryPoint.rankingListHelper
 
-        gameScreenStateHolder =
+        stateHolder =
             gameComponentEntryPoint.gameScreenStateHolder
-        gameScreenStateValue =
+        stateValue =
             gameComponentEntryPoint.gameScreenStateValue
 
         val touchListenerComponent = touchListenerComponentProvider
@@ -135,44 +134,17 @@ class GameScreenViewModel @Inject constructor(
         }
     }
 
-    override fun handleCommand(command: CommandFromGameScreen) {
-        launchOnIOThread {
-            setLoadingState()
-
-            when (command) {
-                is CommandFromGameScreen.NewGame       -> newGame()
-                is CommandFromGameScreen.LoadGame      -> loadGame()
-                is CommandFromGameScreen.CloseError    -> closeError()
-                is CommandFromGameScreen.Pause         -> pause()
-                is CommandFromGameScreen.Resume        -> resume()
-                is CommandFromGameScreen.OpenMenu      -> openMenu()
-                is CommandFromGameScreen.CloseMenu     -> closeMenu()
-                is CommandFromGameScreen.GoToMainMenu  -> goToMainMenu()
-                else                                    -> publishError("error while processing command")
-            }
-        }
-    }
-
-    private suspend fun setLoadingState() {
-        publishNewState(
-            ScreenState.Loading(
-                getGameScreenDataOrDefault()
-            )
-        )
-    }
-
-    private suspend fun doActionIfStateIsCorrect(
-        isStateCorrect: (gameScreenState: GameScreenState) -> Boolean,
-        errorMessage: String,
-        action: suspend (gameScreenData: GameScreenData) -> Unit
-    ) {
-        val gameScreenState = gameScreenStateHolder.value
-        val gameScreenData = gameScreenState?.screenData
-
-        if (gameScreenState == null || gameScreenData == null || !isStateCorrect(gameScreenState)) {
-            publishError(errorMessage)
-        } else {
-            action.invoke(gameScreenData)
+    override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
+        return when (command) {
+            is CommandFromGameScreen.NewGame       -> ::newGame
+            is CommandFromGameScreen.LoadGame      -> ::loadGame
+            is CommandFromGameScreen.CloseError    -> ::closeError
+            is CommandFromGameScreen.Pause         -> ::pause
+            is CommandFromGameScreen.Resume        -> ::resume
+            is CommandFromGameScreen.OpenMenu      -> ::openMenu
+            is CommandFromGameScreen.CloseMenu     -> ::closeMenu
+            is CommandFromGameScreen.GoToMainMenu  -> ::goToMainMenu
+            else                                   -> null
         }
     }
 
@@ -181,10 +153,10 @@ class GameScreenViewModel @Inject constructor(
         errorMessage: String,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
-        val gameScreenData = gameScreenStateHolder.value?.screenData
+        val gameScreenData = stateHolder.value?.screenData
 
         if (gameScreenData == null || !isDataCorrect(gameScreenData)) {
-            publishError(errorMessage)
+            publishErrorState(errorMessage)
         } else {
             action.invoke(gameScreenData)
         }
@@ -199,49 +171,6 @@ class GameScreenViewModel @Inject constructor(
             errorMessage,
             action
         )
-    }
-
-    private suspend fun closeError() {
-        publishNewState(
-            ScreenState.Idle(
-                GameScreenData.MainMenu(
-                    getGameScreenDataOrDefault()
-                )
-            )
-        )
-    }
-
-    private suspend fun publishNewState(
-        gameScreenState: GameScreenState
-    ) {
-        withUIContext {
-            gameScreenStateHolder.value = gameScreenState
-        }
-    }
-
-    private suspend fun publishError(
-        message: String
-    ) {
-        publishNewState(
-            ScreenState.Error(
-                getGameScreenDataOrDefault(),
-                message
-            )
-        )
-    }
-
-    private suspend fun publishIdleState(
-        gameScreenData: GameScreenData
-    ) {
-        publishNewState(
-            ScreenState.Idle(
-                gameScreenData
-            )
-        )
-    }
-
-    private fun getGameScreenDataOrDefault(): GameScreenData {
-        return gameScreenStateHolder.value?.screenData ?: GameScreenData.NoData
     }
 
     private suspend fun newGame() {
@@ -281,11 +210,9 @@ class GameScreenViewModel @Inject constructor(
         val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
 
         if (prevData == null) {
-            publishNewState(
-                ScreenState.Error(
-                    GameScreenData.NoData,
-                    "critical error. reloading"
-                )
+            publishErrorState(
+                "critical error. reloading",
+                GameScreenData.NoData,
             )
             return
         }

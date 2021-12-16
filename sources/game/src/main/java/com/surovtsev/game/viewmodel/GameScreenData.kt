@@ -1,6 +1,8 @@
 package com.surovtsev.game.viewmodel
 
-sealed class GameScreenData {
+import com.surovtsev.core.viewmodel.ScreenData
+
+sealed class GameScreenData: ScreenData {
     object NoData: GameScreenData()
 
     object GameInProgress: GameScreenData()

@@ -23,8 +23,6 @@ typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
 
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
 
-typealias SettingsScreenCommandProcessor = CommandProcessor<CommandFromSettingsScreen>
-
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
     settingsComponentProvider: Provider<SettingsComponent.Builder>,
@@ -38,8 +36,8 @@ class SettingsScreenViewModel @Inject constructor(
     private val settingsDao: SettingsDao
     private val saveController: SaveController
 
-    override val dataHolder: SettingsScreenStateHolder
-    override val dataValue: SettingsScreenStateValue
+    override val stateHolder: SettingsScreenStateHolder
+    override val stateValue: SettingsScreenStateValue
 
     init {
         val settingsComponent: SettingsComponent =
@@ -57,19 +55,19 @@ class SettingsScreenViewModel @Inject constructor(
         saveController =
             settingsComponentEntryPoint.saveController
 
-        dataHolder =
+        stateHolder =
             settingsComponentEntryPoint.settingsScreenStateHolder
-        dataValue =
+        stateValue =
             settingsComponentEntryPoint.settingsScreenStateValue
     }
 
-    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): SettingsScreenCommandProcessor? {
+    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): CommandProcessor? {
         return when (command) {
             is CommandFromSettingsScreen.CloseError             -> ::closeError
             is CommandFromSettingsScreen.LoadSettings           -> ::loadSettings
             is CommandFromSettingsScreen.LoadSelectedSettings   -> ::loadSelectedSettings
             is CommandFromSettingsScreen.RememberSettings       -> suspend { rememberSettings(command.settings) }
-            is CommandFromSettingsScreen.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromUI) }
+            is CommandFromSettingsScreen.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromSlider) }
             is CommandFromSettingsScreen.ApplySettings          -> ::applySettings
             is CommandFromSettingsScreen.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
             else                                                -> null
@@ -77,18 +75,12 @@ class SettingsScreenViewModel @Inject constructor(
 
     }
 
-    //    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen) {
-//    }
-
-
     private suspend fun loadSettings() {
         val settingsList = settingsDao.getAll()
 
-        publishNewState(
-            ScreenState.Loading(
-                SettingsScreenData.SettingsLoaded(
-                    settingsList
-                )
+        publishLoadingState(
+            SettingsScreenData.SettingsLoaded(
+                settingsList
             )
         )
 
@@ -99,18 +91,16 @@ class SettingsScreenViewModel @Inject constructor(
 
     private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData,
-        fromUI: Boolean
+        fromSlider: Boolean
     ) {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
-            publishNewState(
-                ScreenState.Idle(
-                    SettingsScreenData.SettingsDataIsSelected(
-                        screenData,
-                        settingsData,
-                        fromUI
-                    )
+            publishIdleState(
+                SettingsScreenData.SettingsDataIsSelected(
+                    screenData,
+                    settingsData,
+                    fromSlider
                 )
             )
         }
@@ -167,12 +157,10 @@ class SettingsScreenViewModel @Inject constructor(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
-            publishNewState(
-                ScreenState.Idle(
-                    SettingsScreenData.SettingsIsSelected(
-                        screenData,
-                        settings
-                    )
+            publishIdleState(
+                SettingsScreenData.SettingsIsSelected(
+                    screenData,
+                    settings
                 )
             )
         }

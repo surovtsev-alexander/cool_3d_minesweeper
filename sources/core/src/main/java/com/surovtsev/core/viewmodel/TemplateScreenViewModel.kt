@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
+import logcat.logcat
 
-typealias CommandProcessor<T> = suspend () -> Unit
+typealias CommandProcessor = suspend () -> Unit
 
 typealias FinishAction = () -> Unit
 
@@ -20,15 +21,19 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 {
     var finishAction: FinishAction? = null
 
-    protected abstract val dataHolder: MutableLiveData<ScreenState<out D>>
-    abstract val dataValue: LiveData<ScreenState<out D>>
+    protected abstract val stateHolder: MutableLiveData<ScreenState<out D>>
+    abstract val stateValue: LiveData<ScreenState<out D>>
+
+    abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 
 
     override fun handleCommand(command: C) {
         launchOnIOThread {
-            val currState = dataHolder.value
+            logcat { "handleCommand: $command" }
 
-            val screenData = dataHolder.value?.screenData
+            val currState = stateHolder.value
+
+            val screenData = stateHolder.value?.screenData
 
             val isErrorState =
                 currState != null &&
@@ -62,43 +67,62 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
         val commandProcessor = getCommandProcessor(command)
 
         if (commandProcessor == null) {
-            publishError("error while processing command")
+            publishErrorState("unable to process internal command")
         } else {
-            setLoadingState()
+            publishLoadingState()
             commandProcessor.invoke()
         }
     }
 
-    abstract suspend fun getCommandProcessor(command: C): CommandProcessor<C>?
-
-    private suspend fun setLoadingState() {
+    protected suspend fun publishLoadingState(
+        screenData: D = getCurrentScreenDataOrNoData()
+    ) {
         publishNewState(
             ScreenState.Loading(
-                getCurrentScreenDataOrNoData()
+                screenData
             )
         )
     }
 
-    protected suspend fun publishError(
-        message: String
+    protected suspend fun publishErrorState(
+        message: String,
+        screenData: D = getCurrentScreenDataOrNoData()
     ) {
         publishNewState(
             ScreenState.Error(
-                getCurrentScreenDataOrNoData(),
+                screenData,
                 message
             )
         )
     }
 
-    protected suspend fun closeError() {
+    protected suspend fun publishIdleState(
+        screenData: D
+    ) {
         publishNewState(
             ScreenState.Idle(
-                getCurrentScreenDataOrNoData()
+                screenData
             )
         )
     }
 
+    private suspend fun publishNewState(
+        screenState: ScreenState<out D>
+    ) {
+        withUIContext {
+            stateHolder.value = screenState
+        }
+    }
 
+    protected suspend fun closeError() {
+        publishIdleState(
+            getCurrentScreenDataOrNoData()
+        )
+    }
+
+    protected fun getCurrentScreenDataOrNoData(): D {
+        return stateHolder.value?.screenData ?: noScreenData
+    }
 
 //    protected inline fun <reified T: D> processIfDataNullable(
 //        checkData: (screenData: T?) -> Boolean,
@@ -133,26 +157,13 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     protected suspend inline fun <reified T: D> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
-        val screenData = dataHolder.value?.screenData
+        val screenData = stateHolder.value?.screenData
 
         if (screenData == null || screenData !is T) {
-            publishError(errorMessage)
+            publishErrorState(errorMessage)
         } else {
             action.invoke(screenData)
         }
     }
-
-    protected fun getCurrentScreenDataOrNoData(): D {
-        return dataHolder.value?.screenData ?: noScreenData
-    }
-
-    protected suspend fun publishNewState(
-        screenState: ScreenState<out D>
-    ) {
-        withUIContext {
-            dataHolder.value = screenState
-        }
-    }
-
 
 }

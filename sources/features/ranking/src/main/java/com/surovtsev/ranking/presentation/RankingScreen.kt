@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.surovtsev.core.helpers.*
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
@@ -29,10 +30,12 @@ import logcat.logcat
 
 @Composable
 fun RankingScreen(
-    viewModel: RankingScreenViewModel
+    viewModel: RankingScreenViewModel,
+    navController: NavController,
 ) {
     val commandHandler: RankingScreenCommandHandler = viewModel
     LaunchedEffect(key1 = Unit) {
+        viewModel.finishAction = { navController.navigateUp() }
         commandHandler.handleCommand(
             CommandFromRankingScreen
                 .LoadData
@@ -40,7 +43,7 @@ fun RankingScreen(
     }
 
     RankingControls(
-        viewModel.dataValue,
+        viewModel.stateValue,
         commandHandler
     )
 }
