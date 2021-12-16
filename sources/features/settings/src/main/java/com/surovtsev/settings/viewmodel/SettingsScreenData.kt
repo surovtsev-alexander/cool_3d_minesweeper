@@ -6,11 +6,12 @@ import com.surovtsev.core.viewmodel.ScreenData
 
 
 sealed class SettingsScreenData: ScreenData {
-    object NoData: SettingsScreenData()
+
+    object NoData: SettingsScreenData(), ScreenData.DuringInitialization
 
     open class SettingsLoaded(
         val settingsList: SettingsList,
-    ): SettingsScreenData()
+    ): SettingsScreenData(), ScreenData.DuringInitialization
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,

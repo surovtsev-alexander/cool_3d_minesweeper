@@ -3,7 +3,6 @@ package com.surovtsev.core.room.entities
 import androidx.room.*
 import glm_.vec3.Vec3i
 
-typealias SettingsDataFactory = () -> Settings.SettingsData
 
 @Entity(
     indices = [
