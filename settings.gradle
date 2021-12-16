@@ -8,6 +8,7 @@ def touchListenerModule = ":touchlistener"
 def rankingModule = ":ranking"
 def settingsModule = ":settings"
 def gameModule = ":game"
+def gameLogicModule = ":gamelogic"
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/core")
@@ -26,3 +27,6 @@ project(settingsModule).projectDir = new File(rootDir, "sources/features/setting
 
 include gameModule
 project(gameModule).projectDir = new File(rootDir, "sources/game")
+
+include gameLogicModule
+project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")
