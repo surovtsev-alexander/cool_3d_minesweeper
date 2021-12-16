@@ -9,7 +9,7 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.core.viewmodel.ScreenCommandsHandler
+import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
 import com.surovtsev.game.minesweeper.MinesweeperController
@@ -36,7 +36,7 @@ const val LoadGameParameterName = "load_game"
 typealias GameScreenStateHolder = MutableLiveData<GameScreenState>
 typealias GameScreenStateValue = LiveData<GameScreenState>
 
-typealias GameScreenCommandsHandler = ScreenCommandsHandler<CommandsFromGameScreen>
+typealias GameScreenCommandsHandler = ScreenCommandHandler<CommandFromGameScreen>
 
 @SuppressLint("StaticFieldLeak")
 @HiltViewModel
@@ -135,20 +135,20 @@ class GameScreenViewModel @Inject constructor(
         }
     }
 
-    override fun handleCommand(command: CommandsFromGameScreen) {
+    override fun handleCommand(command: CommandFromGameScreen) {
         launchOnIOThread {
             setLoadingState()
 
             when (command) {
-                is CommandsFromGameScreen.NewGame       -> newGame()
-                is CommandsFromGameScreen.LoadGame      -> loadGame()
-                is CommandsFromGameScreen.CloseError    -> closeError()
-                is CommandsFromGameScreen.Pause         -> pause()
-                is CommandsFromGameScreen.Resume        -> resume()
-                is CommandsFromGameScreen.OpenMenu      -> openMenu()
-                is CommandsFromGameScreen.CloseMenu     -> closeMenu()
-                is CommandsFromGameScreen.GoToMainMenu  -> goToMainMenu()
-                else                                    -> publishError("error while processing commands")
+                is CommandFromGameScreen.NewGame       -> newGame()
+                is CommandFromGameScreen.LoadGame      -> loadGame()
+                is CommandFromGameScreen.CloseError    -> closeError()
+                is CommandFromGameScreen.Pause         -> pause()
+                is CommandFromGameScreen.Resume        -> resume()
+                is CommandFromGameScreen.OpenMenu      -> openMenu()
+                is CommandFromGameScreen.CloseMenu     -> closeMenu()
+                is CommandFromGameScreen.GoToMainMenu  -> goToMainMenu()
+                else                                    -> publishError("error while processing command")
             }
         }
     }

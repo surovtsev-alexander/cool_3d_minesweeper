@@ -2,6 +2,7 @@ package com.surovtsev.settings.dagger
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.settings.viewmodel.SettingsScreenInitialState
 import com.surovtsev.settings.viewmodel.SettingsScreenStateHolder
 import com.surovtsev.settings.viewmodel.SettingsScreenStateValue
 import dagger.Module
@@ -44,7 +45,7 @@ object SettingsModule {
     @Provides
     fun provideSettingsScreenStateHolder(
     ): SettingsScreenStateHolder {
-        return SettingsScreenStateHolder()
+        return SettingsScreenStateHolder(SettingsScreenInitialState)
     }
 
     @SettingsScope

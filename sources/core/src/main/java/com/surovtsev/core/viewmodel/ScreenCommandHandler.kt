@@ -1,6 +1,6 @@
 package com.surovtsev.core.viewmodel
 
-interface ScreenCommandsHandler<T: CommandsFromScreen> {
+interface ScreenCommandHandler<T: CommandFromScreen> {
     fun handleCommand(command: T)
 }
 

@@ -3,6 +3,7 @@ package com.surovtsev.ranking.dagger
 import com.surovtsev.core.helpers.*
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenInitialState
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateHolder
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateValue
 import com.surovtsev.utils.timers.TimeSpan
@@ -48,8 +49,9 @@ object RankingModule {
     @Provides
     fun provideRankingScreenStateHolder(
     ): RankingScreenStateHolder {
-        return RankingScreenStateHolder()
+        return RankingScreenStateHolder(RankingScreenInitialState)
     }
+
 
     @RankingScope
     @Provides

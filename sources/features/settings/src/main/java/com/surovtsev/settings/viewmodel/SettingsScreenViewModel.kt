@@ -7,7 +7,8 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.core.viewmodel.ScreenCommandsHandler
+import com.surovtsev.core.viewmodel.CommandProcessor
+import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.ScreenState
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.settings.dagger.SettingsComponent
@@ -20,7 +21,9 @@ import javax.inject.Provider
 typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
 typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
 
-typealias SettingsScreenCommandsHandler = ScreenCommandsHandler<CommandFromSettingsScreen>
+typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
+
+typealias SettingsScreenCommandProcessor = CommandProcessor<CommandFromSettingsScreen>
 
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
@@ -35,8 +38,8 @@ class SettingsScreenViewModel @Inject constructor(
     private val settingsDao: SettingsDao
     private val saveController: SaveController
 
-    override val dataHolder: MutableLiveData<ScreenState<out SettingsScreenData>>
-    override val dataValue: LiveData<ScreenState<out SettingsScreenData>>
+    override val dataHolder: SettingsScreenStateHolder
+    override val dataValue: SettingsScreenStateValue
 
     init {
         val settingsComponent: SettingsComponent =
@@ -60,18 +63,22 @@ class SettingsScreenViewModel @Inject constructor(
             settingsComponentEntryPoint.settingsScreenStateValue
     }
 
-    override suspend fun onCommand(command: CommandFromSettingsScreen) {
-        when (command) {
-            is CommandFromSettingsScreen.CloseError             -> closeError()
-            is CommandFromSettingsScreen.LoadSettings           -> loadSettings()
-            is CommandFromSettingsScreen.LoadSelectedSettings   -> loadSelectedSettings()
-            is CommandFromSettingsScreen.RememberSettings       -> rememberSettings(command.settings)
-            is CommandFromSettingsScreen.RememberSettingsData   -> rememberSettingsData(command.settingsData, command.fromUI)
-            is CommandFromSettingsScreen.ApplySettings          -> applySettings()
-            is CommandFromSettingsScreen.DeleteSettings         -> deleteSettings(command.settingsId)
-            else                                                -> publishError("error while processing commands")
+    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): SettingsScreenCommandProcessor? {
+        return when (command) {
+            is CommandFromSettingsScreen.CloseError             -> ::closeError
+            is CommandFromSettingsScreen.LoadSettings           -> ::loadSettings
+            is CommandFromSettingsScreen.LoadSelectedSettings   -> ::loadSelectedSettings
+            is CommandFromSettingsScreen.RememberSettings       -> suspend { rememberSettings(command.settings) }
+            is CommandFromSettingsScreen.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromUI) }
+            is CommandFromSettingsScreen.ApplySettings          -> ::applySettings
+            is CommandFromSettingsScreen.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
+            else                                                -> null
         }
+
     }
+
+    //    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen) {
+//    }
 
 
     private suspend fun loadSettings() {

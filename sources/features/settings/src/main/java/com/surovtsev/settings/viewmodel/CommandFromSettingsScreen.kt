@@ -1,9 +1,9 @@
 package com.surovtsev.settings.viewmodel
 
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.viewmodel.CommandsFromScreen
+import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed class CommandFromSettingsScreen: CommandsFromScreen {
+sealed class CommandFromSettingsScreen: CommandFromScreen {
     object CloseError: CommandFromSettingsScreen()
 
     object LoadSettings: CommandFromSettingsScreen()

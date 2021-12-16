@@ -31,23 +31,24 @@ import logcat.logcat
 fun RankingScreen(
     viewModel: RankingScreenViewModel
 ) {
+    val commandHandler: RankingScreenCommandHandler = viewModel
     LaunchedEffect(key1 = Unit) {
-        viewModel.handleCommand(
+        commandHandler.handleCommand(
             CommandFromRankingScreen
                 .LoadData
         )
     }
 
     RankingControls(
-        viewModel.rankingScreenStateValue,
-        viewModel
+        viewModel.dataValue,
+        commandHandler
     )
 }
 
 @Composable
 fun RankingControls(
-    rankingScreenStateValue: RankingScreenStateValue,
-    rankingScreenCommandsHandler: RankingScreenCommandsHandler
+    stateValue: RankingScreenStateValue,
+    commandHandler: RankingScreenCommandHandler
 ) {
     MinesweeperTheme {
         Box(
@@ -64,8 +65,8 @@ fun RankingControls(
                     modifier = Modifier.weight(3f)
                 ) {
                     SettingsList(
-                        rankingScreenStateValue,
-                        rankingScreenCommandsHandler
+                        stateValue,
+                        commandHandler
                     )
                 }
                 Divider(
@@ -76,8 +77,8 @@ fun RankingControls(
                     modifier = Modifier.weight(10f)
                 ) {
                     RankingList(
-                        rankingScreenStateValue,
-                        rankingScreenCommandsHandler
+                        stateValue,
+                        commandHandler
                     )
                 }
 //            Row(
@@ -90,7 +91,7 @@ fun RankingControls(
             }
 
             DisplayCircularIndicatorIfNeeded(
-                rankingScreenStateValue,
+                stateValue,
                 this
             )
 
@@ -100,10 +101,10 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    rankingScreenStateValue: RankingScreenStateValue,
-    rankingScreenCommandsHandler: RankingScreenCommandsHandler
+    stateValue: RankingScreenStateValue,
+    commandHandler: RankingScreenCommandHandler
 ) {
-    val rankingScreenState = rankingScreenStateValue.observeAsState(
+    val rankingScreenState = stateValue.observeAsState(
         RankingScreenInitialState
     ).value
 
@@ -163,7 +164,7 @@ fun SettingsList(
                         }
                     } else {
                         Box (
-                                modifier = Modifier.clickable { rankingScreenCommandsHandler.handleCommand(
+                                modifier = Modifier.clickable { commandHandler.handleCommand(
                                     CommandFromRankingScreen.FilterList(itemId))
                                 }
                         ) {
@@ -206,25 +207,25 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    rankingScreenStateValue: RankingScreenStateValue,
-    rankingScreenCommandsHandler: RankingScreenCommandsHandler
+    stateValue: RankingScreenStateValue,
+    commandHandler: RankingScreenCommandHandler
 ) {
-    val rankingScreenState = rankingScreenStateValue.observeAsState(
+    val rankingScreenState = stateValue.observeAsState(
         RankingScreenInitialState
     ).value
 
     val rankingScreenData = rankingScreenState.screenData
 
-    val rankingListWithPlaces: RankingListWithPlaces
-    val rankingTableSortParameters: RankingTableSortParameters
+    val listWithPlaces: RankingListWithPlaces
+    val tableSortParameters: RankingTableSortParameters
     val directionOfSortableColumns: DirectionOfSortableColumns
     if (rankingScreenData !is RankingScreenData.RankingListIsSorted) {
-        rankingListWithPlaces = emptyList()
-        rankingTableSortParameters = DefaultRankingTableSortParameters
+        listWithPlaces = emptyList()
+        tableSortParameters = DefaultRankingTableSortParameters
         directionOfSortableColumns = DefaultSortDirectionForSortableColumns
     } else {
-        rankingListWithPlaces = rankingScreenData.sortedRankingList
-        rankingTableSortParameters = rankingScreenData.rankingTableSortParameters
+        listWithPlaces = rankingScreenData.sortedRankingList
+        tableSortParameters = rankingScreenData.rankingTableSortParameters
         directionOfSortableColumns = rankingScreenData.directionOfSortableColumns
     }
 
@@ -244,16 +245,16 @@ fun RankingList(
             Row {
                 for ((columnType, modifierWidth) in columnsWidth) {
                     RankingListColumnTitle(
-                        rankingScreenCommandsHandler,
+                        commandHandler,
                         columnType,
                         modifierWidth,
-                        rankingTableSortParameters,
+                        tableSortParameters,
                         directionOfSortableColumns
                     )
                 }
             }
             LazyColumn {
-                items(rankingListWithPlaces.withIndex().toList()) { item ->
+                items(listWithPlaces.withIndex().toList()) { item ->
                     RankingDataItem(item)
                 }
             }
@@ -263,7 +264,7 @@ fun RankingList(
 
 @Composable
 fun RankingListColumnTitle(
-    rankingScreenCommandsHandler: RankingScreenCommandsHandler,
+    commandHandler: RankingScreenCommandHandler,
     tableColumnType: RankingTableColumn,
     modifierWidth: Float,
     rankingTableSortParameters: RankingTableSortParameters,
@@ -291,7 +292,7 @@ fun RankingListColumnTitle(
                     .width(30.dp)
                     .background(buttonColor)
                     .clickable {
-                        rankingScreenCommandsHandler.handleCommand(
+                        commandHandler.handleCommand(
                             CommandFromRankingScreen.SortListWithNoDelay(
                                 RankingTableSortParameters(
                                     tableColumnType,
@@ -357,16 +358,16 @@ fun RankingDataItem(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DisplayCircularIndicatorIfNeeded(
-    rankingScreenStateValue: RankingScreenStateValue,
+    stateValue: RankingScreenStateValue,
     boxScope: BoxScope,
 ) {
-    val rankingScreenState = rankingScreenStateValue.observeAsState(
+    val state = stateValue.observeAsState(
         RankingScreenInitialState
     ).value
 
     var showLoadingElements by remember { mutableStateOf(false) }
 
-    showLoadingElements = rankingScreenState is ScreenState.Loading
+    showLoadingElements = state is ScreenState.Loading
 
     with(boxScope) {
         AnimatedVisibility(
@@ -399,7 +400,7 @@ fun DisplayCircularIndicatorIfNeeded(
         }
     }
 
-    if (rankingScreenState is ScreenState.Loading) {
+    if (state is ScreenState.Loading) {
 
         with(boxScope) {
 

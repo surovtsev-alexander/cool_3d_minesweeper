@@ -18,7 +18,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,9 +52,9 @@ fun GameScreen(
         viewModel.finishAction = { navController.navigateUp() }
         viewModel.handleCommand(
             if (viewModel.loadGame) {
-                CommandsFromGameScreen.LoadGame
+                CommandFromGameScreen.LoadGame
             } else {
-                CommandsFromGameScreen.NewGame
+                CommandFromGameScreen.NewGame
             }
         )
     }
@@ -118,7 +117,7 @@ fun GameScreenControls(
                         .width(pauseResumeButtonWidth),
                     onClick = {
                         gameScreenCommandsHandler.handleCommand(
-                            CommandsFromGameScreen.OpenMenu
+                            CommandFromGameScreen.OpenMenu
                         )
                     },
                     border = BorderStroke(1.dp, Color.Black)
@@ -140,8 +139,8 @@ fun MainMenu(
     gameScreenCommandsHandler: GameScreenCommandsHandler,
 ) {
     val mainMenuButtons = arrayOf(
-        "new game" to CommandsFromGameScreen.NewGame,
-        "main menu" to CommandsFromGameScreen.GoToMainMenu,
+        "new game" to CommandFromGameScreen.NewGame,
+        "main menu" to CommandFromGameScreen.GoToMainMenu,
     )
 
     Box(
@@ -159,7 +158,7 @@ fun MainMenu(
                     .width(pauseResumeButtonWidth),
                 onClick = {
                     gameScreenCommandsHandler.handleCommand(
-                        CommandsFromGameScreen.CloseMenu
+                        CommandFromGameScreen.CloseMenu
                     )
                 },
                 border = BorderStroke(1.dp, Color.Black)

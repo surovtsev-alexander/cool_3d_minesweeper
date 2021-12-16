@@ -1,6 +1,6 @@
 package com.surovtsev.core.viewmodel
 
-interface CommandsFromScreen {
+interface CommandFromScreen {
     interface CloseError
     interface Init
 }

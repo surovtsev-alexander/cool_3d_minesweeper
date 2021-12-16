@@ -6,14 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 
+typealias CommandProcessor<T> = suspend () -> Unit
+
 typealias FinishAction = () -> Unit
 
-abstract class TemplateScreenViewModel<C: CommandsFromScreen, D: ScreenData>(
+abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     private val initCommand: C,
     private val noScreenData: D,
 ):
     ViewModel(),
-    ScreenCommandsHandler<C>,
+    ScreenCommandHandler<C>,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
 {
     var finishAction: FinishAction? = null
@@ -36,8 +38,9 @@ abstract class TemplateScreenViewModel<C: CommandsFromScreen, D: ScreenData>(
                         screenData != null &&
                         screenData is ScreenData.DuringInitialization
 
+
             if (isErrorState) {
-                val isCloseErrorCommand = command is CommandsFromScreen.CloseError
+                val isCloseErrorCommand = command is CommandFromScreen.CloseError
 
                 if (isCloseErrorCommand) {
                     if (isErrorDuringInitialization) {
@@ -46,20 +49,29 @@ abstract class TemplateScreenViewModel<C: CommandsFromScreen, D: ScreenData>(
                             it.invoke()
                         }
                     } else {
-                        setLoadingState()
-                        onCommand(initCommand)
+                        tryToProcessCommand(command)
                     }
                 }
             } else {
-                setLoadingState()
-                onCommand(command)
+                tryToProcessCommand(command)
             }
         }
     }
 
-    abstract suspend fun onCommand(command: C)
+    private suspend fun tryToProcessCommand(command: C) {
+        val commandProcessor = getCommandProcessor(command)
 
-    protected suspend fun setLoadingState() {
+        if (commandProcessor == null) {
+            publishError("error while processing command")
+        } else {
+            setLoadingState()
+            commandProcessor.invoke()
+        }
+    }
+
+    abstract suspend fun getCommandProcessor(command: C): CommandProcessor<C>?
+
+    private suspend fun setLoadingState() {
         publishNewState(
             ScreenState.Loading(
                 getCurrentScreenDataOrNoData()
@@ -135,7 +147,7 @@ abstract class TemplateScreenViewModel<C: CommandsFromScreen, D: ScreenData>(
     }
 
     protected suspend fun publishNewState(
-        screenState: ScreenState<D>
+        screenState: ScreenState<out D>
     ) {
         withUIContext {
             dataHolder.value = screenState
