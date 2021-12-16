@@ -37,7 +37,6 @@ typealias GameScreenStateValue = LiveData<GameScreenState>
 
 typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
-@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class GameScreenViewModel @Inject constructor(
     gameComponentProvider: Provider<GameComponent.Builder>,
@@ -57,7 +56,10 @@ class GameScreenViewModel @Inject constructor(
     val minesweeperController: MinesweeperController
 
     private val gameRenderer: GLESRenderer
-    val gLSurfaceView: GLSurfaceView
+
+    // see ::onDestroy
+    @SuppressLint("StaticFieldLeak")
+    var gLSurfaceView: GLSurfaceView? = null
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
     private val gameConfig: GameConfig
@@ -123,10 +125,10 @@ class GameScreenViewModel @Inject constructor(
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        gLSurfaceView.apply {
+        gLSurfaceView!!.apply {
             /* TODO. add back */
             touchListener.connectToGLSurfaceView(
-                gLSurfaceView
+                this
             )
 
             setEGLContextClientVersion(2)
@@ -239,13 +241,13 @@ class GameScreenViewModel @Inject constructor(
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        gLSurfaceView.onPause()
+        gLSurfaceView!!.onPause()
         minesweeperController.onPause(owner)
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        gLSurfaceView.onResume()
+        gLSurfaceView!!.onResume()
         minesweeperController.onResume(owner)
     }
 
@@ -253,6 +255,8 @@ class GameScreenViewModel @Inject constructor(
         super.onDestroy(owner)
         minesweeperController.onDestroy(owner)
         timeSpanHelperImp.forgetSubscribers()
+
+        gLSurfaceView = null
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {

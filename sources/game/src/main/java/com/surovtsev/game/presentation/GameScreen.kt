@@ -59,7 +59,7 @@ fun GameScreen(
         )
     }
 
-    val gLSurfaceView = viewModel.gLSurfaceView
+    val gLSurfaceView = viewModel.gLSurfaceView!!
     val gameViewEvents = viewModel.gameScreenEvents
     val gameControls = viewModel.gameControls
 
