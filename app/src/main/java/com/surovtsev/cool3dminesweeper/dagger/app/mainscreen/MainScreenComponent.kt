@@ -1,41 +1,34 @@
 package com.surovtsev.cool3dminesweeper.dagger.app.mainscreen
 
+import com.surovtsev.cool3dminesweeper.dagger.app.AppComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.MainScreenScope
 import com.surovtsev.cool3dminesweeper.presentation.Screen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonInfo
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonType
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.core.savecontroller.SaveController
+import dagger.Component
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
 
 @MainScreenScope
-@DefineComponent(
-    parent = SingletonComponent::class
+@Component(
+    dependencies = [
+        AppComponent::class,
+    ],
+    modules = [
+        MainScreenModule::class,
+    ]
 )
 interface MainScreenComponent {
-
-    @DefineComponent.Builder
-    interface Builder {
-        fun build(): MainScreenComponent
-    }
-}
-
-@MainScreenScope
-@InstallIn(MainScreenComponent::class)
-@EntryPoint
-interface MainScreenEntryPoint {
-    val buttonsInfo: ButtonsInfo
+    val buttonInfo: ButtonsInfo
+    val saveController: SaveController
 }
 
 @Module
-@InstallIn(MainScreenComponent::class)
 object MainScreenModule {
     @[IntoMap StringKey(MainScreenViewModel.NewGame)]
     @MainScreenScope

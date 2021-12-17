@@ -1,7 +1,9 @@
 package com.surovtsev.cool3dminesweeper.dagger.app
 
 import android.content.Context
+import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -13,24 +15,49 @@ import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import dagger.*
+import dagger.multibindings.IntoMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
 
+
+@AppScope
+@Component(
+    modules = [
+        ViewModelHelper::class,
+        AppModule::class,
+    ]
+)
+interface AppComponent {
+    val saveController: SaveController
+//    fun mainScreenViewModelFactory(): MainScreenViewModel.Factory
+
+    @Component.Builder
+    interface Builder {
+        fun context(@BindsInstance context: Context): Builder
+        fun build(): AppComponent
+    }
+
+    fun viewModelFactory(): ViewModelFactory
+}
+
 @Module
-@InstallIn(SingletonComponent::class)
+abstract class ViewModelHelper {
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainScreenViewModel::class)
+    abstract fun mainScreenViewModel(viewModel: MainScreenViewModel): ViewModel
+}
+
+@Module
 object AppModule {
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideRankingDatabase(
-    @ApplicationContext context: Context,
+    context: Context,
     ): RankingDatabase {
         val res = Room
             .databaseBuilder(
@@ -86,25 +113,25 @@ object AppModule {
         return res
     }
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideSettingsDao(
         rankingDatabase: RankingDatabase
     ): SettingsDao = rankingDatabase.settingsDao()
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideRankingDao(
         rankingDatabase: RankingDatabase
     ): RankingDao = rankingDatabase.rankingDao()
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideSaveController(
-        @ApplicationContext context: Context
+        context: Context
     ) = SaveController(context)
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideSettingsListData(): SettingsListData {
         return SettingsListData(
@@ -112,7 +139,7 @@ object AppModule {
         )
     }
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideRankingListHelper(
         rankingDao: RankingDao
@@ -126,7 +153,7 @@ object AppModule {
     fun provideViewModelCoroutineScopeHelper(): ViewModelCoroutineScopeHelper =
         ViewModelCoroutineScopeHelperImpl()
 
-    @Singleton
+    @AppScope
     @Provides
     fun provideTimeSpanHelperImp(
     ): TimeSpanHelperImp {

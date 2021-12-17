@@ -13,11 +13,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/sources/core" />
-            <option value="$PROJECT_DIR$/sources/features/ranking" />
-            <option value="$PROJECT_DIR$/sources/features/settings" />
-            <option value="$PROJECT_DIR$/sources/game" />
-            <option value="$PROJECT_DIR$/sources/gamelogic" />
-            <option value="$PROJECT_DIR$/sources/touchlistener" />
             <option value="$PROJECT_DIR$/sources/utils" />
           </set>
         </option>

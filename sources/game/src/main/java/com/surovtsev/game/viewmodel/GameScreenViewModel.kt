@@ -24,7 +24,6 @@ import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamelogic.dagger.GameLogicComponent
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
-import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
 import com.surovtsev.utils.timers.TimeSpanFlow
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.hilt.EntryPoints
@@ -127,11 +126,7 @@ class GameScreenViewModel @Inject constructor(
             )
             .build()
 
-        val touchListenerEntryPoint = EntryPoints.get(
-            touchListenerComponent, TouchListenerEntryPoint::class.java
-        )
-
-        touchListener = touchListenerEntryPoint.touchListener
+        touchListener = touchListenerComponent.touchListener
     }
 
     override fun onCreate(owner: LifecycleOwner) {

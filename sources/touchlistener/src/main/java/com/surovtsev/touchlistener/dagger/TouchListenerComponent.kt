@@ -1,6 +1,5 @@
 package com.surovtsev.touchlistener.dagger
 
-import com.surovtsev.utils.timers.TimeSpanHelper
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.touchlistener.helpers.ScalingHelper
@@ -9,21 +8,24 @@ import com.surovtsev.touchlistener.helpers.TouchReceiverImp
 import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
+import com.surovtsev.utils.timers.TimeSpanHelper
 import dagger.*
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import glm_.vec2.Vec2
 import javax.inject.Named
 
 @TouchListenerScope
-@DefineComponent(
-    parent = ViewModelComponent::class
+@Component(
+    modules = [
+        TouchListenerBindModule::class,
+        TouchHelperModule::class,
+        ScalingHelperModule::class,
+        ClickAndRotationHelperModule::class,
+    ]
 )
 interface TouchListenerComponent {
+    val touchListener: TouchListener
 
-    @DefineComponent.Builder
+    @Component.Builder
     interface Builder {
         fun touchHandler(@BindsInstance touchHandler: TouchHandler): Builder
 
@@ -35,14 +37,6 @@ interface TouchListenerComponent {
     }
 }
 
-@TouchListenerScope
-@EntryPoint
-@InstallIn(TouchListenerComponent::class)
-interface TouchListenerEntryPoint {
-    val touchListener: TouchListener
-}
-
-@InstallIn(TouchListenerComponent::class)
 @Module
 interface TouchListenerBindModule {
     @TouchListenerScope
@@ -76,7 +70,6 @@ interface TouchListenerBindModule {
     ): TouchReceiver
 }
 
-@InstallIn(TouchListenerComponent::class)
 @Module
 object TouchHelperModule {
     @Named(TouchListener.PrevPointerCount)
@@ -90,7 +83,6 @@ object TouchHelperModule {
     fun getPrevDistance() = 0f
 }
 
-@InstallIn(TouchListenerComponent::class)
 @Module
 object ScalingHelperModule {
     @Provides
@@ -98,7 +90,6 @@ object ScalingHelperModule {
     fun providePrevCenter() = Vec2()
 }
 
-@InstallIn(TouchListenerComponent::class)
 @Module
 object ClickAndRotationHelperModule {
     @Provides

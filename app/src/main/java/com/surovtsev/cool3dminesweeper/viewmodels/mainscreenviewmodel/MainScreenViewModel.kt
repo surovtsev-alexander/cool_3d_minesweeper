@@ -1,22 +1,25 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.MainScreenComponent
-import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.MainScreenEntryPoint
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
-import dagger.hilt.EntryPoints
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import logcat.logcat
 import javax.inject.Inject
-import javax.inject.Provider
 
-
-@HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val saveController: SaveController,
-    mainScreenComponentProvider: Provider<MainScreenComponent.Builder>
+//    @Assisted
+//    savedStateHandle: SavedStateHandle,
 ): ViewModel() {
+
+//    @AssistedFactory
+//    interface Factory {
+//        fun create(
+//            savedStateHandle: SavedStateHandle,
+////            context: Context,
+//        ): MainScreenViewModel
+//    }
 
     companion object {
         const val NewGame = "new game"
@@ -26,21 +29,24 @@ class MainScreenViewModel @Inject constructor(
         const val Help = "help"
     }
 
-    val buttonsInfo: ButtonsInfo
+//    val buttonsInfo: ButtonsInfo
+//
+//    val saveController: SaveController
 
     init {
-        val mainScreenComponent = mainScreenComponentProvider
-            .get()
-            .build()
-        val mainScreenEntryPoint = EntryPoints.get(
-            mainScreenComponent, MainScreenEntryPoint::class.java
-        )
+        logcat { "init: ${System.identityHashCode(this)}" }
 
-        buttonsInfo = mainScreenEntryPoint.buttonsInfo
+//        val mainScreenComponent = DaggerMainScreenComponent
+//            .builder()
+//            .appComponent(context.appComponent)
+//            .build()
+//
+//        buttonsInfo = mainScreenComponent.buttonInfo
+//        saveController = mainScreenComponent.saveController
     }
 
-    fun hasSave() =
-        saveController.hasData(
-            SaveTypes.SaveGameJson
-        )
+//    fun hasSave() =
+//        saveController.hasData(
+//            SaveTypes.SaveGameJson
+//        )
 }
