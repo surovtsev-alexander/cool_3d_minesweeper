@@ -13,19 +13,11 @@ import javax.inject.Named
 @GameScope
 class GameScreenEventsReceiver @Inject constructor(
     @ApplicationContext private val context: Context,
-    @Named(GameScreenEventsNames.ElapsedTime)
-    private val elapsedTime: ElapsedTimeEvent,
     @Named(GameScreenEventsNames.ShowDialog)
     private val showDialog: ShowDialogEvent
 ): GameEventsReceiver {
     init {
         init()
-    }
-
-    override fun timeUpdated(newValue: Long) {
-        context.runOnUiThread {
-            elapsedTime.onDataChanged(newValue)
-        }
     }
 
     override fun gameStatusUpdated(

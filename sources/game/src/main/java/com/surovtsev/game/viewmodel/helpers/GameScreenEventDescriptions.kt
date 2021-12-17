@@ -14,7 +14,6 @@ typealias BombsLeftData = MutableStateFlow<Int>
 typealias BombsLeftValue = StateFlow<Int>
 
 object GameScreenEventsNames {
-    const val ElapsedTime = "elapsedTime"
     const val ShowDialog = "showDialog"
     const val GameStatus = "gameStatus"
     const val LastWinPlace = "lastWinPlace"
@@ -41,7 +40,6 @@ sealed class Place {
     class WinPlace(val place: Int): Place()
 }
 
-typealias ElapsedTimeEvent = MyLiveData<Long>
 typealias ShowDialogEvent = MyLiveData<Boolean>
 typealias GameStatusEvent = MyLiveData<GameStatus>
 typealias LastWinPlaceEvent = MyLiveData<Place>

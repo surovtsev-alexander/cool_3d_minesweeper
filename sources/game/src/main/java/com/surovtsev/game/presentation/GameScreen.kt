@@ -34,6 +34,7 @@ import com.surovtsev.game.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.game.viewmodel.*
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.utils.timers.TimeSpanFlow
 
 @Composable
 fun GameScreen(
@@ -103,6 +104,7 @@ fun GameScreenControls(
                 Row {
                     Controls(
                         viewModel.bombsLeftValue,
+                        viewModel.timeSpanFlow,
                         gameScreenEvents,
                         gameControls.removeMarkedBombsControl,
                         gameControls.removeZeroBordersControl
@@ -232,6 +234,7 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     bombsLeftValue: BombsLeftValue,
+    timeSpanFlow: TimeSpanFlow,
     gameScreenEvents: GameScreenEvents,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
@@ -266,7 +269,7 @@ fun Controls(
         ) {
             GameInfo(
                 bombsLeftValue,
-                gameScreenEvents.elapsedTimeEvent
+                timeSpanFlow
             )
         }
     }
@@ -333,14 +336,14 @@ fun ControlCheckBox(
 @Composable
 fun GameInfo(
     bombsLeftValue: BombsLeftValue,
-    elapsedTimeEvent: ElapsedTimeEvent
+    timeSpanFlow: TimeSpanFlow,
 ) {
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
         BombsLeft(bombsLeftValue)
-        TimeElapsed(elapsedTimeEvent)
+        TimeElapsed(timeSpanFlow)
     }
 }
 
@@ -356,11 +359,9 @@ fun BombsLeft(
 
 @Composable
 fun TimeElapsed(
-    elapsedTimeEvent: ElapsedTimeEvent
+    timeSpanFlow: TimeSpanFlow
 ) {
-    val elapsed: Long by elapsedTimeEvent.run {
-        data.observeAsState(defaultValue)
-    }
+    val elapsed = timeSpanFlow.collectAsState(0).value
     Text(
         DateUtils.formatElapsedTime(
             elapsed / 1000,

@@ -30,6 +30,7 @@ import com.surovtsev.game.viewmodel.GameScreenStateValue
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
+import com.surovtsev.utils.timers.TimeSpanFlow
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Binds
 import dagger.BindsInstance
@@ -80,6 +81,8 @@ interface GameComponentEntryPoint {
     val gameScreenStateValue: GameScreenStateValue
 
     val bombsLeftValue: BombsLeftValue
+
+    val timeSpanFlow: TimeSpanFlow
 }
 
 @Module
@@ -116,13 +119,6 @@ object GameModule {
 @Module
 @InstallIn(GameComponent::class)
 object GameEventsModule {
-    @GameScope
-    @Provides
-    @Named(GameScreenEventsNames.ElapsedTime)
-    fun provideElapsedTime(): ElapsedTimeEvent {
-        return ElapsedTimeEvent(0L)
-    }
-
     @GameScope
     @Provides
     @Named(GameScreenEventsNames.ShowDialog)

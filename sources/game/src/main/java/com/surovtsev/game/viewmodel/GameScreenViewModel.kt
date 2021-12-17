@@ -17,7 +17,6 @@ import com.surovtsev.game.dagger.GameComponentEntryPoint
 import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.interaction.GameControls
-import com.surovtsev.game.viewmodel.helpers.BombsLeftData
 import com.surovtsev.game.viewmodel.helpers.BombsLeftValue
 import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.game.viewmodel.helpers.Place
@@ -26,10 +25,10 @@ import com.surovtsev.gamelogic.dagger.GameLogicComponent
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
+import com.surovtsev.utils.timers.TimeSpanFlow
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
@@ -72,6 +71,7 @@ class GameScreenViewModel @Inject constructor(
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
     val bombsLeftValue: BombsLeftValue
+    val timeSpanFlow: TimeSpanFlow
 
     override val stateHolder: GameScreenStateHolder
     override val stateValue: GameScreenStateValue
@@ -106,14 +106,15 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.rankingDao
         rankingListHelper =
             gameComponentEntryPoint.rankingListHelper
+        bombsLeftValue =
+            gameComponentEntryPoint.bombsLeftValue
+        timeSpanFlow =
+            gameComponentEntryPoint.timeSpanFlow
 
         stateHolder =
             gameComponentEntryPoint.gameScreenStateHolder
         stateValue =
             gameComponentEntryPoint.gameScreenStateValue
-
-        bombsLeftValue =
-            gameComponentEntryPoint.bombsLeftValue
 
         val touchListenerComponent = touchListenerComponentProvider
             .get()

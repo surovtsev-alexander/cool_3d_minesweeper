@@ -47,8 +47,6 @@ class MinesweeperController @Inject constructor(
 
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.resumeIfNeeded()
-
-        gameLogic.gameLogicStateHelper.notifyTimeUpdated()
     }
 
     override fun onDrawFrame() {

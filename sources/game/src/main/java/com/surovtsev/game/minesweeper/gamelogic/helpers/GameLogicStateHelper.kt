@@ -54,16 +54,9 @@ class GameLogicStateHelper @Inject constructor(
         timeSpan.flush()
     }
 
-    fun notifyTimeUpdated() {
-        gameScreenEventsReceiver.timeUpdated(getElapsed())
-    }
-
     override fun tick() {
         if (timeSpan.isOn()) {
             timeSpan.tick()
-            if (timeSpan.getAndRelease()) {
-                notifyTimeUpdated()
-            }
         }
     }
 

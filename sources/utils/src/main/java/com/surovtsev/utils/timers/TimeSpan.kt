@@ -2,15 +2,19 @@ package com.surovtsev.utils.timers
 
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
-import com.surovtsev.utils.statehelpers.UpdatableImp
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+typealias TimeSpanFlowData = MutableStateFlow<Long>
+typealias TimeSpanFlow = StateFlow<Long>
 
 
 class TimeSpan(
     private val interval: Long,
     private val timeSpanHelper: TimeSpanHelperImp,
+    private val timeSpanFlowData: TimeSpanFlowData,
 ):
     TimeUpdater,
-    UpdatableImp(),
     Switch
 {
     override fun subscribe(x: Tickable) {
@@ -35,13 +39,14 @@ class TimeSpan(
         elapsedTimeBeforePause = 0L
         onTime = timeAfterDeviceStartup()
         prev = onTime
+        timeSpanFlowData.value = getElapsed()
     }
 
     fun tick() {
         val currTime = timeAfterDeviceStartup()
 
         if (currTime - prev >= interval) {
-            update()
+            timeSpanFlowData.value = getElapsed()
             prev = currTime
         }
     }
@@ -58,7 +63,7 @@ class TimeSpan(
         onTime = timeAfterDeviceStartup()
         prev = onTime
 
-        update()
+        timeSpanFlowData.value = getElapsed()
     }
 
     override fun turnOff() {
