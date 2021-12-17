@@ -5,12 +5,16 @@ import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControlsNames
 import com.surovtsev.game.models.game.interaction.MarkOnShortTapControl
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Named
 
+typealias BombsLeftData = MutableStateFlow<Int>
+typealias BombsLeftValue = StateFlow<Int>
+
 object GameScreenEventsNames {
     const val ElapsedTime = "elapsedTime"
-    const val BombsLeft = "bombsLeft"
     const val ShowDialog = "showDialog"
     const val GameStatus = "gameStatus"
     const val LastWinPlace = "lastWinPlace"
@@ -38,7 +42,6 @@ sealed class Place {
 }
 
 typealias ElapsedTimeEvent = MyLiveData<Long>
-typealias BombsLeftEvent = MyLiveData<Int>
 typealias ShowDialogEvent = MyLiveData<Boolean>
 typealias GameStatusEvent = MyLiveData<GameStatus>
 typealias LastWinPlaceEvent = MyLiveData<Place>

@@ -40,6 +40,8 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Named
 
 @GameScope
@@ -76,6 +78,8 @@ interface GameComponentEntryPoint {
 
     val gameScreenStateHolder: GameScreenStateHolder
     val gameScreenStateValue: GameScreenStateValue
+
+    val bombsLeftValue: BombsLeftValue
 }
 
 @Module
@@ -117,13 +121,6 @@ object GameEventsModule {
     @Named(GameScreenEventsNames.ElapsedTime)
     fun provideElapsedTime(): ElapsedTimeEvent {
         return ElapsedTimeEvent(0L)
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameScreenEventsNames.BombsLeft)
-    fun provideBombsLeft(): BombsLeftEvent {
-        return BombsLeftEvent(0)
     }
 
     @GameScope
@@ -225,7 +222,9 @@ object GameControllerModule {
         gameConfig: GameConfig,
         gameScreenEventsReceiver: GameScreenEventsReceiver,
         cubeOpenGLModel: CubeOpenGLModel,
-        gameLogicStateHelper: GameLogicStateHelper
+        gameLogicStateHelper: GameLogicStateHelper,
+        bombsLeftData: BombsLeftData,
+        bombsleftValue: BombsLeftValue
     ): GameLogic {
         val res  =
             GameLogic(
@@ -233,7 +232,8 @@ object GameControllerModule {
                 cubeOpenGLModel,
                 gameConfig,
                 gameScreenEventsReceiver,
-                gameLogicStateHelper
+                gameLogicStateHelper,
+                bombsLeftData,
             )
         if (save != null) {
             save.gameLogicToSave.applySavedData(res)
@@ -276,4 +276,23 @@ object SceneSettingsModule {
     @Provides
     @Named(Scene.PointerEnabledName)
     fun providePointerEnabled() = false
+}
+
+@Module
+@InstallIn(GameComponent::class)
+object InteractionModule {
+    @GameScope
+    @Provides
+    fun provideBombsLeftData(
+    ): BombsLeftData {
+        return MutableStateFlow(0)
+    }
+
+    @GameScope
+    @Provides
+    fun provideBombsLeftValue(
+        bombsLeftData: BombsLeftData
+    ): BombsLeftValue {
+        return bombsLeftData.asStateFlow()
+    }
 }

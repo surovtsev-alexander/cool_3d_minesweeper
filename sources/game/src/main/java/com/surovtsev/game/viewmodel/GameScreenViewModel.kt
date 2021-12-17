@@ -11,21 +11,25 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.dagger.GameComponentEntryPoint
 import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.interaction.GameControls
+import com.surovtsev.game.viewmodel.helpers.BombsLeftData
+import com.surovtsev.game.viewmodel.helpers.BombsLeftValue
 import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.game.viewmodel.helpers.Place
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
+import com.surovtsev.gamelogic.dagger.GameLogicComponent
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerEntryPoint
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Provider
@@ -41,6 +45,7 @@ typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 class GameScreenViewModel @Inject constructor(
     gameComponentProvider: Provider<GameComponent.Builder>,
     touchListenerComponentProvider: Provider<TouchListenerComponent.Builder>,
+    gameLogicComponentProvider: Provider<GameLogicComponent.Builder>,
     savedStateHandle: SavedStateHandle,
     private val timeSpanHelperImp: TimeSpanHelperImp,
 ):
@@ -53,13 +58,12 @@ class GameScreenViewModel @Inject constructor(
 {
     val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
-    val minesweeperController: MinesweeperController
-
-    private val gameRenderer: GLESRenderer
-
     // see ::onDestroy
     @SuppressLint("StaticFieldLeak")
     var gLSurfaceView: GLSurfaceView? = null
+
+    val minesweeperController: MinesweeperController
+    private val gameRenderer: GLESRenderer
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
     private val gameConfig: GameConfig
@@ -67,6 +71,7 @@ class GameScreenViewModel @Inject constructor(
     private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
+    val bombsLeftValue: BombsLeftValue
 
     override val stateHolder: GameScreenStateHolder
     override val stateValue: GameScreenStateValue
@@ -81,12 +86,14 @@ class GameScreenViewModel @Inject constructor(
             gameComponent, GameComponentEntryPoint::class.java
         )
 
+        gLSurfaceView =
+            gameComponentEntryPoint.gLSurfaceView
+
+
         minesweeperController =
             gameComponentEntryPoint.minesweeperController
         gameRenderer =
             gameComponentEntryPoint.gameRenderer
-        gLSurfaceView =
-            gameComponentEntryPoint.gLSurfaceView
         gameScreenEvents =
             gameComponentEntryPoint.gameScreenEvents
         gameControls =
@@ -104,6 +111,9 @@ class GameScreenViewModel @Inject constructor(
             gameComponentEntryPoint.gameScreenStateHolder
         stateValue =
             gameComponentEntryPoint.gameScreenStateValue
+
+        bombsLeftValue =
+            gameComponentEntryPoint.bombsLeftValue
 
         val touchListenerComponent = touchListenerComponentProvider
             .get()
@@ -176,6 +186,15 @@ class GameScreenViewModel @Inject constructor(
     }
 
     private suspend fun newGame() {
+//        val gameLogicComponent = gameLogicComponentProvider
+//            .get()
+////            .loadGame(loadGame)
+//            .build()
+//        val gameLogicComponentEntryPoint = EntryPoints.get(
+//            gameLogicComponent,
+//            GameLogicComponentEntryPoint::class.java
+//        )
+
 
     }
 

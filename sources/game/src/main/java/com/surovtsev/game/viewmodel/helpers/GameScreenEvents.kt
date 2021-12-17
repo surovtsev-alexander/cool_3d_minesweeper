@@ -8,8 +8,6 @@ class GameScreenEvents @Inject constructor(
     var markingEvent: MarkingEvent,
     @Named(GameScreenEventsNames.ElapsedTime)
     var elapsedTimeEvent: ElapsedTimeEvent,
-    @Named(GameScreenEventsNames.BombsLeft)
-    var bombsLeftEvent: BombsLeftEvent,
     @Named(GameScreenEventsNames.ShowDialog)
     var showDialogEvent: ShowDialogEvent,
     @Named(GameScreenEventsNames.LastWinPlace)

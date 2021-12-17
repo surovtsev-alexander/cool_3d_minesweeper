@@ -3,7 +3,6 @@ package com.surovtsev.game.minesweeper.gamelogic
 import com.surovtsev.game.minesweeper.gamelogic.helpers.BombPlacer
 import com.surovtsev.game.minesweeper.gamelogic.helpers.GameLogicStateHelper
 import com.surovtsev.game.minesweeper.gamelogic.helpers.NeighboursCalculator
-import com.surovtsev.utils.androidview.interaction.TouchType
 import com.surovtsev.game.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
 import com.surovtsev.game.models.game.cellpointers.CellIndex
 import com.surovtsev.game.models.game.cellpointers.CellRange
@@ -12,14 +11,18 @@ import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.skin.cube.CubeSkin
 import com.surovtsev.game.utils.utils.gles.interfaces.TextureUpdater
+import com.surovtsev.game.viewmodel.helpers.BombsLeftData
 import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
+import com.surovtsev.utils.androidview.interaction.TouchType
+
 
 class GameLogic(
     private val cubeSkin: CubeSkin,
     private val textureUpdater: TextureUpdater,
     private val gameConfig: GameConfig,
     private val gameScreenEventsReceiver: GameScreenEventsReceiver,
-    val gameLogicStateHelper: GameLogicStateHelper
+    val gameLogicStateHelper: GameLogicStateHelper,
+    private val bombsLeftData: BombsLeftData,
 ) {
 
     private data class PrevClickInfo(var id: Int, var time: Long)
@@ -34,8 +37,6 @@ class GameLogic(
 
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()
-
-    private var bombsLeft = 0
 
     fun applySavedData(
         cubesToOpen_: List<CellIndex>,
@@ -81,17 +82,11 @@ class GameLogic(
     }
 
     fun setBombsLeft(v: Int) {
-        bombsLeft = v
-        notifyBombsCountUpdated()
+        bombsLeftData.value = v
     }
 
     private fun decBombsLeft() {
-        bombsLeft--
-        notifyBombsCountUpdated()
-    }
-
-    fun notifyBombsCountUpdated() {
-        gameScreenEventsReceiver.bombCountUpdated(bombsLeft)
+        bombsLeftData.value -= 1
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
@@ -136,7 +131,7 @@ class GameLogic(
 
         setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EMPTY)
 
-        if (bombsLeft == 0) {
+        if (bombsLeftData.value == 0) {
             gameLogicStateHelper.setGameState(GameStatus.Win)
         }
     }

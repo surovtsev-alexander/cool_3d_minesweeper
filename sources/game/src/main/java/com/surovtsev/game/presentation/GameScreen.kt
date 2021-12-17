@@ -13,6 +13,7 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -101,6 +102,7 @@ fun GameScreenControls(
                 }
                 Row {
                     Controls(
+                        viewModel.bombsLeftValue,
                         gameScreenEvents,
                         gameControls.removeMarkedBombsControl,
                         gameControls.removeZeroBordersControl
@@ -229,6 +231,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
+    bombsLeftValue: BombsLeftValue,
     gameScreenEvents: GameScreenEvents,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
     removeZeroBordersControl: RemoveZeroBordersControl
@@ -262,7 +265,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                gameScreenEvents.bombsLeftEvent,
+                bombsLeftValue,
                 gameScreenEvents.elapsedTimeEvent
             )
         }
@@ -286,7 +289,9 @@ fun ControlButtons(
             Text("V")
         }
         Button(
-            onClick = { removeZeroBordersControl.update() },
+            onClick = {
+                removeZeroBordersControl.update()
+            },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("O")
@@ -327,25 +332,23 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    bombsLeftEvent: BombsLeftEvent,
+    bombsLeftValue: BombsLeftValue,
     elapsedTimeEvent: ElapsedTimeEvent
 ) {
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        BombsLeft(bombsLeftEvent)
+        BombsLeft(bombsLeftValue)
         TimeElapsed(elapsedTimeEvent)
     }
 }
 
 @Composable
 fun BombsLeft(
-    bombsLeftEvent: BombsLeftEvent
+    bombsLeftValue: BombsLeftValue
 ) {
-    val bombsLeft: Int by bombsLeftEvent.run {
-        data.observeAsState(defaultValue)
-    }
+    val bombsLeft = bombsLeftValue.collectAsState(initial = 0).value
     Text(
         bombsLeft.toString()
     )

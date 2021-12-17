@@ -48,7 +48,6 @@ class MinesweeperController @Inject constructor(
         timeSpanHelper.tick()
         gameLogic.gameLogicStateHelper.resumeIfNeeded()
 
-        gameLogic.notifyBombsCountUpdated()
         gameLogic.gameLogicStateHelper.notifyTimeUpdated()
     }
 
