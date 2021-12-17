@@ -9,9 +9,9 @@ import com.surovtsev.cool3dminesweeper.test.TestViewModelAssistedFactory
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.ViewModelAssistedFactory
 
 class LambdaFactory<T: ViewModel>(
-    private val viewModelFactory: TestViewModelAssistedFactory<T>,
+//    private val viewModelFactory: TestViewModelAssistedFactory<T>,
     savedStateRegistryOwner: SavedStateRegistryOwner,
-    defaultArgs: Bundle? = null
+    private val create: (handle: SavedStateHandle) -> T,
 ): AbstractSavedStateViewModelFactory(savedStateRegistryOwner, null) {
 
     @Suppress("UNCHECKED_CAST")
@@ -20,6 +20,6 @@ class LambdaFactory<T: ViewModel>(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        return viewModelFactory.create(handle) as T
+        return create.invoke(handle) as T
     }
 }

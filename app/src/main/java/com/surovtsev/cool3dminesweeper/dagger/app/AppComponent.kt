@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MyViewModel
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -31,6 +32,8 @@ import javax.inject.Singleton
     ]
 )
 interface AppComponent {
+    var factory: MyViewModel.Factory
+
     val saveController: SaveController
 //    fun mainScreenViewModelFactory(): MainScreenViewModel.Factory
 

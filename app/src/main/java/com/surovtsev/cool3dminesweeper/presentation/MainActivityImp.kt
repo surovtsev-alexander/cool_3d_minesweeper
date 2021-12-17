@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -20,6 +21,7 @@ import com.surovtsev.cool3dminesweeper.test.Config
 import com.surovtsev.cool3dminesweeper.test.TestClass
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MyViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
@@ -91,6 +93,14 @@ class MainActivityImp: MainActivity() {
                         viewModel,
                         navController
                     )
+
+                    val x: MyViewModel by viewModels {
+                        LambdaFactory(savedStateRegistryOwner) { stateHandle ->
+                            appComponent.factory.build(stateHandle, "test")
+                        }
+                    }
+
+                    logcat { "x: ${System.identityHashCode(x)}" }
 
 
 //                    val testClass = appComponent.testClassFactory.create(Config("hello from config!"))
