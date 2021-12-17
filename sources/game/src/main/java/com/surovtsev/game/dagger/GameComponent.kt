@@ -30,7 +30,8 @@ import com.surovtsev.game.viewmodel.GameScreenStateValue
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
-import com.surovtsev.utils.timers.TimeSpanFlow
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Binds
 import dagger.BindsInstance
@@ -54,6 +55,7 @@ interface GameComponent {
     @DefineComponent.Builder
     interface Builder {
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
+        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
         fun build(): GameComponent
     }
 }
@@ -82,7 +84,7 @@ interface GameComponentEntryPoint {
 
     val bombsLeftValue: BombsLeftValue
 
-    val timeSpanFlow: TimeSpanFlow
+    val timeSpan: TimeSpan
 }
 
 @Module
@@ -290,5 +292,16 @@ object InteractionModule {
         bombsLeftData: BombsLeftData
     ): BombsLeftValue {
         return bombsLeftData.asStateFlow()
+    }
+
+    @GameScope
+    @Provides
+    fun provideTimeSpan(
+        timeSpanHelper: TimeSpanHelperImp,
+    ): TimeSpan {
+        return TimeSpan(
+            1000L,
+            timeSpanHelper,
+        )
     }
 }

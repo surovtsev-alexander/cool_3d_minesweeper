@@ -9,12 +9,9 @@ import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
-import com.surovtsev.utils.coroutines.CustomScope
-import com.surovtsev.utils.timers.TimeSpan
-import com.surovtsev.utils.timers.TimeSpanFlow
-import com.surovtsev.utils.timers.TimeSpanFlowData
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Module
 import dagger.Provides
@@ -22,8 +19,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
@@ -46,9 +41,10 @@ object AppModule {
             .build()
 
         runBlocking {
-            val customScope = CustomScope(Dispatchers.IO)
+            val customScope = CustomCoroutineScope(Dispatchers.IO)
             customScope.launch {
                 do {
+                    /* TODO: move from dagger. */
                     val settingsDao = res.settingsDao()
                     val needToPrepopulate = settingsDao.getCount() == 0
 
@@ -85,6 +81,7 @@ object AppModule {
                     }
                 } while (false)
             }.join()
+            customScope.onStop()
         }
         return res
     }
@@ -134,33 +131,5 @@ object AppModule {
     fun provideTimeSpanHelperImp(
     ): TimeSpanHelperImp {
         return TimeSpanHelperImp()
-    }
-
-    @Singleton
-    @Provides
-    fun provideTimeSpan(
-        timeSpanHelper: TimeSpanHelperImp,
-        timeSpanFlowData: TimeSpanFlowData,
-    ): TimeSpan {
-        return TimeSpan(
-            1000L,
-            timeSpanHelper,
-            timeSpanFlowData,
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideTimeSpanFlowData(
-    ): TimeSpanFlowData {
-        return MutableStateFlow(0)
-    }
-
-    @Singleton
-    @Provides
-    fun provideTimeSpanFlow(
-        timeSpanFlowData: TimeSpanFlowData
-    ): TimeSpanFlow {
-        return timeSpanFlowData.asStateFlow()
     }
 }

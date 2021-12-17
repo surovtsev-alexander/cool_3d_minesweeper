@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-class CustomScope(
-    val dispatcher: CoroutineDispatcher = Dispatchers.Main
+class CustomCoroutineScope(
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ): CoroutineScope {
     private var parentJob = Job()
 

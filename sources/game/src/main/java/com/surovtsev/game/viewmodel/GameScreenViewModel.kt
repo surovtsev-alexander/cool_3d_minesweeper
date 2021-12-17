@@ -109,7 +109,7 @@ class GameScreenViewModel @Inject constructor(
         bombsLeftValue =
             gameComponentEntryPoint.bombsLeftValue
         timeSpanFlow =
-            gameComponentEntryPoint.timeSpanFlow
+            gameComponentEntryPoint.timeSpan.timeSpanFlow
 
         stateHolder =
             gameComponentEntryPoint.gameScreenStateHolder

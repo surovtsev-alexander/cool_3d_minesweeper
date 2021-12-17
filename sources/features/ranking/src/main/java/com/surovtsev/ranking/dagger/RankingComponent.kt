@@ -1,12 +1,13 @@
 package com.surovtsev.ranking.dagger
 
-import com.surovtsev.core.helpers.*
+import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenInitialState
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateHolder
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateValue
 import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.DefineComponent
@@ -59,5 +60,16 @@ object RankingModule {
         rankingScreenStateHolder: RankingScreenStateHolder
     ): RankingScreenStateValue {
         return rankingScreenStateHolder
+    }
+
+    @RankingScope
+    @Provides
+    fun provideTimeSpan(
+        timeSpanHelper: TimeSpanHelperImp,
+    ): TimeSpan {
+        return TimeSpan(
+            1000L,
+            timeSpanHelper,
+        )
     }
 }
