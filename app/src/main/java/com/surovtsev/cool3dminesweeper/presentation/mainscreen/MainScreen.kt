@@ -127,42 +127,42 @@ class MainScreenUI(
     fun MainScreenButton(
         buttonName: String,
     ) {
-//        val buttonInfo = viewModel.buttonsInfo[buttonName]!!
-//
-//        val buttonType = buttonInfo.buttonType
-//        val isNewGameButton =
-//            buttonType == MainScreenButtonType.NewGameButton
-//        val isLoadGameButton =
-//            buttonType == MainScreenButtonType.LoadGameButton
+        val buttonInfo = viewModel.buttonsInfo[buttonName]!!
 
-//        val onClickAction = if (isNewGameButton || isLoadGameButton) {
-//            {
-//                navController.navigate(
-//                    buttonInfo.screen.withArgs(
-//                        isLoadGameButton.toString()
-//                    )
-//                )
-//            }
-//        } else {
-//            {
-//                navController.navigate(buttonInfo.screen.route)
-//            }
-//        }
-//
-//        val enabled = !isLoadGameButton || viewModel.hasSave()
-//
-//        Button(
-//            onClick = onClickAction,
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(5.dp, 10.dp),
-//            border = BorderStroke(1.dp, Color.Black),
-//            shape = Shapes.small,
-//            enabled = enabled
-//        ) {
-//            Text(
-//                text = buttonInfo.caption
-//            )
-//        }
+        val buttonType = buttonInfo.buttonType
+        val isNewGameButton =
+            buttonType == MainScreenButtonType.NewGameButton
+        val isLoadGameButton =
+            buttonType == MainScreenButtonType.LoadGameButton
+
+        val onClickAction = if (isNewGameButton || isLoadGameButton) {
+            {
+                navController.navigate(
+                    buttonInfo.screen.withArgs(
+                        isLoadGameButton.toString()
+                    )
+                )
+            }
+        } else {
+            {
+                navController.navigate(buttonInfo.screen.route)
+            }
+        }
+
+        val enabled = !isLoadGameButton || viewModel.hasSave()
+
+        Button(
+            onClick = onClickAction,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(5.dp, 10.dp),
+            border = BorderStroke(1.dp, Color.Black),
+            shape = Shapes.small,
+            enabled = enabled
+        ) {
+            Text(
+                text = buttonInfo.caption
+            )
+        }
     }
 }

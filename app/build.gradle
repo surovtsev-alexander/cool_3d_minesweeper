@@ -125,4 +125,7 @@ dependencies {
 
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    // lifecycle-viewmodel-savestate: 1.0.0-alpha01
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0"
 }
