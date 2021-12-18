@@ -6,25 +6,22 @@ import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.lifecycle.SavedStateViewModelFactory
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.appComponent
-import com.surovtsev.cool3dminesweeper.dagger.app.LambdaFactory
-import com.surovtsev.cool3dminesweeper.dagger.app.TestSavedStateViewModelFactory
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
-import com.surovtsev.cool3dminesweeper.test.Config
-import com.surovtsev.cool3dminesweeper.test.TestClass
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MyViewModel
+import com.surovtsev.cool3dminesweeper.unused.test.MyViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.settings.presentation.SettingsScreen
+import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
+import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
 import logcat.logcat
 
 //class Factory<T: ViewModel>(
@@ -54,6 +51,8 @@ class MainActivityImp: MainActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     private fun initUI() {
         val savedStateRegistryOwner: SavedStateRegistryOwner = this
+        val context = applicationContext
+        val appComponent = appComponent
 
         val metrics = applicationContext.resources.displayMetrics
         val activityWidth = metrics.widthPixels
@@ -83,28 +82,19 @@ class MainActivityImp: MainActivity() {
                         )
                     }
                 ) {
-//                    val viewModel by viewModels<MainScreenViewModel> {
-//                        appComponent.viewModelFactory<MainScreenViewModel>(
-//                            savedStateRegistryOwner
-//                        )
-//                    }
-                    val viewModel by viewModels<MainScreenViewModel> {  appComponent.viewModelFactory() }
+
+                    val viewModel: MainScreenViewModel by viewModels {
+                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
+                            appComponent.mainScreenViewModelFactory.build(
+                                stateHandler, context, appComponent
+                            )
+                        }
+
+                    }
                     MainScreen(
                         viewModel,
                         navController
                     )
-
-                    val x: MyViewModel by viewModels {
-                        LambdaFactory(savedStateRegistryOwner) { stateHandle ->
-                            appComponent.factory.build(stateHandle, "test")
-                        }
-                    }
-
-                    logcat { "x: ${System.identityHashCode(x)}" }
-
-
-//                    val testClass = appComponent.testClassFactory.create(Config("hello from config!"))
-//                    logcat { "testClass.config.message: ${testClass.config.message}" }
                 }
 //                composable(
 //                    route = Screen.GameScreen.route + "/{$LoadGameParameterName}",
@@ -138,18 +128,24 @@ class MainActivityImp: MainActivity() {
 //                        navController
 //                    )
 //                }
-//                composable(
-//                    route = Screen.SettingsScreen.route,
-//                    enterTransition = navAnimHelper.concreteEnterSliding.fromRight,
-//                    exitTransition = navAnimHelper.concreteExitException.toRight,
-//                ) { entry ->
-//                    val viewModel: SettingsScreenViewModel = hiltViewModel()
-//                    entry.lifecycle.addObserver(viewModel)
-//                    SettingsScreen(
-//                        viewModel,
-//                        navController
-//                    )
-//                }
+                composable(
+                    route = Screen.SettingsScreen.route,
+                    enterTransition = navAnimHelper.concreteEnterSliding.fromRight,
+                    exitTransition = navAnimHelper.concreteExitException.toRight,
+                ) { entry ->
+                    val viewModel: SettingsScreenViewModel by viewModels {
+                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
+                            appComponent.settingsScreenViewModelFactory.build(
+                                stateHandler, context, appComponent
+                            )
+                        }
+                    }
+                    entry.lifecycle.addObserver(viewModel)
+                    SettingsScreen(
+                        viewModel,
+                        navController
+                    )
+                }
                 composable(
                     route = Screen.HelpScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromBottom,

@@ -1,35 +1,25 @@
 package com.surovtsev.settings.dagger
 
+import com.surovtsev.core.dagger.components.RootComponent
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.settings.viewmodel.SettingsScreenInitialState
 import com.surovtsev.settings.viewmodel.SettingsScreenStateHolder
 import com.surovtsev.settings.viewmodel.SettingsScreenStateValue
+import dagger.Component
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 
-@DefineComponent(
-    parent = ViewModelComponent::class
+@SettingsScope
+@Component(
+    dependencies = [
+        RootComponent::class,
+    ],
+    modules = [
+        SettingsModule::class,
+    ]
 )
-@SettingsScope
 interface SettingsComponent {
-
-
-    @DefineComponent.Builder
-    interface Builder {
-
-        fun build(): SettingsComponent
-    }
-}
-
-@InstallIn(SettingsComponent::class)
-@EntryPoint
-@SettingsScope
-interface SettingsComponentEntryPoint {
     val settingsDao: SettingsDao
     val saveController: SaveController
 
@@ -37,10 +27,9 @@ interface SettingsComponentEntryPoint {
     val settingsScreenStateValue: SettingsScreenStateValue
 }
 
-@Module
-@InstallIn(SettingsComponent::class)
-object SettingsModule {
 
+@Module
+object SettingsModule {
     @SettingsScope
     @Provides
     fun provideSettingsScreenStateHolder(

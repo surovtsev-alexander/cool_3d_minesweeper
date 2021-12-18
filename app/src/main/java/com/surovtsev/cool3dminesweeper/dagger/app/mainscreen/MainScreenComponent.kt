@@ -30,50 +30,45 @@ interface MainScreenComponent {
 
 @Module
 object MainScreenModule {
-    @[IntoMap StringKey(MainScreenViewModel.NewGame)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.NewGame)]
     @MainScreenScope
     @Provides
     fun provideNewGameButtonInfo() =
         MainScreenButtonInfo(
             Screen.GameScreen,
-            MainScreenViewModel.NewGame,
             MainScreenButtonType.NewGameButton
         )
 
-    @[IntoMap StringKey(MainScreenViewModel.LoadGame)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.LoadGame)]
     @MainScreenScope
     @Provides
     fun provideLoadGameButtonInfo() =
         MainScreenButtonInfo(
             Screen.GameScreen,
-            MainScreenViewModel.LoadGame,
             MainScreenButtonType.LoadGameButton
         )
 
-    @[IntoMap StringKey(MainScreenViewModel.Ranking)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.Ranking)]
     @MainScreenScope
     @Provides
     fun provideRankingButtonInfo() =
         MainScreenButtonInfo(
-            Screen.RankingScreen,
-            MainScreenViewModel.Ranking
+            Screen.RankingScreen
         )
 
-    @[IntoMap StringKey(MainScreenViewModel.Settings)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.Settings)]
     @MainScreenScope
     @Provides
     fun provideSettingsButtonInfo() =
         MainScreenButtonInfo(
-            Screen.SettingsScreen,
-            MainScreenViewModel.Settings
+            Screen.SettingsScreen
         )
 
-    @[IntoMap StringKey(MainScreenViewModel.Help)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.Help)]
     @MainScreenScope
     @Provides
     fun provideHelpButtonInfo() =
         MainScreenButtonInfo(
-            Screen.HelpScreen,
-            MainScreenViewModel.Help
+            Screen.HelpScreen
         )
 }

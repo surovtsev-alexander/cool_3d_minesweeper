@@ -58,8 +58,8 @@ class MainScreenUI(
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         TwoButtonsInRow(
-                            firstButtonName = MainScreenViewModel.NewGame,
-                            secondButtonName = MainScreenViewModel.LoadGame,
+                            firstButtonName = MainScreenViewModel.ButtonNames.NewGame,
+                            secondButtonName = MainScreenViewModel.ButtonNames.LoadGame,
                             rowScope = this,
                         )
                     }
@@ -70,8 +70,8 @@ class MainScreenUI(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         TwoButtonsInRow(
-                            firstButtonName = MainScreenViewModel.Ranking,
-                            secondButtonName = MainScreenViewModel.Settings,
+                            firstButtonName = MainScreenViewModel.ButtonNames.Ranking,
+                            secondButtonName = MainScreenViewModel.ButtonNames.Settings,
                             rowScope = this,
                         )
                     }
@@ -86,7 +86,7 @@ class MainScreenUI(
                                 .fillMaxWidth(0.5f)
                         ) {
                             MainScreenButton(
-                                MainScreenViewModel.Help,
+                                MainScreenViewModel.ButtonNames.Help,
                             )
                         }
                     }
@@ -161,7 +161,7 @@ class MainScreenUI(
             enabled = enabled
         ) {
             Text(
-                text = buttonInfo.caption
+                text = buttonName
             )
         }
     }

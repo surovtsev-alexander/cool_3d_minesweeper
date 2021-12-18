@@ -22,9 +22,9 @@ project(utilsModule).projectDir = new File(rootDir, "sources/utils")
 //include rankingModule
 //project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking")
 //
-//include settingsModule
-//project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
-//
+include settingsModule
+project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
+
 //include gameModule
 //project(gameModule).projectDir = new File(rootDir, "sources/game")
 //

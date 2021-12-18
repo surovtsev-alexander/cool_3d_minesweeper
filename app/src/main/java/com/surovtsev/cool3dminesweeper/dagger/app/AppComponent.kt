@@ -1,10 +1,9 @@
 package com.surovtsev.cool3dminesweeper.dagger.app
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
 import androidx.room.Room
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MyViewModel
+import com.surovtsev.core.dagger.components.RootComponent
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -12,30 +11,26 @@ import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
-import dagger.multibindings.IntoMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.inject.Singleton
 
 
 @AppScope
 @Component(
     modules = [
-        ViewModelHelper::class,
         AppModule::class,
     ]
 )
-interface AppComponent {
-    var factory: MyViewModel.Factory
-
-    val saveController: SaveController
-//    fun mainScreenViewModelFactory(): MainScreenViewModel.Factory
+interface AppComponent: RootComponent {
+    val mainScreenViewModelFactory: MainScreenViewModel.Factory
+    val settingsScreenViewModelFactory: SettingsScreenViewModel.Factory
 
     @Component.Builder
     interface Builder {
@@ -43,15 +38,6 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun viewModelFactory(): ViewModelFactory
-}
-
-@Module
-abstract class ViewModelHelper {
-    @Binds
-    @IntoMap
-    @ViewModelKey(MainScreenViewModel::class)
-    abstract fun mainScreenViewModel(viewModel: MainScreenViewModel): ViewModel
 }
 
 @Module

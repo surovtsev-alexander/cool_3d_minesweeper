@@ -6,26 +6,26 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.appComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.DaggerMainScreenComponent
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
+import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import logcat.logcat
-import javax.inject.Inject
 
-interface ViewModelAssistedFactory<T : ViewModel> {
-    fun create(handle: SavedStateHandle): T
-}
 
-class MainScreenViewModel @Inject constructor(
-    context: Context,
-//    @Assisted
-//    savedStateHandle: SavedStateHandle,
+class MainScreenViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted context: Context,
+    @Assisted rootComponent: RootComponent,
 ): ViewModel() {
 
-//    @AssistedFactory
-//    interface Factory: ViewModelAssistedFactory<MainScreenViewModel> {
-//    }
+    @AssistedFactory
+    interface Factory: ViewModelAssistedFactory<MainScreenViewModel>
 
-    companion object {
+    object ButtonNames {
         const val NewGame = "new game"
         const val LoadGame = "load game"
         const val Ranking = "ranking"
@@ -49,17 +49,6 @@ class MainScreenViewModel @Inject constructor(
         saveController = mainScreenComponent.saveController
     }
 
-//    fun load(context: Context) {
-//        val mainScreenComponent = DaggerMainScreenComponent
-//            .builder()
-//            .appComponent(context.appComponent)
-//            .build()
-//
-//        buttonsInfo = mainScreenComponent.buttonInfo
-//        saveController = mainScreenComponent.saveController
-//
-//    }
-//
     fun hasSave() =
         saveController.hasData(
             SaveTypes.SaveGameJson

@@ -1,12 +1,9 @@
-package com.surovtsev.cool3dminesweeper.test
+package com.surovtsev.cool3dminesweeper.unused.test
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.dagger.app.AppScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import javax.inject.Inject
 
 @AppScope

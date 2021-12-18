@@ -1,37 +1,43 @@
 package com.surovtsev.settings.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
-import com.surovtsev.core.viewmodel.ScreenState
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.settings.dagger.DaggerSettingsComponent
 import com.surovtsev.settings.dagger.SettingsComponent
-import com.surovtsev.settings.dagger.SettingsComponentEntryPoint
-import dagger.hilt.EntryPoints
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import javax.inject.Provider
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
 typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
 
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
 
-@HiltViewModel
-class SettingsScreenViewModel @Inject constructor(
-    settingsComponentProvider: Provider<SettingsComponent.Builder>,
+class SettingsScreenViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted context: Context,
+    @Assisted rootComponent: RootComponent,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
         CommandFromSettingsScreen.LoadSettings, SettingsScreenData.NoData
     ),
     DefaultLifecycleObserver
 {
+
+    @AssistedFactory
+    interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
     private val settingsDao: SettingsDao
     private val saveController: SaveController
@@ -41,24 +47,20 @@ class SettingsScreenViewModel @Inject constructor(
 
     init {
         val settingsComponent: SettingsComponent =
-            settingsComponentProvider
-                .get()
+            DaggerSettingsComponent
+                .builder()
+                .rootComponent(rootComponent)
                 .build()
-        val settingsComponentEntryPoint: SettingsComponentEntryPoint =
-            EntryPoints.get(
-                settingsComponent,
-                SettingsComponentEntryPoint::class.java
-            )
 
         settingsDao =
-            settingsComponentEntryPoint.settingsDao
+            settingsComponent.settingsDao
         saveController =
-            settingsComponentEntryPoint.saveController
+            settingsComponent.saveController
 
         stateHolder =
-            settingsComponentEntryPoint.settingsScreenStateHolder
+            settingsComponent.settingsScreenStateHolder
         stateValue =
-            settingsComponentEntryPoint.settingsScreenStateValue
+            settingsComponent.settingsScreenStateValue
     }
 
     override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): CommandProcessor? {
