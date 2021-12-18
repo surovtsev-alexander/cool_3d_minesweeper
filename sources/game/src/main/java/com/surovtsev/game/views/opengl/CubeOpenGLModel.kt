@@ -3,23 +3,22 @@ package com.surovtsev.game.views.opengl
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.game.R
+import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.game.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.game.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
-import com.surovtsev.utils.gles.helpers.TextureHelper
-import com.surovtsev.game.utils.utils.gles.interfaces.TextureUpdater
-import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLModel
-import com.surovtsev.game.utils.gles.model.buffers.VertexArray
-import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.cellpointers.PointedCell
 import com.surovtsev.game.models.game.skin.cube.CubeSkin
 import com.surovtsev.game.models.gles.programs.CubeGLESProgram
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.surovtsev.game.utils.gles.model.buffers.VertexArray
+import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLModel
+import com.surovtsev.game.utils.utils.gles.interfaces.TextureUpdater
+import com.surovtsev.utils.gles.helpers.TextureHelper
 import javax.inject.Inject
 
 @GameScope
 class CubeOpenGLModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     private val cubeCoordinates: CubeCoordinates,
     val cubeGLESProgram: CubeGLESProgram,
 ):

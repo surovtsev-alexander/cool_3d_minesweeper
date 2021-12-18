@@ -2,6 +2,7 @@ package com.surovtsev.game.dagger
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import com.surovtsev.core.dagger.components.RootComponent
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -33,37 +34,27 @@ import com.surovtsev.game.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import dagger.Binds
-import dagger.BindsInstance
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Named
 
 @GameScope
-@DefineComponent(
-    parent = ViewModelComponent::class
+@Component(
+    dependencies = [
+        RootComponent::class,
+    ],
+    modules = [
+        GameModule::class,
+        GameEventsModule::class,
+        GameControlsModule::class,
+        GameControllerModule::class,
+        SceneSettingsModule::class,
+        GameControllerBindModule::class,
+        InteractionModule::class,
+    ]
 )
 interface GameComponent {
-
-    @DefineComponent.Builder
-    interface Builder {
-        fun loadGame(@BindsInstance loadGame: Boolean): Builder
-        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
-        fun build(): GameComponent
-    }
-}
-
-@InstallIn(GameComponent::class)
-@EntryPoint
-@GameScope
-interface GameComponentEntryPoint {
     val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
@@ -85,10 +76,20 @@ interface GameComponentEntryPoint {
     val bombsLeftValue: BombsLeftValue
 
     val timeSpan: TimeSpan
+
+
+    @Component.Builder
+    interface Builder {
+        fun rootComponent(rootComponent: RootComponent): Builder
+        fun loadGame(@BindsInstance loadGame: Boolean): Builder
+        fun context(@BindsInstance context: Context): Builder
+//        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
+        fun build(): GameComponent
+    }
 }
 
+
 @Module
-@InstallIn(GameComponent::class)
 object GameModule {
 
     @GameScope
@@ -111,7 +112,7 @@ object GameModule {
     @GameScope
     @Provides
     fun provideGLSurfaceView(
-        @ApplicationContext context: Context
+        context: Context
     ): GLSurfaceView {
         return GLSurfaceView(context)
     }
@@ -119,7 +120,6 @@ object GameModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 object GameEventsModule {
     @GameScope
     @Provides
@@ -144,7 +144,6 @@ object GameEventsModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 object GameControlsModule {
     @GameScope
     @Provides
@@ -169,7 +168,6 @@ object GameControlsModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 object GameControllerModule {
     @GameScope
     @Provides
@@ -255,7 +253,6 @@ object GameControllerModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 interface GameControllerBindModule {
     @GameScope
     @Binds
@@ -269,7 +266,6 @@ interface GameControllerBindModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 object SceneSettingsModule {
     @Provides
     @Named(Scene.PointerEnabledName)
@@ -277,7 +273,6 @@ object SceneSettingsModule {
 }
 
 @Module
-@InstallIn(GameComponent::class)
 object InteractionModule {
     @GameScope
     @Provides

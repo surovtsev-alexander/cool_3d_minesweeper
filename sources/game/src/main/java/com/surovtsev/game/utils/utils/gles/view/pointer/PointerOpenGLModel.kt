@@ -2,21 +2,20 @@ package com.surovtsev.game.utils.utils.gles.view.pointer
 
 import android.content.Context
 import android.opengl.GLES20.*
-import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLModel
+import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.utils.gles.model.buffers.VertexArray
 import com.surovtsev.game.utils.gles.model.pointer.Pointer
 import com.surovtsev.game.utils.gles.model.program.PointerGLESProgram
-import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLModel
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 /* TODO: refactoring */
 
 @GameScope
 class PointerOpenGLModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     private val pointer: Pointer,
     val mGLESProgram: PointerGLESProgram,
 ):

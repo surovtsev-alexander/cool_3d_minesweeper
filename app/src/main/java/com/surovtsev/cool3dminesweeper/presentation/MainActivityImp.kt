@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.savedstate.SavedStateRegistryOwner
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -18,6 +20,9 @@ import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreen
 import com.surovtsev.cool3dminesweeper.unused.test.MyViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.game.presentation.GameScreen
+import com.surovtsev.game.viewmodel.GameScreenViewModel
+import com.surovtsev.game.viewmodel.LoadGameParameterName
 import com.surovtsev.ranking.presentation.RankingScreen
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settings.presentation.SettingsScreen
@@ -98,26 +103,32 @@ class MainActivityImp: MainActivity() {
                         navController
                     )
                 }
-//                composable(
-//                    route = Screen.GameScreen.route + "/{$LoadGameParameterName}",
-//                    arguments = listOf(
-//                        navArgument(LoadGameParameterName) {
-//                            type = NavType.StringType
-//                            defaultValue = "false"
-//                            nullable = false
-//                        }
-//                    ),
-//                    enterTransition = navAnimHelper.concreteEnterSliding.fromTop,
-//                    exitTransition = navAnimHelper.concreteExitException.toTop,
-//                ) { entry ->
-//                    val viewModel: GameScreenViewModel = hiltViewModel()
-//                    entry.lifecycle.addObserver(viewModel)
-//                    GameScreen(
-//                        viewModel,
-//                        this@MainActivityImp,
-//                        navController,
-//                    )
-//                }
+                composable(
+                    route = Screen.GameScreen.route + "/{$LoadGameParameterName}",
+                    arguments = listOf(
+                        navArgument(LoadGameParameterName) {
+                            type = NavType.StringType
+                            defaultValue = "false"
+                            nullable = false
+                        }
+                    ),
+                    enterTransition = navAnimHelper.concreteEnterSliding.fromTop,
+                    exitTransition = navAnimHelper.concreteExitException.toTop,
+                ) { entry ->
+                    val viewModel: GameScreenViewModel by viewModels {
+                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHadler ->
+                            appComponent.gameScreenViewModelFactory.build(
+                                stateHadler, context, appComponent
+                            )
+                        }
+                    }
+                    entry.lifecycle.addObserver(viewModel)
+                    GameScreen(
+                        viewModel,
+                        this@MainActivityImp,
+                        navController,
+                    )
+                }
                 composable(
                     route = Screen.RankingScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromLeft,

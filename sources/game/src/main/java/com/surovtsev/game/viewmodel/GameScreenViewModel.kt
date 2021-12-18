@@ -1,8 +1,11 @@
 package com.surovtsev.game.viewmodel
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.opengl.GLSurfaceView
 import androidx.lifecycle.*
+import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
@@ -12,8 +15,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.game.dagger.GameComponent
-import com.surovtsev.game.dagger.GameComponentEntryPoint
+import com.surovtsev.game.dagger.DaggerGameComponent
 import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.interaction.GameControls
@@ -21,16 +23,14 @@ import com.surovtsev.game.viewmodel.helpers.BombsLeftValue
 import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.game.viewmodel.helpers.Place
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
-import com.surovtsev.gamelogic.dagger.GameLogicComponent
 import com.surovtsev.touchlistener.TouchListener
-import com.surovtsev.touchlistener.dagger.TouchListenerComponent
+import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
 import com.surovtsev.utils.timers.TimeSpanFlow
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import dagger.hilt.EntryPoints
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import logcat.logcat
-import javax.inject.Inject
-import javax.inject.Provider
 
 const val LoadGameParameterName = "load_game"
 
@@ -39,13 +39,10 @@ typealias GameScreenStateValue = LiveData<GameScreenState>
 
 typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
-@HiltViewModel
-class GameScreenViewModel @Inject constructor(
-    gameComponentProvider: Provider<GameComponent.Builder>,
-    touchListenerComponentProvider: Provider<TouchListenerComponent.Builder>,
-    gameLogicComponentProvider: Provider<GameLogicComponent.Builder>,
-    savedStateHandle: SavedStateHandle,
-    private val timeSpanHelperImp: TimeSpanHelperImp,
+class GameScreenViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted context: Context,
+    @Assisted rootComponent: RootComponent,
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.LoadGame,
@@ -54,6 +51,9 @@ class GameScreenViewModel @Inject constructor(
     GameScreenCommandHandler,
     DefaultLifecycleObserver
 {
+    @AssistedFactory
+    interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
+
     val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
     // see ::onDestroy
@@ -71,58 +71,60 @@ class GameScreenViewModel @Inject constructor(
     private val touchListener: TouchListener
     val bombsLeftValue: BombsLeftValue
     val timeSpanFlow: TimeSpanFlow
+    private val timeSpanHelperImp: TimeSpanHelperImp
 
     override val stateHolder: GameScreenStateHolder
     override val stateValue: GameScreenStateValue
 
     init {
 
-        val gameComponent = gameComponentProvider
-            .get()
+        val gameComponent = DaggerGameComponent
+            .builder()
+            .rootComponent(rootComponent)
+            .context(context)
             .loadGame(loadGame)
             .build()
-        val gameComponentEntryPoint = EntryPoints.get(
-            gameComponent, GameComponentEntryPoint::class.java
-        )
 
         gLSurfaceView =
-            gameComponentEntryPoint.gLSurfaceView
+            gameComponent.gLSurfaceView
 
 
         minesweeperController =
-            gameComponentEntryPoint.minesweeperController
+            gameComponent.minesweeperController
         gameRenderer =
-            gameComponentEntryPoint.gameRenderer
+            gameComponent.gameRenderer
         gameScreenEvents =
-            gameComponentEntryPoint.gameScreenEvents
+            gameComponent.gameScreenEvents
         gameControls =
-            gameComponentEntryPoint.gameControls
+            gameComponent.gameControls
         gameConfig =
-            gameComponentEntryPoint.gameConfig
+            gameComponent.gameConfig
         settingsDao =
-            gameComponentEntryPoint.settingsDao
+            gameComponent.settingsDao
         rankingDao =
-            gameComponentEntryPoint.rankingDao
+            gameComponent.rankingDao
         rankingListHelper =
-            gameComponentEntryPoint.rankingListHelper
+            gameComponent.rankingListHelper
         bombsLeftValue =
-            gameComponentEntryPoint.bombsLeftValue
+            gameComponent.bombsLeftValue
         timeSpanFlow =
-            gameComponentEntryPoint.timeSpan.timeSpanFlow
+            gameComponent.timeSpan.timeSpanFlow
+        timeSpanHelperImp =
+            gameComponent.timeSpanHelperImp
 
         stateHolder =
-            gameComponentEntryPoint.gameScreenStateHolder
+            gameComponent.gameScreenStateHolder
         stateValue =
-            gameComponentEntryPoint.gameScreenStateValue
+            gameComponent.gameScreenStateValue
 
-        val touchListenerComponent = touchListenerComponentProvider
-            .get()
+        val touchListenerComponent = DaggerTouchListenerComponent
+            .builder()
             .touchHandler(
-                gameComponentEntryPoint.touchHandlerImp)
+                gameComponent.touchHandlerImp)
             .moveHandler(
-                gameComponentEntryPoint.moveHandlerImp)
+                gameComponent.moveHandlerImp)
             .timeSpanHelper(
-                gameComponentEntryPoint.timeSpanHelperImp
+                gameComponent.timeSpanHelperImp
             )
             .build()
 

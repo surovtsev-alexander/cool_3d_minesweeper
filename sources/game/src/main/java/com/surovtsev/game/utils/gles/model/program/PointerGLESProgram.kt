@@ -5,12 +5,11 @@ import android.opengl.GLES20
 import com.surovtsev.game.R
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.utils.gles.helpers.ShaderHelper
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @GameScope
 open class PointerGLESProgram @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val context: Context
 ):
     GLESProgram(
         ShaderHelper.ShaderLoadParameters(

@@ -16,8 +16,8 @@ project(coreModule).projectDir = new File(rootDir, "sources/core")
 include utilsModule
 project(utilsModule).projectDir = new File(rootDir, "sources/utils")
 
-//include touchListenerModule
-//project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
+include touchListenerModule
+project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
 
 include rankingModule
 project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking")
@@ -25,8 +25,8 @@ project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking"
 include settingsModule
 project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
 
-//include gameModule
-//project(gameModule).projectDir = new File(rootDir, "sources/game")
-//
-//include gameLogicModule
-//project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")
+include gameModule
+project(gameModule).projectDir = new File(rootDir, "sources/game")
+
+include gameLogicModule
+project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")

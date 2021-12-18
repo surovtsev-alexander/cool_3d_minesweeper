@@ -2,15 +2,14 @@ package com.surovtsev.game.models.gles.programs
 
 import android.content.Context
 import com.surovtsev.game.R
-import com.surovtsev.utils.gles.helpers.ShaderHelper
-import com.surovtsev.game.utils.gles.model.program.GLESProgram
 import com.surovtsev.game.dagger.GameScope
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.surovtsev.game.utils.gles.model.program.GLESProgram
+import com.surovtsev.utils.gles.helpers.ShaderHelper
 import javax.inject.Inject
 
 @GameScope
 open class CubeGLESProgram @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val context: Context
 ):
     GLESProgram(
         ShaderHelper.ShaderLoadParameters(
