@@ -18,6 +18,8 @@ import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreen
 import com.surovtsev.cool3dminesweeper.unused.test.MyViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.ranking.presentation.RankingScreen
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settings.presentation.SettingsScreen
 import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
@@ -116,18 +118,24 @@ class MainActivityImp: MainActivity() {
 //                        navController,
 //                    )
 //                }
-//                composable(
-//                    route = Screen.RankingScreen.route,
-//                    enterTransition = navAnimHelper.concreteEnterSliding.fromLeft,
-//                    exitTransition = navAnimHelper.concreteExitException.toLeft
-//                ) { entry ->
-//                    val viewModel: RankingScreenViewModel = hiltViewModel()
-//                    entry.lifecycle.addObserver(viewModel)
-//                    RankingScreen(
-//                        viewModel,
-//                        navController
-//                    )
-//                }
+                composable(
+                    route = Screen.RankingScreen.route,
+                    enterTransition = navAnimHelper.concreteEnterSliding.fromLeft,
+                    exitTransition = navAnimHelper.concreteExitException.toLeft
+                ) { entry ->
+                    val viewModel: RankingScreenViewModel by viewModels {
+                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
+                            appComponent.rankingScreenViewModelFactory.build(
+                                stateHandler, context, appComponent
+                            )
+                        }
+                    }
+                    entry.lifecycle.addObserver(viewModel)
+                    RankingScreen(
+                        viewModel,
+                        navController
+                    )
+                }
                 composable(
                     route = Screen.SettingsScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromRight,

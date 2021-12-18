@@ -47,9 +47,9 @@ dependencies {
     implementation project(":core")
     implementation project(":utils")
     implementation project(":settings")
+    implementation project(":ranking")
 //    implementation project(":game")
 //    implementation project(":touchlistener")
-//    implementation project(":ranking")
 //    implementation project(":gamelogic")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

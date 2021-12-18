@@ -18,10 +18,10 @@ project(utilsModule).projectDir = new File(rootDir, "sources/utils")
 
 //include touchListenerModule
 //project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
-//
-//include rankingModule
-//project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking")
-//
+
+include rankingModule
+project(rankingModule).projectDir = new File(rootDir, "sources/features/ranking")
+
 include settingsModule
 project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
 

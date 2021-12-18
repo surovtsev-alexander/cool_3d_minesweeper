@@ -1,37 +1,31 @@
 package com.surovtsev.ranking.dagger
 
+import com.surovtsev.core.dagger.components.RootComponent
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
+import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenInitialState
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateHolder
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenStateValue
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
+import dagger.Component
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 
 
-@DefineComponent(
-    parent = ViewModelComponent::class,
-)
 @RankingScope
+@Component(
+    dependencies = [
+        RootComponent::class,
+    ],
+    modules = [
+        RankingModule::class,
+    ]
+)
 interface RankingComponent {
 
-    @DefineComponent.Builder
-    interface Builder {
-        fun build(): RankingComponent
-    }
-}
-
-@InstallIn(RankingComponent::class)
-@EntryPoint
-@RankingScope
-interface RankingComponentEntryPoint {
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
     val rankingListHelper: RankingListHelper
@@ -39,11 +33,13 @@ interface RankingComponentEntryPoint {
     val rankingScreenStateHolder: RankingScreenStateHolder
     val rankingScreenStateValue: RankingScreenStateValue
 
+    val saveController: SaveController
+
     val timeSpan: TimeSpan
 }
 
+
 @Module
-@InstallIn(RankingComponent::class)
 object RankingModule {
 
     @RankingScope

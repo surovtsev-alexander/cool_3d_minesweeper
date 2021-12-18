@@ -1,8 +1,12 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
+import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
@@ -13,25 +17,23 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.ranking.dagger.RankingComponent
-import com.surovtsev.ranking.dagger.RankingComponentEntryPoint
+import com.surovtsev.ranking.dagger.DaggerRankingComponent
 import com.surovtsev.utils.timers.TimeSpan
-import dagger.hilt.EntryPoints
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
 import logcat.logcat
-import javax.inject.Inject
-import javax.inject.Provider
 
 typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
 typealias RankingScreenStateValue = LiveData<RankingScreenState>
 
 typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
 
-@HiltViewModel
-class RankingScreenViewModel @Inject constructor(
-    rankingComponentProvider: Provider<RankingComponent.Builder>,
-    private val saveController: SaveController,
+class RankingScreenViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted context: Context,
+    @Assisted rootComponent: RootComponent,
 ): TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.LoadData,
         RankingScreenData.NoData
@@ -39,6 +41,9 @@ class RankingScreenViewModel @Inject constructor(
     DefaultLifecycleObserver
 //    RequestPermissionsResultReceiver,
 {
+    @AssistedFactory
+    interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
+
     private val settingsDao: SettingsDao
     private val rankingDao: RankingDao
 
@@ -49,34 +54,35 @@ class RankingScreenViewModel @Inject constructor(
 
     private val timeSpan: TimeSpan
 
+    private val saveController: SaveController
+
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 1000L
     }
 
     init {
-        val rankingComponent = rankingComponentProvider
-            .get()
+        val rankingComponent = DaggerRankingComponent
+            .builder()
+            .rootComponent(rootComponent)
             .build()
-        val rankingComponentEntryPoint =
-            EntryPoints.get(
-                rankingComponent,
-                RankingComponentEntryPoint::class.java
-            )
 
         settingsDao =
-            rankingComponentEntryPoint.settingsDao
+            rankingComponent.settingsDao
         rankingDao =
-            rankingComponentEntryPoint.rankingDao
+            rankingComponent.rankingDao
         rankingListHelper =
-            rankingComponentEntryPoint.rankingListHelper
+            rankingComponent.rankingListHelper
 
         stateHolder =
-            rankingComponentEntryPoint.rankingScreenStateHolder
+            rankingComponent.rankingScreenStateHolder
         stateValue =
-            rankingComponentEntryPoint.rankingScreenStateValue
+            rankingComponent.rankingScreenStateValue
 
         timeSpan =
-            rankingComponentEntryPoint.timeSpan
+            rankingComponent.timeSpan
+
+        saveController =
+            rankingComponent.saveController
 
         timeSpan.flush()
     }

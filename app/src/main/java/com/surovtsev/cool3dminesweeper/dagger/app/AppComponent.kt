@@ -11,6 +11,7 @@ import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.settings.SettingsListData
+import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
@@ -31,6 +32,7 @@ import kotlinx.coroutines.runBlocking
 interface AppComponent: RootComponent {
     val mainScreenViewModelFactory: MainScreenViewModel.Factory
     val settingsScreenViewModelFactory: SettingsScreenViewModel.Factory
+    val rankingScreenViewModelFactory: RankingScreenViewModel.Factory
 
     @Component.Builder
     interface Builder {
