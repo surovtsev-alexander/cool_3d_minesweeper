@@ -1,6 +1,6 @@
 package com.surovtsev.settings.dagger
 
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.settings.viewmodel.SettingsScreenInitialState
@@ -13,7 +13,7 @@ import dagger.Provides
 @SettingsScope
 @Component(
     dependencies = [
-        RootComponent::class,
+        AppComponentEntryPoint::class,
     ],
     modules = [
         SettingsModule::class,

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
 import androidx.lifecycle.*
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
@@ -42,7 +42,7 @@ typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted rootComponent: RootComponent,
+    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.LoadGame,
@@ -80,7 +80,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         val gameComponent = DaggerGameComponent
             .builder()
-            .rootComponent(rootComponent)
+            .appComponentEntryPoint(appComponentEntryPoint)
             .context(context)
             .loadGame(loadGame)
             .build()

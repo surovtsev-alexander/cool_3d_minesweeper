@@ -6,7 +6,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 
-interface RootComponent {
+interface AppComponentEntryPoint {
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
 

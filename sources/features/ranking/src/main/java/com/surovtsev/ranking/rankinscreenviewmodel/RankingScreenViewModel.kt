@@ -5,7 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
@@ -33,7 +33,7 @@ typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingS
 class RankingScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted rootComponent: RootComponent,
+    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ): TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.LoadData,
         RankingScreenData.NoData
@@ -63,7 +63,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     init {
         val rankingComponent = DaggerRankingComponent
             .builder()
-            .rootComponent(rootComponent)
+            .appComponentEntryPoint(appComponentEntryPoint)
             .build()
 
         settingsDao =

@@ -1,6 +1,6 @@
 package com.surovtsev.ranking.dagger
 
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -18,7 +18,7 @@ import dagger.Provides
 @RankingScope
 @Component(
     dependencies = [
-        RootComponent::class,
+        AppComponentEntryPoint::class,
     ],
     modules = [
         RankingModule::class,

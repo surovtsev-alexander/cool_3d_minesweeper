@@ -2,7 +2,7 @@ package com.surovtsev.game.dagger
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -31,7 +31,6 @@ import com.surovtsev.game.viewmodel.GameScreenStateValue
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
@@ -42,7 +41,7 @@ import javax.inject.Named
 @GameScope
 @Component(
     dependencies = [
-        RootComponent::class,
+        AppComponentEntryPoint::class,
     ],
     modules = [
         GameModule::class,
@@ -80,7 +79,7 @@ interface GameComponent {
 
     @Component.Builder
     interface Builder {
-        fun rootComponent(rootComponent: RootComponent): Builder
+        fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun context(@BindsInstance context: Context): Builder
 //        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder

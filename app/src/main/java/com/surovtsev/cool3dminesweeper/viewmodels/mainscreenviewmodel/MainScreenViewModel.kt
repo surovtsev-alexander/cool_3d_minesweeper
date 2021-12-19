@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.appComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.DaggerMainScreenComponent
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
@@ -19,7 +19,7 @@ import logcat.logcat
 class MainScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted rootComponent: RootComponent,
+    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ): ViewModel() {
 
     @AssistedFactory

@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.dagger.app
 import android.content.Context
 import androidx.room.Room
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -30,7 +30,7 @@ import kotlinx.coroutines.runBlocking
         AppModule::class,
     ]
 )
-interface AppComponent: RootComponent {
+interface AppComponent: AppComponentEntryPoint {
     val mainScreenViewModelFactory: MainScreenViewModel.Factory
     val settingsScreenViewModelFactory: SettingsScreenViewModel.Factory
     val rankingScreenViewModelFactory: RankingScreenViewModel.Factory

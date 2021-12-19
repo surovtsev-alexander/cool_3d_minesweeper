@@ -5,7 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.surovtsev.core.dagger.components.RootComponent
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
@@ -28,7 +28,7 @@ typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSetting
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted rootComponent: RootComponent,
+    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
         CommandFromSettingsScreen.LoadSettings, SettingsScreenData.NoData
@@ -49,7 +49,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         val settingsComponent: SettingsComponent =
             DaggerSettingsComponent
                 .builder()
-                .rootComponent(rootComponent)
+                .appComponentEntryPoint(appComponentEntryPoint)
                 .build()
 
         settingsDao =
