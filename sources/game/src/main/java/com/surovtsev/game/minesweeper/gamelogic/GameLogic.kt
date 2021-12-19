@@ -12,7 +12,6 @@ import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.skin.cube.CubeSkin
 import com.surovtsev.game.utils.utils.gles.interfaces.TextureUpdater
-import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +21,6 @@ class GameLogic(
     private val cubeSkin: CubeSkin,
     private val textureUpdater: TextureUpdater,
     private val gameConfig: GameConfig,
-    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     val gameLogicStateHelper: GameLogicStateHelper,
 ) {
 

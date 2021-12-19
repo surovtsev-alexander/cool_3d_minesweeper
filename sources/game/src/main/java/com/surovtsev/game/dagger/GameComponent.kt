@@ -206,7 +206,6 @@ object GameControllerModule {
         save: Save?,
         cubeInfo: CubeInfo,
         gameConfig: GameConfig,
-        gameScreenEventsReceiver: GameScreenEventsReceiver,
         cubeOpenGLModel: CubeOpenGLModel,
         gameLogicStateHelper: GameLogicStateHelper,
     ): GameLogic {
@@ -215,7 +214,6 @@ object GameControllerModule {
                 cubeInfo.cubeSkin,
                 cubeOpenGLModel,
                 gameConfig,
-                gameScreenEventsReceiver,
                 gameLogicStateHelper,
             )
         if (save != null) {

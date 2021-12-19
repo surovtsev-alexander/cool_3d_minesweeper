@@ -17,6 +17,7 @@ import com.surovtsev.game.models.gles.gameviewsholder.GameViewsHolder
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.utils.timers.TimeSpan
 
 @GameScope
@@ -32,6 +33,8 @@ class MinesweeperController @Inject constructor(
     private val timeSpan: TimeSpan,
     /* Do not delete this. It is used to add new record into Ranking table when game is won. */
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
+    /* Do not delete this. It notifies view about game status change. */
+    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
 ):
     OpenGLEventsHandler,
     DefaultLifecycleObserver

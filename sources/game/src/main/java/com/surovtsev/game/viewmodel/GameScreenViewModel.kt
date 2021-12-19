@@ -66,7 +66,6 @@ class GameScreenViewModel @AssistedInject constructor(
     val gameControls: GameControls
     private val gameConfig: GameConfig
     private val settingsDao: SettingsDao
-    private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
     val bombsLeftFlow: BombsLeftFlow
@@ -96,8 +95,6 @@ class GameScreenViewModel @AssistedInject constructor(
             gameComponent.gameConfig
         settingsDao =
             gameComponent.settingsDao
-        rankingDao =
-            gameComponent.rankingDao
         rankingListHelper =
             gameComponent.rankingListHelper
         bombsLeftFlow =
@@ -132,8 +129,8 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromGameScreen.NewGame            -> ::newGame
-            is CommandFromGameScreen.LoadGame           -> ::loadGame
+            is CommandFromGameScreen.NewGame            -> suspend { newGame(false) }
+            is CommandFromGameScreen.LoadGame           -> suspend { newGame(true) }
             is CommandFromGameScreen.CloseError         -> ::closeError
             is CommandFromGameScreen.Pause              -> ::pause
             is CommandFromGameScreen.Resume             -> ::resume
@@ -181,7 +178,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun newGame() {
+    private suspend fun newGame(loadGame: Boolean) {
 //        val gameLogicComponent = gameLogicComponentProvider
 //            .get()
 ////            .loadGame(loadGame)
@@ -191,10 +188,6 @@ class GameScreenViewModel @AssistedInject constructor(
 //            GameLogicComponentEntryPoint::class.java
 //        )
 
-
-    }
-
-    private suspend fun loadGame() {
 
     }
 
