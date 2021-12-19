@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.*
+import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControls
@@ -58,6 +59,8 @@ fun GameScreen(
         return
     }
 
+    val gameComponent = viewModel.gameComponent?: return
+
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         viewModel.handleCommand(
@@ -69,8 +72,8 @@ fun GameScreen(
         )
     }
 
-    val gameViewEvents = viewModel.gameScreenEvents
-    val gameControls = viewModel.gameControls
+    val gameViewEvents = gameComponent.gameScreenEvents
+    val gameControls = gameComponent.gameControls
 
     GameScreenControls(
         context,
@@ -89,7 +92,6 @@ private val pauseResumeButtonWidth = 100.dp
 fun GameScreenControls(
     context: Context,
     viewModel: GameScreenViewModel,
-//    glSurfaceView: GLSurfaceView,
     gameScreenEvents: GameScreenEvents,
     gameControls: GameControls,
     stateValue: GameScreenStateValue,
@@ -105,51 +107,84 @@ fun GameScreenControls(
             CommandFromGameScreen.CloseErrorAndFinish
         )
 
-        GameMenu(stateValue, commandHandler)
+        GameView(
+            stateValue,
+            viewModel,
+            context,
+            gameControls,
+            gameScreenEvents,
+            commandHandler,
+        )
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Row(
-                modifier = Modifier.weight(1f)
-            ) {
-                MinesweeperView(context, viewModel::initGLSurfaceView)
-            }
-            Row {
-                Controls(
-                    viewModel.bombsLeftFlow,
-                    viewModel.timeSpanFlow,
-                    gameScreenEvents,
-                    gameControls.removeMarkedBombsControl,
-                    gameControls.removeZeroBordersControl
-                )
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.End
-        ) {
-            Button(
-                modifier = Modifier
-                    .width(pauseResumeButtonWidth),
-                onClick = {
-                    commandHandler.handleCommand(
-                        CommandFromGameScreen.OpenMenu
-                    )
-                },
-                border = BorderStroke(1.dp, Color.Black)
-            ) {
-                Text(text = "pause")
-            }
-        }
+        GameMenu(
+            stateValue,
+            commandHandler
+        )
+
         GameStatusDialog(
             gameScreenEvents.showDialogEvent,
-            viewModel
+            viewModel,
+            viewModel.gameComponent,
         )
     }
 }
 
+
+@Composable
+fun GameView(
+    stateValue: GameScreenStateValue,
+    viewModel: GameScreenViewModel,
+    context: Context,
+    gameControls: GameControls,
+    gameScreenEvents: GameScreenEvents,
+    commandHandler: GameScreenCommandHandler,
+) {
+    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
+    val gameScreenData = gameScreenState.screenData
+
+    if (gameScreenData is ScreenData.InitializationIsNotFinished) {
+        return
+    }
+
+    val gameComponent = viewModel.gameComponent ?: return
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier.weight(1f)
+        ) {
+            MinesweeperView(context, viewModel::initGLSurfaceView)
+        }
+        Row {
+            Controls(
+                gameComponent.bombsLeftFlow,
+                gameComponent.timeSpan.timeSpanFlow,
+                gameScreenEvents,
+                gameControls.removeMarkedBombsControl,
+                gameControls.removeZeroBordersControl
+            )
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.End
+    ) {
+        Button(
+            modifier = Modifier
+                .width(pauseResumeButtonWidth),
+            onClick = {
+                commandHandler.handleCommand(
+                    CommandFromGameScreen.OpenMenu
+                )
+            },
+            border = BorderStroke(1.dp, Color.Black)
+        ) {
+            Text(text = "pause")
+        }
+    }
+}
 
 
 @Composable
@@ -376,7 +411,8 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     showDialogEvent: ShowDialogEvent,
-    viewModel: GameScreenViewModel
+    viewModel: GameScreenViewModel,
+    gameComponent: GameComponent?,
 ) {
     val showDialog: Boolean by showDialogEvent.run {
         data.observeAsState(defaultValue)
@@ -384,11 +420,14 @@ fun GameStatusDialog(
     if (!showDialog) {
         return
     }
-    val lastWinPlaceEvent = viewModel.gameScreenEvents.lastWinPlaceEvent
+    if (gameComponent == null) {
+        return
+    }
+    val lastWinPlaceEvent = gameComponent.gameScreenEvents.lastWinPlaceEvent
     val lastWinPlace: Place by lastWinPlaceEvent.run {
         data.observeAsState(defaultValue)
     }
-    val gameStatus = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus()
+    val gameStatus = gameComponent.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus()
     val win = gameStatus == GameStatus.Win
     if (win && lastWinPlace == Place.NoPlace) {
         viewModel.requestLastWinPlace()

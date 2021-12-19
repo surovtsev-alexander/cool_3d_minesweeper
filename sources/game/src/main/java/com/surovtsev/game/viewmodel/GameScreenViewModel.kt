@@ -6,27 +6,18 @@ import android.opengl.GLSurfaceView
 import androidx.lifecycle.*
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
-import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.ScreenStateValue
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.game.dagger.DaggerGameComponent
-import com.surovtsev.game.minesweeper.MinesweeperController
-import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
-import com.surovtsev.game.models.game.config.GameConfig
-import com.surovtsev.game.models.game.interaction.GameControls
-import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
+import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.viewmodel.helpers.Place
-import com.surovtsev.game.views.glesrenderer.GLESRenderer
-import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
-import com.surovtsev.utils.timers.TimeSpanFlow
-import com.surovtsev.utils.timers.TimeSpanHelperImp
+import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -60,67 +51,39 @@ class GameScreenViewModel @AssistedInject constructor(
     @SuppressLint("StaticFieldLeak")
     var gLSurfaceView: GLSurfaceView? = null
 
-    val minesweeperController: MinesweeperController
-    private val gameRenderer: GLESRenderer
-    val gameScreenEvents: GameScreenEvents
-    val gameControls: GameControls
-    private val gameConfig: GameConfig
-    private val settingsDao: SettingsDao
-    private val rankingListHelper: RankingListHelper
-    private val touchListener: TouchListener
-    val bombsLeftFlow: BombsLeftFlow
-    val timeSpanFlow: TimeSpanFlow
-    private val timeSpanHelperImp: TimeSpanHelperImp
-
     override val stateHolder: GameScreenStateHolder
     override val stateValue: GameScreenStateValue
 
+    var gameComponent: GameComponent? = null
+        private set
+    var touchListenerComponent: TouchListenerComponent? = null
+        private set
+
     init {
         val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
-        val gameComponent = DaggerGameComponent
+        gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .loadGame(loadGame)
             .build()
+            .also {
+                stateHolder = it.gameScreenStateHolder
+                stateValue = it.gameScreenStateValue
 
-        minesweeperController =
-            gameComponent.minesweeperController
-        gameRenderer =
-            gameComponent.gameRenderer
-        gameScreenEvents =
-            gameComponent.gameScreenEvents
-        gameControls =
-            gameComponent.gameControls
-        gameConfig =
-            gameComponent.gameConfig
-        settingsDao =
-            gameComponent.settingsDao
-        rankingListHelper =
-            gameComponent.rankingListHelper
-        bombsLeftFlow =
-            gameComponent.bombsLeftFlow
-        timeSpanFlow =
-            gameComponent.timeSpan.timeSpanFlow
-        timeSpanHelperImp =
-            gameComponent.timeSpanHelperImp
 
-        stateHolder =
-            gameComponent.gameScreenStateHolder
-        stateValue =
-            gameComponent.gameScreenStateValue
-
-        val touchListenerComponent = DaggerTouchListenerComponent
-            .builder()
-            .touchHandler(
-                gameComponent.touchHandlerImp)
-            .moveHandler(
-                gameComponent.moveHandlerImp)
-            .timeSpanHelper(
-                gameComponent.timeSpanHelperImp
-            )
-            .build()
-
-        touchListener = touchListenerComponent.touchListener
+                touchListenerComponent = DaggerTouchListenerComponent
+                    .builder()
+                    .touchHandler(
+                        it.touchHandlerImp
+                    )
+                    .moveHandler(
+                        it.moveHandlerImp
+                    )
+                    .timeSpanHelper(
+                        it.timeSpanHelperImp
+                    )
+                    .build()
+            }
     }
 
     override fun onCreate(owner: LifecycleOwner) {
@@ -145,24 +108,33 @@ class GameScreenViewModel @AssistedInject constructor(
     fun initGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {
-        this.gLSurfaceView = gLSurfaceView
+        val gameRenderer = gameComponent?.gameRenderer
+        val touchListener = touchListenerComponent?.touchListener
+
+        if (gameRenderer == null || touchListener == null) {
+            return
+        }
 
         gLSurfaceView.setEGLContextClientVersion(2)
         gLSurfaceView.setRenderer(gameRenderer)
         touchListener.connectToGLSurfaceView(
-            gLSurfaceView
-        )
+            gLSurfaceView)
+
+        this.gLSurfaceView = gLSurfaceView
     }
 
     private suspend fun doActionIfDataIsCorrect(
         isDataCorrect: (gameScreeData: GameScreenData) -> Boolean,
         errorMessage: String,
+        silent: Boolean = false,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
         val gameScreenData = stateHolder.value?.screenData
 
         if (gameScreenData == null || !isDataCorrect(gameScreenData)) {
-            publishErrorState(errorMessage)
+            if (silent) {
+                publishErrorState(errorMessage)
+            }
         } else {
             action.invoke(gameScreenData)
         }
@@ -175,11 +147,15 @@ class GameScreenViewModel @AssistedInject constructor(
         doActionIfDataIsCorrect(
             { it is T },
             errorMessage,
+            silent = false,
             action
         )
     }
 
     private suspend fun newGame(loadGame: Boolean) {
+        publishIdleState(
+            GameScreenData.GameInProgress
+        )
 //        val gameLogicComponent = gameLogicComponentProvider
 //            .get()
 ////            .loadGame(loadGame)
@@ -193,18 +169,16 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun pause() {
-
     }
 
     private suspend fun resume() {
-
     }
 
     private suspend fun openMenu() {
         logcat { "open menu" }
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
-            "can not open menu twice sequentially",
+            "can not open menu twice sequentially"
         ) { gameScreenData ->
             publishIdleState(
                 GameScreenData.GameMenu(
@@ -233,16 +207,18 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun closeMenu() {
+    private suspend fun closeMenu(silent: Boolean = false) {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
-            "main menu is not opened"
+            "main menu is not opened",
+            silent
         ) { gameScreenData ->
             tryUnstackState(gameScreenData)
         }
     }
 
     private suspend fun goToMainMenu() {
+        closeMenu(true)
         withUIContext {
             finishAction?.invoke()
         }
@@ -251,20 +227,21 @@ class GameScreenViewModel @AssistedInject constructor(
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
         gLSurfaceView?.onPause()
-        minesweeperController.onPause(owner)
+        gameComponent?.minesweeperController?.onPause(owner)
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         gLSurfaceView?.onResume()
-        minesweeperController.onResume(owner)
+        gameComponent?.minesweeperController?.onResume(owner)
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        minesweeperController.onDestroy(owner)
-        timeSpanHelperImp.forgetSubscribers()
-
+        gameComponent?.apply {
+            minesweeperController.onDestroy(owner)
+            timeSpanHelperImp.forgetSubscribers()
+        }
         gLSurfaceView = null
     }
 
@@ -287,10 +264,17 @@ class GameScreenViewModel @AssistedInject constructor(
         launchOnIOThread {
             var res: Place = Place.NoPlace
 
+            val gameComponent = gameComponent
             do {
-                val settings = settingsDao.getBySettingsData(
-                    gameConfig.settingsData
+                if (gameComponent == null) {
+                    break
+                }
+
+                val settings = gameComponent.settingsDao.getBySettingsData(
+                    gameComponent.gameConfig.settingsData
                 ) ?: break
+
+                val rankingListHelper = gameComponent.rankingListHelper
 
                 val filteredData = rankingListHelper.createRankingListWithPlaces(
                     settings.id
@@ -312,10 +296,13 @@ class GameScreenViewModel @AssistedInject constructor(
             } while (false)
 
             withUIContext {
-                gameScreenEvents.lastWinPlaceEvent.onDataChanged(
-                    res
-                )
+                gameComponent?.let {
+                    it.gameScreenEvents.lastWinPlaceEvent.onDataChanged(
+                        res
+                    )
+                }
             }
         }
     }
 }
+
