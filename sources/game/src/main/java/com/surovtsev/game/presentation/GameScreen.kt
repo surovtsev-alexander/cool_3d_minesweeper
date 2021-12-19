@@ -29,15 +29,18 @@ import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
+import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControls
 import com.surovtsev.game.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.game.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.game.viewmodel.*
-import com.surovtsev.game.viewmodel.helpers.*
+import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
+import com.surovtsev.game.viewmodel.helpers.MarkingEvent
+import com.surovtsev.game.viewmodel.helpers.Place
+import com.surovtsev.game.viewmodel.helpers.ShowDialogEvent
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.timers.TimeSpanFlow
-import logcat.logcat
 
 @Composable
 fun GameScreen(
@@ -104,7 +107,7 @@ fun GameScreenControls(
             }
             Row {
                 Controls(
-                    viewModel.bombsLeftValue,
+                    viewModel.bombsLeftFlow,
                     viewModel.timeSpanFlow,
                     gameScreenEvents,
                     gameControls.removeMarkedBombsControl,
@@ -297,7 +300,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    bombsLeftValue: BombsLeftValue,
+    bombsLeftFlow: BombsLeftFlow,
     timeSpanFlow: TimeSpanFlow,
     gameScreenEvents: GameScreenEvents,
     removeMarkedBombsControl: RemoveMarkedBombsControl,
@@ -332,7 +335,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                bombsLeftValue,
+                bombsLeftFlow,
                 timeSpanFlow
             )
         }
@@ -399,23 +402,23 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    bombsLeftValue: BombsLeftValue,
+    bombsLeftFlow: BombsLeftFlow,
     timeSpanFlow: TimeSpanFlow,
 ) {
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        BombsLeft(bombsLeftValue)
+        BombsLeft(bombsLeftFlow)
         TimeElapsed(timeSpanFlow)
     }
 }
 
 @Composable
 fun BombsLeft(
-    bombsLeftValue: BombsLeftValue
+    bombsLeftFlow: BombsLeftFlow
 ) {
-    val bombsLeft = bombsLeftValue.collectAsState(initial = 0).value
+    val bombsLeft = bombsLeftFlow.collectAsState(initial = 0).value
     Text(
         bombsLeft.toString()
     )
@@ -448,7 +451,7 @@ fun GameStatusDialog(
     val lastWinPlace: Place by lastWinPlaceEvent.run {
         data.observeAsState(defaultValue)
     }
-    val gameStatus = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus
+    val gameStatus = viewModel.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus()
     val win = gameStatus == GameStatus.Win
     if (win && lastWinPlace == Place.NoPlace) {
         viewModel.requestLastWinPlace()

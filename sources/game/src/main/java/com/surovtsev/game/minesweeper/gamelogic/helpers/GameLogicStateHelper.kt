@@ -3,55 +3,46 @@ package com.surovtsev.game.minesweeper.gamelogic.helpers
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.game.dagger.GameScope
-import com.surovtsev.game.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.utils.timers.Tickable
 import com.surovtsev.utils.timers.TimeSpan
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
-
-//class GameLogicStateHelper @AssistedInject constructor(
-//    @Assisted private val gameEventsReceiver: GameEventsReceiver,
-//    @Assisted private val gameStatusReceiver: IGameStatusReceiver,
-//    @Assisted timeSpanHelper: TimeSpanHelper
-//):
-//    INeedToBeUpdated, IHandlePauseResume
-//{
-//    @AssistedFactory
-//    interface Factory {
-//        fun create(
-//            gameEventsReceiver: IGameEventsReceiver,
-//            gameStatusReceiver: IGameStatusReceiver,
-//            timeSpanHelper: TimeSpanHelper
-//        ): GameLogicStateHelper
-//    }
 
 @GameScope
 class GameLogicStateHelper @Inject constructor(
-    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
-    private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     private val timeSpan: TimeSpan
 ):
     Tickable,
     DefaultLifecycleObserver
 {
+    private val _gameStatusWithElapsedFlow = MutableStateFlow(
+        GameStatusWithElapsed()
+    )
+    val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow = _gameStatusWithElapsedFlow.asStateFlow()
+
     init {
         timeSpan.subscribe(this)
+
     }
 
-    var gameStatus: GameStatus
-        private set
+    fun gameStatus() = gameStatusWithElapsedFlow.value.gameStatus
 
-    fun isGameNotStarted() = (gameStatus == GameStatus.NoBombsPlaced)
+    fun isGameNotStarted() = (gameStatus() == GameStatus.NoBombsPlaced)
 
-    fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus)
+    fun isGameInProgress() = GameStatusHelper.isGameInProgress(gameStatus())
 
-    fun isGameOver() = GameStatusHelper.isGameOver(gameStatus)
+    fun isGameOver() = GameStatusHelper.isGameOver(gameStatus())
 
     init {
-        gameStatus = GameStatus.NoBombsPlaced
         timeSpan.flush()
+
+        _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
+            GameStatus.NoBombsPlaced,
+            timeSpan.getElapsed()
+        )
     }
 
     override fun tick() {
@@ -84,15 +75,10 @@ class GameLogicStateHelper @Inject constructor(
         }
     }
 
-    fun setGameState(newState: GameStatus) {
-        gameStatus = newState
-        val elapsed = getElapsed()
-        minesweeperGameStatusReceiver.gameStatusUpdated(
-            gameStatus,
-            elapsed)
-        gameScreenEventsReceiver.gameStatusUpdated(
-            gameStatus,
-            elapsed
+    fun setGameState(newStatus: GameStatus) {
+        _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
+            newStatus,
+            timeSpan.getElapsed()
         )
 
         if (isGameInProgress()) {
@@ -101,8 +87,6 @@ class GameLogicStateHelper @Inject constructor(
             timeSpan.turnOff()
         }
     }
-
-    fun getElapsed() = timeSpan.getElapsed()
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
         timeSpan.setElapsed(elapsedTime)

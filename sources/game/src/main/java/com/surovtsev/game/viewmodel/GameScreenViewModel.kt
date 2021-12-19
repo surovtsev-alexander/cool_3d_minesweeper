@@ -17,9 +17,9 @@ import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.game.dagger.DaggerGameComponent
 import com.surovtsev.game.minesweeper.MinesweeperController
+import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.interaction.GameControls
-import com.surovtsev.game.viewmodel.helpers.BombsLeftValue
 import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.game.viewmodel.helpers.Place
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
@@ -69,7 +69,7 @@ class GameScreenViewModel @AssistedInject constructor(
     private val rankingDao: RankingDao
     private val rankingListHelper: RankingListHelper
     private val touchListener: TouchListener
-    val bombsLeftValue: BombsLeftValue
+    val bombsLeftFlow: BombsLeftFlow
     val timeSpanFlow: TimeSpanFlow
     private val timeSpanHelperImp: TimeSpanHelperImp
 
@@ -100,8 +100,8 @@ class GameScreenViewModel @AssistedInject constructor(
             gameComponent.rankingDao
         rankingListHelper =
             gameComponent.rankingListHelper
-        bombsLeftValue =
-            gameComponent.bombsLeftValue
+        bombsLeftFlow =
+            gameComponent.bombsLeftFlow
         timeSpanFlow =
             gameComponent.timeSpan.timeSpanFlow
         timeSpanHelperImp =

@@ -8,6 +8,7 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.minesweeper.scene.Scene
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.game.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.game.models.game.camerainfo.CameraInfo
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gameobjectsholder.CubeInfo
@@ -16,6 +17,7 @@ import com.surovtsev.game.models.gles.gameviewsholder.GameViewsHolder
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.utils.timers.TimeSpan
 
 @GameScope
 class MinesweeperController @Inject constructor(
@@ -27,6 +29,9 @@ class MinesweeperController @Inject constructor(
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     private val scene: Scene,
+    private val timeSpan: TimeSpan,
+    /* Do not delete this. It is used to add new record into Ranking table when game is won. */
+    private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
 ):
     OpenGLEventsHandler,
     DefaultLifecycleObserver
@@ -79,7 +84,8 @@ class MinesweeperController @Inject constructor(
                 gameConfig,
                 cameraInfo,
                 gameLogic,
-                cubeInfo.cubeSkin
+                cubeInfo.cubeSkin,
+                timeSpan
             )
             saveController.save(
                 SaveTypes.SaveGameJson,

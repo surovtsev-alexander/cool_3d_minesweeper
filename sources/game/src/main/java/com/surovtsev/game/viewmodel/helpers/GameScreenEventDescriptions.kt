@@ -5,13 +5,9 @@ import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControlsNames
 import com.surovtsev.game.models.game.interaction.MarkOnShortTapControl
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Named
 
-typealias BombsLeftData = MutableStateFlow<Int>
-typealias BombsLeftValue = StateFlow<Int>
 
 object GameScreenEventsNames {
     const val ShowDialog = "showDialog"

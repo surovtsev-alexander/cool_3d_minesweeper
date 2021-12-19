@@ -1,15 +1,18 @@
 package com.surovtsev.game.minesweeper.helpers
 
-import com.surovtsev.game.minesweeper.gamelogic.gameinteraction.GameStatusReceiver
-import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Ranking
-import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
+import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.game.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gamestatus.GameStatus
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @GameScope
@@ -18,8 +21,22 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     private val gameConfig: GameConfig,
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
-): GameStatusReceiver {
-    override fun gameStatusUpdated(
+    private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
+    customCoroutineScope: CustomCoroutineScope,
+) {
+
+    init {
+        customCoroutineScope.launch {
+            gameStatusWithElapsedFlow.collectLatest {
+                gameStatusUpdated(
+                    it.gameStatus,
+                    it.elapsed
+                )
+            }
+        }
+    }
+
+    private fun gameStatusUpdated(
         newStatus: GameStatus,
         elapsed: Long
     ) {

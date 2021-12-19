@@ -1,6 +1,7 @@
 package com.surovtsev.game.minesweeper.gamelogic
 
 import com.surovtsev.game.minesweeper.gamelogic.helpers.BombPlacer
+import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.minesweeper.gamelogic.helpers.GameLogicStateHelper
 import com.surovtsev.game.minesweeper.gamelogic.helpers.NeighboursCalculator
 import com.surovtsev.game.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
@@ -11,9 +12,10 @@ import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.skin.cube.CubeSkin
 import com.surovtsev.game.utils.utils.gles.interfaces.TextureUpdater
-import com.surovtsev.game.viewmodel.helpers.BombsLeftData
 import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 
 class GameLogic(
@@ -22,8 +24,10 @@ class GameLogic(
     private val gameConfig: GameConfig,
     private val gameScreenEventsReceiver: GameScreenEventsReceiver,
     val gameLogicStateHelper: GameLogicStateHelper,
-    private val bombsLeftData: BombsLeftData,
 ) {
+
+    private val _bombsLeftFlow = MutableStateFlow(0)
+    val bombsLeftFlow: BombsLeftFlow = _bombsLeftFlow.asStateFlow()
 
     private data class PrevClickInfo(var id: Int, var time: Long)
     private val prevClickInfo =
@@ -82,11 +86,11 @@ class GameLogic(
     }
 
     fun setBombsLeft(v: Int) {
-        bombsLeftData.value = v
+        _bombsLeftFlow.value = v
     }
 
     private fun decBombsLeft() {
-        bombsLeftData.value -= 1
+        _bombsLeftFlow.value -= 1
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
@@ -131,7 +135,7 @@ class GameLogic(
 
         setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EMPTY)
 
-        if (bombsLeftData.value == 0) {
+        if (_bombsLeftFlow.value == 0) {
             gameLogicStateHelper.setGameState(GameStatus.Win)
         }
     }

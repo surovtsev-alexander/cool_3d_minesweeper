@@ -1,31 +1,30 @@
 package com.surovtsev.game.viewmodel.helpers
 
-import android.content.Context
 import com.surovtsev.game.dagger.GameScope
-import com.surovtsev.game.minesweeper.gamelogic.gameinteraction.GameEventsReceiver
-import com.surovtsev.game.models.game.gamestatus.GameStatus
+import com.surovtsev.game.minesweeper.gamelogic.helpers.GameLogicStateHelper
+import com.surovtsev.game.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
-import org.jetbrains.anko.runOnUiThread
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
 @GameScope
 class GameScreenEventsReceiver @Inject constructor(
-    private val context: Context,
     @Named(GameScreenEventsNames.ShowDialog)
-    private val showDialog: ShowDialogEvent
-): GameEventsReceiver {
+    private val showDialog: ShowDialogEvent,
+    gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
+    customCoroutineScope: CustomCoroutineScope,
+) {
     init {
-        init()
-    }
-
-    override fun gameStatusUpdated(
-        newStatus: GameStatus,
-        elapsed: Long
-    ) {
-        context.runOnUiThread {
-            if (GameStatusHelper.isGameOver(newStatus)) {
-                showDialog.onDataChanged(true)
+        customCoroutineScope.launch {
+            gameStatusWithElapsedFlow.collectLatest {
+                if (GameStatusHelper.isGameOver(it.gameStatus))
+                launch(Dispatchers.Main) {
+                    showDialog.onDataChanged(true)
+                }
             }
         }
     }

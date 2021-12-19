@@ -1,7 +1,5 @@
 package com.surovtsev.game.dagger
 
-import android.content.Context
-import android.opengl.GLSurfaceView
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
@@ -10,8 +8,10 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.game.minesweeper.MinesweeperController
 import com.surovtsev.game.minesweeper.gamelogic.GameLogic
+import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.game.minesweeper.gamelogic.helpers.GameLogicStateHelper
+import com.surovtsev.game.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.game.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.game.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.game.minesweeper.interaction.touch.TouchHandlerImp
@@ -31,11 +31,11 @@ import com.surovtsev.game.viewmodel.GameScreenStateValue
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 
 @GameScope
@@ -71,10 +71,11 @@ interface GameComponent {
     val gameScreenStateHolder: GameScreenStateHolder
     val gameScreenStateValue: GameScreenStateValue
 
-    val bombsLeftValue: BombsLeftValue
+    val bombsLeftFlow: BombsLeftFlow
 
     val timeSpan: TimeSpan
 
+    val customCoroutineScope: CustomCoroutineScope
 
     @Component.Builder
     interface Builder {
@@ -208,8 +209,6 @@ object GameControllerModule {
         gameScreenEventsReceiver: GameScreenEventsReceiver,
         cubeOpenGLModel: CubeOpenGLModel,
         gameLogicStateHelper: GameLogicStateHelper,
-        bombsLeftData: BombsLeftData,
-        bombsleftValue: BombsLeftValue
     ): GameLogic {
         val res  =
             GameLogic(
@@ -218,7 +217,6 @@ object GameControllerModule {
                 gameConfig,
                 gameScreenEventsReceiver,
                 gameLogicStateHelper,
-                bombsLeftData,
             )
         if (save != null) {
             save.gameLogicToSave.applySavedData(res)
@@ -265,17 +263,10 @@ object SceneSettingsModule {
 object InteractionModule {
     @GameScope
     @Provides
-    fun provideBombsLeftData(
-    ): BombsLeftData {
-        return MutableStateFlow(0)
-    }
-
-    @GameScope
-    @Provides
     fun provideBombsLeftValue(
-        bombsLeftData: BombsLeftData
-    ): BombsLeftValue {
-        return bombsLeftData.asStateFlow()
+        gameLogic: GameLogic
+    ): BombsLeftFlow {
+        return gameLogic.bombsLeftFlow
     }
 
     @GameScope
@@ -287,5 +278,22 @@ object InteractionModule {
             1000L,
             timeSpanHelper,
         )
+    }
+
+    @GameScope
+    @Provides
+    fun provideCustomCoroutineScope(
+    ): CustomCoroutineScope {
+        return CustomCoroutineScope(
+            dispatcher = Dispatchers.IO
+        )
+    }
+
+    @GameScope
+    @Provides
+    fun provideGameStatusWithElapsedFlow(
+        gameLogicStateHelper: GameLogicStateHelper,
+    ): GameStatusWithElapsedFlow {
+        return gameLogicStateHelper.gameStatusWithElapsedFlow
     }
 }
