@@ -1,6 +1,7 @@
 package com.surovtsev.game.presentation
 
 import android.app.Activity
+import android.content.Context
 import android.opengl.GLSurfaceView
 import android.text.format.DateUtils
 import androidx.compose.foundation.BorderStroke
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
@@ -35,12 +37,15 @@ import com.surovtsev.game.viewmodel.*
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.timers.TimeSpanFlow
+import logcat.logcat
 
 @Composable
 fun GameScreen(
     viewModel: GameScreenViewModel,
     activity: Activity,
     navController: NavController,
+    context: Context,
+    loadGame: Boolean,
 ) {
     if (!OpenGLInfoHelper.isSupportEs2(activity)) {
         Text(
@@ -53,7 +58,7 @@ fun GameScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         viewModel.handleCommand(
-            if (viewModel.loadGame) {
+            if (loadGame) {
                 CommandFromGameScreen.LoadGame
             } else {
                 CommandFromGameScreen.NewGame
@@ -61,13 +66,13 @@ fun GameScreen(
         )
     }
 
-    val gLSurfaceView = viewModel.gLSurfaceView!!
     val gameViewEvents = viewModel.gameScreenEvents
     val gameControls = viewModel.gameControls
 
     GameScreenControls(
+        context,
         viewModel,
-        gLSurfaceView,
+//        viewModel.gLSurfaceView!!,
         gameViewEvents,
         gameControls,
         viewModel.stateValue,
@@ -79,79 +84,34 @@ private val pauseResumeButtonWidth = 100.dp
 
 @Composable
 fun GameScreenControls(
+    context: Context,
     viewModel: GameScreenViewModel,
-    gLSurfaceView: GLSurfaceView,
+//    glSurfaceView: GLSurfaceView,
     gameScreenEvents: GameScreenEvents,
     gameControls: GameControls,
     stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
 ) {
-    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
-    val gameScreenData = gameScreenState.screenData
-
     MinesweeperTheme {
-        if (gameScreenData is GameScreenData.MainMenu) {
-            MainMenu(stateValue, commandHandler)
-        } else {
-            Column(
-                modifier = Modifier.fillMaxSize()
+        MainMenu(stateValue, commandHandler)
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier.weight(1f)
             ) {
-                Row(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    MinesweeperView(gLSurfaceView)
-                }
-                Row {
-                    Controls(
-                        viewModel.bombsLeftValue,
-                        viewModel.timeSpanFlow,
-                        gameScreenEvents,
-                        gameControls.removeMarkedBombsControl,
-                        gameControls.removeZeroBordersControl
-                    )
-                }
+                MinesweeperView(context, viewModel::initGLSurfaceView)
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.End
-            ) {
-                Button(
-                    modifier = Modifier
-                        .width(pauseResumeButtonWidth),
-                    onClick = {
-                        commandHandler.handleCommand(
-                            CommandFromGameScreen.OpenMenu
-                        )
-                    },
-                    border = BorderStroke(1.dp, Color.Black)
-                ) {
-                    Text(text = "pause")
-                }
+            Row {
+                Controls(
+                    viewModel.bombsLeftValue,
+                    viewModel.timeSpanFlow,
+                    gameScreenEvents,
+                    gameControls.removeMarkedBombsControl,
+                    gameControls.removeZeroBordersControl
+                )
             }
-            GameStatusDialog(
-                gameScreenEvents.showDialogEvent,
-                viewModel
-            )
         }
-    }
-}
-
-@Composable
-fun MainMenu(
-    stateValue: GameScreenStateValue,
-    commandHandler: GameScreenCommandHandler,
-) {
-    val mainMenuButtons = arrayOf(
-        "new game" to CommandFromGameScreen.NewGame,
-        "main menu" to CommandFromGameScreen.GoToMainMenu,
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(GrayBackground)
-    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -162,25 +122,64 @@ fun MainMenu(
                     .width(pauseResumeButtonWidth),
                 onClick = {
                     commandHandler.handleCommand(
-                        CommandFromGameScreen.CloseMenu
+                        CommandFromGameScreen.OpenMenu
                     )
                 },
                 border = BorderStroke(1.dp, Color.Black)
             ) {
-                Text(text = "resume")
+                Text(text = "pause")
             }
         }
+        GameStatusDialog(
+            gameScreenEvents.showDialogEvent,
+            viewModel
+        )
+    }
+}
+
+@Composable
+fun MainMenu(
+    stateValue: GameScreenStateValue,
+    commandHandler: GameScreenCommandHandler,
+) {
+    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
+    val gameScreenData = gameScreenState.screenData
+    if (gameScreenData !is GameScreenData.MainMenu) {
+        return
+    }
+
+    val mainMenuButtons = arrayOf(
+        "new game" to CommandFromGameScreen.NewGame,
+        "main menu" to CommandFromGameScreen.GoToMainMenu,
+    )
+
+    val closeAction = {
+        commandHandler.handleCommand(CommandFromGameScreen.CloseMenu)
+    }
+
+    Dialog(
+        onDismissRequest = closeAction,
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth(0.8f)
+                .fillMaxHeight(0.5f),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight(0.5f)
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    text = "Paused",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp
+                )
+            }
+            mainMenuButtons.map { (name, command) ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -188,13 +187,58 @@ fun MainMenu(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Paused",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(80.dp),
+                        onClick = {
+                            commandHandler.handleCommand(command)
+                        },
+                        border = BorderStroke(1.dp, Color.Black)
+                    ) {
+                        Text(text = name)
+                    }
                 }
-                mainMenuButtons.map { (name, command) ->
+            }
+        }
+    }
+
+
+    if (false) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(GrayBackground)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.End
+            ) {
+                Button(
+                    modifier = Modifier
+                        .width(pauseResumeButtonWidth),
+                    onClick = {
+                        commandHandler.handleCommand(
+                            CommandFromGameScreen.CloseMenu
+                        )
+                    },
+                    border = BorderStroke(1.dp, Color.Black)
+                ) {
+                    Text(text = "resume")
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight(0.5f)
+                ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -202,16 +246,31 @@ fun MainMenu(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
+                        Text(
+                            text = "Paused",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp
+                        )
+                    }
+                    mainMenuButtons.map { (name, command) ->
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(80.dp),
-                            onClick = {
-                                commandHandler.handleCommand(command)
-                            },
-                            border = BorderStroke(1.dp, Color.Black)
+                                .weight(1f),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = name)
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(80.dp),
+                                onClick = {
+                                    commandHandler.handleCommand(command)
+                                },
+                                border = BorderStroke(1.dp, Color.Black)
+                            ) {
+                                Text(text = name)
+                            }
                         }
                     }
                 }
@@ -222,11 +281,16 @@ fun MainMenu(
 
 @Composable
 fun MinesweeperView(
-    gLSurfaceView: GLSurfaceView
+    context: Context,
+    glSurfaceViewCreated: GLSurfaceViewCreated,
 ) {
     AndroidView(
         factory = {
-            gLSurfaceView
+            GLSurfaceView(context).apply {
+                glSurfaceViewCreated.invoke(
+                    this
+                )
+            }
         }
     )
 }

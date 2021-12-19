@@ -123,10 +123,13 @@ class MainActivityImp: MainActivity() {
                         }
                     }
                     entry.lifecycle.addObserver(viewModel)
+                    val loadGame = entry.arguments!![LoadGameParameterName].toString().toBoolean()
                     GameScreen(
                         viewModel,
                         this@MainActivityImp,
                         navController,
+                        context,
+                        loadGame
                     )
                 }
                 composable(

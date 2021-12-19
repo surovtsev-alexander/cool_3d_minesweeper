@@ -39,10 +39,12 @@ typealias GameScreenStateValue = LiveData<GameScreenState>
 
 typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
+typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
+
 class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
+    @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.LoadGame,
@@ -53,8 +55,6 @@ class GameScreenViewModel @AssistedInject constructor(
 {
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
-
-    val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
 
     // see ::onDestroy
     @SuppressLint("StaticFieldLeak")
@@ -77,17 +77,12 @@ class GameScreenViewModel @AssistedInject constructor(
     override val stateValue: GameScreenStateValue
 
     init {
-
+        val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
         val gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
-            .context(context)
             .loadGame(loadGame)
             .build()
-
-        gLSurfaceView =
-            gameComponent.gLSurfaceView
-
 
         minesweeperController =
             gameComponent.minesweeperController
@@ -133,29 +128,32 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        gLSurfaceView!!.apply {
-            /* TODO. add back */
-            touchListener.connectToGLSurfaceView(
-                this
-            )
-
-            setEGLContextClientVersion(2)
-            setRenderer(gameRenderer)
-        }
     }
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromGameScreen.NewGame       -> ::newGame
-            is CommandFromGameScreen.LoadGame      -> ::loadGame
-            is CommandFromGameScreen.CloseError    -> ::closeError
-            is CommandFromGameScreen.Pause         -> ::pause
-            is CommandFromGameScreen.Resume        -> ::resume
-            is CommandFromGameScreen.OpenMenu      -> ::openMenu
-            is CommandFromGameScreen.CloseMenu     -> ::closeMenu
-            is CommandFromGameScreen.GoToMainMenu  -> ::goToMainMenu
-            else                                   -> null
+            is CommandFromGameScreen.NewGame            -> ::newGame
+            is CommandFromGameScreen.LoadGame           -> ::loadGame
+            is CommandFromGameScreen.CloseError         -> ::closeError
+            is CommandFromGameScreen.Pause              -> ::pause
+            is CommandFromGameScreen.Resume             -> ::resume
+            is CommandFromGameScreen.OpenMenu           -> ::openMenu
+            is CommandFromGameScreen.CloseMenu          -> ::closeMenu
+            is CommandFromGameScreen.GoToMainMenu       -> ::goToMainMenu
+            else                                        -> null
         }
+    }
+
+    fun initGLSurfaceView(
+        gLSurfaceView: GLSurfaceView
+    ) {
+        this.gLSurfaceView = gLSurfaceView
+
+        gLSurfaceView.setEGLContextClientVersion(2)
+        gLSurfaceView.setRenderer(gameRenderer)
+        touchListener.connectToGLSurfaceView(
+            gLSurfaceView
+        )
     }
 
     private suspend fun doActionIfDataIsCorrect(
@@ -258,13 +256,13 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        gLSurfaceView!!.onPause()
+        gLSurfaceView?.onPause()
         minesweeperController.onPause(owner)
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        gLSurfaceView!!.onResume()
+        gLSurfaceView?.onResume()
         minesweeperController.onResume(owner)
     }
 

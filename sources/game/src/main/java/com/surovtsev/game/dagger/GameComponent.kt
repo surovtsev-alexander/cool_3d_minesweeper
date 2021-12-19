@@ -57,7 +57,6 @@ interface GameComponent {
     val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
-    val gLSurfaceView: GLSurfaceView
     val gameScreenEvents: GameScreenEvents
     val gameControls: GameControls
     val gameConfig: GameConfig
@@ -81,7 +80,7 @@ interface GameComponent {
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
-        fun context(@BindsInstance context: Context): Builder
+//        fun context(@BindsInstance context: Context): Builder
 //        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
         fun build(): GameComponent
     }
@@ -107,15 +106,6 @@ object GameModule {
     ): GameScreenStateValue {
         return gameScreenStateHolder
     }
-
-    @GameScope
-    @Provides
-    fun provideGLSurfaceView(
-        context: Context
-    ): GLSurfaceView {
-        return GLSurfaceView(context)
-    }
-
 }
 
 @Module
