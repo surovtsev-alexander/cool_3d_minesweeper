@@ -8,6 +8,7 @@ import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,9 +23,9 @@ class GameScreenEventsReceiver @Inject constructor(
         customCoroutineScope.launch {
             gameStatusWithElapsedFlow.collectLatest {
                 if (GameStatusHelper.isGameOver(it.gameStatus))
-                launch(Dispatchers.Main) {
-                    showDialog.onDataChanged(true)
-                }
+                    withContext(Dispatchers.Main) {
+                        showDialog.onDataChanged(true)
+                    }
             }
         }
     }

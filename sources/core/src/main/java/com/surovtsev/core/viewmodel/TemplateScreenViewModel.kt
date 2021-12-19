@@ -11,6 +11,8 @@ typealias CommandProcessor = suspend () -> Unit
 
 typealias FinishAction = () -> Unit
 
+typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
+
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     private val initCommand: C,
     private val noScreenData: D,
@@ -41,7 +43,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
             val isErrorDuringInitialization =
                 isErrorState &&
                         screenData != null &&
-                        screenData is ScreenData.DuringInitialization
+                        screenData is ScreenData.InitializationIsNotFinished
 
 
             if (isErrorState) {
@@ -51,7 +53,9 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
                     if (isErrorDuringInitialization) {
                         finishAction?.let {
                             closeError()
-                            it.invoke()
+                            withUIContext {
+                                it.invoke()
+                            }
                         }
                     } else {
                         tryToProcessCommand(command)

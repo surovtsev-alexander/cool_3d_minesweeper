@@ -10,10 +10,10 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
-import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
+import com.surovtsev.core.viewmodel.ScreenStateValue
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.game.dagger.DaggerGameComponent
 import com.surovtsev.game.minesweeper.MinesweeperController
@@ -35,7 +35,7 @@ import logcat.logcat
 const val LoadGameParameterName = "load_game"
 
 typealias GameScreenStateHolder = MutableLiveData<GameScreenState>
-typealias GameScreenStateValue = LiveData<GameScreenState>
+typealias GameScreenStateValue = ScreenStateValue<GameScreenData>
 
 typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
@@ -202,11 +202,11 @@ class GameScreenViewModel @AssistedInject constructor(
     private suspend fun openMenu() {
         logcat { "open menu" }
         doActionIfDataIsCorrect(
-            { it !is GameScreenData.MainMenu },
+            { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially",
         ) { gameScreenData ->
             publishIdleState(
-                GameScreenData.MainMenu(
+                GameScreenData.GameMenu(
                     gameScreenData
                 )
             )
@@ -234,7 +234,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend fun closeMenu() {
         doActionIfDataIsCorrect(
-            { it is GameScreenData.MainMenu },
+            { it is GameScreenData.GameMenu },
             "main menu is not opened"
         ) { gameScreenData ->
             tryUnstackState(gameScreenData)

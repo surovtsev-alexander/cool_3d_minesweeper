@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.interaction.GameControls
@@ -96,7 +96,14 @@ fun GameScreenControls(
     commandHandler: GameScreenCommandHandler,
 ) {
     MinesweeperTheme {
-        MainMenu(stateValue, commandHandler)
+        @Suppress("UNCHECKED_CAST")
+        ErrorDialog(
+            stateValue as ScreenStateValue<ScreenData>,
+            commandHandler as ScreenCommandHandler<CommandFromScreen>,
+            CommandFromGameScreen.CloseError
+        )
+
+        GameMenu(stateValue, commandHandler)
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -140,14 +147,16 @@ fun GameScreenControls(
     }
 }
 
+
+
 @Composable
-fun MainMenu(
+fun GameMenu(
     stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
 ) {
     val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
     val gameScreenData = gameScreenState.screenData
-    if (gameScreenData !is GameScreenData.MainMenu) {
+    if (gameScreenData !is GameScreenData.GameMenu) {
         return
     }
 
@@ -200,81 +209,6 @@ fun MainMenu(
                         border = BorderStroke(1.dp, Color.Black)
                     ) {
                         Text(text = name)
-                    }
-                }
-            }
-        }
-    }
-
-
-    if (false) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(GrayBackground)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.End
-            ) {
-                Button(
-                    modifier = Modifier
-                        .width(pauseResumeButtonWidth),
-                    onClick = {
-                        commandHandler.handleCommand(
-                            CommandFromGameScreen.CloseMenu
-                        )
-                    },
-                    border = BorderStroke(1.dp, Color.Black)
-                ) {
-                    Text(text = "resume")
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .fillMaxHeight(0.5f)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Paused",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp
-                        )
-                    }
-                    mainMenuButtons.map { (name, command) ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(80.dp),
-                                onClick = {
-                                    commandHandler.handleCommand(command)
-                                },
-                                border = BorderStroke(1.dp, Color.Black)
-                            ) {
-                                Text(text = name)
-                            }
-                        }
                     }
                 }
             }

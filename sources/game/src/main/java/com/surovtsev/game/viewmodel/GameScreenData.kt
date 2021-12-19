@@ -3,7 +3,7 @@ package com.surovtsev.game.viewmodel
 import com.surovtsev.core.viewmodel.ScreenData
 
 sealed class GameScreenData: ScreenData {
-    object NoData: GameScreenData()
+    object NoData: GameScreenData(), ScreenData.InitializationIsNotFinished
 
     object GameInProgress: GameScreenData()
 
@@ -11,7 +11,7 @@ sealed class GameScreenData: ScreenData {
         val prevData: GameScreenData
     ): GameScreenData()
 
-    class MainMenu(
+    class GameMenu(
         prevData: GameScreenData
     ): HasPrevData(
         prevData

@@ -2,6 +2,7 @@ package com.surovtsev.core.viewmodel
 
 
 interface ScreenData {
-    interface DuringInitialization
+    interface InitializationIsNotFinished
 
+    object NoData: InitializationIsNotFinished
 }

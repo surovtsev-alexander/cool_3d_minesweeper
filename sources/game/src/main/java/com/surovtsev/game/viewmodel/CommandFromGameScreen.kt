@@ -7,7 +7,7 @@ sealed class CommandFromGameScreen: CommandFromScreen {
 
     object NewGame: CommandFromGameScreen()
 
-    object CloseError: CommandFromGameScreen()
+    object CloseError: CommandFromGameScreen(), CommandFromScreen.CloseError
 
     object Pause: CommandFromGameScreen()
 
