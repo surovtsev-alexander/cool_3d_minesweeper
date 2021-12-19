@@ -1,10 +1,7 @@
 package com.surovtsev.core.viewmodel
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +18,7 @@ fun ErrorDialog(
     stateValue: ScreenStateValue<ScreenData>,
     screenCommandHandler: ScreenCommandHandler<CommandFromScreen>,
     closeErrorCommand: CommandFromScreen.CloseError,
+    closeErrorAndFinishCommand: CommandFromScreen.CloseErrorAndFinish
 ) {
     val state by stateValue.observeAsState(ScreenState.Idle(
         ScreenData.NoData
@@ -35,7 +33,7 @@ fun ErrorDialog(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth(1f)
                 .background(GrayBackground)
                 .padding(10.dp, 10.dp)
             ,
@@ -48,8 +46,21 @@ fun ErrorDialog(
             Text(
                 text = errorMessage
             )
-            Button(onClick = closeAction) {
-                Text(text = "Ok")
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Button(onClick = closeAction) {
+                    Text(text = "ok")
+                }
+                Button(
+                    onClick = {
+                        screenCommandHandler.handleCommand(
+                            closeErrorAndFinishCommand
+                        )
+                    }
+                ) {
+                    Text(text = "to main menu")
+                }
             }
         }
     }

@@ -9,6 +9,8 @@ sealed class CommandFromGameScreen: CommandFromScreen {
 
     object CloseError: CommandFromGameScreen(), CommandFromScreen.CloseError
 
+    object CloseErrorAndFinish: CommandFromGameScreen(), CommandFromScreen.CloseErrorAndFinish
+
     object Pause: CommandFromGameScreen()
 
     object Resume: CommandFromGameScreen()

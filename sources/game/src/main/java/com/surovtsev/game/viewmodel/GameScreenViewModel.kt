@@ -129,15 +129,16 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromGameScreen.NewGame            -> suspend { newGame(false) }
-            is CommandFromGameScreen.LoadGame           -> suspend { newGame(true) }
-            is CommandFromGameScreen.CloseError         -> ::closeError
-            is CommandFromGameScreen.Pause              -> ::pause
-            is CommandFromGameScreen.Resume             -> ::resume
-            is CommandFromGameScreen.OpenMenu           -> ::openMenu
-            is CommandFromGameScreen.CloseMenu          -> ::closeMenu
-            is CommandFromGameScreen.GoToMainMenu       -> ::goToMainMenu
-            else                                        -> null
+            is CommandFromGameScreen.NewGame                -> suspend { newGame(false) }
+            is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
+            is CommandFromGameScreen.CloseError             -> ::closeError
+            is CommandFromGameScreen.CloseErrorAndFinish    -> ::closeError
+            is CommandFromGameScreen.Pause                  -> ::pause
+            is CommandFromGameScreen.Resume                 -> ::resume
+            is CommandFromGameScreen.OpenMenu               -> ::openMenu
+            is CommandFromGameScreen.CloseMenu              -> ::closeMenu
+            is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
+            else                                            -> null
         }
     }
 

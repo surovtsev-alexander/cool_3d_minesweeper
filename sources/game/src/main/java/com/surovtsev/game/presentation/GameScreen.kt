@@ -96,14 +96,17 @@ fun GameScreenControls(
     commandHandler: GameScreenCommandHandler,
 ) {
     MinesweeperTheme {
+
         @Suppress("UNCHECKED_CAST")
         ErrorDialog(
             stateValue as ScreenStateValue<ScreenData>,
             commandHandler as ScreenCommandHandler<CommandFromScreen>,
-            CommandFromGameScreen.CloseError
+            CommandFromGameScreen.CloseError,
+            CommandFromGameScreen.CloseErrorAndFinish
         )
 
         GameMenu(stateValue, commandHandler)
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {

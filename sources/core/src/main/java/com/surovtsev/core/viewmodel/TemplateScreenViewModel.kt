@@ -50,7 +50,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
                 val isCloseErrorCommand = command is CommandFromScreen.CloseError
 
                 if (isCloseErrorCommand) {
-                    if (isErrorDuringInitialization) {
+                    if (isErrorDuringInitialization || command is CommandFromScreen.CloseErrorAndFinish) {
                         finishAction?.let {
                             closeError()
                             withUIContext {
