@@ -129,8 +129,8 @@ fun GameView(
     }
 
     val gameComponent = viewModel.gameComponent ?: return
-    val gameControls = gameComponent.gameControls ?: return
-    val gameScreenEvents = gameComponent.gameScreenEvents ?: return
+    val gameControls = gameComponent.gameControls
+    val gameScreenEvents = gameComponent.gameScreenEvents
 
     Column(
         modifier = Modifier.fillMaxSize()

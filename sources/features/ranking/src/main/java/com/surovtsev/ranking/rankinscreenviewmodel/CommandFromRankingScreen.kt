@@ -4,6 +4,8 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
 sealed class CommandFromRankingScreen: CommandFromScreen {
+    object HandleScreenLeaving: CommandFromRankingScreen()
+
     object LoadData: CommandFromRankingScreen()
 
     object CloseError: CommandFromRankingScreen()

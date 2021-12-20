@@ -1,23 +1,17 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
 import android.content.Context
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.room.dao.RankingDao
-import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.ranking.dagger.DaggerRankingComponent
+import com.surovtsev.ranking.dagger.RankingComponent
 import com.surovtsev.utils.timers.TimeSpan
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,9 +25,9 @@ typealias RankingScreenStateValue = LiveData<RankingScreenState>
 typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
 
 class RankingScreenViewModel @AssistedInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
+    @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ): TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.LoadData,
         RankingScreenData.NoData,
@@ -45,43 +39,22 @@ class RankingScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
 
-    private val settingsDao: SettingsDao
-    private val rankingDao: RankingDao
-
-    private val rankingListHelper: RankingListHelper
-
-    private val timeSpan: TimeSpan
-
-    private val saveController: SaveController
+    var rankingComponent: RankingComponent? = null
 
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 1000L
     }
 
-    init {
-        val rankingComponent = DaggerRankingComponent
-            .builder()
-            .appComponentEntryPoint(appComponentEntryPoint)
-            .build()
-
-        settingsDao =
-            rankingComponent.settingsDao
-        rankingDao =
-            rankingComponent.rankingDao
-        rankingListHelper =
-            rankingComponent.rankingListHelper
-
-        timeSpan =
-            rankingComponent.timeSpan
-
-        saveController =
-            rankingComponent.saveController
-
-        timeSpan.flush()
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        handleCommand(
+            CommandFromRankingScreen.HandleScreenLeaving
+        )
     }
 
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
+            is CommandFromRankingScreen.HandleScreenLeaving -> ::handleScreenLeaving
             is CommandFromRankingScreen.LoadData            -> ::loadData
             is CommandFromRankingScreen.FilterList          -> suspend { filterList(command.selectedSettingsId) }
             is CommandFromRankingScreen.SortListWithNoDelay -> suspend { sortList(command.rankingTableSortParameters, false) }
@@ -91,8 +64,38 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
     }
 
+    private suspend fun handleScreenLeaving() {
+        rankingComponent = null
+
+        publishIdleState(
+            RankingScreenData.NoData
+        )
+    }
+
     private suspend fun loadData() {
-        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal {
+        val currRankingComponent: RankingComponent
+
+        rankingComponent.let {
+            if (it == null) {
+                rankingComponent = DaggerRankingComponent
+                    .builder()
+                    .appComponentEntryPoint(appComponentEntryPoint)
+                    .build()
+                    .apply {
+                        currRankingComponent = this
+                    }
+            } else {
+                currRankingComponent = it
+            }
+        }
+
+        currRankingComponent.timeSpan.flush()
+
+        val settingsDao = currRankingComponent.settingsDao
+        val rankingDao = currRankingComponent.rankingDao
+        val saveController = currRankingComponent.saveController
+
+        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currRankingComponent.timeSpan) {
             val settingsList = settingsDao.getAll()
             val winsCountMap = rankingDao.getWinsCountMap()
             RankingScreenData.SettingsListIsLoaded(
@@ -118,8 +121,17 @@ class RankingScreenViewModel @AssistedInject constructor(
     private suspend fun filterList(
         selectedSettingsId: Long
     ) {
+        val currRankingComponent = rankingComponent
+
+        if (currRankingComponent == null) {
+            publishErrorState(
+                "error while filtering ranking list"
+            )
+            return
+        }
+
         val rankingListWithPlaces =
-            rankingListHelper
+            currRankingComponent.rankingListHelper
                 .createRankingListWithPlaces(
                     selectedSettingsId
                 )
@@ -153,11 +165,21 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ) {
+        val currRankingComponent = rankingComponent
+
+        if (currRankingComponent == null) {
+            publishErrorState(
+                "error (1) while sorting ranking list"
+            )
+
+            return
+        }
+
         val rankingScreenData = state.value?.screenData
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             publishErrorState(
-                "error while sorting ranking list"
+                "error (2) while sorting ranking list"
             )
 
             return
@@ -168,14 +190,14 @@ class RankingScreenViewModel @AssistedInject constructor(
         logcat { "rankingTableSortType: $rankingTableSortParameters" }
 
         val sortingAction = {
-            rankingListHelper.sortData(
+            currRankingComponent.rankingListHelper.sortData(
                 filteredRankingList,
                 rankingTableSortParameters
             )
         }
 
         val sortedData = if (doDelay) {
-            doActionWithDelayUpToDefaultMinimal(sortingAction)
+            doActionWithDelayUpToDefaultMinimal(currRankingComponent.timeSpan, sortingAction)
         } else {
             sortingAction.invoke()
         }
@@ -204,6 +226,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
+        timeSpan: TimeSpan,
         block: () -> T
     ): T {
         timeSpan.turnOn()
