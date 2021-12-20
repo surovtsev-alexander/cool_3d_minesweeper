@@ -108,7 +108,8 @@ fun GameScreenControls(
         )
 
         GameStatusDialog(
-            viewModel
+            viewModel,
+            commandHandler,
         )
     }
 }
@@ -395,6 +396,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     viewModel: GameScreenViewModel,
+    commandHandler: GameScreenCommandHandler,
 ) {
     val state by viewModel.state.observeAsState(GameScreenInitialState)
 
@@ -436,10 +438,20 @@ fun GameStatusDialog(
         onDismissRequest = closeDialogAction,
         title = { Text(text = "Game status") },
         text = { Text(
-            /* TODO: replace with gameStatusEvent */
             text = text
         ) },
-
+        dismissButton = {
+            Button(
+                onClick = {
+                    showDialogEvent.onDataChanged(false)
+                    commandHandler.handleCommand(
+                        CommandFromGameScreen.NewGame
+                    )
+                }
+            ) {
+                Text(text = "new game")
+            }
+        },
         confirmButton = {
             Button(
                 onClick = closeDialogAction
