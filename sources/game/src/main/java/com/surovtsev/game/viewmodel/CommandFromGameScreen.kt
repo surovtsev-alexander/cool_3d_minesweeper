@@ -1,25 +1,30 @@
 package com.surovtsev.game.viewmodel
 
+import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed class CommandFromGameScreen: CommandFromScreen {
-    object LoadGame: CommandFromGameScreen()
+sealed interface CommandFromGameScreen: CommandFromScreen {
+    class HandleScreenLeaving(owner: LifecycleOwner):
+        CommandFromGameScreen,
+        CommandFromScreen.HandleScreenLeaving(owner)
 
-    object NewGame: CommandFromGameScreen()
+    object LoadGame: CommandFromGameScreen, CommandFromScreen.Init
 
-    object CloseError: CommandFromGameScreen(), CommandFromScreen.CloseError
+    object NewGame: CommandFromGameScreen
 
-    object CloseErrorAndFinish: CommandFromGameScreen(), CommandFromScreen.CloseErrorAndFinish
+    object CloseError: CommandFromGameScreen, CommandFromScreen.CloseError
 
-    object Pause: CommandFromGameScreen()
+    object CloseErrorAndFinish: CommandFromGameScreen, CommandFromScreen.CloseErrorAndFinish
 
-    object Resume: CommandFromGameScreen()
+    object Pause: CommandFromGameScreen
 
-    object OpenMenu: CommandFromGameScreen()
+    object Resume: CommandFromGameScreen
 
-    object CloseMenu: CommandFromGameScreen()
+    object OpenMenu: CommandFromGameScreen
 
-    object GoToMainMenu: CommandFromGameScreen()
+    object CloseMenu: CommandFromGameScreen
 
-    object CloseGame: CommandFromGameScreen()
+    object GoToMainMenu: CommandFromGameScreen
+
+    object CloseGame: CommandFromGameScreen
 }

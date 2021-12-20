@@ -28,12 +28,13 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
-): TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
+):
+    TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.LoadData,
+        { CommandFromRankingScreen.HandleScreenLeaving(it) },
         RankingScreenData.NoData,
         RankingScreenStateHolder(RankingScreenInitialState)
-    ),
-    DefaultLifecycleObserver
+    )
 //    RequestPermissionsResultReceiver,
 {
     @AssistedFactory
@@ -45,16 +46,9 @@ class RankingScreenViewModel @AssistedInject constructor(
         const val MINIMAL_UI_ACTION_DELAY = 1000L
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        handleCommand(
-            CommandFromRankingScreen.HandleScreenLeaving
-        )
-    }
-
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromRankingScreen.HandleScreenLeaving -> ::handleScreenLeaving
+            is CommandFromRankingScreen.HandleScreenLeaving -> suspend { handleScreenLeaving(command.owner) }
             is CommandFromRankingScreen.LoadData            -> ::loadData
             is CommandFromRankingScreen.FilterList          -> suspend { filterList(command.selectedSettingsId) }
             is CommandFromRankingScreen.SortListWithNoDelay -> suspend { sortList(command.rankingTableSortParameters, false) }
@@ -64,25 +58,17 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleScreenLeaving() {
-        rankingComponent = null
-
-        publishIdleState(
-            RankingScreenData.NoData
-        )
-    }
-
     private suspend fun loadData() {
         val currRankingComponent: RankingComponent
 
         rankingComponent.let {
             if (it == null) {
-                rankingComponent = DaggerRankingComponent
+                currRankingComponent = DaggerRankingComponent
                     .builder()
                     .appComponentEntryPoint(appComponentEntryPoint)
                     .build()
                     .apply {
-                        currRankingComponent = this
+                        rankingComponent = this
                     }
             } else {
                 currRankingComponent = it

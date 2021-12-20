@@ -26,39 +26,26 @@ typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
 
 class SettingsScreenViewModel @AssistedInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
+    @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
         CommandFromSettingsScreen.LoadSettings,
+        { CommandFromSettingsScreen.HandleLeavingScreen(it) },
         SettingsScreenData.NoData,
         SettingsScreenStateHolder(SettingsScreenInitialState),
     ),
     DefaultLifecycleObserver
 {
-
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private val settingsDao: SettingsDao
-    private val saveController: SaveController
-
-    init {
-        val settingsComponent: SettingsComponent =
-            DaggerSettingsComponent
-                .builder()
-                .appComponentEntryPoint(appComponentEntryPoint)
-                .build()
-
-        settingsDao =
-            settingsComponent.settingsDao
-        saveController =
-            settingsComponent.saveController
-    }
+    private var settingsComponent: SettingsComponent? = null
 
     override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): CommandProcessor? {
         return when (command) {
+            is CommandFromSettingsScreen.HandleLeavingScreen    -> suspend { handleScreenLeaving(command.owner) }
             is CommandFromSettingsScreen.CloseError             -> ::closeError
             is CommandFromSettingsScreen.LoadSettings           -> ::loadSettings
             is CommandFromSettingsScreen.LoadSelectedSettings   -> ::loadSelectedSettings
@@ -72,7 +59,23 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSettings() {
-        val settingsList = settingsDao.getAll()
+        val currSettingsComponent: SettingsComponent
+
+        settingsComponent.let {
+            if (it == null) {
+                currSettingsComponent = DaggerSettingsComponent
+                    .builder()
+                    .appComponentEntryPoint(appComponentEntryPoint)
+                    .build()
+                    .apply {
+                        settingsComponent = this
+                    }
+            } else {
+                currSettingsComponent = it
+            }
+        }
+
+        val settingsList = currSettingsComponent.settingsDao.getAll()
 
         publishLoadingState(
             SettingsScreenData.SettingsLoaded(
@@ -103,10 +106,22 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun applySettings() {
+        val currSettingsComponent = settingsComponent
+
+        if (currSettingsComponent == null) {
+            publishErrorState(
+                "error (1) while applying settings"
+            )
+            return
+        }
+
         doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
-            "error while applying settings"
+            "error (2) while applying settings"
         ) { screenData ->
             val settingsData = screenData.settingsData
+
+            val settingsDao = currSettingsComponent.settingsDao
+            val saveController = currSettingsComponent.saveController
 
             settingsDao.getOrCreate(
                 settingsData
@@ -126,10 +141,18 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ) {
+        val currSettingsComponent = settingsComponent
+        if (currSettingsComponent == null) {
+            publishErrorState(
+                "error (1) while deleting settings"
+            )
+            return
+        }
+
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
-            "error while deleting settings"
+            "error (2) while deleting settings"
         ) {
-            settingsDao.delete(settingsId)
+            currSettingsComponent.settingsDao.delete(settingsId)
 
             return handleCommand(
                 CommandFromSettingsScreen.LoadSettings
@@ -138,6 +161,19 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSelectedSettings() {
+        val currSettingsComponent = settingsComponent
+
+        if (currSettingsComponent == null) {
+            publishErrorState(
+                "error while loading selected settings"
+            )
+
+            return
+        }
+
+        val saveController = currSettingsComponent.saveController
+        val settingsDao = currSettingsComponent.settingsDao
+
         val selectedSettingsData = saveController.loadSettingDataOrDefault()
 
         val selectedSettings = settingsDao.getBySettingsData(

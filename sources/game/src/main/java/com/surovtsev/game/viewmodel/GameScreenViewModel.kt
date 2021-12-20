@@ -42,6 +42,7 @@ class GameScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.LoadGame,
+        { CommandFromGameScreen.HandleScreenLeaving(it) },
         GameScreenData.NoData,
         GameScreenStateHolder(GameScreenInitialState)
     ),
@@ -60,12 +61,9 @@ class GameScreenViewModel @AssistedInject constructor(
     var touchListenerComponent: TouchListenerComponent? = null
         private set
 
-    override fun onCreate(owner: LifecycleOwner) {
-        super.onCreate(owner)
-    }
-
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
+            is CommandFromGameScreen.HandleScreenLeaving    -> suspend { handleScreenLeaving(command.owner) }
             is CommandFromGameScreen.CloseGame              -> ::closeGame
             is CommandFromGameScreen.NewGame                -> suspend { newGame(false) }
             is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
@@ -74,7 +72,7 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.Pause                  -> ::pause
             is CommandFromGameScreen.Resume                 -> ::resume
             is CommandFromGameScreen.OpenMenu               -> ::openMenu
-            is CommandFromGameScreen.CloseMenu              -> ::closeMenu
+            is CommandFromGameScreen.CloseMenu              -> suspend { closeMenu() }
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
             else                                            -> null
         }
@@ -235,23 +233,22 @@ class GameScreenViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
+    override fun handleOnCreate(owner: LifecycleOwner) {
+        super.handleOnCreate(owner)
         gLSurfaceView?.onPause()
         gameComponent?.minesweeperController?.onPause(owner)
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
+    override fun handleOnResume(owner: LifecycleOwner) {
+        super.handleOnResume(owner)
         gLSurfaceView?.onResume()
         gameComponent?.minesweeperController?.onResume(owner)
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        gameComponent?.let {
-            it.minesweeperController.onDestroy(owner)
-        }
+    override suspend fun handleScreenLeaving(
+        owner: LifecycleOwner
+    ) {
+        gameComponent?.minesweeperController?.onDestroy(owner)
         handleCommand(
             CommandFromGameScreen.CloseGame
         )

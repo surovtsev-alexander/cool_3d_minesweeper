@@ -1,28 +1,32 @@
 package com.surovtsev.settings.viewmodel
 
+import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed class CommandFromSettingsScreen: CommandFromScreen {
-    object CloseError: CommandFromSettingsScreen()
+sealed interface CommandFromSettingsScreen: CommandFromScreen {
+    class HandleLeavingScreen(owner: LifecycleOwner):
+        CommandFromSettingsScreen,
+        CommandFromScreen.HandleScreenLeaving(owner)
 
-    object LoadSettings: CommandFromSettingsScreen()
+    object CloseError: CommandFromSettingsScreen
 
-    object LoadSelectedSettings: CommandFromSettingsScreen()
+    object LoadSettings: CommandFromSettingsScreen
+
+    object LoadSelectedSettings: CommandFromSettingsScreen
 
     data class RememberSettings(
         val settings: Settings
-    ): CommandFromSettingsScreen()
+    ): CommandFromSettingsScreen
 
     data class RememberSettingsData(
         val settingsData: Settings.SettingsData,
         val fromSlider: Boolean = false
-    ): CommandFromSettingsScreen()
+    ): CommandFromSettingsScreen
 
     data class DeleteSettings(
         val settingsId: Long
-    ): CommandFromSettingsScreen()
+    ): CommandFromSettingsScreen
 
-    object ApplySettings: CommandFromSettingsScreen()
-
+    object ApplySettings: CommandFromSettingsScreen
 }

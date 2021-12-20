@@ -1,22 +1,25 @@
 package com.surovtsev.ranking.rankinscreenviewmodel
 
+import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed class CommandFromRankingScreen: CommandFromScreen {
-    object HandleScreenLeaving: CommandFromRankingScreen()
+sealed interface CommandFromRankingScreen: CommandFromScreen {
+    class HandleScreenLeaving(owner: LifecycleOwner):
+        CommandFromRankingScreen,
+        CommandFromScreen.HandleScreenLeaving(owner)
 
-    object LoadData: CommandFromRankingScreen()
+    object LoadData: CommandFromRankingScreen
 
-    object CloseError: CommandFromRankingScreen()
+    object CloseError: CommandFromRankingScreen
 
     class FilterList(
         val selectedSettingsId: Long
-    ): CommandFromRankingScreen()
+    ): CommandFromRankingScreen
 
     open class SortList(
         val rankingTableSortParameters: RankingTableSortParameters
-    ): CommandFromRankingScreen()
+    ): CommandFromRankingScreen
 
     class SortListWithNoDelay(
         rankingTableSortParameters: RankingTableSortParameters

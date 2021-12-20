@@ -1,8 +1,6 @@
 package com.surovtsev.core.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import logcat.logcat
@@ -13,14 +11,18 @@ typealias FinishAction = () -> Unit
 
 typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 
+typealias HandleScreenLeavingCommandFactory<C> = (owner: LifecycleOwner) -> C
+
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     private val initCommand: C,
+    private val handleScreenLeavingCommandFactory: HandleScreenLeavingCommandFactory<C>,
     private val noScreenData: D,
     initialState: MutableLiveData<ScreenState<out D>>,
 ):
     ViewModel(),
     ScreenCommandHandler<C>,
-    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl()
+    ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
+    DefaultLifecycleObserver
 {
     var finishAction: FinishAction? = null
 
@@ -29,6 +31,31 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        handleOnCreate(owner)
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+    }
+
+    protected open fun handleOnCreate(
+        owner: LifecycleOwner
+    ) {
+    }
+
+    protected open fun handleOnResume(
+        owner: LifecycleOwner
+    ) {
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        handleCommand(
+            handleScreenLeavingCommandFactory(owner)
+        )
+    }
 
     override fun handleCommand(command: C) {
         launchOnIOThread {
@@ -77,6 +104,14 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
             publishLoadingState()
             commandProcessor.invoke()
         }
+    }
+
+    protected open suspend fun handleScreenLeaving(
+        owner: LifecycleOwner
+    ) {
+        publishIdleState(
+            noScreenData
+        )
     }
 
     protected suspend fun publishLoadingState(
