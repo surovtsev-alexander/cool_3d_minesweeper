@@ -88,8 +88,7 @@ class MainActivityImp: MainActivity() {
                             animationSpec = navAnimHelper.fadingTween
                         )
                     }
-                ) {
-
+                ) { entry ->
                     val viewModel: MainScreenViewModel by viewModels {
                         SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
                             appComponent.mainScreenViewModelFactory.build(
@@ -98,6 +97,7 @@ class MainActivityImp: MainActivity() {
                         }
 
                     }
+                    entry.lifecycle.addObserver(viewModel)
                     MainScreen(
                         viewModel,
                         navController

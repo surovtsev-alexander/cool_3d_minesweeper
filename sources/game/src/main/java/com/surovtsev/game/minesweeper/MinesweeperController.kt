@@ -19,6 +19,7 @@ import javax.inject.Inject
 import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
 import com.surovtsev.utils.timers.TimeSpan
+import logcat.logcat
 
 @GameScope
 class MinesweeperController @Inject constructor(
@@ -72,10 +73,22 @@ class MinesweeperController @Inject constructor(
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
+        logcat { "onPause" }
+
+        storeGameIfNeeded()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+
+        logcat { "onDestroy" }
+
         storeGameIfNeeded()
     }
 
     private fun storeGameIfNeeded() {
+        logcat { "storeGameIfNeeded; gameState: ${gameLogic.gameLogicStateHelper.gameStatusWithElapsedFlow.value}" }
+
         if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
             return
         }

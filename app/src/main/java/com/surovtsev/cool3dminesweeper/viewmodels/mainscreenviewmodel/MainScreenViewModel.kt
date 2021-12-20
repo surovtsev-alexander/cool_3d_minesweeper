@@ -1,8 +1,7 @@
 package com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel
 
 import android.content.Context
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.appComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.DaggerMainScreenComponent
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
@@ -20,10 +19,15 @@ class MainScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
-): ViewModel() {
-
+):
+    ViewModel(),
+    DefaultLifecycleObserver
+{
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<MainScreenViewModel>
+
+    private val _hasSave = MutableLiveData<Boolean>(false)
+    val hasSave: LiveData<Boolean> = _hasSave
 
     object ButtonNames {
         const val NewGame = "new game"
@@ -35,7 +39,7 @@ class MainScreenViewModel @AssistedInject constructor(
 
     val buttonsInfo: ButtonsInfo
 
-    val saveController: SaveController
+    private val saveController: SaveController
 
     init {
         logcat { "init: ${System.identityHashCode(this)}" }
@@ -49,8 +53,13 @@ class MainScreenViewModel @AssistedInject constructor(
         saveController = mainScreenComponent.saveController
     }
 
-    fun hasSave() =
-        saveController.hasData(
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+
+        _hasSave.value = saveController.hasData(
             SaveTypes.SaveGameJson
         )
+
+        logcat { "onResume; hasSave.value: ${hasSave.value}" }
+    }
 }

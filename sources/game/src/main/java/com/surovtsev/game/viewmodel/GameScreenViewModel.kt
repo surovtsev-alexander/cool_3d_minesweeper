@@ -235,6 +235,12 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun handleOnCreate(owner: LifecycleOwner) {
         super.handleOnCreate(owner)
+        gameComponent?.minesweeperController?.onCreate(owner)
+    }
+
+
+    override fun handleOnPause(owner: LifecycleOwner) {
+        super.handleOnPause(owner)
         gLSurfaceView?.onPause()
         gameComponent?.minesweeperController?.onPause(owner)
     }
@@ -245,10 +251,14 @@ class GameScreenViewModel @AssistedInject constructor(
         gameComponent?.minesweeperController?.onResume(owner)
     }
 
+    override fun handleOnDestroySync(owner: LifecycleOwner) {
+        super.handleOnDestroySync(owner)
+        gameComponent?.minesweeperController?.onDestroy(owner)
+    }
+
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ) {
-        gameComponent?.minesweeperController?.onDestroy(owner)
         handleCommand(
             CommandFromGameScreen.CloseGame
         )
