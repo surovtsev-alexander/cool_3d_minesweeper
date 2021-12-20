@@ -25,9 +25,6 @@ import com.surovtsev.game.models.game.save.Save
 import com.surovtsev.game.utils.gles.model.pointer.Pointer
 import com.surovtsev.game.utils.gles.model.pointer.PointerImp
 import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.game.viewmodel.GameScreenInitialState
-import com.surovtsev.game.viewmodel.GameScreenStateHolder
-import com.surovtsev.game.viewmodel.GameScreenStateValue
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
@@ -68,9 +65,6 @@ interface GameComponent {
     val moveHandlerImp: MoveHandlerImp
     val timeSpanHelperImp: TimeSpanHelperImp
 
-    val gameScreenStateHolder: GameScreenStateHolder
-    val gameScreenStateValue: GameScreenStateValue
-
     val bombsLeftFlow: BombsLeftFlow
 
     val timeSpan: TimeSpan
@@ -90,23 +84,6 @@ interface GameComponent {
 
 @Module
 object GameModule {
-
-    @GameScope
-    @Provides
-    fun provideGameScreenStateHolder(
-    ): GameScreenStateHolder {
-        return GameScreenStateHolder(
-            GameScreenInitialState
-        )
-    }
-
-    @GameScope
-    @Provides
-    fun provideGameScreenStateValue(
-        gameScreenStateHolder: GameScreenStateHolder
-    ): GameScreenStateValue {
-        return gameScreenStateHolder
-    }
 }
 
 @Module

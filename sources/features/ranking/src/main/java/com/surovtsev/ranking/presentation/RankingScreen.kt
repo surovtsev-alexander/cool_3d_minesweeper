@@ -43,7 +43,7 @@ fun RankingScreen(
     }
 
     RankingControls(
-        viewModel.stateValue,
+        viewModel.state,
         commandHandler
     )
 }

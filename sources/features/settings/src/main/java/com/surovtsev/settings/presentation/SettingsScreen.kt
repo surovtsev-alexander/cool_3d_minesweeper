@@ -19,7 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.ui.theme.*
+import com.surovtsev.core.ui.theme.GrayBackground
+import com.surovtsev.core.ui.theme.LightBlue
+import com.surovtsev.core.ui.theme.MinesweeperTheme
+import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.settings.viewmodel.*
 import com.surovtsev.settings.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settings.viewmodel.helpers.SettingsUIInfo
@@ -39,7 +42,7 @@ fun SettingsScreen(
     }
 
     SettingsControls(
-        viewModel.stateValue,
+        viewModel.state,
         commandHandler
     )
 }

@@ -36,7 +36,8 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ): TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.LoadData,
-        RankingScreenData.NoData
+        RankingScreenData.NoData,
+        RankingScreenStateHolder(RankingScreenInitialState)
     ),
     DefaultLifecycleObserver
 //    RequestPermissionsResultReceiver,
@@ -48,9 +49,6 @@ class RankingScreenViewModel @AssistedInject constructor(
     private val rankingDao: RankingDao
 
     private val rankingListHelper: RankingListHelper
-
-    override val stateHolder: RankingScreenStateHolder
-    override val stateValue: RankingScreenStateValue
 
     private val timeSpan: TimeSpan
 
@@ -72,11 +70,6 @@ class RankingScreenViewModel @AssistedInject constructor(
             rankingComponent.rankingDao
         rankingListHelper =
             rankingComponent.rankingListHelper
-
-        stateHolder =
-            rankingComponent.rankingScreenStateHolder
-        stateValue =
-            rankingComponent.rankingScreenStateValue
 
         timeSpan =
             rankingComponent.timeSpan
@@ -131,7 +124,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                     selectedSettingsId
                 )
 
-        val rankingScreenData = stateHolder.value?.screenData
+        val rankingScreenData = state.value?.screenData
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
             publishErrorState(
@@ -160,7 +153,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ) {
-        val rankingScreenData = stateHolder.value?.screenData
+        val rankingScreenData = state.value?.screenData
 
         if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             publishErrorState(

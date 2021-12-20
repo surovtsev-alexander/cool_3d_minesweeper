@@ -16,6 +16,7 @@ typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     private val initCommand: C,
     private val noScreenData: D,
+    initialState: MutableLiveData<ScreenState<out D>>,
 ):
     ViewModel(),
     ScreenCommandHandler<C>,
@@ -23,8 +24,8 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 {
     var finishAction: FinishAction? = null
 
-    protected abstract val stateHolder: MutableLiveData<ScreenState<out D>>
-    abstract val stateValue: LiveData<ScreenState<out D>>
+    private val _state: MutableLiveData<ScreenState<out D>> = initialState
+    val state: LiveData<ScreenState<out D>> = _state
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 
@@ -33,9 +34,9 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
         launchOnIOThread {
             logcat { "handleCommand: $command" }
 
-            val currState = stateHolder.value
+            val currState = state.value
 
-            val screenData = stateHolder.value?.screenData
+            val screenData = currState?.screenData
 
             val isErrorState =
                 currState != null &&
@@ -114,7 +115,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
         screenState: ScreenState<out D>
     ) {
         withUIContext {
-            stateHolder.value = screenState
+            _state.value = screenState
         }
     }
 
@@ -125,7 +126,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     }
 
     protected fun getCurrentScreenDataOrNoData(): D {
-        return stateHolder.value?.screenData ?: noScreenData
+        return state.value?.screenData ?: noScreenData
     }
 
 //    protected inline fun <reified T: D> processIfDataNullable(
@@ -161,7 +162,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     protected suspend inline fun <reified T: D> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
-        val screenData = stateHolder.value?.screenData
+        val screenData = state.value?.screenData
 
         if (screenData == null || screenData !is T) {
             publishErrorState(errorMessage)

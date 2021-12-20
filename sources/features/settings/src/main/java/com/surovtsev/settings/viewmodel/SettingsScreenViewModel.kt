@@ -31,7 +31,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
-        CommandFromSettingsScreen.LoadSettings, SettingsScreenData.NoData
+        CommandFromSettingsScreen.LoadSettings,
+        SettingsScreenData.NoData,
+        SettingsScreenStateHolder(SettingsScreenInitialState),
     ),
     DefaultLifecycleObserver
 {
@@ -41,9 +43,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private val settingsDao: SettingsDao
     private val saveController: SaveController
-
-    override val stateHolder: SettingsScreenStateHolder
-    override val stateValue: SettingsScreenStateValue
 
     init {
         val settingsComponent: SettingsComponent =
@@ -56,11 +55,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
             settingsComponent.settingsDao
         saveController =
             settingsComponent.saveController
-
-        stateHolder =
-            settingsComponent.settingsScreenStateHolder
-        stateValue =
-            settingsComponent.settingsScreenStateValue
     }
 
     override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): CommandProcessor? {

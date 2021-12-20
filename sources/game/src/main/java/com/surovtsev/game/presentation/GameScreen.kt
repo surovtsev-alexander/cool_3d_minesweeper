@@ -29,17 +29,14 @@ import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.*
-import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.game.models.game.gamestatus.GameStatus
-import com.surovtsev.game.models.game.interaction.GameControls
 import com.surovtsev.game.models.game.interaction.RemoveMarkedBombsControl
 import com.surovtsev.game.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.game.viewmodel.*
 import com.surovtsev.game.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.game.viewmodel.helpers.MarkingEvent
 import com.surovtsev.game.viewmodel.helpers.Place
-import com.surovtsev.game.viewmodel.helpers.ShowDialogEvent
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.timers.TimeSpanFlow
 
@@ -59,8 +56,6 @@ fun GameScreen(
         return
     }
 
-    val gameComponent = viewModel.gameComponent?: return
-
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         viewModel.handleCommand(
@@ -72,16 +67,10 @@ fun GameScreen(
         )
     }
 
-    val gameViewEvents = gameComponent.gameScreenEvents
-    val gameControls = gameComponent.gameControls
-
     GameScreenControls(
         context,
         viewModel,
 //        viewModel.gLSurfaceView!!,
-        gameViewEvents,
-        gameControls,
-        viewModel.stateValue,
         viewModel
     )
 }
@@ -92,39 +81,34 @@ private val pauseResumeButtonWidth = 100.dp
 fun GameScreenControls(
     context: Context,
     viewModel: GameScreenViewModel,
-    gameScreenEvents: GameScreenEvents,
-    gameControls: GameControls,
-    stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
 ) {
     MinesweeperTheme {
 
+        val state = viewModel.state
+
         @Suppress("UNCHECKED_CAST")
         ErrorDialog(
-            stateValue as ScreenStateValue<ScreenData>,
+            state as ScreenStateValue<ScreenData>,
             commandHandler as ScreenCommandHandler<CommandFromScreen>,
             CommandFromGameScreen.CloseError,
             CommandFromGameScreen.CloseErrorAndFinish
         )
 
         GameView(
-            stateValue,
+            state,
             viewModel,
             context,
-            gameControls,
-            gameScreenEvents,
             commandHandler,
         )
 
         GameMenu(
-            stateValue,
+            state,
             commandHandler
         )
 
         GameStatusDialog(
-            gameScreenEvents.showDialogEvent,
-            viewModel,
-            viewModel.gameComponent,
+            viewModel
         )
     }
 }
@@ -135,8 +119,6 @@ fun GameView(
     stateValue: GameScreenStateValue,
     viewModel: GameScreenViewModel,
     context: Context,
-    gameControls: GameControls,
-    gameScreenEvents: GameScreenEvents,
     commandHandler: GameScreenCommandHandler,
 ) {
     val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
@@ -147,6 +129,8 @@ fun GameView(
     }
 
     val gameComponent = viewModel.gameComponent ?: return
+    val gameControls = gameComponent.gameControls ?: return
+    val gameScreenEvents = gameComponent.gameScreenEvents ?: return
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -410,19 +394,25 @@ fun TimeElapsed(
 
 @Composable
 fun GameStatusDialog(
-    showDialogEvent: ShowDialogEvent,
     viewModel: GameScreenViewModel,
-    gameComponent: GameComponent?,
 ) {
+    val state by viewModel.state.observeAsState(GameScreenInitialState)
+
+    if (state.screenData !is GameScreenData.GameInProgress) {
+        return
+    }
+
+    val gameComponent = viewModel.gameComponent ?: return
+
+    val showDialogEvent = gameComponent.gameScreenEvents.showDialogEvent
     val showDialog: Boolean by showDialogEvent.run {
         data.observeAsState(defaultValue)
     }
     if (!showDialog) {
         return
     }
-    if (gameComponent == null) {
-        return
-    }
+
+
     val lastWinPlaceEvent = gameComponent.gameScreenEvents.lastWinPlaceEvent
     val lastWinPlace: Place by lastWinPlaceEvent.run {
         data.observeAsState(defaultValue)

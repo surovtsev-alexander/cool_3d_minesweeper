@@ -3,7 +3,10 @@ package com.surovtsev.game.viewmodel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
@@ -39,7 +42,8 @@ class GameScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.LoadGame,
-        GameScreenData.NoData
+        GameScreenData.NoData,
+        GameScreenStateHolder(GameScreenInitialState)
     ),
     GameScreenCommandHandler,
     DefaultLifecycleObserver
@@ -51,40 +55,10 @@ class GameScreenViewModel @AssistedInject constructor(
     @SuppressLint("StaticFieldLeak")
     var gLSurfaceView: GLSurfaceView? = null
 
-    override val stateHolder: GameScreenStateHolder
-    override val stateValue: GameScreenStateValue
-
     var gameComponent: GameComponent? = null
         private set
     var touchListenerComponent: TouchListenerComponent? = null
         private set
-
-    init {
-        val loadGame: Boolean = savedStateHandle.get<String>(LoadGameParameterName).toBoolean()
-        gameComponent = DaggerGameComponent
-            .builder()
-            .appComponentEntryPoint(appComponentEntryPoint)
-            .loadGame(loadGame)
-            .build()
-            .also {
-                stateHolder = it.gameScreenStateHolder
-                stateValue = it.gameScreenStateValue
-
-
-                touchListenerComponent = DaggerTouchListenerComponent
-                    .builder()
-                    .touchHandler(
-                        it.touchHandlerImp
-                    )
-                    .moveHandler(
-                        it.moveHandlerImp
-                    )
-                    .timeSpanHelper(
-                        it.timeSpanHelperImp
-                    )
-                    .build()
-            }
-    }
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
@@ -92,6 +66,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
+            is CommandFromGameScreen.CloseGame              -> ::closeGame
             is CommandFromGameScreen.NewGame                -> suspend { newGame(false) }
             is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
             is CommandFromGameScreen.CloseError             -> ::closeError
@@ -103,6 +78,16 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
             else                                            -> null
         }
+    }
+
+    private suspend fun closeGame() {
+        gameComponent?.apply {
+            timeSpanHelperImp.forgetSubscribers()
+        }
+        gLSurfaceView = null
+        publishIdleState(
+            GameScreenData.NoData
+        )
     }
 
     fun initGLSurfaceView(
@@ -129,10 +114,10 @@ class GameScreenViewModel @AssistedInject constructor(
         silent: Boolean = false,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
-        val gameScreenData = stateHolder.value?.screenData
+        val gameScreenData = state.value?.screenData
 
         if (gameScreenData == null || !isDataCorrect(gameScreenData)) {
-            if (silent) {
+            if (!silent) {
                 publishErrorState(errorMessage)
             }
         } else {
@@ -153,19 +138,45 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun newGame(loadGame: Boolean) {
+        doActionIfDataIsCorrect(
+            { it is GameScreenData.GameMenu },
+            "main menu is not opened",
+            true
+        ) { gameScreenData ->
+            tryUnstackState(gameScreenData)
+        }
+
+        doActionIfDataIsCorrect(
+            { it is GameScreenData.GameInProgress },
+            "game is in progress",
+            true
+        ) {
+            publishIdleState(GameScreenData.NoData)
+        }
+
+        gameComponent = DaggerGameComponent
+            .builder()
+            .appComponentEntryPoint(appComponentEntryPoint)
+            .loadGame(loadGame)
+            .build()
+            .also {
+                touchListenerComponent = DaggerTouchListenerComponent
+                    .builder()
+                    .touchHandler(
+                        it.touchHandlerImp
+                    )
+                    .moveHandler(
+                        it.moveHandlerImp
+                    )
+                    .timeSpanHelper(
+                        it.timeSpanHelperImp
+                    )
+                    .build()
+            }
+
         publishIdleState(
             GameScreenData.GameInProgress
         )
-//        val gameLogicComponent = gameLogicComponentProvider
-//            .get()
-////            .loadGame(loadGame)
-//            .build()
-//        val gameLogicComponentEntryPoint = EntryPoints.get(
-//            gameLogicComponent,
-//            GameLogicComponentEntryPoint::class.java
-//        )
-
-
     }
 
     private suspend fun pause() {
@@ -238,11 +249,12 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        gameComponent?.apply {
-            minesweeperController.onDestroy(owner)
-            timeSpanHelperImp.forgetSubscribers()
+        gameComponent?.let {
+            it.minesweeperController.onDestroy(owner)
         }
-        gLSurfaceView = null
+        handleCommand(
+            CommandFromGameScreen.CloseGame
+        )
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {
