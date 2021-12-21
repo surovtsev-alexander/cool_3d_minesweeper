@@ -78,14 +78,6 @@ class MinesweeperController @Inject constructor(
         storeGameIfNeeded()
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-
-        logcat { "onDestroy" }
-
-        storeGameIfNeeded()
-    }
-
     private fun storeGameIfNeeded() {
         logcat { "storeGameIfNeeded; gameState: ${gameLogic.gameLogicStateHelper.gameStatusWithElapsedFlow.value}" }
 

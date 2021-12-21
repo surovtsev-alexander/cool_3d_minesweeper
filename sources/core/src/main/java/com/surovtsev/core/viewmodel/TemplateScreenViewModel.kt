@@ -31,46 +31,11 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 
-    override fun onCreate(owner: LifecycleOwner) {
-        super.onCreate(owner)
-        handleOnCreate(owner)
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        handleOnResume(owner)
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-        handleOnPause(owner)
-    }
-
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        handleOnDestroySync(owner)
         handleCommand(
             handleScreenLeavingCommandFactory(owner)
         )
-    }
-    protected open fun handleOnCreate(
-        owner: LifecycleOwner
-    ) {
-    }
-
-    protected open fun handleOnResume(
-        owner: LifecycleOwner
-    ) {
-    }
-
-    protected open fun handleOnPause(
-        owner: LifecycleOwner
-    ) {
-    }
-
-    protected open fun handleOnDestroySync(
-        owner: LifecycleOwner
-    ) {
     }
 
     override fun handleCommand(command: C) {

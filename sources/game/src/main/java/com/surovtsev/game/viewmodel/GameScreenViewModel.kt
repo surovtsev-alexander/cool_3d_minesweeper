@@ -61,6 +61,25 @@ class GameScreenViewModel @AssistedInject constructor(
     var touchListenerComponent: TouchListenerComponent? = null
         private set
 
+    override fun onPause(owner: LifecycleOwner) {
+        super<TemplateScreenViewModel>.onPause(owner)
+        gLSurfaceView?.onPause()
+        gameComponent?.minesweeperController?.onPause(owner)
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super<TemplateScreenViewModel>.onResume(owner)
+        gLSurfaceView?.onResume()
+    }
+
+    override suspend fun handleScreenLeaving(
+        owner: LifecycleOwner
+    ) {
+        handleCommand(
+            CommandFromGameScreen.CloseGame
+        )
+    }
+
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
             is CommandFromGameScreen.HandleScreenLeaving    -> suspend { handleScreenLeaving(command.owner) }
@@ -231,37 +250,6 @@ class GameScreenViewModel @AssistedInject constructor(
         withUIContext {
             finishAction?.invoke()
         }
-    }
-
-    override fun handleOnCreate(owner: LifecycleOwner) {
-        super.handleOnCreate(owner)
-        gameComponent?.minesweeperController?.onCreate(owner)
-    }
-
-
-    override fun handleOnPause(owner: LifecycleOwner) {
-        super.handleOnPause(owner)
-        gLSurfaceView?.onPause()
-        gameComponent?.minesweeperController?.onPause(owner)
-    }
-
-    override fun handleOnResume(owner: LifecycleOwner) {
-        super.handleOnResume(owner)
-        gLSurfaceView?.onResume()
-        gameComponent?.minesweeperController?.onResume(owner)
-    }
-
-    override fun handleOnDestroySync(owner: LifecycleOwner) {
-        super.handleOnDestroySync(owner)
-        gameComponent?.minesweeperController?.onDestroy(owner)
-    }
-
-    override suspend fun handleScreenLeaving(
-        owner: LifecycleOwner
-    ) {
-        handleCommand(
-            CommandFromGameScreen.CloseGame
-        )
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {
