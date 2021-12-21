@@ -54,6 +54,14 @@ class RankingScreenViewModel @AssistedInject constructor(
         val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
     }
 
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+
+        timeSpanComponent
+            ?.subscriberImp
+            ?.onStop()
+    }
+
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
             is CommandFromRankingScreen.HandleScreenLeaving -> suspend { handleScreenLeaving(command.owner) }
@@ -73,13 +81,11 @@ class RankingScreenViewModel @AssistedInject constructor(
             currTimeSpanComponent =
                 it ?: DaggerTimeSpanComponent
                     .builder()
-                    .appComponentEntryPoint(appComponentEntryPoint)
                     .build()
                     .apply {
                         timeSpanComponent = this
                     }
         }
-        currTimeSpanComponent.timeSpan.flush()
 
         val currRankingComponent: RankingComponent
 
@@ -107,6 +113,13 @@ class RankingScreenViewModel @AssistedInject constructor(
                 winsCountMap
             )
         }
+
+        currTimeSpanComponent
+            .timeSpan
+            .flush()
+        currTimeSpanComponent
+            .subscriberImp
+            .onStart()
 
         publishIdleState(
             settingsListIsLoaded

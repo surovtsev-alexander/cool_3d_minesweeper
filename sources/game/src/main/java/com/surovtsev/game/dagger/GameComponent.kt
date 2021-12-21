@@ -74,8 +74,6 @@ interface GameComponent {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
-//        fun context(@BindsInstance context: Context): Builder
-//        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
         fun build(): GameComponent
     }
 }

@@ -54,7 +54,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
 
-    // see ::onDestroy
+    // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
     var gLSurfaceView: GLSurfaceView? = null
 
@@ -73,6 +73,12 @@ class GameScreenViewModel @AssistedInject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super<TemplateScreenViewModel>.onDestroy(owner)
+
+        gLSurfaceView = null
     }
 
     override suspend fun handleScreenLeaving(
@@ -101,10 +107,10 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun closeGame() {
-        gameComponent?.apply {
-            timeSpanHelperImp.forgetSubscribers()
-        }
-        gLSurfaceView = null
+        timeSpanComponent
+            ?.subscriberImp
+            ?.onStop()
+
         publishIdleState(
             GameScreenData.NoData
         )
@@ -175,9 +181,7 @@ class GameScreenViewModel @AssistedInject constructor(
         }
 
         val timeSpanComponent = DaggerTimeSpanComponent
-            .builder()
-            .appComponentEntryPoint(appComponentEntryPoint)
-            .build()
+            .create()
         this.timeSpanComponent = timeSpanComponent
 
         gameComponent = DaggerGameComponent
@@ -189,17 +193,24 @@ class GameScreenViewModel @AssistedInject constructor(
             .also {
                 touchListenerComponent = DaggerTouchListenerComponent
                     .builder()
+                    .timeSpanComponentEntryPoint(
+                        timeSpanComponent
+                    )
                     .touchHandler(
                         it.touchHandlerImp
                     )
                     .moveHandler(
                         it.moveHandlerImp
                     )
-                    .timeSpanHelper(
-                        it.timeSpanHelperImp
-                    )
                     .build()
             }
+
+        timeSpanComponent
+            .timeSpan
+            .flush()
+        timeSpanComponent
+            .subscriberImp
+            .onStart()
 
         publishIdleState(
             GameScreenData.GameInProgress

@@ -48,4 +48,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     implementation 'com.github.kotlin-graphics:glm:v1.0.1'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC2'
 }

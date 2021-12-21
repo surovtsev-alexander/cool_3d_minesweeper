@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.models.game.gamestatus.GameStatus
 import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.utils.timers.Tickable
 import com.surovtsev.utils.timers.TimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,18 +14,12 @@ import javax.inject.Inject
 class GameLogicStateHelper @Inject constructor(
     private val timeSpan: TimeSpan
 ):
-    Tickable,
     DefaultLifecycleObserver
 {
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
         GameStatusWithElapsed()
     )
     val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow = _gameStatusWithElapsedFlow.asStateFlow()
-
-    init {
-        timeSpan.subscribe(this)
-
-    }
 
     fun gameStatus() = gameStatusWithElapsedFlow.value.gameStatus
 
@@ -43,12 +36,6 @@ class GameLogicStateHelper @Inject constructor(
             GameStatus.NoBombsPlaced,
             timeSpan.getElapsed()
         )
-    }
-
-    override fun tick() {
-        if (timeSpan.isOn()) {
-            timeSpan.tick()
-        }
     }
 
     override fun onPause(owner: LifecycleOwner) {

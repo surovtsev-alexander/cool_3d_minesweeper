@@ -1,24 +1,38 @@
 package com.surovtsev.touchlistener.helpers
 
-import com.surovtsev.utils.timers.Tickable
-import com.surovtsev.utils.timers.TimeSpanHelper
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
+import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.subscriptions.Subscriber
+import com.surovtsev.utils.coroutines.subscriptions.Subscription
+import com.surovtsev.utils.timers.TimeSpanHelper
 import glm_.vec2.Vec2
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @TouchListenerScope
 class TouchReceiverImp @Inject constructor(
     private val timeSpanHelper: TimeSpanHelper,
     private val touchHandler: TouchHandler,
-): TouchReceiver, Tickable
+    subscriber: Subscriber,
+): Subscription, TouchReceiver
 {
 
     init {
-        timeSpanHelper.subscribe(this)
+        subscriber
+            .addSubscription(this)
+    }
+
+    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
+        customCoroutineScope.launch {
+            timeSpanHelper.timeAfterDeviceStartupFlow.collectLatest {
+                tick(it)
+            }
+        }
     }
 
     private enum class State {
@@ -46,7 +60,7 @@ class TouchReceiverImp @Inject constructor(
 
     override fun down(pos: Vec2, movementHolderSaver: MovementHolder) {
         touchPos = pos
-        downTime = timeSpanHelper.timeAfterDeviceStartup
+        downTime = timeSpanHelper.timeAfterDeviceStartupFlow.value
 
         this.movementHolderStorer = movementHolderSaver
 
@@ -57,7 +71,7 @@ class TouchReceiverImp @Inject constructor(
     override fun up() {
         releaseIfMovedOrPerform {
             do {
-                val currTime = timeSpanHelper.timeAfterDeviceStartup
+                val currTime = timeSpanHelper.timeAfterDeviceStartupFlow.value
 
                 if (currTime - downTime > TOUCH_DELAY) {
                     release()
@@ -84,8 +98,7 @@ class TouchReceiverImp @Inject constructor(
         }
     }
 
-    override fun tick() {
-        val currTime = timeSpanHelper.timeAfterDeviceStartup
+    private fun tick(currTime: Long) {
         if (state == State.DELAY_BEFORE_LONG_TOUCH) {
             releaseIfMovedOrPerform {
                 if (currTime - downTime > LONG_TOUCH_DELAY) {

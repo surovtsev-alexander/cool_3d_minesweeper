@@ -21,7 +21,7 @@ class Scene @Inject constructor(
     private val gameControls: GameControls,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
-    val touchHandler: TouchHandlerImp,
+    private val touchHandler: TouchHandlerImp,
     private val intersectionCalculator: IntersectionCalculator,
     private val pointerOpenGLModel: PointerOpenGLModel,
     private val cubeOpenGLModel: CubeOpenGLModel,
@@ -94,7 +94,7 @@ class Scene @Inject constructor(
         if (clicked) {
             val cell = intersectionCalculator.getCell()
             if (cell != null) {
-                gameLogic.touchCell(pointer.touchType, cell, timeSpanHelper.timeAfterDeviceStartup)
+                gameLogic.touchCell(pointer.touchType, cell, timeSpanHelper.timeAfterDeviceStartupFlow.value)
             }
 
         }

@@ -1,5 +1,9 @@
 package com.surovtsev.utils.timers
 
-interface TimeSpanHelper: Tickable, TimeUpdater {
-    val timeAfterDeviceStartup: Long
+import kotlinx.coroutines.flow.StateFlow
+
+typealias TimeAfterDeviceStartupFlow = StateFlow<Long>
+
+interface TimeSpanHelper {
+    val timeAfterDeviceStartupFlow: TimeAfterDeviceStartupFlow
 }

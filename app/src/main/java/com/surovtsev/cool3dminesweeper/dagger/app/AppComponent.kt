@@ -17,8 +17,10 @@ import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
-import com.surovtsev.utils.timers.TimeSpanHelperImp
-import dagger.*
+import dagger.BindsInstance
+import dagger.Component
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -145,11 +147,4 @@ object AppModule {
     @Provides
     fun provideViewModelCoroutineScopeHelper(): ViewModelCoroutineScopeHelper =
         ViewModelCoroutineScopeHelperImpl()
-
-    @AppScope
-    @Provides
-    fun provideTimeSpanHelperImp(
-    ): TimeSpanHelperImp {
-        return TimeSpanHelperImp()
-    }
 }

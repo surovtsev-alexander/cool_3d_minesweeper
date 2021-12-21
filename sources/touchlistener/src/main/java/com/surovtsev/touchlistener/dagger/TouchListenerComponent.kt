@@ -1,5 +1,6 @@
 package com.surovtsev.touchlistener.dagger
 
+import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.touchlistener.helpers.ScalingHelper
@@ -15,6 +16,9 @@ import javax.inject.Named
 
 @TouchListenerScope
 @Component(
+    dependencies = [
+        TimeSpanComponentEntryPoint::class,
+    ],
     modules = [
         TouchListenerBindModule::class,
         TouchHelperModule::class,
@@ -27,11 +31,11 @@ interface TouchListenerComponent {
 
     @Component.Builder
     interface Builder {
+        fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
+
         fun touchHandler(@BindsInstance touchHandler: TouchHandler): Builder
 
         fun moveHandler(@BindsInstance moveHandler: MoveHandler): Builder
-
-        fun timeSpanHelper(@BindsInstance timeSpanHelper: TimeSpanHelper): Builder
 
         fun build(): TouchListenerComponent
     }

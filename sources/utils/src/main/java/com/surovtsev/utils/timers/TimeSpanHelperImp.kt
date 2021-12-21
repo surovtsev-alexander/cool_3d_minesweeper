@@ -1,34 +1,18 @@
 package com.surovtsev.utils.timers
 
 import android.os.SystemClock
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class TimeSpanHelperImp: TimeSpanHelper {
+    private val _timeAfterDeviceStartupFlow = MutableStateFlow(0L)
 
-    override var timeAfterDeviceStartup: Long = 0L
-        private set
-
-
-    private val subscribers = emptyList<Tickable>().toMutableList()
+    override val timeAfterDeviceStartupFlow: TimeAfterDeviceStartupFlow = _timeAfterDeviceStartupFlow
 
     init {
         tick()
     }
 
-    fun forgetSubscribers() {
-        subscribers.clear()
-    }
-
-    override fun tick() {
-        timeAfterDeviceStartup = SystemClock.elapsedRealtime()
-
-        subscribers.forEach {
-            it.tick()
-        }
-    }
-
-    override fun subscribe(
-        x: Tickable
-    ) {
-        subscribers.add(x)
+    fun tick() {
+        _timeAfterDeviceStartupFlow.value = SystemClock.elapsedRealtime()
     }
 }

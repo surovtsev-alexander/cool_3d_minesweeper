@@ -16,6 +16,4 @@ interface AppComponentEntryPoint {
     val rankingListHelper: RankingListHelper
 
     val saveController: SaveController
-
-    val timeSpanHelperImp: TimeSpanHelperImp
 }
