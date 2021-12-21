@@ -29,7 +29,7 @@ import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
 import javax.inject.Named

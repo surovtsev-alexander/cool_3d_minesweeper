@@ -1,4 +1,4 @@
-package com.surovtsev.utils.coroutines
+package com.surovtsev.utils.coroutines.customcoroutinescope
 
 import com.surovtsev.utils.statehelpers.SwitchImp
 import kotlinx.coroutines.*

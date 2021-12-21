@@ -1,8 +1,8 @@
 package com.surovtsev.utils.timers
 
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.subscriptions.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
 import kotlinx.coroutines.flow.MutableStateFlow

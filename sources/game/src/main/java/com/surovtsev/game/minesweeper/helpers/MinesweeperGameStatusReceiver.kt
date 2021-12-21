@@ -9,13 +9,19 @@ import com.surovtsev.game.dagger.GameScope
 import com.surovtsev.game.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gamestatus.GameStatus
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.subscriptions.Subscription
+import com.surovtsev.game.models.game.gamestatus.GameStatusHelper
+import com.surovtsev.game.viewmodel.helpers.GameScreenEventsNames
+import com.surovtsev.game.viewmodel.helpers.ShowDialogEvent
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Named
 
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
@@ -24,6 +30,8 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
     private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
+    @Named(GameScreenEventsNames.ShowDialog)
+    private val showDialog: ShowDialogEvent,
     subscriber: Subscriber
 ): Subscription {
 
@@ -42,34 +50,41 @@ class MinesweeperGameStatusReceiver @Inject constructor(
         }
     }
 
-    private fun gameStatusUpdated(
+    private suspend fun gameStatusUpdated(
         newStatus: GameStatus,
         elapsed: Long
     ) {
-        if (newStatus == GameStatus.Win ||
-            newStatus == GameStatus.Lose) {
-            saveController.emptyData(
-                SaveTypes.SaveGameJson
-            )
-        }
-
-        if (newStatus != GameStatus.Win) {
+        if (!GameStatusHelper.isGameOver(newStatus)) {
             return
         }
 
-        val settings = settingsDao.getOrCreate(
-            gameConfig.settingsData
+        saveController.emptyData(
+            SaveTypes.SaveGameJson
         )
 
-        val rankingData = Ranking.RankingData(
-            settings.id,
-            elapsed,
-            LocalDateTimeHelper.epochMilli
-        )
-        rankingDao.insert(
-            Ranking(
-                rankingData
+        do {
+            if (newStatus != GameStatus.Win) {
+                break
+            }
+
+            val settings = settingsDao.getOrCreate(
+                gameConfig.settingsData
             )
-        )
+
+            val rankingData = Ranking.RankingData(
+                settings.id,
+                elapsed,
+                LocalDateTimeHelper.epochMilli
+            )
+            rankingDao.insert(
+                Ranking(
+                    rankingData
+                )
+            )
+        } while (false)
+
+        withContext(Dispatchers.Main) {
+            showDialog.onDataChanged(true)
+        }
     }
 }

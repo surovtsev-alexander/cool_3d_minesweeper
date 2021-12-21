@@ -1,6 +1,6 @@
-package com.surovtsev.utils.coroutines.subscriptions
+package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
 
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 
 class SubscriberImp(
     private val customCoroutineScope: CustomCoroutineScope

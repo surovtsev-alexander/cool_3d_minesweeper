@@ -1,8 +1,8 @@
 package com.surovtsev.core.dagger.components
 
-import com.surovtsev.utils.coroutines.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.subscriptions.SubscriberImp
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.SubscriberImp
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelper
 import com.surovtsev.utils.timers.TimeSpanHelperImp

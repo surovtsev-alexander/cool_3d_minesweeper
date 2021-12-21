@@ -2,24 +2,22 @@ package com.surovtsev.game.minesweeper
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.game.minesweeper.gamelogic.GameLogic
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.game.minesweeper.scene.Scene
-import com.surovtsev.utils.timers.TimeSpanHelperImp
 import com.surovtsev.game.dagger.GameScope
+import com.surovtsev.game.minesweeper.gamelogic.GameLogic
 import com.surovtsev.game.minesweeper.helpers.MinesweeperGameStatusReceiver
+import com.surovtsev.game.minesweeper.scene.Scene
 import com.surovtsev.game.models.game.camerainfo.CameraInfo
 import com.surovtsev.game.models.game.config.GameConfig
 import com.surovtsev.game.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.game.models.game.save.Save
 import com.surovtsev.game.models.gles.gameviewsholder.GameViewsHolder
+import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import glm_.vec2.Vec2i
 import javax.inject.Inject
-import com.surovtsev.game.utils.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.game.viewmodel.helpers.GameScreenEventsReceiver
-import com.surovtsev.utils.timers.TimeSpan
-import logcat.logcat
 
 @GameScope
 class MinesweeperController @Inject constructor(
@@ -32,10 +30,12 @@ class MinesweeperController @Inject constructor(
     private val gameViewsHolder: GameViewsHolder,
     private val scene: Scene,
     private val timeSpan: TimeSpan,
-    /* Do not delete this. It is used to add new record into Ranking table when game is won. */
+    /* Do not delete this. It is used:
+        - to add new record into Ranking table when game is won;
+        - to notify view about game status change.
+    */
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-    /* Do not delete this. It notifies view about game status change. */
-    private val gameScreenEventsReceiver: GameScreenEventsReceiver,
+
 ):
     OpenGLEventsHandler,
     DefaultLifecycleObserver
@@ -73,14 +73,10 @@ class MinesweeperController @Inject constructor(
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
 
-        logcat { "onPause" }
-
         storeGameIfNeeded()
     }
 
     private fun storeGameIfNeeded() {
-        logcat { "storeGameIfNeeded; gameState: ${gameLogic.gameLogicStateHelper.gameStatusWithElapsedFlow.value}" }
-
         if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
             return
         }
