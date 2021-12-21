@@ -13,9 +13,7 @@ import javax.inject.Inject
 @GameScope
 class GameLogicStateHelper @Inject constructor(
     private val timeSpan: TimeSpan
-):
-    DefaultLifecycleObserver
-{
+) {
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
         GameStatusWithElapsed()
     )
@@ -38,22 +36,10 @@ class GameLogicStateHelper @Inject constructor(
         )
     }
 
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-
-        pauseIfNeeded()
-    }
-
     fun pauseIfNeeded() {
         if (isGameInProgress()) {
             timeSpan.turnOff()
         }
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-
-        resumeIfNeeded()
     }
 
     fun resumeIfNeeded() {

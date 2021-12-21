@@ -61,13 +61,22 @@ class GameScreenViewModel @AssistedInject constructor(
     var timeSpanComponent: TimeSpanComponent? = null
     var gameComponent: GameComponent? = null
         private set
-    var touchListenerComponent: TouchListenerComponent? = null
-        private set
+    private var touchListenerComponent: TouchListenerComponent? = null
 
     override fun onPause(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
-        gameComponent?.minesweeperController?.onPause(owner)
+
+        gameComponent?.let {
+            it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
+            it.minesweeperController.storeGameIfNeeded()
+        }
+
+        if (state.value?.screenData !is GameScreenData.GameMenu) {
+            handleCommand(
+                CommandFromGameScreen.OpenGameMenu
+            )
+        }
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -97,10 +106,8 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
             is CommandFromGameScreen.CloseError             -> ::closeError
             is CommandFromGameScreen.CloseErrorAndFinish    -> ::closeError
-            is CommandFromGameScreen.Pause                  -> ::pause
-            is CommandFromGameScreen.Resume                 -> ::resume
-            is CommandFromGameScreen.OpenMenu               -> ::openMenu
-            is CommandFromGameScreen.CloseMenu              -> suspend { closeMenu() }
+            is CommandFromGameScreen.OpenGameMenu           -> ::openGameMenu
+            is CommandFromGameScreen.CloseGameMenu          -> suspend { closeGameMenu() }
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
             else                                            -> null
         }
@@ -214,24 +221,21 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun pause() {
-    }
-
-    private suspend fun resume() {
-    }
-
-    private suspend fun openMenu() {
-        logcat { "open menu" }
+    private suspend fun openGameMenu() {
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially"
         ) { gameScreenData ->
+
+            gameComponent?.let {
+                it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
+            }
+
             publishIdleState(
                 GameScreenData.GameMenu(
                     gameScreenData
                 )
             )
-            logcat { "done" }
         }
     }
 
@@ -253,7 +257,12 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun closeMenu(silent: Boolean = false) {
+    private suspend fun closeGameMenu(silent: Boolean = false) {
+
+        gameComponent?.let {
+            it.minesweeperController.gameLogic.gameLogicStateHelper.resumeIfNeeded()
+        }
+
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",
@@ -264,7 +273,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun goToMainMenu() {
-        closeMenu(true)
+        closeGameMenu(true)
         withUIContext {
             finishAction?.invoke()
         }

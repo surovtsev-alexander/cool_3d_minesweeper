@@ -16,13 +16,9 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
     object CloseErrorAndFinish: CommandFromGameScreen, CommandFromScreen.CloseErrorAndFinish
 
-    object Pause: CommandFromGameScreen
+    object OpenGameMenu: CommandFromGameScreen
 
-    object Resume: CommandFromGameScreen
-
-    object OpenMenu: CommandFromGameScreen
-
-    object CloseMenu: CommandFromGameScreen
+    object CloseGameMenu: CommandFromGameScreen
 
     object GoToMainMenu: CommandFromGameScreen
 

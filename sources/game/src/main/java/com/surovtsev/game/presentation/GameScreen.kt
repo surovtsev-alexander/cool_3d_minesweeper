@@ -162,7 +162,7 @@ fun GameView(
                 .width(pauseResumeButtonWidth),
             onClick = {
                 commandHandler.handleCommand(
-                    CommandFromGameScreen.OpenMenu
+                    CommandFromGameScreen.OpenGameMenu
                 )
             },
             border = BorderStroke(1.dp, Color.Black)
@@ -190,7 +190,7 @@ fun GameMenu(
     )
 
     val closeAction = {
-        commandHandler.handleCommand(CommandFromGameScreen.CloseMenu)
+        commandHandler.handleCommand(CommandFromGameScreen.CloseGameMenu)
     }
 
     Dialog(

@@ -37,8 +37,7 @@ class MinesweeperController @Inject constructor(
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
 
 ):
-    OpenGLEventsHandler,
-    DefaultLifecycleObserver
+    OpenGLEventsHandler
 {
     override fun onSurfaceCreated() {
         gameViewsHolder.onSurfaceCreated()
@@ -55,7 +54,6 @@ class MinesweeperController @Inject constructor(
         gameViewsHolder.cubeOpenGLModel.updateTexture(cubeInfo.cubeSkin)
 
         timeSpanHelper.tick()
-        gameLogic.gameLogicStateHelper.resumeIfNeeded()
     }
 
     override fun onDrawFrame() {
@@ -70,20 +68,12 @@ class MinesweeperController @Inject constructor(
         x()
     }
 
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-
-        storeGameIfNeeded()
-    }
-
-    private fun storeGameIfNeeded() {
+    fun storeGameIfNeeded() {
         if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
             return
         }
 
         syncExecution {
-            gameLogic.gameLogicStateHelper.pauseIfNeeded()
-
             val save = Save.createObject(
                 gameConfig,
                 cameraInfo,

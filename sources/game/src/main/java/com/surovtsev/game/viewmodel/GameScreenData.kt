@@ -16,10 +16,4 @@ sealed class GameScreenData: ScreenData {
     ): HasPrevData(
         prevData
     )
-
-    class Paused(
-        prevData: GameScreenData
-    ): HasPrevData(
-        prevData
-    )
 }
