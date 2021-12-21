@@ -1,30 +1,25 @@
 package com.surovtsev.timespan.dagger
 
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
+import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
 import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
-import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.DefineComponent
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import kotlinx.coroutines.Dispatchers
 
 @TimeSpanScope
-@Component( modules = [
-    TimeSpanModule::class
-])
-interface TimeSpanComponent {
-
-    @DefineComponent.Builder
-    interface Builder {
-        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
-        fun build(): TimeSpanComponent
-    }
-
-    val timeSpan: TimeSpan
+@Component(
+    dependencies = [
+        AppComponentEntryPoint::class,
+   ],
+    modules = [
+        TimeSpanModule::class,
+    ]
+)
+interface TimeSpanComponent: TimeSpanComponentEntryPoint {
 }
 
 @Module
@@ -37,6 +32,15 @@ object TimeSpanModule {
         return TimeSpan(
             1000L,
             timeSpanHelper,
+        )
+    }
+
+    @TimeSpanScope
+    @Provides
+    fun provideCustomCoroutineScope(
+    ): CustomCoroutineScope {
+        return CustomCoroutineScope(
+            Dispatchers.IO
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.surovtsev.game.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
+import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -29,16 +30,15 @@ import com.surovtsev.game.viewmodel.helpers.*
 import com.surovtsev.game.views.glesrenderer.GLESRenderer
 import com.surovtsev.game.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.CustomCoroutineScope
-import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 
 @GameScope
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
+        TimeSpanComponentEntryPoint::class,
     ],
     modules = [
         GameModule::class,
@@ -67,13 +67,12 @@ interface GameComponent {
 
     val bombsLeftFlow: BombsLeftFlow
 
-    val timeSpan: TimeSpan
-
     val customCoroutineScope: CustomCoroutineScope
 
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
+        fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
 //        fun context(@BindsInstance context: Context): Builder
 //        fun customCoroutineScope(@BindsInstance customCoroutineScope: CustomCoroutineScope): Builder
@@ -242,26 +241,6 @@ object InteractionModule {
         gameLogic: GameLogic
     ): BombsLeftFlow {
         return gameLogic.bombsLeftFlow
-    }
-
-    @GameScope
-    @Provides
-    fun provideTimeSpan(
-        timeSpanHelper: TimeSpanHelperImp,
-    ): TimeSpan {
-        return TimeSpan(
-            1000L,
-            timeSpanHelper,
-        )
-    }
-
-    @GameScope
-    @Provides
-    fun provideCustomCoroutineScope(
-    ): CustomCoroutineScope {
-        return CustomCoroutineScope(
-            dispatcher = Dispatchers.IO
-        )
     }
 
     @GameScope

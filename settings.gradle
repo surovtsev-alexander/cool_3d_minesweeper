@@ -9,6 +9,7 @@ def rankingModule = ":ranking"
 def settingsModule = ":settings"
 def gameModule = ":game"
 def gameLogicModule = ":gamelogic"
+def timeSpanModule = ":timespan"
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/core")
@@ -30,3 +31,6 @@ project(gameModule).projectDir = new File(rootDir, "sources/game")
 
 include gameLogicModule
 project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")
+
+include timeSpanModule
+project(timeSpanModule).projectDir = new File(rootDir, "sources/timespan")

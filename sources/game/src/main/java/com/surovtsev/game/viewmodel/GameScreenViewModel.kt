@@ -19,6 +19,8 @@ import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.game.dagger.DaggerGameComponent
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.viewmodel.helpers.Place
+import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
+import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
@@ -56,6 +58,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @SuppressLint("StaticFieldLeak")
     var gLSurfaceView: GLSurfaceView? = null
 
+    var timeSpanComponent: TimeSpanComponent? = null
     var gameComponent: GameComponent? = null
         private set
     var touchListenerComponent: TouchListenerComponent? = null
@@ -171,9 +174,16 @@ class GameScreenViewModel @AssistedInject constructor(
             publishIdleState(GameScreenData.NoData)
         }
 
+        val timeSpanComponent = DaggerTimeSpanComponent
+            .builder()
+            .appComponentEntryPoint(appComponentEntryPoint)
+            .build()
+        this.timeSpanComponent = timeSpanComponent
+
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
+            .timeSpanComponentEntryPoint(timeSpanComponent)
             .loadGame(loadGame)
             .build()
             .also {

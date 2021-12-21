@@ -130,6 +130,7 @@ fun GameView(
     }
 
     val gameComponent = viewModel.gameComponent ?: return
+    val timeSpan = viewModel.timeSpanComponent?.timeSpan ?: return
     val gameControls = gameComponent.gameControls
     val gameScreenEvents = gameComponent.gameScreenEvents
 
@@ -144,7 +145,7 @@ fun GameView(
         Row {
             Controls(
                 gameComponent.bombsLeftFlow,
-                gameComponent.timeSpan.timeSpanFlow,
+                timeSpan.timeSpanFlow,
                 gameScreenEvents,
                 gameControls.removeMarkedBombsControl,
                 gameControls.removeZeroBordersControl

@@ -1,6 +1,7 @@
 package com.surovtsev.ranking.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
+import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
@@ -16,9 +17,9 @@ import dagger.Provides
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
+        TimeSpanComponentEntryPoint::class,
     ],
     modules = [
-        RankingModule::class,
     ]
 )
 interface RankingComponent {
@@ -28,22 +29,4 @@ interface RankingComponent {
     val rankingListHelper: RankingListHelper
 
     val saveController: SaveController
-
-    val timeSpan: TimeSpan
-}
-
-
-@Module
-object RankingModule {
-
-    @RankingScope
-    @Provides
-    fun provideTimeSpan(
-        timeSpanHelper: TimeSpanHelperImp,
-    ): TimeSpan {
-        return TimeSpan(
-            1000L,
-            timeSpanHelper,
-        )
-    }
 }
