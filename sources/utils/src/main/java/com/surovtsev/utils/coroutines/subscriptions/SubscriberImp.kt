@@ -12,15 +12,17 @@ class SubscriberImp(
         subscription: Subscription
     ) {
         subscriptions += subscription
+
+        subscription.initSubscription(customCoroutineScope)
     }
 
-    fun onStart() {
-        customCoroutineScope.onStart()
+    fun restart() {
+        customCoroutineScope.restart()
         initSubscriptions()
     }
 
     fun onStop() {
-        customCoroutineScope.onStop()
+        customCoroutineScope.turnOff()
     }
 
     private fun initSubscriptions() {

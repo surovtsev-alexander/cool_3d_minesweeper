@@ -103,7 +103,7 @@ object AppModule {
                     }
                 } while (false)
             }.join()
-            customScope.onStop()
+            customScope.turnOff()
         }
         return res
     }

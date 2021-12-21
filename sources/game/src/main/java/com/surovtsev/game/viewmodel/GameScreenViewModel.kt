@@ -208,9 +208,6 @@ class GameScreenViewModel @AssistedInject constructor(
         timeSpanComponent
             .timeSpan
             .flush()
-        timeSpanComponent
-            .subscriberImp
-            .onStart()
 
         publishIdleState(
             GameScreenData.GameInProgress

@@ -79,12 +79,14 @@ class RankingScreenViewModel @AssistedInject constructor(
 
         timeSpanComponent.let {
             currTimeSpanComponent =
-                it ?: DaggerTimeSpanComponent
-                    .builder()
-                    .build()
-                    .apply {
-                        timeSpanComponent = this
-                    }
+                it?.also {
+                    it.subscriberImp.restart()
+                }
+                    ?: DaggerTimeSpanComponent
+                        .create()
+                        .apply {
+                            timeSpanComponent = this
+                        }
         }
 
         val currRankingComponent: RankingComponent
@@ -117,9 +119,6 @@ class RankingScreenViewModel @AssistedInject constructor(
         currTimeSpanComponent
             .timeSpan
             .flush()
-        currTimeSpanComponent
-            .subscriberImp
-            .onStart()
 
         publishIdleState(
             settingsListIsLoaded
