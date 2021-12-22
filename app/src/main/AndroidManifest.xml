@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_cool_3d_minesweeper_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Cool_3d_minesweeper">
-
+        android:theme="@style/Theme.CustomSplashScreenTheme">
         <activity
             android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivityImp"
             android:configChanges="orientation|screenSize|navigation"

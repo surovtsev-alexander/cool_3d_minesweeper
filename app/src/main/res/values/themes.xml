@@ -17,5 +17,8 @@
     </style>
     <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/gray_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_cool_3d_minesweeper</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.Cool_3d_minesweeper</item>
     </style>
 </resources>
