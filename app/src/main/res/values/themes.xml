@@ -15,4 +15,7 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
+    <style name="Theme.CustomSplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/gray_background</item>
+    </style>
 </resources>
