@@ -1,6 +1,8 @@
 package com.surovtsev.cool3dminesweeper.presentation
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -30,22 +32,6 @@ import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
 import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
 import logcat.logcat
-
-//class Factory<T: ViewModel>(
-//    savedStateRegistryOwner: SavedStateRegistryOwner,
-//    private val create: (stateHandle: SavedStateHandle) -> T
-//) : AbstractSavedStateViewModelFactory(savedStateRegistryOwner, null) {
-//
-//    override fun <T : ViewModel?> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
-//        return create.invoke(handle) as T
-//    }
-//}
-//
-//inline fun <reified T : ViewModel> Fragment.lazyViewModel(
-//    noinline create: (stateHandle: SavedStateHandle) -> T
-//) = viewModels<T> {
-//    Factory(this, create)
-//}
 
 class MainActivityImp: MainActivity() {
 

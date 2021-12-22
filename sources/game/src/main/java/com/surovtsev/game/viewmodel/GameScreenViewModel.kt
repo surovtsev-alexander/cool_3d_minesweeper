@@ -63,12 +63,17 @@ class GameScreenViewModel @AssistedInject constructor(
         private set
     private var touchListenerComponent: TouchListenerComponent? = null
 
+    override fun onResume(owner: LifecycleOwner) {
+        super<TemplateScreenViewModel>.onResume(owner)
+        gLSurfaceView?.onResume()
+    }
+
     override fun onPause(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
 
+        pauseGame()
         gameComponent?.let {
-            it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
             it.minesweeperController.storeGameIfNeeded()
         }
 
@@ -77,11 +82,6 @@ class GameScreenViewModel @AssistedInject constructor(
                 CommandFromGameScreen.OpenGameMenu
             )
         }
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super<TemplateScreenViewModel>.onResume(owner)
-        gLSurfaceView?.onResume()
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
@@ -227,9 +227,7 @@ class GameScreenViewModel @AssistedInject constructor(
             "can not open menu twice sequentially"
         ) { gameScreenData ->
 
-            gameComponent?.let {
-                it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
-            }
+            pauseGame()
 
             publishIdleState(
                 GameScreenData.GameMenu(
@@ -276,6 +274,12 @@ class GameScreenViewModel @AssistedInject constructor(
         closeGameMenu(true)
         withUIContext {
             finishAction?.invoke()
+        }
+    }
+
+    private fun pauseGame() {
+        gameComponent?.let {
+            it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
         }
     }
 
