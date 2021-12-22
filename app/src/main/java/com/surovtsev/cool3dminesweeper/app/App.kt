@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.controllers.applicationcontroller
+package com.surovtsev.cool3dminesweeper.app
 
 import android.app.Application
 import android.content.Context
@@ -7,7 +7,7 @@ import com.surovtsev.cool3dminesweeper.dagger.app.AppComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.DaggerAppComponent
 import logcat.AndroidLogcatLogger
 
-class ApplicationController : Application() {
+class App : Application() {
     lateinit var appComponent: AppComponent
         private set
 
@@ -28,6 +28,6 @@ class ApplicationController : Application() {
 
 val Context.appComponent: AppComponent
     get() = when (this) {
-        is ApplicationController -> appComponent
+        is App -> appComponent
         else -> applicationContext.appComponent
     }

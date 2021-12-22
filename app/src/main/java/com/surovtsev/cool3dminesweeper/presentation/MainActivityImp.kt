@@ -1,8 +1,6 @@
 package com.surovtsev.cool3dminesweeper.presentation
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,12 +13,11 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.surovtsev.cool3dminesweeper.controllers.applicationcontroller.appComponent
+import com.surovtsev.cool3dminesweeper.controllers.App.appComponent
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
-import com.surovtsev.cool3dminesweeper.unused.test.MyViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.game.presentation.GameScreen
