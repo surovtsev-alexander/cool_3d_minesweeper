@@ -1,20 +1,16 @@
 rootProject.name = "cool_3d_minesweeper"
 
-include ":app"
+def appModule = ":app"
+
+include appModule
+project(appModule).projectDir = new File(rootDir, "sources/app")
+
 
 def coreModule = ":core"
 def utilsModule = ":utils"
 def touchListenerModule = ":touchlistener"
 def gameLogicModule = ":gamelogic"
 def timeSpanModule = ":timespan"
-
-def mainScreenModule = ":mainscreen"
-def gameScreenModule = ":gamescreen"
-def rankingScreenModule = ":rankingscreen"
-def settingsScreenModule = ":settingsscreen"
-def helpScreenModule = ":helpscreen"
-
-
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/logic/core")
@@ -32,7 +28,11 @@ include timeSpanModule
 project(timeSpanModule).projectDir = new File(rootDir, "sources/logic/timespan")
 
 
-
+def mainScreenModule = ":mainscreen"
+def gameScreenModule = ":gamescreen"
+def rankingScreenModule = ":rankingscreen"
+def settingsScreenModule = ":settingsscreen"
+def helpScreenModule = ":helpscreen"
 
 include mainScreenModule
 project(mainScreenModule).projectDir = new File(rootDir, "sources/screens/mainscreen")
