@@ -5,13 +5,16 @@ include ":app"
 def coreModule = ":core"
 def utilsModule = ":utils"
 def touchListenerModule = ":touchlistener"
-def rankingScreenModule = ":rankingscreen"
-def settingsScreenModule = ":settingsscreen"
-def gameScreenModule = ":gamescreen"
 def gameLogicModule = ":gamelogic"
 def timeSpanModule = ":timespan"
-def helpScreenModule = ":helpscreen"
+
 def mainScreenModule = ":mainscreen"
+def gameScreenModule = ":gamescreen"
+def rankingScreenModule = ":rankingscreen"
+def settingsScreenModule = ":settingsscreen"
+def helpScreenModule = ":helpscreen"
+
+
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/core")
@@ -22,23 +25,24 @@ project(utilsModule).projectDir = new File(rootDir, "sources/utils")
 include touchListenerModule
 project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
 
-include rankingScreenModule
-project(rankingScreenModule).projectDir = new File(rootDir, "sources/features/rankingscreen")
-
-include settingsScreenModule
-project(settingsScreenModule).projectDir = new File(rootDir, "sources/features/settingsscreen")
-
-include gameScreenModule
-project(gameScreenModule).projectDir = new File(rootDir, "sources/screens/gamescreen")
-
 include gameLogicModule
 project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")
 
 include timeSpanModule
 project(timeSpanModule).projectDir = new File(rootDir, "sources/timespan")
 
-include helpScreenModule
-project(helpScreenModule).projectDir = new File(rootDir, "sources/features/helpscreen")
 
 include mainScreenModule
 project(mainScreenModule).projectDir = new File(rootDir, "sources/screens/mainscreen")
+
+include gameScreenModule
+project(gameScreenModule).projectDir = new File(rootDir, "sources/screens/gamescreen")
+
+include rankingScreenModule
+project(rankingScreenModule).projectDir = new File(rootDir, "sources/screens/features/rankingscreen")
+
+include settingsScreenModule
+project(settingsScreenModule).projectDir = new File(rootDir, "sources/screens/features/settingsscreen")
+
+include helpScreenModule
+project(helpScreenModule).projectDir = new File(rootDir, "sources/screens/features/helpscreen")

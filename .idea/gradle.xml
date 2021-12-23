@@ -13,10 +13,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/sources/core" />
-            <option value="$PROJECT_DIR$/sources/features/helpscreen" />
-            <option value="$PROJECT_DIR$/sources/features/rankingscreen" />
-            <option value="$PROJECT_DIR$/sources/features/settingsscreen" />
             <option value="$PROJECT_DIR$/sources/gamelogic" />
+            <option value="$PROJECT_DIR$/sources/screens/features/helpscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/features/rankingscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/features/settingsscreen" />
             <option value="$PROJECT_DIR$/sources/screens/gamescreen" />
             <option value="$PROJECT_DIR$/sources/screens/mainscreen" />
             <option value="$PROJECT_DIR$/sources/timespan" />
