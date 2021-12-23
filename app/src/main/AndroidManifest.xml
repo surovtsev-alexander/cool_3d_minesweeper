@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CustomSplashScreenTheme">
         <activity
-            android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivityImp"
+            android:name="com.surovtsev.cool3dminesweeper.presentation.MainActivity"
             android:configChanges="orientation|screenSize|navigation"
             android:exported="true"
             android:screenOrientation="sensor">

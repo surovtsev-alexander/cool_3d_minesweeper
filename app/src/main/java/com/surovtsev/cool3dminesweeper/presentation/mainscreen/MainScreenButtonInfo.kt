@@ -1,6 +1,6 @@
 package com.surovtsev.cool3dminesweeper.presentation.mainscreen
 
-import com.surovtsev.cool3dminesweeper.presentation.Screen
+import com.surovtsev.core.presentation.Screen
 
 typealias ButtonsInfo = Map<String, MainScreenButtonInfo>
 

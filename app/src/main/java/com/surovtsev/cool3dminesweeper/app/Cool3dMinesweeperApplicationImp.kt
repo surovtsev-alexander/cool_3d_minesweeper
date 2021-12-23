@@ -13,7 +13,8 @@ class Cool3dMinesweeperApplicationImp : Application(), Cool3dMinesweeperApplicat
     lateinit var appComponent: AppComponent
         private set
 
-    override val appComponentEntryPoint: AppComponentEntryPoint  = appComponent
+    override val appComponentEntryPoint: AppComponentEntryPoint
+        get() = appComponent
 
     override fun onCreate() {
         super.onCreate()

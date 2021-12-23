@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation
+package com.surovtsev.core.presentation
 
 sealed class Screen(
     val route: String

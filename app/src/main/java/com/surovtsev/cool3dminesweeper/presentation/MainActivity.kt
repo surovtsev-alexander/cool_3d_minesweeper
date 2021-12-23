@@ -18,6 +18,7 @@ import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
+import com.surovtsev.core.presentation.Screen
 import com.surovtsev.game.presentation.GameScreen
 import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.game.viewmodel.LoadGameParameterName
@@ -31,7 +32,7 @@ import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAni
 import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
 import logcat.logcat
 
-class MainActivityImp: MainActivity() {
+class MainActivity: MainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +112,7 @@ class MainActivityImp: MainActivity() {
                     val loadGame = entry.arguments!![LoadGameParameterName].toString().toBoolean()
                     GameScreen(
                         viewModel,
-                        this@MainActivityImp,
+                        this@MainActivity,
                         navController,
                         context,
                         loadGame
