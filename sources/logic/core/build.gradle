@@ -22,7 +22,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion kotlin_version
     }
     buildTypes {
         release {
@@ -36,7 +35,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion kotlin_version
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
