@@ -23,6 +23,7 @@ import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.settings.viewmodel.*
 import com.surovtsev.settings.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settings.viewmodel.helpers.SettingsUIInfo
@@ -37,7 +38,7 @@ fun SettingsScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         commandHandler.handleCommand(
-            CommandFromSettingsScreen.LoadSettings
+            CommandFromSettingsScreen.TriggerInitialization
         )
     }
 
@@ -53,6 +54,15 @@ fun SettingsControls(
     commandHandler: SettingsScreenCommandHandler,
 ) {
     MinesweeperTheme {
+
+        @Suppress("UNCHECKED_CAST")
+        ErrorDialog(
+            stateValue = stateValue as ScreenStateValue<ScreenData>,
+            screenCommandHandler = commandHandler as ScreenCommandHandler<CommandFromScreen>,
+            closeErrorCommand = CommandFromSettingsScreen.CloseError,
+            closeErrorAndFinishCommand = CommandFromSettingsScreen.CloseErrorAndFinish
+        )
+
         Box(
             Modifier.background(GrayBackground)
         ) {
@@ -319,20 +329,33 @@ fun BindViewModelAndUI(
 fun OkButton(
     commandHandler: SettingsScreenCommandHandler
 ) {
-    Button (
-        {
-            commandHandler.handleCommand(
-                CommandFromSettingsScreen.ApplySettings
-            )
-        },
+    Row(
         modifier = Modifier
             .fillMaxWidth(fraction = 0.75f),
-        border = BorderStroke(1.dp, Color.Black)
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
-            "ok",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
+        val buttons = arrayOf(
+            "ok" to CommandFromSettingsScreen.ApplySettings,
+            "back" to CommandFromSettingsScreen.Finish
         )
+
+        buttons.map { (buttonCaption, commandFromScreen) ->
+            Button(
+                {
+                    commandHandler.handleCommand(
+                        commandFromScreen
+                    )
+                },
+                modifier = Modifier
+                    .weight(1f),
+                border = BorderStroke(1.dp, Color.Black)
+            ) {
+                Text(
+                    buttonCaption,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
     }
 }

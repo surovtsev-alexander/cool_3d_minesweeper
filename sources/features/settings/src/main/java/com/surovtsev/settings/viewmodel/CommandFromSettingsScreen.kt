@@ -9,9 +9,13 @@ sealed interface CommandFromSettingsScreen: CommandFromScreen {
         CommandFromSettingsScreen,
         CommandFromScreen.HandleScreenLeaving(owner)
 
-    object CloseError: CommandFromSettingsScreen
+    object CloseError: CommandFromSettingsScreen, CommandFromScreen.CloseError
 
-    object LoadSettings: CommandFromSettingsScreen
+    object CloseErrorAndFinish: CommandFromSettingsScreen, CommandFromScreen.CloseErrorAndFinish
+
+    object TriggerInitialization: CommandFromSettingsScreen, CommandFromScreen.Init
+
+    object LoadSettingsList: CommandFromSettingsScreen
 
     object LoadSelectedSettings: CommandFromSettingsScreen
 
@@ -29,4 +33,6 @@ sealed interface CommandFromSettingsScreen: CommandFromScreen {
     ): CommandFromSettingsScreen
 
     object ApplySettings: CommandFromSettingsScreen
+
+    object Finish: CommandFromSettingsScreen, CommandFromScreen.Finish
 }

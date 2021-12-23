@@ -9,7 +9,6 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
@@ -31,7 +30,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
-        CommandFromSettingsScreen.LoadSettings,
+        CommandFromSettingsScreen.TriggerInitialization,
         { CommandFromSettingsScreen.HandleLeavingScreen(it) },
         SettingsScreenData.NoData,
         SettingsScreenStateHolder(SettingsScreenInitialState),
@@ -47,7 +46,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
         return when (command) {
             is CommandFromSettingsScreen.HandleLeavingScreen    -> suspend { handleScreenLeaving(command.owner) }
             is CommandFromSettingsScreen.CloseError             -> ::closeError
-            is CommandFromSettingsScreen.LoadSettings           -> ::loadSettings
+            is CommandFromSettingsScreen.CloseErrorAndFinish    -> ::closeError
+            is CommandFromSettingsScreen.TriggerInitialization  -> ::triggerInitialization
+            is CommandFromSettingsScreen.LoadSettingsList       -> ::loadSettingsList
             is CommandFromSettingsScreen.LoadSelectedSettings   -> ::loadSelectedSettings
             is CommandFromSettingsScreen.RememberSettings       -> suspend { rememberSettings(command.settings) }
             is CommandFromSettingsScreen.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromSlider) }
@@ -58,7 +59,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     }
 
-    private suspend fun loadSettings() {
+    private suspend fun triggerInitialization() {
         val currSettingsComponent: SettingsComponent
 
         settingsComponent.let {
@@ -75,6 +76,25 @@ class SettingsScreenViewModel @AssistedInject constructor(
             }
         }
 
+        prepopulateSettingsTableWithDefaultValues(
+            currSettingsComponent.settingsDao
+        )
+
+        return handleCommand(
+            CommandFromSettingsScreen.LoadSettingsList
+        )
+    }
+
+    private suspend fun loadSettingsList() {
+        val currSettingsComponent = settingsComponent
+
+        if (currSettingsComponent == null) {
+            publishErrorState(
+                "error while loading settings list"
+            )
+            return
+        }
+
         val settingsList = currSettingsComponent.settingsDao.getAll()
 
         publishLoadingState(
@@ -86,6 +106,36 @@ class SettingsScreenViewModel @AssistedInject constructor(
         return handleCommand(
             CommandFromSettingsScreen.LoadSelectedSettings
         )
+    }
+
+    private fun prepopulateSettingsTableWithDefaultValues(
+        settingsDao: SettingsDao
+    ) {
+        val needToPrepopulate = settingsDao.getCount() == 0
+        if (!needToPrepopulate) {
+            return
+        }
+
+        val dataToPrepopulate = arrayOf(
+            12 to 20,
+            10 to 20,
+            8  to 16,
+            5  to 12,
+            12 to 30,
+            12 to 25,
+            10 to 18,
+        )
+
+        dataToPrepopulate.forEach {
+            settingsDao.insert(
+                Settings(
+                    Settings.SettingsData(
+                        it.first,
+                        it.second
+                    )
+                )
+            )
+        }
     }
 
     private suspend fun rememberSettingsData(
@@ -155,7 +205,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             currSettingsComponent.settingsDao.delete(settingsId)
 
             return handleCommand(
-                CommandFromSettingsScreen.LoadSettings
+                CommandFromSettingsScreen.LoadSettingsList
             )
         }
     }

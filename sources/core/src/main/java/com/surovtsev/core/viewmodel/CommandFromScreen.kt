@@ -9,5 +9,5 @@ interface CommandFromScreen {
     interface CloseErrorAndFinish: CloseError
 
     interface Init: CommandFromScreen
-
+    interface Finish: CommandFromScreen
 }

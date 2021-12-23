@@ -55,23 +55,40 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
                         screenData is ScreenData.InitializationIsNotFinished
 
 
+            val skipProcessingCommand: Boolean
+
             if (isErrorState) {
                 val isCloseErrorCommand = command is CommandFromScreen.CloseError
 
                 if (isCloseErrorCommand) {
                     if (isErrorDuringInitialization || command is CommandFromScreen.CloseErrorAndFinish) {
-                        finishAction?.let {
-                            closeError()
-                            withUIContext {
-                                it.invoke()
-                            }
-                        }
+                        closeError()
+                        finish()
+                        skipProcessingCommand = true
                     } else {
-                        tryToProcessCommand(command)
+                        skipProcessingCommand = false
                     }
+                } else {
+                    skipProcessingCommand = true
                 }
             } else {
-                tryToProcessCommand(command)
+                skipProcessingCommand = false
+            }
+
+            if (!skipProcessingCommand) {
+                if (command is CommandFromScreen.Finish) {
+                    finish()
+                } else {
+                    tryToProcessCommand(command)
+                }
+            }
+        }
+    }
+
+    private suspend fun finish() {
+        finishAction?.let {
+            withUIContext {
+                it.invoke()
             }
         }
     }
