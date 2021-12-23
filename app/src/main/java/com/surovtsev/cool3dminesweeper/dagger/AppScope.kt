@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.dagger.app
+package com.surovtsev.cool3dminesweeper.dagger
 
 import javax.inject.Scope
 

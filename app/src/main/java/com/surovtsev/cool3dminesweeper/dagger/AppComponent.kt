@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.dagger.app
+package com.surovtsev.cool3dminesweeper.dagger
 
 import android.content.Context
 import androidx.room.Room

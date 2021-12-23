@@ -3,8 +3,8 @@ package com.surovtsev.cool3dminesweeper.app
 import android.app.Application
 import android.content.Context
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.surovtsev.cool3dminesweeper.dagger.app.AppComponent
-import com.surovtsev.cool3dminesweeper.dagger.app.DaggerAppComponent
+import com.surovtsev.cool3dminesweeper.dagger.AppComponent
+import com.surovtsev.cool3dminesweeper.dagger.DaggerAppComponent
 import com.surovtsev.core.app.Cool3dMinesweeperApplication
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import logcat.AndroidLogcatLogger

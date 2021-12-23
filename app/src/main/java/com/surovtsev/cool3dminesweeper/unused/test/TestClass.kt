@@ -3,7 +3,7 @@ package com.surovtsev.cool3dminesweeper.unused.test
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.surovtsev.cool3dminesweeper.dagger.app.AppScope
+import com.surovtsev.cool3dminesweeper.dagger.AppScope
 import javax.inject.Inject
 
 @AppScope
