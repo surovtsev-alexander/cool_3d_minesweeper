@@ -1,8 +1,11 @@
 package com.surovtsev.rankingscreen.presentation
 
 import android.text.format.DateUtils
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterExitState
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,14 +22,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.surovtsev.core.helpers.*
+import com.surovtsev.core.helpers.RankingDataWithPlaces
+import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.core.viewmodel.ScreenState
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
+import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import logcat.logcat
 
 @Composable
@@ -46,7 +50,7 @@ fun RankingScreen(
     RankingControls(
         viewModel.state,
         commandHandler,
-        viewModel,
+        viewModel as RankingScreenErrorDialogPlacer,
     )
 }
 
@@ -54,10 +58,10 @@ fun RankingScreen(
 fun RankingControls(
     stateValue: RankingScreenStateValue,
     commandHandler: RankingScreenCommandHandler,
-    viewModel: RankingScreenViewModel
+    errorDialogPlacer: RankingScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
-        viewModel.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog()
 
         Box(
             modifier = Modifier

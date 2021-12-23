@@ -8,6 +8,7 @@ import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.CommandProcessor
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
@@ -25,6 +26,9 @@ typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
 typealias RankingScreenStateValue = LiveData<RankingScreenState>
 
 typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
+
+typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<
+        CommandFromRankingScreen, RankingScreenData>
 
 class RankingScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,

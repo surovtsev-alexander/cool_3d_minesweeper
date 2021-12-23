@@ -1,7 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel.helpers
 
 sealed interface UIGameStatus {
-    object Unimportantly: UIGameStatus
+    object Unimportant: UIGameStatus
 
     class Win(
         val place: Int

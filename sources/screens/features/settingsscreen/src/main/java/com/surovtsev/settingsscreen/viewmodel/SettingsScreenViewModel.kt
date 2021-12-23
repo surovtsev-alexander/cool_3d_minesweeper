@@ -9,10 +9,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.core.viewmodel.CommandProcessor
-import com.surovtsev.core.viewmodel.ScreenCommandHandler
-import com.surovtsev.core.viewmodel.ScreenStateValue
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.dagger.SettingsComponent
 import dagger.assisted.Assisted
@@ -23,6 +20,8 @@ typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
 typealias SettingsScreenStateValue = ScreenStateValue<SettingsScreenData>
 
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
+
+typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<CommandFromSettingsScreen, SettingsScreenData>
 
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,

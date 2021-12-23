@@ -45,7 +45,7 @@ fun SettingsScreen(
     SettingsControls(
         viewModel.state,
         commandHandler,
-        viewModel,
+        viewModel as SettingsScreenErrorDialogPlacer,
     )
 }
 
@@ -53,11 +53,11 @@ fun SettingsScreen(
 fun SettingsControls(
     stateValue: SettingsScreenStateValue,
     commandHandler: SettingsScreenCommandHandler,
-    viewModel: SettingsScreenViewModel,
+    errorDialogPlacer: SettingsScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
 
-        viewModel.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog()
         Box(
             Modifier.background(GrayBackground)
         ) {

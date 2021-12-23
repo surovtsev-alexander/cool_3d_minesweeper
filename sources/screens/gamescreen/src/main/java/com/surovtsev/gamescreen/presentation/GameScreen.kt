@@ -70,7 +70,7 @@ fun GameScreen(
         commandHandler,
         context,
         viewModel::initGLSurfaceView,
-        viewModel,
+        viewModel as GameScreenErrorDialogPlacer,
     )
 }
 
@@ -82,11 +82,11 @@ fun GameScreenControls(
     commandHandler: GameScreenCommandHandler,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
-    viewModel: GameScreenViewModel,
+    errorDialogPlacer: GameScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
 
-        viewModel.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog()
 
         GameView(
             stateValue,
@@ -412,8 +412,8 @@ fun GameStatusDialog(
         return
     }
 
-    val uiGameStatus = screenData.uiGameControls.uiGameStatus.collectAsState(initial = UIGameStatus.Unimportantly).value
-    if (uiGameStatus is UIGameStatus.Unimportantly) {
+    val uiGameStatus = screenData.uiGameControls.uiGameStatus.collectAsState(initial = UIGameStatus.Unimportant).value
+    if (uiGameStatus is UIGameStatus.Unimportant) {
         return
     }
 

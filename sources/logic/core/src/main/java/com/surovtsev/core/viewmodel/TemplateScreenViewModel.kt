@@ -12,19 +12,19 @@ typealias FinishAction = () -> Unit
 typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
-    val baseCommands: CommandFromScreen.BaseCommands<C>,
-    val noScreenData: D,
+    override val baseCommands: CommandFromScreen.BaseCommands<C>,
+    override val noScreenData: D,
     initialState: MutableLiveData<ScreenState<out D>>,
 ):
     ViewModel(),
-    ScreenCommandHandler<C>,
+    ErrorDialogPlacer<C, D>,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
     DefaultLifecycleObserver
 {
     var finishAction: FinishAction? = null
 
     private val _state: MutableLiveData<ScreenState<out D>> = initialState
-    val state: LiveData<ScreenState<out D>> = _state
+    override val state: LiveData<ScreenState<out D>> = _state
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 

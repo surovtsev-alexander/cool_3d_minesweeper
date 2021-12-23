@@ -9,10 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.CommandProcessor
-import com.surovtsev.core.viewmodel.ScreenCommandHandler
-import com.surovtsev.core.viewmodel.ScreenStateValue
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamescreen.dagger.DaggerGameComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
@@ -36,6 +33,8 @@ typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
 typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
 
+typealias GameScreenErrorDialogPlacer = ErrorDialogPlacer<CommandFromGameScreen, GameScreenData>
+
 class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
@@ -54,17 +53,15 @@ class GameScreenViewModel @AssistedInject constructor(
 
     // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
-    var gLSurfaceView: GLSurfaceView? = null
+    private var gLSurfaceView: GLSurfaceView? = null
 
-    var timeSpanComponent: TimeSpanComponent? = null
-    var gameComponent: GameComponent? = null
-        private set
+    private var timeSpanComponent: TimeSpanComponent? = null
+    private var gameComponent: GameComponent? = null
     private var touchListenerComponent: TouchListenerComponent? = null
 
     private var gameControlsImp: GameControlsImp? = null
     private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
-    var uiGameControlsFlows: UIGameControlsFlows? = null
-        private set
+    private var uiGameControlsFlows: UIGameControlsFlows? = null
 
     override fun onResume(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onResume(owner)
@@ -76,9 +73,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onPause()
 
         pauseGame()
-        gameComponent?.let {
-            it.minesweeperController.storeGameIfNeeded()
-        }
+        gameComponent?.minesweeperController?.storeGameIfNeeded()
 
         if (state.value?.screenData !is GameScreenData.GameMenu) {
             handleCommand(
@@ -355,7 +350,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private fun closeGameStatusDialog() {
-        uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportantly
+        uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportant
     }
 }
 
