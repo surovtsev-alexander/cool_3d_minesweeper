@@ -92,7 +92,8 @@ fun GameScreenControls(
             state as ScreenStateValue<ScreenData>,
             commandHandler as ScreenCommandHandler<CommandFromScreen>,
             CommandFromGameScreen.CloseError,
-            CommandFromGameScreen.CloseErrorAndFinish
+            CommandFromGameScreen.CloseErrorAndFinish,
+            GameScreenData.NoData,
         )
 
         GameView(

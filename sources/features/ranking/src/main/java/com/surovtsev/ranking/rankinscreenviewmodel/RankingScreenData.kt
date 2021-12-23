@@ -7,14 +7,14 @@ import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.viewmodel.ScreenData
 
-sealed class RankingScreenData: ScreenData {
+sealed interface RankingScreenData: ScreenData {
 
-    object NoData: RankingScreenData()
+    object NoData: ScreenData.NoData, RankingScreenData, ScreenData.InitializationIsNotFinished
 
     open class SettingsListIsLoaded(
         val settingsList: SettingsList,
         val winsCountMap: WinsCountMap,
-    ): RankingScreenData()
+    ): RankingScreenData, ScreenData.InitializationIsNotFinished
 
     open class RankingListIsPrepared(
         settingsListIsLoaded: SettingsListIsLoaded,

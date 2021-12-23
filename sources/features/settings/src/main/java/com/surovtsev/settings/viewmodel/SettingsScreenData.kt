@@ -5,13 +5,13 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.ScreenData
 
 
-sealed class SettingsScreenData: ScreenData {
+sealed interface SettingsScreenData: ScreenData {
 
-    object NoData: SettingsScreenData(), ScreenData.InitializationIsNotFinished
+    object NoData: SettingsScreenData, ScreenData.NoData, ScreenData.InitializationIsNotFinished
 
     open class SettingsLoaded(
         val settingsList: SettingsList,
-    ): SettingsScreenData(), ScreenData.InitializationIsNotFinished
+    ): SettingsScreenData, ScreenData.InitializationIsNotFinished
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,

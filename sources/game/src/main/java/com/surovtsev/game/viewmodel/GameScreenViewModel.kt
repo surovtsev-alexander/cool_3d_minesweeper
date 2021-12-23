@@ -12,10 +12,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
-import com.surovtsev.core.viewmodel.CommandProcessor
-import com.surovtsev.core.viewmodel.ScreenCommandHandler
-import com.surovtsev.core.viewmodel.ScreenStateValue
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.game.dagger.DaggerGameComponent
 import com.surovtsev.game.dagger.GameComponent
 import com.surovtsev.game.viewmodel.helpers.Place
@@ -43,8 +40,9 @@ class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
-        CommandFromGameScreen.LoadGame,
-        { CommandFromGameScreen.HandleScreenLeaving(it) },
+        CommandFromScreen.BaseCommands(
+            CommandFromGameScreen.LoadGame
+        ) { CommandFromGameScreen.HandleScreenLeaving(it) },
         GameScreenData.NoData,
         GameScreenStateHolder(GameScreenInitialState)
     ),

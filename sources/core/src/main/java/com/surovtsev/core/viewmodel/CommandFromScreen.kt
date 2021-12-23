@@ -2,6 +2,8 @@ package com.surovtsev.core.viewmodel
 
 import androidx.lifecycle.LifecycleOwner
 
+typealias HandleScreenLeavingCommandFactory<C> = (owner: LifecycleOwner) -> C
+
 interface CommandFromScreen {
     open class HandleScreenLeaving(val owner: LifecycleOwner): CommandFromScreen
 
@@ -10,4 +12,9 @@ interface CommandFromScreen {
 
     interface Init: CommandFromScreen
     interface Finish: CommandFromScreen
+
+    class BaseCommands <T: CommandFromScreen>(
+        val init: Init,
+        val handleScreenLeavingCommandFactory: HandleScreenLeavingCommandFactory<T>,
+    )
 }

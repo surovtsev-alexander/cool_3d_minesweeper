@@ -7,6 +7,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.viewmodel.CommandFromScreen
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
@@ -32,8 +33,9 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
-        CommandFromRankingScreen.LoadData,
-        { CommandFromRankingScreen.HandleScreenLeaving(it) },
+        CommandFromScreen.BaseCommands(
+            CommandFromRankingScreen.LoadData
+        ) { CommandFromRankingScreen.HandleScreenLeaving(it) },
         RankingScreenData.NoData,
         RankingScreenStateHolder(RankingScreenInitialState)
     )

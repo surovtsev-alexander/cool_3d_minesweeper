@@ -60,7 +60,8 @@ fun SettingsControls(
             stateValue = stateValue as ScreenStateValue<ScreenData>,
             screenCommandHandler = commandHandler as ScreenCommandHandler<CommandFromScreen>,
             closeErrorCommand = CommandFromSettingsScreen.CloseError,
-            closeErrorAndFinishCommand = CommandFromSettingsScreen.CloseErrorAndFinish
+            closeErrorAndFinishCommand = CommandFromSettingsScreen.CloseErrorAndFinish,
+            noData = SettingsScreenData.NoData,
         )
 
         Box(

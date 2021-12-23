@@ -9,7 +9,7 @@ sealed interface CommandFromRankingScreen: CommandFromScreen {
         CommandFromRankingScreen,
         CommandFromScreen.HandleScreenLeaving(owner)
 
-    object LoadData: CommandFromRankingScreen
+    object LoadData: CommandFromRankingScreen, CommandFromScreen.Init
 
     object CloseError: CommandFromRankingScreen
 

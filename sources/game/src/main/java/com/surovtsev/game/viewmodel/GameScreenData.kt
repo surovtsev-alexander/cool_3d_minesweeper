@@ -2,14 +2,14 @@ package com.surovtsev.game.viewmodel
 
 import com.surovtsev.core.viewmodel.ScreenData
 
-sealed class GameScreenData: ScreenData {
-    object NoData: GameScreenData(), ScreenData.InitializationIsNotFinished
+sealed interface GameScreenData: ScreenData {
+    object NoData: GameScreenData, ScreenData.NoData, ScreenData.InitializationIsNotFinished
 
-    object GameInProgress: GameScreenData()
+    object GameInProgress: GameScreenData
 
     open class HasPrevData(
         val prevData: GameScreenData
-    ): GameScreenData()
+    ): GameScreenData
 
     class GameMenu(
         prevData: GameScreenData

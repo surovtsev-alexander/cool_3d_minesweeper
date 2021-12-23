@@ -11,11 +11,8 @@ typealias FinishAction = () -> Unit
 
 typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 
-typealias HandleScreenLeavingCommandFactory<C> = (owner: LifecycleOwner) -> C
-
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
-    private val initCommand: C,
-    private val handleScreenLeavingCommandFactory: HandleScreenLeavingCommandFactory<C>,
+    private val baseCommands: CommandFromScreen.BaseCommands<C>,
     private val noScreenData: D,
     initialState: MutableLiveData<ScreenState<out D>>,
 ):
@@ -34,7 +31,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         handleCommand(
-            handleScreenLeavingCommandFactory(owner)
+            baseCommands.handleScreenLeavingCommandFactory(owner)
         )
     }
 

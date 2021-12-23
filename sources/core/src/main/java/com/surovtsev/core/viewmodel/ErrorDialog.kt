@@ -18,10 +18,11 @@ fun ErrorDialog(
     stateValue: ScreenStateValue<ScreenData>,
     screenCommandHandler: ScreenCommandHandler<CommandFromScreen>,
     closeErrorCommand: CommandFromScreen.CloseError,
-    closeErrorAndFinishCommand: CommandFromScreen.CloseErrorAndFinish
+    closeErrorAndFinishCommand: CommandFromScreen.CloseErrorAndFinish,
+    noData: ScreenData.NoData
 ) {
     val state by stateValue.observeAsState(ScreenState.Idle(
-        ScreenData.NoData
+        noData
     ))
 
     val errorMessage = (state as? ScreenState.Error<*>)?.message?: return

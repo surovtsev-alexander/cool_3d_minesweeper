@@ -10,6 +10,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
+import com.surovtsev.core.viewmodel.CommandFromScreen
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
@@ -30,8 +31,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
-        CommandFromSettingsScreen.TriggerInitialization,
-        { CommandFromSettingsScreen.HandleLeavingScreen(it) },
+        CommandFromScreen.BaseCommands(
+            CommandFromSettingsScreen.TriggerInitialization
+        ) { CommandFromSettingsScreen.HandleLeavingScreen(it) },
         SettingsScreenData.NoData,
         SettingsScreenStateHolder(SettingsScreenInitialState),
     ),
@@ -56,7 +58,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
             is CommandFromSettingsScreen.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
             else                                                -> null
         }
-
     }
 
     private suspend fun triggerInitialization() {
