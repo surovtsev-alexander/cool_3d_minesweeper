@@ -5,11 +5,15 @@ import android.content.Context
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.surovtsev.cool3dminesweeper.dagger.app.AppComponent
 import com.surovtsev.cool3dminesweeper.dagger.app.DaggerAppComponent
+import com.surovtsev.core.app.Cool3dMinesweeperApplication
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import logcat.AndroidLogcatLogger
 
-class App : Application() {
+class Cool3dMinesweeperApplicationImp : Application(), Cool3dMinesweeperApplication {
     lateinit var appComponent: AppComponent
         private set
+
+    override val appComponentEntryPoint: AppComponentEntryPoint  = appComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -28,6 +32,6 @@ class App : Application() {
 
 val Context.appComponent: AppComponent
     get() = when (this) {
-        is App -> appComponent
+        is Cool3dMinesweeperApplicationImp -> appComponent
         else -> applicationContext.appComponent
     }
