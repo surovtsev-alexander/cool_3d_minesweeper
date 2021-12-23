@@ -17,19 +17,21 @@ def helpScreenModule = ":helpscreen"
 
 
 include coreModule
-project(coreModule).projectDir = new File(rootDir, "sources/core")
+project(coreModule).projectDir = new File(rootDir, "sources/logic/core")
 
 include utilsModule
-project(utilsModule).projectDir = new File(rootDir, "sources/utils")
+project(utilsModule).projectDir = new File(rootDir, "sources/logic/utils")
 
 include touchListenerModule
-project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlistener")
+project(touchListenerModule).projectDir = new File(rootDir, "sources/logic/touchlistener")
 
 include gameLogicModule
-project(gameLogicModule).projectDir = new File(rootDir, "sources/gamelogic")
+project(gameLogicModule).projectDir = new File(rootDir, "sources/logic/gamelogic")
 
 include timeSpanModule
-project(timeSpanModule).projectDir = new File(rootDir, "sources/timespan")
+project(timeSpanModule).projectDir = new File(rootDir, "sources/logic/timespan")
+
+
 
 
 include mainScreenModule

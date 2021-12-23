@@ -1,6 +1,6 @@
 package com.surovtsev.gamescreen.utils.utils.unused
 
-//import com.surovtsev.utils.timers.TimeSpanHelperImp
+//import TimeSpanHelperImp
 //import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 //import glm_.vec2.Vec2
 //
