@@ -48,7 +48,7 @@ dependencies {
     implementation project(":utils")
     implementation project(":settingsscreen")
     implementation project(":rankingscreen")
-    implementation project(":game")
+    implementation project(":gamescreen")
     implementation project(":helpscreen")
     implementation project(":mainscreen")
 //    implementation project(":touchlistener")

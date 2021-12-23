@@ -19,9 +19,9 @@ import com.surovtsev.mainscreeen.presentation.MainScreen
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.core.presentation.Screen
-import com.surovtsev.game.presentation.GameScreen
-import com.surovtsev.game.viewmodel.GameScreenViewModel
-import com.surovtsev.game.viewmodel.LoadGameParameterName
+import com.surovtsev.gamescreen.presentation.GameScreen
+import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
+import com.surovtsev.gamescreen.viewmodel.LoadGameParameterName
 import com.surovtsev.helpscreen.presentation.HelpScreen
 import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
 import com.surovtsev.rankingscreen.presentation.RankingScreen
