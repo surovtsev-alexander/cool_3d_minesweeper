@@ -45,11 +45,11 @@ dependencies {
 
     implementation project(":core")
     implementation project(":utils")
-    implementation project(":settingsscreen")
-    implementation project(":rankingscreen")
-    implementation project(":gamescreen")
-    implementation project(":helpscreen")
     implementation project(":mainscreen")
+    implementation project(":gamescreen")
+    implementation project(":rankingscreen")
+    implementation project(":settingsscreen")
+    implementation project(":helpscreen")
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

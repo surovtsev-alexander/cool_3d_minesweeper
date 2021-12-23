@@ -1,0 +1,78 @@
+digraph G {
+    graph[center=true];
+    node[shape=component];
+//    rankdir=LR;
+//    nodesep=0.5;
+//    edge [ constraint=false ];
+//    fontsize=18;
+    labeljust="l";
+
+    Note [shape="note", label="Note:\nAlmost all modules depend\non :Core and :Utils modules."];
+
+    App;
+
+    subgraph cluster_1 {
+        label="Logic";
+
+        Core;
+        GameLogic;
+
+        subgraph cluster_2 {
+            label="Utils";
+
+            TimeSpan;
+            TouchListener;
+            Utils;
+        };
+    };
+
+    subgraph cluster_3 {
+        label="Screens";
+
+        subgraph cluster_4 {
+            label="Features";
+
+            HelpScreen;
+            RankingScreen;
+            SettingsScreen;
+        };
+        GameScreen;
+        MainScreen;
+    };
+
+//    App -> Core;
+//    App -> Utils;
+    App -> MainScreen;
+    App -> GameScreen;
+    App -> RankingScreen;
+    App -> SettingsScreen;
+    App -> HelpScreen;
+
+    Core -> Utils;
+
+//    GameLogic -> Core;
+//    GameLogic -> Utils;
+
+//    TimeSpan -> Core;
+//    TimeSpan -> Utils;
+
+//    TouchListener -> Core;
+//    TouchListener -> Utils;
+
+//    HelpScreen -> Core;
+
+//    RankingScreen -> Core;
+//    RankingScreen -> Utils;
+    RankingScreen -> TimeSpan;
+
+//    SettingsScreen -> Core;
+//    SettingsScreen -> Utils;
+
+//    GameScreen -> Core;
+//    GameScreen -> Utils;
+    GameScreen -> GameLogic;
+    GameScreen -> TouchListener;
+    GameScreen -> TimeSpan;
+
+//    MainScreen -> Core;
+}
