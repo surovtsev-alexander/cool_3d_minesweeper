@@ -1,21 +1,21 @@
-package com.surovtsev.gamescreen.models.game.border.cube.cell
+package com.surovtsev.gamescreen.models.game.spaceborders.cube.cell
 
-import com.surovtsev.gamescreen.models.game.border.cube.cell.edge.EdgeBorder
+import com.surovtsev.gamescreen.models.game.spaceborders.cube.cell.edge.EdgeSpaceBorder
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerDescriptor
 import glm_.vec3.Vec3
 
-class CellBorder(
+class CellSpaceBorder(
     val center: Vec3,
     halfSpace: Vec3
 ) {
-    private val up: EdgeBorder
-    private val down: EdgeBorder
-    private val left: EdgeBorder
-    private val right: EdgeBorder
-    private val near: EdgeBorder
-    private val far: EdgeBorder
+    private val up: EdgeSpaceBorder
+    private val down: EdgeSpaceBorder
+    private val left: EdgeSpaceBorder
+    private val right: EdgeSpaceBorder
+    private val near: EdgeSpaceBorder
+    private val far: EdgeSpaceBorder
 
-    private val edges: Array<EdgeBorder>
+    private val edgeSpaces: Array<EdgeSpaceBorder>
 
     init {
         val p1 = center - halfSpace
@@ -35,54 +35,54 @@ class CellBorder(
         val h = Vec3(x2, y1, z1)
 
         up =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 a,
                 b,
                 c,
                 d
             )
         down =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 e,
                 f,
                 g,
                 h
             )
         left =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 a,
                 b,
                 f,
                 e
             )
         right =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 d,
                 c,
                 g,
                 h
             )
         near =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 a,
                 d,
                 h,
                 e
             )
         far =
-            EdgeBorder(
+            EdgeSpaceBorder(
                 b,
                 c,
                 g,
                 f
             )
 
-        edges = arrayOf(
+        edgeSpaces = arrayOf(
             up, down, left, right, near, far
         )
     }
 
     fun testIntersection(pointerDescriptor: PointerDescriptor): Boolean {
-        return (edges.firstOrNull { it.testIntersection(pointerDescriptor) }) != null
+        return (edgeSpaces.firstOrNull { it.testIntersection(pointerDescriptor) }) != null
     }
 }

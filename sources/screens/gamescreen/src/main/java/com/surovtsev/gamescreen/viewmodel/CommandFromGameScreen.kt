@@ -22,7 +22,7 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
 
     object RemoveFlaggedBombs: CommandFromGameScreen
-    object RemoveOpenedBorders: CommandFromGameScreen
+    object RemoveOpenedSlices: CommandFromGameScreen
     object ToggleFlagging: CommandFromGameScreen
 
     object CloseGameStatusDialog: CommandFromGameScreen

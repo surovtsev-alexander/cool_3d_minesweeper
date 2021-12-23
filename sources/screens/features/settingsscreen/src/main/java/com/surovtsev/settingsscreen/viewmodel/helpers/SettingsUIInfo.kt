@@ -5,7 +5,7 @@ import com.surovtsev.core.room.entities.Settings
 
 
 class SettingsUIInfo {
-    private val dimBorders = 3..25
+    private val dimensionCellCount = 3..25
     private val bombsPercentageBorders = 10..40
 
     private fun updateDimensions(
@@ -20,7 +20,7 @@ class SettingsUIInfo {
     val info = arrayOf(
         SettingUIControl(
             "x",
-            dimBorders,
+            dimensionCellCount,
             MutableLiveData<Int>(0),
             { it.dimensions.x },
             { settingsData, newValue ->
@@ -32,7 +32,7 @@ class SettingsUIInfo {
         ),
         SettingUIControl(
             "y",
-            dimBorders,
+            dimensionCellCount,
             MutableLiveData<Int>(0),
             { it.dimensions.y },
             { settingsData, newValue ->
@@ -44,7 +44,7 @@ class SettingsUIInfo {
         ),
         SettingUIControl(
             "z",
-            dimBorders,
+            dimensionCellCount,
             MutableLiveData<Int>(0),
             { it.dimensions.z },
             { settingsData, newValue ->

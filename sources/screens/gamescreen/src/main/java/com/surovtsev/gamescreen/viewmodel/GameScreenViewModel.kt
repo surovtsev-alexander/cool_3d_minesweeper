@@ -108,7 +108,7 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.CloseGameMenu          -> suspend { closeGameMenu() }
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
             is CommandFromGameScreen.RemoveFlaggedBombs     -> ::removeFlaggedBombs
-            is CommandFromGameScreen.RemoveOpenedBorders    -> ::removeOpenedBorders
+            is CommandFromGameScreen.RemoveOpenedSlices     -> ::removeOpenedSlices
             is CommandFromGameScreen.ToggleFlagging         -> ::toggleFlagging
             is CommandFromGameScreen.CloseGameStatusDialog  -> ::closeGameStatusDialog
             else                                            -> null
@@ -326,9 +326,9 @@ class GameScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun removeOpenedBorders() {
+    private suspend fun removeOpenedSlices() {
         skipIfGameIsNotInProgress {
-            gameControlsImp?.removeOpenedBorders = true
+            gameControlsImp?.removeOpenedSlices = true
         }
     }
 

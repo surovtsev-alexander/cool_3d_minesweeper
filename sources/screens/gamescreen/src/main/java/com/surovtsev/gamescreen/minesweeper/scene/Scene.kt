@@ -82,7 +82,7 @@ class Scene @Inject constructor(
         if (gameControls.removeFlaggedCells) {
             gameLogic.storeSelectedBombs()
         }
-        if (gameControls.removeOpenedBorders) {
+        if (gameControls.removeOpenedSlices) {
             gameLogic.collectOpenedNotEmptyBorders()
         }
         gameControls.flush()

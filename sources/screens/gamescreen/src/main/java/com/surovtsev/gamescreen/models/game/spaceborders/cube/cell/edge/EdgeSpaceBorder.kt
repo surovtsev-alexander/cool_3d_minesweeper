@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.models.game.border.cube.cell.edge
+package com.surovtsev.gamescreen.models.game.spaceborders.cube.cell.edge
 
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerDescriptor
 import com.surovtsev.utils.math.MyMath
@@ -6,7 +6,7 @@ import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import kotlin.math.sqrt
 
-data class EdgeBorder(
+data class EdgeSpaceBorder(
     val p1: Vec3,
     val p2: Vec3,
     val p3: Vec3,

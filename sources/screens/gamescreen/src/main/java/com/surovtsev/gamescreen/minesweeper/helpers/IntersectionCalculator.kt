@@ -2,10 +2,10 @@ package com.surovtsev.gamescreen.minesweeper.helpers
 
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.dagger.GameScope
-import com.surovtsev.gamescreen.models.game.border.cube.CubeBorder
+import com.surovtsev.gamescreen.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.gamescreen.models.game.cellpointers.CellIndex
 import com.surovtsev.gamescreen.models.game.cellpointers.PointedCell
-import com.surovtsev.gamescreen.models.game.cellpointers.PointedCellWithBorder
+import com.surovtsev.gamescreen.models.game.cellpointers.PointedCellWithSpaceBorder
 import com.surovtsev.gamescreen.models.game.skin.cube.CubeSkin
 import javax.inject.Inject
 
@@ -13,17 +13,17 @@ import javax.inject.Inject
 class IntersectionCalculator @Inject constructor(
     private val pointer: Pointer,
     private val cubeSkin: CubeSkin,
-    cubeBorder: CubeBorder
+    cubeSpaceBorder: CubeSpaceBorder
 ) {
     private val skins = cubeSkin.skins
-    private val borders = cubeBorder.cells
-    private val squaredCubeSphereRadius = cubeBorder.squaredCellSphereRadius
+    private val borders = cubeSpaceBorder.cells
+    private val squaredCubeSphereRadius = cubeSpaceBorder.squaredCellSphereRadius
 
     fun getCell(): PointedCell? {
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         val candidateCubes =
-            mutableListOf<Pair<Float, PointedCellWithBorder>>()
+            mutableListOf<Pair<Float, PointedCellWithSpaceBorder>>()
 
         cubeSkin.iterateCubes { cellIndex: CellIndex ->
             do {
@@ -44,7 +44,7 @@ class IntersectionCalculator @Inject constructor(
                     val fromNear = (pointerDescriptor.near - projection).length()
 
                     candidateCubes.add(
-                        fromNear to PointedCellWithBorder(
+                        fromNear to PointedCellWithSpaceBorder(
                             cellIndex, skin, spaceParameter
                         )
                     )
@@ -57,7 +57,7 @@ class IntersectionCalculator @Inject constructor(
         for (c in sortedCandidates) {
             val candidate = c.second
 
-            if (candidate.border.testIntersection(pointerDescriptor)) {
+            if (candidate.spaceBorder.testIntersection(pointerDescriptor)) {
                 return candidate
             }
         }

@@ -294,7 +294,7 @@ fun ControlButtons(
     ) {
         val buttons = arrayOf(
             "1" to CommandFromGameScreen.RemoveFlaggedBombs,
-            "2" to CommandFromGameScreen.RemoveOpenedBorders,
+            "2" to CommandFromGameScreen.RemoveOpenedSlices,
         )
         buttons.map { (buttonCaption, commandFromScreen) ->
             Button(
