@@ -10,8 +10,7 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.GameStatusWithElap
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.gamescreen.viewmodel.helpers.GameScreenEventsNames
-import com.surovtsev.gamescreen.viewmodel.helpers.ShowDialogEvent
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Named
 
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
@@ -30,8 +28,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
     private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
-    @Named(GameScreenEventsNames.ShowDialog)
-    private val showDialog: ShowDialogEvent,
+    private val uiGameControlsMutableFlows: UIGameControlsMutableFlows,
     subscriber: Subscriber
 ): Subscription {
 
@@ -84,7 +81,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
         } while (false)
 
         withContext(Dispatchers.Main) {
-            showDialog.onDataChanged(true)
+            uiGameControlsMutableFlows.showDialogEvent.value = true
         }
     }
 }

@@ -30,6 +30,7 @@ import com.surovtsev.gamescreen.viewmodel.helpers.*
 import com.surovtsev.gamescreen.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.timers.TimeSpan
 import com.surovtsev.utils.timers.TimeSpanHelperImp
 import dagger.*
 import javax.inject.Named
@@ -125,10 +126,14 @@ object GameControlsModule {
     @Provides
     fun provideUIGameControlsFlows(
         uiGameControlsMutableFlows: UIGameControlsMutableFlows,
+        bombsLeftFlow: BombsLeftFlow,
+        timeSpan: TimeSpan,
     ): UIGameControlsFlows {
         return UIGameControlsFlows(
             uiGameControlsMutableFlows.flagging,
-            uiGameControlsMutableFlows.showDialogEvent
+            uiGameControlsMutableFlows.showDialogEvent,
+            bombsLeftFlow,
+            timeSpan.timeSpanFlow,
         )
     }
 

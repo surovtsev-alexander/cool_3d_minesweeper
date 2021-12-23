@@ -90,9 +90,9 @@ fun GameScreenControls(
 
         GameView(
             state,
-            viewModel,
-            context,
             commandHandler,
+            viewModel::initGLSurfaceView,
+            context,
         )
 
         GameMenu(
@@ -102,6 +102,7 @@ fun GameScreenControls(
 
         GameStatusDialog(
             viewModel,
+            state,
             commandHandler,
         )
     }
@@ -111,9 +112,9 @@ fun GameScreenControls(
 @Composable
 fun GameView(
     stateValue: GameScreenStateValue,
-    viewModel: GameScreenViewModel,
-    context: Context,
     commandHandler: GameScreenCommandHandler,
+    glSurfaceViewCreated: GLSurfaceViewCreated,
+    context: Context,
 ) {
     val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
     val gameScreenData = gameScreenState.screenData
@@ -122,23 +123,17 @@ fun GameView(
         return
     }
 
-    val gameComponent = viewModel.gameComponent ?: return
-    val timeSpan = viewModel.timeSpanComponent?.timeSpan ?: return
-    val gameScreenEvents = gameComponent.gameScreenEvents
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier.weight(1f)
         ) {
-            MinesweeperView(context, viewModel::initGLSurfaceView)
+            MinesweeperView(context, glSurfaceViewCreated)
         }
         Row {
             Controls(
-                viewModel.state,
-                gameComponent.bombsLeftFlow,
-                timeSpan.timeSpanFlow,
+                stateValue,
                 commandHandler,
             )
         }
@@ -250,8 +245,6 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     stateValue: GameScreenStateValue,
-    bombsLeftFlow: BombsLeftFlow,
-    timeSpanFlow: TimeSpanFlow,
     commandHandler: GameScreenCommandHandler,
 ) {
     Row(
@@ -285,8 +278,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                bombsLeftFlow,
-                timeSpanFlow
+                stateValue
             )
         }
     }
@@ -358,7 +350,7 @@ fun ControlCheckBox(
                 modifier = Modifier.weight(1f),
             )
             Text(
-                "marking"
+                "flagging"
             )
         }
     }
@@ -366,15 +358,24 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    bombsLeftFlow: BombsLeftFlow,
-    timeSpanFlow: TimeSpanFlow,
+    stateValue: GameScreenStateValue,
 ) {
+    val state = stateValue.observeAsState(
+        GameScreenInitialState
+    ).value
+
+    val screenData = state.screenData
+
+    if (screenData !is GameScreenData.GameInProgress) {
+        return
+    }
+
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        BombsLeft(bombsLeftFlow)
-        TimeElapsed(timeSpanFlow)
+        BombsLeft(screenData.uiGameControls.bombsLeft)
+        TimeElapsed(screenData.uiGameControls.timeSpan)
     }
 }
 
@@ -403,24 +404,23 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     viewModel: GameScreenViewModel,
+    stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
 ) {
-    val state by viewModel.state.observeAsState(GameScreenInitialState)
+    val state by stateValue.observeAsState(GameScreenInitialState)
 
-    if (state.screenData !is GameScreenData.GameInProgress) {
+    val screenData = state.screenData
+    if (screenData !is GameScreenData.GameInProgress) {
         return
     }
 
     val gameComponent = viewModel.gameComponent ?: return
 
-    val showDialogEvent = gameComponent.gameScreenEvents.showDialogEvent
-    val showDialog: Boolean by showDialogEvent.run {
-        data.observeAsState(defaultValue)
-    }
+    val showDialog = screenData.uiGameControls.showDialog.collectAsState(initial = false).value
+
     if (!showDialog) {
         return
     }
-
 
     val lastWinPlaceEvent = gameComponent.gameScreenEvents.lastWinPlaceEvent
     val lastWinPlace: Place by lastWinPlaceEvent.run {
@@ -434,7 +434,9 @@ fun GameStatusDialog(
     }
 
     val closeDialogAction = {
-        showDialogEvent.onDataChanged(false)
+        commandHandler.handleCommand(
+            CommandFromGameScreen.CloseGameStatusDialog
+        )
         lastWinPlaceEvent.onDataChanged(Place.NoPlace)
     }
 
@@ -450,7 +452,7 @@ fun GameStatusDialog(
         dismissButton = {
             Button(
                 onClick = {
-                    showDialogEvent.onDataChanged(false)
+                    closeDialogAction.invoke()
                     commandHandler.handleCommand(
                         CommandFromGameScreen.NewGame
                     )

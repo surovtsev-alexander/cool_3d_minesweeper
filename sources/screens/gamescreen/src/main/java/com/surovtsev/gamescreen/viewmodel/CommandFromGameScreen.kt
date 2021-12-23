@@ -30,6 +30,8 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
     object ToggleFlagging: CommandFromGameScreen
 
+    object CloseGameStatusDialog: CommandFromGameScreen
+
     object BaseCommands: CommandFromScreen.BaseCommands<CommandFromGameScreen>(
         LoadGame,
         CloseError,

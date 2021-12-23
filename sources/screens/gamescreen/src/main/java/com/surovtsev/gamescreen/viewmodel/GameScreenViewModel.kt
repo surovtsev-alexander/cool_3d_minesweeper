@@ -118,6 +118,7 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.RemoveMarkedBombs      -> ::removeMarkedBombs
             is CommandFromGameScreen.RemoveZeroBorders      -> ::removeZeroBorders
             is CommandFromGameScreen.ToggleFlagging         -> ::toggleFlagging
+            is CommandFromGameScreen.CloseGameStatusDialog  -> ::closeGameStatusDialog
             else                                            -> null
         }
     }
@@ -399,6 +400,10 @@ class GameScreenViewModel @AssistedInject constructor(
     ) {
         gameControlsImp?.flagging = newVal
         uiGameControlsMutableFlows?.flagging?.value = newVal
+    }
+
+    private fun closeGameStatusDialog() {
+        uiGameControlsMutableFlows?.showDialogEvent?.value = false
     }
 }
 
