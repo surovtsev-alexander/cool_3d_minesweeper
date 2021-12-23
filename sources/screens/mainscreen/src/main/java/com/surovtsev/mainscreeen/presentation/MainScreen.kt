@@ -50,35 +50,27 @@ fun MainScreeControls(
                     .fillMaxWidth(0.8f)
                     .fillMaxHeight(0.5f)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    TwoButtonsInRow(
-                        hasSave,
-                        firstButtonName = MainScreenViewModel.ButtonNames.NewGame,
-                        secondButtonName = MainScreenViewModel.ButtonNames.LoadGame,
-                        rowScope = this,
-                        navController,
-                        buttonsInfo,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    TwoButtonsInRow(
-                        hasSave,
-                        firstButtonName = MainScreenViewModel.ButtonNames.Ranking,
-                        secondButtonName = MainScreenViewModel.ButtonNames.Settings,
-                        rowScope = this,
-                        navController,
-                        buttonsInfo,
-                    )
+                val buttonPairs = arrayOf(
+                    MainScreenViewModel.ButtonNames.NewGame to MainScreenViewModel.ButtonNames.LoadGame,
+                    MainScreenViewModel.ButtonNames.Ranking to MainScreenViewModel.ButtonNames.Settings
+                )
+
+                buttonPairs.map { (firstButtonName, secondButtonName) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        TwoButtonsInRow(
+                            hasSave,
+                            firstButtonName = firstButtonName,
+                            secondButtonName = secondButtonName,
+                            rowScope = this,
+                            navController,
+                            buttonsInfo,
+                        )
+                    }
                 }
                 Row(
                     modifier = Modifier
