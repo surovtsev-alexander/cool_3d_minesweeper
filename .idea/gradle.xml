@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/sources/core" />
+            <option value="$PROJECT_DIR$/sources/features/helpscreen" />
             <option value="$PROJECT_DIR$/sources/features/ranking" />
             <option value="$PROJECT_DIR$/sources/features/settings" />
             <option value="$PROJECT_DIR$/sources/game" />
