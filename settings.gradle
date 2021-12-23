@@ -6,7 +6,7 @@ def coreModule = ":core"
 def utilsModule = ":utils"
 def touchListenerModule = ":touchlistener"
 def rankingScreenModule = ":rankingscreen"
-def settingsModule = ":settings"
+def settingsScreenModule = ":settingsscreen"
 def gameModule = ":game"
 def gameLogicModule = ":gamelogic"
 def timeSpanModule = ":timespan"
@@ -25,8 +25,8 @@ project(touchListenerModule).projectDir = new File(rootDir, "sources/touchlisten
 include rankingScreenModule
 project(rankingScreenModule).projectDir = new File(rootDir, "sources/features/rankingscreen")
 
-include settingsModule
-project(settingsModule).projectDir = new File(rootDir, "sources/features/settings")
+include settingsScreenModule
+project(settingsScreenModule).projectDir = new File(rootDir, "sources/features/settingsscreen")
 
 include gameModule
 project(gameModule).projectDir = new File(rootDir, "sources/game")

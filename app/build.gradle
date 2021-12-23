@@ -46,7 +46,7 @@ dependencies {
 
     implementation project(":core")
     implementation project(":utils")
-    implementation project(":settings")
+    implementation project(":settingsscreen")
     implementation project(":rankingscreen")
     implementation project(":game")
     implementation project(":helpscreen")

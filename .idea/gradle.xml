@@ -15,7 +15,7 @@
             <option value="$PROJECT_DIR$/sources/core" />
             <option value="$PROJECT_DIR$/sources/features/helpscreen" />
             <option value="$PROJECT_DIR$/sources/features/rankingscreen" />
-            <option value="$PROJECT_DIR$/sources/features/settings" />
+            <option value="$PROJECT_DIR$/sources/features/settingsscreen" />
             <option value="$PROJECT_DIR$/sources/game" />
             <option value="$PROJECT_DIR$/sources/gamelogic" />
             <option value="$PROJECT_DIR$/sources/mainscreen" />

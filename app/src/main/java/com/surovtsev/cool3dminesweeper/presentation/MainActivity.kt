@@ -26,8 +26,8 @@ import com.surovtsev.helpscreen.presentation.HelpScreen
 import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
 import com.surovtsev.rankingscreen.presentation.RankingScreen
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.settings.presentation.SettingsScreen
-import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
+import com.surovtsev.settingsscreen.presentation.SettingsScreen
+import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
 import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
 import logcat.logcat

@@ -12,7 +12,7 @@ import com.surovtsev.core.settings.SettingsListData
 import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import dagger.BindsInstance
