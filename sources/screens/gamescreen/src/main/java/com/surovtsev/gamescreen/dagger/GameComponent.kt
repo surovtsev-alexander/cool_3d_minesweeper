@@ -42,8 +42,6 @@ import javax.inject.Named
         TimeSpanComponentEntryPoint::class,
     ],
     modules = [
-        GameModule::class,
-        GameEventsModule::class,
         GameControlsModule::class,
         GameControllerModule::class,
         SceneSettingsModule::class,
@@ -52,11 +50,8 @@ import javax.inject.Named
     ]
 )
 interface GameComponent {
-    val markingEvent: MarkingEvent
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
-    val gameScreenEvents: GameScreenEvents
-    val gameControlsOld: GameControlsOld
     val gameConfig: GameConfig
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
@@ -81,35 +76,6 @@ interface GameComponent {
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun build(): GameComponent
-    }
-}
-
-
-@Module
-object GameModule {
-}
-
-@Module
-object GameEventsModule {
-    @GameScope
-    @Provides
-    @Named(GameScreenEventsNames.ShowDialog)
-    fun provideShowDialog(): ShowDialogEvent {
-        return ShowDialogEvent(false)
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameScreenEventsNames.GameStatus)
-    fun provideGameStatusEvent(): GameStatusEvent {
-        return GameStatusEvent(GameStatusHelper.initStatus)
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameScreenEventsNames.LastWinPlace)
-    fun provideLastWindPlaceEvent(): LastWinPlaceEvent {
-        return LastWinPlaceEvent(Place.NoPlace)
     }
 }
 
@@ -143,27 +109,6 @@ object GameControlsModule {
     fun provideGameControlsImp(
     ): GameControlsImp {
         return GameControlsImp()
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameControlsNames.RemoveMarkedBombs)
-    fun provideRemoveBombsControl(): RemoveMarkedBombsControl {
-        return RemoveMarkedBombsControl(false)
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameControlsNames.RemoveZeroBorders)
-    fun provideRemoveZeroBordersControl(): RemoveZeroBordersControl {
-        return RemoveZeroBordersControl(false)
-    }
-
-    @GameScope
-    @Provides
-    @Named(GameControlsNames.MarkOnShortTap)
-    fun provideMarkOnShortTapControl(): MarkOnShortTapControl {
-        return MarkOnShortTapControl()
     }
 }
 

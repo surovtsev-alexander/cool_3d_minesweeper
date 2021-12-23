@@ -14,7 +14,6 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.GameStatusWithElap
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.gamescreen.viewmodel.helpers.Place
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
