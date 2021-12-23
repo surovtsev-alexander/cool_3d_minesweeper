@@ -23,6 +23,7 @@ import com.surovtsev.core.helpers.*
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
+import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.core.viewmodel.ScreenState
@@ -44,16 +45,20 @@ fun RankingScreen(
 
     RankingControls(
         viewModel.state,
-        commandHandler
+        commandHandler,
+        viewModel,
     )
 }
 
 @Composable
 fun RankingControls(
     stateValue: RankingScreenStateValue,
-    commandHandler: RankingScreenCommandHandler
+    commandHandler: RankingScreenCommandHandler,
+    viewModel: RankingScreenViewModel
 ) {
     MinesweeperTheme {
+        viewModel.PlaceErrorDialog()
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
