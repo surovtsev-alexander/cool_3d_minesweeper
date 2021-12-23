@@ -55,7 +55,7 @@ interface GameComponent {
     val minesweeperController: MinesweeperController
     val gameRenderer: GLESRenderer
     val gameScreenEvents: GameScreenEvents
-    val gameControls: GameControls
+    val gameControlsOld: GameControlsOld
     val gameConfig: GameConfig
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
@@ -68,6 +68,11 @@ interface GameComponent {
     val bombsLeftFlow: BombsLeftFlow
 
     val customCoroutineScope: CustomCoroutineScope
+
+    val gameControlsImp: GameControlsImp
+
+    val uiGameControlsMutableFlows: UIGameControlsMutableFlows
+    val uiGameControlsFlows: UIGameControlsFlows
 
     @Component.Builder
     interface Builder {
@@ -109,6 +114,32 @@ object GameEventsModule {
 
 @Module
 object GameControlsModule {
+    @GameScope
+    @Provides
+    fun provideUIGameControlsMutableFlows(
+    ): UIGameControlsMutableFlows {
+        return UIGameControlsMutableFlows()
+    }
+
+    @GameScope
+    @Provides
+    fun provideUIGameControlsFlows(
+        uiGameControlsMutableFlows: UIGameControlsMutableFlows,
+    ): UIGameControlsFlows {
+        return UIGameControlsFlows(
+            uiGameControlsMutableFlows.flagging,
+            uiGameControlsMutableFlows.showDialogEvent
+        )
+    }
+
+
+    @GameScope
+    @Provides
+    fun provideGameControlsImp(
+    ): GameControlsImp {
+        return GameControlsImp()
+    }
+
     @GameScope
     @Provides
     @Named(GameControlsNames.RemoveMarkedBombs)
@@ -182,6 +213,7 @@ object GameControllerModule {
         gameConfig: GameConfig,
         cubeOpenGLModel: CubeOpenGLModel,
         gameLogicStateHelper: GameLogicStateHelper,
+        gameControls: GameControls,
     ): GameLogic {
         val res  =
             GameLogic(
@@ -189,6 +221,7 @@ object GameControllerModule {
                 cubeOpenGLModel,
                 gameConfig,
                 gameLogicStateHelper,
+                gameControls,
             )
         if (save != null) {
             save.gameLogicToSave.applySavedData(res)
@@ -213,6 +246,12 @@ object GameControllerModule {
 
 @Module
 interface GameControllerBindModule {
+    @GameScope
+    @Binds
+    fun provideGameControls(
+        gameControlsImp: GameControlsImp
+    ): GameControls
+
     @GameScope
     @Binds
     fun bindPointer(pointer: PointerImp): Pointer

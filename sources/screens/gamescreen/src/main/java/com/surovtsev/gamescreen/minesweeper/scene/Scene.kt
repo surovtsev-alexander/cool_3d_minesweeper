@@ -1,15 +1,15 @@
 package com.surovtsev.gamescreen.minesweeper.scene
 
+import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.CameraInfoHelper
 import com.surovtsev.gamescreen.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
+import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
-import com.surovtsev.utils.timers.TimeSpanHelperImp
-import com.surovtsev.gamescreen.dagger.GameScope
-import com.surovtsev.gamescreen.models.game.interaction.GameControls
 import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
+import com.surovtsev.utils.timers.TimeSpanHelperImp
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 import javax.inject.Named
@@ -18,7 +18,7 @@ import javax.inject.Named
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
     private val timeSpanHelper: TimeSpanHelperImp,
-    private val gameControls: GameControls,
+    private val gameControls: GameControlsImp,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
     private val touchHandler: TouchHandlerImp,
@@ -41,10 +41,6 @@ class Scene @Inject constructor(
         val cameraMoved = cameraInfoHelper.getAndRelease()
 
         val clicked = touchHandler.getAndRelease()
-
-        if (gameControls.markOnShortTapControl.getAndRelease()) {
-            gameLogic.markingOnShotTap = gameControls.markOnShortTapControl.isOn()
-        }
 
         if (cameraMoved) {
             cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
@@ -83,12 +79,14 @@ class Scene @Inject constructor(
 
         gameLogic.openCubes()
 
-        if (gameControls.removeMarkedBombsControl.getAndRelease()) {
+        if (gameControls.removeFlaggedCells) {
             gameLogic.storeSelectedBombs()
         }
-        if (gameControls.removeZeroBordersControl.getAndRelease()) {
+        if (gameControls.removeZeroBorders) {
             gameLogic.storeZeroBorders()
         }
+        gameControls.flush()
+
         gameLogic.removeCubes()
 
         if (clicked) {

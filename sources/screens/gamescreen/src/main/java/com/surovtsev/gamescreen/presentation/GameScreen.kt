@@ -25,14 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
-import com.surovtsev.gamescreen.models.game.interaction.RemoveMarkedBombsControl
-import com.surovtsev.gamescreen.models.game.interaction.RemoveZeroBordersControl
 import com.surovtsev.gamescreen.viewmodel.*
 import com.surovtsev.gamescreen.viewmodel.helpers.GameScreenEvents
 import com.surovtsev.gamescreen.viewmodel.helpers.MarkingEvent
@@ -125,7 +124,6 @@ fun GameView(
 
     val gameComponent = viewModel.gameComponent ?: return
     val timeSpan = viewModel.timeSpanComponent?.timeSpan ?: return
-    val gameControls = gameComponent.gameControls
     val gameScreenEvents = gameComponent.gameScreenEvents
 
     Column(
@@ -138,11 +136,10 @@ fun GameView(
         }
         Row {
             Controls(
+                viewModel.state,
                 gameComponent.bombsLeftFlow,
                 timeSpan.timeSpanFlow,
-                gameScreenEvents,
-                gameControls.removeMarkedBombsControl,
-                gameControls.removeZeroBordersControl
+                commandHandler,
             )
         }
     }
@@ -252,11 +249,10 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
+    stateValue: GameScreenStateValue,
     bombsLeftFlow: BombsLeftFlow,
     timeSpanFlow: TimeSpanFlow,
-    gameScreenEvents: GameScreenEvents,
-    removeMarkedBombsControl: RemoveMarkedBombsControl,
-    removeZeroBordersControl: RemoveZeroBordersControl
+    commandHandler: GameScreenCommandHandler,
 ) {
     Row(
         modifier = Modifier
@@ -270,8 +266,7 @@ fun Controls(
                 .weight(2f)
         ) {
             ControlButtons(
-                removeMarkedBombsControl,
-                removeZeroBordersControl
+                commandHandler,
             )
         }
         Column(
@@ -279,7 +274,10 @@ fun Controls(
                 .fillMaxHeight()
                 .weight(1f),
         ) {
-            ControlCheckBox(gameScreenEvents.markingEvent)
+            ControlCheckBox(
+                stateValue,
+                commandHandler,
+            )
         }
         Column(
             modifier = Modifier
@@ -296,42 +294,58 @@ fun Controls(
 
 @Composable
 fun ControlButtons(
-    removeMarkedBombsControl: RemoveMarkedBombsControl,
-    removeZeroBordersControl: RemoveZeroBordersControl
+    commandHandler: GameScreenCommandHandler,
 ) {
     Row (
         modifier = Modifier
             .fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Button(
-            onClick = { removeMarkedBombsControl.update() },
-            modifier = Modifier.fillMaxWidth(0.5f)
-        ) {
-            Text("V")
-        }
-        Button(
-            onClick = {
-                removeZeroBordersControl.update()
-            },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text("O")
+        val buttons = arrayOf(
+            "1" to CommandFromGameScreen.RemoveMarkedBombs,
+            "2" to CommandFromGameScreen.RemoveZeroBorders,
+        )
+        buttons.map { (buttonCaption, commandFromScreen) ->
+            Button(
+                modifier = Modifier
+                    .weight(1f),
+                onClick = { commandHandler.handleCommand(commandFromScreen) }
+            ) {
+                Text(text = buttonCaption)
+            }
         }
     }
 }
 
 @Composable
 fun ControlCheckBox(
-    markingEvent: MarkingEvent,
+    stateValue: GameScreenStateValue,
+    commandHandler: GameScreenCommandHandler,
 ) {
-    val checked: Boolean by markingEvent.run {
-        data.observeAsState(defaultValue)
+    val state = stateValue.observeAsState(
+        GameScreenInitialState
+    ).value
+
+    val screenData = state.screenData
+
+    if (screenData !is GameScreenData.GameInProgress) {
+        return
     }
+
+    val uiGameControlsFlows = screenData.uiGameControls
+
+    val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
+
+    val toggleFlaggingAction = {
+        commandHandler.handleCommand(
+            CommandFromGameScreen.ToggleFlagging
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .clickable { markingEvent.onDataChanged(!checked) }
+            .clickable { toggleFlaggingAction() }
     ) {
         Row(
             modifier = Modifier
@@ -339,11 +353,9 @@ fun ControlCheckBox(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checked,
-                onCheckedChange = {
-                    markingEvent.onDataChanged(it)
-                },
-                modifier = Modifier.weight(1f)
+                checked = flagged,
+                onCheckedChange = null,
+                modifier = Modifier.weight(1f),
             )
             Text(
                 "marking"

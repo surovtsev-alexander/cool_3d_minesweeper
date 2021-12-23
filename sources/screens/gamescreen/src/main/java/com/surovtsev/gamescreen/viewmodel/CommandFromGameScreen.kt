@@ -24,6 +24,12 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
     object CloseGame: CommandFromGameScreen
 
+    object RemoveMarkedBombs: CommandFromGameScreen
+
+    object RemoveZeroBorders: CommandFromGameScreen
+
+    object ToggleFlagging: CommandFromGameScreen
+
     object BaseCommands: CommandFromScreen.BaseCommands<CommandFromGameScreen>(
         LoadGame,
         CloseError,

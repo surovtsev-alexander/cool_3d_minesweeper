@@ -12,10 +12,16 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
-import com.surovtsev.core.viewmodel.*
+import com.surovtsev.core.viewmodel.CommandProcessor
+import com.surovtsev.core.viewmodel.ScreenCommandHandler
+import com.surovtsev.core.viewmodel.ScreenStateValue
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.gamescreen.dagger.DaggerGameComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
+import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.viewmodel.helpers.Place
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
@@ -57,6 +63,11 @@ class GameScreenViewModel @AssistedInject constructor(
     var gameComponent: GameComponent? = null
         private set
     private var touchListenerComponent: TouchListenerComponent? = null
+
+    private var gameControlsImp: GameControlsImp? = null
+    private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
+    var uiGameControlsFlows: UIGameControlsFlows? = null
+        private set
 
     override fun onResume(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onResume(owner)
@@ -104,6 +115,9 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.OpenGameMenu           -> ::openGameMenu
             is CommandFromGameScreen.CloseGameMenu          -> suspend { closeGameMenu() }
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
+            is CommandFromGameScreen.RemoveMarkedBombs      -> ::removeMarkedBombs
+            is CommandFromGameScreen.RemoveZeroBorders      -> ::removeZeroBorders
+            is CommandFromGameScreen.ToggleFlagging         -> ::toggleFlagging
             else                                            -> null
         }
     }
@@ -155,13 +169,14 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend inline fun <reified T: GameScreenData> doActionIfDataIsChildOf(
         errorMessage: String,
-        noinline action: (gameScreenData: GameScreenData) -> Unit
+        silent: Boolean = false,
+        noinline action: suspend (gameScreenData: T) -> Unit
     ) {
         doActionIfDataIsCorrect(
             { it is T },
             errorMessage,
-            silent = false,
-            action
+            silent = silent,
+            { gameScreenData -> action.invoke(gameScreenData as T)  }
         )
     }
 
@@ -176,7 +191,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameInProgress },
-            "gamescreen is in progress",
+            "game is in progress",
             true
         ) {
             publishIdleState(GameScreenData.NoData)
@@ -193,6 +208,11 @@ class GameScreenViewModel @AssistedInject constructor(
             .loadGame(loadGame)
             .build()
             .also {
+                gameControlsImp = it.gameControlsImp
+
+                uiGameControlsMutableFlows = it.uiGameControlsMutableFlows
+                uiGameControlsFlows = it.uiGameControlsFlows
+
                 touchListenerComponent = DaggerTouchListenerComponent
                     .builder()
                     .timeSpanComponentEntryPoint(
@@ -207,12 +227,16 @@ class GameScreenViewModel @AssistedInject constructor(
                     .build()
             }
 
+        setFlagging(loadGame)
+
         timeSpanComponent
             .timeSpan
             .flush()
 
         publishIdleState(
-            GameScreenData.GameInProgress
+            GameScreenData.GameInProgress(
+                uiGameControlsFlows!!
+            )
         )
     }
 
@@ -336,6 +360,45 @@ class GameScreenViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun skipIfGameIsNotInProgress(
+        action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
+    ) {
+        doActionIfDataIsChildOf(
+            "game is not in progress",
+            true,
+            action
+        )
+    }
+
+    private suspend fun removeMarkedBombs() {
+        skipIfGameIsNotInProgress {
+            gameControlsImp?.removeFlaggedCells = true
+        }
+    }
+
+    private suspend fun removeZeroBorders() {
+        skipIfGameIsNotInProgress {
+            gameControlsImp?.removeZeroBorders = true
+        }
+    }
+
+    private suspend fun toggleFlagging() {
+        skipIfGameIsNotInProgress {
+            gameControlsImp?.let {
+                setFlagging(
+                    !it.flagging
+                )
+            }
+        }
+    }
+
+    private fun setFlagging(
+        newVal: Boolean
+    ) {
+        gameControlsImp?.flagging = newVal
+        uiGameControlsMutableFlows?.flagging?.value = newVal
     }
 }
 

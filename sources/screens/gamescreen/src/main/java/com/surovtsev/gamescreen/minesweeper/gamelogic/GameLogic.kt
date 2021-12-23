@@ -10,6 +10,7 @@ import com.surovtsev.gamescreen.models.game.cellpointers.CellRange
 import com.surovtsev.gamescreen.models.game.cellpointers.PointedCell
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
+import com.surovtsev.gamescreen.models.game.interaction.GameControls
 import com.surovtsev.gamescreen.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamescreen.utils.utils.gles.interfaces.TextureUpdater
 import com.surovtsev.utils.androidview.interaction.TouchType
@@ -22,6 +23,7 @@ class GameLogic(
     private val textureUpdater: TextureUpdater,
     private val gameConfig: GameConfig,
     val gameLogicStateHelper: GameLogicStateHelper,
+    val gameControls: GameControls,
 ) {
 
     private val _bombsLeftFlow = MutableStateFlow(0)
@@ -34,8 +36,6 @@ class GameLogic(
             0L
         )
     private val doubleClickDelay = 200L
-
-    var markingOnShotTap = false
 
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()
@@ -66,12 +66,13 @@ class GameLogic(
         val id = position.id
         when (touchType) {
             TouchType.SHORT -> {
-                if ((!markingOnShotTap || pointedCell.skin.isOpenedNumber()) &&
+                val flagging = gameControls.flagging
+                if ((!flagging || pointedCell.skin.isOpenedNumber()) &&
                     id == prevClickInfo.id &&
                     currTime - prevClickInfo.time < doubleClickDelay) {
                     emptyCube(pointedCell)
                 } else {
-                    tryToOpenCube(pointedCell, markingOnShotTap)
+                    tryToOpenCube(pointedCell, flagging)
                 }
             }
             TouchType.LONG -> {

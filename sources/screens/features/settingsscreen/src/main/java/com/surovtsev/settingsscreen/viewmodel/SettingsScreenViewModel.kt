@@ -2,7 +2,6 @@ package com.surovtsev.settingsscreen.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
@@ -12,6 +11,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
+import com.surovtsev.core.viewmodel.ScreenStateValue
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.dagger.SettingsComponent
@@ -20,7 +20,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
-typealias SettingsScreenStateValue = LiveData<SettingsScreenState>
+typealias SettingsScreenStateValue = ScreenStateValue<SettingsScreenData>
 
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
 
