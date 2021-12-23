@@ -179,7 +179,7 @@ fun GameMenu(
     }
 
     val mainMenuButtons = arrayOf(
-        "new gamescreen" to CommandFromGameScreen.NewGame,
+        "new game" to CommandFromGameScreen.NewGame,
         "main menu" to CommandFromGameScreen.GoToMainMenu,
     )
 
@@ -444,7 +444,7 @@ fun GameStatusDialog(
                     )
                 }
             ) {
-                Text(text = "new gamescreen")
+                Text(text = "new game")
             }
         },
         confirmButton = {
