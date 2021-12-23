@@ -107,8 +107,8 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.OpenGameMenu           -> ::openGameMenu
             is CommandFromGameScreen.CloseGameMenu          -> suspend { closeGameMenu() }
             is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
-            is CommandFromGameScreen.RemoveMarkedBombs      -> ::removeMarkedBombs
-            is CommandFromGameScreen.RemoveZeroBorders      -> ::removeZeroBorders
+            is CommandFromGameScreen.RemoveFlaggedBombs     -> ::removeFlaggedBombs
+            is CommandFromGameScreen.RemoveOpenedBorders    -> ::removeOpenedBorders
             is CommandFromGameScreen.ToggleFlagging         -> ::toggleFlagging
             is CommandFromGameScreen.CloseGameStatusDialog  -> ::closeGameStatusDialog
             else                                            -> null
@@ -300,8 +300,8 @@ class GameScreenViewModel @AssistedInject constructor(
 //            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
 //            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
 //        ) {
-//            markingEvent.onDataChanged(
-//                !(markingEvent.valueOrDefault)
+//            flaggingEvent.onDataChanged(
+//                !(flaggingEvent.valueOrDefault)
 //            )
 //
 //            return true
@@ -320,15 +320,15 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun removeMarkedBombs() {
+    private suspend fun removeFlaggedBombs() {
         skipIfGameIsNotInProgress {
             gameControlsImp?.removeFlaggedCells = true
         }
     }
 
-    private suspend fun removeZeroBorders() {
+    private suspend fun removeOpenedBorders() {
         skipIfGameIsNotInProgress {
-            gameControlsImp?.removeZeroBorders = true
+            gameControlsImp?.removeOpenedBorders = true
         }
     }
 

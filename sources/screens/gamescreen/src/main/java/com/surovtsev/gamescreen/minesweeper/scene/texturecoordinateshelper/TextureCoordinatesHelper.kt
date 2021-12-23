@@ -23,7 +23,7 @@ object TextureCoordinatesHelper {
     enum class TextureType {
         EMPTY,
         CLOSED,
-        MARKED,
+        FLAGGED,
         EXPLODED_BOMB,
         ZERO,
         ONE,
@@ -43,7 +43,7 @@ object TextureCoordinatesHelper {
     private val commonTexturesPositions = mapOf(
         TextureType.EMPTY to Vec2i(0, 0),
         TextureType.CLOSED to Vec2i(0, 0),
-        TextureType.MARKED to Vec2i(1, 0),
+        TextureType.FLAGGED to Vec2i(1, 0),
         TextureType.EXPLODED_BOMB to Vec2i(2, 0)
     )
 

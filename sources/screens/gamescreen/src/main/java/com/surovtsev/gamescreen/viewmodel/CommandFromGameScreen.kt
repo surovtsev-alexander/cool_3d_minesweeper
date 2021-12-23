@@ -9,28 +9,24 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
         CommandFromScreen.HandleScreenLeaving(owner)
 
     object LoadGame: CommandFromGameScreen, CommandFromScreen.Init
-
     object NewGame: CommandFromGameScreen
+    object CloseGame: CommandFromGameScreen
 
     object CloseError: CommandFromGameScreen, CommandFromScreen.CloseError
-
     object CloseErrorAndFinish: CommandFromGameScreen, CommandFromScreen.CloseErrorAndFinish
-
-    object OpenGameMenu: CommandFromGameScreen
-
-    object CloseGameMenu: CommandFromGameScreen
 
     object GoToMainMenu: CommandFromGameScreen
 
-    object CloseGame: CommandFromGameScreen
+    object OpenGameMenu: CommandFromGameScreen
+    object CloseGameMenu: CommandFromGameScreen
 
-    object RemoveMarkedBombs: CommandFromGameScreen
 
-    object RemoveZeroBorders: CommandFromGameScreen
-
+    object RemoveFlaggedBombs: CommandFromGameScreen
+    object RemoveOpenedBorders: CommandFromGameScreen
     object ToggleFlagging: CommandFromGameScreen
 
     object CloseGameStatusDialog: CommandFromGameScreen
+
 
     object BaseCommands: CommandFromScreen.BaseCommands<CommandFromGameScreen>(
         LoadGame,

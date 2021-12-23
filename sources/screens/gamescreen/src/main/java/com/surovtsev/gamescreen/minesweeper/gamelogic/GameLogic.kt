@@ -76,7 +76,7 @@ class GameLogic(
                 }
             }
             TouchType.LONG -> {
-                toggleMarkingCube(pointedCell)
+                toggleFlaggingCell(pointedCell)
             }
         }
 
@@ -101,7 +101,7 @@ class GameLogic(
         }
 
         if (isBomb) {
-            if (!skin.isMarked()) {
+            if (!skin.isFlagged()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 gameLogicStateHelper.setGameState(GameStatus.Lose)
                 return
@@ -125,7 +125,7 @@ class GameLogic(
 
             decBombsLeft()
         } else {
-            if (skin.isMarked()) {
+            if (skin.isFlagged()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
                 gameLogicStateHelper.setGameState(GameStatus.Lose)
                 return
@@ -167,22 +167,22 @@ class GameLogic(
             do {
                 val p = cubeSkin.getPointedCell(cellIndex)
                 val s = p.skin
-                if (s.isMarked()) {
+                if (s.isFlagged()) {
                     cubesToRemove.add(cellIndex)
                 }
             } while (false)
         }
     }
 
-    fun storeZeroBorders() {
+    fun collectOpenedNotEmptyBorders() {
         val cellRange = cubeSkin.cellRange
 
-        val l = { r: CellRange ->
+        val sliceClearer = { r: CellRange ->
             when (inspectSlice((r))) {
-                SliceDescription.NOT_EMPTY -> {
+                SliceDescription.HAS_CLOSED_CELLS -> {
                     true
                 }
-                SliceDescription.HAS_ZERO -> {
+                SliceDescription.OPENED_AND_NOT_EMPTY -> {
                     emptySlice(r)
                     false
                 }
@@ -192,31 +192,32 @@ class GameLogic(
             }
         }
 
-        val xx = { r: IntRange, c: (Int) -> CellRange ->
+        val sliceBothDirectionsIterator = { r: IntRange, c: (Int) -> CellRange ->
 
-            val fv = { p: IntProgression ->
+            val sliceIterator = { p: IntProgression ->
                 for (v in p) {
                     val rr = c(v)
-                    val stop = l(rr)
+                    // stop on first NOT_EMPTY slice
+                    val stop = sliceClearer(rr)
                     if (stop) {
                         break
                     }
                 }
             }
 
-            fv(r)
-            fv(r.reversed())
+            sliceIterator(r)
+            sliceIterator(r.reversed())
         }
 
-        xx(cellRange.xRange) { v -> cellRange.copy(xRange = v..v) }
-        xx(cellRange.yRange) { v -> cellRange.copy(yRange = v..v) }
-        xx(cellRange.zRange) { v -> cellRange.copy(zRange = v..v) }
+        sliceBothDirectionsIterator(cellRange.xRange) { v -> cellRange.copy(xRange = v..v) }
+        sliceBothDirectionsIterator(cellRange.yRange) { v -> cellRange.copy(yRange = v..v) }
+        sliceBothDirectionsIterator(cellRange.zRange) { v -> cellRange.copy(zRange = v..v) }
     }
 
     private enum class SliceDescription {
         EMPTY,
-        NOT_EMPTY,
-        HAS_ZERO
+        OPENED_AND_NOT_EMPTY,
+        HAS_CLOSED_CELLS,
     }
 
     private fun emptySlice(cellRange: CellRange) {
@@ -230,8 +231,8 @@ class GameLogic(
     }
 
     private fun inspectSlice(cellRange: CellRange): SliceDescription {
-        var notEmpty = false
-        var hasZero = false
+        var hasClosedCells = false
+        var hasOpenedCells = false
 
         val counts = cubeSkin.counts
         for (x in cellRange.xRange) {
@@ -250,36 +251,36 @@ class GameLogic(
                     if (s.isEmpty()) {
                         continue
                     } else if (s.isClosed()) {
-                        notEmpty = true
+                        hasClosedCells = true
                     } else {
-                        hasZero = true
+                        hasOpenedCells = true
                     }
 
-                    if (notEmpty) {
+                    if (hasClosedCells) {
                         break
                     }
                 }
-                if (notEmpty) {
+                if (hasClosedCells) {
                     break
                 }
             }
-            if (notEmpty) {
+            if (hasClosedCells) {
                 break
             }
         }
 
         return when {
-            notEmpty -> SliceDescription.NOT_EMPTY
-            hasZero -> SliceDescription.HAS_ZERO
+            hasClosedCells -> SliceDescription.HAS_CLOSED_CELLS
+            hasOpenedCells -> SliceDescription.OPENED_AND_NOT_EMPTY
             else -> SliceDescription.EMPTY
         }
     }
 
-    private fun tryToOpenCube(pointedCell: PointedCell, markIfClosed: Boolean) {
+    private fun tryToOpenCube(pointedCell: PointedCell, flagIfClosed: Boolean) {
         val skin = pointedCell.skin
         if (skin.isClosed()) {
-            if (markIfClosed) {
-                toggleMarkingCube(pointedCell)
+            if (flagIfClosed) {
+                toggleFlaggingCell(pointedCell)
             } else {
                 if (skin.isBomb) {
                     setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
@@ -288,12 +289,12 @@ class GameLogic(
                     openCube(pointedCell)
                 }
             }
-        } else if (skin.isMarked()) {
-            if (markIfClosed) {
-                toggleMarkingCube(pointedCell)
+        } else if (skin.isFlagged()) {
+            if (flagIfClosed) {
+                toggleFlaggingCell(pointedCell)
             }
         } else {
-            openNeighboursIfBombsMarked(pointedCell)
+            openNeighboursIfBombsFlagged(pointedCell)
             openNeighbours(pointedCell)
         }
     }
@@ -308,7 +309,7 @@ class GameLogic(
         openNeighbours(pointedCell)
     }
 
-    private fun openNeighboursIfBombsMarked(pointedCell: PointedCell) {
+    private fun openNeighboursIfBombsFlagged(pointedCell: PointedCell) {
         if (pointedCell.skin.isBomb) {
             return
         }
@@ -324,9 +325,9 @@ class GameLogic(
             val neighbours = NeighboursCalculator.getNeighbours(
                 cubeSkin, pointedCell.index, i)
 
-            val marked = neighbours.count { it.skin.isMarked() }
+            val flagged = neighbours.count { it.skin.isFlagged() }
 
-            if (cubeNbhBombs == marked) {
+            if (cubeNbhBombs == flagged) {
                 for (n in neighbours) {
                     if (n.skin.isClosed()) {
                         tryToOpenCube(n, false)
@@ -390,11 +391,11 @@ class GameLogic(
         textureUpdater.updateTexture(pointedCell)
     }
 
-    private fun toggleMarkingCube(pointedCell: PointedCell) {
+    private fun toggleFlaggingCell(pointedCell: PointedCell) {
         val skin = pointedCell.skin.texture[0]
 
         if (skin == TextureCoordinatesHelper.TextureType.CLOSED) {
-            setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.MARKED)
+            setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.FLAGGED)
 
             for (i in 0 until 3) {
                 val neighbours = NeighboursCalculator.getNeighbours(
@@ -403,12 +404,12 @@ class GameLogic(
 
                 for (n in neighbours) {
                     if (n.skin.isOpenedNumber()) {
-                        openNeighboursIfBombsMarked(n)
+                        openNeighboursIfBombsFlagged(n)
                         openNeighbours(n)
                     }
                 }
             }
-        } else if (skin == TextureCoordinatesHelper.TextureType.MARKED) {
+        } else if (skin == TextureCoordinatesHelper.TextureType.FLAGGED) {
             setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.CLOSED)
         }
     }

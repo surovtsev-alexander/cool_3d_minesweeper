@@ -293,8 +293,8 @@ fun ControlButtons(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val buttons = arrayOf(
-            "1" to CommandFromGameScreen.RemoveMarkedBombs,
-            "2" to CommandFromGameScreen.RemoveZeroBorders,
+            "1" to CommandFromGameScreen.RemoveFlaggedBombs,
+            "2" to CommandFromGameScreen.RemoveOpenedBorders,
         )
         buttons.map { (buttonCaption, commandFromScreen) ->
             Button(

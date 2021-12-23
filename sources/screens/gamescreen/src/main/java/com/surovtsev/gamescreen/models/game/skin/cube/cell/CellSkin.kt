@@ -16,9 +16,9 @@ class CellSkin(
 
     fun isClosed() = isTexture(TextureType.CLOSED)
 
-    fun isMarked() = isTexture(TextureType.MARKED)
+    fun isFlagged() = isTexture(TextureType.FLAGGED)
 
-    fun isOpenedNumber() = !isMarked() && !isClosed() && !isEmpty()
+    fun isOpenedNumber() = !isFlagged() && !isClosed() && !isEmpty()
 
     fun setTexture(tt: TextureType) {
         for (i in 0 until texture.count()) {

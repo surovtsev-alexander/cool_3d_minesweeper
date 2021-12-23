@@ -9,18 +9,18 @@ import com.surovtsev.gamescreen.models.game.skin.cube.cell.CellSkin
 
 class CubeSkinToSave(
     private val bombs: String,
-    private val markedClosedEmpty: String,
+    private val flaggedClosedEmpty: String,
 ) {
     companion object {
         const val SpaceChar = ' '
         const val BombChar = 'b'
-        const val MarkedChar = 'm'
+        const val FlaggedChar = 'f'
         const val ClosedChar = 'c'
         const val EmptyChar = 'e'
 
         private class SkinSaverHelper(
             val isBomb: Boolean,
-            val isMarked: Boolean,
+            val isFlagged: Boolean,
             val isClosed: Boolean,
             val isEmpty: Boolean,
         ) {
@@ -28,7 +28,7 @@ class CubeSkinToSave(
                 fun createObject(cellSkin: CellSkin): SkinSaverHelper {
                     return SkinSaverHelper(
                         cellSkin.isBomb,
-                        cellSkin.isMarked(),
+                        cellSkin.isFlagged(),
                         cellSkin.isClosed(),
                         cellSkin.isEmpty()
                     )
@@ -36,27 +36,27 @@ class CubeSkinToSave(
 
                 fun createObject(
                     bomb: Char,
-                    markedClosedEmpty: Char
+                    flaggedClosedEmpty: Char
                 ): SkinSaverHelper {
                     return SkinSaverHelper(
                         bomb == BombChar,
-                        markedClosedEmpty == MarkedChar,
-                        markedClosedEmpty == ClosedChar,
-                        markedClosedEmpty == EmptyChar
+                        flaggedClosedEmpty == FlaggedChar,
+                        flaggedClosedEmpty == ClosedChar,
+                        flaggedClosedEmpty == EmptyChar
                     )
                 }
             }
 
             fun getBombChar() = if (isBomb) BombChar else SpaceChar
 
-            fun getMarkedClosedEmptyChar(): Char {
-                if (isMarked) return MarkedChar
+            fun getFlaggedClosedEmptyChar(): Char {
+                if (isFlagged) return FlaggedChar
                 if (isClosed) return ClosedChar
                 if (isEmpty) return EmptyChar
                 return SpaceChar
             }
 
-            fun isOpened() = !isMarked && !isClosed &&  !isEmpty
+            fun isOpened() = !isFlagged && !isClosed &&  !isEmpty
         }
 
         fun createObject(cubeSkin: CubeSkin): CubeSkinToSave {
@@ -65,7 +65,7 @@ class CubeSkinToSave(
             val resArr = { CharArray(cellCount) }
 
             val bombs = resArr()
-            val markedClosedEmpty = resArr()
+            val flaggedClosedEmpty = resArr()
 
 
             val skins = cubeSkin.skins
@@ -75,12 +75,12 @@ class CubeSkinToSave(
 
                 val skinSaverHelper = SkinSaverHelper.createObject(skin)
                 bombs[id] = skinSaverHelper.getBombChar()
-                markedClosedEmpty[id] = skinSaverHelper.getMarkedClosedEmptyChar()
+                flaggedClosedEmpty[id] = skinSaverHelper.getFlaggedClosedEmptyChar()
             }
 
             return CubeSkinToSave(
                 bombs.joinToString(""),
-                markedClosedEmpty.joinToString("")
+                flaggedClosedEmpty.joinToString("")
             )
         }
     }
@@ -98,7 +98,7 @@ class CubeSkinToSave(
             val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(
-                bombs[id], markedClosedEmpty[id]
+                bombs[id], flaggedClosedEmpty[id]
             )
 
             if (skinSaverHelper.isBomb) {
@@ -122,11 +122,11 @@ class CubeSkinToSave(
             val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(
-                bombs[id], markedClosedEmpty[id]
+                bombs[id], flaggedClosedEmpty[id]
             )
 
-            if (skinSaverHelper.isMarked) {
-                skin.setTexture(TextureCoordinatesHelper.TextureType.MARKED)
+            if (skinSaverHelper.isFlagged) {
+                skin.setTexture(TextureCoordinatesHelper.TextureType.FLAGGED)
             } else if (skinSaverHelper.isOpened()) {
                 if (skin.isBomb) {
                     skin.setTexture(TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
