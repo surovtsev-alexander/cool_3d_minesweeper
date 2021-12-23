@@ -14,15 +14,15 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.app.appComponent
-import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
-import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
 import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.game.presentation.GameScreen
 import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.game.viewmodel.LoadGameParameterName
+import com.surovtsev.helpscreen.presentation.HelpScreen
+import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
 import com.surovtsev.ranking.presentation.RankingScreen
 import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settings.presentation.SettingsScreen
@@ -158,7 +158,8 @@ class MainActivityImp: MainActivity() {
                     enterTransition = navAnimHelper.concreteEnterSliding.fromBottom,
                     exitTransition = navAnimHelper.concreteExitException.toBottom,
                 ) { entry ->
-                    val viewModel: HelpScreenViewModel = HelpScreenViewModel()
+                    val viewModel: HelpScreenViewModel =
+                        HelpScreenViewModel()
                     entry.lifecycle.addObserver(viewModel)
                     HelpScreen(viewModel)
                 }

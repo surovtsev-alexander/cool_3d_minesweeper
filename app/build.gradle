@@ -49,6 +49,7 @@ dependencies {
     implementation project(":settings")
     implementation project(":ranking")
     implementation project(":game")
+    implementation project(":helpscreen")
 //    implementation project(":touchlistener")
 //    implementation project(":gamelogic")
 

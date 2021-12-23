@@ -1,9 +1,9 @@
-package com.surovtsev.cool3dminesweeper.presentation.helpscreen
+package com.surovtsev.helpscreen.presentation
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.surovtsev.core.ui.theme.MinesweeperTheme
-import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
+import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
 
 @Composable
 fun HelpScreen(
