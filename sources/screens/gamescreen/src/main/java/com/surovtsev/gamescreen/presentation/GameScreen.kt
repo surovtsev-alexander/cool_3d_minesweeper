@@ -412,8 +412,8 @@ fun GameStatusDialog(
         return
     }
 
-    val uiGameStatus = screenData.uiGameControls.uiGameStatus.collectAsState(initial = UIGameStatus.GameIsNotFinished).value
-    if (uiGameStatus is UIGameStatus.GameIsNotFinished) {
+    val uiGameStatus = screenData.uiGameControls.uiGameStatus.collectAsState(initial = UIGameStatus.Unimportantly).value
+    if (uiGameStatus is UIGameStatus.Unimportantly) {
         return
     }
 

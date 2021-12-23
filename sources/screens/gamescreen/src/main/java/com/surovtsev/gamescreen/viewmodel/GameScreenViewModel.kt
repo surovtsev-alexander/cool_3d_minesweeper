@@ -355,7 +355,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private fun closeGameStatusDialog() {
-        uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.GameIsNotFinished
+        uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportantly
     }
 }
 
