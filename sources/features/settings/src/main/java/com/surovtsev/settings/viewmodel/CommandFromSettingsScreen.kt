@@ -35,4 +35,11 @@ sealed interface CommandFromSettingsScreen: CommandFromScreen {
     object ApplySettings: CommandFromSettingsScreen
 
     object Finish: CommandFromSettingsScreen, CommandFromScreen.Finish
+
+    object BaseCommands: CommandFromScreen.BaseCommands<CommandFromSettingsScreen>(
+        TriggerInitialization,
+        CloseError,
+        CloseErrorAndFinish,
+        { HandleLeavingScreen(it) },
+    )
 }

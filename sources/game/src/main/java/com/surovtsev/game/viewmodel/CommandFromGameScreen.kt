@@ -23,4 +23,11 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
     object GoToMainMenu: CommandFromGameScreen
 
     object CloseGame: CommandFromGameScreen
+
+    object BaseCommands: CommandFromScreen.BaseCommands<CommandFromGameScreen>(
+        LoadGame,
+        CloseError,
+        CloseErrorAndFinish,
+        { HandleScreenLeaving(it) }
+    )
 }

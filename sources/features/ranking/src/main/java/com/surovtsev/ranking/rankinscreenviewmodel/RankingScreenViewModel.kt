@@ -33,11 +33,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
-        CommandFromScreen.BaseCommands(
-            CommandFromRankingScreen.LoadData,
-            CommandFromRankingScreen.CloseError,
-            CommandFromRankingScreen.CloseErrorAndFinish,
-        ) { CommandFromRankingScreen.HandleScreenLeaving(it) },
+        CommandFromRankingScreen.BaseCommands,
         RankingScreenData.NoData,
         RankingScreenStateHolder(RankingScreenInitialState)
     )

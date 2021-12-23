@@ -13,7 +13,7 @@ interface CommandFromScreen {
     interface Init: CommandFromScreen
     interface Finish: CommandFromScreen
 
-    class BaseCommands <T: CommandFromScreen>(
+    abstract class BaseCommands <T: CommandFromScreen>(
         val init: Init,
         val closeError: CloseError,
         val closeErrorAndFinish: CloseErrorAndFinish,

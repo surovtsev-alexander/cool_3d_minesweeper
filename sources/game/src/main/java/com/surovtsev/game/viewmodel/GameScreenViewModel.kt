@@ -40,11 +40,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
-        CommandFromScreen.BaseCommands(
-            CommandFromGameScreen.LoadGame,
-            CommandFromGameScreen.CloseError,
-            CommandFromGameScreen.CloseErrorAndFinish,
-        ) { CommandFromGameScreen.HandleScreenLeaving(it) },
+        CommandFromGameScreen.BaseCommands,
         GameScreenData.NoData,
         GameScreenStateHolder(GameScreenInitialState)
     ),

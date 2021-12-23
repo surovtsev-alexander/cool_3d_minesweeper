@@ -28,4 +28,11 @@ sealed interface CommandFromRankingScreen: CommandFromScreen {
     ): SortList(
         rankingTableSortParameters
     )
+
+    object BaseCommands: CommandFromScreen.BaseCommands<CommandFromRankingScreen>(
+        LoadData,
+        CloseError,
+        CloseErrorAndFinish,
+        { HandleScreenLeaving(it) },
+    )
 }
