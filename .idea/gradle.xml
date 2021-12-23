@@ -17,8 +17,8 @@
             <option value="$PROJECT_DIR$/sources/features/rankingscreen" />
             <option value="$PROJECT_DIR$/sources/features/settingsscreen" />
             <option value="$PROJECT_DIR$/sources/gamelogic" />
-            <option value="$PROJECT_DIR$/sources/mainscreen" />
             <option value="$PROJECT_DIR$/sources/screens/gamescreen" />
+            <option value="$PROJECT_DIR$/sources/screens/mainscreen" />
             <option value="$PROJECT_DIR$/sources/timespan" />
             <option value="$PROJECT_DIR$/sources/touchlistener" />
             <option value="$PROJECT_DIR$/sources/utils" />

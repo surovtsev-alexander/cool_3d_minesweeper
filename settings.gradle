@@ -41,4 +41,4 @@ include helpScreenModule
 project(helpScreenModule).projectDir = new File(rootDir, "sources/features/helpscreen")
 
 include mainScreenModule
-project(mainScreenModule).projectDir = new File(rootDir, "sources/mainscreen")
+project(mainScreenModule).projectDir = new File(rootDir, "sources/screens/mainscreen")
