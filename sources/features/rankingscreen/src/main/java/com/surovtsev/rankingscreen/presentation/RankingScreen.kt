@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.presentation
+package com.surovtsev.rankingscreen.presentation
 
 import android.text.format.DateUtils
 import androidx.compose.animation.*
@@ -24,9 +24,9 @@ import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.ranking.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
 import logcat.logcat
 
 @Composable

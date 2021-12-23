@@ -24,8 +24,8 @@ import com.surovtsev.game.viewmodel.GameScreenViewModel
 import com.surovtsev.game.viewmodel.LoadGameParameterName
 import com.surovtsev.helpscreen.presentation.HelpScreen
 import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
-import com.surovtsev.ranking.presentation.RankingScreen
-import com.surovtsev.ranking.rankinscreenviewmodel.RankingScreenViewModel
+import com.surovtsev.rankingscreen.presentation.RankingScreen
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settings.presentation.SettingsScreen
 import com.surovtsev.settings.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper

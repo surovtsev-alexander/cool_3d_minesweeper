@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.rankinscreenviewmodel
+package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters

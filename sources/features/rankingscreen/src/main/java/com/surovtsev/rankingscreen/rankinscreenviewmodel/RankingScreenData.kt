@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.rankinscreenviewmodel
+package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
 import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns

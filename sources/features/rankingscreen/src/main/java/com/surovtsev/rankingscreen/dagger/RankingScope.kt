@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.dagger
+package com.surovtsev.rankingscreen.dagger
 
 import javax.inject.Scope
 

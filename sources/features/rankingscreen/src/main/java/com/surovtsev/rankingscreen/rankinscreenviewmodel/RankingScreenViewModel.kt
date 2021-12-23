@@ -1,4 +1,4 @@
-package com.surovtsev.ranking.rankinscreenviewmodel
+package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
@@ -7,12 +7,11 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.viewmodel.CommandFromScreen
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.ranking.dagger.DaggerRankingComponent
-import com.surovtsev.ranking.dagger.RankingComponent
+import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
+import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.TimeSpan
@@ -50,7 +49,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     }
 
     object ErrorMessages {
-        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
+        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering rankingscreen list" }
         val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
     }
 
@@ -65,11 +64,11 @@ class RankingScreenViewModel @AssistedInject constructor(
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
             is CommandFromRankingScreen.HandleScreenLeaving -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromRankingScreen.LoadData            -> ::loadData
-            is CommandFromRankingScreen.FilterList          -> suspend { filterList(command.selectedSettingsId) }
+            is CommandFromRankingScreen.LoadData -> ::loadData
+            is CommandFromRankingScreen.FilterList -> suspend { filterList(command.selectedSettingsId) }
             is CommandFromRankingScreen.SortListWithNoDelay -> suspend { sortList(command.rankingTableSortParameters, false) }
-            is CommandFromRankingScreen.SortList            -> suspend { sortList(command.rankingTableSortParameters, true) }
-            is CommandFromRankingScreen.CloseError          -> ::closeError
+            is CommandFromRankingScreen.SortList -> suspend { sortList(command.rankingTableSortParameters, true) }
+            is CommandFromRankingScreen.CloseError -> ::closeError
             else                                            -> null
         }
     }
@@ -128,8 +127,7 @@ class RankingScreenViewModel @AssistedInject constructor(
             saveController.loadSettingDataOrDefault()
         )?.let {
             return handleCommand(
-                CommandFromRankingScreen
-                    .FilterList(it.id)
+                CommandFromRankingScreen.FilterList(it.id)
             )
         }
     }
