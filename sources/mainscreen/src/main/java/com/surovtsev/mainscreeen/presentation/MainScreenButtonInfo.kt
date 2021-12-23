@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.mainscreen
+package com.surovtsev.mainscreeen.presentation
 
 import com.surovtsev.core.presentation.Screen
 

@@ -1,13 +1,12 @@
-package com.surovtsev.cool3dminesweeper.dagger.app.mainscreen
+package com.surovtsev.mainscreeen.dagger
 
-import com.surovtsev.cool3dminesweeper.dagger.app.AppComponent
-import com.surovtsev.cool3dminesweeper.dagger.app.MainScreenScope
+import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.presentation.Screen
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonInfo
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreenButtonType
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.mainscreeen.presentation.ButtonsInfo
+import com.surovtsev.mainscreeen.presentation.MainScreenButtonInfo
+import com.surovtsev.mainscreeen.presentation.MainScreenButtonType
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -17,7 +16,7 @@ import dagger.multibindings.StringKey
 @MainScreenScope
 @Component(
     dependencies = [
-        AppComponent::class,
+        AppComponentEntryPoint::class,
     ],
     modules = [
         MainScreenModule::class,

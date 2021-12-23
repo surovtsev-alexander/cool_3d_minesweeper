@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.mainscreen
+package com.surovtsev.mainscreeen.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -8,13 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.Shapes
 import com.surovtsev.core.ui.theme.MinesweeperTheme

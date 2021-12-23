@@ -50,6 +50,7 @@ dependencies {
     implementation project(":ranking")
     implementation project(":game")
     implementation project(":helpscreen")
+    implementation project(":mainscreen")
 //    implementation project(":touchlistener")
 //    implementation project(":gamelogic")
 

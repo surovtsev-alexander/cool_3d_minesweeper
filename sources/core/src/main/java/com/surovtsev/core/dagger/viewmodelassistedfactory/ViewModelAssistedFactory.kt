@@ -6,5 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 
 interface ViewModelAssistedFactory<T: ViewModel> {
-    fun build(stateHandle: SavedStateHandle, context: Context, appComponentEntryPoint: AppComponentEntryPoint): T
+    fun build(
+        stateHandle: SavedStateHandle,
+        context: Context,
+        appComponentEntryPoint: AppComponentEntryPoint
+    ): T
 }

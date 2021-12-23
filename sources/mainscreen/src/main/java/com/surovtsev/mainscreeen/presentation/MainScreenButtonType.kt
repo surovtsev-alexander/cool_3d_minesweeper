@@ -1,4 +1,4 @@
-package com.surovtsev.cool3dminesweeper.presentation.mainscreen
+package com.surovtsev.mainscreeen.presentation
 
 enum class MainScreenButtonType {
     OrdinaryButton,

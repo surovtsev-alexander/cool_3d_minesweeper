@@ -14,8 +14,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.app.appComponent
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
+import com.surovtsev.mainscreeen.presentation.MainScreen
 import com.surovtsev.core.mainactivity.MainActivity
 import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.core.presentation.Screen

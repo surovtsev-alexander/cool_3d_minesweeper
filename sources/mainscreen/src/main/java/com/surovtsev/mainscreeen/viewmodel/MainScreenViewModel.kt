@@ -1,14 +1,13 @@
-package com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel
+package com.surovtsev.mainscreeen.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
-import com.surovtsev.cool3dminesweeper.app.appComponent
-import com.surovtsev.cool3dminesweeper.dagger.app.mainscreen.DaggerMainScreenComponent
-import com.surovtsev.cool3dminesweeper.presentation.mainscreen.ButtonsInfo
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
+import com.surovtsev.mainscreeen.dagger.DaggerMainScreenComponent
+import com.surovtsev.mainscreeen.presentation.ButtonsInfo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -44,7 +43,7 @@ class MainScreenViewModel @AssistedInject constructor(
     init {
         val mainScreenComponent = DaggerMainScreenComponent
             .builder()
-            .appComponent(context.appComponent)
+            .appComponentEntryPoint(appComponentEntryPoint)
             .build()
 
         buttonsInfo = mainScreenComponent.buttonInfo

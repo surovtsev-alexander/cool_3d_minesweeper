@@ -2,7 +2,7 @@ package com.surovtsev.cool3dminesweeper.dagger.app
 
 import android.content.Context
 import androidx.room.Room
-import com.surovtsev.cool3dminesweeper.viewmodels.mainscreenviewmodel.MainScreenViewModel
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
