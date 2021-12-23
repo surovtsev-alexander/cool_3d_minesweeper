@@ -13,7 +13,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.surovtsev.cool3dminesweeper.controllers.App.appComponent
+import com.surovtsev.cool3dminesweeper.app.appComponent
 import com.surovtsev.cool3dminesweeper.presentation.helpscreen.HelpScreen
 import com.surovtsev.cool3dminesweeper.presentation.mainscreen.MainScreen
 import com.surovtsev.cool3dminesweeper.viewmodels.helpscreenviewmodel.HelpScreenViewModel
