@@ -87,14 +87,7 @@ fun GameScreenControls(
 
         val state = viewModel.state
 
-        @Suppress("UNCHECKED_CAST")
-        ErrorDialog(
-            state as ScreenStateValue<ScreenData>,
-            commandHandler as ScreenCommandHandler<CommandFromScreen>,
-            CommandFromGameScreen.CloseError,
-            CommandFromGameScreen.CloseErrorAndFinish,
-            GameScreenData.NoData,
-        )
+        viewModel.PlaceErrorDialog()
 
         GameView(
             state,

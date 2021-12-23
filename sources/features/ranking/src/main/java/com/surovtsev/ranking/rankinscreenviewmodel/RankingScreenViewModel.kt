@@ -34,7 +34,9 @@ class RankingScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromScreen.BaseCommands(
-            CommandFromRankingScreen.LoadData
+            CommandFromRankingScreen.LoadData,
+            CommandFromRankingScreen.CloseError,
+            CommandFromRankingScreen.CloseErrorAndFinish,
         ) { CommandFromRankingScreen.HandleScreenLeaving(it) },
         RankingScreenData.NoData,
         RankingScreenStateHolder(RankingScreenInitialState)

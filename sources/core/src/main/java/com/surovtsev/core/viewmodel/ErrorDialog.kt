@@ -66,3 +66,15 @@ fun ErrorDialog(
         }
     }
 }
+
+@Composable
+fun <C: CommandFromScreen, D: ScreenData> TemplateScreenViewModel<C, D>.PlaceErrorDialog() {
+    @Suppress("UNCHECKED_CAST")
+    ErrorDialog(
+        stateValue = state  as ScreenStateValue<ScreenData>,
+        screenCommandHandler = this as ScreenCommandHandler<CommandFromScreen>,
+        closeErrorCommand = baseCommands.closeError,
+        closeErrorAndFinishCommand = baseCommands.closeErrorAndFinish,
+        noData = noScreenData as ScreenData.NoData,
+    )
+}

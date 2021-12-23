@@ -44,7 +44,8 @@ fun SettingsScreen(
 
     SettingsControls(
         viewModel.state,
-        commandHandler
+        commandHandler,
+        viewModel,
     )
 }
 
@@ -52,18 +53,11 @@ fun SettingsScreen(
 fun SettingsControls(
     stateValue: SettingsScreenStateValue,
     commandHandler: SettingsScreenCommandHandler,
+    viewModel: SettingsScreenViewModel,
 ) {
     MinesweeperTheme {
 
-        @Suppress("UNCHECKED_CAST")
-        ErrorDialog(
-            stateValue = stateValue as ScreenStateValue<ScreenData>,
-            screenCommandHandler = commandHandler as ScreenCommandHandler<CommandFromScreen>,
-            closeErrorCommand = CommandFromSettingsScreen.CloseError,
-            closeErrorAndFinishCommand = CommandFromSettingsScreen.CloseErrorAndFinish,
-            noData = SettingsScreenData.NoData,
-        )
-
+        viewModel.PlaceErrorDialog()
         Box(
             Modifier.background(GrayBackground)
         ) {

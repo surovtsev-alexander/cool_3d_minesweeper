@@ -32,7 +32,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
         CommandFromScreen.BaseCommands(
-            CommandFromSettingsScreen.TriggerInitialization
+            CommandFromSettingsScreen.TriggerInitialization,
+            CommandFromSettingsScreen.CloseError,
+            CommandFromSettingsScreen.CloseErrorAndFinish,
         ) { CommandFromSettingsScreen.HandleLeavingScreen(it) },
         SettingsScreenData.NoData,
         SettingsScreenStateHolder(SettingsScreenInitialState),
@@ -89,7 +91,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun loadSettingsList() {
         val currSettingsComponent = settingsComponent
 
-        if (currSettingsComponent == null) {
+        if (currSettingsComponent == null || true) {
             publishErrorState(
                 "error while loading settings list"
             )

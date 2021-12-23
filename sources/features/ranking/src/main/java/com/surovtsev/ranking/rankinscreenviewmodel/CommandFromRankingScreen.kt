@@ -11,7 +11,9 @@ sealed interface CommandFromRankingScreen: CommandFromScreen {
 
     object LoadData: CommandFromRankingScreen, CommandFromScreen.Init
 
-    object CloseError: CommandFromRankingScreen
+    object CloseError: CommandFromRankingScreen, CommandFromScreen.CloseError
+
+    object CloseErrorAndFinish: CommandFromRankingScreen, CommandFromScreen.CloseErrorAndFinish
 
     class FilterList(
         val selectedSettingsId: Long

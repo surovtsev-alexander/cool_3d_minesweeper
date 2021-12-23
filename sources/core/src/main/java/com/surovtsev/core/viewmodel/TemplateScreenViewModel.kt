@@ -12,8 +12,8 @@ typealias FinishAction = () -> Unit
 typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
-    private val baseCommands: CommandFromScreen.BaseCommands<C>,
-    private val noScreenData: D,
+    val baseCommands: CommandFromScreen.BaseCommands<C>,
+    val noScreenData: D,
     initialState: MutableLiveData<ScreenState<out D>>,
 ):
     ViewModel(),

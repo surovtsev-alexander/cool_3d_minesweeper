@@ -41,7 +41,9 @@ class GameScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromScreen.BaseCommands(
-            CommandFromGameScreen.LoadGame
+            CommandFromGameScreen.LoadGame,
+            CommandFromGameScreen.CloseError,
+            CommandFromGameScreen.CloseErrorAndFinish,
         ) { CommandFromGameScreen.HandleScreenLeaving(it) },
         GameScreenData.NoData,
         GameScreenStateHolder(GameScreenInitialState)
