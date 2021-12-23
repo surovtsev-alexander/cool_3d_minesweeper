@@ -11,6 +11,7 @@ def gameModule = ":game"
 def gameLogicModule = ":gamelogic"
 def timeSpanModule = ":timespan"
 def helpScreenModule = ":helpscreen"
+def mainScreenModule = ":mainscreen"
 
 include coreModule
 project(coreModule).projectDir = new File(rootDir, "sources/core")
@@ -38,3 +39,6 @@ project(timeSpanModule).projectDir = new File(rootDir, "sources/timespan")
 
 include helpScreenModule
 project(helpScreenModule).projectDir = new File(rootDir, "sources/features/helpscreen")
+
+include mainScreenModule
+project(mainScreenModule).projectDir = new File(rootDir, "sources/mainscreen")

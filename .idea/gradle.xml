@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/sources/features/settings" />
             <option value="$PROJECT_DIR$/sources/game" />
             <option value="$PROJECT_DIR$/sources/gamelogic" />
+            <option value="$PROJECT_DIR$/sources/mainscreen" />
             <option value="$PROJECT_DIR$/sources/timespan" />
             <option value="$PROJECT_DIR$/sources/touchlistener" />
             <option value="$PROJECT_DIR$/sources/utils" />
