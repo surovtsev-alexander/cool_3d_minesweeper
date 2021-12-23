@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class UIGameControlsMutableFlows(
     val flagging: MutableStateFlow<Boolean> = MutableStateFlow(false),
-    val showDialogEvent: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    val uiGameStatus: MutableStateFlow<UIGameStatus> = MutableStateFlow(UIGameStatus.GameIsNotFinished),
 )

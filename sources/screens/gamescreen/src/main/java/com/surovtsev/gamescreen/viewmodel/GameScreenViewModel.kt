@@ -9,9 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.helpers.sorting.RankingTableColumn
-import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.viewmodel.CommandProcessor
 import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.ScreenStateValue
@@ -19,9 +16,9 @@ import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.gamescreen.dagger.DaggerGameComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
-import com.surovtsev.gamescreen.viewmodel.helpers.Place
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
@@ -318,51 +315,6 @@ class GameScreenViewModel @AssistedInject constructor(
 //        return false
 //    }
 
-    fun requestLastWinPlace() {
-        launchOnIOThread {
-            var res: Place = Place.NoPlace
-
-            val gameComponent = gameComponent
-            do {
-                if (gameComponent == null) {
-                    break
-                }
-
-                val settings = gameComponent.settingsDao.getBySettingsData(
-                    gameComponent.gameConfig.settingsData
-                ) ?: break
-
-                val rankingListHelper = gameComponent.rankingListHelper
-
-                val filteredData = rankingListHelper.createRankingListWithPlaces(
-                    settings.id
-                )
-                val rankingTableSortType = RankingTableSortParameters(
-                    RankingTableColumn.SortableTableColumn.DateTableColumn,
-                    SortDirection.Descending
-                )
-                val sortedData = rankingListHelper.sortData(
-                    filteredData,
-                    rankingTableSortType
-                )
-
-                if (sortedData.isEmpty()) {
-                    break
-                }
-
-                res = Place.WinPlace(sortedData.first().place)
-            } while (false)
-
-            withUIContext {
-                gameComponent?.let {
-                    it.gameScreenEvents.lastWinPlaceEvent.onDataChanged(
-                        res
-                    )
-                }
-            }
-        }
-    }
-
     private suspend fun skipIfGameIsNotInProgress(
         action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
     ) {
@@ -403,7 +355,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private fun closeGameStatusDialog() {
-        uiGameControlsMutableFlows?.showDialogEvent?.value = false
+        uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.GameIsNotFinished
     }
 }
 

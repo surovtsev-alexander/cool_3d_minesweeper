@@ -131,7 +131,7 @@ object GameControlsModule {
     ): UIGameControlsFlows {
         return UIGameControlsFlows(
             uiGameControlsMutableFlows.flagging,
-            uiGameControlsMutableFlows.showDialogEvent,
+            uiGameControlsMutableFlows.uiGameStatus,
             bombsLeftFlow,
             timeSpan.timeSpanFlow,
         )

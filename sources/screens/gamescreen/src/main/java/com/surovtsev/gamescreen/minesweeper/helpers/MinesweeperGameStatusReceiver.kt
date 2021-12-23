@@ -1,5 +1,9 @@
 package com.surovtsev.gamescreen.minesweeper.helpers
 
+import com.surovtsev.core.helpers.RankingListHelper
+import com.surovtsev.core.helpers.sorting.RankingTableColumn
+import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.helpers.sorting.SortDirection
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Ranking
@@ -10,7 +14,9 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.GameStatusWithElap
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatusHelper
+import com.surovtsev.gamescreen.viewmodel.helpers.Place
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
@@ -29,6 +35,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     private val rankingDao: RankingDao,
     private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
     private val uiGameControlsMutableFlows: UIGameControlsMutableFlows,
+    private val rankingListHelper: RankingListHelper,
     subscriber: Subscriber
 ): Subscription {
 
@@ -59,11 +66,10 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             SaveTypes.SaveGameJson
         )
 
-        do {
-            if (newStatus != GameStatus.Win) {
-                break
-            }
-
+        val newUIGameStatus: UIGameStatus
+        if (newStatus == GameStatus.Lose) {
+            newUIGameStatus = UIGameStatus.Lose
+        } else {
             val settings = settingsDao.getOrCreate(
                 gameConfig.settingsData
             )
@@ -78,10 +84,26 @@ class MinesweeperGameStatusReceiver @Inject constructor(
                     rankingData
                 )
             )
-        } while (false)
+
+            val filteredData = rankingListHelper.createRankingListWithPlaces(
+                settings.id
+            )
+            val rankingTableSortType = RankingTableSortParameters(
+                RankingTableColumn.SortableTableColumn.DateTableColumn,
+                SortDirection.Descending
+            )
+            val sortedData = rankingListHelper.sortData(
+                filteredData,
+                rankingTableSortType
+            )
+
+            val winPlace = (sortedData.first().place)
+
+            newUIGameStatus = UIGameStatus.Win(winPlace)
+        }
 
         withContext(Dispatchers.Main) {
-            uiGameControlsMutableFlows.showDialogEvent.value = true
+            uiGameControlsMutableFlows.uiGameStatus.value = newUIGameStatus
         }
     }
 }

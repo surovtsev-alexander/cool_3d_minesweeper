@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class UIGameControlsFlows(
     val flagging: StateFlow<Boolean>,
-    val showDialog: StateFlow<Boolean>,
+    val uiGameStatus: StateFlow<UIGameStatus>,
     val bombsLeft: BombsLeftFlow,
     val timeSpan: TimeSpanFlow,
 )

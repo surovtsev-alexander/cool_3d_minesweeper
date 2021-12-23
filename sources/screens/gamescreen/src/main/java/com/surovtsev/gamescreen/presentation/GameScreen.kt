@@ -25,17 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
-import com.surovtsev.core.viewmodel.*
+import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
-import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.viewmodel.*
-import com.surovtsev.gamescreen.viewmodel.helpers.GameScreenEvents
-import com.surovtsev.gamescreen.viewmodel.helpers.MarkingEvent
-import com.surovtsev.gamescreen.viewmodel.helpers.Place
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.timers.TimeSpanFlow
 
@@ -55,9 +52,11 @@ fun GameScreen(
         return
     }
 
+    val commandHandler = viewModel as GameScreenCommandHandler
+
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
-        viewModel.handleCommand(
+        commandHandler.handleCommand(
             if (loadGame) {
                 CommandFromGameScreen.LoadGame
             } else {
@@ -67,10 +66,11 @@ fun GameScreen(
     }
 
     GameScreenControls(
+        viewModel.state,
+        commandHandler,
         context,
+        viewModel::initGLSurfaceView,
         viewModel,
-//        viewModel.gLSurfaceView!!,
-        viewModel
     )
 }
 
@@ -78,31 +78,30 @@ private val pauseResumeButtonWidth = 100.dp
 
 @Composable
 fun GameScreenControls(
-    context: Context,
-    viewModel: GameScreenViewModel,
+    stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
+    context: Context,
+    glSurfaceViewCreated: GLSurfaceViewCreated,
+    viewModel: GameScreenViewModel,
 ) {
     MinesweeperTheme {
-
-        val state = viewModel.state
 
         viewModel.PlaceErrorDialog()
 
         GameView(
-            state,
+            stateValue,
             commandHandler,
-            viewModel::initGLSurfaceView,
+            glSurfaceViewCreated,
             context,
         )
 
         GameMenu(
-            state,
+            stateValue,
             commandHandler
         )
 
         GameStatusDialog(
-            viewModel,
-            state,
+            stateValue,
             commandHandler,
         )
     }
@@ -403,7 +402,6 @@ fun TimeElapsed(
 
 @Composable
 fun GameStatusDialog(
-    viewModel: GameScreenViewModel,
     stateValue: GameScreenStateValue,
     commandHandler: GameScreenCommandHandler,
 ) {
@@ -414,22 +412,8 @@ fun GameStatusDialog(
         return
     }
 
-    val gameComponent = viewModel.gameComponent ?: return
-
-    val showDialog = screenData.uiGameControls.showDialog.collectAsState(initial = false).value
-
-    if (!showDialog) {
-        return
-    }
-
-    val lastWinPlaceEvent = gameComponent.gameScreenEvents.lastWinPlaceEvent
-    val lastWinPlace: Place by lastWinPlaceEvent.run {
-        data.observeAsState(defaultValue)
-    }
-    val gameStatus = gameComponent.minesweeperController.gameLogic.gameLogicStateHelper.gameStatus()
-    val win = gameStatus == GameStatus.Win
-    if (win && lastWinPlace == Place.NoPlace) {
-        viewModel.requestLastWinPlace()
+    val uiGameStatus = screenData.uiGameControls.uiGameStatus.collectAsState(initial = UIGameStatus.GameIsNotFinished).value
+    if (uiGameStatus is UIGameStatus.GameIsNotFinished) {
         return
     }
 
@@ -437,12 +421,14 @@ fun GameStatusDialog(
         commandHandler.handleCommand(
             CommandFromGameScreen.CloseGameStatusDialog
         )
-        lastWinPlaceEvent.onDataChanged(Place.NoPlace)
     }
 
-    val place = if (win) lastWinPlace else Place.NoPlace
+    val text = if (uiGameStatus is UIGameStatus.Win) {
+        "Win\nplace: ${uiGameStatus.place}"
+    } else {
+        "Lose"
+    }
 
-    val text = "$gameStatus ${ if (place is Place.WinPlace) "\nplace: ${place.place + 1}" else ""}"
     AlertDialog(
         onDismissRequest = closeDialogAction,
         title = { Text(text = "Game status") },
