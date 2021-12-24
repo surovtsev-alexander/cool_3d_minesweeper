@@ -5,13 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
-        minSdk = 26
-        targetSdk = 31
-//        versionCode = 1
-//        versionName = "1.0"
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -23,12 +21,14 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
