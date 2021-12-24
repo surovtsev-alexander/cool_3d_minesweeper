@@ -333,6 +333,7 @@ fun RankingDataItem(
     indexedRankingData: IndexedValue<RankingDataWithPlaces>
 ) {
     val rankingData = indexedRankingData.value.rankingData
+    /* place is counted from 0 */
     val place = indexedRankingData.value.place
 
     val elapsedAndPlaceString = "${

@@ -105,29 +105,23 @@ fun TwoButtonsInRow(
     buttonsInfo: ButtonsInfo,
 ) {
     rowScope.apply {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
-        ) {
-            MainScreenButton(
-                hasSave,
-                firstButtonName,
-                navController,
-                buttonsInfo,
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
-        ) {
-            MainScreenButton(
-                hasSave,
-                secondButtonName,
-                navController,
-                buttonsInfo,
-            )
+        arrayOf(
+            firstButtonName,
+            secondButtonName
+        ).map { buttonName ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+            ) {
+                MainScreenButton(
+                    hasSave,
+                    buttonName,
+                    navController,
+                    buttonsInfo,
+                )
+            }
+
         }
     }
 }

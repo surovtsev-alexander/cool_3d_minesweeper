@@ -96,7 +96,8 @@ class MinesweeperGameStatusReceiver @Inject constructor(
                 rankingTableSortType
             )
 
-            val winPlace = (sortedData.first().place)
+            /* place is counted from 0 */
+            val winPlace = sortedData.first().place + 1
 
             newUIGameStatus = UIGameStatus.Win(winPlace)
         }
