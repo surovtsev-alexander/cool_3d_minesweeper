@@ -1,10 +1,17 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.api.initialization.dsl.ScriptHandler
 
 object ConfigurationNames {
+    const val classpath = ScriptHandler.CLASSPATH_CONFIGURATION
     const val implementation = "implementation"
     const val kapt = "kapt"
     const val testImplementation = "testImplementation"
     const val androidTestImplementation = "androidTestImplementation"
+}
+
+fun DependencyHandler.topLevelDependencies() {
+    add(ConfigurationNames.classpath, "com.android.tools.build:gradle:7.0.4")
+    add(ConfigurationNames.classpath, "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
 }
 
 fun DependencyHandler.daggerDependencies() {
