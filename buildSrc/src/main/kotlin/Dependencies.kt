@@ -5,7 +5,6 @@ object Versions {
     const val minSdk = 26
 
     const val kotlin = "1.6.0"
-    const val anko = "0.10.8"
     const val compose = "1.1.0-rc01"
     const val composeNavigation = "2.4.0-rc01"
     const val fragment = "1.4.0"

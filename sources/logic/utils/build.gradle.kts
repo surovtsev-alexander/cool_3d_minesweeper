@@ -41,32 +41,24 @@ android {
 
 dependencies {
 
-    implementation("org.jetbrains.anko:anko-common:${Versions.anko}")
+    glmDependency()
 
-    implementation("com.github.kotlin-graphics:glm:v1.0.1")
+//    defaultDependencies()
+//    testDependencies()
 
-//    implementation "androidx.core:core-ktx:1.7.0"
-//    implementation "androidx.appcompat:appcompat:1.4.0"
-//    implementation "com.google.android.material:material:1.4.0"
-//    testImplementation "junit:junit:4.13.2"
-//    androidTestImplementation "androidx.test.ext:junit:1.1.3"
-//    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
-//
-//
-    implementation("androidx.compose.ui:ui:${Versions.compose}")
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-    implementation("androidx.compose.material:material:${Versions.compose}")
+
+    commonComposeDependencies()
+
     implementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
+
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
 
-    // Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:${Versions.composeNavigation}")
+    composeNavigationDependency()
 
-    // time
-    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+    threetenabpDependency()
 
-    // Square logcat
-    implementation("com.squareup.logcat:logcat:0.1")
+    logcatDependency()
+
 }

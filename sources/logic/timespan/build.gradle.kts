@@ -38,16 +38,11 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":utils"))
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("com.google.android.material:material:1.4.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    defaultDependencies()
+    testDependencies()
 
-    implementation("com.google.dagger:dagger:${Versions.dagger}")
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    daggerDependencies()
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC2")
+    coroutinesDependency()
 
 }

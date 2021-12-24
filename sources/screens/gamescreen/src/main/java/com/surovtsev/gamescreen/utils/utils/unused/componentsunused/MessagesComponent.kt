@@ -7,8 +7,8 @@ import android.util.AttributeSet
 import android.widget.ScrollView
 import android.widget.TextView
 import com.surovtsev.gamescreen.R
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+//import org.jetbrains.anko.doAsync
+//import org.jetbrains.anko.uiThread
 
 @Suppress("unused")
 class MessagesComponent: ScrollView {
@@ -49,10 +49,10 @@ class MessagesComponent: ScrollView {
     }
 
     fun addMessageUI(message: String) {
-        doAsync {
-            uiThread {
-                addMessage(message)
-            }
-        }
+//        doAsync {
+//            uiThread {
+//                addMessage(message)
+//            }
+//        }
     }
 }

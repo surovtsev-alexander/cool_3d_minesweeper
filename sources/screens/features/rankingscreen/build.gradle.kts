@@ -44,44 +44,32 @@ dependencies {
     implementation(project(":utils"))
     implementation(project(":timespan"))
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("com.google.android.material:material:1.4.0")
+    defaultDependencies()
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testDependencies()
 
 
-    implementation("com.google.dagger:dagger:${Versions.dagger}")
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    daggerDependencies()
 
-    implementation("org.jetbrains.anko:anko-common:${Versions.anko}")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC2")
+    coroutinesDependency()
 
 
-    implementation("androidx.compose.ui:ui:${Versions.compose}")
+    commonComposeDependencies()
+
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-    implementation("androidx.compose.material:material:${Versions.compose}")
     implementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
 
 
-    // navigation
-    // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:${Versions.nav}")
-    implementation("androidx.navigation:navigation-ui-ktx:${Versions.nav}")
+    kotlinNavigationDependencies()
 
 
-    implementation("com.github.kotlin-graphics:glm:v1.0.1")
+    glmDependency()
 
-    // time
-    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+    threetenabpDependency()
 
 
-    // Square logcat
-    implementation("com.squareup.logcat:logcat:0.1")
+    logcatDependency()
+
 }
