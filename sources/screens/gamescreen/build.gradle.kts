@@ -39,11 +39,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":utils"))
-    implementation(project(":gamelogic"))
-    implementation(project(":touchlistener"))
-    implementation(project(":timespan"))
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Core.core,
+            ProjectModules.Core.utils,
+            ProjectModules.Core.gameLogic,
+            ProjectModules.Core.touchListener,
+            ProjectModules.Core.timeSpan,
+        )
+    )
 
     defaultDependencies()
 

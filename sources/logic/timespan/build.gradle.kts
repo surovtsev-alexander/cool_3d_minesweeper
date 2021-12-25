@@ -33,8 +33,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":utils"))
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Core.core,
+            ProjectModules.Core.utils,
+        )
+    )
 
     defaultDependencies()
     testDependencies()

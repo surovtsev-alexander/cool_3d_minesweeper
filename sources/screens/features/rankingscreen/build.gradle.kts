@@ -40,9 +40,13 @@ android {
 
 dependencies {
 
-    implementation(project(":core"))
-    implementation(project(":utils"))
-    implementation(project(":timespan"))
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Core.core,
+            ProjectModules.Core.utils,
+            ProjectModules.Core.timeSpan,
+        )
+    )
 
     defaultDependencies()
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")

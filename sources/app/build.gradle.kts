@@ -43,14 +43,17 @@ android {
 
 dependencies {
 
-    implementation(project(":core"))
-    implementation(project(":utils"))
-    implementation(project(":mainscreen"))
-    implementation(project(":gamescreen"))
-    implementation(project(":rankingscreen"))
-    implementation(project(":settingsscreen"))
-    implementation(project(":helpscreen"))
-
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Core.core,
+            ProjectModules.Core.utils,
+            ProjectModules.Screens.mainScreen,
+            ProjectModules.Screens.gameScreen,
+            ProjectModules.FeatureScreens.rankingScreen,
+            ProjectModules.FeatureScreens.settingsScreen,
+            ProjectModules.FeatureScreens.helpScreen,
+        )
+    )
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 

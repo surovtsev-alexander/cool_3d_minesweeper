@@ -38,7 +38,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":utils"))
+    includeProjectModule(
+        ProjectModules.Core.utils
+    )
 
     defaultDependencies()
 

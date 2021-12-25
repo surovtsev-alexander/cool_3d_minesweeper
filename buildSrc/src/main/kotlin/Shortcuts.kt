@@ -70,3 +70,20 @@ fun DependencyHandler.defaultDependencies() {
     add(ConfigurationNames.implementation, "androidx.appcompat:appcompat:1.4.0")
     add(ConfigurationNames.implementation, "com.google.android.material:material:1.4.0")
 }
+
+fun DependencyHandler.includeProjectModules(
+    modules: Array<String>
+) {
+    modules.map {
+        includeProjectModule(it)
+    }
+}
+
+fun DependencyHandler.includeProjectModule(
+    module: String
+) {
+    add(
+        ConfigurationNames.implementation,
+        project(mapOf("path" to module))
+    )
+}

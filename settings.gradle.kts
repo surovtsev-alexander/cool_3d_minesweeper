@@ -1,34 +1,10 @@
 rootProject.name = "cool_3d_minesweeper"
 
-fun includeModule(
-    name: String,
-    dir: String
-) {
-    include(name)
-    project(name).projectDir = File(rootDir, "$dir/${name.substring(1)}")
-}
 
-fun includeModules(
-    modules: Array<String>,
-    dir: String
-) {
-    modules.map {
-        includeModule(
-            it,
-            dir
-        )
-    }
-}
-
-
+/// region [values]: modules descriptions
 val appModule = ":app"
 
 val appModuleDir = "sources"
-
-includeModule(
-    appModule,
-    appModuleDir
-)
 
 
 val coreModule = ":core"
@@ -46,11 +22,6 @@ val coreModules = arrayOf(
 )
 val logicDir = "sources/logic"
 
-includeModules(
-    coreModules,
-    logicDir,
-)
-
 
 val mainScreenModule = ":mainscreen"
 val gameScreenModule = ":gamescreen"
@@ -61,10 +32,6 @@ val screensModules = arrayOf(
 )
 val screensDir = "sources/screens"
 
-includeModules(
-    screensModules,
-    screensDir,
-)
 
 val rankingScreenModule = ":rankingscreen"
 val settingsScreenModule = ":settingsscreen"
@@ -76,8 +43,47 @@ val featuresScreensModules = arrayOf(
     helpScreenModule,
 )
 val featuresScreensDir = "sources/screens/features"
+/// endregion
 
+
+/// region [action]: including modules
+includeModule(
+    appModule,
+    appModuleDir
+)
+includeModules(
+    coreModules,
+    logicDir,
+)
+includeModules(
+    screensModules,
+    screensDir,
+)
 includeModules(
     featuresScreensModules,
     featuresScreensDir,
 )
+/// endregion
+
+
+/// region [helper methods]: include modules
+fun includeModules(
+    modules: Array<String>,
+    dir: String
+) {
+    modules.map {
+        includeModule(
+            it,
+            dir
+        )
+    }
+}
+
+fun includeModule(
+    name: String,
+    dir: String
+) {
+    include(name)
+    project(name).projectDir = File(rootDir, "$dir/${name.substring(1)}")
+}
+/// endregion
