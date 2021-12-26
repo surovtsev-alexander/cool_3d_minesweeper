@@ -7,7 +7,7 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.gamescreen.minesweeper.MinesweeperController
+import com.surovtsev.gamescreen.minesweeper.MinesweeperOpenGLEventsHandler
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.CubeCoordinates
@@ -56,7 +56,7 @@ import javax.inject.Named
     ]
 )
 interface GameComponent {
-    val minesweeperController: MinesweeperController
+    val minesweeperOpenGLEventsHandler: MinesweeperOpenGLEventsHandler
     val gameRenderer: GLESRenderer
     val gameConfig: GameConfig
     val settingsDao: SettingsDao
@@ -230,9 +230,10 @@ object GameControllerModule {
 
 @Module
 interface GameControllerBindModule {
+
     @GameScope
     @Binds
-    fun provideGameControls(
+    fun bindGameControls(
         gameControlsImp: GameControlsImp
     ): GameControls
 
@@ -243,7 +244,7 @@ interface GameControllerBindModule {
     @GameScope
     @Binds
     fun bindOpenGLEventsHandler(
-        minesweeperController: MinesweeperController
+        minesweeperOpenGLEventsHandler: MinesweeperOpenGLEventsHandler
     ): OpenGLEventsHandler
 }
 

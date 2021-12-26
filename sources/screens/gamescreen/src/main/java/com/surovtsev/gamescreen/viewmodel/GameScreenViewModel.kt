@@ -73,7 +73,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onPause()
 
         pauseGame()
-        gameComponent?.minesweeperController?.storeGameIfNeeded()
+        gameComponent?.minesweeperOpenGLEventsHandler?.storeGameIfNeeded()
 
         if (state.value?.screenData !is GameScreenData.GameMenu) {
             handleCommand(
@@ -266,7 +266,7 @@ class GameScreenViewModel @AssistedInject constructor(
     private suspend fun closeGameMenu(silent: Boolean = false) {
 
         gameComponent?.let {
-            it.minesweeperController.gameLogic.gameLogicStateHelper.resumeIfNeeded()
+            it.minesweeperOpenGLEventsHandler.gameLogic.gameLogicStateHelper.resumeIfNeeded()
         }
 
         doActionIfDataIsCorrect(
@@ -287,7 +287,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private fun pauseGame() {
         gameComponent?.let {
-            it.minesweeperController.gameLogic.gameLogicStateHelper.pauseIfNeeded()
+            it.minesweeperOpenGLEventsHandler.gameLogic.gameLogicStateHelper.pauseIfNeeded()
         }
     }
 
