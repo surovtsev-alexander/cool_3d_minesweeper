@@ -32,6 +32,7 @@ import com.surovtsev.gamescreen.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.math.FloatingAverage
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
@@ -92,7 +93,8 @@ object GameControlsModule {
         timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
     ): FPSCalculator {
         return FPSCalculator(
-            timeAfterDeviceStartupFlowHolder
+            timeAfterDeviceStartupFlowHolder,
+            FloatingAverage(10),
         )
     }
 
