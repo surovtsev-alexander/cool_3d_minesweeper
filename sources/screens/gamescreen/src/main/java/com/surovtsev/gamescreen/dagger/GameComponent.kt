@@ -20,18 +20,19 @@ import com.surovtsev.gamescreen.minesweeper.scene.Scene
 import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
-import com.surovtsev.gamescreen.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.gamescreen.models.game.interaction.*
+import com.surovtsev.gamescreen.models.game.interaction.GameControls
+import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.models.game.save.Save
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerImp
 import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.gamescreen.viewmodel.helpers.*
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
+import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.gamescreen.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.timers.TimeSpan
-import com.surovtsev.utils.timers.TimeSpanHelperImp
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
+import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import dagger.*
 import javax.inject.Named
 
@@ -59,7 +60,7 @@ interface GameComponent {
 
     val touchHandlerImp: TouchHandlerImp
     val moveHandlerImp: MoveHandlerImp
-    val timeSpanHelperImp: TimeSpanHelperImp
+    val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 
     val bombsLeftFlow: BombsLeftFlow
 
@@ -93,13 +94,13 @@ object GameControlsModule {
     fun provideUIGameControlsFlows(
         uiGameControlsMutableFlows: UIGameControlsMutableFlows,
         bombsLeftFlow: BombsLeftFlow,
-        timeSpan: TimeSpan,
+        asyncTimeSpan: AsyncTimeSpan,
     ): UIGameControlsFlows {
         return UIGameControlsFlows(
             uiGameControlsMutableFlows.flagging,
             uiGameControlsMutableFlows.uiGameStatus,
             bombsLeftFlow,
-            timeSpan.timeSpanFlow,
+            asyncTimeSpan.timeSpanFlow,
         )
     }
 

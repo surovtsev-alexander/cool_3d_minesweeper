@@ -12,14 +12,14 @@ import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.game.save.Save
 import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLEventsHandler
-import com.surovtsev.utils.timers.TimeSpan
-import com.surovtsev.utils.timers.TimeSpanHelperImp
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
+import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
 @GameScope
 class MinesweeperController @Inject constructor(
-    private val timeSpanHelper: TimeSpanHelperImp,
+    private val manuallyUpdatableTimeSpanHelper: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val saveController: SaveController,
     private val gameConfig: GameConfig,
     private val cameraInfo: CameraInfo,
@@ -27,7 +27,7 @@ class MinesweeperController @Inject constructor(
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     private val scene: Scene,
-    private val timeSpan: TimeSpan,
+    private val asyncTimeSpan: AsyncTimeSpan,
     /* Do not delete this. It is used:
         - to add new record into Ranking table when gamescreen is won;
         - to notify view about gamescreen status change.
@@ -51,11 +51,11 @@ class MinesweeperController @Inject constructor(
 
         gameViewsHolder.cubeOpenGLModel.updateTexture(cubeInfo.cubeSkin)
 
-        timeSpanHelper.tick()
+        manuallyUpdatableTimeSpanHelper.tick()
     }
 
     override fun onDrawFrame() {
-        timeSpanHelper.tick()
+        manuallyUpdatableTimeSpanHelper.tick()
 
         syncExecution {
             scene.onDrawFrame()
@@ -77,7 +77,7 @@ class MinesweeperController @Inject constructor(
                 cameraInfo,
                 gameLogic,
                 cubeInfo.cubeSkin,
-                timeSpan
+                asyncTimeSpan
             )
             saveController.save(
                 SaveTypes.SaveGameJson,

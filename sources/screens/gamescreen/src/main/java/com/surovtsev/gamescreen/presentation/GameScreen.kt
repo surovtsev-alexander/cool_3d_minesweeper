@@ -34,7 +34,7 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamescreen.viewmodel.*
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
-import com.surovtsev.utils.timers.TimeSpanFlow
+import com.surovtsev.utils.timers.async.TimeSpanFlow
 
 @Composable
 fun GameScreen(

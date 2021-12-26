@@ -7,7 +7,7 @@ import com.surovtsev.gamescreen.models.game.save.helpers.CameraInfoToSave
 import com.surovtsev.gamescreen.models.game.save.helpers.CubeSkinToSave
 import com.surovtsev.gamescreen.models.game.save.helpers.GameLogicToSave
 import com.surovtsev.gamescreen.models.game.skin.cube.CubeSkin
-import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
 
 class Save(
     val gameConfig: GameConfig,
@@ -21,12 +21,12 @@ class Save(
             cameraInfo: CameraInfo,
             gameLogic: GameLogic,
             cubeSkin: CubeSkin,
-            timeSpan: TimeSpan,
+            asyncTimeSpan: AsyncTimeSpan,
         ): Save {
             return Save(
                 gameConfig,
                 CameraInfoToSave.createObject(cameraInfo),
-                GameLogicToSave.createObject(gameLogic, timeSpan),
+                GameLogicToSave.createObject(gameLogic, asyncTimeSpan),
                 CubeSkinToSave.createObject(cubeSkin)
             )
         }

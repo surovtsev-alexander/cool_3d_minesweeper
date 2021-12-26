@@ -3,14 +3,14 @@ package com.surovtsev.gamescreen.minesweeper.gamelogic.helpers
 import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @GameScope
 class GameLogicStateHelper @Inject constructor(
-    private val timeSpan: TimeSpan
+    private val asyncTimeSpan: AsyncTimeSpan
 ) {
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
         GameStatusWithElapsed()
@@ -26,41 +26,41 @@ class GameLogicStateHelper @Inject constructor(
     fun isGameOver() = GameStatusHelper.isGameOver(gameStatus())
 
     init {
-        timeSpan.flush()
+        asyncTimeSpan.flush()
 
         _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
             GameStatus.NoBombsPlaced,
-            timeSpan.getElapsed()
+            asyncTimeSpan.getElapsed()
         )
     }
 
     fun pauseIfNeeded() {
         if (isGameInProgress()) {
-            timeSpan.turnOff()
+            asyncTimeSpan.turnOff()
         }
     }
 
     fun resumeIfNeeded() {
         if (isGameInProgress()) {
-            timeSpan.turnOn()
+            asyncTimeSpan.turnOn()
         }
     }
 
     fun setGameState(newStatus: GameStatus) {
         _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
             newStatus,
-            timeSpan.getElapsed()
+            asyncTimeSpan.getElapsed()
         )
 
         if (isGameInProgress()) {
-            timeSpan.turnOn()
+            asyncTimeSpan.turnOn()
         } else if (isGameOver()) {
-            timeSpan.turnOff()
+            asyncTimeSpan.turnOff()
         }
     }
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
-        timeSpan.setElapsed(elapsedTime)
+        asyncTimeSpan.setElapsed(elapsedTime)
         setGameState(gameStatus)
     }
 }

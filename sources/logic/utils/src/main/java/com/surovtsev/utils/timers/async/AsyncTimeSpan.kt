@@ -1,4 +1,4 @@
-package com.surovtsev.utils.timers
+package com.surovtsev.utils.timers.async
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
@@ -13,16 +13,15 @@ import kotlinx.coroutines.launch
 
 typealias TimeSpanFlow = StateFlow<Long>
 
-class TimeSpan(
-    private val interval: Long,
-    private val timeSpanHelper: TimeSpanHelperImp,
+class AsyncTimeSpan(
+    private val delayInterval: Long,
+    private val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
     subscriber: Subscriber
 ):
     Subscription, Switch
 {
     private val _timeSpanFlow = MutableStateFlow(0L)
     val timeSpanFlow: TimeSpanFlow = _timeSpanFlow.asStateFlow()
-
 
     private val switch: SwitchImp = SwitchImp()
 
@@ -38,7 +37,7 @@ class TimeSpan(
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
-            timeSpanHelper.timeAfterDeviceStartupFlow.collectLatest {
+            timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.collectLatest {
                 if (isOn()) {
                     tick(it)
                 }
@@ -46,7 +45,7 @@ class TimeSpan(
         }
     }
 
-    private fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartupFlow.value
+    private fun timeAfterDeviceStartup() = timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value
 
     fun flush() {
         turnOff()
@@ -58,7 +57,7 @@ class TimeSpan(
     }
 
     private fun tick(currTime: Long) {
-        if (currTime - prev >= interval) {
+        if (currTime - prev >= delayInterval) {
             _timeSpanFlow.value = getElapsed()
             prev = currTime
         }

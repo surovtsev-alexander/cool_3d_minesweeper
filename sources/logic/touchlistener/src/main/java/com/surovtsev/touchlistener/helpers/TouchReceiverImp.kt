@@ -8,7 +8,7 @@ import com.surovtsev.utils.androidview.interaction.TouchType
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
-import com.surovtsev.utils.timers.TimeSpanHelper
+import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
 import glm_.vec2.Vec2
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @TouchListenerScope
 class TouchReceiverImp @Inject constructor(
-    private val timeSpanHelper: TimeSpanHelper,
+    private val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
     private val touchHandler: TouchHandler,
     subscriber: Subscriber,
 ): Subscription, TouchReceiver
@@ -29,7 +29,7 @@ class TouchReceiverImp @Inject constructor(
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
-            timeSpanHelper.timeAfterDeviceStartupFlow.collectLatest {
+            timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.collectLatest {
                 tick(it)
             }
         }
@@ -60,7 +60,7 @@ class TouchReceiverImp @Inject constructor(
 
     override fun down(pos: Vec2, movementHolderSaver: MovementHolder) {
         touchPos = pos
-        downTime = timeSpanHelper.timeAfterDeviceStartupFlow.value
+        downTime = timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value
 
         this.movementHolderStorer = movementHolderSaver
 
@@ -71,7 +71,7 @@ class TouchReceiverImp @Inject constructor(
     override fun up() {
         releaseIfMovedOrPerform {
             do {
-                val currTime = timeSpanHelper.timeAfterDeviceStartupFlow.value
+                val currTime = timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value
 
                 if (currTime - downTime > TOUCH_DELAY) {
                     release()

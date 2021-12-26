@@ -3,7 +3,7 @@ package com.surovtsev.gamescreen.models.game.save.helpers
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.models.game.cellpointers.CellIndex
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
-import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
 
 class GameLogicToSave(
     private val elapsedTime: Long,
@@ -13,11 +13,11 @@ class GameLogicToSave(
 ) {
 
     companion object {
-        fun createObject(gameLogic: GameLogic, timeSpan: TimeSpan): GameLogicToSave {
+        fun createObject(gameLogic: GameLogic, asyncTimeSpan: AsyncTimeSpan): GameLogicToSave {
             val gameLogicStateHelper = gameLogic.gameLogicStateHelper
 
             return GameLogicToSave(
-                timeSpan.getElapsed(),
+                asyncTimeSpan.getElapsed(),
                 gameLogicStateHelper.gameStatus(),
                 gameLogic.cubesToOpen,
                 gameLogic.cubesToRemove

@@ -1,9 +1,9 @@
-package com.surovtsev.utils.timers
+package com.surovtsev.utils.timers.async
 
 import kotlinx.coroutines.flow.StateFlow
 
 typealias TimeAfterDeviceStartupFlow = StateFlow<Long>
 
-interface TimeSpanHelper {
+interface TimeAfterDeviceStartupFlowHolder {
     val timeAfterDeviceStartupFlow: TimeAfterDeviceStartupFlow
 }

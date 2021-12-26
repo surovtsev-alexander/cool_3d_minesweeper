@@ -9,7 +9,7 @@ import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
-import com.surovtsev.utils.timers.TimeSpanHelperImp
+import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 import javax.inject.Named
@@ -17,7 +17,7 @@ import javax.inject.Named
 @GameScope
 class Scene @Inject constructor(
     private val gameLogic: GameLogic,
-    private val timeSpanHelper: TimeSpanHelperImp,
+    private val timeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val gameControls: GameControlsImp,
     private val cameraInfoHelper: CameraInfoHelper,
     private val pointer: Pointer,
@@ -92,7 +92,7 @@ class Scene @Inject constructor(
         if (clicked) {
             val cell = intersectionCalculator.getCell()
             if (cell != null) {
-                gameLogic.touchCell(pointer.touchType, cell, timeSpanHelper.timeAfterDeviceStartupFlow.value)
+                gameLogic.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }
 
         }

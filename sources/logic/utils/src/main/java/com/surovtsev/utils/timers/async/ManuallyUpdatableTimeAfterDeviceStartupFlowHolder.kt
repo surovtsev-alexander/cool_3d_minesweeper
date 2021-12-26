@@ -1,9 +1,9 @@
-package com.surovtsev.utils.timers
+package com.surovtsev.utils.timers.async
 
 import android.os.SystemClock
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class TimeSpanHelperImp: TimeSpanHelper {
+class ManuallyUpdatableTimeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder {
     private val _timeAfterDeviceStartupFlow = MutableStateFlow(0L)
 
     override val timeAfterDeviceStartupFlow: TimeAfterDeviceStartupFlow = _timeAfterDeviceStartupFlow

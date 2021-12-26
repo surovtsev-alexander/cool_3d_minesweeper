@@ -1,7 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel.helpers
 
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
-import com.surovtsev.utils.timers.TimeSpanFlow
+import com.surovtsev.utils.timers.async.TimeSpanFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class UIGameControlsFlows(

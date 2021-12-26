@@ -1,7 +1,10 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
@@ -15,7 +18,7 @@ import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
-import com.surovtsev.utils.timers.TimeSpan
+import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -110,7 +113,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         val rankingDao = currRankingComponent.rankingDao
         val saveController = currRankingComponent.saveController
 
-        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.timeSpan) {
+        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan) {
             val settingsList = settingsDao.getAll()
             val winsCountMap = rankingDao.getWinsCountMap()
             RankingScreenData.SettingsListIsLoaded(
@@ -120,7 +123,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
 
         currTimeSpanComponent
-            .timeSpan
+            .asyncTimeSpan
             .flush()
 
         publishIdleState(
@@ -225,7 +228,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
 
         val sortedData = if (doDelay) {
-            doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.timeSpan, sortingAction)
+            doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan, sortingAction)
         } else {
             sortingAction.invoke()
         }
@@ -254,15 +257,15 @@ class RankingScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
-        timeSpan: TimeSpan,
+        asyncTimeSpan: AsyncTimeSpan,
         block: () -> T
     ): T {
-        timeSpan.turnOn()
+        asyncTimeSpan.turnOn()
 
         val res = block.invoke()
 
-        timeSpan.turnOff()
-        val timeToDelay = MINIMAL_UI_ACTION_DELAY - timeSpan.getElapsed()
+        asyncTimeSpan.turnOff()
+        val timeToDelay = MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
 
         if (timeToDelay > 0) {
             delay(timeToDelay)
