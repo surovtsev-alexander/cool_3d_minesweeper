@@ -10,12 +10,11 @@ import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
-import glm_.vec2.Vec2i
 import javax.inject.Inject
 import javax.inject.Named
 
 @GameScope
-class Scene @Inject constructor(
+class SceneCalculator @Inject constructor(
     private val gameLogic: GameLogic,
     private val timeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val gameControls: GameControlsImp,
@@ -25,19 +24,11 @@ class Scene @Inject constructor(
     private val intersectionCalculator: IntersectionCalculator,
     private val pointerOpenGLModel: PointerOpenGLModel,
     private val cubeOpenGLModel: CubeOpenGLModel,
-    @Named(PointerEnabledName)
+    @Named(SceneDrawer.PointerEnabledName)
     private val pointerEnabled: Boolean,
-) {
 
-    companion object {
-        const val PointerEnabledName = "pointerEnabled"
-    }
-
-    fun onSurfaceChanged(newDisplaySize: Vec2i) {
-        cameraInfoHelper.onSurfaceChanged(newDisplaySize)
-    }
-
-    fun onDrawFrame() {
+    ) {
+    fun nextIteration() {
         val cameraMoved = cameraInfoHelper.getAndRelease()
 
         val clicked = touchHandler.getAndRelease()
@@ -63,19 +54,14 @@ class Scene @Inject constructor(
                 pointerOpenGLModel.updatePoints()
             }
 
-            pointerOpenGLModel.mGLESProgram.useProgram()
             if (cameraMoved) {
+                pointerOpenGLModel.mGLESProgram.useProgram()
                 with(pointerOpenGLModel.mGLESProgram) {
                     fillMVP(cameraInfoHelper.cameraInfo.mVP)
                 }
             }
-            pointerOpenGLModel.bindData()
-            pointerOpenGLModel.draw()
         } while (false)
 
-        cubeOpenGLModel.cubeGLESProgram.useProgram()
-
-        cubeOpenGLModel.bindData()
 
         gameLogic.openCubes()
 
@@ -97,10 +83,10 @@ class Scene @Inject constructor(
 
         }
         if (cameraMoved) {
+            cubeOpenGLModel.cubeGLESProgram.useProgram()
             with(cubeOpenGLModel.cubeGLESProgram) {
                 fillMVP(cameraInfoHelper.cameraInfo.mVP)
             }
         }
-        cubeOpenGLModel.draw()
     }
 }

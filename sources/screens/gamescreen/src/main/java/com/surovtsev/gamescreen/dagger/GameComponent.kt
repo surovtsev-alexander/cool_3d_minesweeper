@@ -16,7 +16,7 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.GameStatusWithElap
 import com.surovtsev.gamescreen.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.gamescreen.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
-import com.surovtsev.gamescreen.minesweeper.scene.Scene
+import com.surovtsev.gamescreen.minesweeper.scene.SceneDrawer
 import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
@@ -250,7 +250,7 @@ interface GameControllerBindModule {
 @Module
 object SceneSettingsModule {
     @Provides
-    @Named(Scene.PointerEnabledName)
+    @Named(SceneDrawer.PointerEnabledName)
     fun providePointerEnabled() = false
 }
 
