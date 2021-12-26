@@ -14,6 +14,7 @@ import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
+import com.surovtsev.utils.timers.fpscalculator.FPSCalculator
 import glm_.vec2.Vec2i
 import javax.inject.Inject
 
@@ -29,11 +30,11 @@ class MinesweeperController @Inject constructor(
     private val scene: Scene,
     private val asyncTimeSpan: AsyncTimeSpan,
     /* Do not delete this. It is used:
-        - to add new record into Ranking table when gamescreen is won;
-        - to notify view about gamescreen status change.
+        - to add new record into Ranking table when game is won;
+        - to notify view about game status change.
     */
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-
+    private val fpsCalculator: FPSCalculator,
 ):
     OpenGLEventsHandler
 {
@@ -60,6 +61,8 @@ class MinesweeperController @Inject constructor(
         syncExecution {
             scene.onDrawFrame()
         }
+
+        fpsCalculator.onNextFrame()
     }
 
     @Synchronized fun syncExecution(x: () -> Unit) {

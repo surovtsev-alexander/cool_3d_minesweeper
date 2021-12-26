@@ -1,9 +1,11 @@
 package com.surovtsev.utils.timers.async
 
-import android.os.SystemClock
+import com.surovtsev.utils.timers.sync.ManuallyUpdatableTimeAfterDeviceStartupHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ManuallyUpdatableTimeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder {
+class ManuallyUpdatableTimeAfterDeviceStartupFlowHolder(
+    private val manuallyUpdatableTimeAfterDeviceStartupHolder: ManuallyUpdatableTimeAfterDeviceStartupHolder,
+): TimeAfterDeviceStartupFlowHolder {
     private val _timeAfterDeviceStartupFlow = MutableStateFlow(0L)
 
     override val timeAfterDeviceStartupFlow: TimeAfterDeviceStartupFlow = _timeAfterDeviceStartupFlow
@@ -13,6 +15,9 @@ class ManuallyUpdatableTimeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupF
     }
 
     fun tick() {
-        _timeAfterDeviceStartupFlow.value = SystemClock.elapsedRealtime()
+        manuallyUpdatableTimeAfterDeviceStartupHolder.let {
+            it.tick()
+            _timeAfterDeviceStartupFlow.value = it.timeAfterDeviceStartup
+        }
     }
 }

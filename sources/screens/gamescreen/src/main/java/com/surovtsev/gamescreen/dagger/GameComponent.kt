@@ -31,8 +31,12 @@ import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.gamescreen.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
+import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
+import com.surovtsev.utils.timers.fpscalculator.DelayedFPSFlowHolder
+import com.surovtsev.utils.timers.fpscalculator.FPSCalculator
 import dagger.*
 import javax.inject.Named
 
@@ -84,6 +88,31 @@ interface GameComponent {
 object GameControlsModule {
     @GameScope
     @Provides
+    fun provideFPSCalculator(
+        timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
+    ): FPSCalculator {
+        return FPSCalculator(
+            timeAfterDeviceStartupFlowHolder
+        )
+    }
+
+    @GameScope
+    @Provides
+    fun provideDelayedFPSFlowHolder(
+        timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
+        fpsCalculator: FPSCalculator,
+        subscriber: Subscriber,
+    ): DelayedFPSFlowHolder {
+        return DelayedFPSFlowHolder(
+            timeAfterDeviceStartupFlowHolder,
+            300,
+            fpsCalculator,
+            subscriber
+        )
+    }
+
+    @GameScope
+    @Provides
     fun provideUIGameControlsMutableFlows(
     ): UIGameControlsMutableFlows {
         return UIGameControlsMutableFlows()
@@ -95,12 +124,14 @@ object GameControlsModule {
         uiGameControlsMutableFlows: UIGameControlsMutableFlows,
         bombsLeftFlow: BombsLeftFlow,
         asyncTimeSpan: AsyncTimeSpan,
+        delayedFPSFlowHolder: DelayedFPSFlowHolder,
     ): UIGameControlsFlows {
         return UIGameControlsFlows(
             uiGameControlsMutableFlows.flagging,
             uiGameControlsMutableFlows.uiGameStatus,
             bombsLeftFlow,
             asyncTimeSpan.timeSpanFlow,
+            delayedFPSFlowHolder.flow
         )
     }
 

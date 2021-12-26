@@ -7,6 +7,7 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscri
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
+import com.surovtsev.utils.timers.sync.ManuallyUpdatableTimeAfterDeviceStartupHolder
 import dagger.Binds
 import dagger.Component
 import dagger.Module
@@ -42,6 +43,13 @@ object TimeSpanModule {
 
     @TimeSpanScope
     @Provides
+    fun provideManuallyUpdatableTimeAfterDeviceStartupHolder(
+    ): ManuallyUpdatableTimeAfterDeviceStartupHolder {
+        return ManuallyUpdatableTimeAfterDeviceStartupHolder()
+    }
+
+    @TimeSpanScope
+    @Provides
     fun provideCustomCoroutineScope(
     ): CustomCoroutineScope {
         return CustomCoroutineScope(
@@ -51,9 +59,12 @@ object TimeSpanModule {
 
     @TimeSpanScope
     @Provides
-    fun provideTimeSpanHelperImp(
+    fun provideManuallyUpdatableTimeAfterDeviceStartupFlowHolder(
+        manuallyUpdatableTimeAfterDeviceStartupHolder: ManuallyUpdatableTimeAfterDeviceStartupHolder,
     ): ManuallyUpdatableTimeAfterDeviceStartupFlowHolder {
-        return ManuallyUpdatableTimeAfterDeviceStartupFlowHolder()
+        return ManuallyUpdatableTimeAfterDeviceStartupFlowHolder(
+            manuallyUpdatableTimeAfterDeviceStartupHolder
+        )
     }
 
     @TimeSpanScope

@@ -137,14 +137,29 @@ fun GameView(
             )
         }
     }
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.End
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            FPSLabel(
+                this,
+                gameScreenData
+            )
+        }
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+        )
         Button(
             modifier = Modifier
-                .width(pauseResumeButtonWidth),
+                .width(pauseResumeButtonWidth)
+            ,
             onClick = {
                 commandHandler.handleCommand(
                     CommandFromGameScreen.OpenGameMenu
@@ -154,6 +169,27 @@ fun GameView(
         ) {
             Text(text = "pause")
         }
+    }
+}
+
+@Composable
+fun FPSLabel(
+    columnScope: ColumnScope,
+    gameScreenData: GameScreenData,
+) {
+    if (gameScreenData !is GameScreenData.GameInProgress) {
+        return
+    }
+
+    val fps = gameScreenData.uiGameControls.fpsFlow.collectAsState(0f).value
+
+
+    columnScope.apply {
+        Text(
+            text = fps.toInt().toString().padStart(4),
+            modifier = Modifier
+                .width(50.dp)
+        )
     }
 }
 

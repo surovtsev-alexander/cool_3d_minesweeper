@@ -6,10 +6,12 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscri
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
+import com.surovtsev.utils.timers.sync.ManuallyUpdatableTimeAfterDeviceStartupHolder
 
 interface TimeSpanComponentEntryPoint {
     val asyncTimeSpan: AsyncTimeSpan
-    val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
+    val manuallyUpdatableTimeAfterDeviceStartupHolder: ManuallyUpdatableTimeAfterDeviceStartupHolder
+	val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
     val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder
     val customCoroutineScope: CustomCoroutineScope
 
