@@ -31,7 +31,6 @@ import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.core.viewmodel.ScreenState
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
-import logcat.logcat
 
 @Composable
 fun RankingScreen(
@@ -405,7 +404,7 @@ fun DisplayCircularIndicatorIfNeeded(
             ) {
                 if (it == EnterExitState.Visible) 0.5f else 0.0f
             }
-            logcat { "scale: $transparency" }
+//            logcat { "scale: $transparency" }
             Box(
                 Modifier
                     .fillMaxSize()

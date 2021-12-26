@@ -31,6 +31,7 @@ class TimeSpan(
     private var prev = onTime
 
     init {
+        flush()
         subscriber
             .addSubscription(this)
     }
@@ -43,8 +44,6 @@ class TimeSpan(
                 }
             }
         }
-
-        flush()
     }
 
     private fun timeAfterDeviceStartup() = timeSpanHelper.timeAfterDeviceStartupFlow.value

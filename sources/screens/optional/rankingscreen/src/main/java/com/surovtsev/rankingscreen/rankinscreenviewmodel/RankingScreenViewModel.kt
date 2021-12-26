@@ -49,11 +49,11 @@ class RankingScreenViewModel @AssistedInject constructor(
     var rankingComponent: RankingComponent? = null
 
     companion object {
-        const val MINIMAL_UI_ACTION_DELAY = 1000L
+        const val MINIMAL_UI_ACTION_DELAY = 3000L
     }
 
     object ErrorMessages {
-        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering rankingscreen list" }
+        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
         val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
     }
 
@@ -67,13 +67,13 @@ class RankingScreenViewModel @AssistedInject constructor(
 
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromRankingScreen.HandleScreenLeaving -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromRankingScreen.LoadData -> ::loadData
-            is CommandFromRankingScreen.FilterList -> suspend { filterList(command.selectedSettingsId) }
-            is CommandFromRankingScreen.SortListWithNoDelay -> suspend { sortList(command.rankingTableSortParameters, false) }
-            is CommandFromRankingScreen.SortList -> suspend { sortList(command.rankingTableSortParameters, true) }
-            is CommandFromRankingScreen.CloseError -> ::closeError
-            else                                            -> null
+            is CommandFromRankingScreen.HandleScreenLeaving     -> suspend { handleScreenLeaving(command.owner) }
+            is CommandFromRankingScreen.LoadData                -> ::loadData
+            is CommandFromRankingScreen.FilterList              -> suspend { filterList(command.selectedSettingsId) }
+            is CommandFromRankingScreen.SortListWithNoDelay     -> suspend { sortList(command.rankingTableSortParameters, false) }
+            is CommandFromRankingScreen.SortList                -> suspend { sortList(command.rankingTableSortParameters, true) }
+            is CommandFromRankingScreen.CloseError              -> ::closeError
+            else                                                -> null
         }
     }
 
@@ -83,7 +83,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         timeSpanComponent.let {
             currTimeSpanComponent =
                 it?.also {
-                    it.subscriberImp.restart()
+//                    it.subscriberImp.restart()
                 }
                     ?: DaggerTimeSpanComponent
                         .create()

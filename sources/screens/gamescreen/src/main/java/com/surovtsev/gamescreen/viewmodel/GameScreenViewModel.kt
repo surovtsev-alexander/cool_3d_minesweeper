@@ -222,10 +222,6 @@ class GameScreenViewModel @AssistedInject constructor(
 
         setFlagging(loadGame)
 
-        timeSpanComponent
-            .timeSpan
-            .flush()
-
         publishIdleState(
             GameScreenData.GameInProgress(
                 uiGameControlsFlows!!

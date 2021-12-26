@@ -42,7 +42,7 @@ val featuresScreensModules = arrayOf(
     settingsScreenModule,
     helpScreenModule,
 )
-val featuresScreensDir = "sources/screens/features"
+val featuresScreensDir = "sources/screens/optional"
 /// endregion
 
 

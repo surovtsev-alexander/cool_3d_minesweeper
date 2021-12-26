@@ -8,7 +8,6 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.databases.RankingDatabase
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.settings.SettingsListData
 import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
 import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
@@ -75,14 +74,6 @@ object AppModule {
     fun provideSaveController(
         context: Context
     ) = SaveController(context)
-
-    @AppScope
-    @Provides
-    fun provideSettingsListData(): SettingsListData {
-        return SettingsListData(
-            emptyList()
-        )
-    }
 
     @AppScope
     @Provides
