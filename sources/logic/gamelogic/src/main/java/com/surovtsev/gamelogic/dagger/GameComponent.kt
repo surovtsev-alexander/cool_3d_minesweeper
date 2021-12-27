@@ -2,6 +2,7 @@ package com.surovtsev.gamelogic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.CameraInfoHelperHolder
+import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
@@ -46,6 +47,7 @@ import javax.inject.Named
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
+        RestartableCoroutineScopeEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
         CameraInfoHelperHolder::class,
     ],
@@ -81,6 +83,9 @@ interface GameComponent {
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
+        fun restartableCoroutineScopeEntryPoint(
+            restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint
+        ): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun cameraInfoHelperHolder(cameraInfoHelperHolder: CameraInfoHelperHolder): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder

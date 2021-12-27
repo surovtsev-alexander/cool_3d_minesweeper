@@ -19,6 +19,8 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
+import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
+import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
@@ -58,14 +60,26 @@ class GameScreenViewModel @AssistedInject constructor(
         DaggerGameScreenComponent.create()
     }
 
+    private val restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent by lazy {
+        DaggerRestartableCoroutineScopeComponent
+            .create()
+    }
+
     private val timeSpanComponent: TimeSpanComponent by lazy {
         DaggerTimeSpanComponent
-            .create()
+            .builder()
+            .restartableCoroutineScopeEntryPoint(
+                restartableCoroutineScopeComponent
+            )
+            .build()
     }
 
     private val touchListenerComponent: TouchListenerComponent by lazy {
         DaggerTouchListenerComponent
             .builder()
+            .restartableCoroutineScopeEntryPoint(
+                restartableCoroutineScopeComponent
+            )
             .timeSpanComponentEntryPoint(
                 timeSpanComponent
             )
@@ -112,7 +126,7 @@ class GameScreenViewModel @AssistedInject constructor(
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ) {
-        timeSpanComponent
+        restartableCoroutineScopeComponent
             .subscriberImp
             .onStop()
 
@@ -210,6 +224,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
+            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .cameraInfoHelperHolder(gameScreenComponent)
             .loadGame(loadGame)

@@ -1,5 +1,6 @@
 package com.surovtsev.timespan.dagger
 
+import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 @TimeSpanScope
 @Component(
     dependencies = [
+        RestartableCoroutineScopeEntryPoint::class,
    ],
     modules = [
         TimeSpanModule::class,
@@ -50,30 +52,11 @@ object TimeSpanModule {
 
     @TimeSpanScope
     @Provides
-    fun provideCustomCoroutineScope(
-    ): CustomCoroutineScope {
-        return CustomCoroutineScope(
-            Dispatchers.IO
-        )
-    }
-
-    @TimeSpanScope
-    @Provides
     fun provideManuallyUpdatableTimeAfterDeviceStartupFlowHolder(
         manuallyUpdatableTimeAfterDeviceStartupHolder: ManuallyUpdatableTimeAfterDeviceStartupHolder,
     ): ManuallyUpdatableTimeAfterDeviceStartupFlowHolder {
         return ManuallyUpdatableTimeAfterDeviceStartupFlowHolder(
             manuallyUpdatableTimeAfterDeviceStartupHolder
-        )
-    }
-
-    @TimeSpanScope
-    @Provides
-    fun provideSubscriberImp(
-        customCoroutineScope: CustomCoroutineScope,
-    ): SubscriberImp {
-        return SubscriberImp(
-            customCoroutineScope
         )
     }
 }
@@ -85,10 +68,4 @@ interface TimeSpanBindingsModule {
     fun bindTimeAfterDeviceStartupFlowHolder(
         manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
     ): TimeAfterDeviceStartupFlowHolder
-
-    @Binds
-    @TimeSpanScope
-    fun bindSubscriber(
-        coroutineScopeSubscriberImp: SubscriberImp
-    ): Subscriber
 }

@@ -16,6 +16,8 @@ import com.surovtsev.core.viewmodel.ScreenCommandHandler
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
+import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
+import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
@@ -51,6 +53,12 @@ class RankingScreenViewModel @AssistedInject constructor(
     var timeSpanComponent: TimeSpanComponent? = null
     var rankingComponent: RankingComponent? = null
 
+
+    private val restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent by lazy {
+        DaggerRestartableCoroutineScopeComponent
+            .create()
+    }
+
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 3000L
     }
@@ -63,9 +71,9 @@ class RankingScreenViewModel @AssistedInject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        timeSpanComponent
-            ?.subscriberImp
-            ?.onStop()
+        restartableCoroutineScopeComponent
+            .subscriberImp
+            .onStop()
     }
 
     override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
@@ -89,7 +97,9 @@ class RankingScreenViewModel @AssistedInject constructor(
 //                    it.subscriberImp.restart()
                 }
                     ?: DaggerTimeSpanComponent
-                        .create()
+                        .builder()
+                        .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
+                        .build()
                         .apply {
                             timeSpanComponent = this
                         }

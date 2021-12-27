@@ -13,8 +13,4 @@ interface TimeSpanComponentEntryPoint {
     val manuallyUpdatableTimeAfterDeviceStartupHolder: ManuallyUpdatableTimeAfterDeviceStartupHolder
 	val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
     val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder
-    val customCoroutineScope: CustomCoroutineScope
-
-    val subscriberImp: SubscriberImp
-    val subscriber: Subscriber
 }

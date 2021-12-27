@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id(Plugins.ANDROID_LIBRARY)
+    id(Plugins.KOTLIN_ANDROID)
+    id(Plugins.KOTLIN_KAPT)
 }
 
 android {
@@ -45,6 +45,7 @@ dependencies {
             ProjectModules.Core.utils,
             ProjectModules.Core.gameLogic,
             ProjectModules.Core.touchListener,
+            ProjectModules.Core.restartableCoroutineScope,
             ProjectModules.Core.timeSpan,
         )
     )

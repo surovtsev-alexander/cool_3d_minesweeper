@@ -12,6 +12,7 @@ val utilsModule = ":utils"
 val touchListenerModule = ":touchlistener"
 val gameLogicModule = ":gamelogic"
 val timeSpanModule = ":timespan"
+val restartableCoroutineScopeModule = ":restartablecoroutinescope"
 
 val coreModules = arrayOf(
     coreModule,
@@ -19,6 +20,7 @@ val coreModules = arrayOf(
     touchListenerModule,
     gameLogicModule,
     timeSpanModule,
+    restartableCoroutineScopeModule,
 )
 val logicDir = "sources/logic"
 

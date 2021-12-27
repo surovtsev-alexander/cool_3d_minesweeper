@@ -9,6 +9,7 @@ object ProjectModules {
         const val touchListener = ":touchlistener"
         const val gameLogic = ":gamelogic"
         const val timeSpan = ":timespan"
+        const val restartableCoroutineScope = ":restartablecoroutinescope"
     }
 
     object Screens {

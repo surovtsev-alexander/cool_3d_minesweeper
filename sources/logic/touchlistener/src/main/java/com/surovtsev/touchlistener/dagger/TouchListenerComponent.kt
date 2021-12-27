@@ -1,5 +1,6 @@
 package com.surovtsev.touchlistener.dagger
 
+import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
@@ -17,6 +18,7 @@ import javax.inject.Named
 @TouchListenerScope
 @Component(
     dependencies = [
+        RestartableCoroutineScopeEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
     ],
     modules = [
