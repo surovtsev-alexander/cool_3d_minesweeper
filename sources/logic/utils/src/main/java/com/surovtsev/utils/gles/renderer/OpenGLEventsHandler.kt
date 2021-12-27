@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.utils.utils.gles.interfaces
+package com.surovtsev.utils.gles.renderer
 
 interface OpenGLEventsHandler {
     fun onSurfaceCreated()

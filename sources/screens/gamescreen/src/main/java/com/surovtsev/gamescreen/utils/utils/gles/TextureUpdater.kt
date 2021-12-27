@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.utils.utils.gles.interfaces
+package com.surovtsev.gamescreen.utils.utils.gles
 
 import com.surovtsev.gamescreen.models.game.cellpointers.PointedCell
 

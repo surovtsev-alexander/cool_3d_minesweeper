@@ -11,8 +11,8 @@ import com.surovtsev.gamescreen.models.game.cellpointers.PointedCell
 import com.surovtsev.gamescreen.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamescreen.models.gles.programs.CubeGLESProgram
 import com.surovtsev.gamescreen.utils.gles.model.buffers.VertexArray
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLModel
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.TextureUpdater
+import com.surovtsev.gamescreen.utils.utils.gles.OpenGLModel
+import com.surovtsev.gamescreen.utils.utils.gles.TextureUpdater
 import com.surovtsev.utils.gles.helpers.TextureHelper
 import javax.inject.Inject
 

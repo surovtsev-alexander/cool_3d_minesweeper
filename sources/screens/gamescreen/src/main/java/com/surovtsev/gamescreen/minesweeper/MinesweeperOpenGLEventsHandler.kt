@@ -8,11 +8,10 @@ import com.surovtsev.gamescreen.minesweeper.helpers.MinesweeperGameStatusReceive
 import com.surovtsev.gamescreen.minesweeper.scene.SceneDrawer
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLEventsHandler
+import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.fpscalculator.FPSCalculator
 import glm_.vec2.Vec2i
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @GameScope

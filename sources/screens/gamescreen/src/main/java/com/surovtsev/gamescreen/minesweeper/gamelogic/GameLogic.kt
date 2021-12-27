@@ -12,7 +12,7 @@ import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gamestatus.GameStatus
 import com.surovtsev.gamescreen.models.game.interaction.GameControls
 import com.surovtsev.gamescreen.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.TextureUpdater
+import com.surovtsev.gamescreen.utils.utils.gles.TextureUpdater
 import com.surovtsev.utils.androidview.interaction.TouchType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

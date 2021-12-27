@@ -26,13 +26,12 @@ import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.models.game.save.Save
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerImp
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLEventsHandler
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
-import com.surovtsev.gamescreen.views.glesrenderer.GLESRenderer
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.math.FloatingAverage
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -58,7 +57,6 @@ import javax.inject.Named
 )
 interface GameComponent {
     val minesweeperOpenGLEventsHandler: MinesweeperOpenGLEventsHandler
-    val gameRenderer: GLESRenderer
     val gameConfig: GameConfig
     val settingsDao: SettingsDao
     val rankingDao: RankingDao

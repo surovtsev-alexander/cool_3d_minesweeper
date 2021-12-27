@@ -3,15 +3,14 @@ package com.surovtsev.gamescreen.viewmodel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.opengl.GLSurfaceView
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamescreen.dagger.DaggerGameComponent
+import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
+import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
@@ -24,6 +23,7 @@ import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.launch
 
 const val LoadGameParameterName = "load_game"
 
@@ -51,6 +51,10 @@ class GameScreenViewModel @AssistedInject constructor(
 {
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
+
+    private val gameScreenComponent: GameScreenComponent by lazy {
+        DaggerGameScreenComponent.create()
+    }
 
     // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
@@ -131,17 +135,21 @@ class GameScreenViewModel @AssistedInject constructor(
     fun initGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {
-        val gameRenderer = gameComponent?.gameRenderer
+        val gameRenderer = gameScreenComponent.gLESRenderer
         val touchListener = touchListenerComponent?.touchListener
-
-        if (gameRenderer == null || touchListener == null) {
-            return
-        }
 
         gLSurfaceView.setEGLContextClientVersion(2)
         gLSurfaceView.setRenderer(gameRenderer)
-        touchListener.connectToGLSurfaceView(
-            gLSurfaceView)
+
+        if (touchListener != null) {
+            touchListener.connectToGLSurfaceView(
+                gLSurfaceView
+            )
+        } else {
+            viewModelScope.launch {
+                publishErrorState("error during initialization")
+            }
+        }
 
         this.gLSurfaceView = gLSurfaceView
     }
@@ -221,6 +229,9 @@ class GameScreenViewModel @AssistedInject constructor(
                         it.moveHandlerImp
                     )
                     .build()
+
+                gameScreenComponent.gLESRenderer.openGLEventsHandler =
+                    it.minesweeper.openG LEventsHandler
             }
 
         setFlagging(loadGame)

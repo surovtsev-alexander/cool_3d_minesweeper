@@ -6,7 +6,7 @@ import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.gles.model.program.PointerGLESProgram
-import com.surovtsev.gamescreen.utils.utils.gles.interfaces.OpenGLModel
+import com.surovtsev.gamescreen.utils.utils.gles.OpenGLModel
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
 import javax.inject.Inject
