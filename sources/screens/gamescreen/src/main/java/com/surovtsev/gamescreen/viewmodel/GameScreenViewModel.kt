@@ -193,8 +193,6 @@ class GameScreenViewModel @AssistedInject constructor(
             tryUnstackState(gameScreenData)
         }
 
-        timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
-
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameInProgress },
             "game is in progress",
@@ -203,6 +201,7 @@ class GameScreenViewModel @AssistedInject constructor(
             publishIdleState(GameScreenData.NoData)
         }
 
+        timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
         gameScreenComponent.gLESRenderer.openGLEventsHandler = null
 
         gameComponent = DaggerGameComponent
