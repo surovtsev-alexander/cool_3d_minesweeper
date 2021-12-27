@@ -29,10 +29,9 @@ import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
+import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
-import com.surovtsev.gamescreen.viewmodel.helpers.UIGameStatus
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.timers.async.TimeSpanFlow
 

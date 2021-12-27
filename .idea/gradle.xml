@@ -18,11 +18,11 @@
             <option value="$PROJECT_DIR$/sources/logic/timespan" />
             <option value="$PROJECT_DIR$/sources/logic/touchlistener" />
             <option value="$PROJECT_DIR$/sources/logic/utils" />
-            <option value="$PROJECT_DIR$/sources/screens/features/helpscreen" />
-            <option value="$PROJECT_DIR$/sources/screens/features/rankingscreen" />
-            <option value="$PROJECT_DIR$/sources/screens/features/settingsscreen" />
             <option value="$PROJECT_DIR$/sources/screens/gamescreen" />
             <option value="$PROJECT_DIR$/sources/screens/mainscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/optional/helpscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/optional/rankingscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/optional/settingsscreen" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

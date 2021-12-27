@@ -35,6 +35,7 @@ dependencies {
         arrayOf(
             ProjectModules.Core.core,
             ProjectModules.Core.utils,
+            ProjectModules.Core.touchListener,
         )
     )
 
@@ -47,4 +48,6 @@ dependencies {
     logcatDependency()
 
     glmDependency()
+
+    coroutinesDependency()
 }

@@ -1,7 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel
 
 import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
+import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 
 sealed interface GameScreenData: ScreenData {
     object NoData: GameScreenData, ScreenData.NoData, ScreenData.InitializationIsNotFinished
