@@ -18,8 +18,6 @@ import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.GameStatusWithElap
 import com.surovtsev.gamescreen.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.gamescreen.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
-import com.surovtsev.gamescreen.minesweeper.scene.SceneDrawer
-import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.game.interaction.GameControls
@@ -27,6 +25,7 @@ import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.models.game.save.Save
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerImp
+import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
@@ -34,6 +33,7 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.math.FloatingAverage
+import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
@@ -254,7 +254,7 @@ interface GameControllerBindModule {
 @Module
 object SceneSettingsModule {
     @Provides
-    @Named(SceneDrawer.PointerEnabledName)
+    @Named(PointerEnabledName)
     fun providePointerEnabled() = false
 }
 

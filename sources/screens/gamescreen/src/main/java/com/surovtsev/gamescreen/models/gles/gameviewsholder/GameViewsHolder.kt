@@ -57,4 +57,9 @@ class GameViewsHolder @Inject constructor(
 
         processedActions.processOnSurfaceChanged()
     }
+
+    fun onDrawFrame() {
+        pointerOpenGLModel.drawModel()
+        cubeOpenGLModel.drawModel()
+    }
 }

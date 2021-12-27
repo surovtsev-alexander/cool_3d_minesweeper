@@ -5,8 +5,6 @@ import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandHandler
 import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.minesweeper.helpers.MinesweeperGameStatusReceiver
-import com.surovtsev.gamescreen.minesweeper.scene.SceneDrawer
-import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -16,10 +14,8 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperOpenGLEventsHandler @Inject constructor(
     private val manuallyUpdatableTimeSpanHelper: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
-    private val cubeInfo: CubeInfo,
     val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
-    private val sceneDrawer: SceneDrawer,
     /* Do not delete this. It is used:
         - to add new record into Ranking table when game is won;
         - to notify view about game status change.
@@ -34,9 +30,6 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
         gameViewsHolder.onSurfaceCreated()
     }
 
-    /*
-     * Init GameLogic
-     */
     override fun onSurfaceChanged(width: Int, height: Int) {
         gameViewsHolder.onSurfaceChanged()
 
@@ -53,6 +46,6 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
         commandHandler.handleCommandWithBlocking(
             CommandToMinesweeper.Tick
         )
-        sceneDrawer.onDrawFrame()
+        gameViewsHolder.onDrawFrame()
     }
 }

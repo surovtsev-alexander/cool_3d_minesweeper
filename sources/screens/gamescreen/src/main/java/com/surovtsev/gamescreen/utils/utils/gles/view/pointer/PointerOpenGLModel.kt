@@ -1,6 +1,5 @@
 package com.surovtsev.gamescreen.utils.utils.gles.view.pointer
 
-import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.utils.gles.model.buffers.VertexArray
@@ -10,18 +9,22 @@ import com.surovtsev.gamescreen.utils.utils.gles.OpenGLModel
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
 import javax.inject.Inject
+import javax.inject.Named
 
 /* TODO: refactoring */
 
 @GameScope
 class PointerOpenGLModel @Inject constructor(
-    private val context: Context,
     private val pointer: Pointer,
     val mGLESProgram: PointerGLESProgram,
+    @Named(PointerEnabledName)
+    private val pointerEnabled: Boolean,
 ):
-    OpenGLModel, Switch by SwitchImp()
+    OpenGLModel(mGLESProgram), Switch by SwitchImp()
 {
     companion object {
+        const val PointerEnabledName = "pointerEnabled"
+
         private const val positionComponentCount = 3
     }
 
@@ -53,5 +56,11 @@ class PointerOpenGLModel @Inject constructor(
             GL_LINES, 0,
             vertexArray.floatBuffer.capacity() / positionComponentCount
         )
+    }
+
+    override fun drawModel() {
+        if (pointerEnabled) {
+            super.drawModel()
+        }
     }
 }

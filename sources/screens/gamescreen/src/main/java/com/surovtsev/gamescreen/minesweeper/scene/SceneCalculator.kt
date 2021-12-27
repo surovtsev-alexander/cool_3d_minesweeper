@@ -8,6 +8,7 @@ import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel
+import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamescreen.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import javax.inject.Inject
@@ -24,10 +25,9 @@ class SceneCalculator @Inject constructor(
     private val intersectionCalculator: IntersectionCalculator,
     private val pointerOpenGLModel: PointerOpenGLModel,
     private val cubeOpenGLModel: CubeOpenGLModel,
-    @Named(SceneDrawer.PointerEnabledName)
+    @Named(PointerEnabledName)
     private val pointerEnabled: Boolean,
-
-    ) {
+) {
     fun nextIteration() {
         val cameraMoved = cameraInfoHelper.getAndRelease()
 

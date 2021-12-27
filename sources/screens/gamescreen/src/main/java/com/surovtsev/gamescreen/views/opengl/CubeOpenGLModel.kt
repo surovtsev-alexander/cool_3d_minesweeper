@@ -22,7 +22,7 @@ class CubeOpenGLModel @Inject constructor(
     private val cubeCoordinates: CubeCoordinates,
     val cubeGLESProgram: CubeGLESProgram,
 ):
-    OpenGLModel,
+    OpenGLModel(cubeGLESProgram),
     TextureUpdater
 {
 
