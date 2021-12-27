@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.minesweeper.interaction.touch
+package com.surovtsev.gamescreen.minesweeper.interaction.screeninteractionhandler.touch
 
 import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.utils.androidview.interaction.TouchType

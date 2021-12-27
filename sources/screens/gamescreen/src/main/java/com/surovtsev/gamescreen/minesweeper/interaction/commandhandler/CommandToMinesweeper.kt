@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.minesweeper.commandhandler
+package com.surovtsev.gamescreen.minesweeper.interaction.commandhandler
 
 sealed interface CommandToMinesweeper {
     interface CanBeSkipped

@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.minesweeper.commandhandler
+package com.surovtsev.gamescreen.minesweeper.interaction.commandhandler
 
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes

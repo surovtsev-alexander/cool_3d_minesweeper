@@ -1,10 +1,8 @@
-package com.surovtsev.gamescreen.minesweeper
+package com.surovtsev.gamescreen.minesweeper.interaction.opengleventshandler
 
 import com.surovtsev.gamescreen.dagger.GameScope
-import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandHandler
-import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandToMinesweeper
-import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
-import com.surovtsev.gamescreen.minesweeper.helpers.MinesweeperGameStatusReceiver
+import com.surovtsev.gamescreen.minesweeper.interaction.commandhandler.CommandHandler
+import com.surovtsev.gamescreen.minesweeper.interaction.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -13,13 +11,8 @@ import javax.inject.Inject
 
 @GameScope
 class MinesweeperOpenGLEventsHandler @Inject constructor(
-    private val manuallyUpdatableTimeSpanHelper: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
+    private val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val gameViewsHolder: GameViewsHolder,
-    /* Do not delete this. It is used:
-        - to add new record into Ranking table when game is won;
-        - to notify view about game status change.
-    */
-    private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     private val fpsCalculator: FPSCalculator,
     private val commandHandler: CommandHandler,
 ):
@@ -32,11 +25,11 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
     override fun onSurfaceChanged(width: Int, height: Int) {
         gameViewsHolder.onSurfaceChanged()
 
-        manuallyUpdatableTimeSpanHelper.tick()
+        manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
     }
 
     override fun onDrawFrame() {
-        manuallyUpdatableTimeSpanHelper.tick()
+        manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
         fpsCalculator.onNextFrame()
 
         gameViewsHolder.onSurfaceChanged(

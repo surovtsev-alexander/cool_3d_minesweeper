@@ -4,7 +4,7 @@ import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.gamescreen.minesweeper.helpers.IntersectionCalculator
-import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
+import com.surovtsev.gamescreen.minesweeper.interaction.screeninteractionhandler.touch.TouchHandlerImp
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamescreen.utils.utils.gles.view.pointer.PointerOpenGLModel

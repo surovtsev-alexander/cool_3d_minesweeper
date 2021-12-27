@@ -10,7 +10,6 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
     object LoadGame: CommandFromGameScreen, CommandFromScreen.Init
     object NewGame: CommandFromGameScreen
-    object CloseGame: CommandFromGameScreen
 
     object CloseError: CommandFromGameScreen, CommandFromScreen.CloseError
     object CloseErrorAndFinish: CommandFromGameScreen, CommandFromScreen.CloseErrorAndFinish

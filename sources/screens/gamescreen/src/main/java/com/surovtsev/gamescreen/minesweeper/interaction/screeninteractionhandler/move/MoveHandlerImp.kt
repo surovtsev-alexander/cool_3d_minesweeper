@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.minesweeper.interaction.move
+package com.surovtsev.gamescreen.minesweeper.interaction.screeninteractionhandler.move
 
 import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.gamescreen.dagger.GameScope

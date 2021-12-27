@@ -11,7 +11,7 @@ import com.surovtsev.gamescreen.dagger.DaggerGameComponent
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
-import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandToMinesweeper
+import com.surovtsev.gamescreen.minesweeper.interaction.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
@@ -23,7 +23,6 @@ import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.launch
 
 const val LoadGameParameterName = "load_game"
 
@@ -110,15 +109,20 @@ class GameScreenViewModel @AssistedInject constructor(
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ) {
-        handleCommand(
-            CommandFromGameScreen.CloseGame
+        timeSpanComponent
+            .subscriberImp
+            .onStop()
+
+        gameScreenComponent.gLESRenderer.openGLEventsHandler = null
+
+        publishIdleState(
+            GameScreenData.NoData
         )
     }
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
             is CommandFromGameScreen.HandleScreenLeaving    -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromGameScreen.CloseGame              -> ::closeGame
             is CommandFromGameScreen.NewGame                -> suspend { newGame(false) }
             is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
             is CommandFromGameScreen.CloseError             -> ::closeError
@@ -132,16 +136,6 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.CloseGameStatusDialog  -> ::closeGameStatusDialog
             else                                            -> null
         }
-    }
-
-    private suspend fun closeGame() {
-        timeSpanComponent
-            .subscriberImp
-            .onStop()
-
-        publishIdleState(
-            GameScreenData.NoData
-        )
     }
 
     fun initGLSurfaceView(
