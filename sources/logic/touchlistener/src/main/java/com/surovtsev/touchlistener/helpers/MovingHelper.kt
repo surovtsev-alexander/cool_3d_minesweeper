@@ -2,14 +2,14 @@ package com.surovtsev.touchlistener.helpers
 
 import android.view.MotionEvent
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
-import com.surovtsev.touchlistener.helpers.receivers.MoveReceiver
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import glm_.vec2.Vec2
 import javax.inject.Inject
 import javax.inject.Named
 
 @TouchListenerScope
 class MovingHelper @Inject constructor(
-    private val moveReceiver: MoveReceiver,
+    private val handlesHolder: HandlersHolder,
     @Named(PrevCenter)
     private var prevCenter: Vec2
 ): TouchHelper() {
@@ -24,7 +24,7 @@ class MovingHelper @Inject constructor(
 
         val needToBeInitialized = getAndRelease()
         if (!needToBeInitialized) {
-            moveReceiver.move(
+            handlesHolder.moveHandler?.move(
                 prevCenter, currCenter
             )
         }

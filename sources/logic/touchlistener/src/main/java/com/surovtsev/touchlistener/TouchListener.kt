@@ -8,11 +8,15 @@ import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.touchlistener.helpers.MovingHelper
 import com.surovtsev.touchlistener.helpers.ScalingHelper
 import com.surovtsev.touchlistener.helpers.TouchHelper
+import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
+import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolderImp
 import javax.inject.Inject
 import javax.inject.Named
 
 @TouchListenerScope
 class TouchListener @Inject constructor(
+    private val handlersHolderImp: HandlersHolderImp,
     private val clickAndRotationHelper: ClickAndRotationHelper,
     private val scalingHelper: ScalingHelper,
     private val movingHelper: MovingHelper,
@@ -23,6 +27,14 @@ class TouchListener @Inject constructor(
 
     companion object {
         const val PrevPointerCount = "prevCounterCount"
+    }
+
+    fun bindHandlers(
+        touchHandler: TouchHandler,
+        moveHandler: MoveHandler
+    ) {
+        handlersHolderImp.touchHandler = touchHandler
+        handlersHolderImp.moveHandler = moveHandler
     }
 
     fun connectToGLSurfaceView(

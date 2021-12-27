@@ -2,8 +2,7 @@ package com.surovtsev.touchlistener.helpers
 
 import android.view.MotionEvent
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
-import com.surovtsev.touchlistener.helpers.receivers.MoveReceiver
-import com.surovtsev.touchlistener.helpers.receivers.ScaleReceiver
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import javax.inject.Inject
@@ -11,8 +10,7 @@ import javax.inject.Named
 
 @TouchListenerScope
 class ScalingHelper @Inject constructor(
-    private val scaleReceiver: ScaleReceiver,
-    private val moveReceiver: MoveReceiver,
+    private val handlersHolder: HandlersHolder,
     @Named(PrevDistance)
     private var prevDistance: Float,
     @Named(PrevCenter)
@@ -34,9 +32,9 @@ class ScalingHelper @Inject constructor(
         if (!needToBeInitialized) {
             if (!MyMath.isZero(prevDistance)) {
                 val factor = distance / prevDistance
-                scaleReceiver.scale(factor)
+                handlersHolder.moveHandler?.scale(factor)
             }
-            moveReceiver.move(prevCenter, center)
+            handlersHolder.moveHandler?.move(prevCenter, center)
         }
 
         prevDistance = distance

@@ -7,7 +7,8 @@ import com.surovtsev.touchlistener.helpers.ScalingHelper
 import com.surovtsev.touchlistener.helpers.TouchHelper
 import com.surovtsev.touchlistener.helpers.TouchReceiverImp
 import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
-import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolderImp
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import dagger.*
 import glm_.vec2.Vec2
@@ -27,17 +28,6 @@ import javax.inject.Named
 )
 interface TouchListenerComponent {
     val touchListener: TouchListener
-
-    @Component.Builder
-    interface Builder {
-        fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
-
-        fun touchHandler(@BindsInstance touchHandler: TouchHandler): Builder
-
-        fun moveHandler(@BindsInstance moveHandler: MoveHandler): Builder
-
-        fun build(): TouchListenerComponent
-    }
 }
 
 @Module
@@ -50,27 +40,15 @@ interface TouchListenerBindModule {
 
     @TouchListenerScope
     @Binds
-    fun bindRotationReceiver(
-        moveHandler: MoveHandler
-    ): com.surovtsev.touchlistener.helpers.receivers.RotationReceiver
-
-    @TouchListenerScope
-    @Binds
-    fun bindScaleReceiver(
-        moveHandler: MoveHandler
-    ): com.surovtsev.touchlistener.helpers.receivers.ScaleReceiver
-
-    @TouchListenerScope
-    @Binds
-    fun bindMoveReceiver(
-        moveHandler: MoveHandler
-    ): com.surovtsev.touchlistener.helpers.receivers.MoveReceiver
-
-    @TouchListenerScope
-    @Binds
     fun bindTouchReceiver(
         touchReceiver: TouchReceiverImp
     ): TouchReceiver
+
+    @TouchListenerScope
+    @Binds
+    fun bindHandlersHolder(
+        handlersHolderImp: HandlersHolderImp
+    ): HandlersHolder
 }
 
 @Module

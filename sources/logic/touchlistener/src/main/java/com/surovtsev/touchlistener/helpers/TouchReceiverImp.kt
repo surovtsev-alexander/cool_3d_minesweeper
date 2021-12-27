@@ -1,7 +1,7 @@
 package com.surovtsev.touchlistener.helpers
 
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
-import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @TouchListenerScope
 class TouchReceiverImp @Inject constructor(
     private val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
-    private val touchHandler: TouchHandler,
+    private val handlersHolder: HandlersHolder,
     subscriber: Subscriber,
 ): Subscription, TouchReceiver
 {
@@ -111,7 +111,7 @@ class TouchReceiverImp @Inject constructor(
     private fun notifyHandler(
         touchType: TouchType
     ) {
-        touchHandler.handleTouch(
+        handlersHolder.touchHandler?.handleTouch(
             touchPos,
             touchType
         )

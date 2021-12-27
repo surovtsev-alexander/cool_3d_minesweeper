@@ -3,8 +3,8 @@ package com.surovtsev.touchlistener.helpers
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.surovtsev.touchlistener.dagger.TouchListenerScope
+import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
-import com.surovtsev.touchlistener.helpers.receivers.RotationReceiver
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import glm_.vec2.Vec2
 import javax.inject.Inject
@@ -13,8 +13,8 @@ import kotlin.math.abs
 
 @TouchListenerScope
 class ClickAndRotationHelper @Inject constructor(
+    private val handlersHolder: HandlersHolder,
     private val touchReceiver: TouchReceiver,
-    private val rotationReceiver: RotationReceiver,
     @Named(Prev)
     private var prev: Vec2,
     @Named(Movement)
@@ -56,7 +56,7 @@ class ClickAndRotationHelper @Inject constructor(
                         val p = prev
                         val c = curr
                         override fun run() {
-                            rotationReceiver.rotateBetweenProjections(
+                            handlersHolder.moveHandler?.rotateBetweenProjections(
                                 p, c
                             )
                         }

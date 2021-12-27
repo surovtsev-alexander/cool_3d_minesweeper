@@ -211,27 +211,27 @@ class GameScreenViewModel @AssistedInject constructor(
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .loadGame(loadGame)
             .build()
-            .also {
-                gameControlsImp = it.gameControlsImp
+            .also { gC ->
+                gameControlsImp = gC.gameControlsImp
 
-                uiGameControlsMutableFlows = it.uiGameControlsMutableFlows
-                uiGameControlsFlows = it.uiGameControlsFlows
+                uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
+                uiGameControlsFlows = gC.uiGameControlsFlows
 
                 touchListenerComponent = DaggerTouchListenerComponent
                     .builder()
                     .timeSpanComponentEntryPoint(
                         timeSpanComponent
                     )
-                    .touchHandler(
-                        it.touchHandlerImp
-                    )
-                    .moveHandler(
-                        it.moveHandlerImp
-                    )
                     .build()
+                    .also { tLC ->
+                        tLC.touchListener.bindHandlers(
+                            gC.touchHandlerImp,
+                            gC.moveHandlerImp
+                        )
+                    }
 
                 gameScreenComponent.gLESRenderer.openGLEventsHandler =
-                    it.minesweeper.openG LEventsHandler
+                    gC.minesweeper.openGLEventsHandler
             }
 
         setFlagging(loadGame)
