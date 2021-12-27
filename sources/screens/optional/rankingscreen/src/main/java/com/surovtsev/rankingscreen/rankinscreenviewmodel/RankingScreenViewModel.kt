@@ -18,7 +18,7 @@ import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
-import com.surovtsev.subscriptionsholder.DaggerSubscriptionsHolderComponent
+import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
@@ -103,15 +103,10 @@ class RankingScreenViewModel @AssistedInject constructor(
                     ?: DaggerTimeSpanComponent
                         .builder()
                         .subscriptionsHolderEntryPoint(
-                            DaggerSubscriptionsHolderComponent
-                                .builder()
-                                .restartableCoroutineScopeEntryPoint(
-                                    currRestartableCoroutineScopeComponent
-                                )
-                                .subscriptionsHolderName(
-                                    "RankingScreenViewModel:TimeSpanComponent"
-                                )
-                                .build()
+                            SubscriptionsHolderComponentFactoryHolderImp.create(
+                                currRestartableCoroutineScopeComponent,
+                                "RankingScreenViewModel:TimeSpanComponent"
+                            )
                         )
                         .build()
                         .apply {

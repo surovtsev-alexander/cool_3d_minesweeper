@@ -21,8 +21,7 @@ import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
-import com.surovtsev.subscriptionsholder.DaggerSubscriptionsHolderComponent
-import com.surovtsev.subscriptionsholder.SubscriptionsHolderComponent
+import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
@@ -67,39 +66,16 @@ class GameScreenViewModel @AssistedInject constructor(
             .create()
     }
 
-    private val timeSpanSubscriptionsHolder: SubscriptionsHolderComponent by lazy {
-        DaggerSubscriptionsHolderComponent
-            .builder()
-            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
-            .subscriptionsHolderName("GameScreenViewModel:TimeSpanComponent")
-            .build()
-            .also {
-                restartableCoroutineScopeComponent.subscriberImp.addSubscriptionHolder(
-                    it.subscriptionsHolderWithName
-                )
-            }
-    }
-
     private val timeSpanComponent: TimeSpanComponent by lazy {
         DaggerTimeSpanComponent
             .builder()
             .subscriptionsHolderEntryPoint(
-                timeSpanSubscriptionsHolder
+                SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
+                    restartableCoroutineScopeComponent,
+                    "GameScreenViewModel:TimeSpanComponent"
+                )
             )
             .build()
-    }
-
-    private val touchListenerSubscriptionsHolder: SubscriptionsHolderComponent by lazy {
-        DaggerSubscriptionsHolderComponent
-            .builder()
-            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
-            .subscriptionsHolderName("GameScreenViewModel:TouchListener")
-            .build()
-            .also {
-                restartableCoroutineScopeComponent.subscriberImp.addSubscriptionHolder(
-                    it.subscriptionsHolderWithName
-                )
-            }
     }
 
     private val touchListenerComponent: TouchListenerComponent by lazy {
@@ -109,7 +85,10 @@ class GameScreenViewModel @AssistedInject constructor(
                 timeSpanComponent
             )
             .subscriptionsHolderEntryPoint(
-                touchListenerSubscriptionsHolder
+                SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
+                    restartableCoroutineScopeComponent,
+                    "GameScreenViewModel:TouchListener"
+                )
             )
             .build()
     }
@@ -258,13 +237,10 @@ class GameScreenViewModel @AssistedInject constructor(
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .subscriptionsHolderEntryPoint(
-                DaggerSubscriptionsHolderComponent
-                    .builder()
-                    .restartableCoroutineScopeEntryPoint(
-                        restartableCoroutineScopeComponent
-                    )
-                    .subscriptionsHolderName("GameScreenViewModel:GameComponent")
-                    .build()
+                SubscriptionsHolderComponentFactoryHolderImp.create(
+                    restartableCoroutineScopeComponent,
+                    "GameScreenViewModel:GameComponent"
+                )
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .cameraInfoHelperHolder(gameScreenComponent)

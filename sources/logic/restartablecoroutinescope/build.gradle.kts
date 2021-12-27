@@ -34,6 +34,7 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Core.utils,
+            ProjectModules.Core.subscriptionsHolder,
         )
     )
 

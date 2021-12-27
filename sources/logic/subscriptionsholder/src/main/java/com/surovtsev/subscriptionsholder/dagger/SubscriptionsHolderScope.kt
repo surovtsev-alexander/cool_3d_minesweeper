@@ -1,4 +1,4 @@
-package com.surovtsev.subscriptionsholder
+package com.surovtsev.subscriptionsholder.dagger
 
 import javax.inject.Scope
 

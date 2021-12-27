@@ -1,4 +1,4 @@
-package com.surovtsev.subscriptionsholder
+package com.surovtsev.subscriptionsholder.dagger
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
@@ -9,7 +9,6 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 
 @SubscriptionsHolderScope
 @Component(
