@@ -22,6 +22,7 @@ class CustomCoroutineScope(
 
     override fun turnOff() {
         super.turnOff()
+        parentJob.cancel()
         // The whole scope can be cancelled also
         // with 'cancel(cause: CancellationException).
     }
