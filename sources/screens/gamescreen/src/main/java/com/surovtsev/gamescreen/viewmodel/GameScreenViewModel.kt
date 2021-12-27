@@ -56,13 +56,25 @@ class GameScreenViewModel @AssistedInject constructor(
         DaggerGameScreenComponent.create()
     }
 
+    private val timeSpanComponent: TimeSpanComponent by lazy {
+        DaggerTimeSpanComponent
+            .create()
+    }
+
+    private val touchListenerComponent: TouchListenerComponent by lazy {
+        DaggerTouchListenerComponent
+            .builder()
+            .timeSpanComponentEntryPoint(
+                timeSpanComponent
+            )
+            .build()
+    }
+
     // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
     private var gLSurfaceView: GLSurfaceView? = null
 
-    private var timeSpanComponent: TimeSpanComponent? = null
     private var gameComponent: GameComponent? = null
-    private var touchListenerComponent: TouchListenerComponent? = null
 
     private var gameControlsImp: GameControlsImp? = null
     private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
@@ -124,8 +136,8 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend fun closeGame() {
         timeSpanComponent
-            ?.subscriberImp
-            ?.onStop()
+            .subscriberImp
+            .onStop()
 
         publishIdleState(
             GameScreenData.NoData
@@ -136,20 +148,14 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView: GLSurfaceView
     ) {
         val gameRenderer = gameScreenComponent.gLESRenderer
-        val touchListener = touchListenerComponent?.touchListener
+        val touchListener = touchListenerComponent.touchListener
 
         gLSurfaceView.setEGLContextClientVersion(2)
         gLSurfaceView.setRenderer(gameRenderer)
 
-        if (touchListener != null) {
-            touchListener.connectToGLSurfaceView(
-                gLSurfaceView
-            )
-        } else {
-            viewModelScope.launch {
-                publishErrorState("error during initialization")
-            }
-        }
+        touchListener.connectToGLSurfaceView(
+            gLSurfaceView
+        )
 
         this.gLSurfaceView = gLSurfaceView
     }
@@ -201,10 +207,6 @@ class GameScreenViewModel @AssistedInject constructor(
             publishIdleState(GameScreenData.NoData)
         }
 
-        val timeSpanComponent = DaggerTimeSpanComponent
-            .create()
-        this.timeSpanComponent = timeSpanComponent
-
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
@@ -217,18 +219,10 @@ class GameScreenViewModel @AssistedInject constructor(
                 uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
                 uiGameControlsFlows = gC.uiGameControlsFlows
 
-                touchListenerComponent = DaggerTouchListenerComponent
-                    .builder()
-                    .timeSpanComponentEntryPoint(
-                        timeSpanComponent
-                    )
-                    .build()
-                    .also { tLC ->
-                        tLC.touchListener.bindHandlers(
-                            gC.touchHandlerImp,
-                            gC.moveHandlerImp
-                        )
-                    }
+                touchListenerComponent.touchListener.bindHandlers(
+                    gC.touchHandlerImp,
+                    gC.moveHandlerImp
+                )
 
                 gameScreenComponent.gLESRenderer.openGLEventsHandler =
                     gC.minesweeper.openGLEventsHandler
