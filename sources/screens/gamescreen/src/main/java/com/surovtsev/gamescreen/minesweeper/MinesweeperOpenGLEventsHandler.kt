@@ -14,7 +14,6 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperOpenGLEventsHandler @Inject constructor(
     private val manuallyUpdatableTimeSpanHelper: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
-    val gameLogic: GameLogic,
     private val gameViewsHolder: GameViewsHolder,
     /* Do not delete this. It is used:
         - to add new record into Ranking table when game is won;

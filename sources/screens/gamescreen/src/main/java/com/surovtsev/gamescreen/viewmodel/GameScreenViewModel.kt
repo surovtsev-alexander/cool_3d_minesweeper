@@ -284,9 +284,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend fun closeGameMenu(silent: Boolean = false) {
 
-        gameComponent?.let {
-            it.minesweeperOpenGLEventsHandler.gameLogic.gameLogicStateHelper.resumeIfNeeded()
-        }
+        pauseGame()
 
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
@@ -306,7 +304,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private fun pauseGame() {
         gameComponent?.let {
-            it.minesweeperOpenGLEventsHandler.gameLogic.gameLogicStateHelper.pauseIfNeeded()
+            it.minesweeper.gameLogicStateHelper.pauseIfNeeded()
         }
     }
 
