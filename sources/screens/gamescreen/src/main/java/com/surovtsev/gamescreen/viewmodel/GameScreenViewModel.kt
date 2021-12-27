@@ -207,10 +207,13 @@ class GameScreenViewModel @AssistedInject constructor(
             publishIdleState(GameScreenData.NoData)
         }
 
+        gameScreenComponent.gLESRenderer.openGLEventsHandler = null
+
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .timeSpanComponentEntryPoint(timeSpanComponent)
+            .cameraInfoHelperHolder(gameScreenComponent)
             .loadGame(loadGame)
             .build()
             .also { gC ->
@@ -226,6 +229,14 @@ class GameScreenViewModel @AssistedInject constructor(
 
                 gameScreenComponent.gLESRenderer.openGLEventsHandler =
                     gC.minesweeper.openGLEventsHandler
+
+                // TODO: move updating to Minesweeper.CommandHandler.newGame.
+                gameScreenComponent.cameraInfoHelper.also {
+                    if (!loadGame) {
+                        it.cameraInfo.moveToOrigin()
+                    }
+                    it.update()
+                }
             }
 
         setFlagging(loadGame)

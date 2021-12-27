@@ -5,7 +5,7 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.minesweeper.scene.SceneCalculator
-import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
+import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.game.save.Save

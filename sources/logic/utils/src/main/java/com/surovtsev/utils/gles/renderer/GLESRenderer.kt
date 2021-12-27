@@ -2,10 +2,14 @@ package com.surovtsev.utils.gles.renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
+import glm_.vec2.Vec2i
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GLESRenderer: GLSurfaceView.Renderer {
+class GLESRenderer(
+    private val cameraInfoHelper: CameraInfoHelper
+): GLSurfaceView.Renderer {
 
     var openGLEventsHandler: OpenGLEventsHandler? = null
 
@@ -19,6 +23,9 @@ class GLESRenderer: GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
+
+        val displaySize = Vec2i(width, height)
+        cameraInfoHelper.onSurfaceChanged(displaySize)
 
         openGLEventsHandler?.onSurfaceChanged(width, height)
     }

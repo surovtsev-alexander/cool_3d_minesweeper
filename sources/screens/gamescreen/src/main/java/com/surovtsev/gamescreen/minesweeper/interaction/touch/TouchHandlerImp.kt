@@ -1,6 +1,6 @@
 package com.surovtsev.gamescreen.minesweeper.interaction.touch
 
-import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.CameraInfoHelper
+import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.utils.androidview.interaction.TouchType
 import com.surovtsev.gamescreen.utils.gles.model.pointer.PointerImp
 import com.surovtsev.gamescreen.dagger.GameScope

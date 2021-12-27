@@ -115,13 +115,6 @@ fun GameView(
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
 ) {
-    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
-    val gameScreenData = gameScreenState.screenData
-
-    if (gameScreenData is ScreenData.InitializationIsNotFinished) {
-        return
-    }
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -149,7 +142,7 @@ fun GameView(
         ) {
             FPSLabel(
                 this,
-                gameScreenData
+                stateValue
             )
         }
         Spacer(
@@ -175,18 +168,21 @@ fun GameView(
 @Composable
 fun FPSLabel(
     columnScope: ColumnScope,
-    gameScreenData: GameScreenData,
+    stateValue: GameScreenStateValue,
 ) {
-    if (gameScreenData !is GameScreenData.GameInProgress) {
-        return
+    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
+    val gameScreenData = gameScreenState.screenData
+
+    val text = if (gameScreenData !is GameScreenData.GameInProgress) {
+        "--"
+    } else {
+        val fps = gameScreenData.uiGameControls.fpsFlow.collectAsState(0f).value
+        fps.toInt().toString().padStart(4)
     }
-
-    val fps = gameScreenData.uiGameControls.fpsFlow.collectAsState(0f).value
-
 
     columnScope.apply {
         Text(
-            text = fps.toInt().toString().padStart(4),
+            text = text,
             modifier = Modifier
                 .width(50.dp)
         )

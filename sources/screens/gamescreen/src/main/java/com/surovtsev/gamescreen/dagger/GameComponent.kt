@@ -1,6 +1,7 @@
 package com.surovtsev.gamescreen.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
+import com.surovtsev.core.dagger.components.CameraInfoHelperHolder
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
@@ -18,7 +19,7 @@ import com.surovtsev.gamescreen.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.gamescreen.minesweeper.interaction.move.MoveHandlerImp
 import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.gamescreen.minesweeper.scene.SceneDrawer
-import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
+import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.game.interaction.GameControls
@@ -46,6 +47,7 @@ import javax.inject.Named
     dependencies = [
         AppComponentEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
+        CameraInfoHelperHolder::class,
     ],
     modules = [
         GameControlsModule::class,
@@ -80,6 +82,7 @@ interface GameComponent {
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
+        fun cameraInfoHelperHolder(cameraInfoHelperHolder: CameraInfoHelperHolder): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun build(): GameComponent
     }

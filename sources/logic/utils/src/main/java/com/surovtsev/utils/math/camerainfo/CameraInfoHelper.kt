@@ -1,18 +1,14 @@
-package com.surovtsev.gamescreen.minesweeper.gamelogic.helpers
+package com.surovtsev.utils.math.camerainfo
 
-import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.utils.math.MatrixHelper
 import com.surovtsev.utils.statehelpers.UpdatableImp
-import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
 import glm_.glm
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
-import javax.inject.Inject
 
-@GameScope
-class CameraInfoHelper @Inject constructor(
+class CameraInfoHelper(
     val cameraInfo: CameraInfo,
 ):
     UpdatableImp()

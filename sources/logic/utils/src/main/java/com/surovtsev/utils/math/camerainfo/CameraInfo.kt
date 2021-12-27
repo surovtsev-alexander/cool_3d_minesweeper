@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.models.game.camerainfo
+package com.surovtsev.utils.math.camerainfo
 
 import com.surovtsev.utils.math.MatrixHelper
 import glm_.mat4x4.Mat4
@@ -9,18 +9,28 @@ class CameraInfo {
         private val identityMatrix = MatrixHelper::identityMatrix
     }
 
-    var scaleMatrix = identityMatrix()
-    var rotMatrix = identityMatrix()
-    var viewMatrix = identityMatrix()
-    var moveMatrix = identityMatrix()
-    var projectionMatrix = identityMatrix()
+    var scaleMatrix         = identityMatrix()
+    var rotMatrix           = identityMatrix()
+    var viewMatrix          = identityMatrix()
+    var moveMatrix          = identityMatrix()
+    var projectionMatrix    = identityMatrix()
 
 
-    var mVP = identityMatrix()
+    var mVP                 = identityMatrix()
 
     var invProjectionMatrix = identityMatrix()
-    var invRotMatrix = identityMatrix()
-    var invMVP = identityMatrix()
+    var invRotMatrix        = identityMatrix()
+    var invMVP              = identityMatrix()
+
+    fun moveToOrigin() {
+        scaleMatrix         = identityMatrix()
+        rotMatrix           = identityMatrix()
+        moveMatrix          = identityMatrix()
+
+        invRotMatrix        = identityMatrix()
+
+        recalculateMVPMatrix()
+    }
 
     fun recalculateMVPMatrix() {
         mVP = projectionMatrix * moveMatrix * viewMatrix * rotMatrix * scaleMatrix

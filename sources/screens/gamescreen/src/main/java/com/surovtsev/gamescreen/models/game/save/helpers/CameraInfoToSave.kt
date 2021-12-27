@@ -1,6 +1,6 @@
 package com.surovtsev.gamescreen.models.game.save.helpers
 
-import com.surovtsev.gamescreen.models.game.camerainfo.CameraInfo
+import com.surovtsev.utils.math.camerainfo.CameraInfo
 import glm_.mat4x4.Mat4
 import glm_.vec4.Vec4
 

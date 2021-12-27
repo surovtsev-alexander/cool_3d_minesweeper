@@ -11,7 +11,6 @@ import com.surovtsev.gamescreen.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.fpscalculator.FPSCalculator
-import glm_.vec2.Vec2i
 import javax.inject.Inject
 
 @GameScope
@@ -39,11 +38,7 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
      * Init GameLogic
      */
     override fun onSurfaceChanged(width: Int, height: Int) {
-        val displaySize = Vec2i(width, height)
-
-        sceneDrawer.onSurfaceChanged(displaySize)
-
-        gameViewsHolder.cubeOpenGLModel.updateTexture(cubeInfo.cubeSkin)
+        gameViewsHolder.onSurfaceChanged()
 
         manuallyUpdatableTimeSpanHelper.tick()
     }
@@ -52,6 +47,9 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
         manuallyUpdatableTimeSpanHelper.tick()
         fpsCalculator.onNextFrame()
 
+        gameViewsHolder.onSurfaceChanged(
+            force = false
+        )
         commandHandler.handleCommandWithBlocking(
             CommandToMinesweeper.Tick
         )

@@ -2,7 +2,7 @@ package com.surovtsev.gamescreen.minesweeper.scene
 
 import com.surovtsev.gamescreen.dagger.GameScope
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
-import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.CameraInfoHelper
+import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.gamescreen.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.gamescreen.minesweeper.interaction.touch.TouchHandlerImp
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
