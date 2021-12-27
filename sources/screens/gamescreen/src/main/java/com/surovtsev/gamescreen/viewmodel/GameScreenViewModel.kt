@@ -193,6 +193,8 @@ class GameScreenViewModel @AssistedInject constructor(
             tryUnstackState(gameScreenData)
         }
 
+        timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
+
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameInProgress },
             "game is in progress",
