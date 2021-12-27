@@ -12,6 +12,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamescreen.dagger.DaggerGameComponent
 import com.surovtsev.gamescreen.dagger.GameComponent
+import com.surovtsev.gamescreen.minesweeper.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamescreen.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsFlows
 import com.surovtsev.gamescreen.viewmodel.helpers.UIGameControlsMutableFlows
@@ -73,7 +74,9 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onPause()
 
         pauseGame()
-        gameComponent?.minesweeperOpenGLEventsHandler?.storeGameIfNeeded()
+        gameComponent?.minesweeper?.commandHandler?.handleCommandWithBlocking(
+            CommandToMinesweeper.SaveGame
+        )
 
         if (state.value?.screenData !is GameScreenData.GameMenu) {
             handleCommand(

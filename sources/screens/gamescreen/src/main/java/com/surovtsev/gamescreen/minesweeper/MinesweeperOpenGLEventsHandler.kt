@@ -53,23 +53,9 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
         manuallyUpdatableTimeSpanHelper.tick()
         fpsCalculator.onNextFrame()
 
-        runBlocking {
-            commandHandler.handleCommand(
-                CommandToMinesweeper.Tick
-            )
-        }
+        commandHandler.handleCommandWithBlocking(
+            CommandToMinesweeper.Tick
+        )
         sceneDrawer.onDrawFrame()
-    }
-
-    @Synchronized fun syncExecution(x: () -> Unit) {
-        x()
-    }
-
-    fun storeGameIfNeeded() {
-        runBlocking {
-            commandHandler.handleCommand(
-                CommandToMinesweeper.SaveGame
-            )
-        }
     }
 }

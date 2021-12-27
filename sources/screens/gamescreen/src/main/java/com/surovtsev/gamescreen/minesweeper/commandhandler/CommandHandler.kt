@@ -10,6 +10,7 @@ import com.surovtsev.gamescreen.models.game.config.GameConfig
 import com.surovtsev.gamescreen.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamescreen.models.game.save.Save
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -26,6 +27,16 @@ class CommandHandler @Inject constructor(
 ) {
     private val mutex = Mutex()
 
+    fun handleCommandWithBlocking(
+        command: CommandToMinesweeper
+    ) {
+        runBlocking {
+            handleCommand(
+                command
+            )
+        }
+    }
+
     suspend fun handleCommand(
         command: CommandToMinesweeper
     ) {
@@ -33,9 +44,11 @@ class CommandHandler @Inject constructor(
             is CommandToMinesweeper.NewGame     -> ::newGame
             is CommandToMinesweeper.LoadGame    -> ::loadGame
             is CommandToMinesweeper.SaveGame    -> ::saveGame
-            is CommandToMinesweeper.Pause       -> ::pause
-            is CommandToMinesweeper.Resume      -> ::resume
             is CommandToMinesweeper.Tick        -> ::tick
+        }
+
+        if (mutex.isLocked && command is CommandToMinesweeper.CanBeSkipped) {
+            return
         }
 
         mutex.withLock {
@@ -67,14 +80,6 @@ class CommandHandler @Inject constructor(
             SaveTypes.SaveGameJson,
             save
         )
-    }
-
-    private suspend fun pause() {
-
-    }
-
-    private suspend fun resume() {
-
     }
 
     private suspend fun tick() {

@@ -7,6 +7,7 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
+import com.surovtsev.gamescreen.minesweeper.Minesweeper
 import com.surovtsev.gamescreen.minesweeper.MinesweeperOpenGLEventsHandler
 import com.surovtsev.gamescreen.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamescreen.minesweeper.gamelogic.helpers.BombsLeftFlow
@@ -62,6 +63,7 @@ interface GameComponent {
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
     val rankingListHelper: RankingListHelper
+    val minesweeper: Minesweeper
 
     val touchHandlerImp: TouchHandlerImp
     val moveHandlerImp: MoveHandlerImp
