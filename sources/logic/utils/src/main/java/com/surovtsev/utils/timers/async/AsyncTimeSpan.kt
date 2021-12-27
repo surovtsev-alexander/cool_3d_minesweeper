@@ -1,8 +1,8 @@
 package com.surovtsev.utils.timers.async
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.statehelpers.Switch
 import com.surovtsev.utils.statehelpers.SwitchImp
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ typealias TimeSpanFlow = StateFlow<Long>
 class AsyncTimeSpan(
     private val delayInterval: Long,
     private val timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
-    subscriber: Subscriber
+    subscriptionsHolder: SubscriptionsHolder,
 ):
     Subscription, Switch
 {
@@ -31,7 +31,7 @@ class AsyncTimeSpan(
 
     init {
         flush()
-        subscriber
+        subscriptionsHolder
             .addSubscription(this)
     }
 

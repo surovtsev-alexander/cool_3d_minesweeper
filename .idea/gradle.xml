@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/sources/logic/core" />
             <option value="$PROJECT_DIR$/sources/logic/gamelogic" />
             <option value="$PROJECT_DIR$/sources/logic/restartablecoroutinescope" />
+            <option value="$PROJECT_DIR$/sources/logic/subscriptionsholder" />
             <option value="$PROJECT_DIR$/sources/logic/timespan" />
             <option value="$PROJECT_DIR$/sources/logic/touchlistener" />
             <option value="$PROJECT_DIR$/sources/logic/utils" />

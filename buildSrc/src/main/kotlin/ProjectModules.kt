@@ -10,6 +10,7 @@ object ProjectModules {
         const val gameLogic = ":gamelogic"
         const val timeSpan = ":timespan"
         const val restartableCoroutineScope = ":restartablecoroutinescope"
+        const val subscriptionsHolder = ":subscriptionsholder"
     }
 
     object Screens {

@@ -2,7 +2,6 @@ package com.surovtsev.gamelogic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.CameraInfoHelperHolder
-import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
@@ -30,8 +29,8 @@ import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamelogic.utils.gles.model.pointer.PointerImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.math.FloatingAverage
 import com.surovtsev.utils.math.camerainfo.CameraInfo
@@ -47,7 +46,7 @@ import javax.inject.Named
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
-        RestartableCoroutineScopeEntryPoint::class,
+        SubscriptionsHolderEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
         CameraInfoHelperHolder::class,
     ],
@@ -73,8 +72,6 @@ interface GameComponent {
 
     val bombsLeftFlow: BombsLeftFlow
 
-    val customCoroutineScope: CustomCoroutineScope
-
     val gameControlsImp: GameControlsImp
 
     val uiGameControlsMutableFlows: UIGameControlsMutableFlows
@@ -83,9 +80,7 @@ interface GameComponent {
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
-        fun restartableCoroutineScopeEntryPoint(
-            restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint
-        ): Builder
+        fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun cameraInfoHelperHolder(cameraInfoHelperHolder: CameraInfoHelperHolder): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
@@ -111,13 +106,13 @@ object GameControlsModule {
     fun provideDelayedFPSFlowHolder(
         timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
         fpsCalculator: FPSCalculator,
-        subscriber: Subscriber,
+        subscriptionsHolder: SubscriptionsHolder,
     ): DelayedFPSFlowHolder {
         return DelayedFPSFlowHolder(
             timeAfterDeviceStartupFlowHolder,
             300,
             fpsCalculator,
-            subscriber
+            subscriptionsHolder
         )
     }
 

@@ -1,4 +1,4 @@
-package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
+package com.surovtsev.utils.coroutines.customcoroutinescope.subscription
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 

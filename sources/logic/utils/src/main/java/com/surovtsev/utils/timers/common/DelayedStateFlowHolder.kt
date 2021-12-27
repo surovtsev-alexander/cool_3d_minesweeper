@@ -1,8 +1,8 @@
 package com.surovtsev.utils.timers.common
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ open class DelayedStateFlowHolder<T>(
     private val updateInterval: Int,
     private val stateHolder: StateHolder<T>,
     defaultValue: T,
-    subscriber: Subscriber,
+    subscriptionsHolder: SubscriptionsHolder,
 ): Subscription
 {
     private val _flow = MutableStateFlow<T>(defaultValue)
@@ -26,7 +26,7 @@ open class DelayedStateFlowHolder<T>(
     private var prevTime = 0L
 
     init {
-        subscriber
+        subscriptionsHolder
             .addSubscription(this)
     }
 

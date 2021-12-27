@@ -1,27 +1,30 @@
 package com.surovtsev.touchlistener.dagger
 
-import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.touchlistener.TouchListener
 import com.surovtsev.touchlistener.helpers.ClickAndRotationHelper
 import com.surovtsev.touchlistener.helpers.ScalingHelper
 import com.surovtsev.touchlistener.helpers.TouchHelper
 import com.surovtsev.touchlistener.helpers.TouchReceiverImp
-import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
 import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.touchlistener.helpers.holders.HandlersHolderImp
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
-import dagger.*
+import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
+import dagger.Binds
+import dagger.Component
+import dagger.Module
+import dagger.Provides
 import glm_.vec2.Vec2
 import javax.inject.Named
 
 @TouchListenerScope
 @Component(
     dependencies = [
-        RestartableCoroutineScopeEntryPoint::class,
+        SubscriptionsHolderEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
     ],
     modules = [
+        TouchListenerModule::class,
         TouchListenerBindModule::class,
         TouchHelperModule::class,
         ScalingHelperModule::class,
@@ -30,6 +33,10 @@ import javax.inject.Named
 )
 interface TouchListenerComponent {
     val touchListener: TouchListener
+}
+
+@Module
+object TouchListenerModule {
 }
 
 @Module

@@ -45,6 +45,7 @@ dependencies {
             ProjectModules.Core.core,
             ProjectModules.Core.utils,
             ProjectModules.Core.restartableCoroutineScope,
+            ProjectModules.Core.subscriptionsHolder,
             ProjectModules.Core.timeSpan,
         )
     )

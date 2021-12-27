@@ -1,9 +1,9 @@
 package com.surovtsev.restartablecoroutinescope.dagger
 
-import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.SubscriberImp
+import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import dagger.Binds
 import dagger.Component
 import dagger.Module

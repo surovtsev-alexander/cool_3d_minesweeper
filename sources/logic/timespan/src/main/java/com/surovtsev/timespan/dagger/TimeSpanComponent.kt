@@ -1,10 +1,8 @@
 package com.surovtsev.timespan.dagger
 
-import com.surovtsev.core.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.SubscriberImp
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
@@ -13,12 +11,11 @@ import dagger.Binds
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.Dispatchers
 
 @TimeSpanScope
 @Component(
     dependencies = [
-        RestartableCoroutineScopeEntryPoint::class,
+        SubscriptionsHolderEntryPoint::class,
    ],
     modules = [
         TimeSpanModule::class,
@@ -34,12 +31,12 @@ object TimeSpanModule {
     @Provides
     fun provideTimeSpan(
         timeAfterDeviceStartupFlowHolder: TimeAfterDeviceStartupFlowHolder,
-        subscriber: Subscriber,
+        subscriptionsHolder: SubscriptionsHolder,
     ): AsyncTimeSpan {
         return AsyncTimeSpan(
             1000L,
             timeAfterDeviceStartupFlowHolder,
-            subscriber,
+            subscriptionsHolder,
         )
     }
 

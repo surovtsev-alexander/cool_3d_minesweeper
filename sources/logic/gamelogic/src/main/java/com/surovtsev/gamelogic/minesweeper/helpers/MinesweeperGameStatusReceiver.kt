@@ -17,8 +17,8 @@ import com.surovtsev.gamelogic.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -35,11 +35,11 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
     private val uiGameControlsMutableFlows: UIGameControlsMutableFlows,
     private val rankingListHelper: RankingListHelper,
-    subscriber: Subscriber
+    subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
 
     init {
-        subscriber.addSubscription(this)
+        subscriptionsHolder.addSubscription(this)
     }
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {

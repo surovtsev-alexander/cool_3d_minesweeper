@@ -1,33 +1,55 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
 
 class SubscriberImp(
     private val customCoroutineScope: CustomCoroutineScope
 ): Subscriber {
-    private val subscriptions: MutableList<Subscription> =
-        emptyList<Subscription>().toMutableList()
+    private val subscriptionsHolderMap: MutableMap<String, SubscriptionsHolder> =
+        mapOf<String, SubscriptionsHolder>().toMutableMap()
 
-    override fun addSubscription(
-        subscription: Subscription
+    override fun addSubscriptionHolder(
+        subscriptionsHolderWithName: SubscriptionsHolderWithName,
     ) {
-        subscriptions += subscription
+        removeSubscriptionHolder(
+            subscriptionsHolderWithName.name
+        )
+        subscriptionsHolderMap += subscriptionsHolderWithName.toPair()
 
-        subscription.initSubscription(customCoroutineScope)
+        initSubscriptionHolder(
+            subscriptionsHolderWithName.subscriptionsHolder
+        )
+    }
+
+    override fun removeSubscriptionHolder(
+        name: String
+    ) {
+        subscriptionsHolderMap.remove(
+            name
+        )
     }
 
     fun restart() {
         customCoroutineScope.restart()
-        initSubscriptions()
+
+        subscriptionsHolderMap.map { (_, subscriptionsHolder) ->
+            initSubscriptionHolder(
+                subscriptionsHolder
+            )
+        }
     }
 
     fun onStop() {
         customCoroutineScope.turnOff()
     }
 
-    private fun initSubscriptions() {
-        subscriptions.map {
-            it.initSubscription(customCoroutineScope)
-        }
+    private fun initSubscriptionHolder(
+        subscriptionsHolder: SubscriptionsHolder
+    ) {
+        subscriptionsHolder.initSubscriptions(
+            customCoroutineScope
+        )
     }
 }

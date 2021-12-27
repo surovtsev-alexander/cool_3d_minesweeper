@@ -21,6 +21,8 @@ import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
+import com.surovtsev.subscriptionsholder.DaggerSubscriptionsHolderComponent
+import com.surovtsev.subscriptionsholder.SubscriptionsHolderComponent
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
@@ -65,23 +67,49 @@ class GameScreenViewModel @AssistedInject constructor(
             .create()
     }
 
+    private val timeSpanSubscriptionsHolder: SubscriptionsHolderComponent by lazy {
+        DaggerSubscriptionsHolderComponent
+            .builder()
+            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
+            .subscriptionsHolderName("GameScreenViewModel:TimeSpanComponent")
+            .build()
+            .also {
+                restartableCoroutineScopeComponent.subscriberImp.addSubscriptionHolder(
+                    it.subscriptionsHolderWithName
+                )
+            }
+    }
+
     private val timeSpanComponent: TimeSpanComponent by lazy {
         DaggerTimeSpanComponent
             .builder()
-            .restartableCoroutineScopeEntryPoint(
-                restartableCoroutineScopeComponent
+            .subscriptionsHolderEntryPoint(
+                timeSpanSubscriptionsHolder
             )
             .build()
+    }
+
+    private val touchListenerSubscriptionsHolder: SubscriptionsHolderComponent by lazy {
+        DaggerSubscriptionsHolderComponent
+            .builder()
+            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
+            .subscriptionsHolderName("GameScreenViewModel:TouchListener")
+            .build()
+            .also {
+                restartableCoroutineScopeComponent.subscriberImp.addSubscriptionHolder(
+                    it.subscriptionsHolderWithName
+                )
+            }
     }
 
     private val touchListenerComponent: TouchListenerComponent by lazy {
         DaggerTouchListenerComponent
             .builder()
-            .restartableCoroutineScopeEntryPoint(
-                restartableCoroutineScopeComponent
-            )
             .timeSpanComponentEntryPoint(
                 timeSpanComponent
+            )
+            .subscriptionsHolderEntryPoint(
+                touchListenerSubscriptionsHolder
             )
             .build()
     }
@@ -95,6 +123,11 @@ class GameScreenViewModel @AssistedInject constructor(
     private var gameControlsImp: GameControlsImp? = null
     private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
     private var uiGameControlsFlows: UIGameControlsFlows? = null
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super<TemplateScreenViewModel>.onCreate(owner)
+        restartableCoroutineScopeComponent.subscriberImp.restart()
+    }
 
     override fun onResume(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onResume(owner)
@@ -224,7 +257,15 @@ class GameScreenViewModel @AssistedInject constructor(
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
-            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
+            .subscriptionsHolderEntryPoint(
+                DaggerSubscriptionsHolderComponent
+                    .builder()
+                    .restartableCoroutineScopeEntryPoint(
+                        restartableCoroutineScopeComponent
+                    )
+                    .subscriptionsHolderName("GameScreenViewModel:GameComponent")
+                    .build()
+            )
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .cameraInfoHelperHolder(gameScreenComponent)
             .loadGame(loadGame)

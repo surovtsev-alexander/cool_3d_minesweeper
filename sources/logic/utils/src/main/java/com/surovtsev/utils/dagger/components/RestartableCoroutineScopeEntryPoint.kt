@@ -1,4 +1,4 @@
-package com.surovtsev.core.dagger.components
+package com.surovtsev.utils.dagger.components
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
