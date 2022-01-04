@@ -70,6 +70,9 @@ class AsyncTimeSpan(
     }
 
     override fun turnOn() {
+        if (isOn()) {
+            return
+        }
         switch.turnOn()
 
         onTime = timeAfterDeviceStartup()
@@ -79,6 +82,9 @@ class AsyncTimeSpan(
     }
 
     override fun turnOff() {
+        if (!isOn()) {
+            return
+        }
         elapsedTimeBeforePause = getElapsed()
 
         switch.turnOff()

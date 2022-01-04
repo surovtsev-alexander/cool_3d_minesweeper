@@ -8,11 +8,8 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @GameScope
@@ -47,26 +44,21 @@ class GameLogicStateHelper @Inject constructor(
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
-            gameNotPausedFlow.collectLatest { gameInProgress ->
-                logcat { "gameInProgressFlow: $gameInProgress" }
-                if (gameInProgress) {
-                    resumeIfNeeded()
+
+            gameNotPausedFlow.zip(
+                gameStatusWithElapsedFlow
+            ) { gameNotPaused: Boolean, (gameStatus: GameStatus, _) ->
+
+                gameNotPaused and GameStatusHelper.isGameInProgress(gameStatus)
+
+            }.stateIn(customCoroutineScope).collectLatest { turnOn ->
+                if (turnOn) {
+                    asyncTimeSpan.turnOn()
                 } else {
-                    pauseIfNeeded()
+                    asyncTimeSpan.turnOff()
                 }
             }
-        }
-    }
 
-    private fun pauseIfNeeded() {
-        if (isGameInProgress()) {
-            asyncTimeSpan.turnOff()
-        }
-    }
-
-    private fun resumeIfNeeded() {
-        if (isGameInProgress()) {
-            asyncTimeSpan.turnOn()
         }
     }
 
