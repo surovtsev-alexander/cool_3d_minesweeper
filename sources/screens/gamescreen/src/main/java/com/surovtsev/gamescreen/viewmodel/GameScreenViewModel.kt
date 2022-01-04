@@ -111,6 +111,10 @@ class GameScreenViewModel @AssistedInject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
+
+        gameComponent?.let {
+            it.minesweeper.gameLogicStateHelper.resumeIfNeeded()
+        }
     }
 
     override fun onPause(owner: LifecycleOwner) {
