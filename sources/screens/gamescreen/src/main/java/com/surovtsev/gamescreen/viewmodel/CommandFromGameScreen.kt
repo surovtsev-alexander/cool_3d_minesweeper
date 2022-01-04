@@ -18,7 +18,7 @@ sealed interface CommandFromGameScreen: CommandFromScreen {
 
     object OpenGameMenuAndSetLoadingState: CommandFromGameScreen
     object OpenGameMenuAndSetIdleState: CommandFromGameScreen
-    object SetIdleStateIfMenuIsOpened: CommandFromGameScreen
+    object SetIdleState: CommandFromGameScreen
     object CloseGameMenu: CommandFromGameScreen
 
 

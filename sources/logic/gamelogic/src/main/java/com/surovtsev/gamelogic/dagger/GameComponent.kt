@@ -15,6 +15,7 @@ import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameLogicStateHelper
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.gamelogic.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler.MinesweeperOpenGLEventsHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.move.MoveHandlerImp
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.touch.TouchHandlerImp
@@ -84,6 +85,7 @@ interface GameComponent {
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun cameraInfoHelperHolder(cameraInfoHelperHolder: CameraInfoHelperHolder): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
+        fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
         fun build(): GameComponent
     }
 }

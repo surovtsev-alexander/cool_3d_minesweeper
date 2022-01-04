@@ -28,6 +28,7 @@ import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.*
 
 const val LoadGameParameterName = "load_game"
 
@@ -110,12 +111,8 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
 
-        gameComponent?.let {
-            it.minesweeper.gameLogicStateHelper.resumeIfNeeded()
-        }
-
         handleCommand(
-            CommandFromGameScreen.SetIdleStateIfMenuIsOpened
+            CommandFromGameScreen.SetIdleState
         )
     }
 
@@ -123,7 +120,6 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
 
-        pauseGame()
         gameComponent?.minesweeper?.commandHandler?.handleCommandWithBlocking(
             CommandToMinesweeper.SaveGame
         )
@@ -164,7 +160,7 @@ class GameScreenViewModel @AssistedInject constructor(
             is CommandFromGameScreen.CloseErrorAndFinish            -> ::closeError
             is CommandFromGameScreen.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
             is CommandFromGameScreen.OpenGameMenuAndSetIdleState    -> suspend { openGameMenu(setLoadingState = false) }
-            is CommandFromGameScreen.SetIdleStateIfMenuIsOpened     -> ::setIdleStateIfMenuIsOpened
+            is CommandFromGameScreen.SetIdleState                   -> ::setIdleState
             is CommandFromGameScreen.CloseGameMenu                  -> suspend { closeGameMenu() }
             is CommandFromGameScreen.GoToMainMenu                   -> ::goToMainMenu
             is CommandFromGameScreen.RemoveFlaggedBombs             -> ::removeFlaggedBombs
@@ -197,9 +193,9 @@ class GameScreenViewModel @AssistedInject constructor(
         silent: Boolean = false,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
-        val gameScreenData = state.value?.screenData
+        val gameScreenData = state.value.screenData
 
-        if (gameScreenData == null || !isDataCorrect(gameScreenData)) {
+        if (!isDataCorrect(gameScreenData)) {
             if (!silent) {
                 publishErrorState(errorMessage)
             }
@@ -241,6 +237,11 @@ class GameScreenViewModel @AssistedInject constructor(
         timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
         gameScreenComponent.gLESRenderer.openGLEventsHandler = null
 
+        val gameNotPausedFlow = state.map { screenState ->
+            screenState is ScreenState.Idle &&
+            screenState.screenData is GameScreenData.GameInProgress
+        }.stateIn(restartableCoroutineScopeComponent.customCoroutineScope)
+
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
@@ -253,6 +254,7 @@ class GameScreenViewModel @AssistedInject constructor(
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .cameraInfoHelperHolder(gameScreenComponent)
             .loadGame(loadGame)
+            .gameNotPausedFlow(gameNotPausedFlow)
             .build()
             .also { gC ->
                 gameControlsImp = gC.gameControlsImp
@@ -293,9 +295,6 @@ class GameScreenViewModel @AssistedInject constructor(
             { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially"
         ) { gameScreenData ->
-
-            pauseGame()
-
             val newScreenData = GameScreenData.GameMenu(
                 gameScreenData
             )
@@ -312,17 +311,13 @@ class GameScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun setIdleStateIfMenuIsOpened() {
+    private suspend fun setIdleState() {
         val currState = state.value
         val screenData = currState.screenData
-        if (
-            currState is ScreenState.Loading &&
-            screenData is GameScreenData.GameMenu
-        ) {
-            publishIdleState(
-                screenData
-            )
-        }
+
+        publishIdleState(
+            screenData
+        )
     }
 
     private suspend fun tryUnstackState(
@@ -360,12 +355,6 @@ class GameScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private fun pauseGame() {
-        gameComponent?.let {
-            it.minesweeper.gameLogicStateHelper.pauseIfNeeded()
-        }
-    }
-
 //    override fun onKeyDown(keyCode: Int): Boolean {
 //        if (
 //            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
@@ -389,6 +378,7 @@ class GameScreenViewModel @AssistedInject constructor(
             true,
             action
         )
+        setIdleState()
     }
 
     private suspend fun removeFlaggedBombs() {
