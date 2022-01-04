@@ -5,7 +5,6 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
@@ -32,8 +31,7 @@ import dagger.assisted.AssistedInject
 
 const val LoadGameParameterName = "load_game"
 
-typealias GameScreenStateHolder = MutableLiveData<GameScreenState>
-typealias GameScreenStateValue = ScreenStateValue<GameScreenData>
+typealias GameScreenStateFlow = ScreenStateFlow<GameScreenData>
 
 typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
 
@@ -115,6 +113,10 @@ class GameScreenViewModel @AssistedInject constructor(
         gameComponent?.let {
             it.minesweeper.gameLogicStateHelper.resumeIfNeeded()
         }
+
+        handleCommand(
+            CommandFromGameScreen.SetIdleStateIfMenuIsOpened
+        )
     }
 
     override fun onPause(owner: LifecycleOwner) {
@@ -126,9 +128,9 @@ class GameScreenViewModel @AssistedInject constructor(
             CommandToMinesweeper.SaveGame
         )
 
-        if (state.value?.screenData !is GameScreenData.GameMenu) {
+        if (state.value.screenData !is GameScreenData.GameMenu) {
             handleCommand(
-                CommandFromGameScreen.OpenGameMenu
+                CommandFromGameScreen.OpenGameMenuAndSetLoadingState
             )
         }
     }
@@ -155,19 +157,21 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
         return when (command) {
-            is CommandFromGameScreen.HandleScreenLeaving    -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromGameScreen.NewGame                -> suspend { newGame(false) }
-            is CommandFromGameScreen.LoadGame               -> suspend { newGame(true) }
-            is CommandFromGameScreen.CloseError             -> ::closeError
-            is CommandFromGameScreen.CloseErrorAndFinish    -> ::closeError
-            is CommandFromGameScreen.OpenGameMenu           -> ::openGameMenu
-            is CommandFromGameScreen.CloseGameMenu          -> suspend { closeGameMenu() }
-            is CommandFromGameScreen.GoToMainMenu           -> ::goToMainMenu
-            is CommandFromGameScreen.RemoveFlaggedBombs     -> ::removeFlaggedBombs
-            is CommandFromGameScreen.RemoveOpenedSlices     -> ::removeOpenedSlices
-            is CommandFromGameScreen.ToggleFlagging         -> ::toggleFlagging
-            is CommandFromGameScreen.CloseGameStatusDialog  -> ::closeGameStatusDialog
-            else                                            -> null
+            is CommandFromGameScreen.HandleScreenLeaving            -> suspend { handleScreenLeaving(command.owner) }
+            is CommandFromGameScreen.NewGame                        -> suspend { newGame(false) }
+            is CommandFromGameScreen.LoadGame                       -> suspend { newGame(true) }
+            is CommandFromGameScreen.CloseError                     -> ::closeError
+            is CommandFromGameScreen.CloseErrorAndFinish            -> ::closeError
+            is CommandFromGameScreen.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
+            is CommandFromGameScreen.OpenGameMenuAndSetIdleState    -> suspend { openGameMenu(setLoadingState = false) }
+            is CommandFromGameScreen.SetIdleStateIfMenuIsOpened     -> ::setIdleStateIfMenuIsOpened
+            is CommandFromGameScreen.CloseGameMenu                  -> suspend { closeGameMenu() }
+            is CommandFromGameScreen.GoToMainMenu                   -> ::goToMainMenu
+            is CommandFromGameScreen.RemoveFlaggedBombs             -> ::removeFlaggedBombs
+            is CommandFromGameScreen.RemoveOpenedSlices             -> ::removeOpenedSlices
+            is CommandFromGameScreen.ToggleFlagging                 -> ::toggleFlagging
+            is CommandFromGameScreen.CloseGameStatusDialog          -> ::closeGameStatusDialog
+            else                                                    -> null
         }
     }
 
@@ -282,7 +286,9 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    private suspend fun openGameMenu() {
+    private suspend fun openGameMenu(
+        setLoadingState: Boolean = false
+    ) {
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially"
@@ -290,10 +296,31 @@ class GameScreenViewModel @AssistedInject constructor(
 
             pauseGame()
 
-            publishIdleState(
-                GameScreenData.GameMenu(
-                    gameScreenData
+            val newScreenData = GameScreenData.GameMenu(
+                gameScreenData
+            )
+
+            if (setLoadingState) {
+                publishLoadingState(
+                    newScreenData
                 )
+            } else {
+                publishIdleState(
+                    newScreenData
+                )
+            }
+        }
+    }
+
+    private suspend fun setIdleStateIfMenuIsOpened() {
+        val currState = state.value
+        val screenData = currState.screenData
+        if (
+            currState is ScreenState.Loading &&
+            screenData is GameScreenData.GameMenu
+        ) {
+            publishIdleState(
+                screenData
             )
         }
     }
@@ -317,9 +344,6 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun closeGameMenu(silent: Boolean = false) {
-
-        pauseGame()
-
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",

@@ -15,7 +15,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,7 +54,7 @@ fun RankingScreen(
 
 @Composable
 fun RankingControls(
-    stateValue: RankingScreenStateValue,
+    stateFlow: RankingScreenStateFlow,
     commandHandler: RankingScreenCommandHandler,
     errorDialogPlacer: RankingScreenErrorDialogPlacer,
 ) {
@@ -76,7 +75,7 @@ fun RankingControls(
                     modifier = Modifier.weight(3f)
                 ) {
                     SettingsList(
-                        stateValue,
+                        stateFlow,
                         commandHandler
                     )
                 }
@@ -88,7 +87,7 @@ fun RankingControls(
                     modifier = Modifier.weight(10f)
                 ) {
                     RankingList(
-                        stateValue,
+                        stateFlow,
                         commandHandler
                     )
                 }
@@ -102,7 +101,7 @@ fun RankingControls(
             }
 
             DisplayCircularIndicatorIfNeeded(
-                stateValue,
+                stateFlow,
                 this
             )
 
@@ -112,12 +111,10 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    stateValue: RankingScreenStateValue,
+    stateFlow: RankingScreenStateFlow,
     commandHandler: RankingScreenCommandHandler
 ) {
-    val rankingScreenState = stateValue.observeAsState(
-        RankingScreenInitialState
-    ).value
+    val rankingScreenState = stateFlow.collectAsState().value
 
     val rankingScreenData = rankingScreenState.screenData
 
@@ -218,12 +215,10 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    stateValue: RankingScreenStateValue,
+    stateFlow: RankingScreenStateFlow,
     commandHandler: RankingScreenCommandHandler
 ) {
-    val rankingScreenState = stateValue.observeAsState(
-        RankingScreenInitialState
-    ).value
+    val rankingScreenState = stateFlow.collectAsState().value
 
     val rankingScreenData = rankingScreenState.screenData
 
@@ -370,12 +365,10 @@ fun RankingDataItem(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DisplayCircularIndicatorIfNeeded(
-    stateValue: RankingScreenStateValue,
+    stateFlow: RankingScreenStateFlow,
     boxScope: BoxScope,
 ) {
-    val state = stateValue.observeAsState(
-        RankingScreenInitialState
-    ).value
+    val state = stateFlow.collectAsState().value
 
     var showLoadingElements by remember { mutableStateOf(false) }
 

@@ -16,8 +16,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-typealias SettingsScreenStateHolder = MutableLiveData<SettingsScreenState>
-typealias SettingsScreenStateValue = ScreenStateValue<SettingsScreenData>
+typealias SettingsScreenStateFlow = ScreenStateFlow<SettingsScreenData>
 
 typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
 

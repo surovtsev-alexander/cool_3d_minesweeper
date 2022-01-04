@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +28,7 @@ import androidx.navigation.NavController
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.core.viewmodel.ScreenState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
@@ -77,7 +77,7 @@ private val pauseResumeButtonWidth = 100.dp
 
 @Composable
 fun GameScreenControls(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
@@ -88,19 +88,19 @@ fun GameScreenControls(
         errorDialogPlacer.PlaceErrorDialog()
 
         GameView(
-            stateValue,
+            stateFlow,
             commandHandler,
             glSurfaceViewCreated,
             context,
         )
 
         GameMenu(
-            stateValue,
+            stateFlow,
             commandHandler
         )
 
         GameStatusDialog(
-            stateValue,
+            stateFlow,
             commandHandler,
         )
     }
@@ -109,7 +109,7 @@ fun GameScreenControls(
 
 @Composable
 fun GameView(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
@@ -124,7 +124,7 @@ fun GameView(
         }
         Row {
             Controls(
-                stateValue,
+                stateFlow,
                 commandHandler,
             )
         }
@@ -141,7 +141,7 @@ fun GameView(
         ) {
             FPSLabel(
                 this,
-                stateValue
+                stateFlow
             )
         }
         Spacer(
@@ -154,7 +154,7 @@ fun GameView(
             ,
             onClick = {
                 commandHandler.handleCommand(
-                    CommandFromGameScreen.OpenGameMenu
+                    CommandFromGameScreen.OpenGameMenuAndSetIdleState
                 )
             },
             border = BorderStroke(1.dp, Color.Black)
@@ -167,9 +167,9 @@ fun GameView(
 @Composable
 fun FPSLabel(
     columnScope: ColumnScope,
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
 ) {
-    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
+    val gameScreenState by stateFlow.collectAsState()
     val gameScreenData = gameScreenState.screenData
 
     val text = if (gameScreenData !is GameScreenData.GameInProgress) {
@@ -191,12 +191,13 @@ fun FPSLabel(
 
 @Composable
 fun GameMenu(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
 ) {
-    val gameScreenState by stateValue.observeAsState(GameScreenInitialState)
+    val gameScreenState by stateFlow.collectAsState()
+
     val gameScreenData = gameScreenState.screenData
-    if (gameScreenData !is GameScreenData.GameMenu) {
+    if (gameScreenState !is ScreenState.Idle || gameScreenData !is GameScreenData.GameMenu) {
         return
     }
 
@@ -274,7 +275,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
 ) {
     Row(
@@ -298,7 +299,7 @@ fun Controls(
                 .weight(1f),
         ) {
             ControlCheckBox(
-                stateValue,
+                stateFlow,
                 commandHandler,
             )
         }
@@ -308,7 +309,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                stateValue
+                stateFlow
             )
         }
     }
@@ -341,12 +342,10 @@ fun ControlButtons(
 
 @Composable
 fun ControlCheckBox(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
 ) {
-    val state = stateValue.observeAsState(
-        GameScreenInitialState
-    ).value
+    val state = stateFlow.collectAsState().value
 
     val screenData = state.screenData
 
@@ -388,11 +387,9 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
 ) {
-    val state = stateValue.observeAsState(
-        GameScreenInitialState
-    ).value
+    val state = stateFlow.collectAsState().value
 
     val screenData = state.screenData
 
@@ -433,10 +430,10 @@ fun TimeElapsed(
 
 @Composable
 fun GameStatusDialog(
-    stateValue: GameScreenStateValue,
+    stateFlow: GameScreenStateFlow,
     commandHandler: GameScreenCommandHandler,
 ) {
-    val state by stateValue.observeAsState(GameScreenInitialState)
+    val state by stateFlow.collectAsState()
 
     val screenData = state.screenData
     if (screenData !is GameScreenData.GameInProgress) {

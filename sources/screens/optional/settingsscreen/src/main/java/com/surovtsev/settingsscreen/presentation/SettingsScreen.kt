@@ -28,6 +28,7 @@ import com.surovtsev.settingsscreen.viewmodel.*
 import com.surovtsev.settingsscreen.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settingsscreen.viewmodel.helpers.SettingsUIInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingsScreen(
@@ -51,7 +52,7 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsControls(
-    stateValue: SettingsScreenStateValue,
+    stateFlow: SettingsScreenStateFlow,
     commandHandler: SettingsScreenCommandHandler,
     errorDialogPlacer: SettingsScreenErrorDialogPlacer,
 ) {
@@ -71,7 +72,7 @@ fun SettingsControls(
                         .weight(1f)
                 ) {
                     SettingsList(
-                        stateValue,
+                        stateFlow,
                         commandHandler
                     )
                 }
@@ -85,7 +86,7 @@ fun SettingsControls(
 
                 Column {
                     Controls(
-                        stateValue,
+                        stateFlow,
                         commandHandler
                     )
                 }
@@ -109,12 +110,10 @@ fun SettingsControls(
 
 @Composable
 fun SettingsList(
-    stateValue: SettingsScreenStateValue,
+    stateFlow: SettingsScreenStateFlow,
     commandHandler: SettingsScreenCommandHandler
 ) {
-    val state = stateValue.observeAsState(
-        SettingsScreenInitialState
-    ).value
+    val state = stateFlow.collectAsState().value
 
     Column(
         Modifier
@@ -241,12 +240,10 @@ fun SettingsDataItem(
 
 @Composable
 fun Controls(
-    stateValue: SettingsScreenStateValue,
+    stateFlow: SettingsScreenStateFlow,
     commandHandler: SettingsScreenCommandHandler
 ) {
-    val state = stateValue.observeAsState(
-        SettingsScreenInitialState
-    ).value
+    val state = stateFlow.collectAsState().value
     val screenData = state.screenData
 
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {

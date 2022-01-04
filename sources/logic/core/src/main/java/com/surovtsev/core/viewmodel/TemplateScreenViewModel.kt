@@ -1,15 +1,20 @@
 package com.surovtsev.core.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 
 typealias CommandProcessor = suspend () -> Unit
 
 typealias FinishAction = () -> Unit
 
-typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
+typealias ScreenStateFlow<T> = StateFlow<ScreenState<out T>>
 
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     override val baseCommands: CommandFromScreen.BaseCommands<C>,
@@ -23,8 +28,8 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 {
     var finishAction: FinishAction? = null
 
-    private val _state: MutableLiveData<ScreenState<out D>> = MutableLiveData(initialState)
-    override val state: LiveData<ScreenState<out D>> = _state
+    private val _state: MutableStateFlow<ScreenState<out D>> = MutableStateFlow(initialState)
+    override val state: ScreenStateFlow<D> = _state.asStateFlow()
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
 

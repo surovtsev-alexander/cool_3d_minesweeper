@@ -10,10 +10,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.viewmodel.CommandProcessor
-import com.surovtsev.core.viewmodel.ErrorDialogPlacer
-import com.surovtsev.core.viewmodel.ScreenCommandHandler
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.core.viewmodel.*
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
@@ -28,8 +25,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
 import logcat.logcat
 
-typealias RankingScreenStateHolder = MutableLiveData<RankingScreenState>
-typealias RankingScreenStateValue = LiveData<RankingScreenState>
+typealias RankingScreenStateFlow = ScreenStateFlow<RankingScreenData>
 
 typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
 

@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,15 +15,12 @@ import com.surovtsev.core.ui.theme.GrayBackground
 
 @Composable
 fun ErrorDialog(
-    stateValue: ScreenStateValue<ScreenData>,
+    stateFlow: ScreenStateFlow<ScreenData>,
     screenCommandHandler: ScreenCommandHandler<CommandFromScreen>,
     closeErrorCommand: CommandFromScreen.CloseError,
-    closeErrorAndFinishCommand: CommandFromScreen.CloseErrorAndFinish,
-    noData: ScreenData.NoData
+    closeErrorAndFinishCommand: CommandFromScreen.CloseErrorAndFinish
 ) {
-    val state by stateValue.observeAsState(ScreenState.Idle(
-        noData
-    ))
+    val state by stateFlow.collectAsState()
 
     val errorMessage = (state as? ScreenState.Error<*>)?.message?: return
 
@@ -71,10 +68,9 @@ fun ErrorDialog(
 fun <C: CommandFromScreen, D: ScreenData> ErrorDialogPlacer<C, D>.PlaceErrorDialog() {
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
-        stateValue = state  as ScreenStateValue<ScreenData>,
+        stateFlow = state  as ScreenStateFlow<ScreenData>,
         screenCommandHandler = this as ScreenCommandHandler<CommandFromScreen>,
         closeErrorCommand = baseCommands.closeError,
         closeErrorAndFinishCommand = baseCommands.closeErrorAndFinish,
-        noData = noScreenData as ScreenData.NoData,
     )
 }
