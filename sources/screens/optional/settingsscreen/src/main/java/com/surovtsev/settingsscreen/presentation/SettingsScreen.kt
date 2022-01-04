@@ -1,5 +1,6 @@
 package com.surovtsev.settingsscreen.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,7 +29,6 @@ import com.surovtsev.settingsscreen.viewmodel.*
 import com.surovtsev.settingsscreen.viewmodel.helpers.SettingUIControl
 import com.surovtsev.settingsscreen.viewmodel.helpers.SettingsUIInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingsScreen(
@@ -265,7 +265,7 @@ fun Controls(
             CustomSliderWithCaption(
                 name = settingUIControl.title,
                 borders = settingUIControl.borders,
-                sliderPositionData = settingUIControl.sliderPositionData,
+                sliderPositionMutableStateFlow = settingUIControl.sliderPositionMutableStateFlow,
                 backgroundColor = LightBlue,
                 lineColor = PrimaryColor1,
             )
@@ -273,6 +273,7 @@ fun Controls(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun BindViewModelAndUI(
     screenData: SettingsScreenData.SettingsDataIsSelected,
@@ -281,7 +282,7 @@ fun BindViewModelAndUI(
 ) {
     val settingsData = screenData.settingsData
 
-    val uiValue = settingsUIControl.sliderPositionData.observeAsState().value!!
+    val uiValue = settingsUIControl.sliderPositionMutableStateFlow.collectAsState().value
     val viewModelValue = settingsUIControl.valueCalculator(settingsData)
 
     var prevUIValue by remember { mutableStateOf(-1) }
@@ -297,7 +298,7 @@ fun BindViewModelAndUI(
     if (viewModelValueUpdated) {
         prevViewModelValue = viewModelValue
         if (!fromUI && !uiAndViewModelValuesSame) {
-            settingsUIControl.sliderPositionData.value = viewModelValue
+            settingsUIControl.sliderPositionMutableStateFlow.value = viewModelValue
             prevUIValue = viewModelValue
         }
     } else if (uiUpdated) {

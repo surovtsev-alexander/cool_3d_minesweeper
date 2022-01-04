@@ -1,7 +1,7 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers
 
-import androidx.lifecycle.MutableLiveData
 import com.surovtsev.core.room.entities.Settings
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class SettingsUIInfo {
@@ -21,7 +21,7 @@ class SettingsUIInfo {
         SettingUIControl(
             "x",
             dimensionCellCount,
-            MutableLiveData<Int>(0),
+            MutableStateFlow(0),
             { it.dimensions.x },
             { settingsData, newValue ->
                 updateDimensions(
@@ -33,7 +33,7 @@ class SettingsUIInfo {
         SettingUIControl(
             "y",
             dimensionCellCount,
-            MutableLiveData<Int>(0),
+            MutableStateFlow(0),
             { it.dimensions.y },
             { settingsData, newValue ->
                 updateDimensions(
@@ -45,7 +45,7 @@ class SettingsUIInfo {
         SettingUIControl(
             "z",
             dimensionCellCount,
-            MutableLiveData<Int>(0),
+            MutableStateFlow(0),
             { it.dimensions.z },
             { settingsData, newValue ->
                 updateDimensions(
@@ -57,7 +57,7 @@ class SettingsUIInfo {
         SettingUIControl(
             "bombs %",
             bombsPercentageBorders,
-            MutableLiveData<Int>(0),
+            MutableStateFlow(0),
             { it.bombsPercentage },
             { settingsData, newValue ->
                 settingsData.copy( bombsPercentage = newValue )

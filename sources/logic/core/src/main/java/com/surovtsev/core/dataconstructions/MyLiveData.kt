@@ -3,6 +3,7 @@ package com.surovtsev.core.dataconstructions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
+@Suppress("unused")
 open class MyLiveData<T: Any>(
     val defaultValue: T
 ) {

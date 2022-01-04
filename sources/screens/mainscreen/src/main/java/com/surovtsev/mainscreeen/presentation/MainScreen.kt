@@ -6,17 +6,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.core.ui.theme.Shapes
 import com.surovtsev.core.ui.theme.MinesweeperTheme
+import com.surovtsev.core.ui.theme.Shapes
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 
 @Composable
 fun MainScreen(
@@ -34,7 +34,7 @@ fun MainScreeControls(
     viewModel: MainScreenViewModel,
     navController: NavController,
 ) {
-    val hasSave by viewModel.hasSave.observeAsState(false)
+    val hasSave by viewModel.hasSave.collectAsState()
     val buttonsInfo = viewModel.buttonsInfo
 
     MinesweeperTheme {

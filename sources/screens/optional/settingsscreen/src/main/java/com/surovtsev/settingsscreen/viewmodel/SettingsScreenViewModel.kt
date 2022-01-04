@@ -2,7 +2,6 @@ package com.surovtsev.settingsscreen.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory

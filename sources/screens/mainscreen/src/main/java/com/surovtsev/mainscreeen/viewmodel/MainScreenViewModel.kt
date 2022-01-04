@@ -11,6 +11,9 @@ import com.surovtsev.mainscreeen.presentation.ButtonsInfo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 
 
@@ -25,15 +28,15 @@ class MainScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<MainScreenViewModel>
 
-    private val _hasSave = MutableLiveData<Boolean>(false)
-    val hasSave: LiveData<Boolean> = _hasSave
+    private val _hasSave = MutableStateFlow(false)
+    val hasSave: StateFlow<Boolean> = _hasSave.asStateFlow()
 
     object ButtonNames {
-        const val NewGame = "new game"
-        const val LoadGame = "load game"
-        const val Ranking = "ranking"
-        const val Settings = "settings"
-        const val Help = "help"
+        const val NewGame   = "new game"
+        const val LoadGame  = "load game"
+        const val Ranking   = "ranking"
+        const val Settings  = "settings"
+        const val Help      = "help"
     }
 
     val buttonsInfo: ButtonsInfo
