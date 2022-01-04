@@ -113,6 +113,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             return
         }
 
+        // TODO: 01.01.2022 move to SettingsDao
         val dataToPrepopulate = arrayOf(
             12 to 20,
             10 to 20,
@@ -157,7 +158,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
         if (currSettingsComponent == null) {
             publishErrorState(
-                "error (1) while applying settingsscreen"
+                "error (1) while applying settings"
             )
             return
         }
@@ -234,7 +235,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         settings: Settings,
     ) {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
-            "internal error: can not select settingsscreen"
+            "internal error: can not select settings"
         ) { screenData ->
             publishIdleState(
                 SettingsScreenData.SettingsIsSelected(

@@ -98,7 +98,7 @@ fun SettingsControls(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    OkButton(
+                    ApplySettingsButtons(
                         commandHandler
                     )
                 }
@@ -264,11 +264,11 @@ fun Controls(
     }
 
     LazyColumn {
-        items(settingsUIInfo.info) { item ->
+        items(settingsUIInfo.info) { settingUIControl ->
             CustomSliderWithCaption(
-                name = item.title,
-                borders = item.borders,
-                sliderPositionData = item.sliderPositionData,
+                name = settingUIControl.title,
+                borders = settingUIControl.borders,
+                sliderPositionData = settingUIControl.sliderPositionData,
                 backgroundColor = LightBlue,
                 lineColor = PrimaryColor1,
             )
@@ -321,7 +321,7 @@ fun BindViewModelAndUI(
 }
 
 @Composable
-fun OkButton(
+fun ApplySettingsButtons(
     commandHandler: SettingsScreenCommandHandler
 ) {
     Row(
