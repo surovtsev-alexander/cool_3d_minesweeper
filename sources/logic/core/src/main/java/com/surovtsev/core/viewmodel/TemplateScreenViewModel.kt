@@ -14,7 +14,7 @@ typealias ScreenStateValue<T> = LiveData<ScreenState<out T>>
 abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     override val baseCommands: CommandFromScreen.BaseCommands<C>,
     override val noScreenData: D,
-    initialState: MutableLiveData<ScreenState<out D>>,
+    initialState: ScreenState<out D>,
 ):
     ViewModel(),
     ErrorDialogPlacer<C, D>,
@@ -23,7 +23,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 {
     var finishAction: FinishAction? = null
 
-    private val _state: MutableLiveData<ScreenState<out D>> = initialState
+    private val _state: MutableLiveData<ScreenState<out D>> = MutableLiveData(initialState)
     override val state: LiveData<ScreenState<out D>> = _state
 
     abstract suspend fun getCommandProcessor(command: C): CommandProcessor?

@@ -31,7 +31,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
         CommandFromSettingsScreen.BaseCommands,
         SettingsScreenData.NoData,
-        SettingsScreenStateHolder(SettingsScreenInitialState),
+        SettingsScreenInitialState,
     ),
     DefaultLifecycleObserver
 {

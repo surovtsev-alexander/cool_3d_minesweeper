@@ -44,7 +44,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
         CommandFromRankingScreen.BaseCommands,
         RankingScreenData.NoData,
-        RankingScreenStateHolder(RankingScreenInitialState)
+        RankingScreenInitialState,
     )
 //    RequestPermissionsResultReceiver,
 {

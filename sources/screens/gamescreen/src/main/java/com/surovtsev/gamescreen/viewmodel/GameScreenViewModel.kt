@@ -49,7 +49,7 @@ class GameScreenViewModel @AssistedInject constructor(
     TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
         CommandFromGameScreen.BaseCommands,
         GameScreenData.NoData,
-        GameScreenStateHolder(GameScreenInitialState)
+        GameScreenInitialState,
     ),
     GameScreenCommandHandler,
     DefaultLifecycleObserver
