@@ -22,26 +22,9 @@ import dagger.Provides
 interface SettingsComponent {
     val settingsDao: SettingsDao
     val saveController: SaveController
-
-    val settingsScreenStateHolder: SettingsScreenStateHolder
-    val settingsScreenStateValue: SettingsScreenStateValue
 }
 
 
 @Module
 object SettingsModule {
-    @SettingsScope
-    @Provides
-    fun provideSettingsScreenStateHolder(
-    ): SettingsScreenStateHolder {
-        return SettingsScreenStateHolder(SettingsScreenInitialState)
-    }
-
-    @SettingsScope
-    @Provides
-    fun provideSettingsScreenStateValue(
-        settingsScreenStateHolder: SettingsScreenStateHolder
-    ): SettingsScreenStateValue {
-        return settingsScreenStateHolder
-    }
 }
