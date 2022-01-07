@@ -3,12 +3,10 @@ package com.surovtsev.gamelogic.minesweeper.interaction.commandhandler
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
-import com.surovtsev.gamelogic.models.game.config.GameConfig
-import com.surovtsev.gamelogic.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamelogic.models.game.save.Save
-import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -19,10 +17,8 @@ import javax.inject.Inject
 class CommandHandler @Inject constructor(
     private val sceneCalculator: SceneCalculator,
     private val saveController: SaveController,
-    private val gameConfig: GameConfig,
-    private val cameraInfo: CameraInfo,
+    private val gameState: GameState,
     private val gameLogic: GameLogic,
-    private val cubeInfo: CubeInfo,
     private val asyncTimeSpan: AsyncTimeSpan,
 ) {
     private val mutex = Mutex()
@@ -70,10 +66,8 @@ class CommandHandler @Inject constructor(
         }
 
         val save = Save.createObject(
-            gameConfig,
-            cameraInfo,
+            gameState,
             gameLogic,
-            cubeInfo.cubeSkin,
             asyncTimeSpan
         )
         saveController.save(

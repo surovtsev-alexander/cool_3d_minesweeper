@@ -1,5 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic
 
+import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombPlacer
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameLogicStateHelper
@@ -8,10 +9,8 @@ import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.Textur
 import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
 import com.surovtsev.gamelogic.models.game.cellpointers.CellRange
 import com.surovtsev.gamelogic.models.game.cellpointers.PointedCell
-import com.surovtsev.gamelogic.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
 import com.surovtsev.utils.androidview.interaction.TouchType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +18,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 class GameLogic(
-    private val cubeSkin: CubeSkin,
+    private val gameState: GameState,
     private val textureUpdater: TextureUpdater,
-    private val gameConfig: GameConfig,
     val gameLogicStateHelper: GameLogicStateHelper,
     val gameControls: GameControls,
 ) {
@@ -56,7 +54,13 @@ class GameLogic(
         }
 
         if (gameLogicStateHelper.isGameNotStarted()) {
-            val bombsList = BombPlacer.placeBombs(cubeSkin, pointedCell.index, gameConfig.bombsCount)
+            val cubeSkin = gameState.cubeInfo.cubeSkin
+
+            val bombsList = BombPlacer.placeBombs(
+                cubeSkin,
+                pointedCell.index,
+                gameState.gameConfig.bombsCount
+            )
             setBombsLeft(bombsList.size)
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
@@ -118,7 +122,7 @@ class GameLogic(
             }
 
             NeighboursCalculator.iterateNeighbours(
-                cubeSkin, pointedCell.index, action)
+                gameState.cubeInfo.cubeSkin, pointedCell.index, action)
 
             openNeighbours(pointedCell)
 
@@ -150,7 +154,7 @@ class GameLogic(
                 return
             }
 
-            action(cubeSkin.getPointedCell(list.removeAt(0)))
+            action(gameState.cubeInfo.cubeSkin.getPointedCell(list.removeAt(0)))
         }
     }
 
@@ -163,6 +167,7 @@ class GameLogic(
     }
 
     fun storeSelectedBombs() {
+        val cubeSkin = gameState.cubeInfo.cubeSkin
         cubeSkin.iterateCubes { cellIndex ->
             do {
                 val p = cubeSkin.getPointedCell(cellIndex)
@@ -175,7 +180,7 @@ class GameLogic(
     }
 
     fun collectOpenedNotEmptyBorders() {
-        val cellRange = cubeSkin.cellRange
+        val cellRange = gameState.cubeInfo.cubeSkin.cellRange
 
         val sliceClearer = { r: CellRange ->
             when (inspectSlice((r))) {
@@ -221,6 +226,7 @@ class GameLogic(
     }
 
     private fun emptySlice(cellRange: CellRange) {
+        val cubeSkin = gameState.cubeInfo.cubeSkin
         cellRange.iterate(cubeSkin.counts) {
             val c = cubeSkin.getPointedCell(it)
             val s = c.skin
@@ -231,6 +237,8 @@ class GameLogic(
     }
 
     private fun inspectSlice(cellRange: CellRange): SliceDescription {
+        val cubeSkin = gameState.cubeInfo.cubeSkin
+
         var hasClosedCells = false
         var hasOpenedCells = false
 
@@ -310,6 +318,8 @@ class GameLogic(
     }
 
     private fun openNeighboursIfBombsFlagged(pointedCell: PointedCell) {
+        val cubeSkin = gameState.cubeInfo.cubeSkin
+
         if (pointedCell.skin.isBomb) {
             return
         }
@@ -338,6 +348,8 @@ class GameLogic(
     }
 
     private fun openNeighbours(pointedCell: PointedCell) {
+        val cubeSkin = gameState.cubeInfo.cubeSkin
+
         val neighbourBombs = pointedCell.skin.neighbourBombs
         val position = pointedCell.index
 
@@ -399,7 +411,7 @@ class GameLogic(
 
             for (i in 0 until 3) {
                 val neighbours = NeighboursCalculator.getNeighbours(
-                    cubeSkin, pointedCell.index, i
+                    gameState.cubeInfo.cubeSkin, pointedCell.index, i
                 )
 
                 for (n in neighbours) {

@@ -10,10 +10,10 @@ import com.surovtsev.core.room.entities.Ranking
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
-import com.surovtsev.gamelogic.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
@@ -29,7 +29,7 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
     private val saveController: SaveController,
-    private val gameConfig: GameConfig,
+    private val gameState: GameState,
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
     private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
@@ -70,7 +70,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             newUIGameStatus = UIGameStatus.Lose
         } else {
             val settings = settingsDao.getOrCreate(
-                gameConfig.settingsData
+                gameState.gameConfig.settingsData,
             )
 
             val rankingData = Ranking.RankingData(

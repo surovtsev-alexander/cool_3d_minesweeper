@@ -9,6 +9,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
+import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
@@ -22,7 +23,6 @@ import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.models.game.config.GameConfig
-import com.surovtsev.gamelogic.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamelogic.models.game.save.Save
@@ -198,17 +198,15 @@ object GameControllerModule {
     @Provides
     fun provideGameLogic(
         save: Save?,
-        cubeInfo: CubeInfo,
-        gameConfig: GameConfig,
+        gameState: GameState,
         cubeOpenGLModel: CubeOpenGLModel,
         gameLogicStateHelper: GameLogicStateHelper,
         gameControls: GameControls,
     ): GameLogic {
         val res  =
             GameLogic(
-                cubeInfo.cubeSkin,
+                gameState,
                 cubeOpenGLModel,
-                gameConfig,
                 gameLogicStateHelper,
                 gameControls,
             )
@@ -216,7 +214,7 @@ object GameControllerModule {
             save.gameLogicToSave.applySavedData(res)
 
             save.cubeSkinToSave.applySavedData(
-                cubeInfo.cubeSkin,
+                gameState.cubeInfo.cubeSkin,
                 res
             )
         }
