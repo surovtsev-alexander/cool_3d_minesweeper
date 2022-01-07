@@ -3,7 +3,7 @@ package com.surovtsev.gamelogic.minesweeper.interaction.commandhandler
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
+import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamelogic.models.game.save.Save
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class CommandHandler @Inject constructor(
     private val sceneCalculator: SceneCalculator,
     private val saveController: SaveController,
-    private val gameState: GameState,
+    private val gameStateHolder: GameStateHolder,
     private val gameLogic: GameLogic,
     private val asyncTimeSpan: AsyncTimeSpan,
 ) {
@@ -66,7 +66,7 @@ class CommandHandler @Inject constructor(
         }
 
         val save = Save.createObject(
-            gameState,
+            gameStateHolder.gameStateFlow.value,
             gameLogic,
             asyncTimeSpan
         )

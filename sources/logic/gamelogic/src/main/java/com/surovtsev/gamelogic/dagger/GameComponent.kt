@@ -9,7 +9,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
+import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
@@ -198,14 +198,14 @@ object GameControllerModule {
     @Provides
     fun provideGameLogic(
         save: Save?,
-        gameState: GameState,
+        gameStateHolder: GameStateHolder,
         cubeOpenGLModel: CubeOpenGLModel,
         gameStatusHolder: GameStatusHolder,
         gameControls: GameControls,
     ): GameLogic {
         val res  =
             GameLogic(
-                gameState,
+                gameStateHolder,
                 cubeOpenGLModel,
                 gameStatusHolder,
                 gameControls,
@@ -214,7 +214,7 @@ object GameControllerModule {
             save.gameLogicToSave.applySavedData(res)
 
             save.cubeSkinToSave.applySavedData(
-                gameState.cubeInfo.cubeSkin,
+                gameStateHolder.gameStateFlow.value.cubeInfo.cubeSkin,
                 res
             )
         }
