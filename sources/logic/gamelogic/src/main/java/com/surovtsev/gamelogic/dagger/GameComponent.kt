@@ -200,7 +200,6 @@ object GameControllerModule {
         save: Save?,
         gameStateHolder: GameStateHolder,
         cubeOpenGLModel: CubeOpenGLModel,
-        gameStatusHolder: GameStatusHolder,
         gameControls: GameControls,
         subscriptionsHolder: SubscriptionsHolder,
     ): GameLogic {
@@ -208,19 +207,19 @@ object GameControllerModule {
             GameLogic(
                 gameStateHolder,
                 cubeOpenGLModel,
-                gameStatusHolder,
                 gameControls,
                 subscriptionsHolder,
             )
         if (save != null) {
+            val gameState = gameStateHolder.gameStateFlow.value
+
             save.gameLogicToSave.applySavedData(
-                gameStateHolder.gameStateFlow.value,
-                gameStatusHolder,
+                gameState,
             )
 
             save.cubeSkinToSave.applySavedData(
-                gameStateHolder.gameStateFlow.value.cubeInfo.cubeSkin,
-                gameStatusHolder
+                gameState.cubeInfo.cubeSkin,
+                gameState.gameStatusHolder
             )
         }
 

@@ -37,11 +37,7 @@ class GameStatusHolder @Inject constructor(
     init {
         asyncTimeSpan.flush()
 
-        _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
-            GameStatus.NoBombsPlaced,
-            asyncTimeSpan.getElapsed()
-        )
-
+        setGameStatus(GameStatus.NoBombsPlaced)
         subscriptionsHolder.addSubscription(this)
     }
 
@@ -56,9 +52,9 @@ class GameStatusHolder @Inject constructor(
 
             }.stateIn(customCoroutineScope).collectLatest { turnOn ->
                 if (turnOn) {
-                    asyncTimeSpan.turnOn()
+                    resumeTimeSpan()
                 } else {
-                    asyncTimeSpan.turnOff()
+                    pauseTimeSpan()
                 }
             }
 
@@ -72,10 +68,18 @@ class GameStatusHolder @Inject constructor(
         )
 
         if (isGameInProgress()) {
-            asyncTimeSpan.turnOn()
+            resumeTimeSpan()
         } else if (isGameOver()) {
-            asyncTimeSpan.turnOff()
+            pauseTimeSpan()
         }
+    }
+
+    fun resumeTimeSpan() {
+        asyncTimeSpan.turnOn()
+    }
+
+    fun pauseTimeSpan() {
+        asyncTimeSpan.turnOff()
     }
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {

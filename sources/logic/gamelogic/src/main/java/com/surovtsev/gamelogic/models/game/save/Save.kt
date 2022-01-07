@@ -1,7 +1,6 @@
 package com.surovtsev.gamelogic.models.game.save
 
 import com.surovtsev.gamelogic.minesweeper.gameState.GameState
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.save.helpers.CameraInfoToSave
 import com.surovtsev.gamelogic.models.game.save.helpers.CubeSkinToSave
@@ -17,13 +16,12 @@ class Save(
     companion object {
         fun createObject(
             gameState: GameState,
-            gameStatusHolder: GameStatusHolder,
             asyncTimeSpan: AsyncTimeSpan,
         ): Save {
             return Save(
                 gameState.gameConfig,
                 CameraInfoToSave.createObject(gameState.cameraInfo),
-                GameLogicToSave.createObject(gameStatusHolder, gameState, asyncTimeSpan),
+                GameLogicToSave.createObject(gameState, asyncTimeSpan),
                 CubeSkinToSave.createObject(gameState.cubeInfo.cubeSkin)
             )
         }

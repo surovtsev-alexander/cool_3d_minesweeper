@@ -2,7 +2,6 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic
 
 import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
@@ -17,7 +16,6 @@ import kotlinx.coroutines.launch
 class GameLogic(
     private val gameStateHolder: GameStateHolder,
     private val textureUpdater: TextureUpdater,
-    private val gameStatusHolder: GameStatusHolder,
     private val gameControls: GameControls,
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
@@ -43,7 +41,6 @@ class GameLogic(
     ): GameTouchHandler {
         return GameTouchHandler(
             gameState,
-            gameStatusHolder,
             gameControls,
             textureUpdater,
         )

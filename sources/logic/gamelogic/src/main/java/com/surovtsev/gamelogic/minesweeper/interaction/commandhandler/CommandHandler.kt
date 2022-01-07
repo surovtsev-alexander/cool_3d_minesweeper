@@ -19,8 +19,6 @@ class CommandHandler @Inject constructor(
     private val sceneCalculator: SceneCalculator,
     private val saveController: SaveController,
     private val gameStateHolder: GameStateHolder,
-    private val gameStatusHolder: GameStatusHolder,
-    private val gameLogic: GameLogic,
     private val asyncTimeSpan: AsyncTimeSpan,
 ) {
     private val mutex = Mutex()
@@ -63,13 +61,14 @@ class CommandHandler @Inject constructor(
     }
 
     private suspend fun saveGame() {
-        if (!gameStatusHolder.isGameInProgress()) {
+        val gameState = gameStateHolder.gameStateFlow.value
+
+        if (!gameState.gameStatusHolder.isGameInProgress()) {
             return
         }
 
         val save = Save.createObject(
-            gameStateHolder.gameStateFlow.value,
-            gameStatusHolder,
+            gameState,
             asyncTimeSpan
         )
         saveController.save(
