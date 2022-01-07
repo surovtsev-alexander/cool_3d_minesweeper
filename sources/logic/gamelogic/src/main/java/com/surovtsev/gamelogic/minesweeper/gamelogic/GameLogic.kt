@@ -3,7 +3,7 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic
 import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombPlacer
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameLogicStateHelper
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.NeighboursCalculator
 import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
 import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.asStateFlow
 class GameLogic(
     private val gameState: GameState,
     private val textureUpdater: TextureUpdater,
-    val gameLogicStateHelper: GameLogicStateHelper,
-    val gameControls: GameControls,
+    val gameStatusHolder: GameStatusHolder,
+    private val gameControls: GameControls,
 ) {
 
     private val _bombsLeftFlow = MutableStateFlow(0)
@@ -49,11 +49,11 @@ class GameLogic(
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
 
-        if (gameLogicStateHelper.isGameOver()) {
+        if (gameStatusHolder.isGameOver()) {
             return
         }
 
-        if (gameLogicStateHelper.isGameNotStarted()) {
+        if (gameStatusHolder.isGameNotStarted()) {
             val cubeSkin = gameState.cubeInfo.cubeSkin
 
             val bombsList = BombPlacer.placeBombs(
@@ -64,7 +64,7 @@ class GameLogic(
             setBombsLeft(bombsList.size)
 
             NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
-            gameLogicStateHelper.setGameState(GameStatus.BombsPlaced)
+            gameStatusHolder.setGameStatus(GameStatus.BombsPlaced)
         }
 
         val id = position.id
@@ -107,7 +107,7 @@ class GameLogic(
         if (isBomb) {
             if (!skin.isFlagged()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                gameLogicStateHelper.setGameState(GameStatus.Lose)
+                gameStatusHolder.setGameStatus(GameStatus.Lose)
                 return
             }
 
@@ -131,7 +131,7 @@ class GameLogic(
         } else {
             if (skin.isFlagged()) {
                 setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                gameLogicStateHelper.setGameState(GameStatus.Lose)
+                gameStatusHolder.setGameStatus(GameStatus.Lose)
                 return
             }
         }
@@ -139,7 +139,7 @@ class GameLogic(
         setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EMPTY)
 
         if (_bombsLeftFlow.value == 0) {
-            gameLogicStateHelper.setGameState(GameStatus.Win)
+            gameStatusHolder.setGameStatus(GameStatus.Win)
         }
     }
 
@@ -147,7 +147,7 @@ class GameLogic(
 
     private fun processOnElement(list: MutableList<CellIndex>, action: (PointedCell) -> Unit) {
         for (i in 0 until removeCount) {
-            if (gameLogicStateHelper.isGameOver()) {
+            if (gameStatusHolder.isGameOver()) {
                 return
             }
             if (list.count() == 0) {
@@ -292,7 +292,7 @@ class GameLogic(
             } else {
                 if (skin.isBomb) {
                     setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    gameLogicStateHelper.setGameState(GameStatus.Lose)
+                    gameStatusHolder.setGameStatus(GameStatus.Lose)
                 } else {
                     openCube(pointedCell)
                 }
@@ -379,7 +379,7 @@ class GameLogic(
 
                 if (s.isBomb) {
                     setCubeTexture(n, TextureCoordinatesHelper.TextureType.EXPLODED_BOMB)
-                    gameLogicStateHelper.setGameState(GameStatus.Lose)
+                    gameStatusHolder.setGameStatus(GameStatus.Lose)
                     return
                 }
 

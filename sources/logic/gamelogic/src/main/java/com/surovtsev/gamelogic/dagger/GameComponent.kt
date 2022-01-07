@@ -13,7 +13,7 @@ import com.surovtsev.gamelogic.minesweeper.gameState.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameLogicStateHelper
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
 import com.surovtsev.gamelogic.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
@@ -200,14 +200,14 @@ object GameControllerModule {
         save: Save?,
         gameState: GameState,
         cubeOpenGLModel: CubeOpenGLModel,
-        gameLogicStateHelper: GameLogicStateHelper,
+        gameStatusHolder: GameStatusHolder,
         gameControls: GameControls,
     ): GameLogic {
         val res  =
             GameLogic(
                 gameState,
                 cubeOpenGLModel,
-                gameLogicStateHelper,
+                gameStatusHolder,
                 gameControls,
             )
         if (save != null) {
@@ -271,8 +271,8 @@ object InteractionModule {
     @GameScope
     @Provides
     fun provideGameStatusWithElapsedFlow(
-        gameLogicStateHelper: GameLogicStateHelper,
+        gameStatusHolder: GameStatusHolder,
     ): GameStatusWithElapsedFlow {
-        return gameLogicStateHelper.gameStatusWithElapsedFlow
+        return gameStatusHolder.gameStatusWithElapsedFlow
     }
 }

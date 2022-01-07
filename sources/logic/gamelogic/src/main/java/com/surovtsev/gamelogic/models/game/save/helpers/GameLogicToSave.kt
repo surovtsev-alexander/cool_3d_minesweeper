@@ -14,7 +14,7 @@ class GameLogicToSave(
 
     companion object {
         fun createObject(gameLogic: GameLogic, asyncTimeSpan: AsyncTimeSpan): GameLogicToSave {
-            val gameLogicStateHelper = gameLogic.gameLogicStateHelper
+            val gameLogicStateHelper = gameLogic.gameStatusHolder
 
             return GameLogicToSave(
                 asyncTimeSpan.getElapsed(),
@@ -26,7 +26,7 @@ class GameLogicToSave(
     }
 
     fun applySavedData(gameLogic: GameLogic) {
-        gameLogic.gameLogicStateHelper.applySavedData(
+        gameLogic.gameStatusHolder.applySavedData(
             elapsedTime,
             gameStatus
         )

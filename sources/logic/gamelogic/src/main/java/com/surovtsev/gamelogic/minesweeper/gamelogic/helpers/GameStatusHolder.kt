@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @GameScope
-class GameLogicStateHelper @Inject constructor(
+class GameStatusHolder @Inject constructor(
     private val asyncTimeSpan: AsyncTimeSpan,
     private val gameNotPausedFlow: GameNotPausedFlow,
     subscriptionsHolder: SubscriptionsHolder,
@@ -62,7 +62,7 @@ class GameLogicStateHelper @Inject constructor(
         }
     }
 
-    fun setGameState(newStatus: GameStatus) {
+    fun setGameStatus(newStatus: GameStatus) {
         _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
             newStatus,
             asyncTimeSpan.getElapsed()
@@ -77,6 +77,6 @@ class GameLogicStateHelper @Inject constructor(
 
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
         asyncTimeSpan.setElapsed(elapsedTime)
-        setGameState(gameStatus)
+        setGameStatus(gameStatus)
     }
 }

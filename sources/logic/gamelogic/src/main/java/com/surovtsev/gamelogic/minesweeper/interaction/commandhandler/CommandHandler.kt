@@ -61,7 +61,7 @@ class CommandHandler @Inject constructor(
     }
 
     private suspend fun saveGame() {
-        if (!gameLogic.gameLogicStateHelper.isGameInProgress()) {
+        if (!gameLogic.gameStatusHolder.isGameInProgress()) {
             return
         }
 
