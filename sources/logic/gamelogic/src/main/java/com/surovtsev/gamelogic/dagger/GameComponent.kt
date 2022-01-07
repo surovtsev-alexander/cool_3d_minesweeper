@@ -202,6 +202,7 @@ object GameControllerModule {
         cubeOpenGLModel: CubeOpenGLModel,
         gameStatusHolder: GameStatusHolder,
         gameControls: GameControls,
+        subscriptionsHolder: SubscriptionsHolder,
     ): GameLogic {
         val res  =
             GameLogic(
@@ -209,13 +210,17 @@ object GameControllerModule {
                 cubeOpenGLModel,
                 gameStatusHolder,
                 gameControls,
+                subscriptionsHolder,
             )
         if (save != null) {
-            save.gameLogicToSave.applySavedData(res)
+            save.gameLogicToSave.applySavedData(
+                gameStateHolder.gameStateFlow.value,
+                gameStatusHolder,
+            )
 
             save.cubeSkinToSave.applySavedData(
                 gameStateHolder.gameStateFlow.value.cubeInfo.cubeSkin,
-                res
+                gameStatusHolder
             )
         }
 
@@ -263,9 +268,9 @@ object InteractionModule {
     @GameScope
     @Provides
     fun provideBombsLeftValue(
-        gameLogic: GameLogic
+        gameStatusHolder: GameStatusHolder,
     ): BombsLeftFlow {
-        return gameLogic.bombsLeftFlow
+        return gameStatusHolder.bombsLeftFlow
     }
 
     @GameScope

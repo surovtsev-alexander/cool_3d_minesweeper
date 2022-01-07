@@ -1,6 +1,7 @@
 package com.surovtsev.gamelogic.models.game.save.helpers
 
-import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
+import com.surovtsev.gamelogic.minesweeper.gameState.GameState
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
 import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
@@ -13,24 +14,29 @@ class GameLogicToSave(
 ) {
 
     companion object {
-        fun createObject(gameLogic: GameLogic, asyncTimeSpan: AsyncTimeSpan): GameLogicToSave {
-            val gameLogicStateHelper = gameLogic.gameStatusHolder
-
+        fun createObject(
+            gameStatusHolder: GameStatusHolder,
+            gameState: GameState,
+            asyncTimeSpan: AsyncTimeSpan
+        ): GameLogicToSave {
             return GameLogicToSave(
                 asyncTimeSpan.getElapsed(),
-                gameLogicStateHelper.gameStatus(),
-                gameLogic.cubesToOpen,
-                gameLogic.cubesToRemove
+                gameStatusHolder.gameStatus(),
+                gameState.cubesToOpen,
+                gameState.cubesToRemove
             )
         }
     }
 
-    fun applySavedData(gameLogic: GameLogic) {
-        gameLogic.gameStatusHolder.applySavedData(
+    fun applySavedData(
+        gameState: GameState,
+        gameStatusHolder: GameStatusHolder,
+    ) {
+        gameStatusHolder.applySavedData(
             elapsedTime,
             gameStatus
         )
-        gameLogic.applySavedData(
+        gameState.applySavedData(
             cubesToOpen,
             cubesToRemove
         )

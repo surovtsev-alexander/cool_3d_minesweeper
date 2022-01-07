@@ -23,6 +23,9 @@ class GameStatusHolder @Inject constructor(
     )
     val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow = _gameStatusWithElapsedFlow.asStateFlow()
 
+    private val _bombsLeftFlow = MutableStateFlow(0)
+    val bombsLeftFlow: BombsLeftFlow = _bombsLeftFlow.asStateFlow()
+
     fun gameStatus() = gameStatusWithElapsedFlow.value.gameStatus
 
     fun isGameNotStarted() = (gameStatus() == GameStatus.NoBombsPlaced)
@@ -78,5 +81,19 @@ class GameStatusHolder @Inject constructor(
     fun applySavedData(elapsedTime: Long, gameStatus: GameStatus) {
         asyncTimeSpan.setElapsed(elapsedTime)
         setGameStatus(gameStatus)
+    }
+
+    fun setBombsLeft(v: Int) {
+        _bombsLeftFlow.value = v
+    }
+
+    fun decBombsLeft() {
+        _bombsLeftFlow.value -= 1
+    }
+
+    fun testIfWin() {
+        if (_bombsLeftFlow.value == 0) {
+            setGameStatus(GameStatus.Win)
+        }
     }
 }

@@ -63,22 +63,24 @@ class SceneCalculator @Inject constructor(
         } while (false)
 
 
-        gameLogic.openCubes()
+        val gameTouchHandler = gameLogic.gameTouchHandlerFlow.value
+
+        gameTouchHandler.openCubes()
 
         if (gameControls.removeFlaggedCells) {
-            gameLogic.storeSelectedBombs()
+            gameTouchHandler.storeSelectedBombs()
         }
         if (gameControls.removeOpenedSlices) {
-            gameLogic.collectOpenedNotEmptyBorders()
+            gameTouchHandler.collectOpenedNotEmptyBorders()
         }
         gameControls.flush()
 
-        gameLogic.removeCubes()
+        gameTouchHandler.removeCubes()
 
         if (clicked) {
             val cell = intersectionCalculator.getCell()
             if (cell != null) {
-                gameLogic.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
+                gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }
 
         }

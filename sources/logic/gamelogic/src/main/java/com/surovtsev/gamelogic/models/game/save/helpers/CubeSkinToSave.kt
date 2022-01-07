@@ -1,6 +1,7 @@
 package com.surovtsev.gamelogic.models.game.save.helpers
 
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.NeighboursCalculator
 import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
 import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
@@ -87,7 +88,8 @@ class CubeSkinToSave(
 
     fun applySavedData(
         cubeSkin: CubeSkin,
-        gameLogic: GameLogic) {
+        gameStatusHolder: GameStatusHolder,
+    ) {
 
         val bombsList = mutableListOf<CellIndex>()
 
@@ -136,6 +138,6 @@ class CubeSkinToSave(
             }
         }
 
-        gameLogic.setBombsLeft(closedBombs)
+        gameStatusHolder.setBombsLeft(closedBombs)
     }
 }

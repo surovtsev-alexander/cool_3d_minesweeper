@@ -5,6 +5,7 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamelogic.models.game.save.Save
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
@@ -18,6 +19,7 @@ class CommandHandler @Inject constructor(
     private val sceneCalculator: SceneCalculator,
     private val saveController: SaveController,
     private val gameStateHolder: GameStateHolder,
+    private val gameStatusHolder: GameStatusHolder,
     private val gameLogic: GameLogic,
     private val asyncTimeSpan: AsyncTimeSpan,
 ) {
@@ -61,13 +63,13 @@ class CommandHandler @Inject constructor(
     }
 
     private suspend fun saveGame() {
-        if (!gameLogic.gameStatusHolder.isGameInProgress()) {
+        if (!gameStatusHolder.isGameInProgress()) {
             return
         }
 
         val save = Save.createObject(
             gameStateHolder.gameStateFlow.value,
-            gameLogic,
+            gameStatusHolder,
             asyncTimeSpan
         )
         saveController.save(
