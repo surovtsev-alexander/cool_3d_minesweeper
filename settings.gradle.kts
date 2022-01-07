@@ -8,43 +8,45 @@ val appModuleDir = "sources"
 
 
 val coreModule = ":core"
-val utilsModule = ":utils"
-val touchListenerModule = ":touchlistener"
 val gameLogicModule = ":gamelogic"
-val timeSpanModule = ":timespan"
+val gameStateModule = ":gamestate"
 val restartableCoroutineScopeModule = ":restartablecoroutinescope"
 val subscriptionsHolderModule = ":subscriptionsholder"
+val timeSpanModule = ":timespan"
+val touchListenerModule = ":touchlistener"
+val utilsModule = ":utils"
 
 val coreModules = arrayOf(
     coreModule,
-    utilsModule,
-    touchListenerModule,
     gameLogicModule,
-    timeSpanModule,
+    gameStateModule,
     restartableCoroutineScopeModule,
     subscriptionsHolderModule,
+    timeSpanModule,
+    touchListenerModule,
+    utilsModule,
 )
 val logicDir = "sources/logic"
 
 
-val mainScreenModule = ":mainscreen"
 val gameScreenModule = ":gamescreen"
+val mainScreenModule = ":mainscreen"
 
 val screensModules = arrayOf(
-    mainScreenModule,
     gameScreenModule,
+    mainScreenModule,
 )
 val screensDir = "sources/screens"
 
 
+val helpScreenModule = ":helpscreen"
 val rankingScreenModule = ":rankingscreen"
 val settingsScreenModule = ":settingsscreen"
-val helpScreenModule = ":helpscreen"
 
 val featuresScreensModules = arrayOf(
+    helpScreenModule,
     rankingScreenModule,
     settingsScreenModule,
-    helpScreenModule,
 )
 val featuresScreensDir = "sources/screens/optional"
 /// endregion

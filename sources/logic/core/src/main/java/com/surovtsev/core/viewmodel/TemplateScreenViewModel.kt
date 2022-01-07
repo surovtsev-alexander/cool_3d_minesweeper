@@ -46,15 +46,12 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 
             val currState = state.value
 
-            val screenData = currState?.screenData
+            val screenData = currState.screenData
 
-            val isErrorState =
-                currState != null &&
-                        currState is ScreenState.Error
+            val isErrorState = currState is ScreenState.Error
             val isErrorDuringInitialization =
                 isErrorState &&
-                        screenData != null &&
-                        screenData is ScreenData.InitializationIsNotFinished
+                screenData is ScreenData.InitializationIsNotFinished
 
 
             val skipProcessingCommand: Boolean
@@ -115,7 +112,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     }
 
     protected suspend fun publishLoadingState(
-        screenData: D = getCurrentScreenDataOrNoData()
+        screenData: D = getCurrentScreenData()
     ) {
         publishNewState(
             ScreenState.Loading(
@@ -126,7 +123,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 
     protected suspend fun publishErrorState(
         message: String,
-        screenData: D = getCurrentScreenDataOrNoData()
+        screenData: D = getCurrentScreenData()
     ) {
         publishNewState(
             ScreenState.Error(
@@ -156,12 +153,12 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
 
     protected suspend fun closeError() {
         publishIdleState(
-            getCurrentScreenDataOrNoData()
+            getCurrentScreenData()
         )
     }
 
-    protected fun getCurrentScreenDataOrNoData(): D {
-        return state.value?.screenData ?: noScreenData
+    private fun getCurrentScreenData(): D {
+        return state.value.screenData
     }
 
 //    protected inline fun <reified T: D> processIfDataNullable(
@@ -197,9 +194,9 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     protected suspend inline fun <reified T: D> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
-        val screenData = state.value?.screenData
+        val screenData = state.value.screenData
 
-        if (screenData == null || screenData !is T) {
+        if (screenData !is T) {
             publishErrorState(errorMessage)
         } else {
             action.invoke(screenData)

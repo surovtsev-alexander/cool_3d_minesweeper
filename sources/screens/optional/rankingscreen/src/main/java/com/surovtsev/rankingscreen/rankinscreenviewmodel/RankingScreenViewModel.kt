@@ -170,9 +170,9 @@ class RankingScreenViewModel @AssistedInject constructor(
                     selectedSettingsId
                 )
 
-        val rankingScreenData = state.value?.screenData
+        val rankingScreenData = state.value.screenData
 
-        if (rankingScreenData == null || rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+        if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
             publishErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )

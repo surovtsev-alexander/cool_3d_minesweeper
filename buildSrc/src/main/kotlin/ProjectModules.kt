@@ -8,6 +8,7 @@ object ProjectModules {
         const val utils = ":utils"
         const val touchListener = ":touchlistener"
         const val gameLogic = ":gamelogic"
+        const val gameState = ":gamestate"
         const val timeSpan = ":timespan"
         const val restartableCoroutineScope = ":restartablecoroutinescope"
         const val subscriptionsHolder = ":subscriptionsholder"

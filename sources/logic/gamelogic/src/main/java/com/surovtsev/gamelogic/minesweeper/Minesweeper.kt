@@ -16,5 +16,4 @@ class Minesweeper @Inject constructor(
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
     val openGLEventsHandler: MinesweeperOpenGLEventsHandler,
     val commandHandler: CommandHandler,
-    val gameLogicStateHelper: GameLogicStateHelper,
 )

@@ -31,15 +31,6 @@ android {
 }
 
 dependencies {
-    includeProjectModules(
-        arrayOf(
-            ProjectModules.Core.core,
-            ProjectModules.Core.gameState,
-            ProjectModules.Core.utils,
-            ProjectModules.Core.touchListener,
-        )
-    )
-
     defaultDependencies()
     testDependencies()
 
