@@ -1,49 +1,37 @@
 package com.surovtsev.utils.math.camerainfo
 
+import com.surovtsev.utils.gles.renderer.ScreenResolution
 import com.surovtsev.utils.math.MatrixHelper
 import com.surovtsev.utils.statehelpers.UpdatableImp
 import glm_.glm
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
-import glm_.vec2.Vec2i
 import glm_.vec3.Vec3
 
 class CameraInfoHelper(
     val cameraInfo: CameraInfo,
+    screenResolution: ScreenResolution,
 ):
     UpdatableImp()
 {
     private val zNear: Float = 2f
     private val zFar: Float = 20f
 
-    private var _displaySize: Vec2i = Vec2i(-1, -1)
-    private var displaySize: Vec2i
-        get() = _displaySize
-        private set(value) {
-            _displaySize = value
-            displayWidthF = displaySize[0].toFloat()
-            displayHeightF = displaySize[1].toFloat()
-        }
-    private var displayWidthF = displaySize[0].toFloat()
-    private var displayHeightF = displaySize[1].toFloat()
+    private var displayWidthF = screenResolution[0].toFloat()
+    private var displayHeightF = screenResolution[1].toFloat()
 
-    fun onSurfaceChanged(newDisplaySize: Vec2i) {
-        if (displaySize != newDisplaySize) {
+    init {
+        glm.perspective(
+            cameraInfo.projectionMatrix,
+            45f,
+            displayWidthF / displayHeightF,
+            zNear, zFar
+        )
+        cameraInfo.invProjectionMatrix = cameraInfo.projectionMatrix.inverse()
 
-            displaySize = newDisplaySize
+        cameraInfo.viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
 
-            glm.perspective(
-                cameraInfo.projectionMatrix,
-                45f,
-                displayWidthF / displayHeightF,
-                zNear, zFar
-            )
-            cameraInfo.invProjectionMatrix = cameraInfo.projectionMatrix.inverse()
-
-            cameraInfo.viewMatrix = glm.translate(Mat4(), 0f, 0f, -10f)
-
-            cameraInfo.recalculateMVPMatrix()
-        }
+        cameraInfo.recalculateMVPMatrix()
 
         update()
     }

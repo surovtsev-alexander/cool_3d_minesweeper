@@ -30,7 +30,7 @@ class SceneCalculator @Inject constructor(
     private val pointerEnabled: Boolean,
 ) {
     fun nextIteration() {
-        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelper
+        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value
 
         val cameraMoved = cameraInfoHelper.getAndRelease()
 

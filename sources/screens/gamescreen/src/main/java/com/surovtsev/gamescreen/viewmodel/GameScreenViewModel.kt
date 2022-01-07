@@ -273,7 +273,7 @@ class GameScreenViewModel @AssistedInject constructor(
                     gC.minesweeper.openGLEventsHandler
 
                 // TODO: move updating to Minesweeper.CommandHandler.newGame.
-                gC.cameraInfoHelperHolder.cameraInfoHelper.also {
+                gC.cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
                     if (!loadGame) {
                         it.cameraInfo.moveToOrigin()
                     }

@@ -21,7 +21,7 @@ class TouchHandlerImp @Inject constructor(
         point: Vec2,
         touchType: TouchType
     ) {
-        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelper
+        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value
 
         val proj = cameraInfoHelper.normalizedDisplayCoordinates(point)
         pointer.near = cameraInfoHelper.calcNearByProj(proj)

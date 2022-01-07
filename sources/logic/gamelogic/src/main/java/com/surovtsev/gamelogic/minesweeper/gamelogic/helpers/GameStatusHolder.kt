@@ -8,7 +8,10 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,13 +47,13 @@ class GameStatusHolder @Inject constructor(
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
 
-            gameNotPausedFlow.zip(
+            gameNotPausedFlow.combine(
                 gameStatusWithElapsedFlow
             ) { gameNotPaused: Boolean, (gameStatus: GameStatus, _) ->
 
                 gameNotPaused and GameStatusHelper.isGameInProgress(gameStatus)
 
-            }.stateIn(customCoroutineScope).collectLatest { turnOn ->
+            }.collectLatest { turnOn ->
                 if (turnOn) {
                     resumeTimeSpan()
                 } else {

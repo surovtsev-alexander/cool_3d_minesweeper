@@ -14,7 +14,7 @@ class MoveHandlerImp @Inject constructor(
     MoveHandler
 {
     override fun rotateBetweenProjections(prev: Vec2, curr: Vec2) {
-        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelper
+        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value
 
         val nPrev = cameraInfoHelper.normalizedDisplayCoordinates(prev)
         val nCurr = cameraInfoHelper.normalizedDisplayCoordinates(curr)
@@ -29,11 +29,11 @@ class MoveHandlerImp @Inject constructor(
     }
 
     override fun scale(factor: Float) {
-        cameraInfoHelperHolder.cameraInfoHelper.scale(factor)
+        cameraInfoHelperHolder.cameraInfoHelperFlow.value.scale(factor)
     }
 
     override fun move(proj1: Vec2, proj2: Vec2) {
-        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelper
+        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value
 
         val nP1 = cameraInfoHelper.normalizedDisplayCoordinates(proj1)
         val nP2 = cameraInfoHelper.normalizedDisplayCoordinates(proj2)
