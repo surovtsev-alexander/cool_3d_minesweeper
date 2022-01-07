@@ -102,9 +102,9 @@ class MainActivity: MainActivity() {
                     exitTransition = navAnimHelper.concreteExitException.toTop,
                 ) { entry ->
                     val viewModel: GameScreenViewModel by viewModels {
-                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHadler ->
+                        SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
                             appComponent.gameScreenViewModelFactory.build(
-                                stateHadler, context, appComponent
+                                stateHandler, context, appComponent
                             )
                         }
                     }

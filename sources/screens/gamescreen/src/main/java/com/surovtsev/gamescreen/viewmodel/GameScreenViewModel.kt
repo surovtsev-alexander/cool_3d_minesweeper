@@ -111,9 +111,11 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
 
-        handleCommand(
-            CommandFromGameScreen.SetIdleState
-        )
+        if (state.value.screenData is GameScreenData.GameMenu) {
+            handleCommand(
+                CommandFromGameScreen.SetIdleState
+            )
+        }
     }
 
     override fun onPause(owner: LifecycleOwner) {
