@@ -1,6 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.scene
 
 import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.touch.TouchHandlerImp
@@ -19,7 +20,7 @@ class SceneCalculator @Inject constructor(
     private val gameLogic: GameLogic,
     private val timeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val gameControls: GameControlsImp,
-    private val cameraInfoHelper: CameraInfoHelper,
+    private val cameraInfoHelperHolder: CameraInfoHelperHolder,
     private val pointer: Pointer,
     private val touchHandler: TouchHandlerImp,
     private val intersectionCalculator: IntersectionCalculator,
@@ -29,6 +30,8 @@ class SceneCalculator @Inject constructor(
     private val pointerEnabled: Boolean,
 ) {
     fun nextIteration() {
+        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelper
+
         val cameraMoved = cameraInfoHelper.getAndRelease()
 
         val clicked = touchHandler.getAndRelease()

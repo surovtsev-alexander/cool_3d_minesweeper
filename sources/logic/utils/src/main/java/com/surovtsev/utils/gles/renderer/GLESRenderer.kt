@@ -2,14 +2,23 @@ package com.surovtsev.utils.gles.renderer
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import glm_.vec2.Vec2i
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GLESRenderer(
-    private val cameraInfoHelper: CameraInfoHelper
-): GLSurfaceView.Renderer {
+
+typealias ScreenResolution = Vec2i
+typealias ScreenResolutionFlow = StateFlow<ScreenResolution>
+
+val DefaultScreenResolution: ScreenResolution = Vec2i(-1, -1)
+
+class GLESRenderer: GLSurfaceView.Renderer {
+
+    private val _screenResolutionFlow = MutableStateFlow(DefaultScreenResolution)
+    val screenResolutionFlow: ScreenResolutionFlow = _screenResolutionFlow.asStateFlow()
 
     var openGLEventsHandler: OpenGLEventsHandler? = null
 
@@ -25,7 +34,7 @@ class GLESRenderer(
         glViewport(0, 0, width, height)
 
         val displaySize = Vec2i(width, height)
-        cameraInfoHelper.onSurfaceChanged(displaySize)
+        _screenResolutionFlow.value = displaySize
 
         openGLEventsHandler?.onSurfaceChanged(width, height)
     }

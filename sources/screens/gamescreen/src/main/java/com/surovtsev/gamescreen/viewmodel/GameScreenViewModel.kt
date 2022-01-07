@@ -247,6 +247,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gameComponent = DaggerGameComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
+            .gameScreenEntryPoint(gameScreenComponent)
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.create(
                     restartableCoroutineScopeComponent,
@@ -254,7 +255,6 @@ class GameScreenViewModel @AssistedInject constructor(
                 )
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
-            .cameraInfoHelperHolder(gameScreenComponent)
             .loadGame(loadGame)
             .gameNotPausedFlow(gameNotPausedFlow)
             .build()
@@ -273,7 +273,7 @@ class GameScreenViewModel @AssistedInject constructor(
                     gC.minesweeper.openGLEventsHandler
 
                 // TODO: move updating to Minesweeper.CommandHandler.newGame.
-                gameScreenComponent.cameraInfoHelper.also {
+                gC.cameraInfoHelperHolder.cameraInfoHelper.also {
                     if (!loadGame) {
                         it.cameraInfo.moveToOrigin()
                     }

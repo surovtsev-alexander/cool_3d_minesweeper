@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
-import com.surovtsev.core.dagger.components.CameraInfoHelperHolder
+import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
@@ -9,6 +9,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
+import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
@@ -47,9 +48,9 @@ import javax.inject.Named
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
+        GameScreenEntryPoint::class,
         SubscriptionsHolderEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
-        CameraInfoHelperHolder::class,
     ],
     modules = [
         GameControlsModule::class,
@@ -78,12 +79,14 @@ interface GameComponent {
     val uiGameControlsMutableFlows: UIGameControlsMutableFlows
     val uiGameControlsFlows: UIGameControlsFlows
 
+    val cameraInfoHelperHolder: CameraInfoHelperHolder
+
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
+        fun gameScreenEntryPoint(gameScreenEntryPoint: GameScreenEntryPoint): Builder
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
-        fun cameraInfoHelperHolder(cameraInfoHelperHolder: CameraInfoHelperHolder): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
         fun build(): GameComponent
