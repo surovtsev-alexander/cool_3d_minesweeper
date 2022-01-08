@@ -2,11 +2,11 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic
 
 import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombPlacer
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.NeighboursCalculator
-import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper
-import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
-import com.surovtsev.gamestate.models.game.cellpointers.CellRange
-import com.surovtsev.gamestate.models.game.cellpointers.PointedCell
+import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
+import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
+import com.surovtsev.core.models.game.cellpointers.CellIndex
+import com.surovtsev.core.models.game.cellpointers.CellRange
+import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater

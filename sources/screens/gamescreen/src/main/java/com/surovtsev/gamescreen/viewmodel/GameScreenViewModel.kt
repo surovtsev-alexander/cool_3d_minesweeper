@@ -7,6 +7,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
+import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
@@ -257,6 +258,11 @@ class GameScreenViewModel @AssistedInject constructor(
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .loadGame(loadGame)
+            .gameStateDependencies(GameStateDependencies(
+                appComponentEntryPoint,
+                timeSpanComponent,
+                loadGame
+            ))
             .gameNotPausedFlow(gameNotPausedFlow)
             .build()
             .also { gC ->

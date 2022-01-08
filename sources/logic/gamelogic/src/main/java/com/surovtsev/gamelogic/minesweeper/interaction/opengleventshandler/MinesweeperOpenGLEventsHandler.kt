@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler
 
-import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.interaction.commandhandler.CommandHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.commandhandler.CommandToMinesweeper
 import com.surovtsev.gamelogic.models.gles.gameviewsholder.GameViewsHolder

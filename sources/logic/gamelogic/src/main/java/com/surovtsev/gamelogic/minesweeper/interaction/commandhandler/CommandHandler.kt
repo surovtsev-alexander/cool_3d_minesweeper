@@ -2,10 +2,10 @@ package com.surovtsev.gamelogic.minesweeper.interaction.commandhandler
 
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
-import com.surovtsev.gamelogic.models.game.save.Save
+import com.surovtsev.gamestate.models.game.save.Save
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex

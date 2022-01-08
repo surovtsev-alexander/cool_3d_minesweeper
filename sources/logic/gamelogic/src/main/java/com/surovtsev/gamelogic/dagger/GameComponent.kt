@@ -3,17 +3,16 @@ package com.surovtsev.gamelogic.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
+import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.helpers.RankingListHelper
+import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
 import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
-import com.surovtsev.core.interaction.BombsLeftFlow
-import com.surovtsev.gamelogic.minesweeper.helpers.GameConfigFactory
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler.MinesweeperOpenGLEventsHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.move.MoveHandlerImp
@@ -22,22 +21,19 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
-import com.surovtsev.gamelogic.models.game.save.Save
-import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
-import com.surovtsev.gamelogic.utils.gles.model.pointer.PointerImp
+import com.surovtsev.core.models.gles.pointer.Pointer
+import com.surovtsev.core.models.gles.pointer.PointerImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
-import com.surovtsev.gamestate.dagger.GameScope
-import com.surovtsev.gamestate.helpers.CubeCoordinates
-import com.surovtsev.gamestate.models.game.config.GameConfig
+import com.surovtsev.gamestate.dagger.GameStateScope
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlow
+import com.surovtsev.gamestate.models.game.save.Save
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.math.FloatingAverage
-import com.surovtsev.utils.math.camerainfo.CameraInfo
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
@@ -65,7 +61,6 @@ import javax.inject.Named
 )
 interface GameComponent {
     val minesweeperOpenGLEventsHandler: MinesweeperOpenGLEventsHandler
-    val gameConfig: GameConfig
     val settingsDao: SettingsDao
     val rankingDao: RankingDao
     val rankingListHelper: RankingListHelper
@@ -74,8 +69,6 @@ interface GameComponent {
     val touchHandlerImp: TouchHandlerImp
     val moveHandlerImp: MoveHandlerImp
     val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
-
-    val bombsLeftFlow: BombsLeftFlow
 
     val gameControlsImp: GameControlsImp
 
@@ -92,6 +85,7 @@ interface GameComponent {
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
+        fun gameStateDependencies(@BindsInstance gameStateDependencies: GameStateDependencies): Builder
         fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
         fun build(): GameComponent
     }
@@ -99,6 +93,13 @@ interface GameComponent {
 
 @Module
 object GameControlsModule {
+    @GameScope
+    @Provides
+    fun providePointerImp(
+    ): PointerImp {
+        return PointerImp()
+    }
+
     @GameScope
     @Provides
     fun provideFPSCalculator(
@@ -136,14 +137,14 @@ object GameControlsModule {
     @Provides
     fun provideUIGameControlsFlows(
         uiGameControlsMutableFlows: UIGameControlsMutableFlows,
-        bombsLeftFlow: BombsLeftFlow,
+        gameStatusHolderBridge: GameStatusHolderBridge,
         asyncTimeSpan: AsyncTimeSpan,
         delayedFPSFlowHolder: DelayedFPSFlowHolder,
     ): UIGameControlsFlows {
         return UIGameControlsFlows(
             uiGameControlsMutableFlows.flagging,
             uiGameControlsMutableFlows.uiGameStatus,
-            bombsLeftFlow,
+            gameStatusHolderBridge.bombsLeftFlow,
             asyncTimeSpan.timeSpanFlow,
             delayedFPSFlowHolder.flow
         )
@@ -161,49 +162,7 @@ object GameControlsModule {
 object GameControllerModule {
     @GameScope
     @Provides
-    fun provideSave(
-        saveController: SaveController,
-        loadGame: Boolean
-    ): Save? {
-        val save = if (loadGame) {
-            val res = saveController.tryToLoad<Save>(
-                SaveTypes.SaveGameJson
-            )
-            saveController.emptyData(
-                SaveTypes.SaveGameJson
-            )
-            res
-        } else {
-            null
-        }
-        return save
-    }
-
-    @GameScope
-    @Provides
-    fun provideGameConfig(
-        save: Save?,
-        saveController: SaveController
-    ): GameConfig {
-        return save?.gameConfig
-            ?: GameConfigFactory.createGameConfig(
-                saveController.loadSettingDataOrDefault()
-            )
-    }
-
-    @GameScope
-    @Provides
-    fun provideCameraInfo(
-        save: Save?
-    ): CameraInfo {
-        return save?.cameraInfoToSave?.getCameraInfo()
-            ?: CameraInfo()
-    }
-
-    @GameScope
-    @Provides
     fun provideGameLogic(
-        save: Save?,
         gameStateHolder: GameStateHolder,
         cubeOpenGLModel: CubeOpenGLModel,
         gameControls: GameControls,
@@ -216,28 +175,7 @@ object GameControllerModule {
                 gameControls,
                 subscriptionsHolder,
             )
-        if (save != null) {
-            val gameState = gameStateHolder.gameStateFlow.value
-
-            save.gameLogicToSave.applySavedData(
-                gameState,
-            )
-
-            save.cubeSkinToSave.applySavedData(
-                gameState.cubeInfo.cubeSkin,
-                gameState.gameStatusHolder
-            )
-        }
-
         return res
-    }
-
-    @GameScope
-    @Provides
-    fun provideCubeCoordinates(
-        gameConfig: GameConfig
-    ): CubeCoordinates {
-        return CubeCoordinates.createObject(gameConfig)
     }
 }
 
@@ -270,19 +208,11 @@ object SceneSettingsModule {
 
 @Module
 object InteractionModule {
-    @GameScope
-    @Provides
-    fun provideBombsLeftValue(
-        gameStatusHolder: GameStatusHolder,
-    ): BombsLeftFlow {
-        return gameStatusHolder.bombsLeftFlow
-    }
-
-    @GameScope
-    @Provides
-    fun provideGameStatusWithElapsedFlow(
-        gameStatusHolder: GameStatusHolder,
-    ): GameStatusWithElapsedFlow {
-        return gameStatusHolder.gameStatusWithElapsedFlow
-    }
+//    @GameScope
+//    @Provides
+//    fun provideGameStatusWithElapsedFlow(
+//        gameStatusHolder: GameStatusHolder,
+//    ): GameStatusWithElapsedFlow {
+//        return gameStatusHolder.gameStatusWithElapsedFlow
+//    }
 }

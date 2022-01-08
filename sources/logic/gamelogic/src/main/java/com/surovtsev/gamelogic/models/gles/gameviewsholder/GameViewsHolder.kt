@@ -1,7 +1,8 @@
 package com.surovtsev.gamelogic.models.gles.gameviewsholder
 
-import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
@@ -11,7 +12,7 @@ import javax.inject.Inject
 class GameViewsHolder @Inject constructor(
     private val pointerOpenGLModel: PointerOpenGLModel,
     private val cubeOpenGLModel: CubeOpenGLModel,
-    private val gameState: GameState,
+    private val gameStateHolder: GameStateHolder,
     private val cameraInfoHelperHolder: CameraInfoHelperHolder,
 ) {
     private class ProcessedActions {
@@ -55,7 +56,7 @@ class GameViewsHolder @Inject constructor(
         onSurfaceCreated(force = false)
 
         cameraInfoHelperHolder.cameraInfoHelperFlow.value.update()
-        cubeOpenGLModel.updateTexture(gameState.cubeInfo.cubeSkin)
+        cubeOpenGLModel.updateTexture(gameStateHolder.gameStateFlow.value.cubeInfo.cubeSkin)
 
         processedActions.processOnSurfaceChanged()
     }

@@ -1,19 +1,18 @@
 package com.surovtsev.gamestate
 
-import com.surovtsev.gamestate.dagger.GameScope
-import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
-import com.surovtsev.gamestate.models.game.config.GameConfig
+import com.surovtsev.core.models.game.cellpointers.CellIndex
+import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.gamestate.models.game.gameobjectsholder.CubeInfo
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.utils.math.camerainfo.CameraInfo
-import javax.inject.Inject
 
-@GameScope
-class GameState @Inject constructor(
+class GameState(
     val gameConfig: GameConfig,
     val cubeInfo: CubeInfo,
     val cameraInfo: CameraInfo,
     val gameStatusHolder: GameStatusHolder,
+    val cubeSpaceBorder: CubeSpaceBorder,
 ) {
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()

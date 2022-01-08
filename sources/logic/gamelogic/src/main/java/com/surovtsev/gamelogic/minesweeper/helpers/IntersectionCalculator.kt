@@ -1,25 +1,33 @@
 package com.surovtsev.gamelogic.minesweeper.helpers
 
-import com.surovtsev.gamestate.dagger.GameScope
-import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
-import com.surovtsev.gamestate.models.game.cellpointers.PointedCell
+import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.core.models.game.cellpointers.CellIndex
+import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.gamelogic.models.game.cellpointers.PointedCellWithSpaceBorder
-import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamelogic.models.game.spaceborders.cube.CubeSpaceBorder
-import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
+import com.surovtsev.core.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.models.game.spaceborders.cube.CubeSpaceBorder
+import com.surovtsev.core.models.gles.pointer.Pointer
+import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import javax.inject.Inject
 
 @GameScope
 class IntersectionCalculator @Inject constructor(
     private val pointer: Pointer,
-    private val cubeSkin: CubeSkin,
-    cubeSpaceBorder: CubeSpaceBorder
+    private val gameStateHolder: GameStateHolder,
 ) {
-    private val skins = cubeSkin.skins
-    private val borders = cubeSpaceBorder.cells
-    private val squaredCubeSphereRadius = cubeSpaceBorder.squaredCellSphereRadius
 
     fun getCell(): PointedCell? {
+        val gameState = gameStateHolder.gameStateFlow.value
+
+        val cubeSkin = gameState.cubeInfo.cubeSkin
+        val skins = cubeSkin.skins
+        val cubeSpaceBorder = gameState.cubeSpaceBorder
+        val borders = cubeSpaceBorder.cells
+        val squaredCubeSphereRadius = cubeSpaceBorder.squaredCellSphereRadius
+
         val pointerDescriptor = pointer.getPointerDescriptor()
 
         val candidateCubes =

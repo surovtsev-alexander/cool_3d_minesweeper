@@ -12,7 +12,9 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamestate.GameState
-import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlow
@@ -29,10 +31,10 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
     private val saveController: SaveController,
-    private val gameState: GameState,
+    private val gameStateHolder: GameStateHolder,
+    private val gameStatusHolderBridge: GameStatusHolderBridge,
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
-    private val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow,
     private val uiGameControlsMutableFlows: UIGameControlsMutableFlows,
     private val rankingListHelper: RankingListHelper,
     subscriptionsHolder: SubscriptionsHolder,
@@ -44,7 +46,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
-            gameStatusWithElapsedFlow.collectLatest {
+            gameStatusHolderBridge.gameStatusWithElapsedFlow.collectLatest {
                 gameStatusUpdated(
                     it.gameStatus,
                     it.elapsed
@@ -70,7 +72,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             newUIGameStatus = UIGameStatus.Lose
         } else {
             val settings = settingsDao.getOrCreate(
-                gameState.gameConfig.settingsData,
+                gameStateHolder.gameStateFlow.value.gameConfig.settingsData,
             )
 
             val rankingData = Ranking.RankingData(

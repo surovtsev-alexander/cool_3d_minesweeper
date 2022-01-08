@@ -1,13 +1,14 @@
 package com.surovtsev.gamestate.models.game.gamestatus
 
 import com.surovtsev.core.interaction.BombsLeftFlow
-import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameStateScope
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-@GameScope
+
+@GameStateScope
 class GameStatusHolder @Inject constructor(
     private val asyncTimeSpan: AsyncTimeSpan,
 ) {
