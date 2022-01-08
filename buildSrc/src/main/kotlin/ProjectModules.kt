@@ -3,7 +3,7 @@ object ProjectModules {
         const val app = ":app"
     }
 
-    object Core {
+    object Logic {
         const val core = ":core"
         const val utils = ":utils"
         const val touchListener = ":touchlistener"

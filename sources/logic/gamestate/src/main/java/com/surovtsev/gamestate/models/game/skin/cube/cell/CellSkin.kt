@@ -1,7 +1,7 @@
-package com.surovtsev.gamelogic.models.game.skin.cube.cell
+package com.surovtsev.gamestate.models.game.skin.cube.cell
 
-import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
-import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper.TextureType
+import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper
+import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper.TextureType
 import glm_.vec3.Vec3i
 
 

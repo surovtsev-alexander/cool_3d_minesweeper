@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.models.game.save
 
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
-import com.surovtsev.gamelogic.models.game.config.GameConfig
+import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.save.helpers.CameraInfoToSave
 import com.surovtsev.gamelogic.models.game.save.helpers.CubeSkinToSave
 import com.surovtsev.gamelogic.models.game.save.helpers.GameLogicToSave

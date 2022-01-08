@@ -40,7 +40,7 @@ android {
 
 dependencies {
     includeProjectModule(
-        ProjectModules.Core.core
+        ProjectModules.Logic.core
     )
 
     defaultDependencies()

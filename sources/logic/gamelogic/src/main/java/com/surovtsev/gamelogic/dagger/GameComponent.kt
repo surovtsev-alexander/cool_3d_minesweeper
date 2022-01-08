@@ -12,10 +12,7 @@ import com.surovtsev.gamelogic.minesweeper.Minesweeper
 import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusWithElapsedFlow
+import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.gamelogic.minesweeper.helpers.GameConfigFactory
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler.MinesweeperOpenGLEventsHandler
@@ -23,7 +20,6 @@ import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.touch.TouchHandlerImp
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
-import com.surovtsev.gamelogic.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamelogic.models.game.save.Save
@@ -31,6 +27,11 @@ import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamelogic.utils.gles.model.pointer.PointerImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
+import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.helpers.CubeCoordinates
+import com.surovtsev.gamestate.models.game.config.GameConfig
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlow
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint

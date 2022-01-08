@@ -2,10 +2,8 @@ package com.surovtsev.gamelogic.minesweeper.interaction.commandhandler
 
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
-import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamelogic.models.game.save.Save
 import com.surovtsev.utils.timers.async.AsyncTimeSpan

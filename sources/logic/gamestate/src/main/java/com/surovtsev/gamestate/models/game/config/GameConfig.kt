@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.models.game.config
+package com.surovtsev.gamestate.models.game.config
 
 import com.surovtsev.core.room.entities.Settings
 import glm_.vec3.Vec3

@@ -1,10 +1,10 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
 
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.cellpointers.CellRange
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.cellpointers.CellRange
 import com.surovtsev.gamelogic.models.game.cellpointers.PairCellRange
-import com.surovtsev.gamelogic.models.game.cellpointers.PointedCell
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.models.game.cellpointers.PointedCell
+import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
 import com.surovtsev.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i

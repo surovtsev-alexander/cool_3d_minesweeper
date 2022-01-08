@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.scene
 
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.helpers.IntersectionCalculator
@@ -10,7 +10,6 @@ import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
-import com.surovtsev.utils.math.camerainfo.CameraInfoHelper
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
 import javax.inject.Inject
 import javax.inject.Named

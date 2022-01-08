@@ -1,7 +1,5 @@
-package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
+package com.surovtsev.gamestate.models.game.gamestatus
 
-import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
-import com.surovtsev.gamelogic.models.game.gamestatus.GameStatusHelper
 import kotlinx.coroutines.flow.StateFlow
 
 

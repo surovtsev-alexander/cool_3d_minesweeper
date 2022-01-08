@@ -1,8 +1,8 @@
 package com.surovtsev.gamelogic.models.game.save.helpers
 
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.gamestatus.GameStatus
+import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 
 class GameLogicToSave(

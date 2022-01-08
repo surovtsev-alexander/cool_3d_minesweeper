@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
+package com.surovtsev.core.interaction
 
 import kotlinx.coroutines.flow.StateFlow
 

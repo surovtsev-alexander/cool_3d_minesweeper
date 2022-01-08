@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.helpers
 
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
-import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
+import com.surovtsev.gamestate.helpers.CubeCoordinates
+import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper
 
 class CubeViewDataHelper(
     val triangleCoordinates: FloatArray,

@@ -33,10 +33,10 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Core.core,
-            ProjectModules.Core.gameState,
-            ProjectModules.Core.utils,
-            ProjectModules.Core.touchListener,
+            ProjectModules.Logic.core,
+            ProjectModules.Logic.gameState,
+            ProjectModules.Logic.utils,
+            ProjectModules.Logic.touchListener,
         )
     )
 

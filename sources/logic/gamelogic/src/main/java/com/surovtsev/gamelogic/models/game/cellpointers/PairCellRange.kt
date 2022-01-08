@@ -1,5 +1,7 @@
 package com.surovtsev.gamelogic.models.game.cellpointers
 
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.cellpointers.CellRange
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 import kotlin.math.max

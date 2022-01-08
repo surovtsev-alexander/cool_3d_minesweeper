@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.models.game.gamestatus
+package com.surovtsev.gamestate.models.game.gamestatus
 
 enum class GameStatus {
     NoBombsPlaced,

@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.interaction.ui
 
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombsLeftFlow
+import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.utils.timers.async.TimeSpanFlow
 import kotlinx.coroutines.flow.StateFlow
 

@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.helpers
 
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.gamelogic.models.game.config.GameConfig
+import com.surovtsev.gamestate.models.game.config.GameConfig
 import glm_.vec3.Vec3
 import kotlin.math.max
 

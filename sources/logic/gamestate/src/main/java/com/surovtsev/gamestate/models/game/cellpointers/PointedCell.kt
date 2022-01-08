@@ -1,6 +1,6 @@
-package com.surovtsev.gamelogic.models.game.cellpointers
+package com.surovtsev.gamestate.models.game.cellpointers
 
-import com.surovtsev.gamelogic.models.game.skin.cube.cell.CellSkin
+import com.surovtsev.gamestate.models.game.skin.cube.cell.CellSkin
 
 open class PointedCell(
     val index: CellIndex,

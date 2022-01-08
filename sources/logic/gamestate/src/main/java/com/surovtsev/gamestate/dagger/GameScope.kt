@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.dagger
+package com.surovtsev.gamestate.dagger
 
 import javax.inject.Scope
 

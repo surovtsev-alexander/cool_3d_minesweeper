@@ -1,6 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.gameState
 
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.dagger.GameScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

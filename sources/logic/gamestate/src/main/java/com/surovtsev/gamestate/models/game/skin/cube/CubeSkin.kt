@@ -1,11 +1,11 @@
-package com.surovtsev.gamelogic.models.game.skin.cube
+package com.surovtsev.gamestate.models.game.skin.cube
 
-import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.cellpointers.CellRange
-import com.surovtsev.gamelogic.models.game.cellpointers.PointedCell
-import com.surovtsev.gamelogic.models.game.config.GameConfig
-import com.surovtsev.gamelogic.models.game.skin.cube.cell.CellSkin
+import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.cellpointers.CellRange
+import com.surovtsev.gamestate.models.game.cellpointers.PointedCell
+import com.surovtsev.gamestate.models.game.config.GameConfig
+import com.surovtsev.gamestate.models.game.skin.cube.cell.CellSkin
 import glm_.vec3.Vec3i
 import javax.inject.Inject
 

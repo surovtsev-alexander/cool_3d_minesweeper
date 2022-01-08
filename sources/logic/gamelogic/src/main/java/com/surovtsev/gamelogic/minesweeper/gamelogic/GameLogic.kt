@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic
 
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
+import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater

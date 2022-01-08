@@ -1,7 +1,7 @@
-package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
+package com.surovtsev.gamestate.helpers
 
-import com.surovtsev.gamelogic.models.game.config.GameConfig
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.models.game.config.GameConfig
+import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
 import glm_.vec3.Vec3
 
 class CubeCoordinates(

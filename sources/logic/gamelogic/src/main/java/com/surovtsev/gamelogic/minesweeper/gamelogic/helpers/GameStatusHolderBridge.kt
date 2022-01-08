@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
 
-import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.GameState
+import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope

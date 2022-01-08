@@ -2,7 +2,7 @@ package com.surovtsev.gamelogic.models.gles.programs
 
 import android.content.Context
 import com.surovtsev.gamelogic.R
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.gamelogic.utils.gles.model.program.GLESProgram
 import com.surovtsev.utils.gles.helpers.ShaderHelper
 import javax.inject.Inject

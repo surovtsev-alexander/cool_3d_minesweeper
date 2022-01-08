@@ -248,6 +248,7 @@ class GameScreenViewModel @AssistedInject constructor(
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .gameScreenEntryPoint(gameScreenComponent)
+            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.create(
                     restartableCoroutineScopeComponent,

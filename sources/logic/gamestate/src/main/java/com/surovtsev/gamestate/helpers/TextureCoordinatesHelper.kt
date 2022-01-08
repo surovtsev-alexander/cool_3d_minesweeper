@@ -1,6 +1,6 @@
-package com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper
+package com.surovtsev.gamestate.helpers
 
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
 import com.surovtsev.utils.math.MyMath
 import glm_.vec2.Vec2
 import glm_.vec2.Vec2i

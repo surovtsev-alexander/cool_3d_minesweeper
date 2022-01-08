@@ -1,9 +1,9 @@
 package com.surovtsev.gamelogic.models.game.spaceborders.cube
 
-import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.config.GameConfig
+import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.helpers.CubeCoordinates
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.config.GameConfig
 import com.surovtsev.gamelogic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import javax.inject.Inject
 

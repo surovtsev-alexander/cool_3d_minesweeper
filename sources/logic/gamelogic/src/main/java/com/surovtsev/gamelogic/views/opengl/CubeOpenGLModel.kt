@@ -3,12 +3,12 @@ package com.surovtsev.gamelogic.views.opengl
 import android.content.Context
 import android.opengl.GLES20.*
 import com.surovtsev.gamelogic.R
-import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.CubeCoordinates
+import com.surovtsev.gamestate.dagger.GameScope
+import com.surovtsev.gamestate.helpers.CubeCoordinates
 import com.surovtsev.gamelogic.minesweeper.helpers.CubeViewDataHelper
-import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
-import com.surovtsev.gamelogic.models.game.cellpointers.PointedCell
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper
+import com.surovtsev.gamestate.models.game.cellpointers.PointedCell
+import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamelogic.models.gles.programs.CubeGLESProgram
 import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamelogic.utils.utils.gles.OpenGLModel

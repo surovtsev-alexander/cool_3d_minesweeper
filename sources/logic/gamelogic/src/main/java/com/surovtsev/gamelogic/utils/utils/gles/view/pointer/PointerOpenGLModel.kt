@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.utils.utils.gles.view.pointer
 
 import android.opengl.GLES20.*
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamelogic.utils.gles.model.pointer.Pointer
 import com.surovtsev.gamelogic.utils.gles.model.program.PointerGLESProgram

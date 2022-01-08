@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.gameState
 
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder

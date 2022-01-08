@@ -1,6 +1,6 @@
 package com.surovtsev.gamelogic.utils.gles.model.pointer
 
-import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamestate.dagger.GameScope
 import com.surovtsev.utils.androidview.interaction.TouchType
 import glm_.vec3.Vec3
 import javax.inject.Inject

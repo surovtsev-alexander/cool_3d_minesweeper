@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
 
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
 import kotlin.random.Random
 
 typealias BombsList = MutableList<CellIndex>

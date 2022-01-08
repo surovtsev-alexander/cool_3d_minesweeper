@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.models.game.cellpointers
+package com.surovtsev.gamestate.models.game.cellpointers
 
 import glm_.vec3.Vec3i
 

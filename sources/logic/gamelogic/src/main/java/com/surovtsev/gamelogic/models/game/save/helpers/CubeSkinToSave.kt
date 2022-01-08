@@ -1,12 +1,11 @@
 package com.surovtsev.gamelogic.models.game.save.helpers
 
-import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolder
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.NeighboursCalculator
-import com.surovtsev.gamelogic.minesweeper.scene.texturecoordinateshelper.TextureCoordinatesHelper
-import com.surovtsev.gamelogic.models.game.cellpointers.CellIndex
-import com.surovtsev.gamelogic.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamelogic.models.game.skin.cube.cell.CellSkin
+import com.surovtsev.gamestate.helpers.TextureCoordinatesHelper
+import com.surovtsev.gamestate.models.game.cellpointers.CellIndex
+import com.surovtsev.gamestate.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamestate.models.game.skin.cube.cell.CellSkin
 
 class CubeSkinToSave(
     private val bombs: String,
