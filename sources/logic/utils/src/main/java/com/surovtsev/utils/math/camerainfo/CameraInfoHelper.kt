@@ -7,6 +7,7 @@ import glm_.glm
 import glm_.mat4x4.Mat4
 import glm_.vec2.Vec2
 import glm_.vec3.Vec3
+import java.lang.Float.max
 
 class CameraInfoHelper(
     val cameraInfo: CameraInfo,
@@ -14,11 +15,19 @@ class CameraInfoHelper(
 ):
     UpdatableImp()
 {
+    companion object {
+        fun maxWithOneToAvoidDivisionByZero(
+            x: Float
+        ): Float {
+            return max(1f, x)
+        }
+    }
+
     private val zNear: Float = 2f
     private val zFar: Float = 20f
 
-    private var displayWidthF = screenResolution[0].toFloat()
-    private var displayHeightF = screenResolution[1].toFloat()
+    private var displayWidthF = maxWithOneToAvoidDivisionByZero(screenResolution[0].toFloat())
+    private var displayHeightF = maxWithOneToAvoidDivisionByZero(screenResolution[1].toFloat())
 
     init {
         glm.perspective(

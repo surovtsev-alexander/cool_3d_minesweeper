@@ -13,7 +13,7 @@ import javax.microedition.khronos.opengles.GL10
 typealias ScreenResolution = Vec2i
 typealias ScreenResolutionFlow = StateFlow<ScreenResolution>
 
-val DefaultScreenResolution: ScreenResolution = Vec2i(-1, -1)
+val DefaultScreenResolution: ScreenResolution = Vec2i(0, 0)
 
 class GLESRenderer: GLSurfaceView.Renderer {
 
