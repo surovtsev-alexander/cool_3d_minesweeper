@@ -24,7 +24,9 @@ class GameLogic(
     }
 
     private val _gameTouchHandlerFlow = MutableStateFlow(
-        createGameTouchHandler(gameStateHolder.gameStateFlow.value)
+        createGameTouchHandler(
+            gameStateHolder.gameStateFlow.value
+        )
     )
     val gameTouchHandlerFlow = _gameTouchHandlerFlow.asStateFlow()
 
