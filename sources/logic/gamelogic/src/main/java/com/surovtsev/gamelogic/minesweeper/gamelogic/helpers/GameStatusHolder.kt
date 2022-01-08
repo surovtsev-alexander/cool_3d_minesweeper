@@ -18,9 +18,7 @@ import javax.inject.Inject
 @GameScope
 class GameStatusHolder @Inject constructor(
     private val asyncTimeSpan: AsyncTimeSpan,
-    private val gameNotPausedFlow: GameNotPausedFlow,
-    subscriptionsHolder: SubscriptionsHolder,
-): Subscription {
+) {
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
         GameStatusWithElapsed()
     )
@@ -41,27 +39,6 @@ class GameStatusHolder @Inject constructor(
         asyncTimeSpan.flush()
 
         setGameStatus(GameStatus.NoBombsPlaced)
-        subscriptionsHolder.addSubscription(this)
-    }
-
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
-
-            gameNotPausedFlow.combine(
-                gameStatusWithElapsedFlow
-            ) { gameNotPaused: Boolean, (gameStatus: GameStatus, _) ->
-
-                gameNotPaused and GameStatusHelper.isGameInProgress(gameStatus)
-
-            }.collectLatest { turnOn ->
-                if (turnOn) {
-                    resumeTimeSpan()
-                } else {
-                    pauseTimeSpan()
-                }
-            }
-
-        }
     }
 
     fun setGameStatus(newStatus: GameStatus) {

@@ -32,6 +32,7 @@ import com.surovtsev.gamelogic.utils.gles.model.pointer.PointerImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.math.FloatingAverage
@@ -49,6 +50,7 @@ import javax.inject.Named
     dependencies = [
         AppComponentEntryPoint::class,
         GameScreenEntryPoint::class,
+        RestartableCoroutineScopeEntryPoint::class,
         SubscriptionsHolderEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
     ],
@@ -85,6 +87,7 @@ interface GameComponent {
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
         fun gameScreenEntryPoint(gameScreenEntryPoint: GameScreenEntryPoint): Builder
+        fun restartableCoroutineScopeEntryPoint(restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint): Builder
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
