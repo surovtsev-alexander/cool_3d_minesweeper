@@ -4,24 +4,28 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed interface CommandFromRankingScreen: CommandFromScreen {
-    class HandleScreenLeaving(owner: LifecycleOwner):
-        CommandFromRankingScreen,
-        CommandFromScreen.HandleScreenLeaving(owner)
+sealed class CommandFromRankingScreen(
+    override val setLoadingStateWhileProcessing: Boolean = true
+): CommandFromScreen {
+    class HandleScreenLeaving(
+        override val owner: LifecycleOwner
+    ):
+        CommandFromRankingScreen(),
+        CommandFromScreen.HandleScreenLeaving
 
-    object LoadData: CommandFromRankingScreen, CommandFromScreen.Init
+    object LoadData: CommandFromRankingScreen(), CommandFromScreen.Init
 
-    object CloseError: CommandFromRankingScreen, CommandFromScreen.CloseError
+    object CloseError: CommandFromRankingScreen(), CommandFromScreen.CloseError
 
-    object CloseErrorAndFinish: CommandFromRankingScreen, CommandFromScreen.CloseErrorAndFinish
+    object CloseErrorAndFinish: CommandFromRankingScreen(), CommandFromScreen.CloseErrorAndFinish
 
     class FilterList(
         val selectedSettingsId: Long
-    ): CommandFromRankingScreen
+    ): CommandFromRankingScreen()
 
     open class SortList(
         val rankingTableSortParameters: RankingTableSortParameters
-    ): CommandFromRankingScreen
+    ): CommandFromRankingScreen()
 
     class SortListWithNoDelay(
         rankingTableSortParameters: RankingTableSortParameters

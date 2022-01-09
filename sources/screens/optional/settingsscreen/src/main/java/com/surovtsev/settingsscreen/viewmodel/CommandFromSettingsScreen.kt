@@ -4,37 +4,41 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.CommandFromScreen
 
-sealed interface CommandFromSettingsScreen: CommandFromScreen {
-    class HandleLeavingScreen(owner: LifecycleOwner):
-        CommandFromSettingsScreen,
-        CommandFromScreen.HandleScreenLeaving(owner)
+sealed class CommandFromSettingsScreen(
+    override val setLoadingStateWhileProcessing: Boolean = true
+): CommandFromScreen {
+    class HandleLeavingScreen(
+        override val owner: LifecycleOwner
+    ):
+        CommandFromSettingsScreen(),
+        CommandFromScreen.HandleScreenLeaving
 
-    object CloseError: CommandFromSettingsScreen, CommandFromScreen.CloseError
+    object CloseError: CommandFromSettingsScreen(), CommandFromScreen.CloseError
 
-    object CloseErrorAndFinish: CommandFromSettingsScreen, CommandFromScreen.CloseErrorAndFinish
+    object CloseErrorAndFinish: CommandFromSettingsScreen(), CommandFromScreen.CloseErrorAndFinish
 
-    object TriggerInitialization: CommandFromSettingsScreen, CommandFromScreen.Init
+    object TriggerInitialization: CommandFromSettingsScreen(), CommandFromScreen.Init
 
-    object LoadSettingsList: CommandFromSettingsScreen
+    object LoadSettingsList: CommandFromSettingsScreen()
 
-    object LoadSelectedSettings: CommandFromSettingsScreen
+    object LoadSelectedSettings: CommandFromSettingsScreen()
 
     data class RememberSettings(
         val settings: Settings
-    ): CommandFromSettingsScreen
+    ): CommandFromSettingsScreen()
 
     data class RememberSettingsData(
         val settingsData: Settings.SettingsData,
         val fromSlider: Boolean = false
-    ): CommandFromSettingsScreen
+    ): CommandFromSettingsScreen()
 
     data class DeleteSettings(
         val settingsId: Long
-    ): CommandFromSettingsScreen
+    ): CommandFromSettingsScreen()
 
-    object ApplySettings: CommandFromSettingsScreen
+    object ApplySettings: CommandFromSettingsScreen()
 
-    object Finish: CommandFromSettingsScreen, CommandFromScreen.Finish
+    object Finish: CommandFromSettingsScreen(), CommandFromScreen.Finish
 
     object BaseCommands: CommandFromScreen.BaseCommands<CommandFromSettingsScreen>(
         TriggerInitialization,

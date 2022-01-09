@@ -5,7 +5,11 @@ import androidx.lifecycle.LifecycleOwner
 typealias HandleScreenLeavingCommandFactory<C> = (owner: LifecycleOwner) -> C
 
 interface CommandFromScreen {
-    open class HandleScreenLeaving(val owner: LifecycleOwner): CommandFromScreen
+    val setLoadingStateWhileProcessing: Boolean
+
+    interface HandleScreenLeaving: CommandFromScreen {
+        val owner: LifecycleOwner
+    }
 
     interface CloseError: CommandFromScreen
     interface CloseErrorAndFinish: CloseError

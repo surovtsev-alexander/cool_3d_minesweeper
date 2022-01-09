@@ -98,7 +98,9 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
         if (commandProcessor == null) {
             publishErrorState("unable to process internal command")
         } else {
-            publishLoadingState()
+            if (command.setLoadingStateWhileProcessing) {
+                publishLoadingState()
+            }
             commandProcessor.invoke()
         }
     }
