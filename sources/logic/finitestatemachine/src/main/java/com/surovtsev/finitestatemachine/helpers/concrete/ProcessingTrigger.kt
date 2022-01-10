@@ -1,7 +1,6 @@
 package com.surovtsev.finitestatemachine.helpers.concrete
 
 import com.surovtsev.finitestatemachine.helpers.concrete.auxiliary.MyMutex
-import kotlinx.coroutines.sync.Mutex
 
 interface ProcessingTrigger {
     fun isBusy(): Boolean
@@ -10,7 +9,7 @@ interface ProcessingTrigger {
 }
 
 class ProcessingTriggerImp: ProcessingTrigger, MyMutex() {
-    override fun isBusy(): Boolean = isLocked()
+    override fun isBusy(): Boolean = !isLocked()
 
     override fun triggerProcessing() = safeUnlock()
 
