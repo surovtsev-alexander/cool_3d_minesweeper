@@ -35,7 +35,7 @@ const val LoadGameParameterName = "load_game"
 
 typealias GameScreenStateFlow = ScreenStateFlow<GameScreenData>
 
-typealias GameScreenCommandHandler = ScreenCommandHandler<EventToGameScreenViewModel>
+typealias GameScreenEventHandler = EventHandler<EventToGameScreenViewModel>
 
 typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
 
@@ -51,7 +51,7 @@ class GameScreenViewModel @AssistedInject constructor(
         GameScreenData.NoData,
         GameScreenInitialState,
     ),
-    GameScreenCommandHandler,
+    GameScreenEventHandler,
     DefaultLifecycleObserver
 {
     @AssistedFactory
@@ -113,7 +113,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onResume()
 
         if (state.value.screenData is GameScreenData.GameMenu) {
-            handleCommand(
+            handleEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
         }
@@ -128,7 +128,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
 
         if (state.value.screenData !is GameScreenData.GameMenu) {
-            handleCommand(
+            handleEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }
@@ -154,9 +154,9 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    override suspend fun getCommandProcessor(command: EventToGameScreenViewModel): CommandProcessor? {
-        return when (command) {
-            is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(command.owner) }
+    override suspend fun getEventProcessor(event: EventToGameScreenViewModel): EventProcessor? {
+        return when (event) {
+            is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
             is EventToGameScreenViewModel.LoadGame                       -> suspend { newGame(true) }
             is EventToGameScreenViewModel.CloseError                     -> ::closeError

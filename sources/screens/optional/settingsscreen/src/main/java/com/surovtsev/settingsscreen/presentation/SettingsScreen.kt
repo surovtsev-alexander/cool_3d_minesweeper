@@ -34,17 +34,17 @@ fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    val commandHandler: SettingsScreenCommandHandler = viewModel
+    val eventHandler: SettingsScreenEventHandler = viewModel
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
-        commandHandler.handleCommand(
+        eventHandler.handleEvent(
             EventToSettingsScreenViewModel.TriggerInitialization
         )
     }
 
     SettingsControls(
         viewModel.state,
-        commandHandler,
+        eventHandler,
         viewModel as SettingsScreenErrorDialogPlacer,
     )
 }
@@ -52,7 +52,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsControls(
     stateFlow: SettingsScreenStateFlow,
-    commandHandler: SettingsScreenCommandHandler,
+    eventHandler: SettingsScreenEventHandler,
     errorDialogPlacer: SettingsScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
@@ -72,7 +72,7 @@ fun SettingsControls(
                 ) {
                     SettingsList(
                         stateFlow,
-                        commandHandler
+                        eventHandler
                     )
                 }
 
@@ -86,7 +86,7 @@ fun SettingsControls(
                 Column {
                     Controls(
                         stateFlow,
-                        commandHandler
+                        eventHandler
                     )
                 }
                 Spacer(
@@ -99,7 +99,7 @@ fun SettingsControls(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ApplySettingsButtons(
-                        commandHandler
+                        eventHandler
                     )
                 }
             }
@@ -110,7 +110,7 @@ fun SettingsControls(
 @Composable
 fun SettingsList(
     stateFlow: SettingsScreenStateFlow,
-    commandHandler: SettingsScreenCommandHandler
+    eventHandler: SettingsScreenEventHandler
 ) {
     val state = stateFlow.collectAsState().value
 
@@ -145,7 +145,7 @@ fun SettingsList(
             items(settingsList) { item: Settings ->
                 val itemId = item.id
                 val modifier = Modifier.clickable {
-                    commandHandler.handleCommand(
+                    eventHandler.handleEvent(
                         EventToSettingsScreenViewModel.RememberSettings(
                             item
                         )
@@ -162,7 +162,7 @@ fun SettingsList(
                 Box (
                     modifier
                 ) {
-                    SettingsDataItem(commandHandler, item)
+                    SettingsDataItem(eventHandler, item)
                 }
             }
         }
@@ -171,7 +171,7 @@ fun SettingsList(
 
 @Composable
 fun SettingsDataItem(
-    commandHandler: SettingsScreenCommandHandler,
+    eventHandler: SettingsScreenEventHandler,
     settings: Settings
 ) {
     Row(
@@ -218,7 +218,7 @@ fun SettingsDataItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        commandHandler.handleCommand(
+                        eventHandler.handleEvent(
                             EventToSettingsScreenViewModel.DeleteSettings(settings.id)
                         )
                     }
@@ -240,7 +240,7 @@ fun SettingsDataItem(
 @Composable
 fun Controls(
     stateFlow: SettingsScreenStateFlow,
-    commandHandler: SettingsScreenCommandHandler
+    eventHandler: SettingsScreenEventHandler
 ) {
     val state = stateFlow.collectAsState().value
     val screenData = state.screenData
@@ -254,7 +254,7 @@ fun Controls(
     settingsUIInfo.info.map { settingUIControl ->
         BindViewModelAndUI(
             screenData = screenData,
-            commandHandler = commandHandler,
+            eventHandler = eventHandler,
             settingsUIControl = settingUIControl
         )
     }
@@ -276,7 +276,7 @@ fun Controls(
 @Composable
 fun BindViewModelAndUI(
     screenData: SettingsScreenData.SettingsDataIsSelected,
-    commandHandler: SettingsScreenCommandHandler,
+    eventHandler: SettingsScreenEventHandler,
     settingsUIControl: SettingUIControl
 ) {
     val settingsData = screenData.settingsData
@@ -304,7 +304,7 @@ fun BindViewModelAndUI(
         prevUIValue = uiValue
 
         val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
-            commandHandler.handleCommand(
+            eventHandler.handleEvent(
                 EventToSettingsScreenViewModel.RememberSettingsData(
                     updatedSettingsData, fromSlider = true
                 )
@@ -319,7 +319,7 @@ fun BindViewModelAndUI(
 
 @Composable
 fun ApplySettingsButtons(
-    commandHandler: SettingsScreenCommandHandler
+    eventHandler: SettingsScreenEventHandler
 ) {
     Row(
         modifier = Modifier
@@ -331,11 +331,11 @@ fun ApplySettingsButtons(
             "back" to EventToSettingsScreenViewModel.Finish
         )
 
-        buttons.map { (buttonCaption, commandFromScreen) ->
+        buttons.map { (buttonCaption, event) ->
             Button(
                 {
-                    commandHandler.handleCommand(
-                        commandFromScreen
+                    eventHandler.handleEvent(
+                        event
                     )
                 },
                 modifier = Modifier

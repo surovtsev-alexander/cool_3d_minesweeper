@@ -16,15 +16,15 @@ import com.surovtsev.core.ui.theme.GrayBackground
 @Composable
 fun ErrorDialog(
     stateFlow: ScreenStateFlow<ScreenData>,
-    screenCommandHandler: ScreenCommandHandler<EventToViewModel>,
-    closeErrorCommand: EventToViewModel.CloseError,
-    closeErrorAndFinishCommand: EventToViewModel.CloseErrorAndFinish
+    eventHandler: EventHandler<EventToViewModel>,
+    closeErrorEvent: EventToViewModel.CloseError,
+    closeErrorAndFinishEvent: EventToViewModel.CloseErrorAndFinish
 ) {
     val state by stateFlow.collectAsState()
 
     val errorMessage = (state as? ScreenState.Error<*>)?.message?: return
 
-    val closeAction = { screenCommandHandler.handleCommand(closeErrorCommand) }
+    val closeAction = { eventHandler.handleEvent(closeErrorEvent) }
 
     Dialog(
         onDismissRequest = closeAction
@@ -52,8 +52,8 @@ fun ErrorDialog(
                 }
                 Button(
                     onClick = {
-                        screenCommandHandler.handleCommand(
-                            closeErrorAndFinishCommand
+                        eventHandler.handleEvent(
+                            closeErrorAndFinishEvent
                         )
                     }
                 ) {
@@ -69,8 +69,8 @@ fun <C: EventToViewModel, D: ScreenData> ErrorDialogPlacer<C, D>.PlaceErrorDialo
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         stateFlow = state  as ScreenStateFlow<ScreenData>,
-        screenCommandHandler = this as ScreenCommandHandler<EventToViewModel>,
-        closeErrorCommand = mandatoryEvents.closeError,
-        closeErrorAndFinishCommand = mandatoryEvents.closeErrorAndFinish,
+        eventHandler = this as EventHandler<EventToViewModel>,
+        closeErrorEvent = mandatoryEvents.closeError,
+        closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )
 }

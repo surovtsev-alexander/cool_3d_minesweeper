@@ -17,7 +17,7 @@ import dagger.assisted.AssistedInject
 
 typealias SettingsScreenStateFlow = ScreenStateFlow<SettingsScreenData>
 
-typealias SettingsScreenCommandHandler = ScreenCommandHandler<EventToSettingsScreenViewModel>
+typealias SettingsScreenEventHandler = EventHandler<EventToSettingsScreenViewModel>
 
 typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScreenViewModel, SettingsScreenData>
 
@@ -38,18 +38,18 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private var settingsComponent: SettingsComponent? = null
 
-    override suspend fun getCommandProcessor(command: EventToSettingsScreenViewModel): CommandProcessor? {
-        return when (command) {
-            is EventToSettingsScreenViewModel.HandleLeavingScreen    -> suspend { handleScreenLeaving(command.owner) }
+    override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor? {
+        return when (event) {
+            is EventToSettingsScreenViewModel.HandleLeavingScreen    -> suspend { handleScreenLeaving(event.owner) }
             is EventToSettingsScreenViewModel.CloseError             -> ::closeError
             is EventToSettingsScreenViewModel.CloseErrorAndFinish    -> ::closeError
             is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
             is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
-            is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(command.settings) }
-            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromSlider) }
+            is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(event.settings) }
+            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData, event.fromSlider) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
-            is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
+            is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
             else                                                -> null
         }
     }
@@ -75,7 +75,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             currSettingsComponent.settingsDao
         )
 
-        return handleCommand(
+        return handleEvent(
             EventToSettingsScreenViewModel.LoadSettingsList
         )
     }
@@ -98,7 +98,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             )
         )
 
-        return handleCommand(
+        return handleEvent(
             EventToSettingsScreenViewModel.LoadSelectedSettings
         )
     }
@@ -200,7 +200,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         ) {
             currSettingsComponent.settingsDao.delete(settingsId)
 
-            return handleCommand(
+            return handleEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
             )
         }

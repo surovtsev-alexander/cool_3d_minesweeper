@@ -25,7 +25,7 @@ import logcat.logcat
 
 typealias RankingScreenStateFlow = ScreenStateFlow<RankingScreenData>
 
-typealias RankingScreenCommandHandler = ScreenCommandHandler<EventToRankingScreenViewModel>
+typealias RankingScreenEventHandler = EventHandler<EventToRankingScreenViewModel>
 
 typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<
         EventToRankingScreenViewModel, RankingScreenData>
@@ -65,13 +65,13 @@ class RankingScreenViewModel @AssistedInject constructor(
         restartableCoroutineScopeComponent?.subscriberImp?.onStop()
     }
 
-    override suspend fun getCommandProcessor(command: EventToRankingScreenViewModel): CommandProcessor? {
-        return when (command) {
-            is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(command.owner) }
+    override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor? {
+        return when (event) {
+            is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(event.owner) }
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
-            is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(command.selectedSettingsId) }
-            is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(command.rankingTableSortParameters, false) }
-            is EventToRankingScreenViewModel.SortList                -> suspend { sortList(command.rankingTableSortParameters, true) }
+            is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
+            is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(event.rankingTableSortParameters, false) }
+            is EventToRankingScreenViewModel.SortList                -> suspend { sortList(event.rankingTableSortParameters, true) }
             is EventToRankingScreenViewModel.CloseError              -> ::closeError
             else                                                -> null
         }
@@ -146,7 +146,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
         )?.let {
-            return handleCommand(
+            return handleEvent(
                 EventToRankingScreenViewModel.FilterList(it.id)
             )
         }
@@ -188,7 +188,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
 
 
-        return handleCommand(
+        return handleEvent(
             EventToRankingScreenViewModel.SortList(
                 DefaultRankingTableSortParameters
             )

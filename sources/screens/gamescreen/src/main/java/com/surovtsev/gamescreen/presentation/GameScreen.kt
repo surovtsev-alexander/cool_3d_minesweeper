@@ -51,11 +51,11 @@ fun GameScreen(
         return
     }
 
-    val commandHandler = viewModel as GameScreenCommandHandler
+    val commandHandler = viewModel as GameScreenEventHandler
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
-        commandHandler.handleCommand(
+        commandHandler.handleEvent(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame
             } else {
@@ -78,7 +78,7 @@ private val pauseResumeButtonWidth = 100.dp
 @Composable
 fun GameScreenControls(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     errorDialogPlacer: GameScreenErrorDialogPlacer,
@@ -110,7 +110,7 @@ fun GameScreenControls(
 @Composable
 fun GameView(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
 ) {
@@ -153,7 +153,7 @@ fun GameView(
                 .width(pauseResumeButtonWidth)
             ,
             onClick = {
-                commandHandler.handleCommand(
+                commandHandler.handleEvent(
                     EventToGameScreenViewModel.OpenGameMenuAndSetIdleState
                 )
             },
@@ -192,7 +192,7 @@ fun FPSLabel(
 @Composable
 fun GameMenu(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
 ) {
     val gameScreenState by stateFlow.collectAsState()
 
@@ -207,7 +207,7 @@ fun GameMenu(
     )
 
     val closeAction = {
-        commandHandler.handleCommand(EventToGameScreenViewModel.CloseGameMenu)
+        commandHandler.handleEvent(EventToGameScreenViewModel.CloseGameMenu)
     }
 
     Dialog(
@@ -245,7 +245,7 @@ fun GameMenu(
                             .fillMaxWidth()
                             .height(80.dp),
                         onClick = {
-                            commandHandler.handleCommand(command)
+                            commandHandler.handleEvent(command)
                         },
                         border = BorderStroke(1.dp, Color.Black)
                     ) {
@@ -276,7 +276,7 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
 ) {
     Row(
         modifier = Modifier
@@ -317,7 +317,7 @@ fun Controls(
 
 @Composable
 fun ControlButtons(
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
 ) {
     Row (
         modifier = Modifier
@@ -332,7 +332,7 @@ fun ControlButtons(
             Button(
                 modifier = Modifier
                     .weight(1f),
-                onClick = { commandHandler.handleCommand(commandFromScreen) }
+                onClick = { commandHandler.handleEvent(commandFromScreen) }
             ) {
                 Text(text = buttonCaption)
             }
@@ -343,7 +343,7 @@ fun ControlButtons(
 @Composable
 fun ControlCheckBox(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
 ) {
     val state = stateFlow.collectAsState().value
 
@@ -358,7 +358,7 @@ fun ControlCheckBox(
     val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
 
     val toggleFlaggingAction = {
-        commandHandler.handleCommand(
+        commandHandler.handleEvent(
             EventToGameScreenViewModel.ToggleFlagging
         )
     }
@@ -431,7 +431,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     stateFlow: GameScreenStateFlow,
-    commandHandler: GameScreenCommandHandler,
+    commandHandler: GameScreenEventHandler,
 ) {
     val state by stateFlow.collectAsState()
 
@@ -446,7 +446,7 @@ fun GameStatusDialog(
     }
 
     val closeDialogAction = {
-        commandHandler.handleCommand(
+        commandHandler.handleEvent(
             EventToGameScreenViewModel.CloseGameStatusDialog
         )
     }
@@ -467,7 +467,7 @@ fun GameStatusDialog(
             Button(
                 onClick = {
                     closeDialogAction.invoke()
-                    commandHandler.handleCommand(
+                    commandHandler.handleEvent(
                         EventToGameScreenViewModel.NewGame
                     )
                 }

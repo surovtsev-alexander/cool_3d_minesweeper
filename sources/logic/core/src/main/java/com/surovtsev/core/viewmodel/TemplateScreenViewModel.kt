@@ -10,19 +10,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 
-typealias CommandProcessor = suspend () -> Unit
+typealias EventProcessor = suspend () -> Unit
 
 typealias FinishAction = () -> Unit
 
 typealias ScreenStateFlow<T> = StateFlow<ScreenState<out T>>
 
-abstract class TemplateScreenViewModel<C: EventToViewModel, D: ScreenData>(
-    override val mandatoryEvents: EventToViewModel.MandatoryEvents<C>,
+abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
+    override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
     override val noScreenData: D,
     initialState: ScreenState<out D>,
 ):
     ViewModel(),
-    ErrorDialogPlacer<C, D>,
+    ErrorDialogPlacer<E, D>,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
     DefaultLifecycleObserver
 {
@@ -31,18 +31,18 @@ abstract class TemplateScreenViewModel<C: EventToViewModel, D: ScreenData>(
     private val _state: MutableStateFlow<ScreenState<out D>> = MutableStateFlow(initialState)
     override val state: ScreenStateFlow<D> = _state.asStateFlow()
 
-    abstract suspend fun getCommandProcessor(command: C): CommandProcessor?
+    abstract suspend fun getEventProcessor(event: E): EventProcessor?
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        handleCommand(
+        handleEvent(
             mandatoryEvents.handleScreenLeavingEventFactory(owner)
         )
     }
 
-    override fun handleCommand(command: C) {
+    override fun handleEvent(event: E) {
         launchOnIOThread {
-            logcat { "handleCommand: $command" }
+            logcat { "handleEvent: $event" }
 
             val currState = state.value
 
@@ -54,31 +54,31 @@ abstract class TemplateScreenViewModel<C: EventToViewModel, D: ScreenData>(
                 screenData is ScreenData.InitializationIsNotFinished
 
 
-            val skipProcessingCommand: Boolean
+            val skipEventProcessing: Boolean
 
             if (isErrorState) {
-                val isCloseErrorCommand = command is EventToViewModel.CloseError
+                val isCloseErrorEvent = event is EventToViewModel.CloseError
 
-                if (isCloseErrorCommand) {
-                    if (isErrorDuringInitialization || command is EventToViewModel.CloseErrorAndFinish) {
+                if (isCloseErrorEvent) {
+                    if (isErrorDuringInitialization || event is EventToViewModel.CloseErrorAndFinish) {
                         closeError()
                         finish()
-                        skipProcessingCommand = true
+                        skipEventProcessing = true
                     } else {
-                        skipProcessingCommand = false
+                        skipEventProcessing = false
                     }
                 } else {
-                    skipProcessingCommand = true
+                    skipEventProcessing = true
                 }
             } else {
-                skipProcessingCommand = false
+                skipEventProcessing = false
             }
 
-            if (!skipProcessingCommand) {
-                if (command is EventToViewModel.Finish) {
+            if (!skipEventProcessing) {
+                if (event is EventToViewModel.Finish) {
                     finish()
                 } else {
-                    tryToProcessCommand(command)
+                    processEvent(event)
                 }
             }
         }
@@ -92,16 +92,16 @@ abstract class TemplateScreenViewModel<C: EventToViewModel, D: ScreenData>(
         }
     }
 
-    private suspend fun tryToProcessCommand(command: C) {
-        val commandProcessor = getCommandProcessor(command)
+    private suspend fun processEvent(event: E) {
+        val eventProcessor = getEventProcessor(event)
 
-        if (commandProcessor == null) {
-            publishErrorState("unable to process internal command")
+        if (eventProcessor == null) {
+            publishErrorState("unable to process internal event")
         } else {
-            if (command.setLoadingStateWhileProcessing) {
+            if (event.setLoadingStateWhileProcessing) {
                 publishLoadingState()
             }
-            commandProcessor.invoke()
+            eventProcessor.invoke()
         }
     }
 
