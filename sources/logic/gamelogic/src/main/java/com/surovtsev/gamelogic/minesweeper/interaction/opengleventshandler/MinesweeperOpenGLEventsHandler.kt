@@ -1,8 +1,8 @@
 package com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler
 
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.interaction.commandhandler.CommandHandler
-import com.surovtsev.gamelogic.minesweeper.interaction.commandhandler.CommandToMinesweeper
+import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventHandler
+import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.models.gles.gameviewsholder.GameViewsHolder
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -14,7 +14,7 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
     private val manuallyUpdatableTimeAfterDeviceStartupFlowHolder: ManuallyUpdatableTimeAfterDeviceStartupFlowHolder,
     private val gameViewsHolder: GameViewsHolder,
     private val fpsCalculator: FPSCalculator,
-    private val commandHandler: CommandHandler,
+    private val eventHandler: EventHandler,
 ):
     OpenGLEventsHandler
 {
@@ -35,8 +35,8 @@ class MinesweeperOpenGLEventsHandler @Inject constructor(
         gameViewsHolder.onSurfaceChanged(
             force = false
         )
-        commandHandler.handleCommandWithBlocking(
-            CommandToMinesweeper.Tick
+        eventHandler.handleEventWithBlocking(
+            EventToMinesweeper.Tick
         )
         gameViewsHolder.onDrawFrame()
     }

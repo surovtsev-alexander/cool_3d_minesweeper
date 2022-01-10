@@ -12,7 +12,7 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
-import com.surovtsev.gamelogic.minesweeper.interaction.commandhandler.CommandToMinesweeper
+import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
@@ -123,8 +123,8 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
 
-        gameComponent?.minesweeper?.commandHandler?.handleCommandWithBlocking(
-            CommandToMinesweeper.SaveGame
+        gameComponent?.minesweeper?.eventHandler?.handleEventWithBlocking(
+            EventToMinesweeper.SaveGame
         )
 
         if (state.value.screenData !is GameScreenData.GameMenu) {
@@ -279,7 +279,7 @@ class GameScreenViewModel @AssistedInject constructor(
                 gameScreenComponent.gLESRenderer.openGLEventsHandler =
                     gC.minesweeper.openGLEventsHandler
 
-                // TODO: move updating to Minesweeper.CommandHandler.newGame.
+                // TODO: move updating to Minesweeper.EventHandler.newGame.
                 gC.cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
                     if (!loadGame) {
                         it.cameraInfo.moveToOrigin()

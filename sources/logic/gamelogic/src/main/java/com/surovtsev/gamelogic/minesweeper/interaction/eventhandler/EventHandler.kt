@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.minesweeper.interaction.commandhandler
+package com.surovtsev.gamelogic.minesweeper.interaction.eventhandler
 
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
@@ -13,7 +13,7 @@ import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @GameScope
-class CommandHandler @Inject constructor(
+class EventHandler @Inject constructor(
     private val sceneCalculator: SceneCalculator,
     private val saveController: SaveController,
     private val gameStateHolder: GameStateHolder,
@@ -21,27 +21,27 @@ class CommandHandler @Inject constructor(
 ) {
     private val mutex = Mutex()
 
-    fun handleCommandWithBlocking(
-        command: CommandToMinesweeper
+    fun handleEventWithBlocking(
+        event: EventToMinesweeper
     ) {
         runBlocking {
-            handleCommand(
-                command
+            handleEvent(
+                event
             )
         }
     }
 
-    suspend fun handleCommand(
-        command: CommandToMinesweeper
+    suspend fun handleEvent(
+        event: EventToMinesweeper
     ) {
-        val action = when (command) {
-            is CommandToMinesweeper.NewGame     -> ::newGame
-            is CommandToMinesweeper.LoadGame    -> ::loadGame
-            is CommandToMinesweeper.SaveGame    -> ::saveGame
-            is CommandToMinesweeper.Tick        -> ::tick
+        val action = when (event) {
+            is EventToMinesweeper.NewGame     -> ::newGame
+            is EventToMinesweeper.LoadGame    -> ::loadGame
+            is EventToMinesweeper.SaveGame    -> ::saveGame
+            is EventToMinesweeper.Tick        -> ::tick
         }
 
-        if (mutex.isLocked && command is CommandToMinesweeper.CanBeSkipped) {
+        if (mutex.isLocked && event is EventToMinesweeper.CanBeSkipped) {
             return
         }
 
