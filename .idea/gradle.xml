@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/sources/app" />
             <option value="$PROJECT_DIR$/sources/logic/core" />
+            <option value="$PROJECT_DIR$/sources/logic/finitestatemachine" />
             <option value="$PROJECT_DIR$/sources/logic/gamelogic" />
             <option value="$PROJECT_DIR$/sources/logic/gamestate" />
             <option value="$PROJECT_DIR$/sources/logic/restartablecoroutinescope" />

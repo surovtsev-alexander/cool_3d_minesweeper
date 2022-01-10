@@ -8,6 +8,7 @@ val appModuleDir = "sources"
 
 
 val coreModule = ":core"
+val finiteStateMachineModule = ":finitestatemachine"
 val gameLogicModule = ":gamelogic"
 val gameStateModule = ":gamestate"
 val restartableCoroutineScopeModule = ":restartablecoroutinescope"
@@ -18,6 +19,7 @@ val utilsModule = ":utils"
 
 val coreModules = arrayOf(
     coreModule,
+    finiteStateMachineModule,
     gameLogicModule,
     gameStateModule,
     restartableCoroutineScopeModule,
