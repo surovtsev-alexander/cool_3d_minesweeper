@@ -17,17 +17,17 @@ import dagger.assisted.AssistedInject
 
 typealias SettingsScreenStateFlow = ScreenStateFlow<SettingsScreenData>
 
-typealias SettingsScreenCommandHandler = ScreenCommandHandler<CommandFromSettingsScreen>
+typealias SettingsScreenCommandHandler = ScreenCommandHandler<EventToSettingsScreenViewModel>
 
-typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<CommandFromSettingsScreen, SettingsScreenData>
+typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScreenViewModel, SettingsScreenData>
 
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<CommandFromSettingsScreen, SettingsScreenData>(
-        CommandFromSettingsScreen.BaseCommands,
+    TemplateScreenViewModel<EventToSettingsScreenViewModel, SettingsScreenData>(
+        EventToSettingsScreenViewModel.MandatoryEvents,
         SettingsScreenData.NoData,
         SettingsScreenInitialState,
     ),
@@ -38,18 +38,18 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private var settingsComponent: SettingsComponent? = null
 
-    override suspend fun getCommandProcessor(command: CommandFromSettingsScreen): CommandProcessor? {
+    override suspend fun getCommandProcessor(command: EventToSettingsScreenViewModel): CommandProcessor? {
         return when (command) {
-            is CommandFromSettingsScreen.HandleLeavingScreen    -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromSettingsScreen.CloseError             -> ::closeError
-            is CommandFromSettingsScreen.CloseErrorAndFinish    -> ::closeError
-            is CommandFromSettingsScreen.TriggerInitialization  -> ::triggerInitialization
-            is CommandFromSettingsScreen.LoadSettingsList       -> ::loadSettingsList
-            is CommandFromSettingsScreen.LoadSelectedSettings   -> ::loadSelectedSettings
-            is CommandFromSettingsScreen.RememberSettings       -> suspend { rememberSettings(command.settings) }
-            is CommandFromSettingsScreen.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromSlider) }
-            is CommandFromSettingsScreen.ApplySettings          -> ::applySettings
-            is CommandFromSettingsScreen.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
+            is EventToSettingsScreenViewModel.HandleLeavingScreen    -> suspend { handleScreenLeaving(command.owner) }
+            is EventToSettingsScreenViewModel.CloseError             -> ::closeError
+            is EventToSettingsScreenViewModel.CloseErrorAndFinish    -> ::closeError
+            is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization
+            is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
+            is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
+            is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(command.settings) }
+            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(command.settingsData, command.fromSlider) }
+            is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
+            is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(command.settingsId) }
             else                                                -> null
         }
     }
@@ -76,7 +76,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         )
 
         return handleCommand(
-            CommandFromSettingsScreen.LoadSettingsList
+            EventToSettingsScreenViewModel.LoadSettingsList
         )
     }
 
@@ -99,7 +99,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         )
 
         return handleCommand(
-            CommandFromSettingsScreen.LoadSelectedSettings
+            EventToSettingsScreenViewModel.LoadSelectedSettings
         )
     }
 
@@ -201,7 +201,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             currSettingsComponent.settingsDao.delete(settingsId)
 
             return handleCommand(
-                CommandFromSettingsScreen.LoadSettingsList
+                EventToSettingsScreenViewModel.LoadSettingsList
             )
         }
     }

@@ -57,9 +57,9 @@ fun GameScreen(
         viewModel.finishAction = { navController.navigateUp() }
         commandHandler.handleCommand(
             if (loadGame) {
-                CommandFromGameScreen.LoadGame
+                EventToGameScreenViewModel.LoadGame
             } else {
-                CommandFromGameScreen.NewGame
+                EventToGameScreenViewModel.NewGame
             }
         )
     }
@@ -154,7 +154,7 @@ fun GameView(
             ,
             onClick = {
                 commandHandler.handleCommand(
-                    CommandFromGameScreen.OpenGameMenuAndSetIdleState
+                    EventToGameScreenViewModel.OpenGameMenuAndSetIdleState
                 )
             },
             border = BorderStroke(1.dp, Color.Black)
@@ -202,12 +202,12 @@ fun GameMenu(
     }
 
     val mainMenuButtons = arrayOf(
-        "new game" to CommandFromGameScreen.NewGame,
-        "main menu" to CommandFromGameScreen.GoToMainMenu,
+        "new game" to EventToGameScreenViewModel.NewGame,
+        "main menu" to EventToGameScreenViewModel.GoToMainMenu,
     )
 
     val closeAction = {
-        commandHandler.handleCommand(CommandFromGameScreen.CloseGameMenu)
+        commandHandler.handleCommand(EventToGameScreenViewModel.CloseGameMenu)
     }
 
     Dialog(
@@ -325,8 +325,8 @@ fun ControlButtons(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val buttons = arrayOf(
-            "1" to CommandFromGameScreen.RemoveFlaggedBombs,
-            "2" to CommandFromGameScreen.RemoveOpenedSlices,
+            "1" to EventToGameScreenViewModel.RemoveFlaggedBombs,
+            "2" to EventToGameScreenViewModel.RemoveOpenedSlices,
         )
         buttons.map { (buttonCaption, commandFromScreen) ->
             Button(
@@ -359,7 +359,7 @@ fun ControlCheckBox(
 
     val toggleFlaggingAction = {
         commandHandler.handleCommand(
-            CommandFromGameScreen.ToggleFlagging
+            EventToGameScreenViewModel.ToggleFlagging
         )
     }
 
@@ -447,7 +447,7 @@ fun GameStatusDialog(
 
     val closeDialogAction = {
         commandHandler.handleCommand(
-            CommandFromGameScreen.CloseGameStatusDialog
+            EventToGameScreenViewModel.CloseGameStatusDialog
         )
     }
 
@@ -468,7 +468,7 @@ fun GameStatusDialog(
                 onClick = {
                     closeDialogAction.invoke()
                     commandHandler.handleCommand(
-                        CommandFromGameScreen.NewGame
+                        EventToGameScreenViewModel.NewGame
                     )
                 }
             ) {

@@ -12,7 +12,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +38,7 @@ fun SettingsScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         commandHandler.handleCommand(
-            CommandFromSettingsScreen.TriggerInitialization
+            EventToSettingsScreenViewModel.TriggerInitialization
         )
     }
 
@@ -147,7 +146,7 @@ fun SettingsList(
                 val itemId = item.id
                 val modifier = Modifier.clickable {
                     commandHandler.handleCommand(
-                        CommandFromSettingsScreen.RememberSettings(
+                        EventToSettingsScreenViewModel.RememberSettings(
                             item
                         )
                     )
@@ -220,7 +219,7 @@ fun SettingsDataItem(
                     .fillMaxWidth()
                     .clickable {
                         commandHandler.handleCommand(
-                            CommandFromSettingsScreen.DeleteSettings(settings.id)
+                            EventToSettingsScreenViewModel.DeleteSettings(settings.id)
                         )
                     }
                     .border(1.dp, Color.Black)
@@ -306,7 +305,7 @@ fun BindViewModelAndUI(
 
         val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
             commandHandler.handleCommand(
-                CommandFromSettingsScreen.RememberSettingsData(
+                EventToSettingsScreenViewModel.RememberSettingsData(
                     updatedSettingsData, fromSlider = true
                 )
             )
@@ -328,8 +327,8 @@ fun ApplySettingsButtons(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         val buttons = arrayOf(
-            "ok" to CommandFromSettingsScreen.ApplySettings,
-            "back" to CommandFromSettingsScreen.Finish
+            "ok" to EventToSettingsScreenViewModel.ApplySettings,
+            "back" to EventToSettingsScreenViewModel.Finish
         )
 
         buttons.map { (buttonCaption, commandFromScreen) ->

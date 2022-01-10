@@ -2,30 +2,30 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.viewmodel.CommandFromScreen
+import com.surovtsev.core.viewmodel.EventToViewModel
 
-sealed class CommandFromRankingScreen(
+sealed class EventToRankingScreenViewModel(
     override val setLoadingStateWhileProcessing: Boolean = true
-): CommandFromScreen {
+): EventToViewModel {
     class HandleScreenLeaving(
         override val owner: LifecycleOwner
     ):
-        CommandFromRankingScreen(),
-        CommandFromScreen.HandleScreenLeaving
+        EventToRankingScreenViewModel(),
+        EventToViewModel.HandleScreenLeaving
 
-    object LoadData: CommandFromRankingScreen(), CommandFromScreen.Init
+    object LoadData: EventToRankingScreenViewModel(), EventToViewModel.Init
 
-    object CloseError: CommandFromRankingScreen(), CommandFromScreen.CloseError
+    object CloseError: EventToRankingScreenViewModel(), EventToViewModel.CloseError
 
-    object CloseErrorAndFinish: CommandFromRankingScreen(), CommandFromScreen.CloseErrorAndFinish
+    object CloseErrorAndFinish: EventToRankingScreenViewModel(), EventToViewModel.CloseErrorAndFinish
 
     class FilterList(
         val selectedSettingsId: Long
-    ): CommandFromRankingScreen()
+    ): EventToRankingScreenViewModel()
 
     open class SortList(
         val rankingTableSortParameters: RankingTableSortParameters
-    ): CommandFromRankingScreen()
+    ): EventToRankingScreenViewModel()
 
     class SortListWithNoDelay(
         rankingTableSortParameters: RankingTableSortParameters
@@ -33,7 +33,7 @@ sealed class CommandFromRankingScreen(
         rankingTableSortParameters
     )
 
-    object BaseCommands: CommandFromScreen.BaseCommands<CommandFromRankingScreen>(
+    object MandatoryEvents: EventToViewModel.MandatoryEvents<EventToRankingScreenViewModel>(
         LoadData,
         CloseError,
         CloseErrorAndFinish,

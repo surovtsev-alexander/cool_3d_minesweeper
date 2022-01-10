@@ -16,8 +16,8 @@ typealias FinishAction = () -> Unit
 
 typealias ScreenStateFlow<T> = StateFlow<ScreenState<out T>>
 
-abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
-    override val baseCommands: CommandFromScreen.BaseCommands<C>,
+abstract class TemplateScreenViewModel<C: EventToViewModel, D: ScreenData>(
+    override val mandatoryEvents: EventToViewModel.MandatoryEvents<C>,
     override val noScreenData: D,
     initialState: ScreenState<out D>,
 ):
@@ -36,7 +36,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         handleCommand(
-            baseCommands.handleScreenLeavingCommandFactory(owner)
+            mandatoryEvents.handleScreenLeavingEventFactory(owner)
         )
     }
 
@@ -57,10 +57,10 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
             val skipProcessingCommand: Boolean
 
             if (isErrorState) {
-                val isCloseErrorCommand = command is CommandFromScreen.CloseError
+                val isCloseErrorCommand = command is EventToViewModel.CloseError
 
                 if (isCloseErrorCommand) {
-                    if (isErrorDuringInitialization || command is CommandFromScreen.CloseErrorAndFinish) {
+                    if (isErrorDuringInitialization || command is EventToViewModel.CloseErrorAndFinish) {
                         closeError()
                         finish()
                         skipProcessingCommand = true
@@ -75,7 +75,7 @@ abstract class TemplateScreenViewModel<C: CommandFromScreen, D: ScreenData>(
             }
 
             if (!skipProcessingCommand) {
-                if (command is CommandFromScreen.Finish) {
+                if (command is EventToViewModel.Finish) {
                     finish()
                 } else {
                     tryToProcessCommand(command)

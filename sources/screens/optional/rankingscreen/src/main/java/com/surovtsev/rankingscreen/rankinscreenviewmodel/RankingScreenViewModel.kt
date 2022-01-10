@@ -25,18 +25,18 @@ import logcat.logcat
 
 typealias RankingScreenStateFlow = ScreenStateFlow<RankingScreenData>
 
-typealias RankingScreenCommandHandler = ScreenCommandHandler<CommandFromRankingScreen>
+typealias RankingScreenCommandHandler = ScreenCommandHandler<EventToRankingScreenViewModel>
 
 typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<
-        CommandFromRankingScreen, RankingScreenData>
+        EventToRankingScreenViewModel, RankingScreenData>
 
 class RankingScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<CommandFromRankingScreen, RankingScreenData>(
-        CommandFromRankingScreen.BaseCommands,
+    TemplateScreenViewModel<EventToRankingScreenViewModel, RankingScreenData>(
+        EventToRankingScreenViewModel.MandatoryEvents,
         RankingScreenData.NoData,
         RankingScreenInitialState,
     )
@@ -65,14 +65,14 @@ class RankingScreenViewModel @AssistedInject constructor(
         restartableCoroutineScopeComponent?.subscriberImp?.onStop()
     }
 
-    override suspend fun getCommandProcessor(command: CommandFromRankingScreen): CommandProcessor? {
+    override suspend fun getCommandProcessor(command: EventToRankingScreenViewModel): CommandProcessor? {
         return when (command) {
-            is CommandFromRankingScreen.HandleScreenLeaving     -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromRankingScreen.LoadData                -> ::loadData
-            is CommandFromRankingScreen.FilterList              -> suspend { filterList(command.selectedSettingsId) }
-            is CommandFromRankingScreen.SortListWithNoDelay     -> suspend { sortList(command.rankingTableSortParameters, false) }
-            is CommandFromRankingScreen.SortList                -> suspend { sortList(command.rankingTableSortParameters, true) }
-            is CommandFromRankingScreen.CloseError              -> ::closeError
+            is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(command.owner) }
+            is EventToRankingScreenViewModel.LoadData                -> ::loadData
+            is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(command.selectedSettingsId) }
+            is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(command.rankingTableSortParameters, false) }
+            is EventToRankingScreenViewModel.SortList                -> suspend { sortList(command.rankingTableSortParameters, true) }
+            is EventToRankingScreenViewModel.CloseError              -> ::closeError
             else                                                -> null
         }
     }
@@ -147,7 +147,7 @@ class RankingScreenViewModel @AssistedInject constructor(
             saveController.loadSettingDataOrDefault()
         )?.let {
             return handleCommand(
-                CommandFromRankingScreen.FilterList(it.id)
+                EventToRankingScreenViewModel.FilterList(it.id)
             )
         }
     }
@@ -189,7 +189,7 @@ class RankingScreenViewModel @AssistedInject constructor(
 
 
         return handleCommand(
-            CommandFromRankingScreen.SortList(
+            EventToRankingScreenViewModel.SortList(
                 DefaultRankingTableSortParameters
             )
         )

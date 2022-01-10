@@ -35,19 +35,19 @@ const val LoadGameParameterName = "load_game"
 
 typealias GameScreenStateFlow = ScreenStateFlow<GameScreenData>
 
-typealias GameScreenCommandHandler = ScreenCommandHandler<CommandFromGameScreen>
+typealias GameScreenCommandHandler = ScreenCommandHandler<EventToGameScreenViewModel>
 
 typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
 
-typealias GameScreenErrorDialogPlacer = ErrorDialogPlacer<CommandFromGameScreen, GameScreenData>
+typealias GameScreenErrorDialogPlacer = ErrorDialogPlacer<EventToGameScreenViewModel, GameScreenData>
 
 class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<CommandFromGameScreen, GameScreenData>(
-        CommandFromGameScreen.BaseCommands,
+    TemplateScreenViewModel<EventToGameScreenViewModel, GameScreenData>(
+        EventToGameScreenViewModel.MandatoryEvents,
         GameScreenData.NoData,
         GameScreenInitialState,
     ),
@@ -114,7 +114,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         if (state.value.screenData is GameScreenData.GameMenu) {
             handleCommand(
-                CommandFromGameScreen.SetIdleState
+                EventToGameScreenViewModel.SetIdleState
             )
         }
     }
@@ -129,7 +129,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         if (state.value.screenData !is GameScreenData.GameMenu) {
             handleCommand(
-                CommandFromGameScreen.OpenGameMenuAndSetLoadingState
+                EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }
     }
@@ -154,22 +154,22 @@ class GameScreenViewModel @AssistedInject constructor(
         )
     }
 
-    override suspend fun getCommandProcessor(command: CommandFromGameScreen): CommandProcessor? {
+    override suspend fun getCommandProcessor(command: EventToGameScreenViewModel): CommandProcessor? {
         return when (command) {
-            is CommandFromGameScreen.HandleScreenLeaving            -> suspend { handleScreenLeaving(command.owner) }
-            is CommandFromGameScreen.NewGame                        -> suspend { newGame(false) }
-            is CommandFromGameScreen.LoadGame                       -> suspend { newGame(true) }
-            is CommandFromGameScreen.CloseError                     -> ::closeError
-            is CommandFromGameScreen.CloseErrorAndFinish            -> ::closeError
-            is CommandFromGameScreen.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
-            is CommandFromGameScreen.OpenGameMenuAndSetIdleState    -> suspend { openGameMenu(setLoadingState = false) }
-            is CommandFromGameScreen.SetIdleState                   -> ::setIdleState
-            is CommandFromGameScreen.CloseGameMenu                  -> suspend { closeGameMenu() }
-            is CommandFromGameScreen.GoToMainMenu                   -> ::goToMainMenu
-            is CommandFromGameScreen.RemoveFlaggedBombs             -> ::removeFlaggedBombs
-            is CommandFromGameScreen.RemoveOpenedSlices             -> ::removeOpenedSlices
-            is CommandFromGameScreen.ToggleFlagging                 -> ::toggleFlagging
-            is CommandFromGameScreen.CloseGameStatusDialog          -> ::closeGameStatusDialog
+            is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(command.owner) }
+            is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
+            is EventToGameScreenViewModel.LoadGame                       -> suspend { newGame(true) }
+            is EventToGameScreenViewModel.CloseError                     -> ::closeError
+            is EventToGameScreenViewModel.CloseErrorAndFinish            -> ::closeError
+            is EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
+            is EventToGameScreenViewModel.OpenGameMenuAndSetIdleState    -> suspend { openGameMenu(setLoadingState = false) }
+            is EventToGameScreenViewModel.SetIdleState                   -> ::setIdleState
+            is EventToGameScreenViewModel.CloseGameMenu                  -> suspend { closeGameMenu() }
+            is EventToGameScreenViewModel.GoToMainMenu                   -> ::goToMainMenu
+            is EventToGameScreenViewModel.RemoveFlaggedBombs             -> ::removeFlaggedBombs
+            is EventToGameScreenViewModel.RemoveOpenedSlices             -> ::removeOpenedSlices
+            is EventToGameScreenViewModel.ToggleFlagging                 -> ::toggleFlagging
+            is EventToGameScreenViewModel.CloseGameStatusDialog          -> ::closeGameStatusDialog
             else                                                    -> null
         }
     }

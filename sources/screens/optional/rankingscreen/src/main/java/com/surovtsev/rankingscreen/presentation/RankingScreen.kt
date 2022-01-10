@@ -40,7 +40,7 @@ fun RankingScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.finishAction = { navController.navigateUp() }
         commandHandler.handleCommand(
-            CommandFromRankingScreen
+            EventToRankingScreenViewModel
                 .LoadData
         )
     }
@@ -173,7 +173,7 @@ fun SettingsList(
                     } else {
                         Box (
                                 modifier = Modifier.clickable { commandHandler.handleCommand(
-                                    CommandFromRankingScreen.FilterList(itemId))
+                                    EventToRankingScreenViewModel.FilterList(itemId))
                                 }
                         ) {
                             SettingsDataItem(item.settingsData, winsCount)
@@ -299,7 +299,7 @@ fun RankingListColumnTitle(
                     .background(buttonColor)
                     .clickable {
                         commandHandler.handleCommand(
-                            CommandFromRankingScreen.SortListWithNoDelay(
+                            EventToRankingScreenViewModel.SortListWithNoDelay(
                                 RankingTableSortParameters(
                                     tableColumnType,
                                     if (isColumnSelected) {
