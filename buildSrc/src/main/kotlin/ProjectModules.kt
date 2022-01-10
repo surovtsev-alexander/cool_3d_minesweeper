@@ -5,13 +5,14 @@ object ProjectModules {
 
     object Logic {
         const val core = ":core"
-        const val utils = ":utils"
-        const val touchListener = ":touchlistener"
+        const val finiteStateMachine = ":finiteStateMachine"
         const val gameLogic = ":gamelogic"
         const val gameState = ":gamestate"
-        const val timeSpan = ":timespan"
         const val restartableCoroutineScope = ":restartablecoroutinescope"
         const val subscriptionsHolder = ":subscriptionsholder"
+        const val timeSpan = ":timespan"
+        const val touchListener = ":touchlistener"
+        const val utils = ":utils"
     }
 
     object Screens {

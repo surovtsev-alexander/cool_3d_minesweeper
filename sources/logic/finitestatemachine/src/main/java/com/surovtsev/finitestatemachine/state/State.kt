@@ -5,15 +5,16 @@ import com.surovtsev.finitestatemachine.state.data.Data
 sealed class State<D: Data>(
     val data: D
 ) {
-    class ERROR<D: Data>(
+    class Error<D: Data>(
+        data: D,
+        val message: String,
+    ): State<D>(data)
+
+    class Idle<D: Data>(
         data: D
     ): State<D>(data)
 
-    class IDLE<D: Data>(
-        data: D
-    ): State<D>(data)
-
-    class LOADING<D: Data>(
+    class Loading<D: Data>(
         data: D
     ): State<D>(data)
 }

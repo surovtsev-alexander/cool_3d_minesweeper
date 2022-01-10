@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine
+package com.surovtsev.finitestatemachine.mock
 
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.event.MandatoryEvents
@@ -9,7 +9,7 @@ abstract class TestEvent(
 
     object Init: TestEvent(), Event.Init
     object CloseError: TestEvent(), Event.CloseError
-    object SkipEvent: TestEvent(skipIfFSMIsBusy = true)
+    object EmptyEvent: TestEvent(skipIfFSMIsBusy = true)
 
     object MandatoryTestEvents: MandatoryEvents(
         init = Init,

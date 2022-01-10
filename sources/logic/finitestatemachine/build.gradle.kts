@@ -31,6 +31,11 @@ android {
 }
 
 dependencies {
+
+    includeProjectModule(
+        ProjectModules.Logic.utils
+    )
+
     defaultDependencies()
     testDependencies()
 
