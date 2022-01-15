@@ -3,13 +3,19 @@ package com.surovtsev.finitestatemachine.mock
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.event.MandatoryEvents
 
-abstract class TestEvent(
-    override val skipIfFSMIsBusy: Boolean = false
-): Event {
+interface TestEvent: Event {
 
-    object Init: TestEvent(), Event.Init
-    object CloseError: TestEvent(), Event.CloseError
-    object EmptyEvent: TestEvent(skipIfFSMIsBusy = true)
+    abstract class TestEventImp(
+        override val doNotPushToQueue: Boolean = false,
+        override val pushToHead: Boolean = false
+    ): TestEvent
+
+    object Init: TestEventImp(), Event.Init
+    object CloseError: TestEventImp(), Event.CloseError
+    object EmptyEvent: TestEventImp(doNotPushToQueue = true)
+
+    object Pause: Event.Pause(), TestEvent
+    object Resume: Event.Resume(), TestEvent
 
     object MandatoryTestEvents: MandatoryEvents(
         init = Init,

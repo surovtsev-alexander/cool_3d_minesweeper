@@ -87,4 +87,16 @@ class FSMUnitTest {
         // assert
         assert(fsm.state.value is State.Idle)
     }
+
+    @Test
+    fun pauseResume() {
+        // arrange
+        val fsm = this.fsm!!
+
+        // act
+
+
+        // assert
+        assert(fsm.state.value is State.Idle)
+    }
 }

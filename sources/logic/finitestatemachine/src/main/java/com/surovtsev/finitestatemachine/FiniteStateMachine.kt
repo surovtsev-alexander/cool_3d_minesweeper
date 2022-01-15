@@ -17,24 +17,4 @@ open class FiniteStateMachine<E: Event, D: Data>(
     coroutineScope,
     initialState,
     logConfig
-) {
-
-    open fun handleEvent(
-        event: E
-    ) {
-        if (logConfig.logLevel.isGreaterThan0()) {
-            logcat { "handleEvent: $event" }
-        }
-
-        if (isBusy() && event.skipIfFSMIsBusy) {
-
-            if (logConfig.logLevel.isGreaterThan0()) {
-                logcat { "FSM is Busy; skipIfFSMIsBusy is true in event; skipping: $event" }
-            }
-
-            return
-        }
-
-        pushEvent(event)
-    }
-}
+)

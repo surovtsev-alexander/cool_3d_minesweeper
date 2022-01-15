@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 open class FSMCoreHelper<E: Event, D: Data>(
     coroutineScope: CoroutineScope,
     private val initialState: FSMState<D>,
-    protected val logConfig: LogConfig,
+    private val logConfig: LogConfig,
 
     private val processingTrigger: ProcessingTrigger = ProcessingTriggerImp(),
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
@@ -25,6 +25,3 @@ open class FSMCoreHelper<E: Event, D: Data>(
     ProcessingWaiter by processingWaiter,
     FSMStateHelper<D> by fsmStateHelper,
     QueueHolder<E> by queueHolder
-{
-
-}
