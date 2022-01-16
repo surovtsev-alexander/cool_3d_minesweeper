@@ -12,6 +12,7 @@ import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.DaggerComponentsHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
@@ -46,14 +47,11 @@ class RankingScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
 
-    var timeSpanComponent: TimeSpanComponent? = null
-    var rankingComponent: RankingComponent? = null
+    private val daggerComponentsHolder = DaggerComponentsHolder(appComponentEntryPoint)
 
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 3000L
     }
-
-    private var restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent? = null
 
     object ErrorMessages {
         val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
@@ -63,7 +61,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        restartableCoroutineScopeComponent?.subscriberImp?.onStop()
+        daggerComponentsHolder.restartableCoroutineScopeComponentHolder.component?.subscriberImp?.onStop()
     }
 
     override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor<EventToRankingScreenViewModel>? {
@@ -80,49 +78,24 @@ class RankingScreenViewModel @AssistedInject constructor(
 
     private suspend fun loadData(
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currRestartableCoroutineScopeComponent: RestartableCoroutineScopeComponent
-        restartableCoroutineScopeComponent.let {
-            currRestartableCoroutineScopeComponent =
-                it?.also {
+
+        val currRestartableCoroutineScopeComponent =
+            daggerComponentsHolder
+                .restartableCoroutineScopeComponentHolder
+                .getOrCreate {
                     it.subscriberImp.restart()
-                } ?: DaggerRestartableCoroutineScopeComponent.create()
-                    .also {
-                        restartableCoroutineScopeComponent = it
-                    }
-        }
+                }
 
-        val currTimeSpanComponent: TimeSpanComponent
+        val currTimeSpanComponent: TimeSpanComponent =
+            daggerComponentsHolder
+                .timeSpanComponentHolder
+                .getOrCreate()
 
-        timeSpanComponent.let {
-            currTimeSpanComponent =
-                it
-                    ?: DaggerTimeSpanComponent
-                        .builder()
-                        .subscriptionsHolderEntryPoint(
-                            SubscriptionsHolderComponentFactoryHolderImp.create(
-                                currRestartableCoroutineScopeComponent,
-                                "RankingScreenViewModel:TimeSpanComponent"
-                            )
-                        )
-                        .build()
-                        .apply {
-                            timeSpanComponent = this
-                        }
-        }
 
-        val currRankingComponent: RankingComponent
-
-        rankingComponent.let {
-            currRankingComponent =
-                it ?: DaggerRankingComponent
-                    .builder()
-                    .appComponentEntryPoint(appComponentEntryPoint)
-                    .timeSpanComponentEntryPoint(currTimeSpanComponent)
-                    .build()
-                    .apply {
-                        rankingComponent = this
-                    }
-        }
+        val currRankingComponent: RankingComponent =
+            daggerComponentsHolder
+                .rankingComponentHolder
+                .getOrCreate()
 
         val settingsDao = currRankingComponent.settingsDao
         val rankingDao = currRankingComponent.rankingDao
@@ -161,7 +134,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     private suspend fun filterList(
         selectedSettingsId: Long
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currRankingComponent = rankingComponent
+        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.component
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(
@@ -205,7 +178,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currTimeSpanComponent = timeSpanComponent
+        val currTimeSpanComponent = daggerComponentsHolder.timeSpanComponentHolder.component
 
         if (currTimeSpanComponent == null) {
             stateHolder.publishErrorState(
@@ -215,7 +188,7 @@ class RankingScreenViewModel @AssistedInject constructor(
             return EventProcessingResult.Processed()
         }
 
-        val currRankingComponent = rankingComponent
+        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.component
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(

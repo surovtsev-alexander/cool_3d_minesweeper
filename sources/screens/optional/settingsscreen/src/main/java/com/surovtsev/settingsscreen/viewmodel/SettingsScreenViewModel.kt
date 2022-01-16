@@ -12,6 +12,7 @@ import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.dagger.SettingsComponent
+import com.surovtsev.utils.dagger.componentholder.DaggerComponentHolder
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -25,7 +26,7 @@ typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScr
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,
-    @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
+    @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel<EventToSettingsScreenViewModel, SettingsScreenData>(
         EventToSettingsScreenViewModel.MandatoryEvents,
@@ -37,7 +38,13 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private var settingsComponent: SettingsComponent? = null
+    private val settingsComponentHolder = DaggerComponentHolder<SettingsComponent> {
+        DaggerSettingsComponent
+            .builder()
+            .appComponentEntryPoint(appComponentEntryPoint)
+            .build()
+    }
+
 
     override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor<EventToSettingsScreenViewModel>? {
         return when (event) {
@@ -56,21 +63,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent: SettingsComponent
-
-        settingsComponent.let {
-            if (it == null) {
-                currSettingsComponent = DaggerSettingsComponent
-                    .builder()
-                    .appComponentEntryPoint(appComponentEntryPoint)
-                    .build()
-                    .apply {
-                        settingsComponent = this
-                    }
-            } else {
-                currSettingsComponent = it
-            }
-        }
+        val currSettingsComponent =
+            settingsComponentHolder
+                .getOrCreate()
 
         prepopulateSettingsTableWithDefaultValues(
             currSettingsComponent.settingsDao
@@ -82,7 +77,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponent
+        val currSettingsComponent = settingsComponentHolder.component
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
@@ -155,7 +150,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private suspend fun applySettings(
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponent
+        val currSettingsComponent = settingsComponentHolder.component
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
@@ -192,7 +187,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponent
+        val currSettingsComponent = settingsComponentHolder.component
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while deleting settings"
@@ -213,7 +208,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponent
+        val currSettingsComponent = settingsComponentHolder.component
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
