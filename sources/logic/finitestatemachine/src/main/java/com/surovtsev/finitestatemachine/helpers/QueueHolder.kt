@@ -1,6 +1,7 @@
 package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
+import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
@@ -18,7 +19,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
-interface QueueHolder<E: Event> {
+interface QueueHolder<E: Event, D: Data> {
+    val stateHolder: StateHolder<D>
+
     fun isQueueEmpty(): Boolean
 
     fun handleEvent(
@@ -29,16 +32,16 @@ interface QueueHolder<E: Event> {
 }
 
 class QueueHolderImp<E: Event, D: Data>(
+    override val stateHolder: StateHolder<D>,
     private val eventChecker: EventChecker<E, D>,
     private val eventProcessor: EventProcessor<E>,
-    private val stateHolder: StateHolder<D>,
     private val coroutineScope: CoroutineScope,
-    private val logConfig: LogConfig,
+    private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
     private val processingTrigger: ProcessingTrigger = ProcessingTriggerImp(),
 ):
-    QueueHolder<E>
+    QueueHolder<E, D>
 {
     companion object {
         val uiDispatcher = Dispatchers.Main

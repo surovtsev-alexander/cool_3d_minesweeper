@@ -8,7 +8,9 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.helpers.QueueHolderImp
 import com.surovtsev.finitestatemachine.helpers.State
+import com.surovtsev.finitestatemachine.helpers.StateHolderImp
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,18 +24,23 @@ abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>
     ViewModel(),
     DefaultLifecycleObserver
 {
-    private val fsm = FiniteStateMachine(
-        TemplateScreenViewModelEventChecker(screenEventChecker),
-        TemplateScreenViewModelEventProcessor(
-            screenEventProcessor,
-            finishActionHolder,
-        ),
-        viewModelScope,
-        true,
+    private val stateHolder = StateHolderImp(
         initialState,
+        true,
+    )
+    private val fsm = FiniteStateMachine(
+        QueueHolderImp(
+            stateHolder,
+            TemplateScreenViewModelEventChecker(screenEventChecker),
+            TemplateScreenViewModelEventProcessor(
+                screenEventProcessor,
+                finishActionHolder,
+            ),
+            viewModelScope,
+        )
     )
 
-    val state: StateFlow<StateDescriptionWithData<out D>> = fsm.stateHolder.state
+    val stateFlow: StateFlow<StateDescriptionWithData<out D>> = fsm.queueHolder.stateHolder.state
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
