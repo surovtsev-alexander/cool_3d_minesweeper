@@ -5,7 +5,7 @@ object ProjectModules {
 
     object Logic {
         const val core = ":core"
-        const val finiteStateMachine = ":finiteStateMachine"
+        const val finiteStateMachine = ":finitestatemachine"
         const val gameLogic = ":gamelogic"
         const val gameState = ":gamestate"
         const val restartableCoroutineScope = ":restartablecoroutinescope"

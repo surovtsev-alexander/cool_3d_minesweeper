@@ -42,12 +42,13 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Logic.core,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.finiteStateMachine,
             ProjectModules.Logic.gameLogic,
-            ProjectModules.Logic.touchListener,
             ProjectModules.Logic.restartableCoroutineScope,
             ProjectModules.Logic.subscriptionsHolder,
             ProjectModules.Logic.timeSpan,
+            ProjectModules.Logic.touchListener,
+            ProjectModules.Logic.utils,
         )
     )
 

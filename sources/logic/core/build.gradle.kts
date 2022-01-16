@@ -38,8 +38,11 @@ android {
 }
 
 dependencies {
-    includeProjectModule(
-        ProjectModules.Logic.utils
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Logic.finiteStateMachine,
+            ProjectModules.Logic.utils,
+        )
     )
 
     defaultDependencies()

@@ -2,9 +2,13 @@ package com.surovtsev.finitestatemachine.helpers.concrete
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
+import com.surovtsev.finitestatemachine.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
+import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.state.data.Data
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,7 +24,10 @@ interface QueueHolder<E: Event> {
     suspend fun waitForEmptyQueue()
 }
 
-class QueueHolderImp<E: Event>(
+class QueueHolderImp<E: Event, D: Data>(
+    private val eventChecker: EventChecker<E, D>,
+    private val eventProcessor: EventProcessor<E>,
+    private val fsmStateHolder: FSMStateHolder<D>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig,
     private val processingWaiter: ProcessingWaiter,
@@ -176,6 +183,10 @@ class QueueHolderImp<E: Event>(
         kickFSM()
     }
 
+    private fun kickFSM() {
+        processingTrigger.triggerProcessing()
+    }
+
     private fun lastPos(predicate: (E) -> Boolean): Int {
         val len = eventsQueue.size
         for (i in (0 until len).reversed()) {
@@ -206,11 +217,37 @@ class QueueHolderImp<E: Event>(
                     kickFSM()
                 }
             }
-            delay(1000)
-        }
-    }
 
-    private fun kickFSM() {
-        processingTrigger.triggerProcessing()
+            val eventCheckingResult = eventChecker.check(
+                event,
+                fsmStateHolder.state.value
+            )
+
+            val errorMessage = when (eventCheckingResult) {
+                is EventCheckerResult.Process -> {
+                    if (event.setLoadingStateBeforeProcessing) {
+                        fsmStateHolder.publishLoadingState()
+                    }
+                    val eventProcessingResult = eventProcessor.processEvent(event)
+                    if (eventProcessingResult != EventProcessingResult.Processed) {
+                        "internal error 1"
+                    } else {
+                        null
+                    }
+                }
+                is EventCheckerResult.RaiseError -> {
+                    eventCheckingResult.message
+                }
+                is EventCheckerResult.Unchecked -> {
+                    "internal error 2"
+                }
+            }
+
+            errorMessage?.let {
+                fsmStateHolder.publishErrorState(
+                    it
+                )
+            }
+        }
     }
 }

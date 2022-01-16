@@ -3,6 +3,7 @@
 package com.surovtsev.finitestatemachine.helpers.concrete
 
 import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateWithData
 import com.surovtsev.finitestatemachine.state.data.Data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
-typealias FSMState<D> = State<out D>
+typealias FSMState<D> = StateWithData<out D>
 
-interface FSMStateHelper<D: Data> {
+interface FSMStateHolder<D: Data> {
     val state: StateFlow<FSMState<D>>
 
     suspend fun publishLoadingState(
@@ -28,13 +29,18 @@ interface FSMStateHelper<D: Data> {
         data: D = getCurrentData()
     )
 
+    suspend fun publishNewState(
+        newState: State,
+        data: D = getCurrentData(),
+    )
+
     fun getCurrentData(): D
 }
 
-class FSMStateHelperImp<D: Data>(
+class FSMStateHolderImp<D: Data>(
     initialState: FSMState<D>,
     private val publishStateInUIThread: Boolean = false
-): FSMStateHelper<D> {
+): FSMStateHolder<D> {
     private val _state: MutableStateFlow<FSMState<D>> = MutableStateFlow(initialState)
     override val state: StateFlow<FSMState<D>> = _state.asStateFlow()
 
@@ -42,9 +48,8 @@ class FSMStateHelperImp<D: Data>(
         data: D
     ) {
         publishNewState(
-            State.Loading(
-                data
-            )
+            State.Loading,
+            data
         )
     }
 
@@ -54,9 +59,9 @@ class FSMStateHelperImp<D: Data>(
     ) {
         publishNewState(
             State.Error(
-                data,
                 message
-            )
+            ),
+            data
         )
     }
 
@@ -64,18 +69,21 @@ class FSMStateHelperImp<D: Data>(
         data: D
     ) {
         publishNewState(
-            State.Idle(
-                data
-            )
+            State.Idle,
+            data,
         )
     }
 
-    private suspend fun publishNewState(
-        newState: State<out D>
+    override suspend fun publishNewState(
+        newState: State,
+        data: D,
     ) {
         if (publishStateInUIThread) {
             withContext(Dispatchers.Main) {
-                _state.value = newState
+                _state.value = StateWithData(
+                    newState,
+                    data
+                )
             }
         }
     }

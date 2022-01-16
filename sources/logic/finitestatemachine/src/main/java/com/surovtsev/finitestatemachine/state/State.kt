@@ -1,20 +1,11 @@
 package com.surovtsev.finitestatemachine.state
 
-import com.surovtsev.finitestatemachine.state.data.Data
-
-sealed class State<D: Data>(
-    val data: D
-) {
-    class Error<D: Data>(
-        data: D,
+sealed interface State {
+    class Error(
         val message: String,
-    ): State<D>(data)
+    ): State
 
-    class Idle<D: Data>(
-        data: D
-    ): State<D>(data)
+    object Idle: State
 
-    class Loading<D: Data>(
-        data: D
-    ): State<D>(data)
+    object Loading: State
 }

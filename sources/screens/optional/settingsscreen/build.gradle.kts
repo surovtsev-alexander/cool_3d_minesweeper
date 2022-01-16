@@ -40,6 +40,7 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Logic.core,
+            ProjectModules.Logic.finiteStateMachine,
             ProjectModules.Logic.utils,
         )
     )

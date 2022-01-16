@@ -43,10 +43,11 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Logic.core,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.finiteStateMachine,
             ProjectModules.Logic.restartableCoroutineScope,
             ProjectModules.Logic.subscriptionsHolder,
             ProjectModules.Logic.timeSpan,
+            ProjectModules.Logic.utils,
         )
     )
 
