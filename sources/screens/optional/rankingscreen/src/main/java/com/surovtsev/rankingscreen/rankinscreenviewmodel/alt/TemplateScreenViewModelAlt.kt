@@ -8,10 +8,9 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
-import com.surovtsev.finitestatemachine.helpers.QueueHolderImp
-import com.surovtsev.finitestatemachine.helpers.State
-import com.surovtsev.finitestatemachine.helpers.StateHolderImp
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
+import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>(
@@ -29,23 +28,21 @@ abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>
         true,
     )
     private val fsm = FiniteStateMachine(
-        QueueHolderImp(
-            stateHolder,
-            TemplateScreenViewModelEventChecker(screenEventChecker),
-            TemplateScreenViewModelEventProcessor(
-                screenEventProcessor,
-                finishActionHolder,
-            ),
-            viewModelScope,
-        )
+        stateHolder,
+        TemplateScreenViewModelEventChecker(screenEventChecker),
+        TemplateScreenViewModelEventProcessor(
+            screenEventProcessor,
+            finishActionHolder,
+        ),
+        viewModelScope,
     )
 
-    val stateFlow: StateFlow<StateDescriptionWithData<out D>> = fsm.queueHolder.stateHolder.state
+    val stateFlow: StateFlow<StateDescriptionWithData<out D>> = fsm.stateHolder.state
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        fsm.queueHolder.handleEvent(
+        fsm.handleEvent(
             mandatoryEvents.handleScreenLeavingEventFactory(owner)
         )
     }

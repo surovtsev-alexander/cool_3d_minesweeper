@@ -1,5 +1,6 @@
-package com.surovtsev.finitestatemachine.helpers
+package com.surovtsev.finitestatemachine.stateholder
 
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.finitestatemachine.state.data.Data
@@ -9,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
-typealias State<D> = StateDescriptionWithData<out D>
 
 interface StateHolder<D: Data> {
     val state: StateFlow<State<D>>

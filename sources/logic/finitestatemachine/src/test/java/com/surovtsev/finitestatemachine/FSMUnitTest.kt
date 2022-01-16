@@ -52,12 +52,12 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.queueHolder.handleEvent(
+        fsm.handleEvent(
             TestEvent.Init
         )
 
         runBlocking {
-            fsm.queueHolder.waitForEmptyQueue()
+            fsm.waitForEmptyQueue()
         }
 
         // assert
@@ -70,18 +70,18 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.queueHolder.handleEvent(
+        fsm.handleEvent(
             TestEvent.Init
         )
-        fsm.queueHolder.handleEvent(
+        fsm.handleEvent(
             TestEvent.CloseError
         )
-        fsm.queueHolder.handleEvent(
+        fsm.handleEvent(
             TestEvent.EmptyEvent
         )
 
         runBlocking {
-            fsm.queueHolder.waitForEmptyQueue()
+            fsm.waitForEmptyQueue()
         }
 
         // assert

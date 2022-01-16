@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.helpers.auxiliary
+package com.surovtsev.finitestatemachine.utils
 
 interface ProcessingTrigger {
     fun isBusy(): Boolean

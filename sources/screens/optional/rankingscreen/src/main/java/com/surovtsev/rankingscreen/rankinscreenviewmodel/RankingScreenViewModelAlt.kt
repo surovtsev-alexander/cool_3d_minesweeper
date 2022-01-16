@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.finitestatemachine.helpers.StateHolderImp
+import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.EventToRankingScreenViewModelAlt

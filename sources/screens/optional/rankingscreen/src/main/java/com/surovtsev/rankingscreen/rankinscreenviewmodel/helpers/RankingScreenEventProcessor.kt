@@ -5,7 +5,7 @@ import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.helpers.StateHolder
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenDataAlt

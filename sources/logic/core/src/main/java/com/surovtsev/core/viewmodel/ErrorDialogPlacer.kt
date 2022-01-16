@@ -1,6 +1,6 @@
 package com.surovtsev.core.viewmodel
 
-import com.surovtsev.finitestatemachine.helpers.State
+import com.surovtsev.finitestatemachine.state.State
 import kotlinx.coroutines.flow.StateFlow
 
 typealias ScreenStateFlow<T> = StateFlow<State<out T>>
