@@ -5,7 +5,9 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.EventToViewModel
 
 sealed class EventToRankingScreenViewModel(
-    override val setLoadingStateBeforeProcessing: Boolean = true
+    override val doNotPushToQueue: Boolean = false,
+    override val pushToHead: Boolean = false,
+    override val setLoadingStateBeforeProcessing: Boolean = true,
 ): EventToViewModel {
     class HandleScreenLeaving(
         override val owner: LifecycleOwner

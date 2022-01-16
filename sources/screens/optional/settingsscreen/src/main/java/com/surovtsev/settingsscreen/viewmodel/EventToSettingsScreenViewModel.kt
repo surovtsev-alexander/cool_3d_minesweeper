@@ -5,6 +5,8 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.EventToViewModel
 
 sealed class EventToSettingsScreenViewModel(
+    override val doNotPushToQueue: Boolean = false,
+    override val pushToHead: Boolean = false,
     override val setLoadingStateBeforeProcessing: Boolean = true
 ): EventToViewModel {
     class HandleLeavingScreen(

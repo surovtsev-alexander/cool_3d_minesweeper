@@ -4,6 +4,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel
 
 sealed class EventToGameScreenViewModel(
+    override val doNotPushToQueue: Boolean = false,
+    override val pushToHead: Boolean = false,
     override val setLoadingStateBeforeProcessing: Boolean = true
 ): EventToViewModel {
     class HandleScreenLeaving(

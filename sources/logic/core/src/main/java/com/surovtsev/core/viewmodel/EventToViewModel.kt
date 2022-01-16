@@ -1,11 +1,11 @@
 package com.surovtsev.core.viewmodel
 
 import androidx.lifecycle.LifecycleOwner
+import com.surovtsev.finitestatemachine.event.Event
 
 typealias HandleScreenLeavingEventFactory<E> = (owner: LifecycleOwner) -> E
 
-interface EventToViewModel {
-    val setLoadingStateBeforeProcessing: Boolean
+interface EventToViewModel: Event {
 
     interface HandleScreenLeaving: EventToViewModel {
         val owner: LifecycleOwner
