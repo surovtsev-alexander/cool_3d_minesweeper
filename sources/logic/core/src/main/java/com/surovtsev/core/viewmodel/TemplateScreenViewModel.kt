@@ -4,9 +4,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.helpers.concrete.State
-import com.surovtsev.finitestatemachine.helpers.concrete.StateHolder
-import com.surovtsev.finitestatemachine.helpers.concrete.StateHolderImp
+import com.surovtsev.finitestatemachine.helpers.State
+import com.surovtsev.finitestatemachine.helpers.StateHolder
+import com.surovtsev.finitestatemachine.helpers.StateHolderImp
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl

@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.helpers.concrete.auxiliary
+package com.surovtsev.finitestatemachine.helpers.auxiliary
 
 import kotlinx.coroutines.sync.Mutex
 

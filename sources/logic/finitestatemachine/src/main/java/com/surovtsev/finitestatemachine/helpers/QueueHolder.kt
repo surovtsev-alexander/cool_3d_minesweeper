@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.helpers.concrete
+package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
@@ -6,6 +6,10 @@ import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.helpers.auxiliary.ProcessingTrigger
+import com.surovtsev.finitestatemachine.helpers.auxiliary.ProcessingTriggerImp
+import com.surovtsev.finitestatemachine.helpers.auxiliary.ProcessingWaiter
+import com.surovtsev.finitestatemachine.helpers.auxiliary.ProcessingWaiterImp
 import com.surovtsev.finitestatemachine.state.data.Data
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,9 +34,12 @@ class QueueHolderImp<E: Event, D: Data>(
     private val stateHolder: StateHolder<D>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig,
-    private val processingWaiter: ProcessingWaiter,
-    private val processingTrigger: ProcessingTrigger,
-): QueueHolder<E> {
+
+    private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
+    private val processingTrigger: ProcessingTrigger = ProcessingTriggerImp(),
+):
+    QueueHolder<E>
+{
     companion object {
         val uiDispatcher = Dispatchers.Main
         val ioDispatcher = Dispatchers.IO

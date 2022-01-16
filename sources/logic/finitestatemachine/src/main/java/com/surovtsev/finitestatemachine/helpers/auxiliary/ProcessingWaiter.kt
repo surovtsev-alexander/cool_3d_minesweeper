@@ -1,6 +1,4 @@
-package com.surovtsev.finitestatemachine.helpers.concrete
-
-import com.surovtsev.finitestatemachine.helpers.concrete.auxiliary.MyMutex
+package com.surovtsev.finitestatemachine.helpers.auxiliary
 
 interface ProcessingWaiter {
     fun processingHasStarted()

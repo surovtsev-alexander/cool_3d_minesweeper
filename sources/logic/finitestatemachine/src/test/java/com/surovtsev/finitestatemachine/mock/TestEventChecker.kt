@@ -3,7 +3,7 @@ package com.surovtsev.finitestatemachine.mock
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.helpers.concrete.State
+import com.surovtsev.finitestatemachine.helpers.State
 
 class TestEventChecker: EventChecker<TestEvent, TestFSMData> {
     override fun check(

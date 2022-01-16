@@ -52,16 +52,16 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.handleEvent(
+        fsm.queueHolder.handleEvent(
             TestEvent.Init
         )
 
         runBlocking {
-            fsm.waitForEmptyQueue()
+            fsm.queueHolder.waitForEmptyQueue()
         }
 
         // assert
-        assert(fsm.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
     }
 
     @Test
@@ -70,22 +70,22 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.handleEvent(
+        fsm.queueHolder.handleEvent(
             TestEvent.Init
         )
-        fsm.handleEvent(
+        fsm.queueHolder.handleEvent(
             TestEvent.CloseError
         )
-        fsm.handleEvent(
+        fsm.queueHolder.handleEvent(
             TestEvent.EmptyEvent
         )
 
         runBlocking {
-            fsm.waitForEmptyQueue()
+            fsm.queueHolder.waitForEmptyQueue()
         }
 
         // assert
-        assert(fsm.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
     }
 
     @Test
@@ -97,6 +97,6 @@ class FSMUnitTest {
 
 
         // assert
-        assert(fsm.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
     }
 }

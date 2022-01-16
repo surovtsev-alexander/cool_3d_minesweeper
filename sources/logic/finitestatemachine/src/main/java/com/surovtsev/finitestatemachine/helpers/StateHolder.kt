@@ -1,6 +1,4 @@
-@file:JvmName("FSMCoreHelperKt")
-
-package com.surovtsev.finitestatemachine.helpers.concrete
+package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
