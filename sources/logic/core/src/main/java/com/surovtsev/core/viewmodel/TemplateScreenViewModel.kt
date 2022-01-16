@@ -3,23 +3,23 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.surovtsev.finitestatemachine.helpers.concrete.FSMState
+import com.surovtsev.finitestatemachine.helpers.concrete.FSMStateHolder
+import com.surovtsev.finitestatemachine.helpers.concrete.FSMStateHolderImp
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import logcat.logcat
 
 typealias EventProcessor = suspend () -> Unit
 
 typealias FinishAction = () -> Unit
 
-typealias ScreenStateFlow<T> = StateFlow<ScreenState<out T>>
 
 abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
     override val noScreenData: D,
-    initialState: ScreenState<out D>,
+    initialState: FSMState<D>,
 ):
     ViewModel(),
     ErrorDialogPlacer<E, D>,
@@ -28,8 +28,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 {
     var finishAction: FinishAction? = null
 
-    private val _state: MutableStateFlow<ScreenState<out D>> = MutableStateFlow(initialState)
-    override val state: ScreenStateFlow<D> = _state.asStateFlow()
+    protected val fsmStateHolder: FSMStateHolder<D> = FSMStateHolderImp(
+        initialState,
+        true
+    )
+    override val screenStateFlow: ScreenStateFlow<D>
+        get() = fsmStateHolder.state
 
     abstract suspend fun getEventProcessor(event: E): EventProcessor?
 
@@ -44,11 +48,11 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         launchOnIOThread {
             logcat { "handleEvent: $event" }
 
-            val currState = state.value
+            val currState = fsmStateHolder.state.value
 
-            val screenData = currState.screenData
+            val screenData = currState.data
 
-            val isErrorState = currState is ScreenState.Error
+            val isErrorState = currState.state is State.Error
             val isErrorDuringInitialization =
                 isErrorState &&
                 screenData is ScreenData.InitializationIsNotFinished
@@ -96,10 +100,10 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         val eventProcessor = getEventProcessor(event)
 
         if (eventProcessor == null) {
-            publishErrorState("unable to process internal event")
+            fsmStateHolder.publishErrorState("unable to process internal event")
         } else {
-            if (event.setLoadingStateWhileProcessing) {
-                publishLoadingState()
+            if (event.setLoadingStateBeforeProcessing) {
+                fsmStateHolder.publishLoadingState()
             }
             eventProcessor.invoke()
         }
@@ -108,59 +112,13 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     protected open suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ) {
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             noScreenData
         )
     }
 
-    protected suspend fun publishLoadingState(
-        screenData: D = getCurrentScreenData()
-    ) {
-        publishNewState(
-            ScreenState.Loading(
-                screenData
-            )
-        )
-    }
-
-    protected suspend fun publishErrorState(
-        message: String,
-        screenData: D = getCurrentScreenData()
-    ) {
-        publishNewState(
-            ScreenState.Error(
-                screenData,
-                message
-            )
-        )
-    }
-
-    protected suspend fun publishIdleState(
-        screenData: D
-    ) {
-        publishNewState(
-            ScreenState.Idle(
-                screenData
-            )
-        )
-    }
-
-    private suspend fun publishNewState(
-        screenState: ScreenState<out D>
-    ) {
-        withUIContext {
-            _state.value = screenState
-        }
-    }
-
     protected suspend fun closeError() {
-        publishIdleState(
-            getCurrentScreenData()
-        )
-    }
-
-    private fun getCurrentScreenData(): D {
-        return state.value.screenData
+        fsmStateHolder.publishIdleState()
     }
 
 //    protected inline fun <reified T: D> processIfDataNullable(
@@ -196,10 +154,10 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     protected suspend inline fun <reified T: D> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
-        val screenData = state.value.screenData
+        val screenData = fsmStateHolder.state.value.data
 
         if (screenData !is T) {
-            publishErrorState(errorMessage)
+            fsmStateHolder.publishErrorState(errorMessage)
         } else {
             action.invoke(screenData)
         }

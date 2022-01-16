@@ -29,7 +29,7 @@ import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
@@ -65,7 +65,7 @@ fun GameScreen(
     }
 
     GameScreenControls(
-        viewModel.state,
+        viewModel.screenStateFlow,
         eventHandler,
         context,
         viewModel::initGLSurfaceView,
@@ -170,7 +170,7 @@ fun FPSLabel(
     stateFlow: GameScreenStateFlow,
 ) {
     val gameScreenState by stateFlow.collectAsState()
-    val gameScreenData = gameScreenState.screenData
+    val gameScreenData = gameScreenState.data
 
     val text = if (gameScreenData !is GameScreenData.GameInProgress) {
         "--"
@@ -196,8 +196,8 @@ fun GameMenu(
 ) {
     val gameScreenState by stateFlow.collectAsState()
 
-    val gameScreenData = gameScreenState.screenData
-    if (gameScreenState !is ScreenState.Idle || gameScreenData !is GameScreenData.GameMenu) {
+    val gameScreenData = gameScreenState.data
+    if (gameScreenState.state !is State.Idle || gameScreenData !is GameScreenData.GameMenu) {
         return
     }
 
@@ -347,7 +347,7 @@ fun ControlCheckBox(
 ) {
     val state = stateFlow.collectAsState().value
 
-    val screenData = state.screenData
+    val screenData = state.data
 
     if (screenData !is GameScreenData.GameInProgress) {
         return
@@ -391,7 +391,7 @@ fun GameInfo(
 ) {
     val state = stateFlow.collectAsState().value
 
-    val screenData = state.screenData
+    val screenData = state.data
 
     if (screenData !is GameScreenData.GameInProgress) {
         return
@@ -435,7 +435,7 @@ fun GameStatusDialog(
 ) {
     val state by stateFlow.collectAsState()
 
-    val screenData = state.screenData
+    val screenData = state.data
     if (screenData !is GameScreenData.GameInProgress) {
         return
     }

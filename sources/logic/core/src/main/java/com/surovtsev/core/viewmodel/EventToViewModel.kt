@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 typealias HandleScreenLeavingEventFactory<E> = (owner: LifecycleOwner) -> E
 
 interface EventToViewModel {
-    val setLoadingStateWhileProcessing: Boolean
+    val setLoadingStateBeforeProcessing: Boolean
 
     interface HandleScreenLeaving: EventToViewModel {
         val owner: LifecycleOwner

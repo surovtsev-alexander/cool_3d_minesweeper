@@ -1,9 +1,9 @@
 package com.surovtsev.settingsscreen.viewmodel
 
-import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateWithData
 
-typealias SettingsScreenState = ScreenState<out SettingsScreenData>
-
-val SettingsScreenInitialState = ScreenState.Idle(
+val SettingsScreenInitialState = StateWithData(
+    State.Idle,
     SettingsScreenData.NoData
 )

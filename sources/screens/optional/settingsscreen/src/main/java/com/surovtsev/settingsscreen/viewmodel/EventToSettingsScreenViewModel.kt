@@ -5,7 +5,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.EventToViewModel
 
 sealed class EventToSettingsScreenViewModel(
-    override val setLoadingStateWhileProcessing: Boolean = true
+    override val setLoadingStateBeforeProcessing: Boolean = true
 ): EventToViewModel {
     class HandleLeavingScreen(
         override val owner: LifecycleOwner

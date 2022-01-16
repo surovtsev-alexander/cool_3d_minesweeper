@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel
 
 sealed class EventToGameScreenViewModel(
-    override val setLoadingStateWhileProcessing: Boolean = true
+    override val setLoadingStateBeforeProcessing: Boolean = true
 ): EventToViewModel {
     class HandleScreenLeaving(
         override val owner: LifecycleOwner
@@ -27,13 +27,13 @@ sealed class EventToGameScreenViewModel(
 
 
     object RemoveFlaggedBombs: EventToGameScreenViewModel(
-        setLoadingStateWhileProcessing = false
+        setLoadingStateBeforeProcessing = false
     )
     object RemoveOpenedSlices: EventToGameScreenViewModel(
-        setLoadingStateWhileProcessing = false
+        setLoadingStateBeforeProcessing = false
     )
     object ToggleFlagging: EventToGameScreenViewModel(
-        setLoadingStateWhileProcessing = false
+        setLoadingStateBeforeProcessing = false
     )
 
     object CloseGameStatusDialog: EventToGameScreenViewModel()

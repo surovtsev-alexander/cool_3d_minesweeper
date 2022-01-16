@@ -10,6 +10,7 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.*
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
@@ -112,7 +113,7 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
 
-        if (state.value.screenData is GameScreenData.GameMenu) {
+        if (fsmStateHolder.state.value.data is GameScreenData.GameMenu) {
             handleEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
@@ -127,7 +128,7 @@ class GameScreenViewModel @AssistedInject constructor(
             EventToMinesweeper.SaveGame
         )
 
-        if (state.value.screenData !is GameScreenData.GameMenu) {
+        if (fsmStateHolder.state.value.data !is GameScreenData.GameMenu) {
             handleEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
@@ -149,7 +150,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         gameScreenComponent.gLESRenderer.openGLEventsHandler = null
 
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             GameScreenData.NoData
         )
     }
@@ -196,11 +197,11 @@ class GameScreenViewModel @AssistedInject constructor(
         silent: Boolean = false,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
-        val gameScreenData = state.value.screenData
+        val gameScreenData = fsmStateHolder.getCurrentData()
 
         if (!isDataCorrect(gameScreenData)) {
             if (!silent) {
-                publishErrorState(errorMessage)
+                fsmStateHolder.publishErrorState(errorMessage)
             }
         } else {
             action.invoke(gameScreenData)
@@ -234,15 +235,15 @@ class GameScreenViewModel @AssistedInject constructor(
             "game is in progress",
             true
         ) {
-            publishIdleState(GameScreenData.NoData)
+            fsmStateHolder.publishIdleState(GameScreenData.NoData)
         }
 
         timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
         gameScreenComponent.gLESRenderer.openGLEventsHandler = null
 
-        val gameNotPausedFlow = state.map { screenState ->
-            screenState is ScreenState.Idle &&
-            screenState.screenData is GameScreenData.GameInProgress
+        val gameNotPausedFlow = fsmStateHolder.state.map { screenState ->
+            screenState.state is State.Idle &&
+            screenState.data is GameScreenData.GameInProgress
         }.stateIn(restartableCoroutineScopeComponent.customCoroutineScope)
 
         gameComponent = DaggerGameComponent
@@ -290,7 +291,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
         setFlagging(loadGame)
 
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             GameScreenData.GameInProgress(
                 uiGameControlsFlows!!
             )
@@ -309,11 +310,11 @@ class GameScreenViewModel @AssistedInject constructor(
             )
 
             if (setLoadingState) {
-                publishLoadingState(
+                fsmStateHolder.publishLoadingState(
                     newScreenData
                 )
             } else {
-                publishIdleState(
+                fsmStateHolder.publishIdleState(
                     newScreenData
                 )
             }
@@ -321,12 +322,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun setIdleState() {
-        val currState = state.value
-        val screenData = currState.screenData
-
-        publishIdleState(
-            screenData
-        )
+        fsmStateHolder.publishIdleState()
     }
 
     private suspend fun tryUnstackState(
@@ -335,14 +331,14 @@ class GameScreenViewModel @AssistedInject constructor(
         val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
 
         if (prevData == null) {
-            publishErrorState(
+            fsmStateHolder.publishErrorState(
                 "critical error. reloading",
                 GameScreenData.NoData,
             )
             return
         }
 
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             prevData
         )
     }

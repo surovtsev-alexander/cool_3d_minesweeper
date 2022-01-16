@@ -139,7 +139,7 @@ class RankingScreenViewModel @AssistedInject constructor(
             .asyncTimeSpan
             .flush()
 
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             settingsListIsLoaded
         )
 
@@ -158,7 +158,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         val currRankingComponent = rankingComponent
 
         if (currRankingComponent == null) {
-            publishErrorState(
+            fsmStateHolder.publishErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(1)
             )
             return
@@ -170,15 +170,15 @@ class RankingScreenViewModel @AssistedInject constructor(
                     selectedSettingsId
                 )
 
-        val rankingScreenData = state.value.screenData
+        val rankingScreenData = fsmStateHolder.getCurrentData()
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            publishErrorState(
+            fsmStateHolder.publishErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-            publishIdleState(
+            fsmStateHolder.publishIdleState(
                 RankingScreenData.RankingListIsPrepared(
                     rankingScreenData,
                     selectedSettingsId,
@@ -202,7 +202,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         val currTimeSpanComponent = timeSpanComponent
 
         if (currTimeSpanComponent == null) {
-            publishErrorState(
+            fsmStateHolder.publishErrorState(
                 ErrorMessages.errorWhileSortingListFactory(1)
             )
 
@@ -212,17 +212,17 @@ class RankingScreenViewModel @AssistedInject constructor(
         val currRankingComponent = rankingComponent
 
         if (currRankingComponent == null) {
-            publishErrorState(
+            fsmStateHolder.publishErrorState(
                 ErrorMessages.errorWhileSortingListFactory(2)
             )
 
             return
         }
 
-        val rankingScreenData = state.value?.screenData
+        val rankingScreenData = fsmStateHolder.state.value.data
 
-        if (rankingScreenData == null || rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            publishErrorState(
+        if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
+            fsmStateHolder.publishErrorState(
                 ErrorMessages.errorWhileSortingListFactory(3)
             )
 
@@ -259,7 +259,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                 }
             }.toMap()
 
-        publishIdleState(
+        fsmStateHolder.publishIdleState(
             RankingScreenData.RankingListIsSorted(
                 rankingScreenData,
                 rankingTableSortParameters,

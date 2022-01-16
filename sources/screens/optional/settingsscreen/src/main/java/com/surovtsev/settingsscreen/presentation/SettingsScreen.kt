@@ -43,7 +43,7 @@ fun SettingsScreen(
     }
 
     SettingsControls(
-        viewModel.state,
+        viewModel.screenStateFlow,
         eventHandler,
         viewModel as SettingsScreenErrorDialogPlacer,
     )
@@ -135,7 +135,7 @@ fun SettingsList(
                     .weight(2f))
         }
         LazyColumn {
-            val screenData = state.screenData
+            val screenData = state.data
             val settingsList = if (screenData is SettingsScreenData.SettingsLoaded) {
                 screenData.settingsList
             } else {
@@ -243,7 +243,7 @@ fun Controls(
     eventHandler: SettingsScreenEventHandler
 ) {
     val state = stateFlow.collectAsState().value
-    val screenData = state.screenData
+    val screenData = state.data
 
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
         return

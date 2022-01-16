@@ -1,7 +1,9 @@
 package com.surovtsev.gamescreen.viewmodel
 
-import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateWithData
 
-val GameScreenInitialState = ScreenState.Idle(
+val GameScreenInitialState = StateWithData(
+    State.Idle,
     GameScreenData.NoData
 )

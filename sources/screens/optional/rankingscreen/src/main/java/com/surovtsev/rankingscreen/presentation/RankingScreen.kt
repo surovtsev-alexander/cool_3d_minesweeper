@@ -27,7 +27,7 @@ import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.core.viewmodel.ScreenState
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
@@ -46,7 +46,7 @@ fun RankingScreen(
     }
 
     RankingControls(
-        viewModel.state,
+        viewModel.screenStateFlow,
         eventHandler,
         viewModel as RankingScreenErrorDialogPlacer,
     )
@@ -116,7 +116,7 @@ fun SettingsList(
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
-    val rankingScreenData = rankingScreenState.screenData
+    val rankingScreenData = rankingScreenState.data
 
     if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
         return
@@ -220,7 +220,7 @@ fun RankingList(
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
-    val rankingScreenData = rankingScreenState.screenData
+    val rankingScreenData = rankingScreenState.data
 
     val listWithPlaces: RankingListWithPlaces
     val tableSortParameters: RankingTableSortParameters
@@ -372,7 +372,7 @@ fun DisplayCircularIndicatorIfNeeded(
 
     var showLoadingElements by remember { mutableStateOf(false) }
 
-    showLoadingElements = state is ScreenState.Loading
+    showLoadingElements = state.state is State.Loading
 
     with(boxScope) {
         AnimatedVisibility(
@@ -405,7 +405,7 @@ fun DisplayCircularIndicatorIfNeeded(
         }
     }
 
-    if (state is ScreenState.Loading) {
+    if (state.state is State.Loading) {
 
         with(boxScope) {
 
