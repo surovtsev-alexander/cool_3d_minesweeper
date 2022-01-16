@@ -39,7 +39,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private var settingsComponent: SettingsComponent? = null
 
-    override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor? {
+    override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor<EventToSettingsScreenViewModel>? {
         return when (event) {
             is EventToSettingsScreenViewModel.HandleLeavingScreen    -> suspend { handleScreenLeaving(event.owner) }
             is EventToSettingsScreenViewModel.CloseError             -> ::closeError
@@ -55,7 +55,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun triggerInitialization(): EventProcessingResult {
+    private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
         val currSettingsComponent: SettingsComponent
 
         settingsComponent.let {
@@ -76,20 +76,19 @@ class SettingsScreenViewModel @AssistedInject constructor(
             currSettingsComponent.settingsDao
         )
 
-        handleEvent(
+        return EventProcessingResult.PushNewEvent(
             EventToSettingsScreenViewModel.LoadSettingsList
         )
-        return EventProcessingResult.Processed
     }
 
-    private suspend fun loadSettingsList(): EventProcessingResult {
+    private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error while loading settings list"
             )
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val settingsList = currSettingsComponent.settingsDao.getAll()
@@ -100,10 +99,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
             )
         )
 
-        handleEvent(
+        return EventProcessingResult.PushNewEvent(
             EventToSettingsScreenViewModel.LoadSelectedSettings
         )
-        return EventProcessingResult.Processed
     }
 
     private fun prepopulateSettingsTableWithDefaultValues(
@@ -140,7 +138,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData,
         fromSlider: Boolean
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToSettingsScreenViewModel> {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
@@ -152,18 +150,18 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 )
             )
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun applySettings(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToSettingsScreenViewModel> {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while applying settings"
             )
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
@@ -188,33 +186,33 @@ class SettingsScreenViewModel @AssistedInject constructor(
             }
         }
 
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun deleteSettings(
         settingsId: Long
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToSettingsScreenViewModel> {
         val currSettingsComponent = settingsComponent
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while deleting settings"
             )
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
-            "error (2) while deleting settingsscreen"
+            "error (2) while deleting settings"
         ) {
             currSettingsComponent.settingsDao.delete(settingsId)
 
-            handleEvent(
+            return@deleteSettings EventProcessingResult.PushNewEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
             )
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
-    private suspend fun loadSelectedSettings(): EventProcessingResult {
+    private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
@@ -222,7 +220,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 "error while loading selected settings"
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val saveController = currSettingsComponent.saveController
@@ -236,12 +234,12 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
         rememberSettings(selectedSettings)
 
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun rememberSettings(
         settings: Settings,
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToSettingsScreenViewModel> {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
@@ -252,6 +250,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 )
             )
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 }

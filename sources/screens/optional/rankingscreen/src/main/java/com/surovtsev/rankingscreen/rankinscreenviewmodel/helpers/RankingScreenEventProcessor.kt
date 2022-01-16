@@ -20,15 +20,15 @@ import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay
 import logcat.logcat
 
-class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: RankingScreenDataAlt>(
+class RankingScreenEventProcessor(
     private val rankingScreenDaggerComponentsHolder: RankingScreenDaggerComponentsHolder,
-    private val stateHolder: StateHolder<D>,
+    private val stateHolder: StateHolder<RankingScreenDataAlt>,
 )
-    : com.surovtsev.finitestatemachine.eventprocessor.EventProcessor<E>
+    : com.surovtsev.finitestatemachine.eventprocessor.EventProcessor<EventToRankingScreenViewModelAlt>
 {
     override suspend fun processEvent(
         event: Event
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModelAlt> {
         val action = when (event) {
 //            is EventToRankingScreenViewModelAlt.HandleScreenLeaving     -> suspend { handleScreenLeaving(event.owner) }
             is EventToRankingScreenViewModelAlt.LoadData                -> ::loadData
@@ -40,13 +40,13 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
         }
 
         return if (action == null) {
-            EventProcessingResult.Unprocessed
+            EventProcessingResult.Unprocessed()
         } else {
             return action.invoke()
         }
     }
 
-    private suspend fun loadData(): EventProcessingResult {
+    private suspend fun loadData(): EventProcessingResult<EventToRankingScreenViewModelAlt> {
         val currRestartableCoroutineScopeComponent: RestartableCoroutineScopeComponent
         rankingScreenDaggerComponentsHolder.restartableCoroutineScopeComponent.let {
             currRestartableCoroutineScopeComponent =
@@ -109,29 +109,32 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
             .flush()
 
         stateHolder.publishIdleState(
-            settingsListIsLoaded as D
+            settingsListIsLoaded
         )
 
-        settingsDao.getBySettingsData(
+        return settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
-        )?.let {
-            return EventProcessingResult.PushNewEvent(
-                EventToRankingScreenViewModelAlt.FilterList(it.id)
-            )
+        ).let {
+            if (it != null) {
+                EventProcessingResult.PushNewEvent(
+                    EventToRankingScreenViewModelAlt.FilterList(it.id)
+                )
+            } else {
+                EventProcessingResult.Processed()
+            }
         }
-        return EventProcessingResult.Processed
     }
 
     private suspend fun filterList(
         selectedSettingsId: Long
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModelAlt> {
         val currRankingComponent = rankingScreenDaggerComponentsHolder.rankingComponent
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileFilteringRankingListFactory(1)
             )
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val rankingListWithPlaces =
@@ -153,7 +156,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                     rankingScreenData,
                     selectedSettingsId,
                     rankingListWithPlaces
-                ) as D
+                )
             )
         }
 
@@ -168,7 +171,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
     private suspend fun sortList(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModelAlt> {
         val currTimeSpanComponent = rankingScreenDaggerComponentsHolder.timeSpanComponent
 
         if (currTimeSpanComponent == null) {
@@ -176,7 +179,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(1)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val currRankingComponent = rankingScreenDaggerComponentsHolder.rankingComponent
@@ -186,7 +189,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(2)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val rankingScreenData = stateHolder.getCurrentData()
@@ -196,7 +199,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(3)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val filteredRankingList = rankingScreenData.rankingListWithPlaces
@@ -235,9 +238,9 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                 rankingTableSortParameters,
                 sortedData,
                 directionOfSortableColumns
-            ) as D
+            )
         )
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     companion object {

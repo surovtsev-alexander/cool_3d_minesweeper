@@ -2,12 +2,12 @@ package com.surovtsev.finitestatemachine.eventprocessor
 
 import com.surovtsev.finitestatemachine.event.Event
 
-sealed interface EventProcessingResult {
-    object Unprocessed: EventProcessingResult
+sealed interface EventProcessingResult<E: Event> {
+    class Unprocessed<E: Event>: EventProcessingResult<E>
 
-    object Processed: EventProcessingResult
+    class Processed<E: Event>: EventProcessingResult<E>
 
-    class PushNewEvent(
-        event: Event
-    ): EventProcessingResult
+    class PushNewEvent<E: Event>(
+        val event: E
+    ): EventProcessingResult<E>
 }

@@ -144,7 +144,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         restartableCoroutineScopeComponent
             .subscriberImp
             .onStop()
@@ -154,10 +154,11 @@ class GameScreenViewModel @AssistedInject constructor(
         stateHolder.publishIdleState(
             GameScreenData.NoData
         )
-        return EventProcessingResult.Processed
+
+        return EventProcessingResult.Processed()
     }
 
-    override suspend fun getEventProcessor(event: EventToGameScreenViewModel): EventProcessor? {
+    override suspend fun getEventProcessor(event: EventToGameScreenViewModel): EventProcessor<EventToGameScreenViewModel>? {
         return when (event) {
             is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
@@ -225,7 +226,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend fun newGame(
         loadGame: Boolean
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",
@@ -300,12 +301,12 @@ class GameScreenViewModel @AssistedInject constructor(
                 uiGameControlsFlows!!
             )
         )
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun openGameMenu(
         setLoadingState: Boolean = false
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially"
@@ -324,13 +325,13 @@ class GameScreenViewModel @AssistedInject constructor(
                 )
             }
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun setIdleState(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         stateHolder.publishIdleState()
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun tryUnstackState(
@@ -353,7 +354,7 @@ class GameScreenViewModel @AssistedInject constructor(
 
     private suspend fun closeGameMenu(
         silent: Boolean = false
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",
@@ -361,16 +362,16 @@ class GameScreenViewModel @AssistedInject constructor(
         ) { gameScreenData ->
             tryUnstackState(gameScreenData)
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun goToMainMenu(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         closeGameMenu(true)
         withUIContext {
             finishAction?.invoke()
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {
@@ -400,23 +401,23 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun removeFlaggedBombs(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         skipIfGameIsNotInProgress {
             gameControlsImp?.removeFlaggedCells = true
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun removeOpenedSlices(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         skipIfGameIsNotInProgress {
             gameControlsImp?.removeOpenedSlices = true
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun toggleFlagging(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         skipIfGameIsNotInProgress {
             gameControlsImp?.let {
                 setFlagging(
@@ -424,7 +425,7 @@ class GameScreenViewModel @AssistedInject constructor(
                 )
             }
         }
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private fun setFlagging(
@@ -435,9 +436,9 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     private fun closeGameStatusDialog(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToGameScreenViewModel> {
         uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportant
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 }
 

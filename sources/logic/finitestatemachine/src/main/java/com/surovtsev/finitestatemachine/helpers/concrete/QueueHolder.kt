@@ -229,7 +229,7 @@ class QueueHolderImp<E: Event, D: Data>(
                         stateHolder.publishLoadingState()
                     }
                     val eventProcessingResult = eventProcessor.processEvent(event)
-                    if (eventProcessingResult != EventProcessingResult.Processed) {
+                    if (eventProcessingResult !is EventProcessingResult.Processed<*>) {
                         "internal error 1"
                     } else {
                         null

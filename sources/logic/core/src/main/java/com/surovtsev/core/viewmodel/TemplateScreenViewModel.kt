@@ -12,7 +12,7 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import logcat.logcat
 
-typealias EventProcessor = suspend () -> EventProcessingResult
+typealias EventProcessor<E> = suspend () -> EventProcessingResult<E>
 
 typealias FinishAction = () -> Unit
 
@@ -36,7 +36,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val screenStateFlow: ScreenStateFlow<D>
         get() = stateHolder.state
 
-    abstract suspend fun getEventProcessor(event: E): EventProcessor?
+    abstract suspend fun getEventProcessor(event: E): EventProcessor<E>?
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
@@ -106,22 +106,28 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
             if (event.setLoadingStateBeforeProcessing) {
                 stateHolder.publishLoadingState()
             }
-            eventProcessor.invoke()
+            val eventProcessingResult = eventProcessor.invoke()
+
+            if (eventProcessingResult is EventProcessingResult.PushNewEvent<E>) {
+                return handleEvent(
+                    eventProcessingResult.event
+                )
+            }
         }
     }
 
     protected open suspend fun handleScreenLeaving(
         owner: LifecycleOwner
-    ): EventProcessingResult {
+    ): EventProcessingResult<E> {
         stateHolder.publishIdleState(
             noScreenData
         )
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
-    protected suspend fun closeError(): EventProcessingResult {
+    protected suspend fun closeError(): EventProcessingResult<E> {
         stateHolder.publishIdleState()
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
 //    protected inline fun <reified T: D> processIfDataNullable(

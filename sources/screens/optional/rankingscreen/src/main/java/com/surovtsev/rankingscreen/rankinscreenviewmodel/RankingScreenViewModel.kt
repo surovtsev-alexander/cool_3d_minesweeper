@@ -66,7 +66,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         restartableCoroutineScopeComponent?.subscriberImp?.onStop()
     }
 
-    override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor? {
+    override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor<EventToRankingScreenViewModel>? {
         return when (event) {
             is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(event.owner) }
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
@@ -74,12 +74,12 @@ class RankingScreenViewModel @AssistedInject constructor(
             is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(event.rankingTableSortParameters, false) }
             is EventToRankingScreenViewModel.SortList                -> suspend { sortList(event.rankingTableSortParameters, true) }
             is EventToRankingScreenViewModel.CloseError              -> ::closeError
-            else                                                -> null
+            else                                                     -> null
         }
     }
 
     private suspend fun loadData(
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModel> {
         val currRestartableCoroutineScopeComponent: RestartableCoroutineScopeComponent
         restartableCoroutineScopeComponent.let {
             currRestartableCoroutineScopeComponent =
@@ -145,27 +145,29 @@ class RankingScreenViewModel @AssistedInject constructor(
             settingsListIsLoaded
         )
 
-        settingsDao.getBySettingsData(
+        return settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
-        )?.let {
-            handleEvent(
-                EventToRankingScreenViewModel.FilterList(it.id)
-            )
+        ).let {
+            if (it != null) {
+                EventProcessingResult.PushNewEvent(
+                    EventToRankingScreenViewModel.FilterList(it.id)
+                )
+            } else {
+                EventProcessingResult.Processed()
+            }
         }
-
-        return EventProcessingResult.Processed
     }
 
     private suspend fun filterList(
         selectedSettingsId: Long
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModel> {
         val currRankingComponent = rankingComponent
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(1)
             )
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val rankingListWithPlaces =
@@ -192,18 +194,17 @@ class RankingScreenViewModel @AssistedInject constructor(
         }
 
 
-        handleEvent(
+        return EventProcessingResult.PushNewEvent(
             EventToRankingScreenViewModel.SortList(
                 DefaultRankingTableSortParameters
             )
         )
-        return EventProcessingResult.Processed
     }
 
     private suspend fun sortList(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
-    ): EventProcessingResult {
+    ): EventProcessingResult<EventToRankingScreenViewModel> {
         val currTimeSpanComponent = timeSpanComponent
 
         if (currTimeSpanComponent == null) {
@@ -211,7 +212,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                 ErrorMessages.errorWhileSortingListFactory(1)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val currRankingComponent = rankingComponent
@@ -221,7 +222,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                 ErrorMessages.errorWhileSortingListFactory(2)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val rankingScreenData = stateHolder.state.value.data
@@ -231,7 +232,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                 ErrorMessages.errorWhileSortingListFactory(3)
             )
 
-            return EventProcessingResult.Processed
+            return EventProcessingResult.Processed()
         }
 
         val filteredRankingList = rankingScreenData.rankingListWithPlaces
@@ -272,7 +273,7 @@ class RankingScreenViewModel @AssistedInject constructor(
                 directionOfSortableColumns
             )
         )
-        return EventProcessingResult.Processed
+        return EventProcessingResult.Processed()
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(

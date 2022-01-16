@@ -8,9 +8,10 @@ class TemplateScreenViewModelEventProcessor<E: EventToViewModelAlt>(
     private val screenEventProcessor: EventProcessor<E>,
     private val finishActionHolder: FinishActionHolder,
 ): EventProcessor<E> {
+
     override suspend fun processEvent(
         event: Event
-    ): EventProcessingResult {
+    ): EventProcessingResult<E> {
         return screenEventProcessor.processEvent(
             event
         )
