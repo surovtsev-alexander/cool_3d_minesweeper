@@ -19,19 +19,13 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
-import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
-import com.surovtsev.gamescreen.dagger.GameScreenComponent
-import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
-import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
+import com.surovtsev.gamescreen.viewmodel.helpers.DaggerComponentsHolder
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
-import com.surovtsev.timespan.dagger.TimeSpanComponent
-import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
-import com.surovtsev.touchlistener.dagger.TouchListenerComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 const val LoadGameParameterName = "load_game"
 
@@ -59,41 +53,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
 
-    private val gameScreenComponent: GameScreenComponent by lazy {
-        DaggerGameScreenComponent.create()
-    }
-
-    private val restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent by lazy {
-        DaggerRestartableCoroutineScopeComponent
-            .create()
-    }
-
-    private val timeSpanComponent: TimeSpanComponent by lazy {
-        DaggerTimeSpanComponent
-            .builder()
-            .subscriptionsHolderEntryPoint(
-                SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
-                    restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:TimeSpanComponent"
-                )
-            )
-            .build()
-    }
-
-    private val touchListenerComponent: TouchListenerComponent by lazy {
-        DaggerTouchListenerComponent
-            .builder()
-            .timeSpanComponentEntryPoint(
-                timeSpanComponent
-            )
-            .subscriptionsHolderEntryPoint(
-                SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
-                    restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:TouchListener"
-                )
-            )
-            .build()
-    }
+    private val daggerComponentsHolder = DaggerComponentsHolder()
 
     // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
@@ -107,7 +67,11 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun onCreate(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onCreate(owner)
-        restartableCoroutineScopeComponent.subscriberImp.restart()
+        daggerComponentsHolder
+            .restartableCoroutineScopeComponentHolder
+            .getOrCreate {
+                it.subscriberImp.restart()
+            }
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -145,11 +109,17 @@ class GameScreenViewModel @AssistedInject constructor(
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ): EventProcessingResult<EventToGameScreenViewModel> {
-        restartableCoroutineScopeComponent
-            .subscriberImp
-            .onStop()
+        daggerComponentsHolder
+            .restartableCoroutineScopeComponentHolder
+            .component
+            ?.subscriberImp
+            ?.onStop()
 
-        gameScreenComponent.gLESRenderer.openGLEventsHandler = null
+        daggerComponentsHolder
+            .gameScreenComponentHolder
+            .component
+            ?.gLESRenderer
+            ?.openGLEventsHandler = null
 
         stateHolder.publishIdleState(
             GameScreenData.NoData
@@ -181,8 +151,14 @@ class GameScreenViewModel @AssistedInject constructor(
     fun initGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {
-        val gameRenderer = gameScreenComponent.gLESRenderer
-        val touchListener = touchListenerComponent.touchListener
+        val gameRenderer = daggerComponentsHolder
+            .gameScreenComponentHolder
+            .getOrCreate()
+            .gLESRenderer
+        val touchListener = daggerComponentsHolder
+            .touchListenerComponentHolder
+            .getOrCreate()
+            .touchListener
 
         gLSurfaceView.setEGLContextClientVersion(2)
         gLSurfaceView.setRenderer(gameRenderer)
@@ -243,13 +219,37 @@ class GameScreenViewModel @AssistedInject constructor(
             stateHolder.publishIdleState(GameScreenData.NoData)
         }
 
-        timeSpanComponent.manuallyUpdatableTimeAfterDeviceStartupFlowHolder.tick()
-        gameScreenComponent.gLESRenderer.openGLEventsHandler = null
+        val timeSpanComponent = daggerComponentsHolder
+            .timeSpanComponentHolder
+            .getOrCreate()
+        val restartableCoroutineScopeComponent =
+            daggerComponentsHolder
+                .restartableCoroutineScopeComponentHolder
+                .getOrCreate()
+        val gameScreenComponent =
+            daggerComponentsHolder
+                .gameScreenComponentHolder
+                .getOrCreate()
+        val touchListenerComponent =
+            daggerComponentsHolder
+                .touchListenerComponentHolder
+                .getOrCreate()
+
+        timeSpanComponent
+            .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
+            .tick()
+
+        gameScreenComponent
+            .gLESRenderer
+            .openGLEventsHandler = null
 
         val gameNotPausedFlow = stateHolder.state.map { screenState ->
             screenState.description is StateDescription.Idle &&
             screenState.data is GameScreenData.GameInProgress
-        }.stateIn(restartableCoroutineScopeComponent.customCoroutineScope)
+        }.stateIn(
+            restartableCoroutineScopeComponent
+                .customCoroutineScope
+        )
 
         gameComponent = DaggerGameComponent
             .builder()
