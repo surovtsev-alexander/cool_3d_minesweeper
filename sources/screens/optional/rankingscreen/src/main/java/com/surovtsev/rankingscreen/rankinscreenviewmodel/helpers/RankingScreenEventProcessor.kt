@@ -5,8 +5,7 @@ import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.helpers.concrete.FSMStateHolder
-import com.surovtsev.finitestatemachine.state.data.Data
+import com.surovtsev.finitestatemachine.helpers.concrete.StateHolder
 import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenDataAlt
@@ -23,7 +22,7 @@ import logcat.logcat
 
 class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: RankingScreenDataAlt>(
     private val rankingScreenDaggerComponentsHolder: RankingScreenDaggerComponentsHolder,
-    private val fsmStateHolder: FSMStateHolder<D>,
+    private val stateHolder: StateHolder<D>,
 )
     : com.surovtsev.finitestatemachine.eventprocessor.EventProcessor<E>
 {
@@ -109,7 +108,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
             .asyncTimeSpan
             .flush()
 
-        fsmStateHolder.publishIdleState(
+        stateHolder.publishIdleState(
             settingsListIsLoaded as D
         )
 
@@ -129,7 +128,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
         val currRankingComponent = rankingScreenDaggerComponentsHolder.rankingComponent
 
         if (currRankingComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileFilteringRankingListFactory(1)
             )
             return EventProcessingResult.Processed
@@ -141,15 +140,15 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                     selectedSettingsId
                 )
 
-        val rankingScreenData = fsmStateHolder.state.value.data
+        val rankingScreenData = stateHolder.state.value.data
 
         if (rankingScreenData !is RankingScreenDataAlt.SettingsListIsLoaded) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-            fsmStateHolder.publishIdleState(
+            stateHolder.publishIdleState(
                 RankingScreenDataAlt.RankingListIsPrepared(
                     rankingScreenData,
                     selectedSettingsId,
@@ -173,7 +172,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
         val currTimeSpanComponent = rankingScreenDaggerComponentsHolder.timeSpanComponent
 
         if (currTimeSpanComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(1)
             )
 
@@ -183,17 +182,17 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
         val currRankingComponent = rankingScreenDaggerComponentsHolder.rankingComponent
 
         if (currRankingComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(2)
             )
 
             return EventProcessingResult.Processed
         }
 
-        val rankingScreenData = fsmStateHolder.getCurrentData()
+        val rankingScreenData = stateHolder.getCurrentData()
 
         if (rankingScreenData !is RankingScreenDataAlt.RankingListIsPrepared) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 RankingScreenViewModelAlt.ErrorMessages.errorWhileSortingListFactory(3)
             )
 
@@ -230,7 +229,7 @@ class RankingScreenEventProcessor<E: EventToRankingScreenViewModelAlt, D: Rankin
                 }
             }.toMap()
 
-        fsmStateHolder.publishIdleState(
+        stateHolder.publishIdleState(
             RankingScreenDataAlt.RankingListIsSorted(
                 rankingScreenData,
                 rankingTableSortParameters,

@@ -4,7 +4,7 @@ import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.mock.TestEvent
 import com.surovtsev.finitestatemachine.mock.TestFSM
-import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -61,7 +61,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.state.value is State.Idle)
+        assert(fsm.state.value.description is StateDescription.Idle)
     }
 
     @Test
@@ -85,7 +85,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.state.value is State.Idle)
+        assert(fsm.state.value.description is StateDescription.Idle)
     }
 
     @Test
@@ -97,6 +97,6 @@ class FSMUnitTest {
 
 
         // assert
-        assert(fsm.state.value is State.Idle)
+        assert(fsm.state.value.description is StateDescription.Idle)
     }
 }

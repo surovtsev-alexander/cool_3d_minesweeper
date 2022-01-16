@@ -84,7 +84,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 "error while loading settings list"
             )
             return
@@ -92,7 +92,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
         val settingsList = currSettingsComponent.settingsDao.getAll()
 
-        fsmStateHolder.publishLoadingState(
+        stateHolder.publishLoadingState(
             SettingsScreenData.SettingsLoaded(
                 settingsList
             )
@@ -141,7 +141,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
-            fsmStateHolder.publishIdleState(
+            stateHolder.publishIdleState(
                 SettingsScreenData.SettingsDataIsSelected(
                     screenData,
                     settingsData,
@@ -155,7 +155,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 "error (1) while applying settings"
             )
             return
@@ -189,7 +189,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     ) {
         val currSettingsComponent = settingsComponent
         if (currSettingsComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 "error (1) while deleting settings"
             )
             return
@@ -210,7 +210,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
-            fsmStateHolder.publishErrorState(
+            stateHolder.publishErrorState(
                 "error while loading selected settings"
             )
 
@@ -235,7 +235,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
-            fsmStateHolder.publishIdleState(
+            stateHolder.publishIdleState(
                 SettingsScreenData.SettingsIsSelected(
                     screenData,
                     settings

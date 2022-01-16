@@ -1,9 +1,9 @@
 package com.surovtsev.gamescreen.viewmodel
 
-import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateWithData
+import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 
-val GameScreenInitialState = StateWithData(
-    State.Idle,
+val GameScreenInitialState = StateDescriptionWithData(
+    StateDescription.Idle,
     GameScreenData.NoData
 )

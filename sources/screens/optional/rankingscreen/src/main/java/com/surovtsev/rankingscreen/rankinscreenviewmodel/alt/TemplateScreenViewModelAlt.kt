@@ -8,15 +8,15 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
-import com.surovtsev.finitestatemachine.helpers.concrete.FSMState
-import com.surovtsev.finitestatemachine.state.StateWithData
+import com.surovtsev.finitestatemachine.helpers.concrete.State
+import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>(
     screenEventChecker: EventChecker<E, D>,
     screenEventProcessor: EventProcessor<E>,
     finishActionHolder: FinishActionHolder,
-    initialState: FSMState<D>,
+    initialState: State<D>,
     private val mandatoryEvents: EventToViewModelAlt.MandatoryEvents<E>,
 ):
     ViewModel(),
@@ -33,7 +33,7 @@ abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>
         initialState,
     )
 
-    val state: StateFlow<StateWithData<out D>> = fsm.state
+    val state: StateFlow<StateDescriptionWithData<out D>> = fsm.state
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

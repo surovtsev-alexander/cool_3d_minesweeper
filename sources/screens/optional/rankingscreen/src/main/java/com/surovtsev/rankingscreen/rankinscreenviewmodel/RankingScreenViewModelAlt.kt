@@ -5,10 +5,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.finitestatemachine.helpers.concrete.FSMStateHolder
-import com.surovtsev.finitestatemachine.helpers.concrete.FSMStateHolderImp
-import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateWithData
+import com.surovtsev.finitestatemachine.helpers.concrete.StateHolderImp
+import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.EventToRankingScreenViewModelAlt
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.FinishActionHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.FinishActionHolderImp
@@ -22,7 +21,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.StateFlow
 
 
-typealias RankingScreenStateFlowAlt = StateFlow<StateWithData<out RankingScreenDataAlt>>
+typealias RankingScreenStateFlowAlt = StateFlow<StateDescriptionWithData<out RankingScreenDataAlt>>
 
 class RankingScreenViewModelAlt constructor(
     savedStateHandle: SavedStateHandle,
@@ -33,9 +32,9 @@ class RankingScreenViewModelAlt constructor(
 ):
     TemplateScreenViewModelAlt<EventToRankingScreenViewModelAlt, RankingScreenDataAlt>(
         RankingScreenEventChecker(),
-        RankingScreenEventProcessor(rankingScreenDaggerComponentsHolder, FSMStateHolderImp<RankingScreenDataAlt>(StateWithData(State.Idle, RankingScreenDataAlt.NoData))),
+        RankingScreenEventProcessor(rankingScreenDaggerComponentsHolder, StateHolderImp<RankingScreenDataAlt>(StateDescriptionWithData(StateDescription.Idle, RankingScreenDataAlt.NoData))),
         finishActionHolder,
-        StateWithData(State.Idle, RankingScreenDataAlt.NoData),
+        StateDescriptionWithData(StateDescription.Idle, RankingScreenDataAlt.NoData),
         EventToRankingScreenViewModelAlt.MandatoryEvents,
     )
 //    RequestPermissionsResultReceiver,

@@ -2,8 +2,8 @@
 
 package com.surovtsev.finitestatemachine.helpers.concrete
 
-import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateWithData
+import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.finitestatemachine.state.data.Data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
-typealias FSMState<D> = StateWithData<out D>
+typealias State<D> = StateDescriptionWithData<out D>
 
-interface FSMStateHolder<D: Data> {
-    val state: StateFlow<FSMState<D>>
+interface StateHolder<D: Data> {
+    val state: StateFlow<State<D>>
 
     suspend fun publishLoadingState(
         data: D = getCurrentData()
@@ -30,25 +30,25 @@ interface FSMStateHolder<D: Data> {
     )
 
     suspend fun publishNewState(
-        newState: State,
+        newState: StateDescription,
         data: D = getCurrentData(),
     )
 
     fun getCurrentData(): D
 }
 
-class FSMStateHolderImp<D: Data>(
-    initialState: FSMState<D>,
+class StateHolderImp<D: Data>(
+    initialState: State<D>,
     private val publishStateInUIThread: Boolean = false
-): FSMStateHolder<D> {
-    private val _state: MutableStateFlow<FSMState<D>> = MutableStateFlow(initialState)
-    override val state: StateFlow<FSMState<D>> = _state.asStateFlow()
+): StateHolder<D> {
+    private val _state: MutableStateFlow<State<D>> = MutableStateFlow(initialState)
+    override val state: StateFlow<State<D>> = _state.asStateFlow()
 
     override suspend fun publishLoadingState(
         data: D
     ) {
         publishNewState(
-            State.Loading,
+            StateDescription.Loading,
             data
         )
     }
@@ -58,7 +58,7 @@ class FSMStateHolderImp<D: Data>(
         data: D
     ) {
         publishNewState(
-            State.Error(
+            StateDescription.Error(
                 message
             ),
             data
@@ -69,18 +69,18 @@ class FSMStateHolderImp<D: Data>(
         data: D
     ) {
         publishNewState(
-            State.Idle,
+            StateDescription.Idle,
             data,
         )
     }
 
     override suspend fun publishNewState(
-        newState: State,
+        newState: StateDescription,
         data: D,
     ) {
         if (publishStateInUIThread) {
             withContext(Dispatchers.Main) {
-                _state.value = StateWithData(
+                _state.value = StateDescriptionWithData(
                     newState,
                     data
                 )

@@ -29,7 +29,7 @@ import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
@@ -197,7 +197,7 @@ fun GameMenu(
     val gameScreenState by stateFlow.collectAsState()
 
     val gameScreenData = gameScreenState.data
-    if (gameScreenState.state !is State.Idle || gameScreenData !is GameScreenData.GameMenu) {
+    if (gameScreenState.description !is StateDescription.Idle || gameScreenData !is GameScreenData.GameMenu) {
         return
     }
 

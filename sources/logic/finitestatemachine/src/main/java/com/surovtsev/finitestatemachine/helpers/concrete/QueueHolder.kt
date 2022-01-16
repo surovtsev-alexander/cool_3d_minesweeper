@@ -27,7 +27,7 @@ interface QueueHolder<E: Event> {
 class QueueHolderImp<E: Event, D: Data>(
     private val eventChecker: EventChecker<E, D>,
     private val eventProcessor: EventProcessor<E>,
-    private val fsmStateHolder: FSMStateHolder<D>,
+    private val stateHolder: StateHolder<D>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig,
     private val processingWaiter: ProcessingWaiter,
@@ -220,13 +220,13 @@ class QueueHolderImp<E: Event, D: Data>(
 
             val eventCheckingResult = eventChecker.check(
                 event,
-                fsmStateHolder.state.value
+                stateHolder.state.value
             )
 
             val errorMessage = when (eventCheckingResult) {
                 is EventCheckerResult.Process -> {
                     if (event.setLoadingStateBeforeProcessing) {
-                        fsmStateHolder.publishLoadingState()
+                        stateHolder.publishLoadingState()
                     }
                     val eventProcessingResult = eventProcessor.processEvent(event)
                     if (eventProcessingResult != EventProcessingResult.Processed) {
@@ -244,7 +244,7 @@ class QueueHolderImp<E: Event, D: Data>(
             }
 
             errorMessage?.let {
-                fsmStateHolder.publishErrorState(
+                stateHolder.publishErrorState(
                     it
                 )
             }

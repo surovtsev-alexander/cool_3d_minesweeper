@@ -27,7 +27,7 @@ import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
@@ -372,7 +372,7 @@ fun DisplayCircularIndicatorIfNeeded(
 
     var showLoadingElements by remember { mutableStateOf(false) }
 
-    showLoadingElements = state.state is State.Loading
+    showLoadingElements = state.description is StateDescription.Loading
 
     with(boxScope) {
         AnimatedVisibility(
@@ -405,7 +405,7 @@ fun DisplayCircularIndicatorIfNeeded(
         }
     }
 
-    if (state.state is State.Loading) {
+    if (state.description is StateDescription.Loading) {
 
         with(boxScope) {
 

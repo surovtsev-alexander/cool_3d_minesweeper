@@ -1,8 +1,8 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel
 
-import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateWithData
+import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 
-val RankingScreenInitialStateAlt = StateWithData(
-    State.Idle, RankingScreenDataAlt.NoData
+val RankingScreenInitialStateAlt = StateDescriptionWithData(
+    StateDescription.Idle, RankingScreenDataAlt.NoData
 )

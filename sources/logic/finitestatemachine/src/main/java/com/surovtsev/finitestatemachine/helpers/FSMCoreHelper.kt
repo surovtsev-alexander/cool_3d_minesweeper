@@ -13,19 +13,19 @@ open class FSMCoreHelper<E: Event, D: Data>(
     eventProcessor: EventProcessor<E>,
     coroutineScope: CoroutineScope,
     publishStateInUIThread: Boolean,
-    initialState: FSMState<D>,
+    initialState: State<D>,
     logConfig: LogConfig,
 
     private val processingTrigger: ProcessingTrigger = ProcessingTriggerImp(),
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
-    private val fsmStateHolder: FSMStateHolder<D> = FSMStateHolderImp(
+    private val stateHolder: StateHolder<D> = StateHolderImp(
         initialState,
         publishStateInUIThread
     ),
     private val queueHolder: QueueHolder<E> = QueueHolderImp(
         eventChecker,
         eventProcessor,
-        fsmStateHolder,
+        stateHolder,
         coroutineScope,
         logConfig,
         processingWaiter,
@@ -34,5 +34,5 @@ open class FSMCoreHelper<E: Event, D: Data>(
 ):
     ProcessingTrigger by processingTrigger,
     ProcessingWaiter by processingWaiter,
-    FSMStateHolder<D> by fsmStateHolder,
+    StateHolder<D> by stateHolder,
     QueueHolder<E> by queueHolder

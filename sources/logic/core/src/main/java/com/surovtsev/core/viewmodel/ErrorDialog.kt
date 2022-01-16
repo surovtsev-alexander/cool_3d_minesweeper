@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.StateDescription
 
 @Composable
 fun ErrorDialog(
@@ -23,7 +23,7 @@ fun ErrorDialog(
 ) {
     val state by screenStateFlow.collectAsState()
 
-    val errorMessage = (state.state as? State.Error)?.message?: return
+    val errorMessage = (state.description as? StateDescription.Error)?.message?: return
 
     val closeAction = { eventHandler.handleEvent(closeErrorEvent) }
 
