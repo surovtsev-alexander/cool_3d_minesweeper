@@ -3,6 +3,7 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.helpers.concrete.State
 import com.surovtsev.finitestatemachine.helpers.concrete.StateHolder
 import com.surovtsev.finitestatemachine.helpers.concrete.StateHolderImp
@@ -11,7 +12,7 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import logcat.logcat
 
-typealias EventProcessor = suspend () -> Unit
+typealias EventProcessor = suspend () -> EventProcessingResult
 
 typealias FinishAction = () -> Unit
 
@@ -111,14 +112,16 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     protected open suspend fun handleScreenLeaving(
         owner: LifecycleOwner
-    ) {
+    ): EventProcessingResult {
         stateHolder.publishIdleState(
             noScreenData
         )
+        return EventProcessingResult.Processed
     }
 
-    protected suspend fun closeError() {
+    protected suspend fun closeError(): EventProcessingResult {
         stateHolder.publishIdleState()
+        return EventProcessingResult.Processed
     }
 
 //    protected inline fun <reified T: D> processIfDataNullable(

@@ -9,6 +9,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.*
+import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.dagger.SettingsComponent
 import dagger.assisted.Assisted
@@ -54,7 +55,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun triggerInitialization() {
+    private suspend fun triggerInitialization(): EventProcessingResult {
         val currSettingsComponent: SettingsComponent
 
         settingsComponent.let {
@@ -75,19 +76,20 @@ class SettingsScreenViewModel @AssistedInject constructor(
             currSettingsComponent.settingsDao
         )
 
-        return handleEvent(
+        handleEvent(
             EventToSettingsScreenViewModel.LoadSettingsList
         )
+        return EventProcessingResult.Processed
     }
 
-    private suspend fun loadSettingsList() {
+    private suspend fun loadSettingsList(): EventProcessingResult {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error while loading settings list"
             )
-            return
+            return EventProcessingResult.Processed
         }
 
         val settingsList = currSettingsComponent.settingsDao.getAll()
@@ -98,9 +100,10 @@ class SettingsScreenViewModel @AssistedInject constructor(
             )
         )
 
-        return handleEvent(
+        handleEvent(
             EventToSettingsScreenViewModel.LoadSelectedSettings
         )
+        return EventProcessingResult.Processed
     }
 
     private fun prepopulateSettingsTableWithDefaultValues(
@@ -137,7 +140,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData,
         fromSlider: Boolean
-    ) {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
@@ -149,16 +152,18 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 )
             )
         }
+        return EventProcessingResult.Processed
     }
 
-    private suspend fun applySettings() {
+    private suspend fun applySettings(
+    ): EventProcessingResult {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while applying settings"
             )
-            return
+            return EventProcessingResult.Processed
         }
 
         doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
@@ -182,17 +187,19 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 finishAction?.invoke()
             }
         }
+
+        return EventProcessingResult.Processed
     }
 
     private suspend fun deleteSettings(
         settingsId: Long
-    ) {
+    ): EventProcessingResult {
         val currSettingsComponent = settingsComponent
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while deleting settings"
             )
-            return
+            return EventProcessingResult.Processed
         }
 
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
@@ -200,13 +207,14 @@ class SettingsScreenViewModel @AssistedInject constructor(
         ) {
             currSettingsComponent.settingsDao.delete(settingsId)
 
-            return handleEvent(
+            handleEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
             )
         }
+        return EventProcessingResult.Processed
     }
 
-    private suspend fun loadSelectedSettings() {
+    private suspend fun loadSelectedSettings(): EventProcessingResult {
         val currSettingsComponent = settingsComponent
 
         if (currSettingsComponent == null) {
@@ -214,7 +222,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 "error while loading selected settings"
             )
 
-            return
+            return EventProcessingResult.Processed
         }
 
         val saveController = currSettingsComponent.saveController
@@ -227,11 +235,13 @@ class SettingsScreenViewModel @AssistedInject constructor(
         )?: Settings(selectedSettingsData, -1)
 
         rememberSettings(selectedSettings)
+
+        return EventProcessingResult.Processed
     }
 
     private suspend fun rememberSettings(
         settings: Settings,
-    ) {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
@@ -242,5 +252,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 )
             )
         }
+        return EventProcessingResult.Processed
     }
 }

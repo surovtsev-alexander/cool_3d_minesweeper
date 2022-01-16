@@ -78,13 +78,19 @@ class StateHolderImp<D: Data>(
         newState: StateDescription,
         data: D,
     ) {
+        val publishingAction = {
+            _state.value = StateDescriptionWithData(
+                newState,
+                data,
+            )
+        }
+
         if (publishStateInUIThread) {
             withContext(Dispatchers.Main) {
-                _state.value = StateDescriptionWithData(
-                    newState,
-                    data
-                )
+                publishingAction.invoke()
             }
+        } else {
+            publishingAction.invoke()
         }
     }
 
