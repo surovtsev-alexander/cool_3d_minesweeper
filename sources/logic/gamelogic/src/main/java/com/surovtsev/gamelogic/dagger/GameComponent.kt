@@ -1,7 +1,6 @@
 package com.surovtsev.gamelogic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
-import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.helpers.RankingListHelper
@@ -162,14 +161,12 @@ object GameControllerModule {
         gameControls: GameControls,
         subscriptionsHolder: SubscriptionsHolder,
     ): GameLogic {
-        val res  =
-            GameLogic(
-                gameStateHolder,
-                cubeOpenGLModel,
-                gameControls,
-                subscriptionsHolder,
-            )
-        return res
+        return GameLogic(
+            gameStateHolder,
+            cubeOpenGLModel,
+            gameControls,
+            subscriptionsHolder,
+        )
     }
 }
 

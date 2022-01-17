@@ -55,7 +55,7 @@ object RankingScreenModule {
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
                     restartableCoroutineScopeComponent,
-                    "RankingScreenViewModel:TimeSpanComponent"
+                    "RankingScreen:TimeSpanComponent"
                 )
             )
             .build()

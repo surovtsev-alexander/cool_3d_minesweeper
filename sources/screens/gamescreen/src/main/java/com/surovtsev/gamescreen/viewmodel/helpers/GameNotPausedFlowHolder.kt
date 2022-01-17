@@ -26,7 +26,7 @@ class GameNotPausedFlowHolder @Inject constructor(
     init {
         SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
             restartableCoroutineScopeComponent,
-            "GameNotPausedFlowHolder:GameComponent"
+            "GameScreen:GameNotPausedFlowHolder"
         ).subscriptionsHolder.addSubscription(this)
     }
 

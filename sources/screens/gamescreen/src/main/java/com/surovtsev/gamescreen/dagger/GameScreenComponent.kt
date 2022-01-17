@@ -91,7 +91,7 @@ object GameScreenComponentsModule {
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
                     restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:TimeSpanComponent"
+                    "GameScreen:TimeSpanComponent"
                 )
             )
             .build()
@@ -111,7 +111,7 @@ object GameScreenComponentsModule {
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
                     restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:TouchListener"
+                    "GameScreen:TouchListenerComponent"
                 )
             )
             .build()
@@ -133,7 +133,7 @@ object GameScreenComponentsModule {
             .subscriptionsHolderEntryPoint(
                 SubscriptionsHolderComponentFactoryHolderImp.createAndSubscribe(
                     restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:GameComponent"
+                    "GameScreen:GameComponent"
                 )
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
