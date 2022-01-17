@@ -56,7 +56,12 @@ class GameScreenViewModel @AssistedInject constructor(
                 stateHolder,
             ),
         )
-    // look ::onDestroy
+
+    /**
+     * Released in ::onDestroy and it is the reason to suppress lint warning.
+     *
+     * This variable is needed to call onResume and onPause methods of GLSurfaceView.
+     */
     @SuppressLint("StaticFieldLeak")
     private var gLSurfaceView: GLSurfaceView? = null
 
