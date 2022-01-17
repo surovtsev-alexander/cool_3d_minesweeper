@@ -14,11 +14,13 @@ interface Event {
         override val pushToHead: Boolean,
     ): Event
 
+    interface ProcessedByFSM: Event
+
     abstract class PauseResumeEvent: EventImp(
         false,
         false,
         true
-    )
+    ), ProcessedByFSM
 
     abstract class Pause: PauseResumeEvent()
     abstract class Resume: PauseResumeEvent()
