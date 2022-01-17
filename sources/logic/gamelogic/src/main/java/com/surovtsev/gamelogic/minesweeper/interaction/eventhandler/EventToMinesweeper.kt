@@ -9,5 +9,7 @@ sealed interface EventToMinesweeper {
 
     object SaveGame: EventToMinesweeper
 
+    object SetGameStateToNull: EventToMinesweeper
+
     object Tick: EventToMinesweeper, CanBeSkipped
 }

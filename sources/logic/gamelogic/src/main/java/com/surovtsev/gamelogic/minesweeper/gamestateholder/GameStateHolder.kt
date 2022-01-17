@@ -51,4 +51,8 @@ class GameStateHolder @Inject constructor(
     ) {
         _gameStateFlow.value = createGameState(tryToLoad)
     }
+
+    fun setGameStateToNull() {
+        _gameStateFlow.value = null
+    }
 }

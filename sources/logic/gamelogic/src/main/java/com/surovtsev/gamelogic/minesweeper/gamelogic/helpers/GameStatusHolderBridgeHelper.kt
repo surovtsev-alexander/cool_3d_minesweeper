@@ -52,6 +52,8 @@ class GameStatusHolderBridgeHelper(
     }
 
     fun stop() {
+        bombsLeftFlow.value = 0
+        gameStatusWithElapsedFlow.value = null
         jobs.map {
             it.cancel()
         }

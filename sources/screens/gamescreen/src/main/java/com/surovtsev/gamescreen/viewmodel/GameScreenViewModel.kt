@@ -113,6 +113,10 @@ class GameScreenViewModel @AssistedInject constructor(
             .gLESRenderer
             .openGLEventsHandler = null
 
+        gameScreenComponent.gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
+            EventToMinesweeper.SetGameStateToNull
+        )
+
         stateHolder.publishIdleState(
             GameScreenData.NoData
         )

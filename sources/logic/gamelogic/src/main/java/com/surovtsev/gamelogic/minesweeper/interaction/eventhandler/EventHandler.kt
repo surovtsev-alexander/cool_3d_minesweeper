@@ -37,10 +37,11 @@ class EventHandler @Inject constructor(
         event: EventToMinesweeper
     ) {
         val action = when (event) {
-            is EventToMinesweeper.NewGame     -> suspend { newGame(false) }
-            is EventToMinesweeper.LoadGame    -> suspend { newGame(true) }
-            is EventToMinesweeper.SaveGame    -> ::saveGame
-            is EventToMinesweeper.Tick        -> ::tick
+            is EventToMinesweeper.NewGame            -> suspend { newGame(false) }
+            is EventToMinesweeper.LoadGame           -> suspend { newGame(true) }
+            is EventToMinesweeper.SaveGame           -> ::saveGame
+            is EventToMinesweeper.SetGameStateToNull -> ::setGameStateToNull
+            is EventToMinesweeper.Tick               -> ::tick
         }
 
         if (mutex.isLocked && event is EventToMinesweeper.CanBeSkipped) {
@@ -56,13 +57,11 @@ class EventHandler @Inject constructor(
         tryToLoad: Boolean = false
     ) {
         gameStateHolder.newGame(tryToLoad)
-        // TODO: 17.01.2022 Remove
-//        cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
-//            if (!tryToLoad) {
-//                it.cameraInfo.moveToOrigin()
-//            }
-//            it.update()
-//        }
+    }
+
+    private suspend fun setGameStateToNull(
+    ) {
+        gameStateHolder.setGameStateToNull()
     }
 
     private suspend fun saveGame() {
