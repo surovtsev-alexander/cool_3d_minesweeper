@@ -50,8 +50,4 @@ class SettingsScreenViewModel @AssistedInject constructor(
             stateHolder,
         ),
     )
-
-    override suspend fun processEvent(event: EventToSettingsScreenViewModel): EventProcessingResult<EventToSettingsScreenViewModel> {
-        return eventHandler.eventProcessor.processEvent(event)
-    }
 }

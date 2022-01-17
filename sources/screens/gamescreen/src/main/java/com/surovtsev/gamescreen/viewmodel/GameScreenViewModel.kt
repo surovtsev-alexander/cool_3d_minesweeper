@@ -107,10 +107,6 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView = null
     }
 
-    override suspend fun processEvent(event: EventToGameScreenViewModel): EventProcessingResult<EventToGameScreenViewModel> {
-        return eventHandler.eventProcessor.processEvent(event)
-    }
-
     fun initGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {

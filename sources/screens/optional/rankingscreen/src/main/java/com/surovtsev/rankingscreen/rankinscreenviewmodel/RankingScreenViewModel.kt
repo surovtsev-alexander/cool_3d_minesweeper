@@ -65,10 +65,6 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingScreenComponent.restartableCoroutineScopeComponent.subscriberImp.onStop()
     }
 
-    override suspend fun processEvent(event: EventToRankingScreenViewModel): EventProcessingResult<EventToRankingScreenViewModel> {
-        return eventHandler.eventProcessor.processEvent(event)
-    }
-
 //    companion object {
 //        const val requestWriteExternalStorageCode = 100
 //    }

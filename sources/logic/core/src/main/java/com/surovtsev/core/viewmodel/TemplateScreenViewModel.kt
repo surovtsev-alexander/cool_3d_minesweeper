@@ -48,8 +48,6 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     abstract val eventHandler: EventHandler<E, D>
 
-    abstract suspend fun processEvent(event: E): EventProcessingResult<E>
-
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         handleEvent(
@@ -58,62 +56,74 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     }
 
     override fun handleEvent(event: E) {
+        val eventHandles = arrayOf(
+            eventHandler,
+            templateScreenViewModelEventHandler,
+        )
+
         launchOnIOThread {
             logcat { "handleEvent: $event" }
 
-            val errorMessage = when (
-                val eventCheckingResult =
-                    templateScreenViewModelEventHandler.eventChecker.check(
-                        event, stateHolder.state.value
-                    )
-            ) {
-                is EventCheckerResult.Pass -> {
-                    organizeEventProcessing(event)
-                    null
+            val currState = stateHolder.state.value
+            val checkingResult = eventHandles.map {
+                it.eventChecker.check(event, currState)
+            }
+
+            checkingResult.firstOrNull {
+                it !is EventCheckerResult.Skip
+            } ?: return@launchOnIOThread
+
+            checkingResult.firstOrNull {
+                it is EventCheckerResult.RaiseError
+            } ?.let {
+                stateHolder.publishErrorState(
+                    (it as EventCheckerResult.RaiseError<E>).message
+                )
+                return@launchOnIOThread
+            }
+
+            val changeEventResults = checkingResult.filterIsInstance<EventCheckerResult.ChangeWith<E>>()
+
+            val eventToProcess = when (changeEventResults.count()) {
+                0 -> {
+                    event
                 }
-                is EventCheckerResult.Skip -> {
-                    null
-                }
-                is EventCheckerResult.Unchecked -> {
-                    "internal error 1"
-                }
-                is EventCheckerResult.RaiseError -> {
-                    eventCheckingResult.message
-                }
-                is EventCheckerResult.ChangeWith -> {
-                    organizeEventProcessing(
-                        eventCheckingResult.event
-                    )
-                    null
+                1 -> {
+                    changeEventResults[0].event
                 }
                 else -> {
-                    "internal error 2"
+                    stateHolder.publishErrorState(
+                        "internal error 1"
+                    )
+                    return@launchOnIOThread
                 }
             }
 
-            if (errorMessage != null) {
-                stateHolder.publishErrorState(
-                    errorMessage
-                )
+            if (eventToProcess.setLoadingStateBeforeProcessing) {
+                stateHolder.publishLoadingState()
             }
-        }
-    }
 
-    private suspend fun organizeEventProcessing(event: E) {
-        // TODO: 17.01.2022 Legacy solution. Need to be deleted.
-        if (event.setLoadingStateBeforeProcessing) {
-            stateHolder.publishLoadingState()
-        }
-
-        when (val eventProcessingResult = processEvent(event)) {
-            is EventProcessingResult.Processed -> {}
-            is EventProcessingResult.Unprocessed -> {
-                stateHolder.publishErrorState("unable to process internal event")
+            val processingResults = eventHandles.map {
+                it.eventProcessor.processEvent(eventToProcess)
             }
-            is EventProcessingResult.PushNewEvent<E> -> {
-                return handleEvent(
-                    eventProcessingResult.event
-                )
+
+            val pushNewEventResults = processingResults.filterIsInstance<EventProcessingResult.PushNewEvent<E>>()
+
+            when (pushNewEventResults.count()) {
+                0 -> {
+                }
+                1 -> {
+                    return@launchOnIOThread handleEvent(
+                        pushNewEventResults[0].event
+                    )
+                }
+                else -> {
+                    // TODO: 17.01.2022 do not fix it.
+                    //  it is temporary solution to migrate to finite state machine.
+                    stateHolder.publishErrorState(
+                        "internal error 3"
+                    )
+                }
             }
         }
     }
