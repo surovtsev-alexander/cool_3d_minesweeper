@@ -17,7 +17,7 @@ import com.surovtsev.finitestatemachine.state.StateDescription
 @Composable
 fun ErrorDialog(
     screenStateFlow: ScreenStateFlow<ScreenData>,
-    eventHandler: EventHandler<EventToViewModel>,
+    eventReceiver: EventReceiver<EventToViewModel>,
     closeErrorEvent: EventToViewModel,
     closeErrorAndFinishEvent: EventToViewModel
 ) {
@@ -25,7 +25,7 @@ fun ErrorDialog(
 
     val errorMessage = (state.description as? StateDescription.Error)?.message?: return
 
-    val closeAction = { eventHandler.handleEvent(closeErrorEvent) }
+    val closeAction = { eventReceiver.receiveEvent(closeErrorEvent) }
 
     Dialog(
         onDismissRequest = closeAction
@@ -53,7 +53,7 @@ fun ErrorDialog(
                 }
                 Button(
                     onClick = {
-                        eventHandler.handleEvent(
+                        eventReceiver.receiveEvent(
                             closeErrorAndFinishEvent
                         )
                     }
@@ -70,7 +70,7 @@ fun <C: EventToViewModel, D: ScreenData> ErrorDialogPlacer<C, D>.PlaceErrorDialo
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         screenStateFlow = screenStateFlow,
-        eventHandler = this as EventHandler<EventToViewModel>,
+        eventReceiver = this as EventReceiver<EventToViewModel>,
         closeErrorEvent = mandatoryEvents.closeError,
         closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )

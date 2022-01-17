@@ -3,7 +3,6 @@ package com.surovtsev.gamescreen.presentation
 import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.text.format.DateUtils
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,14 +51,14 @@ fun GameScreen(
         return
     }
 
-    val eventHandler = viewModel as GameScreenEventHandler
+    val eventReceiver = viewModel as GameScreenEventReceiver
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventHandler.handleEvent(
+        eventReceiver.receiveEvent(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame
             } else {
@@ -70,7 +69,7 @@ fun GameScreen(
 
     GameScreenControls(
         viewModel.screenStateFlow,
-        eventHandler,
+        eventReceiver,
         context,
         viewModel::initGLSurfaceView,
         viewModel as GameScreenErrorDialogPlacer,
@@ -82,7 +81,7 @@ private val pauseResumeButtonWidth = 100.dp
 @Composable
 fun GameScreenControls(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     errorDialogPlacer: GameScreenErrorDialogPlacer,
@@ -93,19 +92,19 @@ fun GameScreenControls(
 
         GameView(
             stateFlow,
-            eventHandler,
+            eventReceiver,
             glSurfaceViewCreated,
             context,
         )
 
         GameMenu(
             stateFlow,
-            eventHandler
+            eventReceiver
         )
 
         GameStatusDialog(
             stateFlow,
-            eventHandler,
+            eventReceiver,
         )
     }
 }
@@ -114,7 +113,7 @@ fun GameScreenControls(
 @Composable
 fun GameView(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
 ) {
@@ -129,7 +128,7 @@ fun GameView(
         Row {
             Controls(
                 stateFlow,
-                eventHandler,
+                eventReceiver,
             )
         }
     }
@@ -157,7 +156,7 @@ fun GameView(
                 .width(pauseResumeButtonWidth)
             ,
             onClick = {
-                eventHandler.handleEvent(
+                eventReceiver.receiveEvent(
                     EventToGameScreenViewModel.OpenGameMenuAndSetIdleState
                 )
             },
@@ -196,7 +195,7 @@ fun FPSLabel(
 @Composable
 fun GameMenu(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
 ) {
     val gameScreenState by stateFlow.collectAsState()
 
@@ -211,7 +210,7 @@ fun GameMenu(
     )
 
     val closeAction = {
-        eventHandler.handleEvent(EventToGameScreenViewModel.CloseGameMenu)
+        eventReceiver.receiveEvent(EventToGameScreenViewModel.CloseGameMenu)
     }
 
     Dialog(
@@ -249,7 +248,7 @@ fun GameMenu(
                             .fillMaxWidth()
                             .height(80.dp),
                         onClick = {
-                            eventHandler.handleEvent(event)
+                            eventReceiver.receiveEvent(event)
                         },
                         border = BorderStroke(1.dp, Color.Black)
                     ) {
@@ -280,7 +279,7 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
 ) {
     Row(
         modifier = Modifier
@@ -294,7 +293,7 @@ fun Controls(
                 .weight(2f)
         ) {
             ControlButtons(
-                eventHandler,
+                eventReceiver,
             )
         }
         Column(
@@ -304,7 +303,7 @@ fun Controls(
         ) {
             ControlCheckBox(
                 stateFlow,
-                eventHandler,
+                eventReceiver,
             )
         }
         Column(
@@ -321,7 +320,7 @@ fun Controls(
 
 @Composable
 fun ControlButtons(
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
 ) {
     Row (
         modifier = Modifier
@@ -336,7 +335,7 @@ fun ControlButtons(
             Button(
                 modifier = Modifier
                     .weight(1f),
-                onClick = { eventHandler.handleEvent(event) }
+                onClick = { eventReceiver.receiveEvent(event) }
             ) {
                 Text(text = buttonCaption)
             }
@@ -347,7 +346,7 @@ fun ControlButtons(
 @Composable
 fun ControlCheckBox(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
 ) {
     val state = stateFlow.collectAsState().value
 
@@ -362,7 +361,7 @@ fun ControlCheckBox(
     val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
 
     val toggleFlaggingAction = {
-        eventHandler.handleEvent(
+        eventReceiver.receiveEvent(
             EventToGameScreenViewModel.ToggleFlagging
         )
     }
@@ -435,7 +434,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     stateFlow: GameScreenStateFlow,
-    eventHandler: GameScreenEventHandler,
+    eventReceiver: GameScreenEventReceiver,
 ) {
     val state by stateFlow.collectAsState()
 
@@ -450,7 +449,7 @@ fun GameStatusDialog(
     }
 
     val closeDialogAction = {
-        eventHandler.handleEvent(
+        eventReceiver.receiveEvent(
             EventToGameScreenViewModel.CloseGameStatusDialog
         )
     }
@@ -474,7 +473,7 @@ fun GameStatusDialog(
             Button(
                 onClick = {
                     closeDialogAction.invoke()
-                    eventHandler.handleEvent(
+                    eventReceiver.receiveEvent(
                         EventToGameScreenViewModel.NewGame
                     )
                 }

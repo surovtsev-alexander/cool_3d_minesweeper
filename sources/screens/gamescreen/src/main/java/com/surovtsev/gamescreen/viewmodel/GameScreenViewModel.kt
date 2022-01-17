@@ -8,13 +8,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
+import com.surovtsev.core.viewmodel.EventReceiver
+import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
-import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
-import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
-import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
-import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
@@ -27,7 +26,7 @@ const val LoadGameParameterName = "load_game"
 
 typealias GameScreenStateFlow = ScreenStateFlow<GameScreenData>
 
-typealias GameScreenEventHandler = EventHandler<EventToGameScreenViewModel>
+typealias GameScreenEventReceiver = EventReceiver<EventToGameScreenViewModel>
 
 typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
 
@@ -43,7 +42,7 @@ class GameScreenViewModel @AssistedInject constructor(
         GameScreenData.NoData,
         GameScreenInitialState,
     ),
-    GameScreenEventHandler,
+    GameScreenEventReceiver,
     DefaultLifecycleObserver
 {
     @AssistedFactory
@@ -56,8 +55,8 @@ class GameScreenViewModel @AssistedInject constructor(
             .gameScreenStateFlow(screenStateFlow)
             .build()
 
-    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToGameScreenViewModel, GameScreenData> =
-        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+    override val eventHandler =
+        EventHandler(
             EventCheckerImp(),
             EventProcessorImp(
                 gameScreenComponent,
@@ -80,7 +79,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onResume()
 
         if (stateHolder.state.value.data is GameScreenData.GameMenu) {
-            handleEvent(
+            receiveEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
         }
@@ -95,7 +94,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
 
         if (stateHolder.state.value.data !is GameScreenData.GameMenu) {
-            handleEvent(
+            receiveEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }

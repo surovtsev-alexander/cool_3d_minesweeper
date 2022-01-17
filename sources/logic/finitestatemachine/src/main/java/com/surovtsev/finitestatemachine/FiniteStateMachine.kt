@@ -102,7 +102,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         } while (true)
     }
 
-    fun handleEvent(
+    fun receiveEvent(
         event: E
     ) {
         if (logConfig.logLevel.isGreaterThan0()) {

@@ -50,12 +50,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        handleEvent(
+        receiveEvent(
             mandatoryEvents.handleScreenLeavingEventFactory(owner)
         )
     }
 
-    override fun handleEvent(event: E) {
+    override fun receiveEvent(event: E) {
         val eventHandles = arrayOf(
             eventHandler,
             templateScreenViewModelEventHandler,
@@ -113,7 +113,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
                 0 -> {
                 }
                 1 -> {
-                    return@launchOnIOThread handleEvent(
+                    return@launchOnIOThread receiveEvent(
                         pushNewEventResults[0].event
                     )
                 }

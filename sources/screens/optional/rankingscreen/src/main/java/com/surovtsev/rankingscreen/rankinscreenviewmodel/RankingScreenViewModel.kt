@@ -5,26 +5,22 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
-import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
-import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
+import com.surovtsev.core.viewmodel.EventReceiver
+import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventCheckerImp
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventProcessorImp
-import com.surovtsev.timespan.dagger.TimeSpanComponent
-import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
-import logcat.logcat
 
 typealias RankingScreenStateFlow = ScreenStateFlow<RankingScreenData>
 
-typealias RankingScreenEventHandler = EventHandler<EventToRankingScreenViewModel>
+typealias RankingScreenEventReceiver = EventReceiver<EventToRankingScreenViewModel>
 
 typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<
         EventToRankingScreenViewModel, RankingScreenData>
@@ -50,8 +46,8 @@ class RankingScreenViewModel @AssistedInject constructor(
             .appComponentEntryPoint(appComponentEntryPoint)
             .build()
 
-    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
-        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+    override val eventHandler =
+        EventHandler(
             EventCheckerImp(),
             EventProcessorImp(
                 stateHolder,

@@ -36,13 +36,13 @@ fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
 ) {
-    val eventHandler: RankingScreenEventHandler = viewModel
+    val eventReceiver: RankingScreenEventReceiver = viewModel
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventHandler.handleEvent(
+        eventReceiver.receiveEvent(
             EventToRankingScreenViewModel
                 .LoadData
         )
@@ -50,7 +50,7 @@ fun RankingScreen(
 
     RankingControls(
         viewModel.screenStateFlow,
-        eventHandler,
+        eventReceiver,
         viewModel as RankingScreenErrorDialogPlacer,
     )
 }
@@ -58,7 +58,7 @@ fun RankingScreen(
 @Composable
 fun RankingControls(
     stateFlow: RankingScreenStateFlow,
-    eventHandler: RankingScreenEventHandler,
+    eventReceiver: RankingScreenEventReceiver,
     errorDialogPlacer: RankingScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
@@ -79,7 +79,7 @@ fun RankingControls(
                 ) {
                     SettingsList(
                         stateFlow,
-                        eventHandler
+                        eventReceiver
                     )
                 }
                 Divider(
@@ -91,7 +91,7 @@ fun RankingControls(
                 ) {
                     RankingList(
                         stateFlow,
-                        eventHandler
+                        eventReceiver
                     )
                 }
 //            Row(
@@ -115,7 +115,7 @@ fun RankingControls(
 @Composable
 fun SettingsList(
     stateFlow: RankingScreenStateFlow,
-    eventHandler: RankingScreenEventHandler
+    eventReceiver: RankingScreenEventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
@@ -175,7 +175,7 @@ fun SettingsList(
                         }
                     } else {
                         Box (
-                                modifier = Modifier.clickable { eventHandler.handleEvent(
+                                modifier = Modifier.clickable { eventReceiver.receiveEvent(
                                     EventToRankingScreenViewModel.FilterList(itemId))
                                 }
                         ) {
@@ -219,7 +219,7 @@ fun SettingsDataItem(
 @Composable
 fun RankingList(
     stateFlow: RankingScreenStateFlow,
-    eventHandler: RankingScreenEventHandler
+    eventReceiver: RankingScreenEventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
@@ -254,7 +254,7 @@ fun RankingList(
             Row {
                 for ((columnType, modifierWidth) in columnsWidth) {
                     RankingListColumnTitle(
-                        eventHandler,
+                        eventReceiver,
                         columnType,
                         modifierWidth,
                         tableSortParameters,
@@ -273,7 +273,7 @@ fun RankingList(
 
 @Composable
 fun RankingListColumnTitle(
-    eventHandler: RankingScreenEventHandler,
+    eventReceiver: RankingScreenEventReceiver,
     tableColumnType: RankingTableColumn,
     modifierWidth: Float,
     rankingTableSortParameters: RankingTableSortParameters,
@@ -301,7 +301,7 @@ fun RankingListColumnTitle(
                     .width(30.dp)
                     .background(buttonColor)
                     .clickable {
-                        eventHandler.handleEvent(
+                        eventReceiver.receiveEvent(
                             EventToRankingScreenViewModel.SortListWithNoDelay(
                                 RankingTableSortParameters(
                                     tableColumnType,

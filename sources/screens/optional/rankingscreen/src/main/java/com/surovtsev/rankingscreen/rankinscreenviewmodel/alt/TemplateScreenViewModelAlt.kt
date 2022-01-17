@@ -42,7 +42,7 @@ abstract class TemplateScreenViewModelAlt<E: EventToViewModelAlt, D: ScreenData>
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        fsm.handleEvent(
+        fsm.receiveEvent(
             mandatoryEvents.handleScreenLeavingEventFactory(owner)
         )
     }

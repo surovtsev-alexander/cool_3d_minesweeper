@@ -52,7 +52,7 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.handleEvent(
+        fsm.receiveEvent(
             TestEvent.Init
         )
 
@@ -70,13 +70,13 @@ class FSMUnitTest {
         val fsm = this.fsm!!
 
         // act
-        fsm.handleEvent(
+        fsm.receiveEvent(
             TestEvent.Init
         )
-        fsm.handleEvent(
+        fsm.receiveEvent(
             TestEvent.CloseError
         )
-        fsm.handleEvent(
+        fsm.receiveEvent(
             TestEvent.EmptyEvent
         )
 

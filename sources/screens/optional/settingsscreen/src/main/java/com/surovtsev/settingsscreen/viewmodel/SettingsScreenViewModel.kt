@@ -5,11 +5,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.room.dao.SettingsDao
-import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.EventCheckerImp
 import com.surovtsev.settingsscreen.viewmodel.helpers.EventProcessorImp
@@ -19,7 +16,7 @@ import dagger.assisted.AssistedInject
 
 typealias SettingsScreenStateFlow = ScreenStateFlow<SettingsScreenData>
 
-typealias SettingsScreenEventHandler = EventHandler<EventToSettingsScreenViewModel>
+typealias SettingsScreenEventReceiver = EventReceiver<EventToSettingsScreenViewModel>
 
 typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScreenViewModel, SettingsScreenData>
 
@@ -43,7 +40,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
         .appComponentEntryPoint(appComponentEntryPoint)
         .build()
 
-    override val eventHandler = com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+    override val eventHandler = EventHandler(
         EventCheckerImp(),
         EventProcessorImp(
             settingsComponent,
