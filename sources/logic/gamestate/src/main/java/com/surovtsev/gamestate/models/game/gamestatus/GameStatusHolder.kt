@@ -18,7 +18,7 @@ class GameStatusHolder @Inject constructor(
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
         GameStatusWithElapsedForGameConfig(gameConfig)
     )
-    val gameStatusWithElapsedFlow: GameStatusWithElapsedFlowForGameConfig = _gameStatusWithElapsedFlow.asStateFlow()
+    val gameStatusWithElapsedFlow: GameStatusWithElapsedForGameConfigFlow = _gameStatusWithElapsedFlow.asStateFlow()
 
     private val _bombsLeftFlow = MutableStateFlow(0)
     val bombsLeftFlow: BombsLeftFlow = _bombsLeftFlow.asStateFlow()

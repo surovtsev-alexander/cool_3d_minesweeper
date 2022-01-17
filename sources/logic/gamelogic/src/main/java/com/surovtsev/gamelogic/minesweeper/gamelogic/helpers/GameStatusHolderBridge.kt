@@ -5,7 +5,7 @@ import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamestate.GameState
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlowForGameConfig
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedForGameConfigFlow
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
@@ -26,7 +26,7 @@ class GameStatusHolderBridge @Inject constructor(
     val bombsLeftFlow: BombsLeftFlow = _bombsLeftFlow.asStateFlow()
 
     private val _gameStatusWithElapsedFlow = MutableStateFlow(gameStateHolder.gameStateFlow.value.gameStatusHolder.gameStatusWithElapsedFlow.value)
-    val gameStatusWithElapsedFlow: GameStatusWithElapsedFlowForGameConfig = _gameStatusWithElapsedFlow.asStateFlow()
+    val gameStatusWithElapsedFlow: GameStatusWithElapsedForGameConfigFlow = _gameStatusWithElapsedFlow.asStateFlow()
 
     private val _gameStatusHolderBridgeHelper = MutableStateFlow(
         createGameStatusHolderBridgeHelper(

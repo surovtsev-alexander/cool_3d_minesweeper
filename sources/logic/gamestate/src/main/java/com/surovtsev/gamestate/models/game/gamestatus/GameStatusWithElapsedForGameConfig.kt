@@ -10,4 +10,4 @@ data class GameStatusWithElapsedForGameConfig(
     val elapsed: Long = 0L,
 )
 
-typealias GameStatusWithElapsedFlowForGameConfig = StateFlow<GameStatusWithElapsedForGameConfig>
+typealias GameStatusWithElapsedForGameConfigFlow = StateFlow<GameStatusWithElapsedForGameConfig>
