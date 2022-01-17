@@ -19,11 +19,7 @@ class GameLogic(
     private val gameControls: GameControls,
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
-    private val _gameTouchHandlerFlow = MutableStateFlow(
-        createGameTouchHandler(
-            gameStateHolder.gameStateFlow.value
-        )
-    )
+    private val _gameTouchHandlerFlow = MutableStateFlow<GameTouchHandler?>(null)
     val gameTouchHandlerFlow = _gameTouchHandlerFlow.asStateFlow()
 
     init {

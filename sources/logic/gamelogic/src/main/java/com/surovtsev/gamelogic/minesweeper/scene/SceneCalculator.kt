@@ -64,8 +64,14 @@ class SceneCalculator @Inject constructor(
             }
         } while (false)
 
+        if (cameraMoved) {
+            cubeOpenGLModel.cubeGLESProgram.useProgram()
+            with(cubeOpenGLModel.cubeGLESProgram) {
+                fillMVP(cameraInfoHelper.cameraInfo.mVP)
+            }
+        }
 
-        val gameTouchHandler = gameLogic.gameTouchHandlerFlow.value
+        val gameTouchHandler = gameLogic.gameTouchHandlerFlow.value ?: return
 
         gameTouchHandler.openCubes()
 
@@ -83,13 +89,6 @@ class SceneCalculator @Inject constructor(
             val cell = intersectionCalculator.getCell()
             if (cell != null) {
                 gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
-            }
-
-        }
-        if (cameraMoved) {
-            cubeOpenGLModel.cubeGLESProgram.useProgram()
-            with(cubeOpenGLModel.cubeGLESProgram) {
-                fillMVP(cameraInfoHelper.cameraInfo.mVP)
             }
         }
     }
