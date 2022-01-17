@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
+import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventProcessor
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
@@ -19,7 +20,7 @@ typealias FinishAction = () -> Unit
 
 abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     final override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
-    override val noScreenData: D,
+    final override val noScreenData: D,
     initialState: State<D>,
 ):
     ViewModel(),
@@ -39,6 +40,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     protected val templateScreenViewModelEventChecker =
         TemplateScreenViewModelEventChecker<E, D>(
             mandatoryEvents.closeErrorAndFinish
+        )
+    protected val templateScreenViewModelEventProcessor =
+        TemplateScreenViewModelEventProcessor<E, D>(
+            stateHolder,
+            finishActionHolder,
+            noScreenData,
         )
 
     abstract suspend fun processEvent(event: E): EventProcessingResult<E>
