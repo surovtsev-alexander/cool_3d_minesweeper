@@ -6,15 +6,15 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.settingsscreen.dagger.SettingsScreenComponent
+import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import javax.inject.Inject
 
 
-class EventProcessorImp(
-    private val settingsScreenComponent: SettingsScreenComponent,
-    private val stateHolder: StateHolder<SettingsScreenData>,
+@SettingsScreenScope
+class EventProcessorImp @Inject constructor(
+    private val eventProcessorParameters: EventProcessorParameters,
 ): EventProcessor<EventToSettingsScreenViewModel> {
 
     override suspend fun processEvent(event: EventToSettingsScreenViewModel): EventProcessingResult<EventToSettingsScreenViewModel> {
@@ -38,7 +38,7 @@ class EventProcessorImp(
 
     private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
         prepopulateSettingsTableWithDefaultValues(
-            settingsScreenComponent.settingsDao
+            eventProcessorParameters.settingsDao
         )
 
         return EventProcessingResult.PushNewEvent(
@@ -47,9 +47,9 @@ class EventProcessorImp(
     }
 
     private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val settingsList = settingsScreenComponent.settingsDao.getAll()
+        val settingsList = eventProcessorParameters.settingsDao.getAll()
 
-        stateHolder.publishLoadingState(
+        eventProcessorParameters.stateHolder.publishLoadingState(
             SettingsScreenData.SettingsLoaded(
                 settingsList
             )
@@ -98,7 +98,7 @@ class EventProcessorImp(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
-            stateHolder.publishIdleState(
+            eventProcessorParameters.stateHolder.publishIdleState(
                 SettingsScreenData.SettingsDataIsSelected(
                     screenData,
                     settingsData,
@@ -116,8 +116,8 @@ class EventProcessorImp(
         ) { screenData ->
             val settingsData = screenData.settingsData
 
-            val settingsDao = settingsScreenComponent.settingsDao
-            val saveController = settingsScreenComponent.saveController
+            val settingsDao = eventProcessorParameters.settingsDao
+            val saveController = eventProcessorParameters.saveController
 
             settingsDao.getOrCreate(
                 settingsData
@@ -142,7 +142,7 @@ class EventProcessorImp(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while deleting settings"
         ) {
-            settingsScreenComponent.settingsDao.delete(settingsId)
+            eventProcessorParameters.settingsDao.delete(settingsId)
 
             return@deleteSettings EventProcessingResult.PushNewEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
@@ -152,8 +152,8 @@ class EventProcessorImp(
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val saveController = settingsScreenComponent.saveController
-        val settingsDao = settingsScreenComponent.settingsDao
+        val saveController = eventProcessorParameters.saveController
+        val settingsDao = eventProcessorParameters.settingsDao
 
         val selectedSettingsData = saveController.loadSettingDataOrDefault()
 
@@ -172,7 +172,7 @@ class EventProcessorImp(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
-            stateHolder.publishIdleState(
+            eventProcessorParameters.stateHolder.publishIdleState(
                 SettingsScreenData.SettingsIsSelected(
                     screenData,
                     settings
@@ -185,6 +185,7 @@ class EventProcessorImp(
     private suspend inline fun <reified T: ScreenData> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
+        val stateHolder = eventProcessorParameters.stateHolder
         val screenData = stateHolder.state.value.data
 
         if (screenData !is T) {

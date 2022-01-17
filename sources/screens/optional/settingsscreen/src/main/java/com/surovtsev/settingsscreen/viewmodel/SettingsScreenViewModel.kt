@@ -38,13 +38,8 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private val settingsComponent = DaggerSettingsScreenComponent
         .builder()
         .appComponentEntryPoint(appComponentEntryPoint)
+        .stateHolder(stateHolder)
         .build()
 
-    override val eventHandler = EventHandler(
-        EventCheckerImp(),
-        EventProcessorImp(
-            settingsComponent,
-            stateHolder,
-        ),
-    )
+    override val eventHandler = settingsComponent.eventHandler
 }
