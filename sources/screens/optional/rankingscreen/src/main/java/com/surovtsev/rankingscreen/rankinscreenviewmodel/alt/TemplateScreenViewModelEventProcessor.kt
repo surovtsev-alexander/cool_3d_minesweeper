@@ -1,8 +1,7 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel.alt
 
-import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 
 class TemplateScreenViewModelEventProcessor<E: EventToViewModelAlt>(
     private val screenEventProcessor: EventProcessor<E>,

@@ -5,10 +5,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
-import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper

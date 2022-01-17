@@ -1,7 +1,7 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers
 
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenDataAlt
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.EventToRankingScreenViewModelAlt

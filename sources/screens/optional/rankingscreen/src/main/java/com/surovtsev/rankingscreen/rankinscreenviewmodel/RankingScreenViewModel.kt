@@ -9,7 +9,7 @@ import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent

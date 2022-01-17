@@ -9,7 +9,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

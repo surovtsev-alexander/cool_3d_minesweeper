@@ -2,8 +2,8 @@ package com.surovtsev.core.viewmodel.helpers
 
 import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.finitestatemachine.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
+import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescription
 

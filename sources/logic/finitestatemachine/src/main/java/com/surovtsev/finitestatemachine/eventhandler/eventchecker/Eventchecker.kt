@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.eventchecker
+package com.surovtsev.finitestatemachine.eventhandler.eventchecker
 
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.state.State

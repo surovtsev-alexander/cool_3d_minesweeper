@@ -1,7 +1,7 @@
 package com.surovtsev.finitestatemachine.mock
 
 import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import logcat.logcat
 
 class TestEventProcessor: EventProcessor<TestEvent> {

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.FiniteStateMachine
-import com.surovtsev.finitestatemachine.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
