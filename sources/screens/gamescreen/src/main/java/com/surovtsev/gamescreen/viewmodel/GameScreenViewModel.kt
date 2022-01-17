@@ -17,6 +17,8 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
+import com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
+import com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers.EventProcessorImp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -46,6 +48,12 @@ class GameScreenViewModel @AssistedInject constructor(
 {
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
+
+    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToGameScreenViewModel, GameScreenData> =
+        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+            EventCheckerImp(),
+            EventProcessorImp(),
+        )
 
     private val gameScreenComponent: GameScreenComponent =
         DaggerGameScreenComponent

@@ -11,6 +11,8 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
+import com.surovtsev.settingsscreen.viewmodel.helpers.EventCheckerImp
+import com.surovtsev.settingsscreen.viewmodel.helpers.EventProcessorImp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,7 +43,10 @@ class SettingsScreenViewModel @AssistedInject constructor(
         .appComponentEntryPoint(appComponentEntryPoint)
         .build()
 
-
+    override val eventHandler = com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+        EventCheckerImp(),
+        EventProcessorImp(),
+    )
 
     override suspend fun processEvent(event: EventToSettingsScreenViewModel): EventProcessingResult<EventToSettingsScreenViewModel> {
         val eventProcessor = when (event) {

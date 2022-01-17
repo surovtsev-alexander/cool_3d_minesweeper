@@ -12,6 +12,8 @@ import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventCheckerImp
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventProcessorImp
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import dagger.assisted.Assisted
@@ -41,6 +43,12 @@ class RankingScreenViewModel @AssistedInject constructor(
 {
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
+
+    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
+        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+            EventCheckerImp(),
+            EventProcessorImp(),
+        )
 
     private val rankingScreenComponent: RankingScreenComponent =
         DaggerRankingScreenComponent
