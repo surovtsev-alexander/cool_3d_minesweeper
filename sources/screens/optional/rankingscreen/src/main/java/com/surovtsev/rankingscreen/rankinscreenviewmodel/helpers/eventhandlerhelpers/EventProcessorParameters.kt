@@ -5,7 +5,7 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenStateHolder
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import javax.inject.Inject
