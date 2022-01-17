@@ -28,7 +28,7 @@ class TemplateScreenViewModelEventProcessor<E: EventToViewModel, D: ScreenData>(
         }
     }
 
-    public suspend fun handleScreenLeaving(
+    private suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ): EventProcessingResult<E> {
         stateHolder.publishIdleState(
@@ -37,18 +37,18 @@ class TemplateScreenViewModelEventProcessor<E: EventToViewModel, D: ScreenData>(
         return EventProcessingResult.Processed()
     }
 
-    public suspend fun closeError(): EventProcessingResult<E> {
+    private suspend fun closeError(): EventProcessingResult<E> {
         stateHolder.publishIdleState()
         return EventProcessingResult.Processed()
     }
 
-    public suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
+    private suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
         stateHolder.publishIdleState()
         finishActionHolder.finish()
         return EventProcessingResult.Processed()
     }
 
-    public suspend fun finish(): EventProcessingResult<E> {
+    private suspend fun finish(): EventProcessingResult<E> {
         finishActionHolder.finish()
         return EventProcessingResult.Processed()
     }

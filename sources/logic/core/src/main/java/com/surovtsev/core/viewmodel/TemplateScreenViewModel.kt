@@ -16,9 +16,6 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import logcat.logcat
 
-typealias FinishAction = () -> Unit
-
-
 abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     final override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
     final override val noScreenData: D,
@@ -121,31 +118,6 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         }
     }
 
-    protected open suspend fun handleScreenLeaving(
-        owner: LifecycleOwner
-    ): EventProcessingResult<E> {
-        stateHolder.publishIdleState(
-            noScreenData
-        )
-        return EventProcessingResult.Processed()
-    }
-
-    protected suspend fun closeError(): EventProcessingResult<E> {
-        stateHolder.publishIdleState()
-        return EventProcessingResult.Processed()
-    }
-
-    protected suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
-        stateHolder.publishIdleState()
-        finishActionHolder.finish()
-        return EventProcessingResult.Processed()
-    }
-
-    protected suspend fun finish(): EventProcessingResult<E> {
-        finishActionHolder.finish()
-        return EventProcessingResult.Processed()
-    }
-
 //    protected inline fun <reified T: D> processIfDataNullable(
 //        checkData: (screenData: T?) -> Boolean,
 //        errorAction: (screenData: D?) -> Unit,
@@ -175,17 +147,4 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 //            action(castedScreenData)
 //        }
 //    }
-
-    protected suspend inline fun <reified T: D> doActionIfStateIsChildIs(
-        errorMessage: String, action: (screenData: T) -> Unit
-    ) {
-        val screenData = stateHolder.state.value.data
-
-        if (screenData !is T) {
-            stateHolder.publishErrorState(errorMessage)
-        } else {
-            action.invoke(screenData)
-        }
-    }
-
 }

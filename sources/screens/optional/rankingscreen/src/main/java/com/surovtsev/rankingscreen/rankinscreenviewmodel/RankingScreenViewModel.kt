@@ -44,26 +44,20 @@ class RankingScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
 
-    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
-        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
-            EventCheckerImp(),
-            EventProcessorImp(),
-        )
-
     private val rankingScreenComponent: RankingScreenComponent =
         DaggerRankingScreenComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .build()
 
-    companion object {
-        const val MINIMAL_UI_ACTION_DELAY = 3000L
-    }
-
-    object ErrorMessages {
-        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
-        val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
-    }
+    override val eventHandler: com.surovtsev.finitestatemachine.eventhandler.EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
+        com.surovtsev.finitestatemachine.eventhandler.EventHandler(
+            EventCheckerImp(),
+            EventProcessorImp(
+                stateHolder,
+                rankingScreenComponent,
+            ),
+        )
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
@@ -72,180 +66,8 @@ class RankingScreenViewModel @AssistedInject constructor(
     }
 
     override suspend fun processEvent(event: EventToRankingScreenViewModel): EventProcessingResult<EventToRankingScreenViewModel> {
-        val eventProcessor = when (event) {
-            is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(event.owner) }
-            is EventToRankingScreenViewModel.LoadData                -> ::loadData
-            is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
-            is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(event.rankingTableSortParameters, false) }
-            is EventToRankingScreenViewModel.SortList                -> suspend { sortList(event.rankingTableSortParameters, true) }
-            is EventToRankingScreenViewModel.CloseError              -> ::closeError
-            else                                                     -> null
-        }
-
-        return if (eventProcessor == null) {
-            EventProcessingResult.Unprocessed()
-        } else {
-            eventProcessor()
-        }
+        return eventHandler.eventProcessor.processEvent(event)
     }
-
-    private suspend fun loadData(
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
-
-        val currRestartableCoroutineScopeComponent =
-            rankingScreenComponent
-                .restartableCoroutineScopeComponent
-                .subscriberImp
-                .restart()
-
-        val currTimeSpanComponent: TimeSpanComponent =
-            rankingScreenComponent
-                .timeSpanComponent
-
-        val settingsDao = rankingScreenComponent.settingsDao
-        val rankingDao = rankingScreenComponent.rankingDao
-        val saveController = rankingScreenComponent.saveController
-
-        val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan) {
-            val settingsList = settingsDao.getAll()
-            val winsCountMap = rankingDao.getWinsCountMap()
-            RankingScreenData.SettingsListIsLoaded(
-                settingsList,
-                winsCountMap
-            )
-        }
-
-        currTimeSpanComponent
-            .asyncTimeSpan
-            .flush()
-
-        stateHolder.publishIdleState(
-            settingsListIsLoaded
-        )
-
-        return settingsDao.getBySettingsData(
-            saveController.loadSettingDataOrDefault()
-        ).let {
-            if (it != null) {
-                EventProcessingResult.PushNewEvent(
-                    EventToRankingScreenViewModel.FilterList(it.id)
-                )
-            } else {
-                EventProcessingResult.Processed()
-            }
-        }
-    }
-
-    private suspend fun filterList(
-        selectedSettingsId: Long
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
-
-        val rankingListWithPlaces =
-            rankingScreenComponent.rankingListHelper
-                .createRankingListWithPlaces(
-                    selectedSettingsId
-                )
-
-        val rankingScreenData = stateHolder.getCurrentData()
-
-        if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileFilteringRankingListFactory(2)
-            )
-        } else {
-            // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-            stateHolder.publishIdleState(
-                RankingScreenData.RankingListIsPrepared(
-                    rankingScreenData,
-                    selectedSettingsId,
-                    rankingListWithPlaces
-                )
-            )
-        }
-
-
-        return EventProcessingResult.PushNewEvent(
-            EventToRankingScreenViewModel.SortList(
-                DefaultRankingTableSortParameters
-            )
-        )
-    }
-
-    private suspend fun sortList(
-        rankingTableSortParameters: RankingTableSortParameters,
-        doDelay: Boolean
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currTimeSpanComponent = rankingScreenComponent.timeSpanComponent
-
-        val rankingScreenData = stateHolder.state.value.data
-
-        if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(1)
-            )
-
-            return EventProcessingResult.Processed()
-        }
-
-        val filteredRankingList = rankingScreenData.rankingListWithPlaces
-
-        logcat { "rankingTableSortType: $rankingTableSortParameters" }
-
-        val sortingAction = {
-            rankingScreenComponent.rankingListHelper.sortData(
-                filteredRankingList,
-                rankingTableSortParameters
-            )
-        }
-
-        val sortedData = if (doDelay) {
-            doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan, sortingAction)
-        } else {
-            sortingAction.invoke()
-        }
-
-        val directionOfSortableColumns =
-            (if (rankingScreenData is RankingScreenData.RankingListIsSorted) {
-                rankingScreenData.directionOfSortableColumns
-            } else {
-                DefaultSortDirectionForSortableColumns
-            }).map { (k, v) ->
-                k to if (k == rankingTableSortParameters.rankingTableColumn) {
-                    rankingTableSortParameters.sortDirection
-                } else {
-                    v
-                }
-            }.toMap()
-
-        stateHolder.publishIdleState(
-            RankingScreenData.RankingListIsSorted(
-                rankingScreenData,
-                rankingTableSortParameters,
-                sortedData,
-                directionOfSortableColumns
-            )
-        )
-        return EventProcessingResult.Processed()
-    }
-
-    private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
-        asyncTimeSpan: AsyncTimeSpan,
-        block: () -> T
-    ): T {
-        asyncTimeSpan.turnOn()
-
-        val res = block.invoke()
-
-        asyncTimeSpan.turnOff()
-        val timeToDelay = MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
-
-        if (timeToDelay > 0) {
-            delay(timeToDelay)
-        }
-
-        return res
-    }
-
 
 //    companion object {
 //        const val requestWriteExternalStorageCode = 100
