@@ -4,20 +4,18 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.helpers.sorting.RankingTableColumn
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.SortDirection
+import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Ranking
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
+import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
-import com.surovtsev.gamestate.GameState
-import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlow
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
@@ -31,7 +29,6 @@ import javax.inject.Inject
 @GameScope
 class MinesweeperGameStatusReceiver @Inject constructor(
     private val saveController: SaveController,
-    private val gameStateHolder: GameStateHolder,
     private val gameStatusHolderBridge: GameStatusHolderBridge,
     private val settingsDao: SettingsDao,
     private val rankingDao: RankingDao,
@@ -48,6 +45,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
         customCoroutineScope.launch {
             gameStatusHolderBridge.gameStatusWithElapsedFlow.collectLatest {
                 gameStatusUpdated(
+                    it.gameConfig,
                     it.gameStatus,
                     it.elapsed
                 )
@@ -56,6 +54,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     }
 
     private suspend fun gameStatusUpdated(
+        gameConfig: GameConfig,
         newStatus: GameStatus,
         elapsed: Long
     ) {
@@ -72,7 +71,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             newUIGameStatus = UIGameStatus.Lose
         } else {
             val settings = settingsDao.getOrCreate(
-                gameStateHolder.gameStateFlow.value.gameConfig.settingsData,
+                gameConfig.settingsData,
             )
 
             val rankingData = Ranking.RankingData(

@@ -4,7 +4,7 @@ import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNo
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsed
+import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedForGameConfig
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ class GameStatusHolderBridgeHelper(
     private val gameStatusHolder: GameStatusHolder,
     private val gameNotPausedFlow: GameNotPausedFlow,
     private val bombsLeftFlow: MutableStateFlow<Int>,
-    private val gameStatusWithElapsedFlow: MutableStateFlow<GameStatusWithElapsed>,
+    private val gameStatusWithElapsedFlow: MutableStateFlow<GameStatusWithElapsedForGameConfig>,
     customCoroutineScope: CustomCoroutineScope,
 ) {
     var jobs: MutableList<Job> = emptyList<Job>().toMutableList()
@@ -25,7 +25,7 @@ class GameStatusHolderBridgeHelper(
         jobs += customCoroutineScope.launch {
              gameNotPausedFlow.combine(
                 gameStatusHolder.gameStatusWithElapsedFlow
-            ) { gameNotPaused: Boolean, (gameStatus: GameStatus, _) ->
+            ) { gameNotPaused: Boolean, (_, gameStatus: GameStatus, _) ->
 
                 gameNotPaused and GameStatusHelper.isGameInProgress(gameStatus)
 

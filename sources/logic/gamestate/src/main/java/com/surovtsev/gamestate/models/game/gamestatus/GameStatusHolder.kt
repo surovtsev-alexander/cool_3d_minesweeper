@@ -1,6 +1,7 @@
 package com.surovtsev.gamestate.models.game.gamestatus
 
 import com.surovtsev.core.interaction.BombsLeftFlow
+import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.gamestate.dagger.GameStateScope
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,11 +13,12 @@ import javax.inject.Inject
 @GameStateScope
 class GameStatusHolder @Inject constructor(
     private val asyncTimeSpan: AsyncTimeSpan,
+    private val gameConfig: GameConfig,
 ) {
     private val _gameStatusWithElapsedFlow = MutableStateFlow(
-        GameStatusWithElapsed()
+        GameStatusWithElapsedForGameConfig(gameConfig)
     )
-    val gameStatusWithElapsedFlow: GameStatusWithElapsedFlow = _gameStatusWithElapsedFlow.asStateFlow()
+    val gameStatusWithElapsedFlow: GameStatusWithElapsedFlowForGameConfig = _gameStatusWithElapsedFlow.asStateFlow()
 
     private val _bombsLeftFlow = MutableStateFlow(0)
     val bombsLeftFlow: BombsLeftFlow = _bombsLeftFlow.asStateFlow()
@@ -37,7 +39,8 @@ class GameStatusHolder @Inject constructor(
 
     fun setGameStatus(newStatus: GameStatus) {
         logcat { "setGameStatus; newStatus: $newStatus; currGameStatus: ${gameStatusWithElapsedFlow.value}" }
-        _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
+        _gameStatusWithElapsedFlow.value = GameStatusWithElapsedForGameConfig(
+            gameConfig,
             newStatus,
             asyncTimeSpan.getElapsed()
         )
