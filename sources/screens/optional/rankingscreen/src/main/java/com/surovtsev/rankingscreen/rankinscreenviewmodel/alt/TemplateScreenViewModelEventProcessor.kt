@@ -10,7 +10,7 @@ class TemplateScreenViewModelEventProcessor<E: EventToViewModelAlt>(
 ): EventProcessor<E> {
 
     override suspend fun processEvent(
-        event: Event
+        event: E
     ): EventProcessingResult<E> {
         return screenEventProcessor.processEvent(
             event

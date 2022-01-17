@@ -6,7 +6,7 @@ import com.surovtsev.finitestatemachine.state.data.Data
 
 interface EventChecker<E: Event, D: Data> {
     fun check(
-        event: Event,
+        event: E,
         state: State<D>,
-    ): EventCheckerResult
+    ): EventCheckerResult<E>
 }

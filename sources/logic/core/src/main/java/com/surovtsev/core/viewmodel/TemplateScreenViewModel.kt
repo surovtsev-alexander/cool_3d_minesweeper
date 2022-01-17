@@ -12,8 +12,6 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import logcat.logcat
 
-typealias EventProcessor<E> = suspend () -> EventProcessingResult<E>
-
 typealias FinishAction = () -> Unit
 
 

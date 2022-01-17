@@ -9,7 +9,7 @@ import com.surovtsev.finitestatemachine.state.State
 class TemplateScreenViewModelEventChecker<E: EventToViewModelAlt, D: ScreenData>(
     private val screenEventChecker: EventChecker<E, D>
 ):EventChecker<E, D> {
-    override fun check(event: Event, state: State<D>): EventCheckerResult {
+    override fun check(event: E, state: State<D>): EventCheckerResult<E> {
         return screenEventChecker.check(
             event,
             state,

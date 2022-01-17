@@ -221,7 +221,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
             )
 
             val errorMessage = when (eventCheckingResult) {
-                is EventCheckerResult.Process -> {
+                is EventCheckerResult.Pass -> {
                     if (event.setLoadingStateBeforeProcessing) {
                         stateHolder.publishLoadingState()
                     }
@@ -237,6 +237,11 @@ open class FiniteStateMachine<E: Event, D: Data>(
                 }
                 is EventCheckerResult.Unchecked -> {
                     "internal error 2"
+                }
+                is EventCheckerResult.ChangeWith -> {
+                    // todo: add implementation
+                    assert(false)
+                    null
                 }
             }
 

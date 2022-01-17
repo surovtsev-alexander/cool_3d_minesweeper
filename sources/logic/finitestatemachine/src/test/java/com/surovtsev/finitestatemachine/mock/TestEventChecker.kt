@@ -7,9 +7,9 @@ import com.surovtsev.finitestatemachine.state.State
 
 class TestEventChecker: EventChecker<TestEvent, TestFSMData> {
     override fun check(
-        event: Event,
+        event: TestEvent,
         state: State<TestFSMData>
-    ): EventCheckerResult {
-        return EventCheckerResult.Process
+    ): EventCheckerResult<TestEvent> {
+        return EventCheckerResult.Pass()
     }
 }

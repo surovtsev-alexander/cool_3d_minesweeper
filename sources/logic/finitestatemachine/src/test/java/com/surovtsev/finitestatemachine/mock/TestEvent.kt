@@ -7,7 +7,8 @@ interface TestEvent: Event {
 
     abstract class TestEventImp(
         override val doNotPushToQueue: Boolean = false,
-        override val pushToHead: Boolean = false
+        override val pushToHead: Boolean = false,
+        override val setLoadingStateBeforeProcessing: Boolean = true,
     ): TestEvent
 
     object Init: TestEventImp(), Event.Init
