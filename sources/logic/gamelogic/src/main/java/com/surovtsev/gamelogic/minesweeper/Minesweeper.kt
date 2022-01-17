@@ -9,12 +9,12 @@ import javax.inject.Inject
 
 @GameScope
 class Minesweeper @Inject constructor(
-    /* Do not delete this. It is used:
+/*
+  Do not delete this. It is used:
     - to add new record into Ranking table when game is won;
     - to notify view about game status change.
 */
     private val minesweeperGameStatusReceiver: MinesweeperGameStatusReceiver,
-    private val gameStatusHolderBridge: GameStatusHolderBridge,
     val openGLEventsHandler: MinesweeperOpenGLEventsHandler,
     val eventHandler: EventHandler,
 )

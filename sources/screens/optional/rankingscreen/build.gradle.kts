@@ -52,7 +52,7 @@ dependencies {
     )
 
     defaultDependencies()
-    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     testDependencies()
 
 
