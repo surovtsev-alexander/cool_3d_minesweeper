@@ -4,7 +4,8 @@ sealed interface UIGameStatus {
     object Unimportant: UIGameStatus
 
     class Win(
-        val place: Int
+        val place: Int,
+        val elapsed: Long,
     ): UIGameStatus
 
     object Lose: UIGameStatus

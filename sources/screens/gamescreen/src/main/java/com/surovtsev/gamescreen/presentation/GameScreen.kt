@@ -33,6 +33,7 @@ import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
+import com.surovtsev.utils.time.elapsedformatter.ElapsedFormatter
 import com.surovtsev.utils.timers.async.TimeSpanFlow
 
 @Composable
@@ -422,8 +423,8 @@ fun TimeElapsed(
 ) {
     val elapsed = timeSpanFlow.collectAsState(0).value
     Text(
-        DateUtils.formatElapsedTime(
-            elapsed / 1000,
+        ElapsedFormatter.formatElapsedMillis(
+            elapsed
         )
     )
 }
@@ -451,8 +452,11 @@ fun GameStatusDialog(
         )
     }
 
+
     val text = if (uiGameStatus is UIGameStatus.Win) {
-        "Win\nplace: ${uiGameStatus.place}"
+        "Win\n" +
+                "place: ${uiGameStatus.place}\n" +
+                "elapsed: ${ElapsedFormatter.formatElapsedMillis(uiGameStatus.elapsed)}"
     } else {
         "Lose"
     }

@@ -100,7 +100,7 @@ class MinesweeperGameStatusReceiver @Inject constructor(
             /* place is counted from 0 */
             val winPlace = sortedData.first().place + 1
 
-            newUIGameStatus = UIGameStatus.Win(winPlace)
+            newUIGameStatus = UIGameStatus.Win(winPlace, elapsed)
         }
 
         withContext(Dispatchers.Main) {
