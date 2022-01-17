@@ -28,12 +28,7 @@ class GameStatusHolderBridge @Inject constructor(
     private val _gameStatusWithElapsedFlow = MutableStateFlow<GameStatusWithElapsedForGameConfig?>(null)
     val gameStatusWithElapsedFlow = _gameStatusWithElapsedFlow.asStateFlow()
 
-    private val _gameStatusHolderBridgeHelper = MutableStateFlow(
-        createGameStatusHolderBridgeHelper(
-            gameStateHolder.gameStateFlow.value,
-            gameNotPausedFlow,
-        )
-    )
+    private var gameStatusHolderBridgeHelper: GameStatusHolderBridgeHelper? = null
 
     init {
         subscriptionsHolder.addSubscription(this)
@@ -42,8 +37,8 @@ class GameStatusHolderBridge @Inject constructor(
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
-                _gameStatusHolderBridgeHelper.value.stop()
-                _gameStatusHolderBridgeHelper.value = createGameStatusHolderBridgeHelper(
+                gameStatusHolderBridgeHelper?.stop()
+                gameStatusHolderBridgeHelper = createGameStatusHolderBridgeHelper(
                     it,
                     gameNotPausedFlow,
                 )
