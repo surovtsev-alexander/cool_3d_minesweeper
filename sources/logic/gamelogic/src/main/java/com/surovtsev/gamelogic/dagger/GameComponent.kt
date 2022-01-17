@@ -9,7 +9,7 @@ import com.surovtsev.core.models.gles.pointer.PointerImp
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge

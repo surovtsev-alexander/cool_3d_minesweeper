@@ -3,7 +3,7 @@ package com.surovtsev.gamelogic.minesweeper.interaction.eventhandler
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamestate.models.game.save.Save

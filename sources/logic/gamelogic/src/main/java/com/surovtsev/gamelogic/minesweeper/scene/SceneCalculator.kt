@@ -2,7 +2,7 @@ package com.surovtsev.gamelogic.minesweeper.scene
 
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.helpers.IntersectionCalculator
 import com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.touch.TouchHandlerImp
