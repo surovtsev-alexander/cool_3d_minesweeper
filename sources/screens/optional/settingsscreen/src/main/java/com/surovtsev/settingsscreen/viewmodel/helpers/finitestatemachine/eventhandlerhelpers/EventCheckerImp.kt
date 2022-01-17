@@ -1,11 +1,11 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
-import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import javax.inject.Inject
 
 

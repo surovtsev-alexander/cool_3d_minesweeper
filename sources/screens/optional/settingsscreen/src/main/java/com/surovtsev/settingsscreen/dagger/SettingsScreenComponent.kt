@@ -6,8 +6,8 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventHandler
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
-import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
-import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventProcessorImp
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventCheckerImp
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventProcessorImp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings

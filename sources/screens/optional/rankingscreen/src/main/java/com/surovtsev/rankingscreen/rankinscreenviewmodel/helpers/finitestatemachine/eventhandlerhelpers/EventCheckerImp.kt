@@ -1,11 +1,11 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.EventToRankingScreenViewModel
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenData
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
 import javax.inject.Inject
 
 @RankingScreenScope

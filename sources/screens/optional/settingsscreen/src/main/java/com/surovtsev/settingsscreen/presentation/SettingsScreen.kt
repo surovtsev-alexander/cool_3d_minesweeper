@@ -24,8 +24,8 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
-import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenErrorDialogPlacer
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventReceiver

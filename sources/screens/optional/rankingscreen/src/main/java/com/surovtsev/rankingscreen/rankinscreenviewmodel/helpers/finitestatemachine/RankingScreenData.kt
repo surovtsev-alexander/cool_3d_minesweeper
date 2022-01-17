@@ -1,4 +1,4 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns
@@ -7,14 +7,14 @@ import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.viewmodel.ScreenData
 
-sealed interface RankingScreenDataAlt: ScreenData {
+sealed interface RankingScreenData: ScreenData {
 
-    object NoData: ScreenData.NoData, RankingScreenDataAlt, ScreenData.InitializationIsNotFinished
+    object NoData: ScreenData.NoData, RankingScreenData, ScreenData.InitializationIsNotFinished
 
     open class SettingsListIsLoaded(
         val settingsList: SettingsList,
         val winsCountMap: WinsCountMap,
-    ): RankingScreenDataAlt, ScreenData.InitializationIsNotFinished
+    ): RankingScreenData, ScreenData.InitializationIsNotFinished
 
     open class RankingListIsPrepared(
         settingsListIsLoaded: SettingsListIsLoaded,

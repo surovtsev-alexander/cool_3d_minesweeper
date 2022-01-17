@@ -5,7 +5,7 @@ import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
-import com.surovtsev.gamescreen.viewmodel.helpers.GameNotPausedFlowHolder
+import com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder.GameNotPausedFlowHolder
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent

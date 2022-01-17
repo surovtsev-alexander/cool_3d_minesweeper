@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -10,8 +10,8 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableF
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
-import com.surovtsev.gamescreen.viewmodel.EventToGameScreenViewModel
-import com.surovtsev.gamescreen.viewmodel.GameScreenData
+import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
+import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 
 class EventProcessorImp(
     private val gameScreenComponent: GameScreenComponent,

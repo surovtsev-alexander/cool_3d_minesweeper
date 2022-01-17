@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
@@ -7,8 +7,8 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
-import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import javax.inject.Inject
 
 

@@ -1,7 +1,7 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.typealiases
 
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
-import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 
 typealias SettingsScreenEventHandler = EventHandler<EventToSettingsScreenViewModel, SettingsScreenData>

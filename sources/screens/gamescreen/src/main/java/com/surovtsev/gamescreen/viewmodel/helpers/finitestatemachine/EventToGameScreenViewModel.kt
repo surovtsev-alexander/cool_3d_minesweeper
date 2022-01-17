@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.viewmodel
+package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel

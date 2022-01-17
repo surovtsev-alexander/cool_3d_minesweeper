@@ -1,9 +1,9 @@
-package com.surovtsev.gamescreen.viewmodel.helpers
+package com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder
 
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamescreen.dagger.GameScreenScope
-import com.surovtsev.gamescreen.viewmodel.GameScreenData
+import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp

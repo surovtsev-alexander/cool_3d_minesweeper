@@ -1,4 +1,4 @@
-package com.surovtsev.gamescreen.viewmodel
+package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows

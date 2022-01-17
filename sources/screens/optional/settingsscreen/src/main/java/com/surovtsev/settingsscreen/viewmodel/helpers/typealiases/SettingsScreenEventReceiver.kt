@@ -1,6 +1,6 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.typealiases
 
 import com.surovtsev.core.viewmodel.EventReceiver
-import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 
 typealias SettingsScreenEventReceiver = EventReceiver<EventToSettingsScreenViewModel>

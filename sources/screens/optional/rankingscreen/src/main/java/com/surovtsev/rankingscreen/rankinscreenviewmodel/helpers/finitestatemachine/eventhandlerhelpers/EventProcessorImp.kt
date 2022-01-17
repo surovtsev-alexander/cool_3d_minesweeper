@@ -1,4 +1,4 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
@@ -6,8 +6,8 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.EventToRankingScreenViewModel
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenData
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay

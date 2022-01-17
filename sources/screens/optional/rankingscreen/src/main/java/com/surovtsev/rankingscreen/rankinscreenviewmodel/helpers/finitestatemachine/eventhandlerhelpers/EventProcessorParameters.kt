@@ -1,4 +1,4 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao

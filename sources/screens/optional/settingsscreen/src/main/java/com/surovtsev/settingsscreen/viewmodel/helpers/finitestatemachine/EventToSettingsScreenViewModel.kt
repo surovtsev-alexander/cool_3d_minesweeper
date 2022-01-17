@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.room.entities.Settings
