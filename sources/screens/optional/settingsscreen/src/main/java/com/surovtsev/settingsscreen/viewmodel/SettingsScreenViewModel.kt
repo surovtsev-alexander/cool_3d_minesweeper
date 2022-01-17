@@ -12,7 +12,7 @@ import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
 import com.surovtsev.settingsscreen.dagger.SettingsComponent
-import com.surovtsev.utils.dagger.componentholder.DaggerComponentHolder
+import com.surovtsev.utils.dagger.componentholder.CustomLazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -38,7 +38,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private val settingsComponentHolder = DaggerComponentHolder<SettingsComponent> {
+    private val settingsComponentHolder = CustomLazy<SettingsComponent> {
         DaggerSettingsComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
@@ -77,7 +77,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.component
+        val currSettingsComponent = settingsComponentHolder.value
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
@@ -150,7 +150,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private suspend fun applySettings(
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.component
+        val currSettingsComponent = settingsComponentHolder.value
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
@@ -187,7 +187,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.component
+        val currSettingsComponent = settingsComponentHolder.value
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(
                 "error (1) while deleting settings"
@@ -208,7 +208,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.component
+        val currSettingsComponent = settingsComponentHolder.value
 
         if (currSettingsComponent == null) {
             stateHolder.publishErrorState(

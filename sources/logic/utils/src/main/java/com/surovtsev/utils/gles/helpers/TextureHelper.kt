@@ -5,11 +5,28 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLES20.*
 import android.opengl.GLUtils
-import android.util.Log
+import com.surovtsev.utils.constants.Constants
 import com.surovtsev.utils.loggerconfig.UtilsLoggerConfig
+import logcat.LogPriority
+import logcat.logcat
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 object TextureHelper {
-    private const val TAG = "TextureHelper"
+    fun deleteTexture(
+        textureId: Int
+    ) {
+        logcat { "deleteTexture: $textureId" }
+        val texturesBuffer = ByteBuffer
+            .allocateDirect(1 * Constants.BytesPerInt)
+            .order(ByteOrder.nativeOrder())
+            .asIntBuffer()
+            .put(intArrayOf(textureId))
+
+        texturesBuffer.position(0)
+
+        glDeleteTextures(1, texturesBuffer)
+    }
 
     fun loadTexture(context: Context, resourceId: Int): Int {
         val textureObjectIds = intArrayOf(0)
@@ -18,10 +35,10 @@ object TextureHelper {
 
         if (textureObjectIds[0] == 0) {
             if (UtilsLoggerConfig.ON) {
-                Log.w(TAG, "Could not generate a new OpenGL texture for object.")
+                logcat(priority = LogPriority.WARN) { "Could not generate a new OpenGL texture for object." }
             }
 
-            return 0
+            return -1
         }
 
         val options = BitmapFactory.Options()
@@ -31,7 +48,7 @@ object TextureHelper {
 
         if (bitmap == null) {
             if (UtilsLoggerConfig.ON) {
-                Log.w(TAG, "Resource ID $resourceId could not be decoded.")
+                logcat(priority = LogPriority.WARN) { "Resource ID $resourceId could not be decoded." }
             }
 
             glDeleteTextures(1, textureObjectIds, 0)
@@ -68,7 +85,7 @@ object TextureHelper {
 
         if (textureObjectIds[0] == 0) {
             if (UtilsLoggerConfig.ON) {
-                Log.w(TAG, "Could not generate a new OpenGL texture object.")
+                logcat(priority = LogPriority.WARN) { "Could not generate a new OpenGL texture object." }
             }
             return 0
         }
@@ -85,10 +102,9 @@ object TextureHelper {
 
             if (cubeBitmaps[i] == null) {
                 if (UtilsLoggerConfig.ON) {
-                    Log.w(
-                        TAG,
+                    logcat(priority = LogPriority.WARN) {
                         "Resource ID ${cubeResources[i]} could not be decoded"
-                    )
+                    }
                     glDeleteTextures(1, textureObjectIds, 0)
                     return 0
                 }

@@ -10,13 +10,8 @@ import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.rankingscreen.dagger.DaggerRankingComponent
 import com.surovtsev.rankingscreen.dagger.RankingComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.DaggerComponentsHolder
-import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
-import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
-import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import dagger.assisted.Assisted
@@ -61,7 +56,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        daggerComponentsHolder.restartableCoroutineScopeComponentHolder.component?.subscriberImp?.onStop()
+        daggerComponentsHolder.restartableCoroutineScopeComponentHolder.value?.subscriberImp?.onStop()
     }
 
     override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor<EventToRankingScreenViewModel>? {
@@ -134,7 +129,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     private suspend fun filterList(
         selectedSettingsId: Long
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.component
+        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.value
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(
@@ -178,7 +173,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currTimeSpanComponent = daggerComponentsHolder.timeSpanComponentHolder.component
+        val currTimeSpanComponent = daggerComponentsHolder.timeSpanComponentHolder.value
 
         if (currTimeSpanComponent == null) {
             stateHolder.publishErrorState(
@@ -188,7 +183,7 @@ class RankingScreenViewModel @AssistedInject constructor(
             return EventProcessingResult.Processed()
         }
 
-        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.component
+        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.value
 
         if (currRankingComponent == null) {
             stateHolder.publishErrorState(

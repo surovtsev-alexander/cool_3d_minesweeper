@@ -3,9 +3,14 @@ package com.surovtsev.gamelogic.models.gles.gameviewsholder
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
-import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @GameScope
@@ -14,12 +19,29 @@ class GameViewsHolder @Inject constructor(
     private val cubeOpenGLModel: CubeOpenGLModel,
     private val gameStateHolder: GameStateHolder,
     private val cameraInfoHelperHolder: CameraInfoHelperHolder,
-) {
+
+    subscriptionsHolder: SubscriptionsHolder,
+): Subscription {
+    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
+        customCoroutineScope.launch {
+            gameStateHolder.gameStateFlow.collectLatest {
+                with(Dispatchers.Main) {
+                    processedActions.flush()
+                }
+            }
+        }
+    }
+
     private class ProcessedActions {
         var onSurfaceCreated = false
             private set
         var onSurfaceChanged = false
             private set
+
+        fun flush() {
+            onSurfaceChanged = false
+            onSurfaceCreated = false
+        }
 
         fun processOnSurfaceCreated() {
             onSurfaceCreated = true
@@ -32,6 +54,12 @@ class GameViewsHolder @Inject constructor(
     }
 
     private val processedActions = ProcessedActions()
+
+    init {
+        subscriptionsHolder.addSubscription(
+            this
+        )
+    }
 
     fun onSurfaceCreated(
         force: Boolean = true

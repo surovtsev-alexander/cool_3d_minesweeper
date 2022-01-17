@@ -8,18 +8,18 @@ import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeC
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
-import com.surovtsev.utils.dagger.componentholder.DaggerComponentHolder
+import com.surovtsev.utils.dagger.componentholder.CustomLazy
 
 class DaggerComponentsHolder(
     private val appComponentEntryPoint: AppComponentEntryPoint,
 ) {
 
-    val restartableCoroutineScopeComponentHolder = DaggerComponentHolder<RestartableCoroutineScopeComponent> {
+    val restartableCoroutineScopeComponentHolder = CustomLazy<RestartableCoroutineScopeComponent> {
         DaggerRestartableCoroutineScopeComponent
             .create()
     }
 
-    val timeSpanComponentHolder = DaggerComponentHolder<TimeSpanComponent> {
+    val timeSpanComponentHolder = CustomLazy<TimeSpanComponent> {
         DaggerTimeSpanComponent
             .builder()
             .subscriptionsHolderEntryPoint(
@@ -31,7 +31,7 @@ class DaggerComponentsHolder(
             .build()
     }
 
-    val rankingComponentHolder = DaggerComponentHolder<RankingComponent>  {
+    val rankingComponentHolder = CustomLazy<RankingComponent>  {
         DaggerRankingComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)

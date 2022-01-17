@@ -1,9 +1,9 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic
 
-import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
+import com.surovtsev.gamestate.GameState
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
@@ -19,10 +19,6 @@ class GameLogic(
     private val gameControls: GameControls,
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
-    init {
-        subscriptionsHolder.addSubscription(this)
-    }
-
     private val _gameTouchHandlerFlow = MutableStateFlow(
         createGameTouchHandler(
             gameStateHolder.gameStateFlow.value
@@ -30,10 +26,14 @@ class GameLogic(
     )
     val gameTouchHandlerFlow = _gameTouchHandlerFlow.asStateFlow()
 
+    init {
+        subscriptionsHolder.addSubscription(this)
+    }
+
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
-                createGameTouchHandler(it)
+                _gameTouchHandlerFlow.value = createGameTouchHandler(it)
             }
         }
     }

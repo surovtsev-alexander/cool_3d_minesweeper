@@ -5,7 +5,8 @@ import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.helpers.RankingListHelper
-import com.surovtsev.core.interaction.BombsLeftFlow
+import com.surovtsev.core.models.gles.pointer.Pointer
+import com.surovtsev.core.models.gles.pointer.PointerImp
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
@@ -21,18 +22,13 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
-import com.surovtsev.core.models.gles.pointer.Pointer
-import com.surovtsev.core.models.gles.pointer.PointerImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
-import com.surovtsev.gamestate.dagger.GameStateScope
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlow
-import com.surovtsev.gamestate.models.game.save.Save
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler
+import com.surovtsev.utils.gles.renderer.ScreenResolutionFlow
 import com.surovtsev.utils.math.FloatingAverage
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -46,7 +42,6 @@ import javax.inject.Named
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
-        GameScreenEntryPoint::class,
         RestartableCoroutineScopeEntryPoint::class,
         SubscriptionsHolderEntryPoint::class,
         TimeSpanComponentEntryPoint::class,
@@ -56,7 +51,6 @@ import javax.inject.Named
         GameControllerModule::class,
         SceneSettingsModule::class,
         GameControllerBindModule::class,
-        InteractionModule::class,
     ]
 )
 interface GameComponent {
@@ -80,10 +74,10 @@ interface GameComponent {
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
-        fun gameScreenEntryPoint(gameScreenEntryPoint: GameScreenEntryPoint): Builder
         fun restartableCoroutineScopeEntryPoint(restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint): Builder
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
+        fun screenResolutionFlow(@BindsInstance screenResolutionFlow: ScreenResolutionFlow): Builder
         fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun gameStateDependencies(@BindsInstance gameStateDependencies: GameStateDependencies): Builder
         fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
@@ -206,13 +200,3 @@ object SceneSettingsModule {
     fun providePointerEnabled() = false
 }
 
-@Module
-object InteractionModule {
-//    @GameScope
-//    @Provides
-//    fun provideGameStatusWithElapsedFlow(
-//        gameStatusHolder: GameStatusHolder,
-//    ): GameStatusWithElapsedFlow {
-//        return gameStatusHolder.gameStatusWithElapsedFlow
-//    }
-}

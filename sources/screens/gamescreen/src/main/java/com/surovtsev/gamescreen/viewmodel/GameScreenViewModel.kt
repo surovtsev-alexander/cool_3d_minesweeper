@@ -7,25 +7,19 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
-import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.state.StateDescription
-import com.surovtsev.gamelogic.dagger.DaggerGameComponent
-import com.surovtsev.gamelogic.dagger.GameComponent
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
-import com.surovtsev.gamescreen.viewmodel.helpers.DaggerComponentsHolder
-import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
+import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
+import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 const val LoadGameParameterName = "load_game"
 
@@ -53,13 +47,16 @@ class GameScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<GameScreenViewModel>
 
-    private val daggerComponentsHolder = DaggerComponentsHolder()
+    private val gameScreenComponent: GameScreenComponent =
+        DaggerGameScreenComponent
+            .builder()
+            .appComponentEntryPoint(appComponentEntryPoint)
+            .gameScreenStateFlow(screenStateFlow)
+            .build()
 
     // look ::onDestroy
     @SuppressLint("StaticFieldLeak")
     private var gLSurfaceView: GLSurfaceView? = null
-
-    private var gameComponent: GameComponent? = null
 
     private var gameControlsImp: GameControlsImp? = null
     private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
@@ -67,11 +64,9 @@ class GameScreenViewModel @AssistedInject constructor(
 
     override fun onCreate(owner: LifecycleOwner) {
         super<TemplateScreenViewModel>.onCreate(owner)
-        daggerComponentsHolder
-            .restartableCoroutineScopeComponentHolder
-            .getOrCreate {
-                it.subscriberImp.restart()
-            }
+        gameScreenComponent
+            .restartableCoroutineScopeComponent
+            .subscriberImp.restart()
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -89,7 +84,7 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateScreenViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
 
-        gameComponent?.minesweeper?.eventHandler?.handleEventWithBlocking(
+        gameScreenComponent.gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
             EventToMinesweeper.SaveGame
         )
 
@@ -109,17 +104,14 @@ class GameScreenViewModel @AssistedInject constructor(
     override suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ): EventProcessingResult<EventToGameScreenViewModel> {
-        daggerComponentsHolder
-            .restartableCoroutineScopeComponentHolder
-            .component
-            ?.subscriberImp
-            ?.onStop()
+        gameScreenComponent
+            .restartableCoroutineScopeComponent
+            .subscriberImp
+            .onStop()
 
-        daggerComponentsHolder
-            .gameScreenComponentHolder
-            .component
-            ?.gLESRenderer
-            ?.openGLEventsHandler = null
+        gameScreenComponent
+            .gLESRenderer
+            .openGLEventsHandler = null
 
         stateHolder.publishIdleState(
             GameScreenData.NoData
@@ -144,20 +136,17 @@ class GameScreenViewModel @AssistedInject constructor(
             is EventToGameScreenViewModel.RemoveOpenedSlices             -> ::removeOpenedSlices
             is EventToGameScreenViewModel.ToggleFlagging                 -> ::toggleFlagging
             is EventToGameScreenViewModel.CloseGameStatusDialog          -> ::closeGameStatusDialog
-            else                                                    -> null
+            else                                                         -> null
         }
     }
 
     fun initGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {
-        val gameRenderer = daggerComponentsHolder
-            .gameScreenComponentHolder
-            .getOrCreate()
+        val gameRenderer = gameScreenComponent
             .gLESRenderer
-        val touchListener = daggerComponentsHolder
-            .touchListenerComponentHolder
-            .getOrCreate()
+        val touchListener = gameScreenComponent
+            .touchListenerComponent
             .touchListener
 
         gLSurfaceView.setEGLContextClientVersion(2)
@@ -219,21 +208,12 @@ class GameScreenViewModel @AssistedInject constructor(
             stateHolder.publishIdleState(GameScreenData.NoData)
         }
 
-        val timeSpanComponent = daggerComponentsHolder
-            .timeSpanComponentHolder
-            .getOrCreate()
-        val restartableCoroutineScopeComponent =
-            daggerComponentsHolder
-                .restartableCoroutineScopeComponentHolder
-                .getOrCreate()
-        val gameScreenComponent =
-            daggerComponentsHolder
-                .gameScreenComponentHolder
-                .getOrCreate()
-        val touchListenerComponent =
-            daggerComponentsHolder
-                .touchListenerComponentHolder
-                .getOrCreate()
+        val timeSpanComponent = gameScreenComponent
+            .timeSpanComponent
+        val touchListenerComponent = gameScreenComponent
+            .touchListenerComponent
+        val gameComponent = gameScreenComponent
+            .gameComponent
 
         timeSpanComponent
             .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
@@ -243,56 +223,29 @@ class GameScreenViewModel @AssistedInject constructor(
             .gLESRenderer
             .openGLEventsHandler = null
 
-        val gameNotPausedFlow = stateHolder.state.map { screenState ->
-            screenState.description is StateDescription.Idle &&
-            screenState.data is GameScreenData.GameInProgress
-        }.stateIn(
-            restartableCoroutineScopeComponent
-                .customCoroutineScope
+        gameComponent.let { gC ->
+            gameControlsImp = gC.gameControlsImp
+
+            uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
+            uiGameControlsFlows = gC.uiGameControlsFlows
+
+            touchListenerComponent.touchListener.bindHandlers(
+                gC.touchHandlerImp,
+                gC.moveHandlerImp
+            )
+        }
+
+        gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
+            if (loadGame) {
+                EventToMinesweeper.LoadGame
+            } else {
+                EventToMinesweeper.NewGame
+            }
         )
 
-        gameComponent = DaggerGameComponent
-            .builder()
-            .appComponentEntryPoint(appComponentEntryPoint)
-            .gameScreenEntryPoint(gameScreenComponent)
-            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeComponent)
-            .subscriptionsHolderEntryPoint(
-                SubscriptionsHolderComponentFactoryHolderImp.create(
-                    restartableCoroutineScopeComponent,
-                    "GameScreenViewModel:GameComponent"
-                )
-            )
-            .timeSpanComponentEntryPoint(timeSpanComponent)
-            .loadGame(loadGame)
-            .gameStateDependencies(GameStateDependencies(
-                appComponentEntryPoint,
-                timeSpanComponent,
-                loadGame
-            ))
-            .gameNotPausedFlow(gameNotPausedFlow)
-            .build()
-            .also { gC ->
-                gameControlsImp = gC.gameControlsImp
+        gameScreenComponent.gLESRenderer.openGLEventsHandler =
+            gameComponent.minesweeper.openGLEventsHandler
 
-                uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
-                uiGameControlsFlows = gC.uiGameControlsFlows
-
-                touchListenerComponent.touchListener.bindHandlers(
-                    gC.touchHandlerImp,
-                    gC.moveHandlerImp
-                )
-
-                gameScreenComponent.gLESRenderer.openGLEventsHandler =
-                    gC.minesweeper.openGLEventsHandler
-
-                // TODO: move updating to Minesweeper.EventHandler.newGame.
-                gC.cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
-                    if (!loadGame) {
-                        it.cameraInfo.moveToOrigin()
-                    }
-                    it.update()
-                }
-            }
 
         setFlagging(loadGame)
 

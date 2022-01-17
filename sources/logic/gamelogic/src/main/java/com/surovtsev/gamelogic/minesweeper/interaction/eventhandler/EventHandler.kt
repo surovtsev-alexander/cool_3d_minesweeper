@@ -3,6 +3,7 @@ package com.surovtsev.gamelogic.minesweeper.interaction.eventhandler
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamestate.models.game.save.Save
@@ -18,6 +19,7 @@ class EventHandler @Inject constructor(
     private val saveController: SaveController,
     private val gameStateHolder: GameStateHolder,
     private val asyncTimeSpan: AsyncTimeSpan,
+    private val cameraInfoHelperHolder: CameraInfoHelperHolder,
 ) {
     private val mutex = Mutex()
 
@@ -35,8 +37,8 @@ class EventHandler @Inject constructor(
         event: EventToMinesweeper
     ) {
         val action = when (event) {
-            is EventToMinesweeper.NewGame     -> ::newGame
-            is EventToMinesweeper.LoadGame    -> ::loadGame
+            is EventToMinesweeper.NewGame     -> suspend { newGame(false) }
+            is EventToMinesweeper.LoadGame    -> suspend { newGame(true) }
             is EventToMinesweeper.SaveGame    -> ::saveGame
             is EventToMinesweeper.Tick        -> ::tick
         }
@@ -50,12 +52,16 @@ class EventHandler @Inject constructor(
         }
     }
 
-    private suspend fun newGame() {
-
-    }
-
-    private suspend fun loadGame() {
-
+    private suspend fun newGame(
+        tryToLoad: Boolean = false
+    ) {
+        cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
+            if (!tryToLoad) {
+                it.cameraInfo.moveToOrigin()
+            }
+            it.update()
+        }
+        gameStateHolder.newGame(tryToLoad)
     }
 
     private suspend fun saveGame() {

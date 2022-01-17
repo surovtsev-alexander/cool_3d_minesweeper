@@ -2,14 +2,14 @@ package com.surovtsev.gamelogic.views.opengl
 
 import android.content.Context
 import android.opengl.GLES20.*
-import com.surovtsev.gamelogic.R
-import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
-import com.surovtsev.gamelogic.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
+import com.surovtsev.gamelogic.R
+import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.gamelogic.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.gamelogic.models.gles.programs.CubeGLESProgram
 import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamelogic.utils.utils.gles.OpenGLModel
@@ -27,27 +27,10 @@ class CubeOpenGLModel @Inject constructor(
     private val context: Context,
     private val gameStateHolder: GameStateHolder,
     val cubeGLESProgram: CubeGLESProgram,
-    subscriptionsHolder: SubscriptionsHolder,
 ):
     OpenGLModel(cubeGLESProgram),
-    TextureUpdater,
-    Subscription
+    TextureUpdater
 {
-
-    init {
-        subscriptionsHolder.addSubscription(this)
-    }
-
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
-            gameStateHolder.gameStateFlow.collectLatest {
-                updateBuffers(
-                    it.cubeInfo.cubeCoordinates,
-                )
-            }
-        }
-    }
-
     private var textureId: Int = -1
 
     /* TODO: refactor */
@@ -61,9 +44,13 @@ class CubeOpenGLModel @Inject constructor(
         )
     }
 
-    fun updateBuffers(
+    private fun updateBuffers(
         cubeCoordinates: CubeCoordinates,
     ) {
+        if (textureId != -1) {
+            TextureHelper.deleteTexture(textureId)
+            textureId = -1
+        }
         textureId = TextureHelper.loadTexture(context, R.drawable.skin)
 
         val cubeViewDataHelper = CubeViewDataHelper.createObject(

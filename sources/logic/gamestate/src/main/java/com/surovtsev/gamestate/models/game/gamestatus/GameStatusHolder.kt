@@ -5,6 +5,7 @@ import com.surovtsev.gamestate.dagger.GameStateScope
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import logcat.logcat
 import javax.inject.Inject
 
 
@@ -35,16 +36,11 @@ class GameStatusHolder @Inject constructor(
     }
 
     fun setGameStatus(newStatus: GameStatus) {
+        logcat { "setGameStatus; newStatus: $newStatus; currGameStatus: ${gameStatusWithElapsedFlow.value}" }
         _gameStatusWithElapsedFlow.value = GameStatusWithElapsed(
             newStatus,
             asyncTimeSpan.getElapsed()
         )
-
-        if (isGameInProgress()) {
-            resumeTimeSpan()
-        } else if (isGameOver()) {
-            pauseTimeSpan()
-        }
     }
 
     fun resumeTimeSpan() {

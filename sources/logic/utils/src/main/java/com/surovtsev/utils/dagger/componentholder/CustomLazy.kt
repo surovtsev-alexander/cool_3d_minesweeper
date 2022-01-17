@@ -1,12 +1,12 @@
 package com.surovtsev.utils.dagger.componentholder
 
 typealias ActionIfNotNull<C> = (component: C) -> Unit
-typealias ComponentBuilder<C> = () -> C
+typealias ValueBuilder<C> = () -> C
 
-class DaggerComponentHolder<C: Any>(
-    private val componentBuilder: ComponentBuilder<C>,
+class CustomLazy<C: Any>(
+    private val valueBuilder: ValueBuilder<C>,
 ) {
-    var component: C? = null
+    var value: C? = null
         private set
 
     fun getOrCreate(
@@ -17,7 +17,7 @@ class DaggerComponentHolder<C: Any>(
     fun getOrCreate(
         actionIfNotNull: ActionIfNotNull<C>?
     ): C {
-        val currValue = component
+        val currValue = value
 
         return if (currValue != null) {
             actionIfNotNull?.invoke(currValue)
@@ -28,9 +28,9 @@ class DaggerComponentHolder<C: Any>(
     }
 
     private fun create(): C {
-        val newSettingsComponent = componentBuilder()
+        val newSettingsComponent = valueBuilder()
 
-        component = newSettingsComponent
+        value = newSettingsComponent
 
         return newSettingsComponent
     }
