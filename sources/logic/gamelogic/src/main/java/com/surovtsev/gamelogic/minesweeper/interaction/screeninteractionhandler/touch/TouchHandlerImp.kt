@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.touch
 
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
 import com.surovtsev.core.models.gles.pointer.PointerImp
 import com.surovtsev.touchlistener.helpers.handlers.TouchHandler
 import com.surovtsev.utils.androidview.interaction.TouchType

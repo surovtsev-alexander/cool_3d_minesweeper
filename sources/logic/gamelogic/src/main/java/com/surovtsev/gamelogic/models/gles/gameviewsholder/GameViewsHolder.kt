@@ -1,8 +1,8 @@
 package com.surovtsev.gamelogic.models.gles.gameviewsholder
 
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
-import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope

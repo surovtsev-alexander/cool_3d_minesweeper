@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.minesweeper.gameState
+package com.surovtsev.gamelogic.minesweeper.gamestateholder
 
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope

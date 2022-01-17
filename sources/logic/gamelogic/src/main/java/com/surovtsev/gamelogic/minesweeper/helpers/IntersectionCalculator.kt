@@ -4,13 +4,8 @@ import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.gamelogic.models.game.cellpointers.PointedCellWithSpaceBorder
-import com.surovtsev.core.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamestate.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.core.models.gles.pointer.Pointer
-import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import javax.inject.Inject
 
 @GameScope

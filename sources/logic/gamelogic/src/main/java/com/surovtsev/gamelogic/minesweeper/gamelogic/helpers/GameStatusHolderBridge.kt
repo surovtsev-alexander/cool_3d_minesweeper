@@ -2,7 +2,7 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
 
 import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamestate.GameState
 import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedFlowForGameConfig

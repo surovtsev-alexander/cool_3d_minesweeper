@@ -1,4 +1,4 @@
-package com.surovtsev.gamelogic.minesweeper.gameState
+package com.surovtsev.gamelogic.minesweeper.gamestateholder
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint

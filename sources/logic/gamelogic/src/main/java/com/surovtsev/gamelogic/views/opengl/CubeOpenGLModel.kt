@@ -8,18 +8,13 @@ import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamelogic.R
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.GameStateHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.helpers.CubeViewDataHelper
 import com.surovtsev.gamelogic.models.gles.programs.CubeGLESProgram
 import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamelogic.utils.utils.gles.OpenGLModel
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.gles.helpers.TextureHelper
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @GameScope

@@ -1,7 +1,7 @@
 package com.surovtsev.gamelogic.minesweeper.interaction.screeninteractionhandler.move
 
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gameState.CameraInfoHelperHolder
+import com.surovtsev.gamelogic.minesweeper.gamestateholder.CameraInfoHelperHolder
 import com.surovtsev.touchlistener.helpers.handlers.MoveHandler
 import com.surovtsev.utils.math.MatrixHelper
 import glm_.vec2.Vec2
