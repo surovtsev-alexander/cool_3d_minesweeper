@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers
 
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult

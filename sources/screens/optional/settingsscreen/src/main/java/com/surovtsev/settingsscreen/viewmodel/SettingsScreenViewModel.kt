@@ -7,9 +7,9 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
-import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
-import com.surovtsev.settingsscreen.viewmodel.helpers.EventCheckerImp
-import com.surovtsev.settingsscreen.viewmodel.helpers.EventProcessorImp
+import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
+import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
+import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventProcessorImp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -35,7 +35,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private val settingsComponent = DaggerSettingsComponent
+    private val settingsComponent = DaggerSettingsScreenComponent
         .builder()
         .appComponentEntryPoint(appComponentEntryPoint)
         .build()

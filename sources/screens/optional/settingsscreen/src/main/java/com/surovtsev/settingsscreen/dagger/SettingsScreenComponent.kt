@@ -6,21 +6,21 @@ import com.surovtsev.core.savecontroller.SaveController
 import dagger.Component
 import dagger.Module
 
-@SettingsScope
+@SettingsScreenScope
 @Component(
     dependencies = [
         AppComponentEntryPoint::class,
     ],
     modules = [
-        SettingsModule::class,
+        SettingsScreenModule::class,
     ]
 )
-interface SettingsComponent {
+interface SettingsScreenComponent {
     val settingsDao: SettingsDao
     val saveController: SaveController
 }
 
 
 @Module
-object SettingsModule {
+object SettingsScreenModule {
 }

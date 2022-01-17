@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
@@ -7,12 +7,13 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.settingsscreen.dagger.SettingsComponent
+import com.surovtsev.settingsscreen.dagger.SettingsScreenComponent
 import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
 
+
 class EventProcessorImp(
-    private val settingsComponent: SettingsComponent,
+    private val settingsScreenComponent: SettingsScreenComponent,
     private val stateHolder: StateHolder<SettingsScreenData>,
 ): EventProcessor<EventToSettingsScreenViewModel> {
 
@@ -37,7 +38,7 @@ class EventProcessorImp(
 
     private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
         prepopulateSettingsTableWithDefaultValues(
-            settingsComponent.settingsDao
+            settingsScreenComponent.settingsDao
         )
 
         return EventProcessingResult.PushNewEvent(
@@ -46,7 +47,7 @@ class EventProcessorImp(
     }
 
     private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val settingsList = settingsComponent.settingsDao.getAll()
+        val settingsList = settingsScreenComponent.settingsDao.getAll()
 
         stateHolder.publishLoadingState(
             SettingsScreenData.SettingsLoaded(
@@ -115,8 +116,8 @@ class EventProcessorImp(
         ) { screenData ->
             val settingsData = screenData.settingsData
 
-            val settingsDao = settingsComponent.settingsDao
-            val saveController = settingsComponent.saveController
+            val settingsDao = settingsScreenComponent.settingsDao
+            val saveController = settingsScreenComponent.saveController
 
             settingsDao.getOrCreate(
                 settingsData
@@ -141,7 +142,7 @@ class EventProcessorImp(
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while deleting settings"
         ) {
-            settingsComponent.settingsDao.delete(settingsId)
+            settingsScreenComponent.settingsDao.delete(settingsId)
 
             return@deleteSettings EventProcessingResult.PushNewEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
@@ -151,8 +152,8 @@ class EventProcessorImp(
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val saveController = settingsComponent.saveController
-        val settingsDao = settingsComponent.settingsDao
+        val saveController = settingsScreenComponent.saveController
+        val settingsDao = settingsScreenComponent.settingsDao
 
         val selectedSettingsData = saveController.loadSettingDataOrDefault()
 
