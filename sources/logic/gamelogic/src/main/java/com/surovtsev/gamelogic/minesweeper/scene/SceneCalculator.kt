@@ -29,45 +29,46 @@ class SceneCalculator @Inject constructor(
     private val pointerEnabled: Boolean,
 ) {
     fun nextIteration() {
-        val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value
-
-        val cameraMoved = cameraInfoHelper.getAndRelease()
-
         val clicked = touchHandler.getAndRelease()
 
-        if (cameraMoved) {
-            cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
-        }
-
-        do {
-            if (!pointerEnabled) {
-                break
-            }
-
-            if (clicked) {
-                pointerOpenGLModel.turnOn()
-            }
-
-            if (!pointerOpenGLModel.isOn()) {
-                break
-            }
-
-            if (clicked) {
-                pointerOpenGLModel.updatePoints()
-            }
+        cameraInfoHelperHolder.cameraInfoHelperFlow.value?.let { cameraInfoHelper ->
+            val cameraMoved = cameraInfoHelper.getAndRelease()
 
             if (cameraMoved) {
-                pointerOpenGLModel.mGLESProgram.useProgram()
-                with(pointerOpenGLModel.mGLESProgram) {
+                cameraInfoHelper.cameraInfo.recalculateMVPMatrix()
+            }
+
+            do {
+                if (!pointerEnabled) {
+                    break
+                }
+
+                if (clicked) {
+                    pointerOpenGLModel.turnOn()
+                }
+
+                if (!pointerOpenGLModel.isOn()) {
+                    break
+                }
+
+                if (clicked) {
+                    pointerOpenGLModel.updatePoints()
+                }
+
+                if (cameraMoved) {
+                    pointerOpenGLModel.mGLESProgram.useProgram()
+                    with(pointerOpenGLModel.mGLESProgram) {
+                        fillMVP(cameraInfoHelper.cameraInfo.mVP)
+                    }
+                }
+            } while (false)
+
+
+            if (cameraMoved) {
+                cubeOpenGLModel.cubeGLESProgram.useProgram()
+                with(cubeOpenGLModel.cubeGLESProgram) {
                     fillMVP(cameraInfoHelper.cameraInfo.mVP)
                 }
-            }
-        } while (false)
-
-        if (cameraMoved) {
-            cubeOpenGLModel.cubeGLESProgram.useProgram()
-            with(cubeOpenGLModel.cubeGLESProgram) {
-                fillMVP(cameraInfoHelper.cameraInfo.mVP)
             }
         }
 

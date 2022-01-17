@@ -83,7 +83,7 @@ class GameViewsHolder @Inject constructor(
 
         onSurfaceCreated(force = false)
 
-        cameraInfoHelperHolder.cameraInfoHelperFlow.value.update()
+        cameraInfoHelperHolder.cameraInfoHelperFlow.value?.update()
         cubeOpenGLModel.updateTexture(gameStateHolder.gameStateFlow.value.cubeInfo.cubeSkin)
 
         processedActions.processOnSurfaceChanged()

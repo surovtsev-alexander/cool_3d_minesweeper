@@ -55,13 +55,14 @@ class EventHandler @Inject constructor(
     private suspend fun newGame(
         tryToLoad: Boolean = false
     ) {
-        cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
-            if (!tryToLoad) {
-                it.cameraInfo.moveToOrigin()
-            }
-            it.update()
-        }
         gameStateHolder.newGame(tryToLoad)
+        // TODO: 17.01.2022 Remove
+//        cameraInfoHelperHolder.cameraInfoHelperFlow.value.also {
+//            if (!tryToLoad) {
+//                it.cameraInfo.moveToOrigin()
+//            }
+//            it.update()
+//        }
     }
 
     private suspend fun saveGame() {

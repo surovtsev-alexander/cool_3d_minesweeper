@@ -24,11 +24,7 @@ class CameraInfoHelperHolder @Inject constructor(
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
 
-    private val _cameraInfoHelperFlow = MutableStateFlow(
-        createCameraInfoHelper(
-            gameStateHolder.gameStateFlow.value.cameraInfo,
-            DefaultScreenResolution
-        ))
+    private val _cameraInfoHelperFlow = MutableStateFlow<CameraInfoHelper?>(null)
     val cameraInfoHelperFlow = _cameraInfoHelperFlow.asStateFlow()
 
     init {
