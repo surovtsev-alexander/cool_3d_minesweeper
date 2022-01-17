@@ -7,8 +7,10 @@ sealed interface EventCheckerResult<E: Event> {
 
     class Pass<E: Event>: EventCheckerResult<E>
 
+    class Skip<E: Event>: EventCheckerResult<E>
+
     class ChangeWith<E: Event>(
-        event: E
+        val event: E,
     ): EventCheckerResult<E>
 
     class RaiseError<E: Event>(

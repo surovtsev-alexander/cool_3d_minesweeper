@@ -18,9 +18,22 @@ interface EventToViewModel: Event {
     interface Finish: EventToViewModel
 
     abstract class MandatoryEvents <E: EventToViewModel>(
-        val init: Init,
-        val closeError: CloseError,
-        val closeErrorAndFinish: CloseErrorAndFinish,
+        val init: E,
+        val closeError: E,
+        val closeErrorAndFinish: E,
         val handleScreenLeavingEventFactory: HandleScreenLeavingEventFactory<E>,
-    )
+    ) {
+        init {
+            // TODO: 17.01.2022 refactor
+            assert(
+                init is Init
+            )
+            assert(
+                closeError is CloseError
+            )
+            assert(
+                closeErrorAndFinish is CloseErrorAndFinish
+            )
+        }
+    }
 }

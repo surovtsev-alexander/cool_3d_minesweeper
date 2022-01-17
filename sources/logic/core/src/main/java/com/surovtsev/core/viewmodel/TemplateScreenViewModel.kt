@@ -3,6 +3,8 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
+import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescription
@@ -16,7 +18,7 @@ typealias FinishAction = () -> Unit
 
 
 abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
-    override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
+    final override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
     override val noScreenData: D,
     initialState: State<D>,
 ):
@@ -34,6 +36,11 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val screenStateFlow: ScreenStateFlow<D>
         get() = stateHolder.state
 
+    protected val templateScreenViewModelEventChecker =
+        TemplateScreenViewModelEventChecker<E, D>(
+            mandatoryEvents.closeErrorAndFinish
+        )
+
     abstract suspend fun processEvent(event: E): EventProcessingResult<E>
 
     override fun onDestroy(owner: LifecycleOwner) {
@@ -47,42 +54,40 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         launchOnIOThread {
             logcat { "handleEvent: $event" }
 
-            val currState = stateHolder.state.value
-
-            val screenData = currState.data
-
-            val isErrorState = currState.description is StateDescription.Error
-            val isErrorDuringInitialization =
-                isErrorState &&
-                screenData is ScreenData.InitializationIsNotFinished
-
-
-            val skipEventProcessing: Boolean
-
-            if (isErrorState) {
-                val isCloseErrorEvent = event is EventToViewModel.CloseError
-
-                if (isCloseErrorEvent) {
-                    if (isErrorDuringInitialization || event is EventToViewModel.CloseErrorAndFinish) {
-                        closeError()
-                        finish()
-                        skipEventProcessing = true
-                    } else {
-                        skipEventProcessing = false
-                    }
-                } else {
-                    skipEventProcessing = true
+            val errorMessage = when (
+                val eventCheckingResult =
+                    templateScreenViewModelEventChecker.check(
+                        event, stateHolder.state.value
+                    )
+            ) {
+                is EventCheckerResult.Pass -> {
+                    organizeEventProcessing(event)
+                    null
                 }
-            } else {
-                skipEventProcessing = false
+                is EventCheckerResult.Skip -> {
+                    null
+                }
+                is EventCheckerResult.Unchecked -> {
+                    "internal error 1"
+                }
+                is EventCheckerResult.RaiseError -> {
+                    eventCheckingResult.message
+                }
+                is EventCheckerResult.ChangeWith -> {
+                    organizeEventProcessing(
+                        eventCheckingResult.event
+                    )
+                    null
+                }
+                else -> {
+                    "internal error 2"
+                }
             }
 
-            if (!skipEventProcessing) {
-                if (event is EventToViewModel.Finish) {
-                    finish()
-                } else {
-                    organizeEventProcessing(event)
-                }
+            if (errorMessage != null) {
+                stateHolder.publishErrorState(
+                    errorMessage
+                )
             }
         }
     }
@@ -126,6 +131,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     protected suspend fun closeError(): EventProcessingResult<E> {
         stateHolder.publishIdleState()
+        return EventProcessingResult.Processed()
+    }
+
+    protected suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
+        stateHolder.publishIdleState()
+        finish()
         return EventProcessingResult.Processed()
     }
 

@@ -238,6 +238,11 @@ open class FiniteStateMachine<E: Event, D: Data>(
                 is EventCheckerResult.Unchecked -> {
                     "internal error 2"
                 }
+                is EventCheckerResult.Skip -> {
+                    // todo: add implementation
+                    assert(false)
+                    null
+                }
                 is EventCheckerResult.ChangeWith -> {
                     // todo: add implementation
                     assert(false)

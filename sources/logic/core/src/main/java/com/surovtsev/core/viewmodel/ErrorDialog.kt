@@ -18,8 +18,8 @@ import com.surovtsev.finitestatemachine.state.StateDescription
 fun ErrorDialog(
     screenStateFlow: ScreenStateFlow<ScreenData>,
     eventHandler: EventHandler<EventToViewModel>,
-    closeErrorEvent: EventToViewModel.CloseError,
-    closeErrorAndFinishEvent: EventToViewModel.CloseErrorAndFinish
+    closeErrorEvent: EventToViewModel,
+    closeErrorAndFinishEvent: EventToViewModel
 ) {
     val state by screenStateFlow.collectAsState()
 
