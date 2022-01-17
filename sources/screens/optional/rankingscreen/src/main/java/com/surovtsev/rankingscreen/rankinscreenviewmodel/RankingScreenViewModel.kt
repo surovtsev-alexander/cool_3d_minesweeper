@@ -10,8 +10,8 @@ import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
-import com.surovtsev.rankingscreen.dagger.RankingComponent
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.DaggerComponentsHolder
+import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
+import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import dagger.assisted.Assisted
@@ -42,7 +42,11 @@ class RankingScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<RankingScreenViewModel>
 
-    private val daggerComponentsHolder = DaggerComponentsHolder(appComponentEntryPoint)
+    private val rankingScreenComponent: RankingScreenComponent =
+        DaggerRankingScreenComponent
+            .builder()
+            .appComponentEntryPoint(appComponentEntryPoint)
+            .build()
 
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 3000L
@@ -56,7 +60,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        daggerComponentsHolder.restartableCoroutineScopeComponentHolder.value?.subscriberImp?.onStop()
+        rankingScreenComponent.restartableCoroutineScopeComponent.subscriberImp.onStop()
     }
 
     override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor<EventToRankingScreenViewModel>? {
@@ -75,26 +79,18 @@ class RankingScreenViewModel @AssistedInject constructor(
     ): EventProcessingResult<EventToRankingScreenViewModel> {
 
         val currRestartableCoroutineScopeComponent =
-            daggerComponentsHolder
-                .restartableCoroutineScopeComponentHolder
-                .getOrCreate {
-                    it.subscriberImp.restart()
-                }
+            rankingScreenComponent
+                .restartableCoroutineScopeComponent
+                .subscriberImp
+                .restart()
 
         val currTimeSpanComponent: TimeSpanComponent =
-            daggerComponentsHolder
-                .timeSpanComponentHolder
-                .getOrCreate()
+            rankingScreenComponent
+                .timeSpanComponent
 
-
-        val currRankingComponent: RankingComponent =
-            daggerComponentsHolder
-                .rankingComponentHolder
-                .getOrCreate()
-
-        val settingsDao = currRankingComponent.settingsDao
-        val rankingDao = currRankingComponent.rankingDao
-        val saveController = currRankingComponent.saveController
+        val settingsDao = rankingScreenComponent.settingsDao
+        val rankingDao = rankingScreenComponent.rankingDao
+        val saveController = rankingScreenComponent.saveController
 
         val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan) {
             val settingsList = settingsDao.getAll()
@@ -129,17 +125,9 @@ class RankingScreenViewModel @AssistedInject constructor(
     private suspend fun filterList(
         selectedSettingsId: Long
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.value
-
-        if (currRankingComponent == null) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileFilteringRankingListFactory(1)
-            )
-            return EventProcessingResult.Processed()
-        }
 
         val rankingListWithPlaces =
-            currRankingComponent.rankingListHelper
+            rankingScreenComponent.rankingListHelper
                 .createRankingListWithPlaces(
                     selectedSettingsId
                 )
@@ -173,31 +161,13 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currTimeSpanComponent = daggerComponentsHolder.timeSpanComponentHolder.value
-
-        if (currTimeSpanComponent == null) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(1)
-            )
-
-            return EventProcessingResult.Processed()
-        }
-
-        val currRankingComponent = daggerComponentsHolder.rankingComponentHolder.value
-
-        if (currRankingComponent == null) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(2)
-            )
-
-            return EventProcessingResult.Processed()
-        }
+        val currTimeSpanComponent = rankingScreenComponent.timeSpanComponent
 
         val rankingScreenData = stateHolder.state.value.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(3)
+                ErrorMessages.errorWhileSortingListFactory(1)
             )
 
             return EventProcessingResult.Processed()
@@ -208,7 +178,7 @@ class RankingScreenViewModel @AssistedInject constructor(
         logcat { "rankingTableSortType: $rankingTableSortParameters" }
 
         val sortingAction = {
-            currRankingComponent.rankingListHelper.sortData(
+            rankingScreenComponent.rankingListHelper.sortData(
                 filteredRankingList,
                 rankingTableSortParameters
             )

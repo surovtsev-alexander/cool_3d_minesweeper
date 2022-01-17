@@ -11,8 +11,6 @@ import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.*
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsComponent
-import com.surovtsev.settingsscreen.dagger.SettingsComponent
-import com.surovtsev.utils.dagger.componentholder.CustomLazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -38,12 +36,11 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private val settingsComponentHolder = CustomLazy<SettingsComponent> {
-        DaggerSettingsComponent
-            .builder()
-            .appComponentEntryPoint(appComponentEntryPoint)
-            .build()
-    }
+    private val settingsComponent = DaggerSettingsComponent
+        .builder()
+        .appComponentEntryPoint(appComponentEntryPoint)
+        .build()
+
 
 
     override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor<EventToSettingsScreenViewModel>? {
@@ -63,12 +60,8 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent =
-            settingsComponentHolder
-                .getOrCreate()
-
         prepopulateSettingsTableWithDefaultValues(
-            currSettingsComponent.settingsDao
+            settingsComponent.settingsDao
         )
 
         return EventProcessingResult.PushNewEvent(
@@ -77,16 +70,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.value
-
-        if (currSettingsComponent == null) {
-            stateHolder.publishErrorState(
-                "error while loading settings list"
-            )
-            return EventProcessingResult.Processed()
-        }
-
-        val settingsList = currSettingsComponent.settingsDao.getAll()
+        val settingsList = settingsComponent.settingsDao.getAll()
 
         stateHolder.publishLoadingState(
             SettingsScreenData.SettingsLoaded(
@@ -150,22 +134,13 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private suspend fun applySettings(
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.value
-
-        if (currSettingsComponent == null) {
-            stateHolder.publishErrorState(
-                "error (1) while applying settings"
-            )
-            return EventProcessingResult.Processed()
-        }
-
         doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
-            "error (2) while applying settingsscreen"
+            "error while applying settings"
         ) { screenData ->
             val settingsData = screenData.settingsData
 
-            val settingsDao = currSettingsComponent.settingsDao
-            val saveController = currSettingsComponent.saveController
+            val settingsDao = settingsComponent.settingsDao
+            val saveController = settingsComponent.saveController
 
             settingsDao.getOrCreate(
                 settingsData
@@ -187,18 +162,10 @@ class SettingsScreenViewModel @AssistedInject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.value
-        if (currSettingsComponent == null) {
-            stateHolder.publishErrorState(
-                "error (1) while deleting settings"
-            )
-            return EventProcessingResult.Processed()
-        }
-
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
-            "error (2) while deleting settings"
+            "error while deleting settings"
         ) {
-            currSettingsComponent.settingsDao.delete(settingsId)
+            settingsComponent.settingsDao.delete(settingsId)
 
             return@deleteSettings EventProcessingResult.PushNewEvent(
                 EventToSettingsScreenViewModel.LoadSettingsList
@@ -208,18 +175,8 @@ class SettingsScreenViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
-        val currSettingsComponent = settingsComponentHolder.value
-
-        if (currSettingsComponent == null) {
-            stateHolder.publishErrorState(
-                "error while loading selected settings"
-            )
-
-            return EventProcessingResult.Processed()
-        }
-
-        val saveController = currSettingsComponent.saveController
-        val settingsDao = currSettingsComponent.settingsDao
+        val saveController = settingsComponent.saveController
+        val settingsDao = settingsComponent.settingsDao
 
         val selectedSettingsData = saveController.loadSettingDataOrDefault()
 
