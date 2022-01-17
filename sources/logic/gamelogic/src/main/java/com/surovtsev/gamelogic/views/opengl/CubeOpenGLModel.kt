@@ -34,9 +34,11 @@ class CubeOpenGLModel @Inject constructor(
     private var textureCoordinatesArray: VertexArray = VertexArray()
 
     fun onSurfaceCreated() {
-        updateBuffers(
-            gameStateHolder.gameStateFlow.value.cubeInfo.cubeCoordinates
-        )
+        gameStateHolder.gameStateFlow.value?.let {
+            updateBuffers(
+                it.cubeInfo.cubeCoordinates
+            )
+        }
     }
 
     private fun updateBuffers(

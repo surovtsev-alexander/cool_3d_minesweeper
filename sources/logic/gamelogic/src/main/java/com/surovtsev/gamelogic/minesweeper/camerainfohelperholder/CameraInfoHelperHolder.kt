@@ -36,11 +36,15 @@ class CameraInfoHelperHolder @Inject constructor(
             gameStateHolder.gameStateFlow.combine(
                 screenResolutionFlow
             ) { gameState, screenResolution ->
-                gameState.cameraInfo to screenResolution
+                gameState?.cameraInfo to screenResolution
             }.collectLatest { (cameraInfo, screenResolution) ->
-                _cameraInfoHelperFlow.value = createCameraInfoHelper(
-                    cameraInfo, screenResolution
-                )
+                _cameraInfoHelperFlow.value = if (cameraInfo == null) {
+                    null
+                } else {
+                    createCameraInfoHelper(
+                        cameraInfo, screenResolution
+                    )
+                }
             }
         }
     }

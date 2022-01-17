@@ -29,7 +29,11 @@ class GameLogic(
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
-                _gameTouchHandlerFlow.value = createGameTouchHandler(it)
+                _gameTouchHandlerFlow.value = if (it == null) {
+                    null
+                } else {
+                    createGameTouchHandler(it)
+                }
             }
         }
     }

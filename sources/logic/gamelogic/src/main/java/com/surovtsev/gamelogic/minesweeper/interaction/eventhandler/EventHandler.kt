@@ -66,7 +66,7 @@ class EventHandler @Inject constructor(
     }
 
     private suspend fun saveGame() {
-        val gameState = gameStateHolder.gameStateFlow.value
+        val gameState = gameStateHolder.gameStateFlow.value ?: return
 
         if (!gameState.gameStatusHolder.isGameInProgress()) {
             return

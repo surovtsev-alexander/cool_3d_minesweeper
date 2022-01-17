@@ -38,10 +38,14 @@ class GameStatusHolderBridge @Inject constructor(
         customCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
                 gameStatusHolderBridgeHelper?.stop()
-                gameStatusHolderBridgeHelper = createGameStatusHolderBridgeHelper(
-                    it,
-                    gameNotPausedFlow,
-                )
+                gameStatusHolderBridgeHelper = if (it == null) {
+                    null
+                } else {
+                    createGameStatusHolderBridgeHelper(
+                        it,
+                        gameNotPausedFlow,
+                    )
+                }
             }
         }
     }

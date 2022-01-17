@@ -15,7 +15,7 @@ class IntersectionCalculator @Inject constructor(
 ) {
 
     fun getCell(): PointedCell? {
-        val gameState = gameStateHolder.gameStateFlow.value
+        val gameState = gameStateHolder.gameStateFlow.value ?: return null
 
         val cubeSkin = gameState.cubeInfo.cubeSkin
         val skins = cubeSkin.skins

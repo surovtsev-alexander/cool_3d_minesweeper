@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-typealias GameStateFlow = StateFlow<GameState>
+typealias GameStateFlow = StateFlow<GameState?>
 
 @GameScope
 class GameStateHolder @Inject constructor(
@@ -33,9 +33,7 @@ class GameStateHolder @Inject constructor(
         }
     }
 
-    private val _gameStateFlow = MutableStateFlow(
-        createGameState(false)
-    )
+    private val _gameStateFlow = MutableStateFlow<GameState?>(null)
     val gameStateFlow: GameStateFlow = _gameStateFlow.asStateFlow()
 
     private fun createGameState(
