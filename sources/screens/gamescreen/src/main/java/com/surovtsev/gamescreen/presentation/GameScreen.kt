@@ -55,7 +55,10 @@ fun GameScreen(
     val eventHandler = viewModel as GameScreenEventHandler
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.finishAction = { navController.navigateUp() }
+        viewModel.finishActionHolder.finishAction =
+            {
+                navController.navigateUp()
+            }
         eventHandler.handleEvent(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame

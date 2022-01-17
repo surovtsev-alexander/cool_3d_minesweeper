@@ -36,7 +36,9 @@ fun SettingsScreen(
 ) {
     val eventHandler: SettingsScreenEventHandler = viewModel
     LaunchedEffect(key1 = Unit) {
-        viewModel.finishAction = { navController.navigateUp() }
+        viewModel.finishActionHolder.finishAction = {
+            navController.navigateUp()
+        }
         eventHandler.handleEvent(
             EventToSettingsScreenViewModel.TriggerInitialization
         )

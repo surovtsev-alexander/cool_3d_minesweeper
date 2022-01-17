@@ -11,6 +11,7 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscrip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @GameScope
@@ -25,7 +26,7 @@ class GameViewsHolder @Inject constructor(
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
-                with(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     processedActions.flush()
                 }
             }

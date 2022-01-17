@@ -27,6 +27,8 @@ sealed class EventToGameScreenViewModel(
     object SetIdleState: EventToGameScreenViewModel()
     object CloseGameMenu: EventToGameScreenViewModel()
 
+    object Finish: EventToGameScreenViewModel(), EventToViewModel.Finish
+
 
     object RemoveFlaggedBombs: EventToGameScreenViewModel(
         setLoadingStateBeforeProcessing = false

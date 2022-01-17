@@ -140,6 +140,7 @@ class GameScreenViewModel @AssistedInject constructor(
             is EventToGameScreenViewModel.RemoveOpenedSlices             -> ::removeOpenedSlices
             is EventToGameScreenViewModel.ToggleFlagging                 -> ::toggleFlagging
             is EventToGameScreenViewModel.CloseGameStatusDialog          -> ::closeGameStatusDialog
+            is EventToGameScreenViewModel.Finish                         -> ::finish
             else                                                         -> null
         }
 
@@ -331,10 +332,9 @@ class GameScreenViewModel @AssistedInject constructor(
     private suspend fun goToMainMenu(
     ): EventProcessingResult<EventToGameScreenViewModel> {
         closeGameMenu(true)
-        withUIContext {
-            finishAction?.invoke()
-        }
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.PushNewEvent(
+            EventToGameScreenViewModel.Finish
+        )
     }
 
 //    override fun onKeyDown(keyCode: Int): Boolean {

@@ -55,6 +55,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
             is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData, event.fromSlider) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
+            is EventToSettingsScreenViewModel.Finish                 -> ::finish
             else                                                     -> null
         }
 
@@ -157,9 +158,9 @@ class SettingsScreenViewModel @AssistedInject constructor(
                 settingsData
             )
 
-            withUIContext {
-                finishAction?.invoke()
-            }
+            return EventProcessingResult.PushNewEvent(
+                EventToSettingsScreenViewModel.Finish
+            )
         }
 
         return EventProcessingResult.Processed()

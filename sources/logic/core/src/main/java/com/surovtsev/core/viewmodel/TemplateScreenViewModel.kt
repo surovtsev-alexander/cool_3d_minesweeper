@@ -3,6 +3,7 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
 import com.surovtsev.finitestatemachine.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.eventprocessor.EventProcessingResult
@@ -27,7 +28,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
     DefaultLifecycleObserver
 {
-    var finishAction: FinishAction? = null
+    val finishActionHolder = FinishActionHolder()
 
     protected val stateHolder: StateHolder<D> = StateHolderImp(
         initialState,
@@ -92,14 +93,6 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         }
     }
 
-    private suspend fun finish() {
-        finishAction?.let {
-            withUIContext {
-                it.invoke()
-            }
-        }
-    }
-
     private suspend fun organizeEventProcessing(event: E) {
         // TODO: 17.01.2022 Legacy solution. Need to be deleted.
         if (event.setLoadingStateBeforeProcessing) {
@@ -115,7 +108,6 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
                 return handleEvent(
                     eventProcessingResult.event
                 )
-
             }
         }
     }
@@ -136,7 +128,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     protected suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
         stateHolder.publishIdleState()
-        finish()
+        finishActionHolder.finish()
+        return EventProcessingResult.Processed()
+    }
+
+    protected suspend fun finish(): EventProcessingResult<E> {
+        finishActionHolder.finish()
         return EventProcessingResult.Processed()
     }
 

@@ -38,7 +38,10 @@ fun RankingScreen(
 ) {
     val eventHandler: RankingScreenEventHandler = viewModel
     LaunchedEffect(key1 = Unit) {
-        viewModel.finishAction = { navController.navigateUp() }
+        viewModel.finishActionHolder.finishAction =
+            {
+                navController.navigateUp()
+            }
         eventHandler.handleEvent(
             EventToRankingScreenViewModel
                 .LoadData
