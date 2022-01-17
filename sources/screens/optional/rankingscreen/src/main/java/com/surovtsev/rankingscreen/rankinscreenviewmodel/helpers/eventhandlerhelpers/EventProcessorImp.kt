@@ -5,22 +5,19 @@ import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
+import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenData
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.alt.EventToRankingScreenViewModelAlt
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay
 import logcat.logcat
+import javax.inject.Inject
 
-class EventProcessorImp(
-    private val stateHolder: StateHolder<RankingScreenData>,
-    private val rankingScreenComponent: RankingScreenComponent,
-) :
-    EventProcessor<EventToRankingScreenViewModel>
+@RankingScreenScope
+class EventProcessorImp @Inject constructor(
+    private val eventProcessorParameters: EventProcessorParameters,
+): EventProcessor<EventToRankingScreenViewModel>
 {
     companion object {
         const val MINIMAL_UI_ACTION_DELAY = 3000L
@@ -52,18 +49,18 @@ class EventProcessorImp(
     private suspend fun loadData(
     ): EventProcessingResult<EventToRankingScreenViewModel> {
 
-        rankingScreenComponent
+        eventProcessorParameters
             .restartableCoroutineScopeComponent
             .subscriberImp
             .restart()
 
         val currTimeSpanComponent: TimeSpanComponent =
-            rankingScreenComponent
+            eventProcessorParameters
                 .timeSpanComponent
 
-        val settingsDao = rankingScreenComponent.settingsDao
-        val rankingDao = rankingScreenComponent.rankingDao
-        val saveController = rankingScreenComponent.saveController
+        val settingsDao = eventProcessorParameters.settingsDao
+        val rankingDao = eventProcessorParameters.rankingDao
+        val saveController = eventProcessorParameters.saveController
 
         val settingsListIsLoaded = doActionWithDelayUpToDefaultMinimal(currTimeSpanComponent.asyncTimeSpan) {
             val settingsList = settingsDao.getAll()
@@ -78,7 +75,7 @@ class EventProcessorImp(
             .asyncTimeSpan
             .flush()
 
-        stateHolder.publishIdleState(
+        eventProcessorParameters.stateHolder.publishIdleState(
             settingsListIsLoaded
         )
 
@@ -100,11 +97,12 @@ class EventProcessorImp(
     ): EventProcessingResult<EventToRankingScreenViewModel> {
 
         val rankingListWithPlaces =
-            rankingScreenComponent.rankingListHelper
+            eventProcessorParameters.rankingListHelper
                 .createRankingListWithPlaces(
                     selectedSettingsId
                 )
 
+        val stateHolder = eventProcessorParameters.stateHolder
         val rankingScreenData = stateHolder.getCurrentData()
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
@@ -134,8 +132,9 @@ class EventProcessorImp(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-        val currTimeSpanComponent = rankingScreenComponent.timeSpanComponent
+        val currTimeSpanComponent = eventProcessorParameters.timeSpanComponent
 
+        val stateHolder = eventProcessorParameters.stateHolder
         val rankingScreenData = stateHolder.state.value.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
@@ -151,7 +150,7 @@ class EventProcessorImp(
         logcat { "rankingTableSortType: $rankingTableSortParameters" }
 
         val sortingAction = {
-            rankingScreenComponent.rankingListHelper.sortData(
+            eventProcessorParameters.rankingListHelper.sortData(
                 filteredRankingList,
                 rankingTableSortParameters
             )

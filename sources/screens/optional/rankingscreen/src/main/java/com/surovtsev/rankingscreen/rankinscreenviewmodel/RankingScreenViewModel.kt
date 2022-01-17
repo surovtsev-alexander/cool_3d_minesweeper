@@ -44,16 +44,10 @@ class RankingScreenViewModel @AssistedInject constructor(
         DaggerRankingScreenComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
+            .stateHolder(stateHolder)
             .build()
 
-    override val eventHandler =
-        EventHandler(
-            EventCheckerImp(),
-            EventProcessorImp(
-                stateHolder,
-                rankingScreenComponent,
-            ),
-        )
+    override val eventHandler = rankingScreenComponent.eventHandler
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
