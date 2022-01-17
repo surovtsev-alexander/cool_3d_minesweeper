@@ -124,8 +124,8 @@ class GameScreenViewModel @AssistedInject constructor(
         return EventProcessingResult.Processed()
     }
 
-    override suspend fun getEventProcessor(event: EventToGameScreenViewModel): EventProcessor<EventToGameScreenViewModel>? {
-        return when (event) {
+    override suspend fun processEvent(event: EventToGameScreenViewModel): EventProcessingResult<EventToGameScreenViewModel> {
+        val eventProcessor = when (event) {
             is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
             is EventToGameScreenViewModel.LoadGame                       -> suspend { newGame(true) }
@@ -141,6 +141,12 @@ class GameScreenViewModel @AssistedInject constructor(
             is EventToGameScreenViewModel.ToggleFlagging                 -> ::toggleFlagging
             is EventToGameScreenViewModel.CloseGameStatusDialog          -> ::closeGameStatusDialog
             else                                                         -> null
+        }
+
+        return if (eventProcessor == null) {
+            EventProcessingResult.Unprocessed()
+        } else {
+            eventProcessor()
         }
     }
 
@@ -392,7 +398,7 @@ class GameScreenViewModel @AssistedInject constructor(
         uiGameControlsMutableFlows?.flagging?.value = newVal
     }
 
-    private fun closeGameStatusDialog(
+    private suspend fun closeGameStatusDialog(
     ): EventProcessingResult<EventToGameScreenViewModel> {
         uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportant
         return EventProcessingResult.Processed()

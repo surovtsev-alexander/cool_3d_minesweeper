@@ -43,8 +43,8 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
 
 
-    override suspend fun getEventProcessor(event: EventToSettingsScreenViewModel): EventProcessor<EventToSettingsScreenViewModel>? {
-        return when (event) {
+    override suspend fun processEvent(event: EventToSettingsScreenViewModel): EventProcessingResult<EventToSettingsScreenViewModel> {
+        val eventProcessor = when (event) {
             is EventToSettingsScreenViewModel.HandleLeavingScreen    -> suspend { handleScreenLeaving(event.owner) }
             is EventToSettingsScreenViewModel.CloseError             -> ::closeError
             is EventToSettingsScreenViewModel.CloseErrorAndFinish    -> ::closeError
@@ -55,7 +55,13 @@ class SettingsScreenViewModel @AssistedInject constructor(
             is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData, event.fromSlider) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
-            else                                                -> null
+            else                                                     -> null
+        }
+
+        return if (eventProcessor == null) {
+            EventProcessingResult.Unprocessed()
+        } else {
+            eventProcessor()
         }
     }
 

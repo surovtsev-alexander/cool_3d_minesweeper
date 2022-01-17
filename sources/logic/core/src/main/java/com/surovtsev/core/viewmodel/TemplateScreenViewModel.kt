@@ -36,7 +36,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val screenStateFlow: ScreenStateFlow<D>
         get() = stateHolder.state
 
-    abstract suspend fun getEventProcessor(event: E): EventProcessor<E>?
+    abstract suspend fun processEvent(event: E): EventProcessingResult<E>
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
@@ -83,7 +83,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
                 if (event is EventToViewModel.Finish) {
                     finish()
                 } else {
-                    processEvent(event)
+                    organizeEventProcessing(event)
                 }
             }
         }
@@ -97,21 +97,22 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
         }
     }
 
-    private suspend fun processEvent(event: E) {
-        val eventProcessor = getEventProcessor(event)
+    private suspend fun organizeEventProcessing(event: E) {
+        // TODO: 17.01.2022 Legacy solution. Need to be deleted.
+        if (event.setLoadingStateBeforeProcessing) {
+            stateHolder.publishLoadingState()
+        }
 
-        if (eventProcessor == null) {
-            stateHolder.publishErrorState("unable to process internal event")
-        } else {
-            if (event.setLoadingStateBeforeProcessing) {
-                stateHolder.publishLoadingState()
+        when (val eventProcessingResult = processEvent(event)) {
+            is EventProcessingResult.Processed -> {}
+            is EventProcessingResult.Unprocessed -> {
+                stateHolder.publishErrorState("unable to process internal event")
             }
-            val eventProcessingResult = eventProcessor.invoke()
-
-            if (eventProcessingResult is EventProcessingResult.PushNewEvent<E>) {
+            is EventProcessingResult.PushNewEvent<E> -> {
                 return handleEvent(
                     eventProcessingResult.event
                 )
+
             }
         }
     }

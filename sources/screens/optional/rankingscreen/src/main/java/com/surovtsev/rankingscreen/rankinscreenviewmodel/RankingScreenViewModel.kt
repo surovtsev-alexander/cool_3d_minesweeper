@@ -63,8 +63,8 @@ class RankingScreenViewModel @AssistedInject constructor(
         rankingScreenComponent.restartableCoroutineScopeComponent.subscriberImp.onStop()
     }
 
-    override suspend fun getEventProcessor(event: EventToRankingScreenViewModel): EventProcessor<EventToRankingScreenViewModel>? {
-        return when (event) {
+    override suspend fun processEvent(event: EventToRankingScreenViewModel): EventProcessingResult<EventToRankingScreenViewModel> {
+        val eventProcessor = when (event) {
             is EventToRankingScreenViewModel.HandleScreenLeaving     -> suspend { handleScreenLeaving(event.owner) }
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
             is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
@@ -72,6 +72,12 @@ class RankingScreenViewModel @AssistedInject constructor(
             is EventToRankingScreenViewModel.SortList                -> suspend { sortList(event.rankingTableSortParameters, true) }
             is EventToRankingScreenViewModel.CloseError              -> ::closeError
             else                                                     -> null
+        }
+
+        return if (eventProcessor == null) {
+            EventProcessingResult.Unprocessed()
+        } else {
+            eventProcessor()
         }
     }
 
