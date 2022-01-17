@@ -31,6 +31,10 @@ import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.*
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GLSurfaceViewCreated
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenErrorDialogPlacer
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenEventReceiver
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.time.elapsedformatter.ElapsedFormatter
 import com.surovtsev.utils.timers.async.TimeSpanFlow

@@ -18,19 +18,12 @@ import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
 import com.surovtsev.gamescreen.viewmodel.helpers.eventhandlerhelpers.EventProcessorImp
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenEventReceiver
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 const val LoadGameParameterName = "load_game"
-
-typealias GameScreenStateFlow = ScreenStateFlow<GameScreenData>
-
-typealias GameScreenEventReceiver = EventReceiver<EventToGameScreenViewModel>
-
-typealias GLSurfaceViewCreated = (gLSurfaceView: GLSurfaceView) -> Unit
-
-typealias GameScreenErrorDialogPlacer = ErrorDialogPlacer<EventToGameScreenViewModel, GameScreenData>
 
 class GameScreenViewModel @AssistedInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,

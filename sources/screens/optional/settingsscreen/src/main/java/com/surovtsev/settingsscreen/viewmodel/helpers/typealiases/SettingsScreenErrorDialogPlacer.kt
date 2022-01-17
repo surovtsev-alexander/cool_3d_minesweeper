@@ -1,7 +1,7 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.typealiases
 
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
 import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
 
-typealias SettingsScreenEventHandler = EventHandler<EventToSettingsScreenViewModel, SettingsScreenData>
+typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScreenViewModel, SettingsScreenData>

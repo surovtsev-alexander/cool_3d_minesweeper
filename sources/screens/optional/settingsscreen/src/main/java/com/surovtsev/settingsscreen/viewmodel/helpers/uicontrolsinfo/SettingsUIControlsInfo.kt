@@ -1,10 +1,10 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo
 
 import com.surovtsev.core.room.entities.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-class SettingsUIInfo {
+class SettingsUIControlsInfo {
     private val dimensionCellCount = 3..25
     private val bombsPercentageBorders = 10..40
 

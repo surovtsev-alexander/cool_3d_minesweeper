@@ -8,7 +8,7 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenData
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenStateHolder
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventCheckerImp
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.eventhandlerhelpers.EventProcessorImp
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent

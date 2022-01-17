@@ -4,8 +4,8 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenEventHandler
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenStateHolder
+import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventHandler
+import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
 import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventCheckerImp
 import com.surovtsev.settingsscreen.viewmodel.helpers.eventhandlerhelpers.EventProcessorImp
 import dagger.BindsInstance

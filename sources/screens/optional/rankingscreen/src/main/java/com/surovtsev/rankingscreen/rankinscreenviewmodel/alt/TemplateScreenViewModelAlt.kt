@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor

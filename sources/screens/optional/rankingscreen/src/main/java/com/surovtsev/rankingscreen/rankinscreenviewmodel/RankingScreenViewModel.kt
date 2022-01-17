@@ -18,12 +18,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-typealias RankingScreenStateFlow = ScreenStateFlow<RankingScreenData>
-
-typealias RankingScreenEventReceiver = EventReceiver<EventToRankingScreenViewModel>
-
-typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<
-        EventToRankingScreenViewModel, RankingScreenData>
 
 class RankingScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,

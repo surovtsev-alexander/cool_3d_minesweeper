@@ -23,10 +23,15 @@ import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
-import com.surovtsev.core.viewmodel.*
-import com.surovtsev.settingsscreen.viewmodel.*
-import com.surovtsev.settingsscreen.viewmodel.helpers.SettingUIControl
-import com.surovtsev.settingsscreen.viewmodel.helpers.SettingsUIInfo
+import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.settingsscreen.viewmodel.EventToSettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
+import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenErrorDialogPlacer
+import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventReceiver
+import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateFlow
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingUIControl
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
 @Composable
@@ -251,7 +256,7 @@ fun Controls(
         return
     }
 
-    val settingsUIInfo by remember { mutableStateOf(SettingsUIInfo()) }
+    val settingsUIInfo by remember { mutableStateOf(SettingsUIControlsInfo()) }
 
     settingsUIInfo.info.map { settingUIControl ->
         BindViewModelAndUI(

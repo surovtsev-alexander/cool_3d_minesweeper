@@ -14,12 +14,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
-typealias SettingsScreenStateFlow = ScreenStateFlow<SettingsScreenData>
-
-typealias SettingsScreenEventReceiver = EventReceiver<EventToSettingsScreenViewModel>
-
-typealias SettingsScreenErrorDialogPlacer = ErrorDialogPlacer<EventToSettingsScreenViewModel, SettingsScreenData>
-
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted context: Context,

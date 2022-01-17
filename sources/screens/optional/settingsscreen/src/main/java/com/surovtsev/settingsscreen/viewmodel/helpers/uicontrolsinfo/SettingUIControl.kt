@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo
 
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.utils.compose.components.SliderPositionMutableStateFlow

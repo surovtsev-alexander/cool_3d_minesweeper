@@ -4,7 +4,7 @@ import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.GameScreenData
-import com.surovtsev.gamescreen.viewmodel.GameScreenStateFlow
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope

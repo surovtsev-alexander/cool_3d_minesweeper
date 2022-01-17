@@ -1,5 +1,6 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel.alt
 
+import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 

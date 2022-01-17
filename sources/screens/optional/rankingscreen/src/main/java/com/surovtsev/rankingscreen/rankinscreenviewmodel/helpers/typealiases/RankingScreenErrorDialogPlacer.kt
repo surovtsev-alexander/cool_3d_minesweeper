@@ -1,0 +1,7 @@
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases
+
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.EventToRankingScreenViewModel
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenData
+
+typealias RankingScreenErrorDialogPlacer = ErrorDialogPlacer<EventToRankingScreenViewModel, RankingScreenData>
