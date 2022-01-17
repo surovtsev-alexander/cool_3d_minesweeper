@@ -16,10 +16,10 @@ class GameStatusHolderBridgeHelper(
     private val gameStatusHolder: GameStatusHolder,
     private val gameNotPausedFlow: GameNotPausedFlow,
     private val bombsLeftFlow: MutableStateFlow<Int>,
-    private val gameStatusWithElapsedFlow: MutableStateFlow<GameStatusWithElapsedForGameConfig>,
+    private val gameStatusWithElapsedFlow: MutableStateFlow<GameStatusWithElapsedForGameConfig?>,
     customCoroutineScope: CustomCoroutineScope,
 ) {
-    var jobs: MutableList<Job> = emptyList<Job>().toMutableList()
+    private var jobs: MutableList<Job> = emptyList<Job>().toMutableList()
 
     init {
         jobs += customCoroutineScope.launch {

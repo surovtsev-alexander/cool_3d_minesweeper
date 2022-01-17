@@ -44,11 +44,13 @@ class MinesweeperGameStatusReceiver @Inject constructor(
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             gameStatusHolderBridge.gameStatusWithElapsedFlow.collectLatest {
-                gameStatusUpdated(
-                    it.gameConfig,
-                    it.gameStatus,
-                    it.elapsed
-                )
+                it?.let {
+                    gameStatusUpdated(
+                        it.gameConfig,
+                        it.gameStatus,
+                        it.elapsed
+                    )
+                }
             }
         }
     }
