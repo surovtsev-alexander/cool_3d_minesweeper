@@ -14,6 +14,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+/**
+ *   Game is not paused if only
+ * screenState.description is Idle and
+ * screenState.data is GameInProgress.
+ */
 @GameScreenScope
 class GameNotPausedFlowHolder @Inject constructor(
     private val gameScreenStateFlow: GameScreenStateFlow,
