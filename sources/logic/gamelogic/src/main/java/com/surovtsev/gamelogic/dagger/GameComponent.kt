@@ -77,7 +77,6 @@ interface GameComponent {
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun screenResolutionFlow(@BindsInstance screenResolutionFlow: ScreenResolutionFlow): Builder
-        fun loadGame(@BindsInstance loadGame: Boolean): Builder
         fun gameStateDependencies(@BindsInstance gameStateDependencies: GameStateDependencies): Builder
         fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
         fun build(): GameComponent

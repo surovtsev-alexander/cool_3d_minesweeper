@@ -138,12 +138,10 @@ object GameScreenComponentsModule {
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .screenResolutionFlow(screenResolutionFlow)
-            .loadGame(false)
             .gameStateDependencies(
                 GameStateDependencies(
                     appComponentEntryPoint,
-                    timeSpanComponent,
-                    false)
+                    timeSpanComponent)
             )
             .gameNotPausedFlow(gameNotPausedFlowHolder.gameNotPausedFlow)
             .build()

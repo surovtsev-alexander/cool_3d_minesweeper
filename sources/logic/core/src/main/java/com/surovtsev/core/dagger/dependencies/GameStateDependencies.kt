@@ -6,5 +6,4 @@ import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 data class GameStateDependencies(
     val appComponentEntryPoint: AppComponentEntryPoint,
     val timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint,
-    val loadData: Boolean
 )

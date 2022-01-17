@@ -33,8 +33,8 @@ class GameStateHolder @Inject constructor(
         }
     }
 
-    private val _gameStateFlow = MutableStateFlow<GameState>(
-        createGameState(gameStateDependencies.loadData)
+    private val _gameStateFlow = MutableStateFlow(
+        createGameState(false)
     )
     val gameStateFlow: GameStateFlow = _gameStateFlow.asStateFlow()
 
