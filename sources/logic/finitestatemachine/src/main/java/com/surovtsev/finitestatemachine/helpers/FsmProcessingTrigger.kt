@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.utils
+package com.surovtsev.finitestatemachine.helpers
 
 interface FsmProcessingTrigger {
     fun isBusy(): Boolean

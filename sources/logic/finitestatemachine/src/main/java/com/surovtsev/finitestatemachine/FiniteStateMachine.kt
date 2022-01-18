@@ -9,7 +9,7 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcess
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.finitestatemachine.utils.*
+import com.surovtsev.finitestatemachine.helpers.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
