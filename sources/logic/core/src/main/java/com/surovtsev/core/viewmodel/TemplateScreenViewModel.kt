@@ -127,34 +127,4 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
             }
         }
     }
-
-//    protected inline fun <reified T: D> processIfDataNullable(
-//        checkData: (screenData: T?) -> Boolean,
-//        errorAction: (screenData: D?) -> Unit,
-//        action: (screenData: T?) -> Unit
-//    ) {
-//        val screenData = dataHolder.value?.screenData
-//        val castedScreenData = screenData as? T
-//
-//        if (castedScreenData == null || !checkData(castedScreenData)) {
-//            errorAction(screenData)
-//        } else {
-//            action(castedScreenData)
-//        }
-//    }
-//
-//    protected inline fun <reified T: D>processIfData(
-//        checkData: (screenData: T) -> Boolean,
-//        errorAction: () -> Unit,
-//        action: (screenData: T) -> Unit
-//    ) {
-//        val screenData =  dataHolder.value?.screenData
-//        val castedScreenData = screenData as? T
-//
-//        if (castedScreenData == null || !checkData(castedScreenData)) {
-//            errorAction()
-//        } else {
-//            action(castedScreenData)
-//        }
-//    }
 }

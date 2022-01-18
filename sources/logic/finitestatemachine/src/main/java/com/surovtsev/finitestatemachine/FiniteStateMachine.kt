@@ -7,12 +7,9 @@ import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.finitestatemachine.utils.ProcessingTrigger
-import com.surovtsev.finitestatemachine.utils.ProcessingTriggerImp
-import com.surovtsev.finitestatemachine.utils.ProcessingWaiter
-import com.surovtsev.finitestatemachine.utils.ProcessingWaiterImp
 import com.surovtsev.finitestatemachine.state.data.Data
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.finitestatemachine.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +25,8 @@ open class FiniteStateMachine<E: Event, D: Data>(
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
-    private val processingTrigger: ProcessingTrigger = ProcessingTriggerImp(),
+    private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp(),
+    private val pausedStateHolder: PausedStateHolder = PausedStateHolder(),
 ) {
     companion object {
         val uiDispatcher = Dispatchers.Main
@@ -41,15 +39,13 @@ open class FiniteStateMachine<E: Event, D: Data>(
 
     private val eventsQueue = emptyList<E>().toMutableList()
 
-    private var paused: Boolean = false
-        private set
 
     private suspend fun pollEvent(): E? {
         return queueMutex.withLock {
             if (eventsQueue.count() == 0) {
                 null
             } else {
-                if (!paused) {
+                if (!pausedStateHolder.paused) {
                     eventsQueue.removeAt(0)
                 } else {
                     val first = eventsQueue[0]
@@ -64,7 +60,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         }
     }
 
-    fun isQueueEmpty(): Boolean {
+    private fun isQueueEmpty(): Boolean {
         return eventsQueue.isEmpty()
     }
 
@@ -93,7 +89,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
                 if (logConfig.logLevel.isGreaterThan3()) {
                     logcat { "$funcName; wait for trigger processing" }
                 }
-                processingTrigger.waitForTriggerProcessing()
+                fsmProcessingTrigger.waitForTriggerProcessing()
                 processingWaiter.processingHasStarted()
                 continue
             }
@@ -110,7 +106,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         }
 
         if (event.doNotPushToQueue) {
-            if (processingTrigger.isBusy()) {
+            if (fsmProcessingTrigger.isBusy()) {
                 if (logConfig.logLevel.isGreaterThan0()) {
                     logcat { "doNotPushToQueue and skipIfBusy are true in event; FSM is Busy; skipping: $event" }
                 }
@@ -177,12 +173,9 @@ open class FiniteStateMachine<E: Event, D: Data>(
             }
         }
 
-        kickFSM()
+        fsmProcessingTrigger.kickFSM()
     }
 
-    private fun kickFSM() {
-        processingTrigger.triggerProcessing()
-    }
 
     private fun lastPos(predicate: (E) -> Boolean): Int {
         val len = eventsQueue.size
@@ -207,11 +200,12 @@ open class FiniteStateMachine<E: Event, D: Data>(
 
             when (event) {
                 is Event.Pause -> {
-                    paused = true
+                    pausedStateHolder.pause()
                 }
                 is Event.Resume -> {
-                    paused = false
-                    kickFSM()
+                    pausedStateHolder.resume()
+
+                    fsmProcessingTrigger.kickFSM()
                 }
             }
 
