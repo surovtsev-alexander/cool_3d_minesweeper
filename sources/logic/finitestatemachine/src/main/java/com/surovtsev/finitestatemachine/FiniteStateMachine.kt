@@ -33,13 +33,20 @@ open class FiniteStateMachine<E: Event, D: Data>(
         val ioDispatcher = Dispatchers.IO
     }
 
-    private val processingMutex = Mutex(locked = false)
-
     private val fsmQueueHolder = FSMQueueHolder<E>(
         pausedStateHolder,
         processingWaiter,
         fsmProcessingTrigger,
         logConfig,
+    )
+
+    private val eventProcessorHelper = EventProcessorHelper(
+        logConfig,
+        stateHolder,
+        pausedStateHolder,
+        fsmProcessingTrigger,
+        eventChecker,
+        eventProcessor,
     )
 
     init {
@@ -63,7 +70,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
                 continue
             }
 
-            processEvent(event)
+            eventProcessorHelper.processEvent(event)
         } while (true)
     }
 
@@ -82,73 +89,11 @@ open class FiniteStateMachine<E: Event, D: Data>(
                 return
             }
             coroutineScope.launch(ioDispatcher) {
-                processEvent(event)
+                eventProcessorHelper.processEvent(event)
             }
         } else {
             coroutineScope.launch(ioDispatcher) {
                 fsmQueueHolder.pushEvent(event)
-            }
-        }
-    }
-
-    private suspend fun processEvent(
-        event: E
-    ) {
-        processingMutex.withLock {
-            if (logConfig.logLevel.isGreaterThan2()) {
-                logcat { "processEvent; event: $event" }
-            }
-
-            when (event) {
-                is Event.Pause -> {
-                    pausedStateHolder.pause()
-                }
-                is Event.Resume -> {
-                    pausedStateHolder.resume()
-
-                    fsmProcessingTrigger.kickFSM()
-                }
-            }
-
-            val eventCheckingResult = eventChecker.check(
-                event,
-                stateHolder.state.value
-            )
-
-            val errorMessage = when (eventCheckingResult) {
-                is EventCheckerResult.Pass -> {
-                    if (event.setLoadingStateBeforeProcessing) {
-                        stateHolder.publishLoadingState()
-                    }
-                    val eventProcessingResult = eventProcessor.processEvent(event)
-                    if (eventProcessingResult !is EventProcessingResult.Processed<*>) {
-                        "internal error 1"
-                    } else {
-                        null
-                    }
-                }
-                is EventCheckerResult.RaiseError -> {
-                    eventCheckingResult.message
-                }
-                is EventCheckerResult.Unchecked -> {
-                    "internal error 2"
-                }
-                is EventCheckerResult.Skip -> {
-                    // todo: add implementation
-                    assert(false)
-                    null
-                }
-                is EventCheckerResult.ChangeWith -> {
-                    // todo: add implementation
-                    assert(false)
-                    null
-                }
-            }
-
-            errorMessage?.let {
-                stateHolder.publishErrorState(
-                    it
-                )
             }
         }
     }
