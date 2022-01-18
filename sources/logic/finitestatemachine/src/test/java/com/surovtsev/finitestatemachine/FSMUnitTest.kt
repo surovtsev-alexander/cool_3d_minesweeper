@@ -57,7 +57,7 @@ class FSMUnitTest {
         )
 
         runBlocking {
-            fsm.waitForEmptyQueue()
+            fsm.queueHolder.waitForEmptyQueue()
         }
 
         // assert
@@ -81,7 +81,7 @@ class FSMUnitTest {
         )
 
         runBlocking {
-            fsm.waitForEmptyQueue()
+            fsm.queueHolder.waitForEmptyQueue()
         }
 
         // assert

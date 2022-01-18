@@ -4,8 +4,6 @@ import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
@@ -13,8 +11,6 @@ import com.surovtsev.finitestatemachine.helpers.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
 open class FiniteStateMachine<E: Event, D: Data>(
@@ -33,7 +29,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         val ioDispatcher = Dispatchers.IO
     }
 
-    private val fsmQueueHolder = FSMQueueHolder<E>(
+    val queueHolder = FSMQueueHolder<E>(
         pausedStateHolder,
         processingWaiter,
         fsmProcessingTrigger,
@@ -59,7 +55,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         val funcName = "handlingEventsLoop"
 
         do {
-            val event = fsmQueueHolder.pollEvent()
+            val event = queueHolder.pollEvent()
 
             if (event == null) {
                 if (logConfig.logLevel.isGreaterThan3()) {
@@ -93,7 +89,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
             }
         } else {
             coroutineScope.launch(ioDispatcher) {
-                fsmQueueHolder.pushEvent(event)
+                queueHolder.pushEvent(event)
             }
         }
     }
