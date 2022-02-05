@@ -6,11 +6,14 @@ object ProjectModules {
     object Logic {
         object Common {
             const val finiteStateMachine = ":finitestatemachine"
-            const val restartableCoroutineScope = ":restartablecoroutinescope"
-            const val subscriptionsHolder = ":subscriptionsholder"
             const val timeSpan = ":timespan"
             const val touchListener = ":touchlistener"
             const val utils = ":utils"
+
+            object RestartableCoroutineScope {
+                const val restartableCoroutineScope = ":restartablecoroutinescope"
+                const val subscriptionsHolder = ":subscriptionsholder"
+            }
         }
 
         object Specific {

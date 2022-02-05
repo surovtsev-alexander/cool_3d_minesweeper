@@ -14,8 +14,8 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/sources/app" />
             <option value="$PROJECT_DIR$/sources/logic/common/finitestatemachine" />
-            <option value="$PROJECT_DIR$/sources/logic/common/restartablecoroutinescope" />
-            <option value="$PROJECT_DIR$/sources/logic/common/subscriptionsholder" />
+            <option value="$PROJECT_DIR$/sources/logic/common/restartablecoroutinescope/restartablecoroutinescope" />
+            <option value="$PROJECT_DIR$/sources/logic/common/restartablecoroutinescope/subscriptionsholder" />
             <option value="$PROJECT_DIR$/sources/logic/common/timespan" />
             <option value="$PROJECT_DIR$/sources/logic/common/touchlistener" />
             <option value="$PROJECT_DIR$/sources/logic/common/utils" />

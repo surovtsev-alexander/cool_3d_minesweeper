@@ -20,13 +20,17 @@ val utilsModule = ":utils"
 
 val commonLogicModules = arrayOf(
     finiteStateMachineModule,
-    restartableCoroutineScopeModule,
-    subscriptionsHolderModule,
     timeSpanModule,
     touchListenerModule,
     utilsModule,
 )
 val commonLogicDir = "sources/logic/common"
+
+val restartableCoroutineScopeModules = arrayOf(
+    restartableCoroutineScopeModule,
+    subscriptionsHolderModule,
+)
+val restartableCoroutineScopeDir = "sources/logic/common/restartablecoroutinescope"
 
 val specificLogicModules = arrayOf(
     coreModule,
@@ -67,6 +71,10 @@ includeModule(
 includeModules(
     commonLogicModules,
     commonLogicDir,
+)
+includeModules(
+    restartableCoroutineScopeModules,
+    restartableCoroutineScopeDir,
 )
 includeModules(
     specificLogicModules,

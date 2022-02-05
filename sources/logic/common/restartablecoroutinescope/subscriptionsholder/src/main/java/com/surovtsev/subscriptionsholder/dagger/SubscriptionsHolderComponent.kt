@@ -27,10 +27,8 @@ interface SubscriptionsHolderComponent: SubscriptionsHolderEntryPoint {
             restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint
         ): Builder
 
-//        @Named(SubscriptionsHolder.NAME)
         @BindsInstance
         fun subscriptionsHolderName(name: String): Builder
-
 
         fun build(): SubscriptionsHolderComponent
     }

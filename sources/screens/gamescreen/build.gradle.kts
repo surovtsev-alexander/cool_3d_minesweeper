@@ -42,8 +42,8 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Logic.Common.finiteStateMachine,
-            ProjectModules.Logic.Common.restartableCoroutineScope,
-            ProjectModules.Logic.Common.subscriptionsHolder,
+            ProjectModules.Logic.Common.RestartableCoroutineScope.restartableCoroutineScope,
+            ProjectModules.Logic.Common.RestartableCoroutineScope.subscriptionsHolder,
             ProjectModules.Logic.Common.timeSpan,
             ProjectModules.Logic.Common.touchListener,
             ProjectModules.Logic.Common.utils,
