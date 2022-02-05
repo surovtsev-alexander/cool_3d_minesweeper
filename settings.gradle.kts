@@ -91,7 +91,7 @@ projectDir(
 /// endregion
 
 
-/// region [helper methods]: include modules of project tree
+/// region [helper methods]: dsl to declare project modules tree
 fun projectDir(
     dir: String,
     modules: Array<String> = emptyArray(),
