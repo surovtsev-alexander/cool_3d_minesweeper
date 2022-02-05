@@ -36,8 +36,8 @@ dependencies {
             ProjectModules.Logic.Common.utils,
             ProjectModules.Logic.Common.touchListener,
             ProjectModules.Logic.Specific.core,
-            ProjectModules.Logic.Specific.gameState,
-            ProjectModules.Logic.Specific.gameStateHolder,
+            ProjectModules.Logic.Specific.GameStateHolder.gameState,
+            ProjectModules.Logic.Specific.GameStateHolder.gameStateHolder,
         )
     )
 

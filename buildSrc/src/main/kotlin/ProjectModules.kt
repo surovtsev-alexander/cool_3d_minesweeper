@@ -17,8 +17,11 @@ object ProjectModules {
         object Specific {
             const val core = ":core"
             const val gameLogic = ":gamelogic"
-            const val gameState = ":gamestate"
-            const val gameStateHolder = ":gamestateholder"
+
+            object GameStateHolder {
+                const val gameState = ":gamestate"
+                const val gameStateHolder = ":gamestateholder"
+            }
         }
     }
 

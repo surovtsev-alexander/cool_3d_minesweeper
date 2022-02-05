@@ -21,8 +21,8 @@
             <option value="$PROJECT_DIR$/sources/logic/common/utils" />
             <option value="$PROJECT_DIR$/sources/logic/specific/core" />
             <option value="$PROJECT_DIR$/sources/logic/specific/gamelogic" />
-            <option value="$PROJECT_DIR$/sources/logic/specific/gamestate" />
-            <option value="$PROJECT_DIR$/sources/logic/specific/gamestateholder" />
+            <option value="$PROJECT_DIR$/sources/logic/specific/gamestateholder/gamestate" />
+            <option value="$PROJECT_DIR$/sources/logic/specific/gamestateholder/gamestateholder" />
             <option value="$PROJECT_DIR$/sources/screens/gamescreen" />
             <option value="$PROJECT_DIR$/sources/screens/mainscreen" />
             <option value="$PROJECT_DIR$/sources/screens/optional/helpscreen" />

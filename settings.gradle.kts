@@ -24,6 +24,7 @@ object Modules {
 
 object Folders {
     const val common = "common"
+    const val gameStateHolder = "gamestateholder"
     const val logic = "logic"
     const val optional = "optional"
     const val restartableCoroutineScope = "restartablecoroutinescope"
@@ -65,10 +66,16 @@ projectDir(
             arrayOf(
                 Modules.core,
                 Modules.gameLogic,
-                Modules.gameState,
-                Modules.gameStateHolder,
             )
-        )
+        ) {
+            projectDir(
+                subfolder(Folders.gameStateHolder),
+                arrayOf(
+                    Modules.gameState,
+                    Modules.gameStateHolder,
+                )
+            )
+        }
     }
 
     projectDir(

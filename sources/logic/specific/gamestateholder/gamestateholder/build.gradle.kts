@@ -34,7 +34,7 @@ dependencies {
     includeProjectModules(
         arrayOf(
             ProjectModules.Logic.Specific.core,
-            ProjectModules.Logic.Specific.gameState,
+            ProjectModules.Logic.Specific.GameStateHolder.gameState,
         )
     )
 
