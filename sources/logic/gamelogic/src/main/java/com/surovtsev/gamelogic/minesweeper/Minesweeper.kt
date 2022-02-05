@@ -1,7 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper
 
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamelogic.minesweeper.helpers.MinesweeperGameStatusReceiver
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.opengleventshandler.MinesweeperOpenGLEventsHandler
