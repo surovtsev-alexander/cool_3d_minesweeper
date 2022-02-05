@@ -11,6 +11,7 @@ val coreModule = ":core"
 val finiteStateMachineModule = ":finitestatemachine"
 val gameLogicModule = ":gamelogic"
 val gameStateModule = ":gamestate"
+val gameStateHolderModule = ":gamestateholder"
 val restartableCoroutineScopeModule = ":restartablecoroutinescope"
 val subscriptionsHolderModule = ":subscriptionsholder"
 val timeSpanModule = ":timespan"
@@ -22,6 +23,7 @@ val coreModules = arrayOf(
     finiteStateMachineModule,
     gameLogicModule,
     gameStateModule,
+    gameStateHolderModule,
     restartableCoroutineScopeModule,
     subscriptionsHolderModule,
     timeSpanModule,

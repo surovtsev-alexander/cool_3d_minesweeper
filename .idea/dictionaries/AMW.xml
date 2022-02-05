@@ -1,7 +1,20 @@
 <component name="ProjectDictionaryState">
   <dictionary name="AMW">
     <words>
+      <w>finitestatemachine</w>
+      <w>gamelogic</w>
+      <w>gamescreen</w>
+      <w>gamestate</w>
+      <w>gamestateholder</w>
+      <w>helpscreen</w>
+      <w>mainscreen</w>
+      <w>rankingscreen</w>
+      <w>restartablecoroutinescope</w>
+      <w>settingsscreen</w>
+      <w>subscriptionsholder</w>
       <w>surovtsev</w>
+      <w>timespan</w>
+      <w>touchlistener</w>
     </words>
   </dictionary>
 </component>

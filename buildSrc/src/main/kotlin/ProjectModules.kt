@@ -8,6 +8,7 @@ object ProjectModules {
         const val finiteStateMachine = ":finitestatemachine"
         const val gameLogic = ":gamelogic"
         const val gameState = ":gamestate"
+        const val gameStateHolder = ":gamestateholder"
         const val restartableCoroutineScope = ":restartablecoroutinescope"
         const val subscriptionsHolder = ":subscriptionsholder"
         const val timeSpan = ":timespan"
