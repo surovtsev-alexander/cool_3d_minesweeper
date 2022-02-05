@@ -1,10 +1,10 @@
-package com.surovtsev.gamestate.models.game.save
+package com.surovtsev.gamestate.logic.models.game.save
 
-import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.models.game.save.helpers.CameraInfoToSave
-import com.surovtsev.gamestate.models.game.save.helpers.CubeSkinToSave
-import com.surovtsev.gamestate.models.game.save.helpers.GameLogicToSave
+import com.surovtsev.gamestate.logic.models.game.save.helpers.CameraInfoToSave
+import com.surovtsev.gamestate.logic.models.game.save.helpers.CubeSkinToSave
+import com.surovtsev.gamestate.logic.models.game.save.helpers.GameLogicToSave
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 
 class Save(

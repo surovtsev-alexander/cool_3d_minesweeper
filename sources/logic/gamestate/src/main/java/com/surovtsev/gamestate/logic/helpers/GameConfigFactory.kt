@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.helpers
+package com.surovtsev.gamestate.logic.helpers
 
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.models.game.config.GameConfig

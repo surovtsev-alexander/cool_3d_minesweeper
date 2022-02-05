@@ -1,10 +1,10 @@
-package com.surovtsev.gamestate
+package com.surovtsev.gamestate.logic
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.models.game.gameobjectsholder.CubeInfo
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
-import com.surovtsev.gamestate.models.game.spaceborders.cube.CubeSpaceBorder
+import com.surovtsev.gamestate.logic.models.game.gameobjectsholder.CubeInfo
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.utils.math.camerainfo.CameraInfo
 
 class GameState(

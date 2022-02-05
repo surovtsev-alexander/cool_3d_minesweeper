@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.dagger
+package com.surovtsev.gamestate.logic.dagger
 
 import javax.inject.Scope
 

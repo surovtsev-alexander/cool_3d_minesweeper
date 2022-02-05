@@ -4,8 +4,8 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamestate.GameState
-import com.surovtsev.gamestate.dagger.DaggerGameStateComponent
+import com.surovtsev.gamestate.logic.GameState
+import com.surovtsev.gamestate.logic.dagger.DaggerGameStateComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

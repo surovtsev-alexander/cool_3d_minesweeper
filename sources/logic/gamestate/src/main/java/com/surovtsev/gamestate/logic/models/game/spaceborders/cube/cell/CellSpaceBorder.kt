@@ -1,7 +1,7 @@
-package com.surovtsev.gamestate.models.game.spaceborders.cube.cell
+package com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell
 
 import com.surovtsev.core.models.gles.pointer.PointerDescriptor
-import com.surovtsev.gamestate.models.game.spaceborders.cube.cell.edge.EdgeSpaceBorder
+import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.edge.EdgeSpaceBorder
 import glm_.vec3.Vec3
 
 class CellSpaceBorder(

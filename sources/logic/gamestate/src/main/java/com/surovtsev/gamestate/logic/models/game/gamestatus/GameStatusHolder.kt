@@ -1,8 +1,8 @@
-package com.surovtsev.gamestate.models.game.gamestatus
+package com.surovtsev.gamestate.logic.models.game.gamestatus
 
 import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.dagger.GameStateScope
+import com.surovtsev.gamestate.logic.dagger.GameStateScope
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

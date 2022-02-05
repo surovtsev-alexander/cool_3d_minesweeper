@@ -1,11 +1,11 @@
-package com.surovtsev.gamestate.models.game.save.helpers
+package com.surovtsev.gamestate.logic.models.game.save.helpers
 
 import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.core.models.game.skin.cube.cell.CellSkin
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 
 class CubeSkinToSave(
     private val bombs: String,

@@ -14,8 +14,8 @@ import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHelper
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder

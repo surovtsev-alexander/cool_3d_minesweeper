@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.models.game.save.helpers
+package com.surovtsev.gamestate.logic.models.game.save.helpers
 
 import com.surovtsev.utils.math.camerainfo.CameraInfo
 import glm_.mat4x4.Mat4

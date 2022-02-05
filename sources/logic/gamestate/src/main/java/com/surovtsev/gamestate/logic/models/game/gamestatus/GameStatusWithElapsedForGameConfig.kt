@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.models.game.gamestatus
+package com.surovtsev.gamestate.logic.models.game.gamestatus
 
 import com.surovtsev.core.models.game.config.GameConfig
 import kotlinx.coroutines.flow.StateFlow

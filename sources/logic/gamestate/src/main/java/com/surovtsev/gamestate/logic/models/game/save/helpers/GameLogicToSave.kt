@@ -1,8 +1,8 @@
-package com.surovtsev.gamestate.models.game.save.helpers
+package com.surovtsev.gamestate.logic.models.game.save.helpers
 
-import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 
 class GameLogicToSave(

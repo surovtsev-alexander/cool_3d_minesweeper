@@ -1,8 +1,8 @@
-package com.surovtsev.gamestate.models.game.gameobjectsholder
+package com.surovtsev.gamestate.logic.models.game.gameobjectsholder
 
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamestate.dagger.GameStateScope
+import com.surovtsev.gamestate.logic.dagger.GameStateScope
 import javax.inject.Inject
 
 @GameStateScope

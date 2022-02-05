@@ -1,10 +1,10 @@
-package com.surovtsev.gamestate.models.game.spaceborders.cube
+package com.surovtsev.gamestate.logic.models.game.spaceborders.cube
 
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.dagger.GameStateScope
-import com.surovtsev.gamestate.models.game.spaceborders.cube.cell.CellSpaceBorder
+import com.surovtsev.gamestate.logic.dagger.GameStateScope
+import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import javax.inject.Inject
 
 @GameStateScope

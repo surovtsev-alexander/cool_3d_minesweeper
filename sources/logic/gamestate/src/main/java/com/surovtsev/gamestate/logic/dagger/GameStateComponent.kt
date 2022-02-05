@@ -1,19 +1,18 @@
-package com.surovtsev.gamestate.dagger
+package com.surovtsev.gamestate.logic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.gamestate.GameState
+import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamestate.helpers.GameConfigFactory
-import com.surovtsev.gamestate.models.game.gameobjectsholder.CubeInfo
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
-import com.surovtsev.gamestate.models.game.save.Save
-import com.surovtsev.gamestate.models.game.spaceborders.cube.CubeSpaceBorder
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.gamestate.logic.helpers.GameConfigFactory
+import com.surovtsev.gamestate.logic.models.game.gameobjectsholder.CubeInfo
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.logic.models.game.save.Save
+import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.utils.math.camerainfo.CameraInfo
 import dagger.BindsInstance
 import dagger.Component

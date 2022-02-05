@@ -1,10 +1,10 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic.helpers
 
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatus
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusHolder
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedForGameConfig
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

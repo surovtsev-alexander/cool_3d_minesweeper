@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.models.game.spaceborders.cube.cell.edge
+package com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.edge
 
 import com.surovtsev.core.models.gles.pointer.PointerDescriptor
 import com.surovtsev.utils.math.MyMath

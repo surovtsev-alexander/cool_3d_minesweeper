@@ -4,8 +4,8 @@ import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
-import com.surovtsev.gamestate.GameState
-import com.surovtsev.gamestate.models.game.gamestatus.GameStatusWithElapsedForGameConfig
+import com.surovtsev.gamestate.logic.GameState
+import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
