@@ -2,7 +2,6 @@ package com.surovtsev.gamescreen.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
-import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder.GameNotPausedFlowHolder
@@ -138,11 +137,6 @@ object GameScreenComponentsModule {
             )
             .timeSpanComponentEntryPoint(timeSpanComponent)
             .screenResolutionFlow(screenResolutionFlow)
-            .gameStateDependencies(
-                GameStateDependencies(
-                    appComponentEntryPoint,
-                    timeSpanComponent)
-            )
             .gameNotPausedFlow(gameNotPausedFlowHolder.gameNotPausedFlow)
             .build()
     }

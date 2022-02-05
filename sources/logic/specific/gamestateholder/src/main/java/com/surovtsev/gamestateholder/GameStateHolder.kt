@@ -1,11 +1,10 @@
-package com.surovtsev.gamelogic.minesweeper.gamestateholder
+package com.surovtsev.gamestateholder
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
-import com.surovtsev.core.dagger.dependencies.GameStateDependencies
-import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.gamestate.logic.dagger.DaggerGameStateComponent
+import com.surovtsev.gamestateholder.dagger.GameStateHolderScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,9 +12,10 @@ import javax.inject.Inject
 
 typealias GameStateFlow = StateFlow<GameState?>
 
-@GameScope
+@GameStateHolderScope
 class GameStateHolder @Inject constructor(
-    private val gameStateDependencies: GameStateDependencies,
+    private val appComponentEntryPoint: AppComponentEntryPoint,
+    private val timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint,
 ) {
     companion object {
         fun createGameState(
@@ -40,8 +40,8 @@ class GameStateHolder @Inject constructor(
         tryToLoad: Boolean = false
     ): GameState {
         return Companion.createGameState(
-            gameStateDependencies.appComponentEntryPoint,
-            gameStateDependencies.timeSpanComponentEntryPoint,
+            appComponentEntryPoint,
+            timeSpanComponentEntryPoint,
             tryToLoad
         )
     }

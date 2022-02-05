@@ -2,7 +2,6 @@ package com.surovtsev.gamelogic.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
-import com.surovtsev.core.dagger.dependencies.GameStateDependencies
 import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.core.models.gles.pointer.PointerImp
@@ -10,7 +9,6 @@ import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.gamelogic.minesweeper.Minesweeper
 import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.minesweeper.gamelogic.GameLogic
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.GameStatusHolderBridge
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
@@ -23,6 +21,8 @@ import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
+import com.surovtsev.gamestateholder.GameStateHolder
+import com.surovtsev.gamestateholder.dagger.DaggerGameStateHolderComponent
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
@@ -77,7 +77,6 @@ interface GameComponent {
         fun subscriptionsHolderEntryPoint(subscriptionsHolderEntryPoint: SubscriptionsHolderEntryPoint): Builder
         fun timeSpanComponentEntryPoint(timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint): Builder
         fun screenResolutionFlow(@BindsInstance screenResolutionFlow: ScreenResolutionFlow): Builder
-        fun gameStateDependencies(@BindsInstance gameStateDependencies: GameStateDependencies): Builder
         fun gameNotPausedFlow(@BindsInstance gameNotPausedFlow: GameNotPausedFlow): Builder
         fun build(): GameComponent
     }
@@ -152,6 +151,24 @@ object GameControlsModule {
 
 @Module
 object GameControllerModule {
+    @GameScope
+    @Provides
+    fun provideGameStateHolder(
+        appComponentEntryPoint: AppComponentEntryPoint,
+        timeSpanComponentEntryPoint: TimeSpanComponentEntryPoint,
+    ): GameStateHolder {
+        return DaggerGameStateHolderComponent
+            .builder()
+            .appComponentEntryPoint(
+                appComponentEntryPoint
+            )
+            .timeSpanComponentEntryPoint(
+                timeSpanComponentEntryPoint
+            )
+            .build()
+            .gameStateHolder
+    }
+
     @GameScope
     @Provides
     fun provideGameLogic(

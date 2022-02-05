@@ -1,11 +1,11 @@
 package com.surovtsev.gamelogic.minesweeper.helpers
 
-import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.PointedCell
-import com.surovtsev.gamelogic.models.game.cellpointers.PointedCellWithSpaceBorder
 import com.surovtsev.core.models.gles.pointer.Pointer
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
+import com.surovtsev.gamelogic.dagger.GameScope
+import com.surovtsev.gamelogic.models.game.cellpointers.PointedCellWithSpaceBorder
+import com.surovtsev.gamestateholder.GameStateHolder
 import javax.inject.Inject
 
 @GameScope

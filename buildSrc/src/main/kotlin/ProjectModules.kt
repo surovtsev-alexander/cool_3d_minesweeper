@@ -1,7 +1,5 @@
 object ProjectModules {
-    object App {
-        const val app = ":app"
-    }
+    const val app = ":app"
 
     object Logic {
         object Common {

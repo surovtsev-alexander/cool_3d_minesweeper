@@ -1,9 +1,9 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic
 
-import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
 import com.surovtsev.gamestate.logic.GameState
+import com.surovtsev.gamestateholder.GameStateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
