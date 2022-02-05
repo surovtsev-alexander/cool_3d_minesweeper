@@ -18,20 +18,23 @@ val timeSpanModule = ":timespan"
 val touchListenerModule = ":touchlistener"
 val utilsModule = ":utils"
 
-val coreModules = arrayOf(
-    coreModule,
+val commonLogicModules = arrayOf(
     finiteStateMachineModule,
-    gameLogicModule,
-    gameStateModule,
-    gameStateHolderModule,
     restartableCoroutineScopeModule,
     subscriptionsHolderModule,
     timeSpanModule,
     touchListenerModule,
     utilsModule,
 )
-val logicDir = "sources/logic"
+val commonLogicDir = "sources/logic/common"
 
+val specificLogicModules = arrayOf(
+    coreModule,
+    gameLogicModule,
+    gameStateModule,
+    gameStateHolderModule,
+)
+val specificLogicDir = "sources/logic/specific"
 
 val gameScreenModule = ":gamescreen"
 val mainScreenModule = ":mainscreen"
@@ -47,31 +50,35 @@ val helpScreenModule = ":helpscreen"
 val rankingScreenModule = ":rankingscreen"
 val settingsScreenModule = ":settingsscreen"
 
-val featuresScreensModules = arrayOf(
+val optionalScreensModules = arrayOf(
     helpScreenModule,
     rankingScreenModule,
     settingsScreenModule,
 )
-val featuresScreensDir = "sources/screens/optional"
+val optionalScreensDir = "sources/screens/optional"
 /// endregion
 
 
 /// region [action]: including modules
 includeModule(
     appModule,
-    appModuleDir
+    appModuleDir,
 )
 includeModules(
-    coreModules,
-    logicDir,
+    commonLogicModules,
+    commonLogicDir,
+)
+includeModules(
+    specificLogicModules,
+    specificLogicDir,
 )
 includeModules(
     screensModules,
     screensDir,
 )
 includeModules(
-    featuresScreensModules,
-    featuresScreensDir,
+    optionalScreensModules,
+    optionalScreensDir,
 )
 /// endregion
 

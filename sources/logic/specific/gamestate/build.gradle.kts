@@ -33,8 +33,8 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Specific.core,
         )
     )
 

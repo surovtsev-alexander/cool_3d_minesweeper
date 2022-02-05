@@ -21,6 +21,13 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.compose
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -33,22 +40,27 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.gameState,
-            ProjectModules.Logic.utils,
-            ProjectModules.Logic.touchListener,
+            ProjectModules.Logic.Common.finiteStateMachine,
+            ProjectModules.Logic.Common.utils,
         )
     )
 
     defaultDependencies()
+
     testDependencies()
-
-    daggerDependencies()
-
-
-    logcatDependency()
 
     glmDependency()
 
-    coroutinesDependency()
+    roomDependencies()
+
+    gsonDependency()
+
+    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}")
+
+    logcatDependency()
+
+
+    commonComposeDependencies()
 }

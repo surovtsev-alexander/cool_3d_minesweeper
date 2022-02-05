@@ -39,9 +39,9 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.finiteStateMachine,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Common.finiteStateMachine,
+            ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Specific.core,
         )
     )
 

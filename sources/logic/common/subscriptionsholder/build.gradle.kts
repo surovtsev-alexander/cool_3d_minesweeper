@@ -1,6 +1,7 @@
 plugins {
     id(Plugins.ANDROID_LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
+    id(Plugins.KOTLIN_KAPT)
 }
 
 android {
@@ -15,12 +16,11 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -31,15 +31,16 @@ android {
 }
 
 dependencies {
-
-    includeProjectModule(
-        ProjectModules.Logic.utils
+    includeProjectModules(
+            arrayOf(
+                    ProjectModules.Logic.Common.utils,
+            )
     )
 
     defaultDependencies()
     testDependencies()
 
-    coroutinesDependency()
+    daggerDependencies()
 
-    logcatDependency()
+    coroutinesDependency()
 }

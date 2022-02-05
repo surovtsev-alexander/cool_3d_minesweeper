@@ -1,7 +1,6 @@
 plugins {
     id(Plugins.ANDROID_LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
-    id(Plugins.KOTLIN_KAPT)
 }
 
 android {
@@ -16,18 +15,12 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -38,29 +31,15 @@ android {
 }
 
 dependencies {
-    includeProjectModules(
-        arrayOf(
-            ProjectModules.Logic.finiteStateMachine,
-            ProjectModules.Logic.utils,
-        )
+
+    includeProjectModule(
+        ProjectModules.Logic.Common.utils
     )
 
     defaultDependencies()
-
     testDependencies()
 
-    glmDependency()
-
-    roomDependencies()
-
-    gsonDependency()
-
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}")
+    coroutinesDependency()
 
     logcatDependency()
-
-
-    commonComposeDependencies()
 }

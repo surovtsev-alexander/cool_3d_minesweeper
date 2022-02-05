@@ -33,18 +33,12 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Specific.gameState,
         )
     )
 
     defaultDependencies()
-
     testDependencies()
 
     daggerDependencies()
-
-    glmDependency()
-
-    coroutinesDependency()
 }

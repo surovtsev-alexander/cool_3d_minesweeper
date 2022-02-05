@@ -45,13 +45,13 @@ dependencies {
 
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Specific.core,
             ProjectModules.Screens.mainScreen,
             ProjectModules.Screens.gameScreen,
-            ProjectModules.FeatureScreens.rankingScreen,
-            ProjectModules.FeatureScreens.settingsScreen,
-            ProjectModules.FeatureScreens.helpScreen,
+            ProjectModules.Screens.Optional.rankingScreen,
+            ProjectModules.Screens.Optional.settingsScreen,
+            ProjectModules.Screens.Optional.helpScreen,
         )
     )
 

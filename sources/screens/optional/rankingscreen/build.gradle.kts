@@ -42,12 +42,12 @@ dependencies {
 
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.finiteStateMachine,
-            ProjectModules.Logic.restartableCoroutineScope,
-            ProjectModules.Logic.subscriptionsHolder,
-            ProjectModules.Logic.timeSpan,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Common.finiteStateMachine,
+            ProjectModules.Logic.Common.restartableCoroutineScope,
+            ProjectModules.Logic.Common.subscriptionsHolder,
+            ProjectModules.Logic.Common.timeSpan,
+            ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Specific.core,
         )
     )
 

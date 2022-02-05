@@ -5,7 +5,6 @@ import com.surovtsev.gamelogic.minesweeper.gamestateholder.GameStateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
-import com.surovtsev.utils.gles.renderer.DefaultScreenResolution
 import com.surovtsev.utils.gles.renderer.ScreenResolution
 import com.surovtsev.utils.gles.renderer.ScreenResolutionFlow
 import com.surovtsev.utils.math.camerainfo.CameraInfo

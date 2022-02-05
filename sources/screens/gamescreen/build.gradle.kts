@@ -41,14 +41,14 @@ android {
 dependencies {
     includeProjectModules(
         arrayOf(
-            ProjectModules.Logic.core,
-            ProjectModules.Logic.finiteStateMachine,
-            ProjectModules.Logic.gameLogic,
-            ProjectModules.Logic.restartableCoroutineScope,
-            ProjectModules.Logic.subscriptionsHolder,
-            ProjectModules.Logic.timeSpan,
-            ProjectModules.Logic.touchListener,
-            ProjectModules.Logic.utils,
+            ProjectModules.Logic.Common.finiteStateMachine,
+            ProjectModules.Logic.Common.restartableCoroutineScope,
+            ProjectModules.Logic.Common.subscriptionsHolder,
+            ProjectModules.Logic.Common.timeSpan,
+            ProjectModules.Logic.Common.touchListener,
+            ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Specific.core,
+            ProjectModules.Logic.Specific.gameLogic,
         )
     )
 
