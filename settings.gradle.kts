@@ -1,40 +1,5 @@
 rootProject.name = "cool_3d_minesweeper"
 
-
-/// region [values]: constants (Modules and Folders)
-object Modules {
-    const val app = ":app"
-    const val core = ":core"
-    const val finiteStateMachine = ":finitestatemachine"
-    const val helpScreen = ":helpscreen"
-    const val gameLogic = ":gamelogic"
-    const val gameScreen = ":gamescreen"
-    const val gameState = ":gamestate"
-    const val gameStateHolder = ":gamestateholder"
-    const val mainScreen = ":mainscreen"
-    const val rankingScreen = ":rankingscreen"
-    const val restartableCoroutineScope = ":restartablecoroutinescope"
-    const val settingsScreen = ":settingsscreen"
-    const val subscriptionsHolder = ":subscriptionsholder"
-    const val timeSpan = ":timespan"
-    const val touchListener = ":touchlistener"
-    const val utils = ":utils"
-}
-
-
-object Folders {
-    const val common = "common"
-    const val gameStateHolder = "gamestateholder"
-    const val logic = "logic"
-    const val optional = "optional"
-    const val restartableCoroutineScope = "restartablecoroutinescope"
-    const val root = "sources"
-    const val screens = "screens"
-    const val specific = "specific"
-}
-/// endregion
-
-
 /// region [action]: declare project modules tree
 projectDir(
     Folders.root,
@@ -94,6 +59,40 @@ projectDir(
             ),
         )
     }
+}
+/// endregion
+
+
+/// region [values]: constants (Modules and Folders)
+object Modules {
+    const val app = ":app"
+    const val core = ":core"
+    const val finiteStateMachine = ":finitestatemachine"
+    const val helpScreen = ":helpscreen"
+    const val gameLogic = ":gamelogic"
+    const val gameScreen = ":gamescreen"
+    const val gameState = ":gamestate"
+    const val gameStateHolder = ":gamestateholder"
+    const val mainScreen = ":mainscreen"
+    const val rankingScreen = ":rankingscreen"
+    const val restartableCoroutineScope = ":restartablecoroutinescope"
+    const val settingsScreen = ":settingsscreen"
+    const val subscriptionsHolder = ":subscriptionsholder"
+    const val timeSpan = ":timespan"
+    const val touchListener = ":touchlistener"
+    const val utils = ":utils"
+}
+
+
+object Folders {
+    const val common = "common"
+    const val gameStateHolder = "gamestateholder"
+    const val logic = "logic"
+    const val optional = "optional"
+    const val restartableCoroutineScope = "restartablecoroutinescope"
+    const val root = "sources"
+    const val screens = "screens"
+    const val specific = "specific"
 }
 /// endregion
 
