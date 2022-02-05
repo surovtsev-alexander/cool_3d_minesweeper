@@ -19,15 +19,15 @@ open class FiniteStateMachine<E: Event, D: Data>(
     private val eventProcessor: EventProcessor<E>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-
-    private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp(),
-    private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp(),
-    private val pausedStateHolder: PausedStateHolder = PausedStateHolder(),
 ) {
     companion object {
         val uiDispatcher = Dispatchers.Main
         val ioDispatcher = Dispatchers.IO
     }
+
+    private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp()
+    private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp()
+    private val pausedStateHolder: PausedStateHolder = PausedStateHolder()
 
     val queueHolder = FSMQueueHolder<E>(
         pausedStateHolder,
