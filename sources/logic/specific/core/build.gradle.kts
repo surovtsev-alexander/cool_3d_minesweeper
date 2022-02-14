@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
+    compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = Versions.Sdk.minSdk
+        targetSdk = Versions.Sdk.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,7 +26,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.AndroidX.compose
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,12 +55,7 @@ dependencies {
 
     gsonDependency()
 
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}")
-
     logcatDependency()
-
 
     commonComposeDependencies()
 }

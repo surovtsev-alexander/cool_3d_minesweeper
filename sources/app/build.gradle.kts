@@ -6,14 +6,15 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
+    compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
-        applicationId = "com.surovtsev.cool_3d_minesweeper"
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Versions.Application.id
+
+        minSdk = Versions.Sdk.minSdk
+        targetSdk = Versions.Sdk.targetSdk
+        versionCode = Versions.Library.versionCode
+        versionName = Versions.Library.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,7 +30,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.AndroidX.compose
     }
 
     compileOptions {
@@ -55,11 +56,7 @@ dependencies {
         )
     )
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
-
     defaultDependencies()
-
-    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 
     testDependencies()
 
@@ -67,51 +64,23 @@ dependencies {
 
     gsonDependency()
 
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation("androidx.cardview:cardview:1.0.0")
-
     commonComposeDependencies()
-
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-    implementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-
-
-    implementation("androidx.fragment:fragment-ktx:${Versions.fragment}")
 
     threetenabpDependency()
 
-    kotlinNavigationDependencies()
-
-    // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:${Versions.nav}")
-
-    // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:${Versions.nav}")
+    navigationDependencies()
 
     composeNavigationDependency()
 
-
-    implementation("com.google.accompanist:accompanist-navigation-animation:${Versions.animNavVersion}")
-
-    //end of navigation
+    navigationAnimationDependency()
 
     daggerDependencies()
-
-    //region Lifecycle
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}")
 
     logcatDependency()
 
     roomDependencies()
 
+    splashScreenDependency()
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0")
-
-    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
-
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
+    leakCanaryDependency()
 }

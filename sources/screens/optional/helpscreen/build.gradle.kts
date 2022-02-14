@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.compileSdk
+    compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        minSdk = Versions.Sdk.minSdk
+        targetSdk = Versions.Sdk.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,7 +26,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.AndroidX.compose
     }
 
     compileOptions {
