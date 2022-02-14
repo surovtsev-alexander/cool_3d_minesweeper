@@ -15,8 +15,8 @@ object Versions {
         private const val minor = 1 // change when you add functionality in a backward-compatible manner
         private const val build = 0 // change when you make backward-compatible bug fixes
 
-        val versionCode = (major * 100 + minor) * 100 + build
-        val versionName = "$major.$minor.$build"
+        const val versionCode = (major * 100 + minor) * 100 + build
+        const val versionName = "$major.$minor.$build"
     }
 
     const val dagger = "2.40.3"
