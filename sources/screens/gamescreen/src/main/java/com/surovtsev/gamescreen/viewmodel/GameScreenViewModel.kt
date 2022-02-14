@@ -122,22 +122,5 @@ class GameScreenViewModel @AssistedInject constructor(
 
         this.gLSurfaceView = gLSurfaceView
     }
-
-//    override fun onKeyDown(keyCode: Int): Boolean {
-//        if (
-//            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-//            keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-//        ) {
-//            flaggingEvent.onDataChanged(
-//                !(flaggingEvent.valueOrDefault)
-//            )
-//
-//            return true
-//        }
-//
-//        return false
-//    }
-
-
 }
 

@@ -82,8 +82,6 @@ fun GameScreen(
     )
 }
 
-private val pauseResumeButtonWidth = 100.dp
-
 @Composable
 fun GameScreenControls(
     stateFlow: GameScreenStateFlow,
@@ -115,6 +113,7 @@ fun GameScreenControls(
     }
 }
 
+private val pauseResumeButtonWidth = 100.dp
 
 @Composable
 fun GameView(
