@@ -7,7 +7,7 @@ import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreen
 import javax.inject.Inject
 
 @SettingsScreenScope
-class EventProcessorParameters @Inject constructor(
+class EventHandlerParameters @Inject constructor(
     val stateHolder: SettingsScreenStateHolder,
     val settingsDao: SettingsDao,
     val saveController: SaveController,

@@ -5,7 +5,7 @@ import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventChecke
 import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.data.Data
 
-class EventHandler<E: Event, D: Data>(
+class EventHandlerOld<E: Event, D: Data>(
     val eventChecker: EventChecker<E, D>,
     val eventProcessor: EventProcessor<E>,
 )

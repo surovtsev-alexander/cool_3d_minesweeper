@@ -9,7 +9,7 @@ sealed interface EventHandlingResult<E: Event> {
     ): EventHandlingResult<E>
 
     class Process<E: Event>(
-        eventProcessor: EventProcessor<E>
+        val eventProcessor: EventProcessor<E>
     ): EventHandlingResult<E>
 
     class Skip<E: Event>: EventHandlingResult<E>
@@ -17,4 +17,18 @@ sealed interface EventHandlingResult<E: Event> {
     class ChangeWith<E: Event>(
         val event: E,
     ): EventHandlingResult<E>
+
+    object Helper {
+        fun <E: Event> processOrSkipIfNull(
+            eventProcessor: EventProcessor<E>?,
+        ): EventHandlingResult<E> {
+            return if (eventProcessor == null) {
+                Skip()
+            } else {
+                Process(
+                    eventProcessor
+                )
+            }
+        }
+    }
 }

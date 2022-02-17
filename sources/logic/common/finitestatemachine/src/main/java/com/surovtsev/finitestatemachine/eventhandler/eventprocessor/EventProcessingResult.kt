@@ -8,6 +8,6 @@ sealed interface EventProcessingResult<E: Event> {
     ) : EventProcessingResult<E>
 
     class Ok<E : Event>(
-        val newEventToPush: Event?,
+        val newEventToPush: E? = null,
     ) : EventProcessingResult<E>
 }

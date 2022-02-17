@@ -11,7 +11,7 @@ import com.surovtsev.timespan.dagger.TimeSpanComponent
 import javax.inject.Inject
 
 @RankingScreenScope
-class EventProcessorParameters @Inject constructor(
+class EventHandlerParameters @Inject constructor(
     val stateHolder: RankingScreenStateHolder,
     val rankingListHelper: RankingListHelper,
     val timeSpanComponent: TimeSpanComponent,

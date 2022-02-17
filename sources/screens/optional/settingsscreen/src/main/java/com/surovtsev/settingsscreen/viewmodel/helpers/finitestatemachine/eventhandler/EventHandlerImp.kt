@@ -1,23 +1,28 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventHandlerParameters
 import javax.inject.Inject
 
-
 @SettingsScreenScope
-class EventProcessorImp @Inject constructor(
+class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventProcessor<EventToSettingsScreenViewModel> {
+): EventHandler<EventToSettingsScreenViewModel, SettingsScreenData> {
 
-    override suspend fun processEvent(event: EventToSettingsScreenViewModel): EventProcessingResult<EventToSettingsScreenViewModel> {
+    override fun handleEvent(
+        event: EventToSettingsScreenViewModel,
+        state: State<SettingsScreenData>
+    ): EventHandlingResult<EventToSettingsScreenViewModel> {
         val eventProcessor = when (event) {
             is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
@@ -30,18 +35,21 @@ class EventProcessorImp @Inject constructor(
         }
 
         return if (eventProcessor == null) {
-            EventProcessingResult.Unprocessed()
+            EventHandlingResult.Skip()
         } else {
-            eventProcessor()
+            EventHandlingResult.Process(
+                eventProcessor
+            )
         }
     }
+
 
     private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
         prepopulateSettingsTableWithDefaultValues(
             eventHandlerParameters.settingsDao
         )
 
-        return EventProcessingResult.PushNewEvent(
+        return EventProcessingResult.Ok(
             EventToSettingsScreenViewModel.LoadSettingsList
         )
     }
@@ -55,7 +63,7 @@ class EventProcessorImp @Inject constructor(
             )
         )
 
-        return EventProcessingResult.PushNewEvent(
+        return EventProcessingResult.Ok(
             EventToSettingsScreenViewModel.LoadSelectedSettings
         )
     }
@@ -106,7 +114,7 @@ class EventProcessorImp @Inject constructor(
                 )
             )
         }
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun applySettings(
@@ -128,12 +136,12 @@ class EventProcessorImp @Inject constructor(
                 settingsData
             )
 
-            return EventProcessingResult.PushNewEvent(
+            return EventProcessingResult.Ok(
                 EventToSettingsScreenViewModel.Finish
             )
         }
 
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun deleteSettings(
@@ -144,11 +152,11 @@ class EventProcessorImp @Inject constructor(
         ) {
             eventHandlerParameters.settingsDao.delete(settingsId)
 
-            return@deleteSettings EventProcessingResult.PushNewEvent(
+            return@deleteSettings EventProcessingResult.Ok(
                 EventToSettingsScreenViewModel.LoadSettingsList
             )
         }
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
@@ -163,7 +171,7 @@ class EventProcessorImp @Inject constructor(
 
         rememberSettings(selectedSettings)
 
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun rememberSettings(
@@ -179,7 +187,7 @@ class EventProcessorImp @Inject constructor(
                 )
             )
         }
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend inline fun <reified T: ScreenData> doActionIfStateIsChildIs(

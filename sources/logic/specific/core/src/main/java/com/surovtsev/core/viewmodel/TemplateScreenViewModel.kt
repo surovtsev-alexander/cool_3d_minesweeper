@@ -3,12 +3,14 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.surovtsev.core.viewmodel.finitestatemachine.eventhandler.TemplateScreenViewModelEventHandler
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
 import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventProcessor
-import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandler
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandlerOld
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
@@ -35,7 +37,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val screenStateFlow: ScreenStateFlow<D>
         get() = stateHolder.state
 
-    private val templateScreenViewModelEventHandler = EventHandler(
+    private val templateScreenViewModelEventHandlerOld = EventHandlerOld(
         TemplateScreenViewModelEventChecker<E, D>(
             mandatoryEvents.closeErrorAndFinish
         ),
@@ -45,6 +47,15 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
             noScreenData,
         )
     )
+
+    private val templateScreenViewModelEventHandler = TemplateScreenViewModelEventHandler(
+        mandatoryEvents.closeErrorAndFinish,
+        stateHolder,
+        finishActionHolder,
+        noScreenData,
+    )
+
+    abstract val eventHandlerOld: EventHandlerOld<E, D>
 
     abstract val eventHandler: EventHandler<E, D>
 
@@ -65,24 +76,24 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
             logcat { "handleEvent: $event" }
 
             val currState = stateHolder.state.value
-            val checkingResult = eventHandles.map {
-                it.eventChecker.check(event, currState)
+            val handlingResult = eventHandles.map {
+                it.handleEvent(event, currState)
             }
 
-            checkingResult.firstOrNull {
-                it !is EventCheckerResult.Skip
+            handlingResult.firstOrNull {
+                it !is EventHandlingResult.Skip
             } ?: return@launchOnIOThread
 
-            checkingResult.firstOrNull {
-                it is EventCheckerResult.RaiseError
+            handlingResult.firstOrNull {
+                it is EventHandlingResult.RaiseError
             } ?.let {
                 stateHolder.publishErrorState(
-                    (it as EventCheckerResult.RaiseError<E>).message
+                    (it as EventHandlingResult.RaiseError<E>).message
                 )
                 return@launchOnIOThread
             }
 
-            val changeEventResults = checkingResult.filterIsInstance<EventCheckerResult.ChangeWith<E>>()
+            val changeEventResults = handlingResult.filterIsInstance<EventHandlingResult.ChangeWith<E>>()
 
             val eventToProcess = when (changeEventResults.count()) {
                 0 -> {
@@ -103,18 +114,25 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
                 stateHolder.publishLoadingState()
             }
 
-            val processingResults = eventHandles.map {
-                it.eventProcessor.processEvent(eventToProcess)
+            val processingResults = handlingResult.map {
+                if (it is EventHandlingResult.Process) {
+                    it.eventProcessor.invoke()
+                } else {
+                    null
+                }
             }
 
-            val pushNewEventResults = processingResults.filterIsInstance<EventProcessingResult.PushNewEvent<E>>()
+            val pushNewEventResults = processingResults
+                .filterIsInstance<EventProcessingResult.Ok<E>>()
+                .filter { it.newEventToPush != null }
+                .map { it.newEventToPush!! }
 
             when (pushNewEventResults.count()) {
                 0 -> {
                 }
                 1 -> {
                     return@launchOnIOThread receiveEvent(
-                        pushNewEventResults[0].event
+                        pushNewEventResults[0]
                     )
                 }
                 else -> {

@@ -1,13 +1,17 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers
+package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandler
 
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventProcessorImp
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventHandlerParameters
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay
@@ -15,22 +19,14 @@ import logcat.logcat
 import javax.inject.Inject
 
 @RankingScreenScope
-class EventProcessorImp @Inject constructor(
+class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventProcessor<EventToRankingScreenViewModel>
-{
-    companion object {
-        const val MINIMAL_UI_ACTION_DELAY = 3000L
-    }
+): EventHandler<EventToRankingScreenViewModel, RankingScreenData> {
 
-    object ErrorMessages {
-        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
-        val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
-    }
-
-    override suspend fun processEvent(
-        event: EventToRankingScreenViewModel
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
+    override fun handleEvent(
+        event: EventToRankingScreenViewModel,
+        state: State<RankingScreenData>
+    ): EventHandlingResult<EventToRankingScreenViewModel> {
         val eventProcessor = when (event) {
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
             is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
@@ -40,10 +36,21 @@ class EventProcessorImp @Inject constructor(
         }
 
         return if (eventProcessor == null) {
-            EventProcessingResult.Unprocessed()
+            EventHandlingResult.Skip()
         } else {
-            eventProcessor()
+            EventHandlingResult.Process(
+                eventProcessor
+            )
         }
+    }
+
+    companion object {
+        const val MINIMAL_UI_ACTION_DELAY = 3000L
+    }
+
+    object ErrorMessages {
+        val errorWhileFilteringRankingListFactory = { code: Int -> "error (code: $code) while filtering ranking list" }
+        val errorWhileSortingListFactory = { code: Int -> "error (code: $code) while sorting list" }
     }
 
     private suspend fun loadData(
@@ -83,11 +90,11 @@ class EventProcessorImp @Inject constructor(
             saveController.loadSettingDataOrDefault()
         ).let {
             if (it != null) {
-                EventProcessingResult.PushNewEvent(
+                EventProcessingResult.Ok(
                     EventToRankingScreenViewModel.FilterList(it.id)
                 )
             } else {
-                EventProcessingResult.Processed()
+                EventProcessingResult.Ok()
             }
         }
     }
@@ -107,7 +114,7 @@ class EventProcessorImp @Inject constructor(
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
             stateHolder.publishErrorState(
-                ErrorMessages.errorWhileFilteringRankingListFactory(2)
+                EventProcessorImp.ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE in order to avoid blinking loading ui attributes.
@@ -120,8 +127,7 @@ class EventProcessorImp @Inject constructor(
             )
         }
 
-
-        return EventProcessingResult.PushNewEvent(
+        return EventProcessingResult.Ok(
             EventToRankingScreenViewModel.SortList(
                 DefaultRankingTableSortParameters
             )
@@ -139,10 +145,10 @@ class EventProcessorImp @Inject constructor(
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(1)
+                EventProcessorImp.ErrorMessages.errorWhileSortingListFactory(1)
             )
 
-            return EventProcessingResult.Processed()
+            return EventProcessingResult.Ok()
         }
 
         val filteredRankingList = rankingScreenData.rankingListWithPlaces
@@ -183,7 +189,7 @@ class EventProcessorImp @Inject constructor(
                 directionOfSortableColumns
             )
         )
-        return EventProcessingResult.Processed()
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
@@ -195,7 +201,7 @@ class EventProcessorImp @Inject constructor(
         val res = block.invoke()
 
         asyncTimeSpan.turnOff()
-        val timeToDelay = MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
+        val timeToDelay = EventProcessorImp.MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
 
         if (timeToDelay > 0) {
             delay(timeToDelay)

@@ -5,9 +5,11 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandlerOld
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventCheckerImp
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventProcessorImp
@@ -40,7 +42,9 @@ interface RankingScreenComponent {
     val restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent
     val timeSpanComponent: TimeSpanComponent
 
-    val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData>
+    val eventHandlerOld: EventHandlerOld<EventToRankingScreenViewModel, RankingScreenData>
+
+    val eventHandler: EventHandlerImp
 
     @Component.Builder
     interface Builder {
@@ -84,8 +88,8 @@ object RankingScreenModule {
     fun provideEventHandler(
         eventCheckerImp: EventCheckerImp,
         eventProcessorImp: EventProcessorImp,
-    ): EventHandler<EventToRankingScreenViewModel, RankingScreenData> {
-        return EventHandler(
+    ): EventHandlerOld<EventToRankingScreenViewModel, RankingScreenData> {
+        return EventHandlerOld(
             eventCheckerImp,
             eventProcessorImp
         )

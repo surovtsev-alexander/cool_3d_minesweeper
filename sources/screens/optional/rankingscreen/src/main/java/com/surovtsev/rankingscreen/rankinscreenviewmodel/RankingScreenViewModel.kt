@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
@@ -38,7 +39,10 @@ class RankingScreenViewModel @AssistedInject constructor(
             .stateHolder(stateHolder)
             .build()
 
-    override val eventHandler = rankingScreenComponent.eventHandler
+    override val eventHandlerOld = rankingScreenComponent.eventHandlerOld
+
+    override val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
+        rankingScreenComponent.eventHandler
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

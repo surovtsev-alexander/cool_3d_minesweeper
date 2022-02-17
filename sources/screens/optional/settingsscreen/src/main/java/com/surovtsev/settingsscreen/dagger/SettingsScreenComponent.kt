@@ -3,7 +3,8 @@ package com.surovtsev.settingsscreen.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandler
+import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandlerOld
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventHandler
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventCheckerImp
@@ -27,7 +28,9 @@ interface SettingsScreenComponent {
     val settingsDao: SettingsDao
     val saveController: SaveController
 
-    val eventHandler: SettingsScreenEventHandler
+    val eventHandlerOld: SettingsScreenEventHandler
+
+    val eventHandler: EventHandlerImp
 
     @Component.Builder
     interface Builder {
@@ -49,7 +52,7 @@ object SettingsScreenModule {
         eventCheckerImp: EventCheckerImp,
         eventProcessorImp: EventProcessorImp,
     ): SettingsScreenEventHandler {
-        return EventHandler(
+        return EventHandlerOld(
             eventCheckerImp,
             eventProcessorImp,
         )
