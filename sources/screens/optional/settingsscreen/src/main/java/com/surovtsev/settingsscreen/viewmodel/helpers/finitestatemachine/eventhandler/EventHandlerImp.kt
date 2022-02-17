@@ -11,7 +11,6 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventHandlerParameters
 import javax.inject.Inject
 
 @SettingsScreenScope

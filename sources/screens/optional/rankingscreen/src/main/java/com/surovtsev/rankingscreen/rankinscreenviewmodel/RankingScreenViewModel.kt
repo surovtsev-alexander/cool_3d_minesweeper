@@ -39,8 +39,6 @@ class RankingScreenViewModel @AssistedInject constructor(
             .stateHolder(stateHolder)
             .build()
 
-    override val eventHandlerOld = rankingScreenComponent.eventHandlerOld
-
     override val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
         rankingScreenComponent.eventHandler
 

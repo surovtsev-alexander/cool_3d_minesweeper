@@ -2,10 +2,9 @@ package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.sync.Mutex
@@ -17,8 +16,7 @@ class EventProcessorHelper<E: Event, D: Data>(
     private val stateHolder: StateHolder<D>,
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
-    private val eventChecker: EventChecker<E, D>,
-    private val eventProcessor: EventProcessor<E>,
+    private val eventHandler: EventHandler<E, D>,
 ) {
     private val processingMutex = Mutex(locked = false)
 
@@ -41,35 +39,30 @@ class EventProcessorHelper<E: Event, D: Data>(
                 }
             }
 
-            val eventCheckingResult = eventChecker.check(
+            val eventHandlingResult = eventHandler.handleEvent(
                 event,
                 stateHolder.state.value
             )
 
-            val errorMessage = when (eventCheckingResult) {
-                is EventCheckerResult.Pass -> {
+            val errorMessage = when (eventHandlingResult) {
+                is EventHandlingResult.Process -> {
                     if (event.setLoadingStateBeforeProcessing) {
                         stateHolder.publishLoadingState()
                     }
-                    val eventProcessingResult = eventProcessor.processEvent(event)
-                    if (eventProcessingResult !is EventProcessingResult.Processed<*>) {
+                    val eventProcessingResult = eventHandlingResult.eventProcessor.invoke()
+                    if (eventProcessingResult !is EventProcessingResult.Ok<*>) {
                         "internal error 1"
                     } else {
                         null
                     }
                 }
-                is EventCheckerResult.RaiseError -> {
-                    eventCheckingResult.message
+                is EventHandlingResult.RaiseError -> {
+                    eventHandlingResult.message
                 }
-                is EventCheckerResult.Unchecked -> {
+                is EventHandlingResult.Skip -> {
                     "internal error 2"
                 }
-                is EventCheckerResult.Skip -> {
-                    // todo: add implementation
-                    assert(false)
-                    null
-                }
-                is EventCheckerResult.ChangeWith -> {
+                is EventHandlingResult.ChangeWith -> {
                     // todo: add implementation
                     assert(false)
                     null

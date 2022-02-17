@@ -10,12 +10,9 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
-import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandlerOld
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
-import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventCheckerImp
-import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventProcessorImp
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenInitialState
@@ -49,15 +46,6 @@ class GameScreenViewModel @AssistedInject constructor(
             .appComponentEntryPoint(appComponentEntryPoint)
             .gameScreenStateFlow(screenStateFlow)
             .build()
-
-    override val eventHandlerOld =
-        EventHandlerOld(
-            EventCheckerImp(),
-            EventProcessorImp(
-                gameScreenComponent,
-                stateHolder,
-            ),
-        )
 
     override val eventHandler: EventHandler<EventToGameScreenViewModel, GameScreenData> =
         EventHandlerImp(

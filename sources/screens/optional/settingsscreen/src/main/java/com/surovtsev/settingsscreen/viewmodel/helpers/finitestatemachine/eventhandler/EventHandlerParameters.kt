@@ -1,4 +1,4 @@
-package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
+package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController

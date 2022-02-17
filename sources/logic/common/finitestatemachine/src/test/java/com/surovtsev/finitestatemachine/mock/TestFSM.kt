@@ -17,8 +17,7 @@ class TestFSM(
     ),
 ): FiniteStateMachine<TestEvent, TestFSMData>(
     stateHolder,
-    TestEventChecker(),
-    TestEventProcessor(stateHolder),
+    TestEventHandler(stateHolder),
     coroutineScope,
     logConfig,
 )

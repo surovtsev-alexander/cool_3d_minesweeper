@@ -5,8 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.*
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
@@ -34,8 +33,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
         .appComponentEntryPoint(appComponentEntryPoint)
         .stateHolder(stateHolder)
         .build()
-
-    override val eventHandlerOld = settingsComponent.eventHandlerOld
 
     override val eventHandler = settingsComponent.eventHandler
 }

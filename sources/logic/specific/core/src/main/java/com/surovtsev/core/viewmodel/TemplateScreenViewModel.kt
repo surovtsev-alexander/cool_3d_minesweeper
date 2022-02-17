@@ -5,11 +5,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.surovtsev.core.viewmodel.finitestatemachine.eventhandler.TemplateScreenViewModelEventHandler
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
-import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventChecker
-import com.surovtsev.core.viewmodel.helpers.TemplateScreenViewModelEventProcessor
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
-import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandlerOld
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
@@ -37,25 +34,12 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     override val screenStateFlow: ScreenStateFlow<D>
         get() = stateHolder.state
 
-    private val templateScreenViewModelEventHandlerOld = EventHandlerOld(
-        TemplateScreenViewModelEventChecker<E, D>(
-            mandatoryEvents.closeErrorAndFinish
-        ),
-        TemplateScreenViewModelEventProcessor<E, D>(
-            stateHolder,
-            finishActionHolder,
-            noScreenData,
-        )
-    )
-
     private val templateScreenViewModelEventHandler = TemplateScreenViewModelEventHandler(
         mandatoryEvents.closeErrorAndFinish,
         stateHolder,
         finishActionHolder,
         noScreenData,
     )
-
-    abstract val eventHandlerOld: EventHandlerOld<E, D>
 
     abstract val eventHandler: EventHandler<E, D>
 

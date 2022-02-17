@@ -10,8 +10,6 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventProcessorImp
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandlerhelpers.EventHandlerParameters
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay
@@ -114,7 +112,7 @@ class EventHandlerImp @Inject constructor(
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
             stateHolder.publishErrorState(
-                EventProcessorImp.ErrorMessages.errorWhileFilteringRankingListFactory(2)
+                ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE in order to avoid blinking loading ui attributes.
@@ -145,7 +143,7 @@ class EventHandlerImp @Inject constructor(
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
             stateHolder.publishErrorState(
-                EventProcessorImp.ErrorMessages.errorWhileSortingListFactory(1)
+                ErrorMessages.errorWhileSortingListFactory(1)
             )
 
             return EventProcessingResult.Ok()
@@ -201,7 +199,7 @@ class EventHandlerImp @Inject constructor(
         val res = block.invoke()
 
         asyncTimeSpan.turnOff()
-        val timeToDelay = EventProcessorImp.MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
+        val timeToDelay = MINIMAL_UI_ACTION_DELAY - asyncTimeSpan.getElapsed()
 
         if (timeToDelay > 0) {
             delay(timeToDelay)
