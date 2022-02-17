@@ -14,30 +14,51 @@ digraph G {
     subgraph cluster_1 {
         label="Logic";
 
-        Core;
-        GameLogic;
-
         subgraph cluster_2 {
-            label="Utils";
+            label="common"
+
+            FiniteStateMachine;
+
+            subgraph cluster_3 {
+                label="RestartableCoroutineScope"
+
+                RestartableCoroutineScope;
+                SubscriptionsHolder;
+            }
 
             TimeSpan;
             TouchListener;
-            Utils;
+            Utils [shape=component];
+        }
+
+        subgraph cluster_4 {
+            label="specific";
+
+            Core;
+            GameLogic;
+
+            subgraph cluster5 {
+                label = "GameStateHolder"
+
+                GameState;
+                GameStateHolder;
+            };
         };
     };
 
-    subgraph cluster_3 {
+    subgraph cluster_6 {
         label="Screens";
 
-        subgraph cluster_4 {
-            label="Features";
+        GameScreen;
+        MainScreen;
+
+        subgraph cluster_7 {
+            label="optional";
 
             HelpScreen;
             RankingScreen;
             SettingsScreen;
         };
-        GameScreen;
-        MainScreen;
     };
 
 //    App -> Core;
@@ -48,10 +69,16 @@ digraph G {
     App -> SettingsScreen;
     App -> HelpScreen;
 
-    Core -> Utils;
+//    Core -> Utils;
+//    Core -> FiniteStateMachine;
 
 //    GameLogic -> Core;
 //    GameLogic -> Utils;
+    GameLogic -> TouchListener;
+    GameLogic -> GameState;
+    GameLogic -> GameStateHolder;
+
+//    FiniteStateMachine -> Utils;
 
 //    TimeSpan -> Core;
 //    TimeSpan -> Utils;
@@ -63,14 +90,33 @@ digraph G {
 
 //    RankingScreen -> Core;
 //    RankingScreen -> Utils;
+    RankingScreen -> FiniteStateMachine;
+//    RankingScreen -> RestartableCoroutineScope;
+    RankingScreen -> SubscriptionsHolder;
     RankingScreen -> TimeSpan;
+
+    SubscriptionsHolder -> RestartableCoroutineScope;
+
+//    GameState -> Core;
+//    GameState -> Utils;
+
+//    GameStateHolder -> Core;
+    GameStateHolder -> GameState;
+
+//    RestartableCoroutineScope -> Utils;
 
 //    SettingsScreen -> Core;
 //    SettingsScreen -> Utils;
+    SettingsScreen -> FiniteStateMachine;
+
+//    SubscriptionsHolder -> Utils;
 
 //    GameScreen -> Core;
 //    GameScreen -> Utils;
+    GameScreen -> FiniteStateMachine;
     GameScreen -> GameLogic;
+//    GameScreen -> RestartableCoroutineScope;
+    GameScreen -> SubscriptionsHolder;
     GameScreen -> TouchListener;
     GameScreen -> TimeSpan;
 

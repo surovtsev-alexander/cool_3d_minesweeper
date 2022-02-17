@@ -1,8 +1,8 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows

@@ -4,8 +4,8 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData

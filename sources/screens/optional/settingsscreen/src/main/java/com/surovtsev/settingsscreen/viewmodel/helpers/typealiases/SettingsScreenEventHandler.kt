@@ -1,6 +1,6 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.typealiases
 
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandler
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 

@@ -3,8 +3,8 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemac
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData

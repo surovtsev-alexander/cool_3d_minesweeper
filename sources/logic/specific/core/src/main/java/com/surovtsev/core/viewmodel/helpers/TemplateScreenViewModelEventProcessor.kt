@@ -3,8 +3,8 @@ package com.surovtsev.core.viewmodel.helpers
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.ScreenData
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 
 class TemplateScreenViewModelEventProcessor<E: EventToViewModel, D: ScreenData>(

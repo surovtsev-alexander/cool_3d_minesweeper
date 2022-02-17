@@ -3,8 +3,8 @@ package com.surovtsev.finitestatemachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.finitestatemachine.helpers.*

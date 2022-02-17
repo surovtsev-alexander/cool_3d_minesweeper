@@ -2,10 +2,10 @@ package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventCheckerResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventprocessor.EventProcessor
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.sync.Mutex

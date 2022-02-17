@@ -9,7 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandlerOld.EventHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent

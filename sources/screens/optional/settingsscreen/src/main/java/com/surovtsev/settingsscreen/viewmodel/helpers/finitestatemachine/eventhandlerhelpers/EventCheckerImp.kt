@@ -1,7 +1,7 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandlerhelpers
 
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventChecker
-import com.surovtsev.finitestatemachine.eventhandler.eventchecker.EventCheckerResult
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventChecker
+import com.surovtsev.finitestatemachine.eventhandlerOld.eventchecker.EventCheckerResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
