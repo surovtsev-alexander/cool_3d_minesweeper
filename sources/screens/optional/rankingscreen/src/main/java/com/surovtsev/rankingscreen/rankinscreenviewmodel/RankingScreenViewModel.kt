@@ -40,15 +40,11 @@ class RankingScreenViewModel @AssistedInject constructor(
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .stateHolder(stateHolder)
+            .rankingScreenFiniteStateMachineFactory(::createFiniteStateMachine)
             .build()
 
-    private val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
-        rankingScreenComponent.eventHandler
-
-    override val finiteStateMachine = createFiniteStateMachine(
-            eventHandler,
-            CustomCoroutineScope(),
-        )
+    override val finiteStateMachine = rankingScreenComponent
+        .rankingScreenFiniteStateMachine
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

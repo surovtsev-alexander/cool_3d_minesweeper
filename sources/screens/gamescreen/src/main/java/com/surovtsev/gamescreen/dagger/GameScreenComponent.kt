@@ -6,6 +6,8 @@ import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder.GameNotPausedFlowHolder
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenFiniteStateMachine
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenFiniteStateMachineFactory
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
@@ -15,6 +17,7 @@ import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.gles.renderer.GLESRenderer
 import com.surovtsev.utils.gles.renderer.ScreenResolutionFlow
 import dagger.BindsInstance
@@ -39,7 +42,7 @@ interface GameScreenComponent: GameScreenEntryPoint {
     val touchListenerComponent: TouchListenerComponent
     val timeSpanComponent: TimeSpanComponent
 
-    val eventHandler: EventHandlerImp
+    val gameScreenFiniteStateMachine: GameScreenFiniteStateMachine
 
     @Component.Builder
     interface Builder {
@@ -48,11 +51,18 @@ interface GameScreenComponent: GameScreenEntryPoint {
         ): Builder
 
         fun gameScreenStateFlow(
-            @BindsInstance gameScreenStateFlow: GameScreenStateFlow,
+            @BindsInstance
+            gameScreenStateFlow: GameScreenStateFlow,
         ): Builder
 
         fun stateHolder(
-            @BindsInstance stateHolder: GameScreenStateHolder
+            @BindsInstance
+            stateHolder: GameScreenStateHolder
+        ): Builder
+
+        fun gameScreenFiniteStateMachineFactory(
+            @BindsInstance
+            gameScreenFiniteStateMachineFactory: GameScreenFiniteStateMachineFactory
         ): Builder
 
         fun build(
@@ -62,6 +72,18 @@ interface GameScreenComponent: GameScreenEntryPoint {
 
 @Module
 object GameScreenModule {
+    @GameScreenScope
+    @Provides
+    fun provideGameScreenFiniteStateMachine(
+        gameScreenFiniteStateMachineFactory: GameScreenFiniteStateMachineFactory,
+        eventHandler: EventHandlerImp
+    ): GameScreenFiniteStateMachine {
+        return gameScreenFiniteStateMachineFactory(
+            eventHandler,
+            CustomCoroutineScope()
+        )
+    }
+
     @GameScreenScope
     @Provides
     fun provideGLESRenderer(

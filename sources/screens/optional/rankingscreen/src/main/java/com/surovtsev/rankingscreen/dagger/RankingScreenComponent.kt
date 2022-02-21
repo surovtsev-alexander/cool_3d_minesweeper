@@ -5,13 +5,16 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenFiniteStateMachineFactory
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenFiniteStateMachine
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -36,13 +39,23 @@ interface RankingScreenComponent {
     val restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent
     val timeSpanComponent: TimeSpanComponent
 
-    val eventHandler: EventHandlerImp
+    val rankingScreenFiniteStateMachine: RankingScreenFiniteStateMachine
 
     @Component.Builder
     interface Builder {
-        fun appComponentEntryPoint(appComponentEntryPoint: AppComponentEntryPoint): Builder
+        fun appComponentEntryPoint(
+            appComponentEntryPoint: AppComponentEntryPoint
+        ): Builder
 
-        fun stateHolder(@BindsInstance stateHolder: RankingScreenStateHolder): Builder
+        fun stateHolder(
+            @BindsInstance
+            stateHolder: RankingScreenStateHolder
+        ): Builder
+
+        fun rankingScreenFiniteStateMachineFactory(
+            @BindsInstance
+            rankingScreenFiniteStateMachineFactory: RankingScreenFiniteStateMachineFactory,
+        ): Builder
 
         fun build(): RankingScreenComponent
     }
@@ -50,6 +63,17 @@ interface RankingScreenComponent {
 
 @Module
 object RankingScreenModule {
+    @RankingScreenScope
+    @Provides
+    fun provideRankingScreenFiniteStateMachine(
+        rankingScreenFiniteStateMachineFactory: RankingScreenFiniteStateMachineFactory,
+        eventHandler: EventHandlerImp,
+    ): RankingScreenFiniteStateMachine {
+        return rankingScreenFiniteStateMachineFactory(
+            eventHandler,
+            CustomCoroutineScope()
+        )
+    }
 
     @RankingScreenScope
     @Provides

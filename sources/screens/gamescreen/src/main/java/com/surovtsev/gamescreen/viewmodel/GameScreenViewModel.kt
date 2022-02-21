@@ -44,15 +44,11 @@ class GameScreenViewModel @AssistedInject constructor(
             .appComponentEntryPoint(appComponentEntryPoint)
             .gameScreenStateFlow(screenStateFlow)
             .stateHolder(stateHolder)
+            .gameScreenFiniteStateMachineFactory(::createFiniteStateMachine)
             .build()
 
-    private val eventHandler: EventHandler<EventToGameScreenViewModel, GameScreenData> =
-        gameScreenComponent.eventHandler
-
-    override val finiteStateMachine = createFiniteStateMachine(
-            eventHandler,
-            CustomCoroutineScope(),
-        )
+    override val finiteStateMachine =
+        gameScreenComponent.gameScreenFiniteStateMachine
 
     /**
      * Released in ::onDestroy and it is the reason to suppress lint warning.

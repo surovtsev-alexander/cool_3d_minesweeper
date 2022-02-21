@@ -6,11 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -30,16 +28,14 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @AssistedFactory
     interface Factory: ViewModelAssistedFactory<SettingsScreenViewModel>
 
-    private val settingsComponent = DaggerSettingsScreenComponent
+    private val settingsScreenComponent = DaggerSettingsScreenComponent
         .builder()
         .appComponentEntryPoint(appComponentEntryPoint)
         .stateHolder(stateHolder)
+        .settingsScreenFiniteStateMachineFactory(::createFiniteStateMachine)
         .build()
 
-    private val eventHandler = settingsComponent.eventHandler
-
-    override val finiteStateMachine = createFiniteStateMachine(
-            eventHandler,
-            CustomCoroutineScope(),
-        )
+    override val finiteStateMachine =
+        settingsScreenComponent
+            .settingsScreenFiniteStateMachine
 }
