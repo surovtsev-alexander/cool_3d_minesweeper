@@ -30,7 +30,7 @@ import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
-import com.surovtsev.gamescreen.viewmodel.*
+import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GLSurfaceViewCreated
@@ -57,14 +57,14 @@ fun GameScreen(
         return
     }
 
-    val eventReceiver = viewModel as GameScreenEventReceiver
+    val eventReceiver = viewModel.eventReceiver
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventReceiver.receiveEvent(
+        eventReceiver.pushEventAsync(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame
             } else {
@@ -161,7 +161,7 @@ fun GameView(
                 .width(pauseResumeButtonWidth)
             ,
             onClick = {
-                eventReceiver.receiveEvent(
+                eventReceiver.pushEventAsync(
                     EventToGameScreenViewModel.OpenGameMenuAndSetIdleState
                 )
             },
@@ -214,8 +214,10 @@ fun GameMenu(
         "main menu" to EventToGameScreenViewModel.GoToMainMenu,
     )
 
-    val closeAction = {
-        eventReceiver.receiveEvent(EventToGameScreenViewModel.CloseGameMenu)
+    val closeAction: () -> Unit = {
+        eventReceiver.pushEventAsync(
+            EventToGameScreenViewModel.CloseGameMenu
+        )
     }
 
     Dialog(
@@ -253,7 +255,7 @@ fun GameMenu(
                             .fillMaxWidth()
                             .height(80.dp),
                         onClick = {
-                            eventReceiver.receiveEvent(event)
+                            eventReceiver.pushEventAsync(event)
                         },
                         border = BorderStroke(1.dp, Color.Black)
                     ) {
@@ -340,7 +342,7 @@ fun ControlButtons(
             Button(
                 modifier = Modifier
                     .weight(1f),
-                onClick = { eventReceiver.receiveEvent(event) }
+                onClick = { eventReceiver.pushEventAsync(event) }
             ) {
                 Text(text = buttonCaption)
             }
@@ -366,7 +368,7 @@ fun ControlCheckBox(
     val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
 
     val toggleFlaggingAction = {
-        eventReceiver.receiveEvent(
+        eventReceiver.pushEventAsync(
             EventToGameScreenViewModel.ToggleFlagging
         )
     }
@@ -454,7 +456,7 @@ fun GameStatusDialog(
     }
 
     val closeDialogAction = {
-        eventReceiver.receiveEvent(
+        eventReceiver.pushEventAsync(
             EventToGameScreenViewModel.CloseGameStatusDialog
         )
     }
@@ -478,7 +480,7 @@ fun GameStatusDialog(
             Button(
                 onClick = {
                     closeDialogAction.invoke()
-                    eventReceiver.receiveEvent(
+                    eventReceiver.pushEventAsync(
                         EventToGameScreenViewModel.NewGame
                     )
                 }

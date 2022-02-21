@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
@@ -18,6 +19,7 @@ import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenD
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenInitialState
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenEventReceiver
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -34,7 +36,6 @@ class GameScreenViewModel @AssistedInject constructor(
         GameScreenData.NoData,
         GameScreenInitialState,
     ),
-    GameScreenEventReceiver,
     DefaultLifecycleObserver
 {
     @AssistedFactory
@@ -47,11 +48,19 @@ class GameScreenViewModel @AssistedInject constructor(
             .gameScreenStateFlow(screenStateFlow)
             .build()
 
-    override val eventHandler: EventHandler<EventToGameScreenViewModel, GameScreenData> =
+    private val eventHandler: EventHandler<EventToGameScreenViewModel, GameScreenData> =
         EventHandlerImp(
             gameScreenComponent,
             stateHolder
         )
+
+    override val finiteStateMachine: FiniteStateMachine<EventToGameScreenViewModel, GameScreenData>
+        get() = createFiniteStateMachine(
+            eventHandler,
+            CustomCoroutineScope(),
+        )
+
+    val eventReceiver = finiteStateMachine.queueHolder as GameScreenEventReceiver
 
     /**
      * Released in ::onDestroy and it is the reason to suppress lint warning.
@@ -73,7 +82,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onResume()
 
         if (stateHolder.state.value.data is GameScreenData.GameMenu) {
-            receiveEvent(
+            eventReceiver.pushEventAsync(
                 EventToGameScreenViewModel.SetIdleState
             )
         }
@@ -88,7 +97,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
 
         if (stateHolder.state.value.data !is GameScreenData.GameMenu) {
-            receiveEvent(
+            eventReceiver.pushEventAsync(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }

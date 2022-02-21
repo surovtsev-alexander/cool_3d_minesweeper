@@ -12,20 +12,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.core.ui.theme.GrayBackground
+import com.surovtsev.finitestatemachine.helpers.EventReceiver
+import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
 import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun ErrorDialog(
     screenStateFlow: ScreenStateFlow<ScreenData>,
     eventReceiver: EventReceiver<EventToViewModel>,
     closeErrorEvent: EventToViewModel,
-    closeErrorAndFinishEvent: EventToViewModel
+    closeErrorAndFinishEvent: EventToViewModel,
 ) {
     val state by screenStateFlow.collectAsState()
 
     val errorMessage = (state.description as? StateDescription.Error)?.message?: return
 
-    val closeAction = { eventReceiver.receiveEvent(closeErrorEvent) }
+    val closeAction: () -> Unit = {
+        eventReceiver.pushEventAsync(
+            closeErrorEvent
+        )
+    }
 
     Dialog(
         onDismissRequest = closeAction
@@ -53,7 +61,7 @@ fun ErrorDialog(
                 }
                 Button(
                     onClick = {
-                        eventReceiver.receiveEvent(
+                        eventReceiver.pushEventAsync(
                             closeErrorAndFinishEvent
                         )
                     }
@@ -66,11 +74,12 @@ fun ErrorDialog(
 }
 
 @Composable
-fun <C: EventToViewModel, D: ScreenData> ErrorDialogPlacer<C, D>.PlaceErrorDialog() {
+fun <E: EventToViewModel, D: ScreenData> ErrorDialogPlacer<E, D>.PlaceErrorDialog(
+) {
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         screenStateFlow = screenStateFlow,
-        eventReceiver = this as EventReceiver<EventToViewModel>,
+        eventReceiver = finiteStateMachine.queueHolder as FSMQueueHolder<EventToViewModel>,
         closeErrorEvent = mandatoryEvents.closeError,
         closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )

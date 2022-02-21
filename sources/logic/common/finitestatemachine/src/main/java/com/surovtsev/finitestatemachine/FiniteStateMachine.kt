@@ -3,7 +3,7 @@ package com.surovtsev.finitestatemachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
@@ -14,7 +14,7 @@ import logcat.logcat
 
 open class FiniteStateMachine<E: Event, D: Data>(
     val stateHolder: StateHolder<D>,
-    private val eventHandler: EventHandler<E, D>,
+    private val eventHandlers: EventHandlers<E, D>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 ) {
@@ -32,6 +32,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         processingWaiter,
         fsmProcessingTrigger,
         logConfig,
+        coroutineScope,
     )
 
     private val eventProcessorHelper = EventProcessorHelper(
@@ -39,7 +40,8 @@ open class FiniteStateMachine<E: Event, D: Data>(
         stateHolder,
         pausedStateHolder,
         fsmProcessingTrigger,
-        eventHandler,
+        eventHandlers,
+        queueHolder,
     )
 
     init {

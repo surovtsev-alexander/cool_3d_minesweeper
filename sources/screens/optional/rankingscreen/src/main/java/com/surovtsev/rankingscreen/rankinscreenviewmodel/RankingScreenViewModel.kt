@@ -6,12 +6,15 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenInitialState
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenEventReceiver
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -39,8 +42,16 @@ class RankingScreenViewModel @AssistedInject constructor(
             .stateHolder(stateHolder)
             .build()
 
-    override val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
+    private val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
         rankingScreenComponent.eventHandler
+
+    override val finiteStateMachine: FiniteStateMachine<EventToRankingScreenViewModel, RankingScreenData>
+        get() = createFiniteStateMachine(
+            eventHandler,
+            CustomCoroutineScope(),
+        )
+
+    val eventReceiver = finiteStateMachine.queueHolder as RankingScreenEventReceiver
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

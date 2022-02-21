@@ -28,7 +28,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.finitestatemachine.state.StateDescription
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.*
+import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenErrorDialogPlacer
@@ -41,13 +41,13 @@ fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
 ) {
-    val eventReceiver: RankingScreenEventReceiver = viewModel
+    val eventReceiver = viewModel.eventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventReceiver.receiveEvent(
+        eventReceiver.pushEventAsync(
             EventToRankingScreenViewModel
                 .LoadData
         )
@@ -180,8 +180,10 @@ fun SettingsList(
                         }
                     } else {
                         Box (
-                                modifier = Modifier.clickable { eventReceiver.receiveEvent(
-                                    EventToRankingScreenViewModel.FilterList(itemId))
+                                modifier = Modifier.clickable {
+                                    eventReceiver.pushEventAsync(
+                                        EventToRankingScreenViewModel.FilterList(itemId)
+                                    )
                                 }
                         ) {
                             SettingsDataItem(item.settingsData, winsCount)
@@ -306,7 +308,7 @@ fun RankingListColumnTitle(
                     .width(30.dp)
                     .background(buttonColor)
                     .clickable {
-                        eventReceiver.receiveEvent(
+                        eventReceiver.pushEventAsync(
                             EventToRankingScreenViewModel.SortListWithNoDelay(
                                 RankingTableSortParameters(
                                     tableColumnType,

@@ -2,6 +2,8 @@ package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
@@ -11,7 +13,8 @@ class FSMQueueHolder<E: Event>(
     private val processingWaiter: ProcessingWaiter,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val logConfig: LogConfig,
-) {
+    private val coroutineScope: CoroutineScope,
+): EventReceiver<E> {
     private val queueMutex = Mutex(locked = false)
 
     private val eventsQueue = emptyList<E>().toMutableList()
@@ -49,8 +52,13 @@ class FSMQueueHolder<E: Event>(
         } while (true)
     }
 
+    override fun pushEventAsync(event: E) {
+        coroutineScope.launch {
+            pushEvent(event)
+        }
+    }
 
-    suspend fun pushEvent(
+    override suspend fun pushEvent(
         event: E
     ) {
         queueMutex.withLock {
@@ -58,7 +66,7 @@ class FSMQueueHolder<E: Event>(
                 eventsQueue.size
             } else {
                 when (event) {
-                    is com.surovtsev.finitestatemachine.event.Event.Pause -> {
+                    is Event.Pause -> {
                         // push right after the latest Pause Event
                         // or at the beginning of the list is there is no Pause Event in queue
                         val lastPausePos = lastPausePos()
@@ -68,7 +76,7 @@ class FSMQueueHolder<E: Event>(
                             lastPausePos + 1
                         }
                     }
-                    is com.surovtsev.finitestatemachine.event.Event.Resume -> {
+                    is Event.Resume -> {
                         // push right after the latest Resume Event
                         // or right after the latest Pause Event is there is no Resume Events in queue
                         // or at the beginning of the list is there is no Pause Event in queue

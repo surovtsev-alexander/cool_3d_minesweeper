@@ -24,9 +24,9 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenErrorDialogPlacer
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenEventReceiver
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateFlow
@@ -39,12 +39,12 @@ fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    val eventReceiver: SettingsScreenEventReceiver = viewModel
+    val eventReceiver = viewModel.eventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction = {
             navController.navigateUp()
         }
-        eventReceiver.receiveEvent(
+        eventReceiver.pushEventAsync(
             EventToSettingsScreenViewModel.TriggerInitialization
         )
     }
@@ -152,7 +152,7 @@ fun SettingsList(
             items(settingsList) { item: Settings ->
                 val itemId = item.id
                 val modifier = Modifier.clickable {
-                    eventReceiver.receiveEvent(
+                    eventReceiver.pushEventAsync(
                         EventToSettingsScreenViewModel.RememberSettings(
                             item
                         )
@@ -225,7 +225,7 @@ fun SettingsDataItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        eventReceiver.receiveEvent(
+                        eventReceiver.pushEventAsync(
                             EventToSettingsScreenViewModel.DeleteSettings(settings.id)
                         )
                     }
@@ -311,7 +311,7 @@ fun BindViewModelAndUI(
         prevUIValue = uiValue
 
         val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
-            eventReceiver.receiveEvent(
+            eventReceiver.pushEventAsync(
                 EventToSettingsScreenViewModel.RememberSettingsData(
                     updatedSettingsData, fromSlider = true
                 )
@@ -341,7 +341,7 @@ fun ApplySettingsButtons(
         buttons.map { (buttonCaption, event) ->
             Button(
                 {
-                    eventReceiver.receiveEvent(
+                    eventReceiver.pushEventAsync(
                         event
                     )
                 },
