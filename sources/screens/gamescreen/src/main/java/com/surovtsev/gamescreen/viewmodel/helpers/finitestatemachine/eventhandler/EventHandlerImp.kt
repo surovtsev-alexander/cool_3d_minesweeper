@@ -96,22 +96,12 @@ class EventHandlerImp @Inject constructor(
                 stateHolder.publishIdleState(GameScreenData.NoData)
             }
 
-            val timeSpanComponent =
-                gameScreenComponent
-                    .timeSpanComponent
-            val touchListenerComponent =
-                gameScreenComponent
-                    .touchListenerComponent
-            val gameComponent =
-                gameScreenComponent
-                    .gameComponent
 
             timeSpanComponent
                 .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
                 .tick()
 
-            gameScreenComponent
-                .gLESRenderer
+            gLESRenderer
                 .openGLEventsHandler = null
 
             gameComponent.let { gC ->
@@ -120,7 +110,7 @@ class EventHandlerImp @Inject constructor(
                 uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
                 uiGameControlsFlows = gC.uiGameControlsFlows
 
-                touchListenerComponent.touchListener.bindHandlers(
+            touchListenerComponent.touchListener.bindHandlers(
                     gC.touchHandlerImp,
                     gC.moveHandlerImp
                 )
@@ -134,7 +124,7 @@ class EventHandlerImp @Inject constructor(
                 }
             )
 
-            gameScreenComponent.gLESRenderer.openGLEventsHandler =
+            gLESRenderer.openGLEventsHandler =
                 gameComponent.minesweeper.openGLEventsHandler
 
 
