@@ -4,8 +4,10 @@ import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
+import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder.GameNotPausedFlowHolder
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
+import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
@@ -37,6 +39,8 @@ interface GameScreenComponent: GameScreenEntryPoint {
     val touchListenerComponent: TouchListenerComponent
     val timeSpanComponent: TimeSpanComponent
 
+    val eventHandler: EventHandlerImp
+
     @Component.Builder
     interface Builder {
         fun appComponentEntryPoint(
@@ -45,6 +49,10 @@ interface GameScreenComponent: GameScreenEntryPoint {
 
         fun gameScreenStateFlow(
             @BindsInstance gameScreenStateFlow: GameScreenStateFlow,
+        ): Builder
+
+        fun stateHolder(
+            @BindsInstance stateHolder: GameScreenStateHolder
         ): Builder
 
         fun build(

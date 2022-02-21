@@ -46,13 +46,11 @@ class GameScreenViewModel @AssistedInject constructor(
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .gameScreenStateFlow(screenStateFlow)
+            .stateHolder(stateHolder)
             .build()
 
     private val eventHandler: EventHandler<EventToGameScreenViewModel, GameScreenData> =
-        EventHandlerImp(
-            gameScreenComponent,
-            stateHolder
-        )
+        gameScreenComponent.eventHandler
 
     override val finiteStateMachine = createFiniteStateMachine(
             eventHandler,

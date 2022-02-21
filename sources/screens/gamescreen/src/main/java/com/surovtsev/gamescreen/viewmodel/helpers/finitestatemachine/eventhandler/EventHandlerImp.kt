@@ -5,19 +5,19 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
-import com.surovtsev.gamescreen.dagger.GameScreenComponent
+import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
+import javax.inject.Inject
 
-class EventHandlerImp(
-    private val gameScreenComponent: GameScreenComponent,
-    private val stateHolder: StateHolder<GameScreenData>,
+@GameScreenScope
+class EventHandlerImp @Inject constructor(
+    private val eventHandlerParameters: EventHandlerParameters,
 ): EventHandler<EventToGameScreenViewModel, GameScreenData> {
 
     override fun handleEvent(
@@ -52,22 +52,26 @@ class EventHandlerImp(
     private suspend fun handleScreenLeaving(
         owner: LifecycleOwner
     ): EventProcessingResult<EventToGameScreenViewModel> {
-        gameScreenComponent
-            .restartableCoroutineScopeComponent
-            .subscriberImp
-            .onStop()
+        with(eventHandlerParameters) {
+            restartableCoroutineScopeComponent
+                .subscriberImp
+                .onStop()
 
-        gameScreenComponent
-            .gLESRenderer
-            .openGLEventsHandler = null
+            gLESRenderer
+                .openGLEventsHandler = null
 
-        gameScreenComponent.gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
-            EventToMinesweeper.SetGameStateToNull
-        )
+            gameComponent
+                .minesweeper
+                .eventHandler
+                .handleEventWithBlocking(
+                    EventToMinesweeper.SetGameStateToNull
+                )
 
-        stateHolder.publishIdleState(
-            GameScreenData.NoData
-        )
+            stateHolder
+                .publishIdleState(
+                    GameScreenData.NoData
+                )
+        }
 
         return EventProcessingResult.Ok()
     }
@@ -83,60 +87,65 @@ class EventHandlerImp(
             tryUnstackState(gameScreenData)
         }
 
-        doActionIfDataIsCorrect(
-            { it is GameScreenData.GameInProgress },
-            "game is in progress",
-            true
-        ) {
-            stateHolder.publishIdleState(GameScreenData.NoData)
-        }
-
-        val timeSpanComponent = gameScreenComponent
-            .timeSpanComponent
-        val touchListenerComponent = gameScreenComponent
-            .touchListenerComponent
-        val gameComponent = gameScreenComponent
-            .gameComponent
-
-        timeSpanComponent
-            .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
-            .tick()
-
-        gameScreenComponent
-            .gLESRenderer
-            .openGLEventsHandler = null
-
-        gameComponent.let { gC ->
-            gameControlsImp = gC.gameControlsImp
-
-            uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
-            uiGameControlsFlows = gC.uiGameControlsFlows
-
-            touchListenerComponent.touchListener.bindHandlers(
-                gC.touchHandlerImp,
-                gC.moveHandlerImp
-            )
-        }
-
-        gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
-            if (loadGame) {
-                EventToMinesweeper.LoadGame
-            } else {
-                EventToMinesweeper.NewGame
+        with(eventHandlerParameters) {
+            doActionIfDataIsCorrect(
+                { it is GameScreenData.GameInProgress },
+                "game is in progress",
+                true
+            ) {
+                stateHolder.publishIdleState(GameScreenData.NoData)
             }
-        )
 
-        gameScreenComponent.gLESRenderer.openGLEventsHandler =
-            gameComponent.minesweeper.openGLEventsHandler
+            val timeSpanComponent =
+                gameScreenComponent
+                    .timeSpanComponent
+            val touchListenerComponent =
+                gameScreenComponent
+                    .touchListenerComponent
+            val gameComponent =
+                gameScreenComponent
+                    .gameComponent
 
+            timeSpanComponent
+                .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
+                .tick()
 
-        setFlagging(loadGame)
+            gameScreenComponent
+                .gLESRenderer
+                .openGLEventsHandler = null
 
-        stateHolder.publishIdleState(
-            GameScreenData.GameInProgress(
-                uiGameControlsFlows!!
+            gameComponent.let { gC ->
+                gameControlsImp = gC.gameControlsImp
+
+                uiGameControlsMutableFlows = gC.uiGameControlsMutableFlows
+                uiGameControlsFlows = gC.uiGameControlsFlows
+
+                touchListenerComponent.touchListener.bindHandlers(
+                    gC.touchHandlerImp,
+                    gC.moveHandlerImp
+                )
+            }
+
+            gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
+                if (loadGame) {
+                    EventToMinesweeper.LoadGame
+                } else {
+                    EventToMinesweeper.NewGame
+                }
             )
-        )
+
+            gameScreenComponent.gLESRenderer.openGLEventsHandler =
+                gameComponent.minesweeper.openGLEventsHandler
+
+
+            setFlagging(loadGame)
+
+            stateHolder.publishIdleState(
+                GameScreenData.GameInProgress(
+                    uiGameControlsFlows!!
+                )
+            )
+        }
         return EventProcessingResult.Ok()
     }
 
@@ -150,6 +159,8 @@ class EventHandlerImp(
             val newScreenData = GameScreenData.GameMenu(
                 gameScreenData
             )
+
+            val stateHolder = eventHandlerParameters.stateHolder
 
             if (setLoadingState) {
                 stateHolder.publishLoadingState(
@@ -166,7 +177,7 @@ class EventHandlerImp(
 
     private suspend fun setIdleState(
     ): EventProcessingResult<EventToGameScreenViewModel> {
-        stateHolder.publishIdleState()
+        eventHandlerParameters.stateHolder.publishIdleState()
         return EventProcessingResult.Ok()
     }
 
@@ -237,6 +248,8 @@ class EventHandlerImp(
     ) {
         val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
 
+        val stateHolder = eventHandlerParameters.stateHolder
+
         if (prevData == null) {
             stateHolder.publishErrorState(
                 "critical error. reloading",
@@ -256,6 +269,8 @@ class EventHandlerImp(
         silent: Boolean = false,
         action: suspend (gameScreenData: GameScreenData) -> Unit
     ) {
+        val stateHolder = eventHandlerParameters.stateHolder
+
         val gameScreenData = stateHolder.getCurrentData()
 
         if (!isDataCorrect(gameScreenData)) {
