@@ -39,12 +39,12 @@ fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    val eventReceiver = viewModel.eventReceiver
+    val eventReceiver = viewModel.finiteStateMachine as SettingsScreenEventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction = {
             navController.navigateUp()
         }
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             EventToSettingsScreenViewModel.TriggerInitialization
         )
     }
@@ -152,7 +152,7 @@ fun SettingsList(
             items(settingsList) { item: Settings ->
                 val itemId = item.id
                 val modifier = Modifier.clickable {
-                    eventReceiver.pushEventAsync(
+                    eventReceiver.receiveEvent(
                         EventToSettingsScreenViewModel.RememberSettings(
                             item
                         )
@@ -225,7 +225,7 @@ fun SettingsDataItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        eventReceiver.pushEventAsync(
+                        eventReceiver.receiveEvent(
                             EventToSettingsScreenViewModel.DeleteSettings(settings.id)
                         )
                     }
@@ -311,7 +311,7 @@ fun BindViewModelAndUI(
         prevUIValue = uiValue
 
         val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
-            eventReceiver.pushEventAsync(
+            eventReceiver.receiveEvent(
                 EventToSettingsScreenViewModel.RememberSettingsData(
                     updatedSettingsData, fromSlider = true
                 )
@@ -341,7 +341,7 @@ fun ApplySettingsButtons(
         buttons.map { (buttonCaption, event) ->
             Button(
                 {
-                    eventReceiver.pushEventAsync(
+                    eventReceiver.receiveEvent(
                         event
                     )
                 },

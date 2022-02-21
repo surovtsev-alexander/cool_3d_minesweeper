@@ -57,14 +57,14 @@ fun GameScreen(
         return
     }
 
-    val eventReceiver = viewModel.eventReceiver
+    val eventReceiver = viewModel.finiteStateMachine as GameScreenEventReceiver
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame
             } else {
@@ -161,7 +161,7 @@ fun GameView(
                 .width(pauseResumeButtonWidth)
             ,
             onClick = {
-                eventReceiver.pushEventAsync(
+                eventReceiver.receiveEvent(
                     EventToGameScreenViewModel.OpenGameMenuAndSetIdleState
                 )
             },
@@ -215,7 +215,7 @@ fun GameMenu(
     )
 
     val closeAction: () -> Unit = {
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             EventToGameScreenViewModel.CloseGameMenu
         )
     }
@@ -255,7 +255,7 @@ fun GameMenu(
                             .fillMaxWidth()
                             .height(80.dp),
                         onClick = {
-                            eventReceiver.pushEventAsync(event)
+                            eventReceiver.receiveEvent(event)
                         },
                         border = BorderStroke(1.dp, Color.Black)
                     ) {
@@ -342,7 +342,7 @@ fun ControlButtons(
             Button(
                 modifier = Modifier
                     .weight(1f),
-                onClick = { eventReceiver.pushEventAsync(event) }
+                onClick = { eventReceiver.receiveEvent(event) }
             ) {
                 Text(text = buttonCaption)
             }
@@ -368,7 +368,7 @@ fun ControlCheckBox(
     val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
 
     val toggleFlaggingAction = {
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             EventToGameScreenViewModel.ToggleFlagging
         )
     }
@@ -456,7 +456,7 @@ fun GameStatusDialog(
     }
 
     val closeDialogAction = {
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             EventToGameScreenViewModel.CloseGameStatusDialog
         )
     }
@@ -480,7 +480,7 @@ fun GameStatusDialog(
             Button(
                 onClick = {
                     closeDialogAction.invoke()
-                    eventReceiver.pushEventAsync(
+                    eventReceiver.receiveEvent(
                         EventToGameScreenViewModel.NewGame
                     )
                 }

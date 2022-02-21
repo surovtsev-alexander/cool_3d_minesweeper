@@ -41,13 +41,13 @@ fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
 ) {
-    val eventReceiver = viewModel.eventReceiver
+    val eventReceiver = viewModel.finiteStateMachine as RankingScreenEventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
                 navController.navigateUp()
             }
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             EventToRankingScreenViewModel
                 .LoadData
         )
@@ -181,7 +181,7 @@ fun SettingsList(
                     } else {
                         Box (
                                 modifier = Modifier.clickable {
-                                    eventReceiver.pushEventAsync(
+                                    eventReceiver.receiveEvent(
                                         EventToRankingScreenViewModel.FilterList(itemId)
                                     )
                                 }
@@ -308,7 +308,7 @@ fun RankingListColumnTitle(
                     .width(30.dp)
                     .background(buttonColor)
                     .clickable {
-                        eventReceiver.pushEventAsync(
+                        eventReceiver.receiveEvent(
                             EventToRankingScreenViewModel.SortListWithNoDelay(
                                 RankingTableSortParameters(
                                     tableColumnType,

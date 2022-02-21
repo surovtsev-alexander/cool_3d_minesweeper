@@ -43,6 +43,4 @@ class SettingsScreenViewModel @AssistedInject constructor(
             eventHandler,
             CustomCoroutineScope(),
         )
-
-    val eventReceiver = finiteStateMachine.queueHolder
 }

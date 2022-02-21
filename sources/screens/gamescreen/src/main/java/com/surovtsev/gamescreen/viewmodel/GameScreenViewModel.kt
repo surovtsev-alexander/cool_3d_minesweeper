@@ -60,8 +60,6 @@ class GameScreenViewModel @AssistedInject constructor(
             CustomCoroutineScope(),
         )
 
-    val eventReceiver = finiteStateMachine.queueHolder as GameScreenEventReceiver
-
     /**
      * Released in ::onDestroy and it is the reason to suppress lint warning.
      *
@@ -82,7 +80,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onResume()
 
         if (stateHolder.state.value.data is GameScreenData.GameMenu) {
-            eventReceiver.pushEventAsync(
+            finiteStateMachine.receiveEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
         }
@@ -97,7 +95,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
 
         if (stateHolder.state.value.data !is GameScreenData.GameMenu) {
-            eventReceiver.pushEventAsync(
+            finiteStateMachine.receiveEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }

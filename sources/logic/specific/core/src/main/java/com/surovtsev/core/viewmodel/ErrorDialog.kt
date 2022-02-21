@@ -12,11 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.finitestatemachine.helpers.EventReceiver
-import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
+import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.StateDescription
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun ErrorDialog(
@@ -30,7 +27,7 @@ fun ErrorDialog(
     val errorMessage = (state.description as? StateDescription.Error)?.message?: return
 
     val closeAction: () -> Unit = {
-        eventReceiver.pushEventAsync(
+        eventReceiver.receiveEvent(
             closeErrorEvent
         )
     }
@@ -61,7 +58,7 @@ fun ErrorDialog(
                 }
                 Button(
                     onClick = {
-                        eventReceiver.pushEventAsync(
+                        eventReceiver.receiveEvent(
                             closeErrorAndFinishEvent
                         )
                     }
@@ -79,7 +76,7 @@ fun <E: EventToViewModel, D: ScreenData> ErrorDialogPlacer<E, D>.PlaceErrorDialo
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         screenStateFlow = screenStateFlow,
-        eventReceiver = finiteStateMachine.queueHolder as FSMQueueHolder<EventToViewModel>,
+        eventReceiver = finiteStateMachine as EventReceiver<EventToViewModel>,
         closeErrorEvent = mandatoryEvents.closeError,
         closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )

@@ -3,7 +3,6 @@ package com.surovtsev.finitestatemachine.helpers
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
@@ -14,7 +13,7 @@ class FSMQueueHolder<E: Event>(
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val logConfig: LogConfig,
     private val coroutineScope: CoroutineScope,
-): EventReceiver<E> {
+) {
     private val queueMutex = Mutex(locked = false)
 
     private val eventsQueue = emptyList<E>().toMutableList()
@@ -52,13 +51,7 @@ class FSMQueueHolder<E: Event>(
         } while (true)
     }
 
-    override fun pushEventAsync(event: E) {
-        coroutineScope.launch {
-            pushEvent(event)
-        }
-    }
-
-    override suspend fun pushEvent(
+    suspend fun pushEvent(
         event: E
     ) {
         queueMutex.withLock {

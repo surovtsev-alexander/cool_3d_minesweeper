@@ -51,8 +51,6 @@ class RankingScreenViewModel @AssistedInject constructor(
             CustomCoroutineScope(),
         )
 
-    val eventReceiver = finiteStateMachine.queueHolder as RankingScreenEventReceiver
-
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 

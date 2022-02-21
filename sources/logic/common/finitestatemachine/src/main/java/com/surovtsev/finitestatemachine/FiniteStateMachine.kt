@@ -5,6 +5,7 @@ import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.helpers.*
+import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +18,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
     private val eventHandlers: EventHandlers<E, D>,
     private val coroutineScope: CoroutineScope,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-) {
+): EventReceiver<E> {
     companion object {
         val uiDispatcher = Dispatchers.Main
         val ioDispatcher = Dispatchers.IO
@@ -69,7 +70,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         } while (true)
     }
 
-    fun receiveEvent(
+    override fun receiveEvent(
         event: E
     ) {
         if (logConfig.logLevel.isGreaterThan0()) {
