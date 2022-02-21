@@ -357,7 +357,7 @@ fun ControlCheckBox(
 ) {
     val state = stateFlow.collectAsState().value
 
-    val screenData = state.data
+    val screenData = state.data.rootScreenData()
 
     if (screenData !is GameScreenData.GameInProgress) {
         return
@@ -401,7 +401,7 @@ fun GameInfo(
 ) {
     val state = stateFlow.collectAsState().value
 
-    val screenData = state.data
+    val screenData = state.data.rootScreenData()
 
     if (screenData !is GameScreenData.GameInProgress) {
         return
