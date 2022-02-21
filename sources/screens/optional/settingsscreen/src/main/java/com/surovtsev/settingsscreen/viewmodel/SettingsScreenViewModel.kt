@@ -38,8 +38,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
 
     private val eventHandler = settingsComponent.eventHandler
 
-    override val finiteStateMachine: FiniteStateMachine<EventToSettingsScreenViewModel, SettingsScreenData>
-        get() = createFiniteStateMachine(
+    override val finiteStateMachine = createFiniteStateMachine(
             eventHandler,
             CustomCoroutineScope(),
         )

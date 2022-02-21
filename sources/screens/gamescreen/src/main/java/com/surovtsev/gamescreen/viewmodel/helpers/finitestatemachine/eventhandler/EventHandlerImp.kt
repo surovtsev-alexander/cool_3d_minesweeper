@@ -40,13 +40,9 @@ class EventHandlerImp(
             else                                                         -> null
         }
 
-        return if (eventProcessor == null) {
-            EventHandlingResult.Skip()
-        } else {
-            EventHandlingResult.Process(
-                eventProcessor
-            )
-        }
+        return EventHandlingResult.Helper.processOrSkipIfNull(
+            eventProcessor
+        )
     }
 
     private var gameControlsImp: GameControlsImp? = null

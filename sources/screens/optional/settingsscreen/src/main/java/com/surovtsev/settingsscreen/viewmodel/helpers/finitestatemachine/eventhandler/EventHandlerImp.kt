@@ -32,14 +32,10 @@ class EventHandlerImp @Inject constructor(
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
             else                                                     -> null
         }
-
-        return if (eventProcessor == null) {
-            EventHandlingResult.Skip()
-        } else {
-            EventHandlingResult.Process(
-                eventProcessor
-            )
-        }
+        
+        return EventHandlingResult.Helper.processOrSkipIfNull(
+            eventProcessor
+        )
     }
 
 

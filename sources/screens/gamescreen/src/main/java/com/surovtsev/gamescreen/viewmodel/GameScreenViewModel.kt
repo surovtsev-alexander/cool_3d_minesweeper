@@ -54,8 +54,7 @@ class GameScreenViewModel @AssistedInject constructor(
             stateHolder
         )
 
-    override val finiteStateMachine: FiniteStateMachine<EventToGameScreenViewModel, GameScreenData>
-        get() = createFiniteStateMachine(
+    override val finiteStateMachine = createFiniteStateMachine(
             eventHandler,
             CustomCoroutineScope(),
         )

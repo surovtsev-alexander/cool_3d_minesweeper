@@ -33,17 +33,13 @@ class EventHandlerImp @Inject constructor(
             else                                                     -> null
         }
 
-        return if (eventProcessor == null) {
-            EventHandlingResult.Skip()
-        } else {
-            EventHandlingResult.Process(
-                eventProcessor
-            )
-        }
+        return EventHandlingResult.Helper.processOrSkipIfNull(
+            eventProcessor
+        )
     }
 
     companion object {
-        const val MINIMAL_UI_ACTION_DELAY = 3000L
+        const val MINIMAL_UI_ACTION_DELAY = 0L
     }
 
     object ErrorMessages {

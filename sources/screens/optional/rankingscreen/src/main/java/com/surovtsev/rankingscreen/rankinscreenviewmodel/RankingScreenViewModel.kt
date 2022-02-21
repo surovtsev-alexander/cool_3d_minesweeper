@@ -45,8 +45,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     private val eventHandler: EventHandler<EventToRankingScreenViewModel, RankingScreenData> =
         rankingScreenComponent.eventHandler
 
-    override val finiteStateMachine: FiniteStateMachine<EventToRankingScreenViewModel, RankingScreenData>
-        get() = createFiniteStateMachine(
+    override val finiteStateMachine = createFiniteStateMachine(
             eventHandler,
             CustomCoroutineScope(),
         )

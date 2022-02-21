@@ -6,19 +6,21 @@ import com.surovtsev.utils.dagger.components.helpers.SubscriptionsHolderComponen
 
 object SubscriptionsHolderComponentFactoryHolderImp: SubscriptionsHolderComponentFactoryHolder {
 
-    override val create: SubscriptionsHolderComponentFactory = { restartableCoroutineScopeEntryPoint, name ->
-        DaggerSubscriptionsHolderComponent
-            .builder()
-            .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeEntryPoint)
-            .subscriptionsHolderName(name)
-            .build()
-    }
-
-    override val createAndSubscribe: SubscriptionsHolderComponentFactory = { restartableCoroutineScopeEntryPoint, name ->
-        create(restartableCoroutineScopeEntryPoint, name).also {
-            restartableCoroutineScopeEntryPoint.subscriberImp.addSubscriptionHolder(
-                it.subscriptionsHolderWithName
-            )
+    override val create: SubscriptionsHolderComponentFactory =
+        { restartableCoroutineScopeEntryPoint, name ->
+            DaggerSubscriptionsHolderComponent
+                .builder()
+                .restartableCoroutineScopeEntryPoint(restartableCoroutineScopeEntryPoint)
+                .subscriptionsHolderName(name)
+                .build()
         }
-    }
+
+    override val createAndSubscribe: SubscriptionsHolderComponentFactory =
+        { restartableCoroutineScopeEntryPoint, name ->
+            create(restartableCoroutineScopeEntryPoint, name).also {
+                restartableCoroutineScopeEntryPoint.subscriberImp.addSubscriptionHolder(
+                    it.subscriptionsHolderWithName
+                )
+            }
+        }
 }
