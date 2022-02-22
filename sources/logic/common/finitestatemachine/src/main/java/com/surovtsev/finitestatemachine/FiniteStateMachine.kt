@@ -8,17 +8,19 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import kotlinx.coroutines.CoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import logcat.logcat
 
-open class FiniteStateMachine<E: Event, D: Data>(
+class FiniteStateMachine<E: Event, D: Data>(
     val stateHolder: StateHolder<D>,
     private val eventHandlers: EventHandlers<E, D>,
-    private val coroutineScope: CoroutineScope,
+    subscriptionsHolder: SubscriptionsHolder,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-): EventReceiver<E> {
+): EventReceiver<E>, Subscription {
     companion object {
         val uiDispatcher = Dispatchers.Main
         val ioDispatcher = Dispatchers.IO
@@ -33,7 +35,6 @@ open class FiniteStateMachine<E: Event, D: Data>(
         processingWaiter,
         fsmProcessingTrigger,
         logConfig,
-        coroutineScope,
     )
 
     private val eventProcessorHelper = EventProcessorHelper(
@@ -45,8 +46,15 @@ open class FiniteStateMachine<E: Event, D: Data>(
         queueHolder,
     )
 
+    val coroutineScope = subscriptionsHolder.coroutineScope
+
     init {
-        coroutineScope.launch(ioDispatcher) {
+        subscriptionsHolder
+            .addSubscription(this)
+    }
+
+    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
+        customCoroutineScope.launch {
             handlingEventsLoop()
         }
     }
@@ -74,7 +82,7 @@ open class FiniteStateMachine<E: Event, D: Data>(
         event: E
     ) {
         if (logConfig.logLevel.isGreaterThan0()) {
-            logcat { "handleEvent: $event" }
+            logcat { "receiveEvent: $event" }
         }
 
         if (event.doNotPushToQueue) {

@@ -1,11 +1,14 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope.subscription
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import kotlinx.coroutines.CoroutineScope
 
 
 class SubscriptionsHolder(
     private val customCoroutineScope: CustomCoroutineScope
 ) {
+    val coroutineScope = customCoroutineScope as CoroutineScope
+
     companion object {
         const val NAME = "SUBSCRIPTIONS_HOLDER_NAME"
     }

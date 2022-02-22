@@ -49,12 +49,6 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun loadData(
     ): EventProcessingResult<EventToRankingScreenViewModel> {
-
-        eventHandlerParameters
-            .restartableCoroutineScopeComponent
-            .subscriberImp
-            .restart()
-
         val currTimeSpanComponent: TimeSpanComponent =
             eventHandlerParameters
                 .timeSpanComponent
@@ -71,10 +65,6 @@ class EventHandlerImp @Inject constructor(
                 winsCountMap
             )
         }
-
-        currTimeSpanComponent
-            .asyncTimeSpan
-            .flush()
 
         eventHandlerParameters.stateHolder.publishIdleState(
             settingsListIsLoaded
@@ -190,6 +180,7 @@ class EventHandlerImp @Inject constructor(
         asyncTimeSpan: AsyncTimeSpan,
         block: () -> T
     ): T {
+        asyncTimeSpan.flush()
         asyncTimeSpan.turnOn()
 
         val res = block.invoke()

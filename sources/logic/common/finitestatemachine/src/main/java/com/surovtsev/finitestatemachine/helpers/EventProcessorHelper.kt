@@ -93,10 +93,13 @@ class EventProcessorHelper<E: Event, D: Data>(
                     }
                 }
 
-                val pushNewEventResults = processingResults
+                logcat { "processingResults: $processingResults" }
+
+                processingResults
                     .filterIsInstance<EventProcessingResult.Ok<E>>()
                     .map {
                         it.newEventToPush?.let { e ->
+                            logcat { "pushEvent: $e" }
                             fsmQueueHolder.pushEvent(e)
                         }
                     }

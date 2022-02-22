@@ -68,10 +68,16 @@ object RankingScreenModule {
     fun provideRankingScreenFiniteStateMachine(
         rankingScreenFiniteStateMachineFactory: RankingScreenFiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
+        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): RankingScreenFiniteStateMachine {
         return rankingScreenFiniteStateMachineFactory(
             eventHandler,
-            CustomCoroutineScope()
+            SubscriptionsHolderComponentFactoryHolderImp
+                .createAndSubscribe(
+                    restartableCoroutineScopeComponent,
+                    "RankingScreen:FiniteStateMachine"
+                )
+                .subscriptionsHolder
         )
     }
 

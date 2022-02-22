@@ -12,7 +12,7 @@ import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
-import kotlinx.coroutines.CoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
 abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
     final override val mandatoryEvents: EventToViewModel.MandatoryEvents<E>,
@@ -42,7 +42,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
 
     fun createFiniteStateMachine(
         eventHandler: EventHandler<E, D>,
-        coroutineScope: CoroutineScope,
+        subscriptionsHolder: SubscriptionsHolder,
     ): FiniteStateMachine<E, D> {
         return FiniteStateMachine(
             stateHolder,
@@ -50,7 +50,7 @@ abstract class TemplateScreenViewModel<E: EventToViewModel, D: ScreenData>(
                 templateScreenViewModelEventHandler,
                 eventHandler,
             ),
-            coroutineScope,
+            subscriptionsHolder,
         )
     }
 

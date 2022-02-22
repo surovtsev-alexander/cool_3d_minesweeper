@@ -12,7 +12,6 @@ class FSMQueueHolder<E: Event>(
     private val processingWaiter: ProcessingWaiter,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val logConfig: LogConfig,
-    private val coroutineScope: CoroutineScope,
 ) {
     private val queueMutex = Mutex(locked = false)
 

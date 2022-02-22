@@ -3,11 +3,13 @@ package com.surovtsev.settingsscreen.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
+import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenFiniteStateMachine
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenFiniteStateMachineFactory
 import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -57,10 +59,24 @@ object SettingsScreenModule {
     fun provideSettingsScreenFiniteStateMachine(
         settingsScreenFiniteStateMachineFactory: SettingsScreenFiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
+        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): SettingsScreenFiniteStateMachine {
         return settingsScreenFiniteStateMachineFactory(
             eventHandler,
-            CustomCoroutineScope()
+            SubscriptionsHolderComponentFactoryHolderImp
+                .createAndSubscribe(
+                    restartableCoroutineScopeComponent,
+                    "SettingsScreen:FiniteStateMachine"
+                )
+                .subscriptionsHolder
         )
+    }
+
+    @SettingsScreenScope
+    @Provides
+    fun provideRestartableCoroutineScopeComponent(
+    ): RestartableCoroutineScopeComponent {
+        return DaggerRestartableCoroutineScopeComponent
+            .create()
     }
 }

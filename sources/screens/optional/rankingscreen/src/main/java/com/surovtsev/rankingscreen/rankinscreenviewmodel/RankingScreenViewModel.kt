@@ -46,6 +46,14 @@ class RankingScreenViewModel @AssistedInject constructor(
     override val finiteStateMachine = rankingScreenComponent
         .rankingScreenFiniteStateMachine
 
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        rankingScreenComponent
+            .restartableCoroutineScopeComponent
+            .subscriberImp
+            .restart()
+    }
+
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 

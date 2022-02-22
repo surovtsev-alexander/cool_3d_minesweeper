@@ -76,11 +76,17 @@ object GameScreenModule {
     @Provides
     fun provideGameScreenFiniteStateMachine(
         gameScreenFiniteStateMachineFactory: GameScreenFiniteStateMachineFactory,
-        eventHandler: EventHandlerImp
+        eventHandler: EventHandlerImp,
+        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): GameScreenFiniteStateMachine {
         return gameScreenFiniteStateMachineFactory(
             eventHandler,
-            CustomCoroutineScope()
+            SubscriptionsHolderComponentFactoryHolderImp
+                .createAndSubscribe(
+                    restartableCoroutineScopeComponent,
+                    "GameScreen:FiniteStateMachine"
+                )
+                .subscriptionsHolder
         )
     }
 

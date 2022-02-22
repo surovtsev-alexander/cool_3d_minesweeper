@@ -41,6 +41,8 @@ dependencies {
         arrayOf(
             ProjectModules.Logic.Common.finiteStateMachine,
             ProjectModules.Logic.Common.utils,
+            ProjectModules.Logic.Common.RestartableCoroutineScope.restartableCoroutineScope,
+            ProjectModules.Logic.Common.RestartableCoroutineScope.subscriptionsHolder,
             ProjectModules.Logic.Specific.core,
         )
     )
