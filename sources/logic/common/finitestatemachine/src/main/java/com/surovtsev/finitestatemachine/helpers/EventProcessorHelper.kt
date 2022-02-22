@@ -71,11 +71,15 @@ class EventProcessorHelper<E: Event, D: Data>(
                         event
                     }
                     1 -> {
-                        changeEventResults[0].event
+                        // TODO: 22.02.2022 implement
+                        stateHolder.publishErrorState(
+                            "internal error 1"
+                        )
+                        break
                     }
                     else -> {
                         stateHolder.publishErrorState(
-                            "internal error 1"
+                            "internal error 2"
                         )
                         break
                     }
@@ -104,42 +108,6 @@ class EventProcessorHelper<E: Event, D: Data>(
                         }
                     }
             } while (false)
-
-//            val eventHandlingResult = eventHandler.handleEvent(
-//                event,
-//                stateHolder.state.value
-//            )
-//
-//            val errorMessage = when (eventHandlingResult) {
-//                is EventHandlingResult.Process -> {
-//                    if (event.setLoadingStateBeforeProcessing) {
-//                        stateHolder.publishLoadingState()
-//                    }
-//                    val eventProcessingResult = eventHandlingResult.eventProcessor.invoke()
-//                    if (eventProcessingResult !is EventProcessingResult.Ok<*>) {
-//                        "internal error 1"
-//                    } else {
-//                        null
-//                    }
-//                }
-//                is EventHandlingResult.RaiseError -> {
-//                    eventHandlingResult.message
-//                }
-//                is EventHandlingResult.Skip -> {
-//                    "internal error 2"
-//                }
-//                is EventHandlingResult.ChangeWith -> {
-//                    // todo: add implementation
-//                    assert(false)
-//                    null
-//                }
-//            }
-//
-//            errorMessage?.let {
-//                stateHolder.publishErrorState(
-//                    it
-//                )
-//            }
         }
     }
 }
