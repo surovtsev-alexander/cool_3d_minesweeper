@@ -38,6 +38,7 @@ class MainActivity: MainActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen()
+
         initUI()
     }
 
@@ -168,6 +169,8 @@ class MainActivity: MainActivity() {
         }
     }
 
+
+    // TODO: 22.02.2022 remove
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

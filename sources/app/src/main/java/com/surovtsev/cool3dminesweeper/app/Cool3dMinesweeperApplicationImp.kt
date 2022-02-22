@@ -19,15 +19,15 @@ class Cool3dMinesweeperApplicationImp : Application(), Cool3dMinesweeperApplicat
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent
-            .builder()
-            .context(this)
-            .build()
-
         AndroidThreeTen.init(this)
 
         // Log all priorities in debug builds, no-op in release builds.
         AndroidLogcatLogger.installOnDebuggableApp(this)
+
+        appComponent = DaggerAppComponent
+            .builder()
+            .context(this)
+            .build()
     }
 }
 

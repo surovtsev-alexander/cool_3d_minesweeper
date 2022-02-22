@@ -55,7 +55,7 @@ class EventHandlerImp @Inject constructor(
         with(eventHandlerParameters) {
             restartableCoroutineScopeComponent
                 .subscriberImp
-                .onStop()
+                .stop()
 
             gLESRenderer
                 .openGLEventsHandler = null

@@ -82,7 +82,7 @@ fun MainScreeControls(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
                     ) {
-                        MainScreenButton(
+                        SingleButton(
                             hasSave,
                             MainScreenViewModel.ButtonNames.Help,
                             navController,
@@ -114,7 +114,7 @@ fun TwoButtonsInRow(
                     .fillMaxSize()
                     .weight(1f),
             ) {
-                MainScreenButton(
+                SingleButton(
                     hasSave,
                     buttonName,
                     navController,
@@ -127,7 +127,7 @@ fun TwoButtonsInRow(
 }
 
 @Composable
-fun MainScreenButton(
+fun SingleButton(
     hasSave: Boolean,
     buttonName: String,
     navController: NavController,

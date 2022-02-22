@@ -41,7 +41,7 @@ class SubscriberImp(
         }
     }
 
-    fun onStop() {
+    fun stop() {
         customCoroutineScope.turnOff()
     }
 
