@@ -57,7 +57,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
 
-        rankingScreenComponent.restartableCoroutineScopeComponent.subscriberImp.onStop()
+        rankingScreenComponent.restartableCoroutineScopeComponent.subscriberImp.stop()
     }
 
 //    companion object {
