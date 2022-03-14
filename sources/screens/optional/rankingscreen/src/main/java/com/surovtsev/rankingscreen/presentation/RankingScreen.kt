@@ -62,7 +62,7 @@ fun RankingScreen(
 
 @Composable
 fun RankingControls(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
     errorDialogPlacer: ErrorDialogPlacer,
 ) {
@@ -83,7 +83,7 @@ fun RankingControls(
                     modifier = Modifier.weight(3f)
                 ) {
                     SettingsList(
-                        stateFlow,
+                        screenStateFlow,
                         eventReceiver
                     )
                 }
@@ -95,7 +95,7 @@ fun RankingControls(
                     modifier = Modifier.weight(10f)
                 ) {
                     RankingList(
-                        stateFlow,
+                        screenStateFlow,
                         eventReceiver
                     )
                 }
@@ -109,7 +109,7 @@ fun RankingControls(
             }
 
             DisplayCircularIndicatorIfNeeded(
-                stateFlow,
+                screenStateFlow,
                 this
             )
 
@@ -119,10 +119,10 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val rankingScreenState = stateFlow.collectAsState().value
+    val rankingScreenState = screenStateFlow.collectAsState().value
 
     val rankingScreenData = rankingScreenState.data
 
@@ -225,10 +225,10 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val rankingScreenState = stateFlow.collectAsState().value
+    val rankingScreenState = screenStateFlow.collectAsState().value
 
     val rankingScreenData = rankingScreenState.data
 
@@ -375,10 +375,10 @@ fun RankingDataItem(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DisplayCircularIndicatorIfNeeded(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     boxScope: BoxScope,
 ) {
-    val state = stateFlow.collectAsState().value
+    val state = screenStateFlow.collectAsState().value
 
     var showLoadingElements by remember { mutableStateOf(false) }
 

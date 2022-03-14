@@ -84,7 +84,7 @@ fun GameScreen(
 
 @Composable
 fun GameScreenControls(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
@@ -95,19 +95,19 @@ fun GameScreenControls(
         errorDialogPlacer.PlaceErrorDialog()
 
         GameView(
-            stateFlow,
+            screenStateFlow,
             eventReceiver,
             glSurfaceViewCreated,
             context,
         )
 
         GameMenu(
-            stateFlow,
+            screenStateFlow,
             eventReceiver
         )
 
         GameStatusDialog(
-            stateFlow,
+            screenStateFlow,
             eventReceiver,
         )
     }
@@ -117,7 +117,7 @@ private val pauseResumeButtonWidth = 100.dp
 
 @Composable
 fun GameView(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
@@ -132,7 +132,7 @@ fun GameView(
         }
         Row {
             Controls(
-                stateFlow,
+                screenStateFlow,
                 eventReceiver,
             )
         }
@@ -149,7 +149,7 @@ fun GameView(
         ) {
             FPSLabel(
                 this,
-                stateFlow
+                screenStateFlow
             )
         }
         Spacer(
@@ -175,9 +175,9 @@ fun GameView(
 @Composable
 fun FPSLabel(
     columnScope: ColumnScope,
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
 ) {
-    val gameScreenState by stateFlow.collectAsState()
+    val gameScreenState by screenStateFlow.collectAsState()
     val gameScreenData = gameScreenState.data
 
     val text = if (gameScreenData !is GameScreenData.GameInProgress) {
@@ -199,10 +199,10 @@ fun FPSLabel(
 
 @Composable
 fun GameMenu(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val gameScreenState by stateFlow.collectAsState()
+    val gameScreenState by screenStateFlow.collectAsState()
 
     val gameScreenData = gameScreenState.data
     if (gameScreenState.description !is Description.Idle || gameScreenData !is GameScreenData.GameMenu) {
@@ -285,7 +285,7 @@ fun MinesweeperView(
 
 @Composable
 fun Controls(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
     Row(
@@ -309,7 +309,7 @@ fun Controls(
                 .weight(1f),
         ) {
             ControlCheckBox(
-                stateFlow,
+                screenStateFlow,
                 eventReceiver,
             )
         }
@@ -319,7 +319,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                stateFlow
+                screenStateFlow
             )
         }
     }
@@ -352,10 +352,10 @@ fun ControlButtons(
 
 @Composable
 fun ControlCheckBox(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val state = stateFlow.collectAsState().value
+    val state = screenStateFlow.collectAsState().value
 
     val stateData = state.data
 
@@ -404,9 +404,9 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
 ) {
-    val state = stateFlow.collectAsState().value
+    val state = screenStateFlow.collectAsState().value
 
     val stateData = state.data
 
@@ -454,10 +454,10 @@ fun TimeElapsed(
 
 @Composable
 fun GameStatusDialog(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val state by stateFlow.collectAsState()
+    val state by screenStateFlow.collectAsState()
 
     val screenData = state.data
     if (screenData !is GameScreenData.GameInProgress) {

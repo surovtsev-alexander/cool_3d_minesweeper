@@ -58,7 +58,7 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsControls(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
     errorDialogPlacer: ErrorDialogPlacer,
 ) {
@@ -78,7 +78,7 @@ fun SettingsControls(
                         .weight(1f)
                 ) {
                     SettingsList(
-                        stateFlow,
+                        screenStateFlow,
                         eventReceiver
                     )
                 }
@@ -92,7 +92,7 @@ fun SettingsControls(
 
                 Column {
                     Controls(
-                        stateFlow,
+                        screenStateFlow,
                         eventReceiver
                     )
                 }
@@ -116,10 +116,10 @@ fun SettingsControls(
 
 @Composable
 fun SettingsList(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val state = stateFlow.collectAsState().value
+    val state = screenStateFlow.collectAsState().value
 
     Column(
         Modifier
@@ -246,10 +246,10 @@ fun SettingsDataItem(
 
 @Composable
 fun Controls(
-    stateFlow: ScreenStateFlow,
+    screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val state = stateFlow.collectAsState().value
+    val state = screenStateFlow.collectAsState().value
     val screenData = state.data
 
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
