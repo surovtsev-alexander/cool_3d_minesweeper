@@ -6,15 +6,14 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
 import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
-sealed interface RankingScreenData: ScreenData {
-
-    object NoData: ScreenData.NoData, RankingScreenData, ScreenData.InitializationIsNotFinished
+sealed interface RankingScreenData: ScreenData.UserData {
 
     open class SettingsListIsLoaded(
         val settingsList: SettingsList,
         val winsCountMap: WinsCountMap,
-    ): RankingScreenData, ScreenData.InitializationIsNotFinished
+    ): RankingScreenData, InitializationIsNotFinished
 
     open class RankingListIsPrepared(
         settingsListIsLoaded: SettingsListIsLoaded,

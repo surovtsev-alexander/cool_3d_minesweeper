@@ -3,10 +3,8 @@ package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 
-sealed class GameScreenData: ScreenData {
+sealed class GameScreenData: ScreenData.UserData {
     open fun rootScreenData(): GameScreenData = this
-
-    object NoData: GameScreenData(), ScreenData.NoData, ScreenData.InitializationIsNotFinished
 
     class GameInProgress(
         val uiGameControls: UIGameControlsFlows

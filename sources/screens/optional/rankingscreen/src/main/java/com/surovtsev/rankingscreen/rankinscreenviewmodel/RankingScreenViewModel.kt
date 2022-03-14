@@ -9,8 +9,6 @@ import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenInitialState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,8 +21,6 @@ class RankingScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel(
         EventToRankingScreenViewModel.MandatoryEvents,
-        RankingScreenData.NoData,
-        RankingScreenInitialState,
     )
 //    RequestPermissionsResultReceiver,
 {

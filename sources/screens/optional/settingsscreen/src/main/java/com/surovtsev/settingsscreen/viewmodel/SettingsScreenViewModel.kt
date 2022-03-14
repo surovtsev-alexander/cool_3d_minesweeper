@@ -8,7 +8,6 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
-import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,8 +19,6 @@ class SettingsScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel(
         EventToSettingsScreenViewModel.MandatoryEvents,
-        SettingsScreenData.NoData,
-        SettingsScreenInitialState,
     ),
     DefaultLifecycleObserver
 {

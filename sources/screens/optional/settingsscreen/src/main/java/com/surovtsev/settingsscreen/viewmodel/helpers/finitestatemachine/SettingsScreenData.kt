@@ -3,15 +3,14 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
 
-sealed interface SettingsScreenData: ScreenData {
-
-    object NoData: SettingsScreenData, ScreenData.NoData, ScreenData.InitializationIsNotFinished
+sealed interface SettingsScreenData: ScreenData.UserData {
 
     open class SettingsLoaded(
         val settingsList: SettingsList,
-    ): SettingsScreenData, ScreenData.InitializationIsNotFinished
+    ): SettingsScreenData, InitializationIsNotFinished
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,

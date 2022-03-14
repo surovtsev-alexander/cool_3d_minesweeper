@@ -1,3 +1,9 @@
 package com.surovtsev.finitestatemachine.state.data
 
-interface Data
+sealed interface Data {
+    object NoData: Data, InitializationIsNotFinished
+
+    interface UserData: Data
+}
+
+interface InitializationIsNotFinished

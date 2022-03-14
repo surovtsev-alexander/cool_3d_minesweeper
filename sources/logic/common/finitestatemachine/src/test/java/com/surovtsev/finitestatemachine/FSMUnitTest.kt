@@ -4,10 +4,8 @@ import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.mock.TestEvent
 import com.surovtsev.finitestatemachine.mock.TestEventHandler
-import com.surovtsev.finitestatemachine.mock.TestFSMData
-import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.description.Description
-import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
@@ -43,10 +41,7 @@ class FSMUnitTest {
     @Before
     fun setup() {
         coroutineScope = CustomCoroutineScope(dispatcher = Dispatchers.IO).also {
-            val stateHolder = StateHolderImp(
-                State(Description.Idle, TestFSMData),
-                false
-            )
+            val stateHolder = StateHolder(false)
             fsm = FiniteStateMachine(
                 stateHolder,
                 arrayOf(

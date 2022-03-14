@@ -10,39 +10,33 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
 
-interface StateHolder {
-    val state: StateFlow<State>
+class StateHolder(
+    private val publishStateInUIThread: Boolean = false,
+    initialState: State = defaultInitialState
+) {
+
+    companion object {
+        val defaultInitialState = State(
+            Description.Idle,
+            Data.NoData,
+        )
+    }
+
+    private val _state: MutableStateFlow<State> = MutableStateFlow(
+        initialState
+    )
+
+    val state: StateFlow<State> = _state.asStateFlow()
+
+    val data: Data
+        get() = state.value.data
+
+    suspend fun publishDefaultInitialState() {
+        publishNewState(defaultInitialState)
+    }
 
     suspend fun publishLoadingState(
         newData: Data = data
-    )
-
-    suspend fun publishErrorState(
-        message: String,
-        newData: Data = data
-    )
-
-    suspend fun publishIdleState(
-        newData: Data = data
-    )
-
-    suspend fun publishNewState(
-        newDescription: Description,
-        newData: Data = data,
-    )
-
-    val data: Data
-}
-
-class StateHolderImp(
-    initialState: State,
-    private val publishStateInUIThread: Boolean = false
-): StateHolder {
-    private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
-    override val state: StateFlow<State> = _state.asStateFlow()
-
-    override suspend fun publishLoadingState(
-        newData: Data
     ) {
         publishNewState(
             Description.Loading,
@@ -50,9 +44,9 @@ class StateHolderImp(
         )
     }
 
-    override suspend fun publishErrorState(
+    suspend fun publishErrorState(
         message: String,
-        newData: Data
+        newData: Data = data
     ) {
         publishNewState(
             Description.Error(
@@ -62,8 +56,8 @@ class StateHolderImp(
         )
     }
 
-    override suspend fun publishIdleState(
-        newData: Data
+    suspend fun publishIdleState(
+        newData: Data = data
     ) {
         publishNewState(
             Description.Idle,
@@ -71,15 +65,23 @@ class StateHolderImp(
         )
     }
 
-    override suspend fun publishNewState(
+    private suspend fun publishNewState(
         newDescription: Description,
         newData: Data,
     ) {
-        val publishingAction = {
-            _state.value = State(
+        publishNewState(
+            State(
                 newDescription,
-                newData,
+                newData
             )
+        )
+    }
+
+    private suspend fun publishNewState(
+        state: State
+    ) {
+        val publishingAction = {
+            _state.value = state
         }
 
         if (publishStateInUIThread) {
@@ -90,7 +92,4 @@ class StateHolderImp(
             publishingAction.invoke()
         }
     }
-
-    override val data: Data
-        get() = state.value.data
 }

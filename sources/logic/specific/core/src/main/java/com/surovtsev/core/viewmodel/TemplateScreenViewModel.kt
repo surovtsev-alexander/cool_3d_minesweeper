@@ -7,17 +7,13 @@ import com.surovtsev.core.viewmodel.finitestatemachine.eventhandler.TemplateScre
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
-import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
 abstract class TemplateScreenViewModel(
     final override val mandatoryEvents: EventToViewModel.MandatoryEvents,
-    final override val noScreenData: ScreenData,
-    initialState: State,
 ):
     ViewModel(),
     ErrorDialogPlacer,
@@ -26,10 +22,7 @@ abstract class TemplateScreenViewModel(
 {
     val finishActionHolder = FinishActionHolder()
 
-    protected val stateHolder: StateHolder = StateHolderImp(
-        initialState,
-        true
-    )
+    protected val stateHolder: StateHolder = StateHolder(true)
     override val screenStateFlow: ScreenStateFlow
         get() = stateHolder.state
 
@@ -37,7 +30,6 @@ abstract class TemplateScreenViewModel(
         mandatoryEvents.closeErrorAndFinish,
         stateHolder,
         finishActionHolder,
-        noScreenData,
     )
 
     fun createFiniteStateMachine(

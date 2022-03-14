@@ -14,7 +14,6 @@ import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
-import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenInitialState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,8 +27,6 @@ class GameScreenViewModel @AssistedInject constructor(
 ):
     TemplateScreenViewModel(
         EventToGameScreenViewModel.MandatoryEvents,
-        GameScreenData.NoData,
-        GameScreenInitialState,
     ),
     DefaultLifecycleObserver
 {

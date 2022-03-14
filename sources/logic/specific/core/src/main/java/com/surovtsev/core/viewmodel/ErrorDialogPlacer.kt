@@ -8,7 +8,6 @@ typealias ScreenStateFlow = StateFlow<State>
 
 interface ErrorDialogPlacer {
     val mandatoryEvents: EventToViewModel.MandatoryEvents
-    val noScreenData: ScreenData
     val screenStateFlow: ScreenStateFlow
     val finiteStateMachine: FiniteStateMachine
 }

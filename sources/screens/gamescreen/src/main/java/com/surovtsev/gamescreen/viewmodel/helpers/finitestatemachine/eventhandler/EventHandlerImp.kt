@@ -6,6 +6,7 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
@@ -67,11 +68,6 @@ class EventHandlerImp @Inject constructor(
                 .handleEventWithBlocking(
                     EventToMinesweeper.SetGameStateToNull
                 )
-
-            stateHolder
-                .publishIdleState(
-                    GameScreenData.NoData
-                )
         }
 
         return EventProcessingResult.Ok()
@@ -94,7 +90,7 @@ class EventHandlerImp @Inject constructor(
                 "game is in progress",
                 true
             ) {
-                stateHolder.publishIdleState(GameScreenData.NoData)
+                stateHolder.publishDefaultInitialState()
             }
 
 
@@ -244,7 +240,7 @@ class EventHandlerImp @Inject constructor(
         if (prevData == null) {
             stateHolder.publishErrorState(
                 "critical error. reloading",
-                GameScreenData.NoData,
+                Data.NoData,
             )
             return
         }
@@ -262,7 +258,7 @@ class EventHandlerImp @Inject constructor(
     ) {
         val stateHolder = eventHandlerParameters.stateHolder
 
-        val gameScreenData = stateHolder.data as GameScreenData?
+        val gameScreenData = stateHolder.data as? GameScreenData
 
         // TODO: refactor
         val msg = if (gameScreenData == null) {
