@@ -20,11 +20,11 @@ import javax.inject.Inject
 @RankingScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<RankingScreenData> {
+): EventHandler {
 
     override fun handleEvent(
         event: Event,
-        state: State<RankingScreenData>
+        state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
@@ -95,7 +95,7 @@ class EventHandlerImp @Inject constructor(
                 )
 
         val stateHolder = eventHandlerParameters.stateHolder
-        val rankingScreenData = stateHolder.getCurrentData()
+        val rankingScreenData = stateHolder.data
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
             stateHolder.publishErrorState(

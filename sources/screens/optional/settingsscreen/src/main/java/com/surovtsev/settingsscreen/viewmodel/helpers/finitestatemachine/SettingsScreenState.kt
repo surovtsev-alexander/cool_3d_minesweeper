@@ -1,10 +1,10 @@
 package com.surovtsev.settingsscreen.viewmodel
 
-import com.surovtsev.finitestatemachine.state.StateDescription
-import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
+import com.surovtsev.finitestatemachine.state.description.Description
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 
-val SettingsScreenInitialState = StateDescriptionWithData(
-    StateDescription.Idle,
+val SettingsScreenInitialState = State(
+    Description.Idle,
     SettingsScreenData.NoData
 )

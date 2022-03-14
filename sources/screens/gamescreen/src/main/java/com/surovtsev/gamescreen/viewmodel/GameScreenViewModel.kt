@@ -26,7 +26,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<GameScreenData>(
+    TemplateScreenViewModel(
         EventToGameScreenViewModel.MandatoryEvents,
         GameScreenData.NoData,
         GameScreenInitialState,
@@ -40,13 +40,13 @@ class GameScreenViewModel @AssistedInject constructor(
         DaggerGameScreenComponent
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
-            .gameScreenStateFlow(screenStateFlow)
+            .screenStateFlow(screenStateFlow)
             .stateHolder(stateHolder)
-            .gameScreenFiniteStateMachineFactory(::createFiniteStateMachine)
+            .finiteStateMachineFactory(::createFiniteStateMachine)
             .build()
 
     override val finiteStateMachine =
-        gameScreenComponent.gameScreenFiniteStateMachine
+        gameScreenComponent.finiteStateMachine
 
     /**
      * Released in ::onDestroy and it is the reason to suppress lint warning.

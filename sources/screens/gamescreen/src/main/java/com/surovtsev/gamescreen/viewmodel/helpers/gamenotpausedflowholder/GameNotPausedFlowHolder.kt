@@ -1,10 +1,10 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder
 
-import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 @GameScreenScope
 class GameNotPausedFlowHolder @Inject constructor(
-    private val gameScreenStateFlow: GameScreenStateFlow,
+    private val screenStateFlow: ScreenStateFlow,
     restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
 ): Subscription {
 
@@ -37,8 +37,8 @@ class GameNotPausedFlowHolder @Inject constructor(
 
     override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         val gameNotPausedFlowLocal = runBlocking {
-            gameScreenStateFlow.map { screenState ->
-                screenState.description is StateDescription.Idle &&
+            screenStateFlow.map { screenState ->
+                screenState.description is Description.Idle &&
                         screenState.data is GameScreenData.GameInProgress
             }.stateIn(
                 customCoroutineScope

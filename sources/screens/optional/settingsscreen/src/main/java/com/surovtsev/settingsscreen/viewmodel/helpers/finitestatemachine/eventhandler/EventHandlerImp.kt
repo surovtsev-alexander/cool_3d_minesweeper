@@ -17,11 +17,11 @@ import javax.inject.Inject
 @SettingsScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<SettingsScreenData> {
+): EventHandler {
 
     override fun handleEvent(
         event: Event,
-        state: State<SettingsScreenData>
+        state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization

@@ -3,9 +3,13 @@ package com.surovtsev.finitestatemachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.mock.TestEvent
-import com.surovtsev.finitestatemachine.mock.TestFSM
-import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.mock.TestEventHandler
+import com.surovtsev.finitestatemachine.mock.TestFSMData
+import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.description.Description
+import com.surovtsev.finitestatemachine.stateholder.StateHolderImp
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import logcat.LogcatLogger
@@ -26,7 +30,7 @@ class FSMUnitTest {
     )
 
     private var coroutineScope: CustomCoroutineScope? = null
-    private var fsm: TestFSM? = null
+    private var fsm: FiniteStateMachine? = null
 
     companion object {
         @JvmStatic
@@ -39,9 +43,17 @@ class FSMUnitTest {
     @Before
     fun setup() {
         coroutineScope = CustomCoroutineScope(dispatcher = Dispatchers.IO).also {
-            fsm = TestFSM(
-                it,
-                testLogConfig,
+            val stateHolder = StateHolderImp(
+                State(Description.Idle, TestFSMData),
+                false
+            )
+            fsm = FiniteStateMachine(
+                stateHolder,
+                arrayOf(
+                    TestEventHandler(stateHolder)
+                ),
+                SubscriptionsHolder(it),
+                testLogConfig
             )
         }
     }
@@ -61,7 +73,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is Description.Idle)
     }
 
     @Test
@@ -85,7 +97,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is Description.Idle)
     }
 
     @Test
@@ -97,6 +109,6 @@ class FSMUnitTest {
 
 
         // assert
-        assert(fsm.stateHolder.state.value.description is StateDescription.Idle)
+        assert(fsm.stateHolder.state.value.description is Description.Idle)
     }
 }

@@ -2,14 +2,14 @@ package com.surovtsev.gamescreen.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
+import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
+import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.finitestatemachine.FiniteStateMachine
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
 import com.surovtsev.gamelogic.dagger.GameComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
 import com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder.GameNotPausedFlowHolder
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenFiniteStateMachine
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenFiniteStateMachineFactory
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
@@ -17,7 +17,6 @@ import com.surovtsev.timespan.dagger.DaggerTimeSpanComponent
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.touchlistener.dagger.DaggerTouchListenerComponent
 import com.surovtsev.touchlistener.dagger.TouchListenerComponent
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.gles.renderer.GLESRenderer
 import com.surovtsev.utils.gles.renderer.ScreenResolutionFlow
 import dagger.BindsInstance
@@ -42,7 +41,7 @@ interface GameScreenComponent: GameScreenEntryPoint {
     val touchListenerComponent: TouchListenerComponent
     val timeSpanComponent: TimeSpanComponent
 
-    val gameScreenFiniteStateMachine: GameScreenFiniteStateMachine
+    val finiteStateMachine: FiniteStateMachine
 
     @Component.Builder
     interface Builder {
@@ -50,19 +49,19 @@ interface GameScreenComponent: GameScreenEntryPoint {
             appComponentEntryPoint: AppComponentEntryPoint
         ): Builder
 
-        fun gameScreenStateFlow(
+        fun screenStateFlow(
             @BindsInstance
-            gameScreenStateFlow: GameScreenStateFlow,
+            screenStateFlow: ScreenStateFlow,
         ): Builder
 
         fun stateHolder(
             @BindsInstance
-            stateHolder: GameScreenStateHolder
+            stateHolder: StateHolder
         ): Builder
 
-        fun gameScreenFiniteStateMachineFactory(
+        fun finiteStateMachineFactory(
             @BindsInstance
-            gameScreenFiniteStateMachineFactory: GameScreenFiniteStateMachineFactory
+            finiteStateMachineFactory: FiniteStateMachineFactory
         ): Builder
 
         fun build(
@@ -75,11 +74,11 @@ object GameScreenModule {
     @GameScreenScope
     @Provides
     fun provideGameScreenFiniteStateMachine(
-        gameScreenFiniteStateMachineFactory: GameScreenFiniteStateMachineFactory,
+        finiteStateMachineFactory: FiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
         restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
-    ): GameScreenFiniteStateMachine {
-        return gameScreenFiniteStateMachineFactory(
+    ): FiniteStateMachine {
+        return finiteStateMachineFactory(
             eventHandler,
             SubscriptionsHolderComponentFactoryHolderImp
                 .createAndSubscribe(

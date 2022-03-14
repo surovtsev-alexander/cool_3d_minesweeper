@@ -9,24 +9,25 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.data.Data
+import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 
-class TemplateScreenViewModelEventHandler<D: ScreenData>(
+class TemplateScreenViewModelEventHandler(
     private val closeErrorAndFinishEvent: Event,
-    private val stateHolder: StateHolder<D>,
+    private val stateHolder: StateHolder,
     private val finishActionHolder: FinishActionHolder,
-    private val noScreenData: D,
-    ): EventHandler<D> {
+    private val noScreenData: Data,
+    ): EventHandler {
 
     override fun handleEvent(
         event: Event,
-        state: State<D>
+        state: State
     ): EventHandlingResult {
         val screenData = state.data
 
         do {
-            if (state.description !is StateDescription.Error) {
+            if (state.description !is Description.Error) {
                 break
             }
 

@@ -21,7 +21,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<RankingScreenData>(
+    TemplateScreenViewModel(
         EventToRankingScreenViewModel.MandatoryEvents,
         RankingScreenData.NoData,
         RankingScreenInitialState,
@@ -36,11 +36,11 @@ class RankingScreenViewModel @AssistedInject constructor(
             .builder()
             .appComponentEntryPoint(appComponentEntryPoint)
             .stateHolder(stateHolder)
-            .rankingScreenFiniteStateMachineFactory(::createFiniteStateMachine)
+            .finiteStateMachineFactory(::createFiniteStateMachine)
             .build()
 
     override val finiteStateMachine = rankingScreenComponent
-        .rankingScreenFiniteStateMachine
+        .finiteStateMachine
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)

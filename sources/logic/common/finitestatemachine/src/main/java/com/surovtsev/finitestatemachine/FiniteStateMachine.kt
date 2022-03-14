@@ -6,7 +6,6 @@ import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
-import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
@@ -15,9 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import logcat.logcat
 
-class FiniteStateMachine<D: Data>(
-    val stateHolder: StateHolder<D>,
-    private val eventHandlers: EventHandlers<D>,
+class FiniteStateMachine(
+    val stateHolder: StateHolder,
+    private val eventHandlers: EventHandlers,
     subscriptionsHolder: SubscriptionsHolder,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 ): EventReceiver, Subscription {

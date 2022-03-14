@@ -1,7 +1,0 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel
-
-import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
-
-typealias RankingScreenFiniteStateMachineFactory =
-    FiniteStateMachineFactory<RankingScreenData>

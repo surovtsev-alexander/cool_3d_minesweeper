@@ -1,3 +1,3 @@
 package com.surovtsev.finitestatemachine.eventhandler
 
-typealias EventHandlers<D> = Array<EventHandler<D>>
+typealias EventHandlers = Array<EventHandler>

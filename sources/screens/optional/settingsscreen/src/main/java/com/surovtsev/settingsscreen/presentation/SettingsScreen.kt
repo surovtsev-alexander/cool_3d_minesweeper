@@ -23,13 +23,13 @@ import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.core.viewmodel.ScreenStateFlow
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenErrorDialogPlacer
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateFlow
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingUIControl
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
@@ -52,15 +52,15 @@ fun SettingsScreen(
     SettingsControls(
         viewModel.screenStateFlow,
         eventReceiver,
-        viewModel as SettingsScreenErrorDialogPlacer,
+        viewModel as ErrorDialogPlacer,
     )
 }
 
 @Composable
 fun SettingsControls(
-    stateFlow: SettingsScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
-    errorDialogPlacer: SettingsScreenErrorDialogPlacer,
+    errorDialogPlacer: ErrorDialogPlacer,
 ) {
     MinesweeperTheme {
 
@@ -116,7 +116,7 @@ fun SettingsControls(
 
 @Composable
 fun SettingsList(
-    stateFlow: SettingsScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
     val state = stateFlow.collectAsState().value
@@ -246,7 +246,7 @@ fun SettingsDataItem(
 
 @Composable
 fun Controls(
-    stateFlow: SettingsScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
     val state = stateFlow.collectAsState().value

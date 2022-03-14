@@ -2,13 +2,13 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventh
 
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
 import javax.inject.Inject
 
 @SettingsScreenScope
 class EventHandlerParameters @Inject constructor(
-    val stateHolder: SettingsScreenStateHolder,
+    val stateHolder: StateHolder,
     val settingsDao: SettingsDao,
     val saveController: SaveController,
 )

@@ -14,23 +14,23 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
-abstract class TemplateScreenViewModel<D: ScreenData>(
+abstract class TemplateScreenViewModel(
     final override val mandatoryEvents: EventToViewModel.MandatoryEvents,
-    final override val noScreenData: D,
-    initialState: State<D>,
+    final override val noScreenData: ScreenData,
+    initialState: State,
 ):
     ViewModel(),
-    ErrorDialogPlacer<D>,
+    ErrorDialogPlacer,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
     DefaultLifecycleObserver
 {
     val finishActionHolder = FinishActionHolder()
 
-    protected val stateHolder: StateHolder<D> = StateHolderImp(
+    protected val stateHolder: StateHolder = StateHolderImp(
         initialState,
         true
     )
-    override val screenStateFlow: ScreenStateFlow<D>
+    override val screenStateFlow: ScreenStateFlow
         get() = stateHolder.state
 
     private val templateScreenViewModelEventHandler = TemplateScreenViewModelEventHandler(
@@ -41,9 +41,9 @@ abstract class TemplateScreenViewModel<D: ScreenData>(
     )
 
     fun createFiniteStateMachine(
-        eventHandler: EventHandler<D>,
+        eventHandler: EventHandler,
         subscriptionsHolder: SubscriptionsHolder,
-    ): FiniteStateMachine<D> {
+    ): FiniteStateMachine {
         return FiniteStateMachine(
             stateHolder,
             arrayOf(

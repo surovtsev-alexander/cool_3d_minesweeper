@@ -18,7 +18,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<SettingsScreenData>(
+    TemplateScreenViewModel(
         EventToSettingsScreenViewModel.MandatoryEvents,
         SettingsScreenData.NoData,
         SettingsScreenInitialState,
@@ -32,10 +32,10 @@ class SettingsScreenViewModel @AssistedInject constructor(
         .builder()
         .appComponentEntryPoint(appComponentEntryPoint)
         .stateHolder(stateHolder)
-        .settingsScreenFiniteStateMachineFactory(::createFiniteStateMachine)
+        .finiteStateMachineFactory(::createFiniteStateMachine)
         .build()
 
     override val finiteStateMachine =
         settingsScreenComponent
-            .settingsScreenFiniteStateMachine
+            .finiteStateMachine
 }

@@ -3,12 +3,12 @@ package com.surovtsev.settingsscreen.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
+import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
+import com.surovtsev.finitestatemachine.FiniteStateMachine
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenFiniteStateMachine
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenFiniteStateMachineFactory
-import com.surovtsev.settingsscreen.viewmodel.helpers.typealiases.SettingsScreenStateHolder
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import dagger.BindsInstance
 import dagger.Component
@@ -29,7 +29,7 @@ interface SettingsScreenComponent {
     val settingsDao: SettingsDao
     val saveController: SaveController
 
-    val settingsScreenFiniteStateMachine: SettingsScreenFiniteStateMachine
+    val finiteStateMachine: FiniteStateMachine
 
     @Component.Builder
     interface Builder {
@@ -39,12 +39,12 @@ interface SettingsScreenComponent {
 
         fun stateHolder(
             @BindsInstance
-            stateHolder: SettingsScreenStateHolder
+            stateHolder: StateHolder
         ): Builder
 
-        fun settingsScreenFiniteStateMachineFactory(
+        fun finiteStateMachineFactory(
             @BindsInstance
-            settingsScreenFiniteStateMachineFactory: SettingsScreenFiniteStateMachineFactory
+            finiteStateMachineFactory: FiniteStateMachineFactory
         ): Builder
 
         fun build(): SettingsScreenComponent
@@ -57,11 +57,11 @@ object SettingsScreenModule {
     @SettingsScreenScope
     @Provides
     fun provideSettingsScreenFiniteStateMachine(
-        settingsScreenFiniteStateMachineFactory: SettingsScreenFiniteStateMachineFactory,
+        finiteStateMachineFactory: FiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
         restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
-    ): SettingsScreenFiniteStateMachine {
-        return settingsScreenFiniteStateMachineFactory(
+    ): FiniteStateMachine {
+        return finiteStateMachineFactory(
             eventHandler,
             SubscriptionsHolderComponentFactoryHolderImp
                 .createAndSubscribe(

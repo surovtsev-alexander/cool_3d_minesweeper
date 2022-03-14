@@ -5,18 +5,17 @@ import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
-import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
-class EventProcessorHelper<D: Data>(
+class EventProcessorHelper(
     private val logConfig: LogConfig,
-    private val stateHolder: StateHolder<D>,
+    private val stateHolder: StateHolder,
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
-    private val eventHandlers: EventHandlers<D>,
+    private val eventHandlers: EventHandlers,
     private val fsmQueueHolder: FSMQueueHolder,
 ) {
     private val processingMutex = Mutex(locked = false)

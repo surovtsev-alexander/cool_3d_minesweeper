@@ -4,8 +4,8 @@ import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
-typealias FiniteStateMachineFactory<D> =
+typealias FiniteStateMachineFactory =
     (
-        eventHandler: EventHandler<D>,
+        eventHandler: EventHandler,
         subscriptionsHolder: SubscriptionsHolder,
-    ) -> FiniteStateMachine<D>
+    ) -> FiniteStateMachine

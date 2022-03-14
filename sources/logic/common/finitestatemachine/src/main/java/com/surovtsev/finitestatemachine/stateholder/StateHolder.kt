@@ -1,9 +1,8 @@
 package com.surovtsev.finitestatemachine.stateholder
 
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.StateDescription
-import com.surovtsev.finitestatemachine.state.StateDescriptionWithData
 import com.surovtsev.finitestatemachine.state.data.Data
+import com.surovtsev.finitestatemachine.state.description.Description
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,75 +10,75 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
 
-interface StateHolder<D: Data> {
-    val state: StateFlow<State<D>>
+interface StateHolder {
+    val state: StateFlow<State>
 
     suspend fun publishLoadingState(
-        data: D = getCurrentData()
+        newData: Data = data
     )
 
     suspend fun publishErrorState(
         message: String,
-        data: D = getCurrentData()
+        newData: Data = data
     )
 
     suspend fun publishIdleState(
-        data: D = getCurrentData()
+        newData: Data = data
     )
 
     suspend fun publishNewState(
-        newState: StateDescription,
-        data: D = getCurrentData(),
+        newDescription: Description,
+        newData: Data = data,
     )
 
-    fun getCurrentData(): D
+    val data: Data
 }
 
-class StateHolderImp<D: Data>(
-    initialState: State<D>,
+class StateHolderImp(
+    initialState: State,
     private val publishStateInUIThread: Boolean = false
-): StateHolder<D> {
-    private val _state: MutableStateFlow<State<D>> = MutableStateFlow(initialState)
-    override val state: StateFlow<State<D>> = _state.asStateFlow()
+): StateHolder {
+    private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
+    override val state: StateFlow<State> = _state.asStateFlow()
 
     override suspend fun publishLoadingState(
-        data: D
+        newData: Data
     ) {
         publishNewState(
-            StateDescription.Loading,
-            data
+            Description.Loading,
+            newData
         )
     }
 
     override suspend fun publishErrorState(
         message: String,
-        data: D
+        newData: Data
     ) {
         publishNewState(
-            StateDescription.Error(
+            Description.Error(
                 message
             ),
-            data
+            newData
         )
     }
 
     override suspend fun publishIdleState(
-        data: D
+        newData: Data
     ) {
         publishNewState(
-            StateDescription.Idle,
-            data,
+            Description.Idle,
+            newData,
         )
     }
 
     override suspend fun publishNewState(
-        newState: StateDescription,
-        data: D,
+        newDescription: Description,
+        newData: Data,
     ) {
         val publishingAction = {
-            _state.value = StateDescriptionWithData(
-                newState,
-                data,
+            _state.value = State(
+                newDescription,
+                newData,
             )
         }
 
@@ -92,7 +91,6 @@ class StateHolderImp<D: Data>(
         }
     }
 
-    override fun getCurrentData(): D {
-        return state.value.data
-    }
+    override val data: Data
+        get() = state.value.data
 }

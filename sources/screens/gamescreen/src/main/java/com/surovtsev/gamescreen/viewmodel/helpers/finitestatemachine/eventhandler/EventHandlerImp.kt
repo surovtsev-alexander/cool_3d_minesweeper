@@ -19,11 +19,11 @@ import javax.inject.Inject
 @GameScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<GameScreenData> {
+): EventHandler {
 
     override fun handleEvent(
         event: Event,
-        state: State<GameScreenData>
+        state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
@@ -262,14 +262,23 @@ class EventHandlerImp @Inject constructor(
     ) {
         val stateHolder = eventHandlerParameters.stateHolder
 
-        val gameScreenData = stateHolder.getCurrentData()
+        val gameScreenData = stateHolder.data as GameScreenData?
 
-        if (!isDataCorrect(gameScreenData)) {
+        // TODO: refactor
+        val msg = if (gameScreenData == null) {
+            "error 1"
+        } else if (!isDataCorrect(gameScreenData)) {
+            errorMessage
+        } else {
+            null
+        }
+
+        if (msg != null) {
             if (!silent) {
                 stateHolder.publishErrorState(errorMessage)
             }
         } else {
-            action.invoke(gameScreenData)
+            action.invoke(gameScreenData!!)
         }
     }
 

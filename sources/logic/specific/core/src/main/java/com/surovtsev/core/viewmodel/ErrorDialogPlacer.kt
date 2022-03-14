@@ -4,12 +4,12 @@ import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.state.State
 import kotlinx.coroutines.flow.StateFlow
 
-typealias ScreenStateFlow<T> = StateFlow<State<out T>>
+typealias ScreenStateFlow = StateFlow<State>
 
-interface ErrorDialogPlacer<D: ScreenData> {
+interface ErrorDialogPlacer {
     val mandatoryEvents: EventToViewModel.MandatoryEvents
-    val noScreenData: D
-    val screenStateFlow: ScreenStateFlow<D>
-    val finiteStateMachine: FiniteStateMachine<D>
+    val noScreenData: ScreenData
+    val screenStateFlow: ScreenStateFlow
+    val finiteStateMachine: FiniteStateMachine
 }
 

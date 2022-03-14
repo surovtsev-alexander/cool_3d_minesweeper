@@ -26,14 +26,14 @@ import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
+import com.surovtsev.core.viewmodel.ErrorDialogPlacer
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.core.viewmodel.ScreenStateFlow
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
-import com.surovtsev.finitestatemachine.state.StateDescription
+import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenErrorDialogPlacer
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateFlow
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
 @Composable
@@ -56,15 +56,15 @@ fun RankingScreen(
     RankingControls(
         viewModel.screenStateFlow,
         eventReceiver,
-        viewModel as RankingScreenErrorDialogPlacer,
+        viewModel as ErrorDialogPlacer,
     )
 }
 
 @Composable
 fun RankingControls(
-    stateFlow: RankingScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
-    errorDialogPlacer: RankingScreenErrorDialogPlacer,
+    errorDialogPlacer: ErrorDialogPlacer,
 ) {
     MinesweeperTheme {
         errorDialogPlacer.PlaceErrorDialog()
@@ -119,7 +119,7 @@ fun RankingControls(
 
 @Composable
 fun SettingsList(
-    stateFlow: RankingScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
@@ -225,7 +225,7 @@ fun SettingsDataItem(
 
 @Composable
 fun RankingList(
-    stateFlow: RankingScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
@@ -375,14 +375,14 @@ fun RankingDataItem(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DisplayCircularIndicatorIfNeeded(
-    stateFlow: RankingScreenStateFlow,
+    stateFlow: ScreenStateFlow,
     boxScope: BoxScope,
 ) {
     val state = stateFlow.collectAsState().value
 
     var showLoadingElements by remember { mutableStateOf(false) }
 
-    showLoadingElements = state.description is StateDescription.Loading
+    showLoadingElements = state.description is Description.Loading
 
     with(boxScope) {
         AnimatedVisibility(
@@ -415,7 +415,7 @@ fun DisplayCircularIndicatorIfNeeded(
         }
     }
 
-    if (state.description is StateDescription.Loading) {
+    if (state.description is Description.Loading) {
 
         with(boxScope) {
 

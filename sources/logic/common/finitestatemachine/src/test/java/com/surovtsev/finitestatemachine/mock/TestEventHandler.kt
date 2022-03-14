@@ -1,5 +1,6 @@
 package com.surovtsev.finitestatemachine.mock
 
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -8,12 +9,12 @@ import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import logcat.logcat
 
 class TestEventHandler(
-    private val stateHolder: StateHolder<TestFSMData>
-): EventHandler<TestEvent, TestFSMData> {
+    private val stateHolder: StateHolder
+): EventHandler {
     override fun handleEvent(
-        event: TestEvent,
-        state: State<TestFSMData>
-    ): EventHandlingResult<TestEvent> {
+        event: Event,
+        state: State
+    ): EventHandlingResult {
         logcat {
             "handling: $event"
         }
@@ -23,7 +24,7 @@ class TestEventHandler(
     }
 
     private suspend fun ok(
-    ): EventProcessingResult<TestEvent> {
+    ): EventProcessingResult {
         stateHolder.publishIdleState()
 
         return EventProcessingResult.Ok()
