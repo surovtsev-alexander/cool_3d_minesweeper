@@ -49,6 +49,16 @@ class EventHandlerImp @Inject constructor(
         )
     }
 
+    enum class Errors(val message: String) {
+        MAIN_MENU_IS_NOT_OPENED("main menu is not opened"),
+        GAME_IS_NOT_IN_PROGRESS("game is not in progress"),
+        GAME_IS_IN_PROGRESS("game is in progress"),
+        CAN_NOT_OPEN_MENU_TWICE_SEQUENTIALLY("can not open menu twice sequentially"),
+        CRITICAL_ERROR_RELOADING("critical error. reloading"),
+        INTERNAL_SETTINGS_SCREEN_ERROR_001("internal settings screen error");
+    }
+
+
     private var gameControlsImp: GameControlsImp? = null
     private var uiGameControlsMutableFlows: UIGameControlsMutableFlows? = null
     private var uiGameControlsFlows: UIGameControlsFlows? = null
@@ -80,7 +90,7 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
-            "main menu is not opened",
+            Errors.MAIN_MENU_IS_NOT_OPENED.message,
             true
         ) { gameScreenData ->
             tryUnstackState(gameScreenData)
@@ -89,7 +99,7 @@ class EventHandlerImp @Inject constructor(
         with(eventHandlerParameters) {
             doActionIfDataIsCorrect(
                 { it is GameScreenData.GameInProgress },
-                "game is in progress",
+                Errors.GAME_IS_IN_PROGRESS.message,
                 true
             ) {
                 stateHolder.publishDefaultInitialState()
@@ -143,7 +153,7 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
-            "can not open menu twice sequentially"
+            Errors.CAN_NOT_OPEN_MENU_TWICE_SEQUENTIALLY.message
         ) { gameScreenData ->
             val newScreenData = GameScreenData.GameMenu(
                 gameScreenData
@@ -176,7 +186,7 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
-            "main menu is not opened",
+            Errors.MAIN_MENU_IS_NOT_OPENED.message,
             silent
         ) { gameScreenData ->
             tryUnstackState(gameScreenData)
@@ -242,7 +252,7 @@ class EventHandlerImp @Inject constructor(
 
         if (prevData == null) {
             stateHolder.publishErrorState(
-                "critical error. reloading",
+                Errors.CRITICAL_ERROR_RELOADING.message,
                 Data.NoData,
             )
             return
@@ -263,29 +273,29 @@ class EventHandlerImp @Inject constructor(
 
         val gameScreenData = stateHolder.data as? GameScreenData
 
-        // TODO: refactor
-        val msg = if (gameScreenData == null) {
-            "error 1"
-        } else if (!isDataCorrect(gameScreenData)) {
-            errorMessage
-        } else {
-            null
-        }
-
-        if (msg != null) {
-            if (!silent) {
-                stateHolder.publishErrorState(errorMessage)
+        do {
+            val messageToShow = if (gameScreenData == null) {
+                Errors.INTERNAL_SETTINGS_SCREEN_ERROR_001.message
+            } else if (!isDataCorrect(gameScreenData)) {
+                errorMessage
+            } else {
+                action.invoke(
+                    gameScreenData
+                )
+                break
             }
-        } else {
-            action.invoke(gameScreenData!!)
-        }
+
+            if (!silent) {
+                stateHolder.publishErrorState(messageToShow)
+            }
+        } while (false)
     }
 
     private suspend fun skipIfGameIsNotInProgress(
         action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
     ) {
         doActionIfDataIsChildOf(
-            "game is not in progress",
+            Errors.GAME_IS_NOT_IN_PROGRESS.message,
             true,
             action
         )
