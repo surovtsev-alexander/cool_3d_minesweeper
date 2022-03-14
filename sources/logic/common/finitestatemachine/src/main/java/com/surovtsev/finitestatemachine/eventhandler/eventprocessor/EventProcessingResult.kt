@@ -2,12 +2,12 @@ package com.surovtsev.finitestatemachine.eventhandler.eventprocessor
 
 import com.surovtsev.finitestatemachine.event.Event
 
-sealed interface EventProcessingResult<E: Event> {
-    class Error<E : Event>(
+sealed interface EventProcessingResult {
+    class Error(
         message: String,
-    ) : EventProcessingResult<E>
+    ) : EventProcessingResult
 
-    class Ok<E : Event>(
-        val newEventToPush: E? = null,
-    ) : EventProcessingResult<E>
+    class Ok(
+        val newEventToPush: Event? = null,
+    ) : EventProcessingResult
 }

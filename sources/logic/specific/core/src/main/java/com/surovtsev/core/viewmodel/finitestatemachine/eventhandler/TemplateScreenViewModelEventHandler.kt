@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -11,17 +12,17 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 
-class TemplateScreenViewModelEventHandler<E: EventToViewModel, D: ScreenData>(
-    private val closeErrorAndFinishEvent: E,
+class TemplateScreenViewModelEventHandler<D: ScreenData>(
+    private val closeErrorAndFinishEvent: Event,
     private val stateHolder: StateHolder<D>,
     private val finishActionHolder: FinishActionHolder,
     private val noScreenData: D,
-    ): EventHandler<E, D> {
+    ): EventHandler<D> {
 
     override fun handleEvent(
-        event: E,
+        event: Event,
         state: State<D>
-    ): EventHandlingResult<E> {
+    ): EventHandlingResult {
         val screenData = state.data
 
         do {
@@ -30,7 +31,7 @@ class TemplateScreenViewModelEventHandler<E: EventToViewModel, D: ScreenData>(
             }
 
             if (event !is EventToViewModel.CloseError) {
-                return EventHandlingResult.Skip()
+                return EventHandlingResult.Skip
             }
 
             if (event is EventToViewModel.CloseErrorAndFinish) {
@@ -59,25 +60,25 @@ class TemplateScreenViewModelEventHandler<E: EventToViewModel, D: ScreenData>(
 
     private suspend fun handleScreenLeaving(
         owner: LifecycleOwner
-    ): EventProcessingResult<E> {
+    ): EventProcessingResult {
         stateHolder.publishIdleState(
             noScreenData
         )
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun closeError(): EventProcessingResult<E> {
+    private suspend fun closeError(): EventProcessingResult {
         stateHolder.publishIdleState()
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun closeErrorAndFinish(): EventProcessingResult<E> {
+    private suspend fun closeErrorAndFinish(): EventProcessingResult {
         stateHolder.publishIdleState()
         finishActionHolder.finish()
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun finish(): EventProcessingResult<E> {
+    private suspend fun finish(): EventProcessingResult {
         finishActionHolder.finish()
         return EventProcessingResult.Ok()
     }

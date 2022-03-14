@@ -11,18 +11,18 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
-class EventProcessorHelper<E: Event, D: Data>(
+class EventProcessorHelper<D: Data>(
     private val logConfig: LogConfig,
     private val stateHolder: StateHolder<D>,
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
-    private val eventHandlers: EventHandlers<E, D>,
-    private val fsmQueueHolder: FSMQueueHolder<E>,
+    private val eventHandlers: EventHandlers<D>,
+    private val fsmQueueHolder: FSMQueueHolder,
 ) {
     private val processingMutex = Mutex(locked = false)
 
     suspend fun processEvent(
-        event: E
+        event: Event
     ) {
         processingMutex.withLock {
             if (logConfig.logLevel.isGreaterThan2()) {
@@ -64,7 +64,7 @@ class EventProcessorHelper<E: Event, D: Data>(
                 }
 
                 val changeEventResults =
-                    handlingResult.filterIsInstance<EventHandlingResult.ChangeWith<E>>()
+                    handlingResult.filterIsInstance<EventHandlingResult.ChangeWith>()
 
                 val eventToProcess = when (changeEventResults.count()) {
                     0 -> {
@@ -100,7 +100,7 @@ class EventProcessorHelper<E: Event, D: Data>(
                 logcat { "processingResults: $processingResults" }
 
                 processingResults
-                    .filterIsInstance<EventProcessingResult.Ok<E>>()
+                    .filterIsInstance<EventProcessingResult.Ok>()
                     .map {
                         it.newEventToPush?.let { e ->
                             logcat { "pushEvent: $e" }

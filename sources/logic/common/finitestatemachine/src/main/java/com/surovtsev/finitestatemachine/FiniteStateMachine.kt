@@ -15,12 +15,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import logcat.logcat
 
-class FiniteStateMachine<E: Event, D: Data>(
+class FiniteStateMachine<D: Data>(
     val stateHolder: StateHolder<D>,
-    private val eventHandlers: EventHandlers<E, D>,
+    private val eventHandlers: EventHandlers<D>,
     subscriptionsHolder: SubscriptionsHolder,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-): EventReceiver<E>, Subscription {
+): EventReceiver, Subscription {
     companion object {
         val uiDispatcher = Dispatchers.Main
         val ioDispatcher = Dispatchers.IO
@@ -30,7 +30,7 @@ class FiniteStateMachine<E: Event, D: Data>(
     private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp()
     private val pausedStateHolder: PausedStateHolder = PausedStateHolder()
 
-    val queueHolder = FSMQueueHolder<E>(
+    val queueHolder = FSMQueueHolder(
         pausedStateHolder,
         processingWaiter,
         fsmProcessingTrigger,
@@ -79,7 +79,7 @@ class FiniteStateMachine<E: Event, D: Data>(
     }
 
     override fun receiveEvent(
-        event: E
+        event: Event
     ) {
         if (logConfig.logLevel.isGreaterThan0()) {
             logcat { "receiveEvent: $event" }

@@ -4,6 +4,7 @@ import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -16,12 +17,12 @@ import javax.inject.Inject
 @SettingsScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<EventToSettingsScreenViewModel, SettingsScreenData> {
+): EventHandler<SettingsScreenData> {
 
     override fun handleEvent(
-        event: EventToSettingsScreenViewModel,
+        event: Event,
         state: State<SettingsScreenData>
-    ): EventHandlingResult<EventToSettingsScreenViewModel> {
+    ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
@@ -39,7 +40,7 @@ class EventHandlerImp @Inject constructor(
     }
 
 
-    private suspend fun triggerInitialization(): EventProcessingResult<EventToSettingsScreenViewModel> {
+    private suspend fun triggerInitialization(): EventProcessingResult {
         prepopulateSettingsTableWithDefaultValues(
             eventHandlerParameters.settingsDao
         )
@@ -49,7 +50,7 @@ class EventHandlerImp @Inject constructor(
         )
     }
 
-    private suspend fun loadSettingsList(): EventProcessingResult<EventToSettingsScreenViewModel> {
+    private suspend fun loadSettingsList(): EventProcessingResult {
         val settingsList = eventHandlerParameters.settingsDao.getAll()
 
         eventHandlerParameters.stateHolder.publishLoadingState(
@@ -97,7 +98,7 @@ class EventHandlerImp @Inject constructor(
     private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData,
         fromSlider: Boolean
-    ): EventProcessingResult<EventToSettingsScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
@@ -113,7 +114,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun applySettings(
-    ): EventProcessingResult<EventToSettingsScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
             "error while applying settings"
         ) { screenData ->
@@ -141,7 +142,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun deleteSettings(
         settingsId: Long
-    ): EventProcessingResult<EventToSettingsScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "error while deleting settings"
         ) {
@@ -154,7 +155,7 @@ class EventHandlerImp @Inject constructor(
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun loadSelectedSettings(): EventProcessingResult<EventToSettingsScreenViewModel> {
+    private suspend fun loadSelectedSettings(): EventProcessingResult {
         val saveController = eventHandlerParameters.saveController
         val settingsDao = eventHandlerParameters.settingsDao
 
@@ -171,7 +172,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun rememberSettings(
         settings: Settings,
-    ): EventProcessingResult<EventToSettingsScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->

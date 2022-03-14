@@ -1,6 +1,0 @@
-package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases
-
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
-
-typealias RankingScreenEventReceiver = EventReceiver<EventToRankingScreenViewModel>

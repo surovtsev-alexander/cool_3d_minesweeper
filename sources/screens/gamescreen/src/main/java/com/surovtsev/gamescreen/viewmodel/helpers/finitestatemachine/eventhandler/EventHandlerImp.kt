@@ -1,6 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -18,12 +19,12 @@ import javax.inject.Inject
 @GameScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<EventToGameScreenViewModel, GameScreenData> {
+): EventHandler<GameScreenData> {
 
     override fun handleEvent(
-        event: EventToGameScreenViewModel,
+        event: Event,
         state: State<GameScreenData>
-    ): EventHandlingResult<EventToGameScreenViewModel> {
+    ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
@@ -51,7 +52,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun handleScreenLeaving(
         owner: LifecycleOwner
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         with(eventHandlerParameters) {
             restartableCoroutineScopeComponent
                 .subscriberImp
@@ -78,7 +79,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun newGame(
         loadGame: Boolean
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",
@@ -141,7 +142,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun openGameMenu(
         setLoadingState: Boolean = false
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it !is GameScreenData.GameMenu },
             "can not open menu twice sequentially"
@@ -166,14 +167,14 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun setIdleState(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         eventHandlerParameters.stateHolder.publishIdleState()
         return EventProcessingResult.Ok()
     }
 
     private suspend fun closeGameMenu(
         silent: Boolean = false
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         doActionIfDataIsCorrect(
             { it is GameScreenData.GameMenu },
             "main menu is not opened",
@@ -185,7 +186,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun goToMainMenu(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         closeGameMenu(true)
         return EventProcessingResult.Ok(
             EventToGameScreenViewModel.Finish
@@ -193,7 +194,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun removeFlaggedBombs(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         skipIfGameIsNotInProgress {
             gameControlsImp?.removeFlaggedCells = true
         }
@@ -201,7 +202,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun removeOpenedSlices(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         skipIfGameIsNotInProgress {
             gameControlsImp?.removeOpenedSlices = true
         }
@@ -209,7 +210,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun toggleFlagging(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         skipIfGameIsNotInProgress {
             gameControlsImp?.let {
                 setFlagging(
@@ -228,7 +229,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun closeGameStatusDialog(
-    ): EventProcessingResult<EventToGameScreenViewModel> {
+    ): EventProcessingResult {
         uiGameControlsMutableFlows?.uiGameStatus?.value = UIGameStatus.Unimportant
         return EventProcessingResult.Ok()
     }

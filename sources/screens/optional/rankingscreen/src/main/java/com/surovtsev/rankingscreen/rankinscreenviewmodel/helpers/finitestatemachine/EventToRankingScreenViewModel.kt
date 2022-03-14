@@ -35,7 +35,7 @@ sealed class EventToRankingScreenViewModel(
         rankingTableSortParameters
     )
 
-    object MandatoryEvents: EventToViewModel.MandatoryEvents<EventToRankingScreenViewModel>(
+    object MandatoryEvents: EventToViewModel.MandatoryEvents(
         LoadData,
         CloseError,
         CloseErrorAndFinish,

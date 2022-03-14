@@ -3,7 +3,7 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.finitestatemachine.event.Event
 
-typealias HandleScreenLeavingEventFactory<E> = (owner: LifecycleOwner) -> E
+typealias HandleScreenLeavingEventFactory = (owner: LifecycleOwner) -> Event
 
 interface EventToViewModel: Event {
 
@@ -17,11 +17,11 @@ interface EventToViewModel: Event {
     interface Init: EventToViewModel
     interface Finish: EventToViewModel
 
-    abstract class MandatoryEvents <E: EventToViewModel>(
-        val init: E,
-        val closeError: E,
-        val closeErrorAndFinish: E,
-        val handleScreenLeavingEventFactory: HandleScreenLeavingEventFactory<E>,
+    abstract class MandatoryEvents(
+        val init: Event,
+        val closeError: Event,
+        val closeErrorAndFinish: Event,
+        val handleScreenLeavingEventFactory: HandleScreenLeavingEventFactory,
     ) {
         init {
             // TODO: 17.01.2022 refactor

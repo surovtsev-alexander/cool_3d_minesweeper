@@ -5,9 +5,9 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.Data
 
 
-interface EventHandler<E: Event, D: Data> {
+interface EventHandler<D: Data> {
     fun handleEvent(
-        event: E,
+        event: Event,
         state: State<D>
-    ): EventHandlingResult<E>
+    ): EventHandlingResult
 }

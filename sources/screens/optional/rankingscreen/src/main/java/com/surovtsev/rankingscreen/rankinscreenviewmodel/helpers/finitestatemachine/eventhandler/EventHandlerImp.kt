@@ -3,6 +3,7 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemac
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
@@ -19,12 +20,12 @@ import javax.inject.Inject
 @RankingScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
-): EventHandler<EventToRankingScreenViewModel, RankingScreenData> {
+): EventHandler<RankingScreenData> {
 
     override fun handleEvent(
-        event: EventToRankingScreenViewModel,
+        event: Event,
         state: State<RankingScreenData>
-    ): EventHandlingResult<EventToRankingScreenViewModel> {
+    ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToRankingScreenViewModel.LoadData                -> ::loadData
             is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
@@ -48,7 +49,7 @@ class EventHandlerImp @Inject constructor(
     }
 
     private suspend fun loadData(
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
+    ): EventProcessingResult {
         val currTimeSpanComponent: TimeSpanComponent =
             eventHandlerParameters
                 .timeSpanComponent
@@ -85,7 +86,7 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun filterList(
         selectedSettingsId: Long
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
+    ): EventProcessingResult {
 
         val rankingListWithPlaces =
             eventHandlerParameters.rankingListHelper
@@ -121,7 +122,7 @@ class EventHandlerImp @Inject constructor(
     private suspend fun sortList(
         rankingTableSortParameters: RankingTableSortParameters,
         doDelay: Boolean
-    ): EventProcessingResult<EventToRankingScreenViewModel> {
+    ): EventProcessingResult {
         val currTimeSpanComponent = eventHandlerParameters.timeSpanComponent
 
         val stateHolder = eventHandlerParameters.stateHolder

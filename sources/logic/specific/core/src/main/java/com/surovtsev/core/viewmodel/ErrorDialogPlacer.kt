@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 typealias ScreenStateFlow<T> = StateFlow<State<out T>>
 
-interface ErrorDialogPlacer<E: EventToViewModel, D: ScreenData> {
-    val mandatoryEvents: EventToViewModel.MandatoryEvents<E>
+interface ErrorDialogPlacer<D: ScreenData> {
+    val mandatoryEvents: EventToViewModel.MandatoryEvents
     val noScreenData: D
     val screenStateFlow: ScreenStateFlow<D>
-    val finiteStateMachine: FiniteStateMachine<E, D>
+    val finiteStateMachine: FiniteStateMachine<D>
 }
 

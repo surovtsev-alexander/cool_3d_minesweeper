@@ -2,12 +2,11 @@ package com.surovtsev.finitestatemachine.helpers
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
-class FSMQueueHolder<E: Event>(
+class FSMQueueHolder(
     private val pausedStateHolder: PausedStateHolder,
     private val processingWaiter: ProcessingWaiter,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
@@ -15,13 +14,13 @@ class FSMQueueHolder<E: Event>(
 ) {
     private val queueMutex = Mutex(locked = false)
 
-    private val eventsQueue = emptyList<E>().toMutableList()
+    private val eventsQueue = emptyList<Event>().toMutableList()
 
     private fun isQueueEmpty(): Boolean {
         return eventsQueue.isEmpty()
     }
 
-    suspend fun pollEvent(): E? {
+    suspend fun pollEvent(): Event? {
         return queueMutex.withLock {
             if (eventsQueue.count() == 0) {
                 null
@@ -51,7 +50,7 @@ class FSMQueueHolder<E: Event>(
     }
 
     suspend fun pushEvent(
-        event: E
+        event: Event
     ) {
         queueMutex.withLock {
             val posToPush = if (!event.pushToHead) {
@@ -104,7 +103,7 @@ class FSMQueueHolder<E: Event>(
         fsmProcessingTrigger.kickFSM()
     }
 
-    private fun lastPos(predicate: (E) -> Boolean): Int {
+    private fun lastPos(predicate: (Event) -> Boolean): Int {
         val len = eventsQueue.size
         for (i in (0 until len).reversed()) {
             if (predicate(eventsQueue[i])) {

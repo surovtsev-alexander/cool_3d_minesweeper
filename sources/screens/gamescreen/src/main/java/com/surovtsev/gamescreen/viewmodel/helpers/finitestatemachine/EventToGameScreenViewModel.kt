@@ -43,7 +43,7 @@ sealed class EventToGameScreenViewModel(
     object CloseGameStatusDialog: EventToGameScreenViewModel()
 
 
-    object MandatoryEvents: EventToViewModel.MandatoryEvents<EventToGameScreenViewModel>(
+    object MandatoryEvents: EventToViewModel.MandatoryEvents(
         LoadGame,
         CloseError,
         CloseErrorAndFinish,

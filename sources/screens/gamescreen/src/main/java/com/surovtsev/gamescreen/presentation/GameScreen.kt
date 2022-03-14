@@ -28,6 +28,7 @@ import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
@@ -35,7 +36,6 @@ import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGame
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GLSurfaceViewCreated
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenErrorDialogPlacer
-import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenEventReceiver
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GameScreenStateFlow
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.time.elapsedformatter.ElapsedFormatter
@@ -57,7 +57,7 @@ fun GameScreen(
         return
     }
 
-    val eventReceiver = viewModel.finiteStateMachine as GameScreenEventReceiver
+    val eventReceiver = viewModel.finiteStateMachine as EventReceiver
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
@@ -85,7 +85,7 @@ fun GameScreen(
 @Composable
 fun GameScreenControls(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
     context: Context,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     errorDialogPlacer: GameScreenErrorDialogPlacer,
@@ -118,7 +118,7 @@ private val pauseResumeButtonWidth = 100.dp
 @Composable
 fun GameView(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
     glSurfaceViewCreated: GLSurfaceViewCreated,
     context: Context,
 ) {
@@ -200,7 +200,7 @@ fun FPSLabel(
 @Composable
 fun GameMenu(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
 ) {
     val gameScreenState by stateFlow.collectAsState()
 
@@ -286,7 +286,7 @@ fun MinesweeperView(
 @Composable
 fun Controls(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
 ) {
     Row(
         modifier = Modifier
@@ -327,7 +327,7 @@ fun Controls(
 
 @Composable
 fun ControlButtons(
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
 ) {
     Row (
         modifier = Modifier
@@ -353,7 +353,7 @@ fun ControlButtons(
 @Composable
 fun ControlCheckBox(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
 ) {
     val state = stateFlow.collectAsState().value
 
@@ -441,7 +441,7 @@ fun TimeElapsed(
 @Composable
 fun GameStatusDialog(
     stateFlow: GameScreenStateFlow,
-    eventReceiver: GameScreenEventReceiver,
+    eventReceiver: EventReceiver,
 ) {
     val state by stateFlow.collectAsState()
 

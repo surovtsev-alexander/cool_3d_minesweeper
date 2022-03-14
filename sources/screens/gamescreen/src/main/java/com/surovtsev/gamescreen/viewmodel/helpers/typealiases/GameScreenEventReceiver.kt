@@ -1,6 +1,0 @@
-package com.surovtsev.gamescreen.viewmodel.helpers.typealiases
-
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
-import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
-
-typealias GameScreenEventReceiver = EventReceiver<EventToGameScreenViewModel>

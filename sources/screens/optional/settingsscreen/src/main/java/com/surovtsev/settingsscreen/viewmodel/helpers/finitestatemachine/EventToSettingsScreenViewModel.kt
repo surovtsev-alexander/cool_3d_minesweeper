@@ -42,7 +42,7 @@ sealed class EventToSettingsScreenViewModel(
 
     object Finish: EventToSettingsScreenViewModel(), EventToViewModel.Finish
 
-    object MandatoryEvents: EventToViewModel.MandatoryEvents<EventToSettingsScreenViewModel>(
+    object MandatoryEvents: EventToViewModel.MandatoryEvents(
         TriggerInitialization,
         CloseError,
         CloseErrorAndFinish,

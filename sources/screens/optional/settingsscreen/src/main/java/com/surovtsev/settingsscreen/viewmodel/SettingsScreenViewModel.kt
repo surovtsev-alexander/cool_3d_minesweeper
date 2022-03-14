@@ -18,7 +18,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<EventToSettingsScreenViewModel, SettingsScreenData>(
+    TemplateScreenViewModel<SettingsScreenData>(
         EventToSettingsScreenViewModel.MandatoryEvents,
         SettingsScreenData.NoData,
         SettingsScreenInitialState,

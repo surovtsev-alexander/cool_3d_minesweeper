@@ -3,27 +3,27 @@ package com.surovtsev.finitestatemachine.eventhandler
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessor
 
-sealed interface EventHandlingResult<E: Event> {
-    class RaiseError<E: Event>(
+sealed interface EventHandlingResult {
+    class RaiseError(
         val message: String
-    ): EventHandlingResult<E>
+    ): EventHandlingResult
 
-    class Process<E: Event>(
-        val eventProcessor: EventProcessor<E>
-    ): EventHandlingResult<E>
+    class Process(
+        val eventProcessor: EventProcessor
+    ): EventHandlingResult
 
-    class Skip<E: Event>: EventHandlingResult<E>
+    object Skip: EventHandlingResult
 
-    class ChangeWith<E: Event>(
-        val event: E,
-    ): EventHandlingResult<E>
+    class ChangeWith(
+        val event: Event,
+    ): EventHandlingResult
 
     object Helper {
-        fun <E: Event> processOrSkipIfNull(
-            eventProcessor: EventProcessor<E>?,
-        ): EventHandlingResult<E> {
+        fun processOrSkipIfNull(
+            eventProcessor: EventProcessor?,
+        ): EventHandlingResult {
             return if (eventProcessor == null) {
-                Skip()
+                Skip
             } else {
                 Process(
                     eventProcessor

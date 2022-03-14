@@ -9,14 +9,12 @@ import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenInitialState
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,7 +26,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel<EventToGameScreenViewModel, GameScreenData>(
+    TemplateScreenViewModel<GameScreenData>(
         EventToGameScreenViewModel.MandatoryEvents,
         GameScreenData.NoData,
         GameScreenInitialState,

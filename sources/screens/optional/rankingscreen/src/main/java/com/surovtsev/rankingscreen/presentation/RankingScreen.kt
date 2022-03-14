@@ -27,12 +27,12 @@ import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
+import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.StateDescription
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenErrorDialogPlacer
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenEventReceiver
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.typealiases.RankingScreenStateFlow
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
@@ -41,7 +41,7 @@ fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
 ) {
-    val eventReceiver = viewModel.finiteStateMachine as RankingScreenEventReceiver
+    val eventReceiver = viewModel.finiteStateMachine as EventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
             {
@@ -63,7 +63,7 @@ fun RankingScreen(
 @Composable
 fun RankingControls(
     stateFlow: RankingScreenStateFlow,
-    eventReceiver: RankingScreenEventReceiver,
+    eventReceiver: EventReceiver,
     errorDialogPlacer: RankingScreenErrorDialogPlacer,
 ) {
     MinesweeperTheme {
@@ -120,7 +120,7 @@ fun RankingControls(
 @Composable
 fun SettingsList(
     stateFlow: RankingScreenStateFlow,
-    eventReceiver: RankingScreenEventReceiver
+    eventReceiver: EventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
@@ -226,7 +226,7 @@ fun SettingsDataItem(
 @Composable
 fun RankingList(
     stateFlow: RankingScreenStateFlow,
-    eventReceiver: RankingScreenEventReceiver
+    eventReceiver: EventReceiver
 ) {
     val rankingScreenState = stateFlow.collectAsState().value
 
@@ -280,7 +280,7 @@ fun RankingList(
 
 @Composable
 fun RankingListColumnTitle(
-    eventReceiver: RankingScreenEventReceiver,
+    eventReceiver: EventReceiver,
     tableColumnType: RankingTableColumn,
     modifierWidth: Float,
     rankingTableSortParameters: RankingTableSortParameters,

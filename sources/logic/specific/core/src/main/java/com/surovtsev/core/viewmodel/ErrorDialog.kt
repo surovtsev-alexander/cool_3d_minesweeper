@@ -12,15 +12,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.core.ui.theme.GrayBackground
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.StateDescription
 
 @Composable
 fun ErrorDialog(
     screenStateFlow: ScreenStateFlow<ScreenData>,
-    eventReceiver: EventReceiver<EventToViewModel>,
-    closeErrorEvent: EventToViewModel,
-    closeErrorAndFinishEvent: EventToViewModel,
+    eventReceiver: EventReceiver,
+    closeErrorEvent: Event,
+    closeErrorAndFinishEvent: Event,
 ) {
     val state by screenStateFlow.collectAsState()
 
@@ -71,12 +72,12 @@ fun ErrorDialog(
 }
 
 @Composable
-fun <E: EventToViewModel, D: ScreenData> ErrorDialogPlacer<E, D>.PlaceErrorDialog(
+fun <D: ScreenData> ErrorDialogPlacer<D>.PlaceErrorDialog(
 ) {
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         screenStateFlow = screenStateFlow,
-        eventReceiver = finiteStateMachine as EventReceiver<EventToViewModel>,
+        eventReceiver = finiteStateMachine as EventReceiver,
         closeErrorEvent = mandatoryEvents.closeError,
         closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )
