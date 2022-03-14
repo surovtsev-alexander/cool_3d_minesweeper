@@ -1,6 +1,7 @@
 package com.surovtsev.core.viewmodel.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
+import com.surovtsev.core.viewmodel.CloseErrorEvent
 import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.event.Event
@@ -13,7 +14,6 @@ import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 
 class TemplateScreenViewModelEventHandler(
-    private val closeErrorAndFinishEvent: Event,
     private val stateHolder: StateHolder,
     private val finishActionHolder: FinishActionHolder,
     ): EventHandler {
@@ -29,7 +29,7 @@ class TemplateScreenViewModelEventHandler(
                 break
             }
 
-            if (event !is EventToViewModel.CloseError) {
+            if (event !is CloseErrorEvent) {
                 return EventHandlingResult.Skip
             }
 
@@ -38,14 +38,14 @@ class TemplateScreenViewModelEventHandler(
             }
 
             if (screenData is InitializationIsNotFinished) {
-                return EventHandlingResult.ChangeWith(closeErrorAndFinishEvent)
+                return EventHandlingResult.ChangeWith(EventToViewModel.CloseErrorAndFinish)
             }
         } while(false)
 
         val eventProcessor = when(event) {
-            is EventToViewModel.Finish              -> ::finish
             is EventToViewModel.CloseError          -> ::closeError
             is EventToViewModel.CloseErrorAndFinish -> ::closeErrorAndFinish
+            is EventToViewModel.Finish              -> ::finish
             is EventToViewModel.HandleScreenLeaving -> suspend { handleScreenLeaving(event.owner) }
             else                                    -> null
         }
@@ -66,18 +66,26 @@ class TemplateScreenViewModelEventHandler(
     }
 
     private suspend fun closeError(): EventProcessingResult {
-        stateHolder.publishIdleState()
+        closeErrorAction()
         return EventProcessingResult.Ok()
     }
 
     private suspend fun closeErrorAndFinish(): EventProcessingResult {
-        stateHolder.publishIdleState()
-        finishActionHolder.finish()
+        closeErrorAction()
+        invokeFinishAction()
         return EventProcessingResult.Ok()
     }
 
     private suspend fun finish(): EventProcessingResult {
-        finishActionHolder.finish()
+        invokeFinishAction()
         return EventProcessingResult.Ok()
+    }
+
+    private suspend fun closeErrorAction() {
+        stateHolder.publishIdleState()
+    }
+
+    private suspend fun invokeFinishAction() {
+        finishActionHolder.finish()
     }
 }

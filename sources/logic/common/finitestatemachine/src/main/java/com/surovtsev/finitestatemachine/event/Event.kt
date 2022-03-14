@@ -1,12 +1,17 @@
 package com.surovtsev.finitestatemachine.event
 
-interface Event {
-    val setLoadingStateBeforeProcessing: Boolean
-    val doNotPushToQueue: Boolean
-    val pushToHead: Boolean
+sealed interface Event {
+    object Pause: PauseResumeEvent()
+    object Resume: PauseResumeEvent()
 
-    interface Init: Event
-    interface CloseError: Event
+    interface UserEvent: Event
+
+
+    abstract class PauseResumeEvent: EventImp(
+        false,
+        false,
+        true
+    )
 
     abstract class EventImp(
         override val setLoadingStateBeforeProcessing: Boolean,
@@ -14,14 +19,8 @@ interface Event {
         override val pushToHead: Boolean,
     ): Event
 
-    interface ProcessedByFSM: Event
 
-    abstract class PauseResumeEvent: EventImp(
-        false,
-        false,
-        true
-    ), ProcessedByFSM
-
-    abstract class Pause: PauseResumeEvent()
-    abstract class Resume: PauseResumeEvent()
+    val setLoadingStateBeforeProcessing: Boolean
+    val doNotPushToQueue: Boolean
+    val pushToHead: Boolean
 }

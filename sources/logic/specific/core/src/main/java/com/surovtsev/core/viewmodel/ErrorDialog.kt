@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.core.ui.theme.GrayBackground
-import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 
@@ -20,8 +19,6 @@ import com.surovtsev.finitestatemachine.state.description.Description
 fun ErrorDialog(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
-    closeErrorEvent: Event,
-    closeErrorAndFinishEvent: Event,
 ) {
     val state by screenStateFlow.collectAsState()
 
@@ -29,7 +26,7 @@ fun ErrorDialog(
 
     val closeAction: () -> Unit = {
         eventReceiver.receiveEvent(
-            closeErrorEvent
+            EventToViewModel.CloseError
         )
     }
 
@@ -60,7 +57,7 @@ fun ErrorDialog(
                 Button(
                     onClick = {
                         eventReceiver.receiveEvent(
-                            closeErrorAndFinishEvent
+                            EventToViewModel.CloseErrorAndFinish
                         )
                     }
                 ) {
@@ -78,7 +75,5 @@ fun ErrorDialogPlacer.PlaceErrorDialog(
     ErrorDialog(
         screenStateFlow = screenStateFlow,
         eventReceiver = finiteStateMachine as EventReceiver,
-        closeErrorEvent = mandatoryEvents.closeError,
-        closeErrorAndFinishEvent = mandatoryEvents.closeErrorAndFinish,
     )
 }

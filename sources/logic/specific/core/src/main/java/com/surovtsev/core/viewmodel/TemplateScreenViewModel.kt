@@ -27,7 +27,6 @@ abstract class TemplateScreenViewModel(
         get() = stateHolder.state
 
     private val templateScreenViewModelEventHandler = TemplateScreenViewModelEventHandler(
-        mandatoryEvents.closeErrorAndFinish,
         stateHolder,
         finishActionHolder,
     )
@@ -49,7 +48,7 @@ abstract class TemplateScreenViewModel(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         finiteStateMachine.receiveEvent(
-            mandatoryEvents.handleScreenLeavingEventFactory(owner)
+            EventToViewModel.HandleScreenLeaving(owner)
         )
     }
 }

@@ -1,25 +1,12 @@
 package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine
 
-import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.InitEvent
 
-sealed class EventToRankingScreenViewModel(
-    override val doNotPushToQueue: Boolean = false,
-    override val pushToHead: Boolean = false,
-    override val setLoadingStateBeforeProcessing: Boolean = true,
-): EventToViewModel {
-    class HandleScreenLeaving(
-        override val owner: LifecycleOwner
-    ):
-        EventToRankingScreenViewModel(),
-        EventToViewModel.HandleScreenLeaving
+sealed class EventToRankingScreenViewModel: EventToViewModel.UserEvent() {
 
-    object LoadData: EventToRankingScreenViewModel(), EventToViewModel.Init
-
-    object CloseError: EventToRankingScreenViewModel(), EventToViewModel.CloseError
-
-    object CloseErrorAndFinish: EventToRankingScreenViewModel(), EventToViewModel.CloseErrorAndFinish
+    object LoadData: EventToRankingScreenViewModel(), InitEvent
 
     class FilterList(
         val selectedSettingsId: Long
@@ -37,8 +24,5 @@ sealed class EventToRankingScreenViewModel(
 
     object MandatoryEvents: EventToViewModel.MandatoryEvents(
         LoadData,
-        CloseError,
-        CloseErrorAndFinish,
-        { HandleScreenLeaving(it) },
     )
 }

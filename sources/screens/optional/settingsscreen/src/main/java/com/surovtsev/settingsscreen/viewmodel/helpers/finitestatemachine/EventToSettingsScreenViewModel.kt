@@ -1,25 +1,12 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
-import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.InitEvent
 
 sealed class EventToSettingsScreenViewModel(
-    override val doNotPushToQueue: Boolean = false,
-    override val pushToHead: Boolean = false,
-    override val setLoadingStateBeforeProcessing: Boolean = true
-): EventToViewModel {
-    class HandleLeavingScreen(
-        override val owner: LifecycleOwner
-    ):
-        EventToSettingsScreenViewModel(),
-        EventToViewModel.HandleScreenLeaving
-
-    object CloseError: EventToSettingsScreenViewModel(), EventToViewModel.CloseError
-
-    object CloseErrorAndFinish: EventToSettingsScreenViewModel(), EventToViewModel.CloseErrorAndFinish
-
-    object TriggerInitialization: EventToSettingsScreenViewModel(), EventToViewModel.Init
+): EventToViewModel.UserEvent() {
+    object TriggerInitialization: EventToSettingsScreenViewModel(), InitEvent
 
     object LoadSettingsList: EventToSettingsScreenViewModel()
 
@@ -40,12 +27,7 @@ sealed class EventToSettingsScreenViewModel(
 
     object ApplySettings: EventToSettingsScreenViewModel()
 
-    object Finish: EventToSettingsScreenViewModel(), EventToViewModel.Finish
-
     object MandatoryEvents: EventToViewModel.MandatoryEvents(
         TriggerInitialization,
-        CloseError,
-        CloseErrorAndFinish,
-        { HandleLeavingScreen(it) },
     )
 }

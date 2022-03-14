@@ -1,24 +1,14 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
-import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.core.viewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.InitEvent
 
 sealed class EventToGameScreenViewModel(
-    override val doNotPushToQueue: Boolean = false,
-    override val pushToHead: Boolean = false,
-    override val setLoadingStateBeforeProcessing: Boolean = true
-): EventToViewModel {
-    class HandleScreenLeaving(
-        override val owner: LifecycleOwner
-    ):
-        EventToGameScreenViewModel(),
-        EventToViewModel.HandleScreenLeaving
+    override val setLoadingStateBeforeProcessing: Boolean = true,
+): EventToViewModel.UserEvent() {
 
-    object LoadGame: EventToGameScreenViewModel(), EventToViewModel.Init
+    object LoadGame: EventToGameScreenViewModel(), InitEvent
     object NewGame: EventToGameScreenViewModel()
-
-    object CloseError: EventToGameScreenViewModel(), EventToViewModel.CloseError
-    object CloseErrorAndFinish: EventToGameScreenViewModel(), EventToViewModel.CloseErrorAndFinish
 
     object GoToMainMenu: EventToGameScreenViewModel()
 
@@ -26,9 +16,6 @@ sealed class EventToGameScreenViewModel(
     object OpenGameMenuAndSetIdleState: EventToGameScreenViewModel()
     object SetIdleState: EventToGameScreenViewModel()
     object CloseGameMenu: EventToGameScreenViewModel()
-
-    object Finish: EventToGameScreenViewModel(), EventToViewModel.Finish
-
 
     object RemoveFlaggedBombs: EventToGameScreenViewModel(
         setLoadingStateBeforeProcessing = false
@@ -45,8 +32,5 @@ sealed class EventToGameScreenViewModel(
 
     object MandatoryEvents: EventToViewModel.MandatoryEvents(
         LoadGame,
-        CloseError,
-        CloseErrorAndFinish,
-        { HandleScreenLeaving(it) }
     )
 }

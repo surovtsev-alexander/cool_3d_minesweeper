@@ -24,6 +24,7 @@ import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
 import com.surovtsev.core.viewmodel.ErrorDialogPlacer
+import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.PlaceErrorDialog
 import com.surovtsev.core.viewmodel.ScreenStateFlow
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
@@ -335,7 +336,7 @@ fun ApplySettingsButtons(
     ) {
         val buttons = arrayOf(
             "ok" to EventToSettingsScreenViewModel.ApplySettings,
-            "back" to EventToSettingsScreenViewModel.Finish
+            "back" to EventToViewModel.Finish
         )
 
         buttons.map { (buttonCaption, event) ->

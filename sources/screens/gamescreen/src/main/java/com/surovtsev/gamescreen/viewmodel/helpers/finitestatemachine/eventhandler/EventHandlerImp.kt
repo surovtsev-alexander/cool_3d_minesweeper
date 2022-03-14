@@ -1,6 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
+import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -27,7 +28,7 @@ class EventHandlerImp @Inject constructor(
         state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
-            is EventToGameScreenViewModel.HandleScreenLeaving            -> suspend { handleScreenLeaving(event.owner) }
+            is EventToViewModel.HandleScreenLeaving                      -> suspend { handleScreenLeaving(event.owner) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
             is EventToGameScreenViewModel.LoadGame                       -> suspend { newGame(true) }
             is EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
@@ -185,7 +186,7 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         closeGameMenu(true)
         return EventProcessingResult.Ok(
-            EventToGameScreenViewModel.Finish
+            EventToViewModel.Finish
         )
     }
 

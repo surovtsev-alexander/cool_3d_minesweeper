@@ -3,37 +3,35 @@ package com.surovtsev.core.viewmodel
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.finitestatemachine.event.Event
 
-typealias HandleScreenLeavingEventFactory = (owner: LifecycleOwner) -> Event
-
-interface EventToViewModel: Event {
-
-    interface HandleScreenLeaving: EventToViewModel {
+sealed interface EventToViewModel: Event.UserEvent {
+    object Finish: EventToViewModelImp()
+    object CloseError: EventToViewModelImp(), CloseErrorEvent
+    object CloseErrorAndFinish: EventToViewModelImp(), CloseErrorEvent
+    class HandleScreenLeaving(
         val owner: LifecycleOwner
-    }
+    ): EventToViewModelImp()
 
-    interface CloseError: EventToViewModel
-    interface CloseErrorAndFinish: CloseError
+    abstract class UserEvent: EventToViewModelImp()
 
-    interface Init: EventToViewModel
-    interface Finish: EventToViewModel
+
+    abstract class EventToViewModelImp(
+        override val doNotPushToQueue: Boolean = false,
+        override val pushToHead: Boolean = false,
+        override val setLoadingStateBeforeProcessing: Boolean = true,
+    ): EventToViewModel
 
     abstract class MandatoryEvents(
         val init: Event,
-        val closeError: Event,
-        val closeErrorAndFinish: Event,
-        val handleScreenLeavingEventFactory: HandleScreenLeavingEventFactory,
     ) {
         init {
             // TODO: 17.01.2022 refactor
             assert(
-                init is Init
-            )
-            assert(
-                closeError is CloseError
-            )
-            assert(
-                closeErrorAndFinish is CloseErrorAndFinish
+                init is InitEvent
             )
         }
     }
 }
+
+
+interface CloseErrorEvent
+interface InitEvent

@@ -3,6 +3,7 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventh
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
+import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
@@ -133,7 +134,7 @@ class EventHandlerImp @Inject constructor(
             )
 
             return EventProcessingResult.Ok(
-                EventToSettingsScreenViewModel.Finish
+                EventToViewModel.Finish
             )
         }
 
