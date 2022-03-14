@@ -46,7 +46,7 @@ fun SettingsScreen(
             navController.navigateUp()
         }
         eventReceiver.receiveEvent(
-            EventToSettingsScreenViewModel.TriggerInitialization
+            EventToSettingsScreenViewModel.TriggerInitialization()
         )
     }
 

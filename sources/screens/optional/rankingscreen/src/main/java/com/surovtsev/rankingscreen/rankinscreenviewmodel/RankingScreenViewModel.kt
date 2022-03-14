@@ -8,7 +8,6 @@ import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFacto
 import com.surovtsev.core.viewmodel.TemplateScreenViewModel
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
-import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,9 +18,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel(
-        EventToRankingScreenViewModel.MandatoryEvents,
-    )
+    TemplateScreenViewModel()
 //    RequestPermissionsResultReceiver,
 {
     @AssistedFactory

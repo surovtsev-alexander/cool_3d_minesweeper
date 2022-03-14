@@ -25,7 +25,7 @@ class EventHandlerImp @Inject constructor(
         state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
-            is EventToSettingsScreenViewModel.TriggerInitialization  -> ::triggerInitialization
+            is EventToViewModel.Init                                 -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
             is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
             is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(event.settings) }

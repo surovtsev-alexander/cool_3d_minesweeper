@@ -3,6 +3,7 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemac
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
+import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -27,7 +28,7 @@ class EventHandlerImp @Inject constructor(
         state: State
     ): EventHandlingResult {
         val eventProcessor = when (event) {
-            is EventToRankingScreenViewModel.LoadData                -> ::loadData
+            is EventToViewModel.Init                                 -> ::loadData
             is EventToRankingScreenViewModel.FilterList              -> suspend { filterList(event.selectedSettingsId) }
             is EventToRankingScreenViewModel.SortListWithNoDelay     -> suspend { sortList(event.rankingTableSortParameters, false) }
             is EventToRankingScreenViewModel.SortList                -> suspend { sortList(event.rankingTableSortParameters, true) }

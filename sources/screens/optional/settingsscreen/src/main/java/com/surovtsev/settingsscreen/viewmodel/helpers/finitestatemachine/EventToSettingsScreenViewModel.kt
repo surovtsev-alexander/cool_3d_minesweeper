@@ -2,11 +2,14 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.viewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.InitEvent
 
 sealed class EventToSettingsScreenViewModel(
 ): EventToViewModel.UserEvent() {
-    object TriggerInitialization: EventToSettingsScreenViewModel(), InitEvent
+
+    companion object {
+        @Suppress("FunctionName")
+        fun TriggerInitialization() = EventToViewModel.Init
+    }
 
     object LoadSettingsList: EventToSettingsScreenViewModel()
 
@@ -26,8 +29,4 @@ sealed class EventToSettingsScreenViewModel(
     ): EventToSettingsScreenViewModel()
 
     object ApplySettings: EventToSettingsScreenViewModel()
-
-    object MandatoryEvents: EventToViewModel.MandatoryEvents(
-        TriggerInitialization,
-    )
 }

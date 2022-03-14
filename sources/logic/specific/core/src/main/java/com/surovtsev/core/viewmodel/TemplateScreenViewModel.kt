@@ -12,9 +12,7 @@ import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
-abstract class TemplateScreenViewModel(
-    final override val mandatoryEvents: EventToViewModel.MandatoryEvents,
-):
+abstract class TemplateScreenViewModel:
     ViewModel(),
     ErrorDialogPlacer,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),

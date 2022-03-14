@@ -1,13 +1,16 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.viewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.InitEvent
 
 sealed class EventToGameScreenViewModel(
     override val setLoadingStateBeforeProcessing: Boolean = true,
 ): EventToViewModel.UserEvent() {
 
-    object LoadGame: EventToGameScreenViewModel(), InitEvent
+    companion object {
+        @Suppress("FunctionName")
+        fun LoadGame() = EventToViewModel.Init
+    }
+
     object NewGame: EventToGameScreenViewModel()
 
     object GoToMainMenu: EventToGameScreenViewModel()
@@ -28,9 +31,4 @@ sealed class EventToGameScreenViewModel(
     )
 
     object CloseGameStatusDialog: EventToGameScreenViewModel()
-
-
-    object MandatoryEvents: EventToViewModel.MandatoryEvents(
-        LoadGame,
-    )
 }

@@ -49,7 +49,7 @@ fun RankingScreen(
             }
         eventReceiver.receiveEvent(
             EventToRankingScreenViewModel
-                .LoadData
+                .LoadData()
         )
     }
 

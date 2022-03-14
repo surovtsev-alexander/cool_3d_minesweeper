@@ -66,7 +66,7 @@ fun GameScreen(
             }
         eventReceiver.receiveEvent(
             if (loadGame) {
-                EventToGameScreenViewModel.LoadGame
+                EventToGameScreenViewModel.LoadGame()
             } else {
                 EventToGameScreenViewModel.NewGame
             }

@@ -2,11 +2,12 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemac
 
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.viewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.InitEvent
 
 sealed class EventToRankingScreenViewModel: EventToViewModel.UserEvent() {
-
-    object LoadData: EventToRankingScreenViewModel(), InitEvent
+    companion object {
+        @Suppress("FunctionName")
+        fun LoadData() = EventToViewModel.Init
+    }
 
     class FilterList(
         val selectedSettingsId: Long
@@ -20,9 +21,5 @@ sealed class EventToRankingScreenViewModel: EventToViewModel.UserEvent() {
         rankingTableSortParameters: RankingTableSortParameters
     ): SortList(
         rankingTableSortParameters
-    )
-
-    object MandatoryEvents: EventToViewModel.MandatoryEvents(
-        LoadData,
     )
 }

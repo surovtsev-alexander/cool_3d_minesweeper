@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.finitestatemachine.event.Event
 
 sealed interface EventToViewModel: Event.UserEvent {
+    object Init: EventToViewModelImp()
     object Finish: EventToViewModelImp()
     object CloseError: EventToViewModelImp(), CloseErrorEvent
     object CloseErrorAndFinish: EventToViewModelImp(), CloseErrorEvent
@@ -19,19 +20,7 @@ sealed interface EventToViewModel: Event.UserEvent {
         override val pushToHead: Boolean = false,
         override val setLoadingStateBeforeProcessing: Boolean = true,
     ): EventToViewModel
-
-    abstract class MandatoryEvents(
-        val init: Event,
-    ) {
-        init {
-            // TODO: 17.01.2022 refactor
-            assert(
-                init is InitEvent
-            )
-        }
-    }
 }
 
 
 interface CloseErrorEvent
-interface InitEvent

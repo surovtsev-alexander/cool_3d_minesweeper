@@ -17,9 +17,7 @@ class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel(
-        EventToSettingsScreenViewModel.MandatoryEvents,
-    ),
+    TemplateScreenViewModel(),
     DefaultLifecycleObserver
 {
     @AssistedFactory

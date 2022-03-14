@@ -29,8 +29,8 @@ class EventHandlerImp @Inject constructor(
     ): EventHandlingResult {
         val eventProcessor = when (event) {
             is EventToViewModel.HandleScreenLeaving                      -> suspend { handleScreenLeaving(event.owner) }
+            is EventToViewModel.Init                                     -> suspend { newGame(true) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
-            is EventToGameScreenViewModel.LoadGame                       -> suspend { newGame(true) }
             is EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState -> suspend { openGameMenu(setLoadingState = true) }
             is EventToGameScreenViewModel.OpenGameMenuAndSetIdleState    -> suspend { openGameMenu(setLoadingState = false) }
             is EventToGameScreenViewModel.SetIdleState                   -> ::setIdleState

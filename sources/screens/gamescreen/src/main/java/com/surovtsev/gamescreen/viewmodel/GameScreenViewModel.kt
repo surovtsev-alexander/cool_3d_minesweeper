@@ -25,9 +25,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel(
-        EventToGameScreenViewModel.MandatoryEvents,
-    ),
+    TemplateScreenViewModel(),
     DefaultLifecycleObserver
 {
     @AssistedFactory
