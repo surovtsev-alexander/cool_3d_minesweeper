@@ -8,6 +8,7 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.Data
+import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
@@ -150,15 +151,16 @@ class EventHandlerImp @Inject constructor(
 
             val stateHolder = eventHandlerParameters.stateHolder
 
-            if (setLoadingState) {
-                stateHolder.publishLoadingState(
-                    newScreenData
-                )
+            val newDescription = if (setLoadingState) {
+                Description.Loading
             } else {
-                stateHolder.publishIdleState(
-                    newScreenData
-                )
+                Description.Idle
             }
+
+            stateHolder.publishNewState(
+                newDescription,
+                newScreenData,
+            )
         }
         return EventProcessingResult.Ok()
     }

@@ -65,7 +65,7 @@ class StateHolder(
         )
     }
 
-    private suspend fun publishNewState(
+    suspend fun publishNewState(
         newDescription: Description,
         newData: Data,
     ) {
