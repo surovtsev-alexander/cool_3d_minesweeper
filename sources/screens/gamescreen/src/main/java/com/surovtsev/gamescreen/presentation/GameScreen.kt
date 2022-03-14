@@ -177,13 +177,13 @@ fun FPSLabel(
     columnScope: ColumnScope,
     screenStateFlow: ScreenStateFlow,
 ) {
-    val gameScreenState by screenStateFlow.collectAsState()
-    val gameScreenData = gameScreenState.data
+    val screenState by screenStateFlow.collectAsState()
+    val screenData = screenState.data
 
-    val text = if (gameScreenData !is GameScreenData.GameInProgress) {
+    val text = if (screenData !is GameScreenData.GameInProgress) {
         "--"
     } else {
-        val fps = gameScreenData.uiGameControls.fpsFlow.collectAsState(0f).value
+        val fps = screenData.uiGameControls.fpsFlow.collectAsState(0f).value
         fps.toInt().toString().padStart(4)
     }
 
@@ -202,10 +202,10 @@ fun GameMenu(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val gameScreenState by screenStateFlow.collectAsState()
+    val screenState by screenStateFlow.collectAsState()
 
-    val gameScreenData = gameScreenState.data
-    if (gameScreenState.description !is Description.Idle || gameScreenData !is GameScreenData.GameMenu) {
+    val screenData = screenState.data
+    if (screenState.description !is Description.Idle || screenData !is GameScreenData.GameMenu) {
         return
     }
 
@@ -288,6 +288,15 @@ fun Controls(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
+    val screenState = screenStateFlow.collectAsState().value
+
+    val screenData = screenState.data
+    if (screenData !is GameScreenData) {
+        return
+    }
+
+    val gameInProgress = screenData.rootScreenData() as? GameScreenData.GameInProgress
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -309,7 +318,7 @@ fun Controls(
                 .weight(1f),
         ) {
             ControlCheckBox(
-                screenStateFlow,
+                gameInProgress,
                 eventReceiver,
             )
         }
@@ -319,7 +328,7 @@ fun Controls(
                 .weight(1f)
         ) {
             GameInfo(
-                screenStateFlow
+                gameInProgress
             )
         }
     }
@@ -352,27 +361,18 @@ fun ControlButtons(
 
 @Composable
 fun ControlCheckBox(
-    screenStateFlow: ScreenStateFlow,
+    gameInProgress: GameScreenData.GameInProgress?,
     eventReceiver: EventReceiver,
 ) {
-    val state = screenStateFlow.collectAsState().value
-
-    val stateData = state.data
-
-    // TODO: refactor
-    if (stateData !is GameScreenData) {
+    if (gameInProgress == null) {
         return
     }
 
-    val screenData = stateData.rootScreenData()
-
-    if (screenData !is GameScreenData.GameInProgress) {
-        return
-    }
-
-    val uiGameControlsFlows = screenData.uiGameControls
-
-    val flagged = uiGameControlsFlows.flagging.collectAsState(initial = false).value
+    val flagged = gameInProgress
+        .uiGameControls
+        .flagging
+        .collectAsState(initial = false)
+        .value
 
     val toggleFlaggingAction = {
         eventReceiver.receiveEvent(
@@ -404,29 +404,17 @@ fun ControlCheckBox(
 
 @Composable
 fun GameInfo(
-    screenStateFlow: ScreenStateFlow,
+    gameInProgress: GameScreenData.GameInProgress?,
 ) {
-    val state = screenStateFlow.collectAsState().value
 
-    val stateData = state.data
-
-    // TODO: refactor
-    if (stateData !is GameScreenData) {
-        return
-    }
-
-    val screenData = stateData.rootScreenData()
-
-    if (screenData !is GameScreenData.GameInProgress) {
-        return
-    }
+    val uiGameControls = gameInProgress?.uiGameControls ?: return
 
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        BombsLeft(screenData.uiGameControls.bombsLeft)
-        TimeElapsed(screenData.uiGameControls.timeSpan)
+        BombsLeft(uiGameControls.bombsLeft)
+        TimeElapsed(uiGameControls.timeSpan)
     }
 }
 
@@ -457,9 +445,9 @@ fun GameStatusDialog(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val state by screenStateFlow.collectAsState()
+    val screenState by screenStateFlow.collectAsState()
 
-    val screenData = state.data
+    val screenData = screenState.data
     if (screenData !is GameScreenData.GameInProgress) {
         return
     }

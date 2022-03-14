@@ -20,9 +20,9 @@ fun ErrorDialog(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
 ) {
-    val state by screenStateFlow.collectAsState()
+    val screenState by screenStateFlow.collectAsState()
 
-    val errorMessage = (state.description as? Description.Error)?.message?: return
+    val errorMessage = (screenState.description as? Description.Error)?.message?: return
 
     val closeAction: () -> Unit = {
         eventReceiver.receiveEvent(

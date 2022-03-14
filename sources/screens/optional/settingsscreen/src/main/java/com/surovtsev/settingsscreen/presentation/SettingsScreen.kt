@@ -120,7 +120,7 @@ fun SettingsList(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val state = screenStateFlow.collectAsState().value
+    val screenState = screenStateFlow.collectAsState().value
 
     Column(
         Modifier
@@ -143,7 +143,7 @@ fun SettingsList(
                     .weight(2f))
         }
         LazyColumn {
-            val screenData = state.data
+            val screenData = screenState.data
             val settingsList = if (screenData is SettingsScreenData.SettingsLoaded) {
                 screenData.settingsList
             } else {
@@ -250,8 +250,8 @@ fun Controls(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver
 ) {
-    val state = screenStateFlow.collectAsState().value
-    val screenData = state.data
+    val screenState = screenStateFlow.collectAsState().value
+    val screenData = screenState.data
 
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
         return
