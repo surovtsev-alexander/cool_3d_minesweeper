@@ -9,10 +9,6 @@ class SubscriptionsHolder(
 ) {
     val coroutineScope = customCoroutineScope as CoroutineScope
 
-    companion object {
-        const val NAME = "SUBSCRIPTIONS_HOLDER_NAME"
-    }
-
     private val subscriptions: MutableList<Subscription> =
         emptyList<Subscription>().toMutableList()
 

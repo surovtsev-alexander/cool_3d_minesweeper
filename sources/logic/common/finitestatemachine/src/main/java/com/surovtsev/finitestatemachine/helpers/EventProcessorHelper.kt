@@ -10,6 +10,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
 
+
 class EventProcessorHelper(
     private val logConfig: LogConfig,
     private val stateHolder: StateHolder,

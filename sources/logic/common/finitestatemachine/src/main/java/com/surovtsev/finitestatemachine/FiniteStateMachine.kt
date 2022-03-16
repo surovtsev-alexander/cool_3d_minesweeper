@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import logcat.logcat
 
+
 class FiniteStateMachine(
     val stateHolder: StateHolder,
     userEventHandlers: EventHandlers,

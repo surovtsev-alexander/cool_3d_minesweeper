@@ -1,12 +1,13 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope
 
-import com.surovtsev.utils.statehelpers.SwitchImp
+import com.surovtsev.utils.statehelpers.OnOffSwitchImp
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class CustomCoroutineScope(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
-): CoroutineScope, SwitchImp(true) {
+): CoroutineScope, OnOffSwitchImp(true) {
+
     private var parentJob: CompletableJob = Job()
 
 

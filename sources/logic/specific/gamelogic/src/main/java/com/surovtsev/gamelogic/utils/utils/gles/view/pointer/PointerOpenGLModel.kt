@@ -6,8 +6,8 @@ import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.gamelogic.utils.gles.model.program.PointerGLESProgram
 import com.surovtsev.gamelogic.utils.utils.gles.OpenGLModel
-import com.surovtsev.utils.statehelpers.Switch
-import com.surovtsev.utils.statehelpers.SwitchImp
+import com.surovtsev.utils.statehelpers.OnOffSwitch
+import com.surovtsev.utils.statehelpers.OnOffSwitchImp
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -20,7 +20,7 @@ class PointerOpenGLModel @Inject constructor(
     @Named(PointerEnabledName)
     private val pointerEnabled: Boolean,
 ):
-    OpenGLModel(mGLESProgram), Switch by SwitchImp()
+    OpenGLModel(mGLESProgram), OnOffSwitch by OnOffSwitchImp()
 {
     companion object {
         const val PointerEnabledName = "pointerEnabled"

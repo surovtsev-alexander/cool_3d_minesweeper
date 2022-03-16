@@ -1,15 +1,15 @@
 package com.surovtsev.utils.statehelpers
 
-interface Switch {
+interface OnOffSwitch {
     fun turnOn()
     fun turnOff()
 
     fun isOn(): Boolean
 }
 
-open class SwitchImp(
+open class OnOffSwitchImp(
     private var on: Boolean = false
-): Switch {
+): OnOffSwitch {
 
     override fun turnOn() {
         on = true

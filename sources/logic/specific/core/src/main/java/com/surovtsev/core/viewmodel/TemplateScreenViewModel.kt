@@ -35,7 +35,7 @@ abstract class TemplateScreenViewModel:
     ): FiniteStateMachine {
         return FiniteStateMachine(
             stateHolder,
-            arrayOf(
+            listOf(
                 templateScreenViewModelEventHandler,
                 eventHandler,
             ),
