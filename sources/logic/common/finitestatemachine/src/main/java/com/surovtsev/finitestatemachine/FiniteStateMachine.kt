@@ -3,7 +3,9 @@ package com.surovtsev.finitestatemachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.event.Event
+import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventHandlerImp
 import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
@@ -16,7 +18,7 @@ import logcat.logcat
 
 class FiniteStateMachine(
     val stateHolder: StateHolder,
-    private val eventHandlers: EventHandlers,
+    userEventHandlers: EventHandlers,
     subscriptionsHolder: SubscriptionsHolder,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 ): EventReceiver, Subscription {
@@ -36,16 +38,21 @@ class FiniteStateMachine(
         logConfig,
     )
 
+    private val baseEventHandler: EventHandler = EventHandlerImp(
+        pausedStateHolder,
+        fsmProcessingTrigger,
+    )
+
+    private val eventHandlers = listOf(baseEventHandler) + userEventHandlers
+
     private val eventProcessorHelper = EventProcessorHelper(
         logConfig,
         stateHolder,
-        pausedStateHolder,
-        fsmProcessingTrigger,
         eventHandlers,
         queueHolder,
     )
 
-    val coroutineScope = subscriptionsHolder.coroutineScope
+    private val coroutineScope = subscriptionsHolder.coroutineScope
 
     init {
         subscriptionsHolder

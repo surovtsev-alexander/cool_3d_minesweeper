@@ -51,7 +51,7 @@ class TemplateScreenViewModelEventHandler(
         }
 
         return EventHandlingResult
-            .Helper
+            .GeneratorHelper
             .processOrSkipIfNull(
                 eventProcessor
             )

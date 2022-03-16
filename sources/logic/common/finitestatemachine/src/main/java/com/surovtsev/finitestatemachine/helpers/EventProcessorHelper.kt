@@ -13,100 +13,211 @@ import logcat.logcat
 class EventProcessorHelper(
     private val logConfig: LogConfig,
     private val stateHolder: StateHolder,
-    private val pausedStateHolder: PausedStateHolder,
-    private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val eventHandlers: EventHandlers,
     private val fsmQueueHolder: FSMQueueHolder,
 ) {
     private val processingMutex = Mutex(locked = false)
 
+    companion object {
+        const val EVENT_PROCESSING_CHANGES = 1
+    }
+
+    enum class Errors(
+        val message: String
+    ) {
+        FSM_INTERNAL_ERROR_001("FSM_INTERNAL_ERROR_001");
+    }
+
     suspend fun processEvent(
         event: Event
     ) {
         processingMutex.withLock {
-            if (logConfig.logLevel.isGreaterThan2()) {
-                logcat { "processEvent; event: $event" }
+            if (logConfig.logLevel.isGreaterThan1()) {
+                logcat { "processEvent: $event" }
             }
 
-            when (event) {
-                is Event.Pause -> {
-                    pausedStateHolder.pause()
-                }
-                is Event.Resume -> {
-                    pausedStateHolder.resume()
+            var attemptsToProcess = 0
+            var eventToProcess = event
+            var eventProcessorHelperResult: EventProcessorHelperResult? = null
 
-                    fsmProcessingTrigger.kickFSM()
+            while (attemptsToProcess < EVENT_PROCESSING_CHANGES) {
+                attemptsToProcess++
+
+                eventProcessorHelperResult = tryToProcessEvent(eventToProcess)
+
+                when (eventProcessorHelperResult) {
+                    is EventProcessorHelperResult.Skipped -> {
+                        break
+                    }
+                    is EventProcessorHelperResult.Processed -> {
+                        break
+                    }
+                    is EventProcessorHelperResult.Error -> {
+                        stateHolder
+                            .publishErrorState(
+                                eventProcessorHelperResult.message
+                            )
+                        break
+                    }
+                    is EventProcessorHelperResult.ChangeWith -> {
+                        eventToProcess = eventProcessorHelperResult.event
+                    }
                 }
             }
 
-            do {
-                logcat { "handleEvent: $event" }
-
-                val currState = stateHolder.state.value
-                val handlingResult = eventHandlers.map {
-                    it.handleEvent(event, currState)
+            if (logConfig.logLevel.isGreaterThan1()) {
+                logcat {
+                    "result of processing event after $attemptsToProcess:" +
+                            "$eventProcessorHelperResult"
                 }
-
-                handlingResult.firstOrNull {
-                    it !is EventHandlingResult.Skip
-                } ?: break
-
-                val firstError = handlingResult.firstOrNull {
-                    it is EventHandlingResult.RaiseError
-                }
-
-                if (firstError is EventHandlingResult.RaiseError) {
-                    stateHolder.publishErrorState(
-                        firstError.message
-                    )
-                    break
-                }
-
-                val changeEventResults =
-                    handlingResult.filterIsInstance<EventHandlingResult.ChangeWith>()
-
-                val eventToProcess = when (changeEventResults.count()) {
-                    0 -> {
-                        event
-                    }
-                    1 -> {
-                        // TODO: 22.02.2022 implement
-                        stateHolder.publishErrorState(
-                            "internal error 1"
-                        )
-                        break
-                    }
-                    else -> {
-                        stateHolder.publishErrorState(
-                            "internal error 2"
-                        )
-                        break
-                    }
-                }
-
-                if (eventToProcess.setLoadingStateBeforeProcessing) {
-                    stateHolder.publishLoadingState()
-                }
-
-                val processingResults = handlingResult.map {
-                    if (it is EventHandlingResult.Process) {
-                        it.eventProcessor.invoke()
-                    } else {
-                        null
-                    }
-                }
-
-                logcat { "processingResults: $processingResults" }
-
-                processingResults
-                    .filterIsInstance<EventProcessingResult.Ok>()
-                    .map {
-                        it.newEventToPush?.let { e ->
-                            logcat { "pushEvent: $e" }
-                            fsmQueueHolder.pushEvent(e)
-                        }
-                    }
-            } while (false)
+            }
         }
     }
+
+    private suspend fun tryToProcessEvent(
+        event: Event
+    ): EventProcessorHelperResult {
+        if (logConfig.logLevel.isGreaterThan2()) {
+            logcat { "tryToProcessEvent: $event" }
+        }
+
+        // step 1. Calculation EventHandlingResults for each fsm.
+        // EventHandlingResults: Skip, Process, etc.
+        val eventHandlingResults = calculateHandlingResults(event)
+
+
+        // step 2. Stop processing event if each EventHandlingResult is Skip.
+        if (areAllSkip(eventHandlingResults)) {
+            return EventProcessorHelperResult.Skipped
+        }
+
+
+        // step 3. Finish processing this event and notify about error.
+        val firstError = getFirstErrorResult(
+            eventHandlingResults
+        )
+        if (firstError != null) {
+            return EventProcessorHelperResult.Error(
+                firstError.message
+            )
+        }
+
+
+        // step 4. Changing events.
+        // Change CloseEvent with CloseAndFinishEvent, for example.
+        // Continue processing if there is no EventHandlingResult.ChangeWith.
+        // Return new event if there is only one EventHandlingResult.ChangeWith.
+        // Return error otherwise.
+        val changeEventResults = getChangeEventsResult(
+            eventHandlingResults
+        )
+
+        when(changeEventResults.count()) {
+            0 -> { }
+            1 -> {
+                return EventProcessorHelperResult.ChangeWith(
+                    changeEventResults[0].event
+                )
+            }
+            else -> {
+                return EventProcessorHelperResult.Error(
+                    Errors.FSM_INTERNAL_ERROR_001.message
+                )
+            }
+        }
+
+
+        // step 5. Setting loading state before processing.
+        // Setting new state is up to user in processing results step (6).
+        if (event.setLoadingStateBeforeProcessing) {
+            stateHolder.publishLoadingState()
+        }
+
+
+        // step 6. Processing results.
+        val eventProcessingResults = calculateEventProcessingResults(
+            eventHandlingResults
+        )
+
+        if (logConfig.logLevel.isGreaterThan3()) {
+            logcat { "eventProcessingResults: $eventProcessingResults" }
+        }
+
+
+        // step 7. Pushing new events.
+        pushNewEventsIfRequired(
+            eventProcessingResults
+        )
+
+        return EventProcessorHelperResult.Processed
+    }
+
+    private sealed interface EventProcessorHelperResult {
+        object Skipped: EventProcessorHelperResult
+        object Processed: EventProcessorHelperResult
+        class Error(
+            val message: String
+        ): EventProcessorHelperResult
+        class ChangeWith(
+            val event: Event
+        ): EventProcessorHelperResult
+    }
+
+    /// region [auxiliary functions]
+    private fun calculateHandlingResults(
+        event: Event,
+    ): List<EventHandlingResult> {
+        return eventHandlers.map {
+            it.handleEvent(event, stateHolder.state.value)
+        }
+    }
+
+    private fun areAllSkip(
+        eventHandlingResults: List<EventHandlingResult>
+    ): Boolean {
+        return eventHandlingResults.firstOrNull {
+            it !is EventHandlingResult.Skip
+        } == null
+    }
+
+    private fun getFirstErrorResult(
+        eventHandlingResults: List<EventHandlingResult>
+    ): EventHandlingResult.RaiseError? {
+        return eventHandlingResults.firstOrNull {
+            it is EventHandlingResult.RaiseError
+        } as? EventHandlingResult.RaiseError
+    }
+
+    private fun getChangeEventsResult(
+        eventHandlingResults: List<EventHandlingResult>
+    ): List<EventHandlingResult.ChangeWith> {
+        return eventHandlingResults
+            .filterIsInstance<EventHandlingResult.ChangeWith>()
+    }
+
+    private suspend fun calculateEventProcessingResults(
+        eventHandlingResults: List<EventHandlingResult>
+    ): List<EventProcessingResult?> {
+        return eventHandlingResults.map {
+            if (it is EventHandlingResult.Process) {
+                it.eventProcessor.invoke()
+            } else {
+                null
+            }
+        }
+    }
+
+    private suspend fun pushNewEventsIfRequired(
+        eventProcessingResults: List<EventProcessingResult?>
+    ) {
+        eventProcessingResults
+            .filterIsInstance<EventProcessingResult.Ok>()
+            .map {
+                it.newEventToPush?.let { eventToPush ->
+                    logcat { "eventToPush: $eventToPush" }
+                    fsmQueueHolder.pushEvent(eventToPush)
+                }
+            }
+    }
+    /// endregion [auxiliary functions]
 }

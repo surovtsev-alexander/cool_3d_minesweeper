@@ -35,7 +35,7 @@ class EventHandlerImp @Inject constructor(
             else                                                     -> null
         }
         
-        return EventHandlingResult.Helper.processOrSkipIfNull(
+        return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
             eventProcessor
         )
     }

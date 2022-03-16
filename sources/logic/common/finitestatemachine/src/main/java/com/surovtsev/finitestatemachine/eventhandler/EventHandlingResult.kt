@@ -18,7 +18,7 @@ sealed interface EventHandlingResult {
         val event: Event,
     ): EventHandlingResult
 
-    object Helper {
+    object GeneratorHelper {
         fun processOrSkipIfNull(
             eventProcessor: EventProcessor?,
         ): EventHandlingResult {
