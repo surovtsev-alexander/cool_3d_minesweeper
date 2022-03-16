@@ -1,6 +1,11 @@
 package com.surovtsev.finitestatemachine.event
 
 sealed interface Event {
+    object ToDefault: EventImp(
+        false,
+        false,
+        true,
+    )
     object Pause: PauseResumeEvent()
     object Resume: PauseResumeEvent()
 

@@ -1,5 +1,6 @@
 package com.surovtsev.finitestatemachine.helpers
 
+
 class PausedStateHolder {
     var paused: Boolean = false
         private set

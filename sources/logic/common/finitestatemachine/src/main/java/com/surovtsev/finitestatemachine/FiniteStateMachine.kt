@@ -40,8 +40,10 @@ class FiniteStateMachine(
     )
 
     private val baseEventHandler: EventHandler = EventHandlerImp(
+        stateHolder,
         pausedStateHolder,
         fsmProcessingTrigger,
+        queueHolder,
     )
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers

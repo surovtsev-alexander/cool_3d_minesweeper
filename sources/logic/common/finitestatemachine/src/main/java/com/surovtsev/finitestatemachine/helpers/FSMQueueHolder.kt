@@ -20,6 +20,12 @@ class FSMQueueHolder(
         return eventsQueue.isEmpty()
     }
 
+    suspend fun emptyQueue() {
+        queueMutex.withLock {
+            eventsQueue.clear()
+        }
+    }
+
     suspend fun pollEvent(): Event? {
         return queueMutex.withLock {
             if (eventsQueue.count() == 0) {
@@ -30,7 +36,7 @@ class FSMQueueHolder(
                 } else {
                     val first = eventsQueue[0]
 
-                    if (first is com.surovtsev.finitestatemachine.event.Event.Pause || first is com.surovtsev.finitestatemachine.event.Event.Resume) {
+                    if (first is Event.Pause || first is Event.Resume) {
                         eventsQueue.removeAt(0)
                     } else {
                         null
