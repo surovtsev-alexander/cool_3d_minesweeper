@@ -3,7 +3,7 @@ package com.surovtsev.utils.statehelpers
 class UpdatableOnOffSwitch(
     private val updatable: UpdatableImp = UpdatableImp(false)
 ):
-    SwitchImp(),
+    OnOffSwitchImp(),
     SmartUpdatable by updatable {
 
     override fun turnOn() {
