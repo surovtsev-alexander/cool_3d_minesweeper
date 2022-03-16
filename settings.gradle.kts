@@ -3,39 +3,39 @@ rootProject.name = "cool_3d_minesweeper"
 /// region [action]: declare project modules tree
 projectDir(
     Folders.root,
-    arrayOf(Modules.app),
+    listOf(Modules.app),
 ) {
-    projectDir(
-        subfolder(Folders.logic),
+    subfolder(
+        Folders.logic,
     ) {
-        projectDir(
-           subfolder(Folders.common),
-           arrayOf(
+        subfolder(
+           Folders.common,
+           listOf(
                Modules.finiteStateMachine,
                Modules.timeSpan,
                Modules.touchListener,
                Modules.utils,
            ),
         ) {
-            projectDir(
-                subfolder(Folders.restartableCoroutineScope),
-                arrayOf(
+            subfolder(
+                Folders.restartableCoroutineScope,
+                listOf(
                     Modules.restartableCoroutineScope,
                     Modules.subscriptionsHolder,
                 )
             )
         }
 
-        projectDir(
-            subfolder(Folders.specific),
-            arrayOf(
+        subfolder(
+            Folders.specific,
+            listOf(
                 Modules.core,
                 Modules.gameLogic,
             )
         ) {
-            projectDir(
-                subfolder(Folders.gameStateHolder),
-                arrayOf(
+            subfolder(
+                Folders.gameStateHolder,
+                listOf(
                     Modules.gameState,
                     Modules.gameStateHolder,
                 )
@@ -43,16 +43,16 @@ projectDir(
         }
     }
 
-    projectDir(
-        subfolder(Folders.screens),
-        arrayOf(
+    subfolder(
+        Folders.screens,
+        listOf(
             Modules.gameScreen,
             Modules.mainScreen,
         ),
     ) {
-        projectDir(
-            subfolder(Folders.optional),
-            arrayOf(
+        subfolder(
+            Folders.optional,
+            listOf(
                 Modules.helpScreen,
                 Modules.rankingScreen,
                 Modules.settingsScreen,
@@ -100,7 +100,7 @@ object Folders {
 /// region [helper methods]: dsl to declare project modules tree
 fun projectDir(
     dir: String,
-    modules: Array<String> = emptyArray(),
+    modules: List<String> = emptyList(),
     subDirsCreator: (ParentDirHolder.() -> Unit)? = null,
 ) {
     includeModules(
@@ -110,16 +110,28 @@ fun projectDir(
     subDirsCreator?.invoke(ParentDirHolder(dir))
 }
 
+fun ParentDirHolder.subfolder(
+    folderName: String,
+    modules: List<String> = emptyList(),
+    subDirsCreator: (ParentDirHolder.() -> Unit)? = null,
+) {
+    projectDir(
+        this.subfolderPath(folderName),
+        modules,
+        subDirsCreator
+    )
+}
+
 data class ParentDirHolder(
     val parentDir: String,
 ) {
-    fun subfolder(
-        dir: String
-    ) = "$parentDir/$dir"
+    fun subfolderPath(
+        folderName: String
+    ) = "$parentDir/$folderName"
 }
 
 fun includeModules(
-    modules: Array<String>,
+    modules: List<String>,
     dir: String
 ) {
     modules.map {
@@ -135,6 +147,7 @@ fun includeModule(
     dir: String
 ) {
     include(name)
+    // remove colon. e.g. :app -> app
     project(name).projectDir = File(rootDir, "$dir/${name.substring(1)}")
 }
 /// endregion
