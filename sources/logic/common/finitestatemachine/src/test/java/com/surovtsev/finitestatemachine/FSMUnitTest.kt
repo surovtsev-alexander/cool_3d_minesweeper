@@ -44,7 +44,7 @@ class FSMUnitTest {
             val stateHolder = StateHolder(false)
             fsm = FiniteStateMachine(
                 stateHolder,
-                arrayOf(
+                listOf(
                     TestEventHandler(stateHolder)
                 ),
                 SubscriptionsHolder(it),
