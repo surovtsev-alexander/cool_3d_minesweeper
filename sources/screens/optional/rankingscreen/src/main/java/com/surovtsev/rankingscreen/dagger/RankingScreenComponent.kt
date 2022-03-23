@@ -71,12 +71,6 @@ object RankingScreenModule {
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,
-            SubscriptionsHolderComponentFactoryHolderImp
-                .createAndSubscribe(
-                    restartableCoroutineScopeComponent,
-                    "RankingScreen:FiniteStateMachine"
-                )
-                .subscriptionsHolder
         )
     }
 

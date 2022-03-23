@@ -6,6 +6,5 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscrip
 
 typealias FiniteStateMachineFactory =
     (
-        eventHandler: EventHandler,
-        subscriptionsHolder: SubscriptionsHolder,
+        userEventHandler: EventHandler,
     ) -> FiniteStateMachine

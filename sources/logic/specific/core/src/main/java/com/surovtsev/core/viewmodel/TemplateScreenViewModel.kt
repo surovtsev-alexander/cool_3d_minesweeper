@@ -12,7 +12,6 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 
 abstract class TemplateScreenViewModel:
     ViewModel(),
@@ -32,14 +31,13 @@ abstract class TemplateScreenViewModel:
     )
 
     fun createFiniteStateMachine(
-        eventHandler: EventHandler,
-        subscriptionsHolder: SubscriptionsHolder,
+        userEventHandler: EventHandler,
     ): FiniteStateMachine {
         return FiniteStateMachine(
             stateHolder,
             listOf(
                 templateScreenViewModelEventHandler,
-                eventHandler,
+                userEventHandler,
             ),
             logConfig = LogConfig(
                 LogLevel.LOG_LEVEL_1,

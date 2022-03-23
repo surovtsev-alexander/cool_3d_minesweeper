@@ -10,4 +10,6 @@ sealed interface EventProcessingResult {
     class Ok(
         val newEventToPush: Event? = null,
     ) : EventProcessingResult
+
+    object Restarted: EventProcessingResult
 }

@@ -80,12 +80,6 @@ object GameScreenModule {
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,
-            SubscriptionsHolderComponentFactoryHolderImp
-                .createAndSubscribe(
-                    restartableCoroutineScopeComponent,
-                    "GameScreen:FiniteStateMachine"
-                )
-                .subscriptionsHolder
         )
     }
 

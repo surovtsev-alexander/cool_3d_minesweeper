@@ -17,7 +17,6 @@ class EventHandlerImp(
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val fsmQueueHolder: FSMQueueHolder,
-    private val customCoroutineScope: CustomCoroutineScope,
 ): EventHandler {
     override fun handleEvent(
         event: Event,
@@ -41,13 +40,11 @@ class EventHandlerImp(
 
         fsmQueueHolder.emptyQueue()
 
-        customCoroutineScope.restart()
-
         stateHolder.publishDefaultInitialState()
 
         resumeAction()
 
-        return EventProcessingResult.Ok()
+        return EventProcessingResult.Restarted
     }
 
     private suspend fun pause(

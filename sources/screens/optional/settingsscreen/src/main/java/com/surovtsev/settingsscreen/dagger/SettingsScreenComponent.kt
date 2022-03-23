@@ -63,12 +63,6 @@ object SettingsScreenModule {
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,
-            SubscriptionsHolderComponentFactoryHolderImp
-                .createAndSubscribe(
-                    restartableCoroutineScopeComponent,
-                    "SettingsScreen:FiniteStateMachine"
-                )
-                .subscriptionsHolder
         )
     }
 

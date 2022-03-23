@@ -48,7 +48,6 @@ class FiniteStateMachine(
         pausedStateHolder,
         fsmProcessingTrigger,
         queueHolder,
-        customCoroutineScope,
     )
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers

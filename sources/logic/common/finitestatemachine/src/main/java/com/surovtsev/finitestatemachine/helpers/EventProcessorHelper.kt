@@ -236,6 +236,14 @@ class EventProcessorHelper(
     private suspend fun pushNewEventsIfRequired(
         eventProcessingResults: List<EventProcessingResult?>
     ) {
+        val hasRestartedResult = eventProcessingResults
+            .filterIsInstance<EventProcessingResult.Restarted>()
+            .count() > 0
+
+        if (hasRestartedResult) {
+            return
+        }
+
         eventProcessingResults
             .filterIsInstance<EventProcessingResult.Ok>()
             .map {
