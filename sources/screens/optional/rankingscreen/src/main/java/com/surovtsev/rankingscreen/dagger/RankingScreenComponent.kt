@@ -5,7 +5,7 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
@@ -67,7 +67,6 @@ object RankingScreenModule {
     fun provideRankingScreenFiniteStateMachine(
         finiteStateMachineFactory: FiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
-        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,

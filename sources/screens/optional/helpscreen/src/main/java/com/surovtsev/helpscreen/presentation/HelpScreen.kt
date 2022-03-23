@@ -14,7 +14,7 @@ fun HelpScreen(
 
 @Composable
 fun HelpScreenControls(
-    viewModel: HelpScreenViewModel
+    @Suppress("UNUSED_PARAMETER") viewModel: HelpScreenViewModel
 ) {
     MinesweeperTheme {
         Text(

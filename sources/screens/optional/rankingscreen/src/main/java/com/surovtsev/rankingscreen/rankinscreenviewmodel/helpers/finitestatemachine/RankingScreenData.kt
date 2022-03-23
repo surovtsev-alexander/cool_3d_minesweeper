@@ -5,7 +5,7 @@ import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
-import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
 sealed interface RankingScreenData: ScreenData.UserData {

@@ -5,16 +5,15 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.TemplateScreenViewModel
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.TemplateScreenViewModel
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
-import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 
 class SettingsScreenViewModel @AssistedInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
-    @Assisted context: Context,
+    @Assisted @Suppress("UNUSED_PARAMETER") savedStateHandle: SavedStateHandle,
+    @Assisted @Suppress("UNUSED_PARAMETER") context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     TemplateScreenViewModel(),

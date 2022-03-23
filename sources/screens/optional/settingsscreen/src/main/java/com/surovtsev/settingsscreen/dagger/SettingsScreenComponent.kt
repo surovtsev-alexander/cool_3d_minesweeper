@@ -3,13 +3,12 @@ package com.surovtsev.settingsscreen.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
-import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -59,7 +58,6 @@ object SettingsScreenModule {
     fun provideSettingsScreenFiniteStateMachine(
         finiteStateMachineFactory: FiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
-        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,

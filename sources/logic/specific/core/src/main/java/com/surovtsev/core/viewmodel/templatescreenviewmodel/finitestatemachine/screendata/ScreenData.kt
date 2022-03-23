@@ -1,4 +1,4 @@
-package com.surovtsev.core.viewmodel
+package com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata
 
 import com.surovtsev.finitestatemachine.state.data.Data
 

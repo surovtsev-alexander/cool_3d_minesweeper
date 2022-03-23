@@ -1,9 +1,9 @@
-package com.surovtsev.core.viewmodel.finitestatemachine.eventhandler
+package com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.core.viewmodel.CloseErrorEvent
-import com.surovtsev.core.viewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.CloseErrorEvent
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.finishactionholder.FinishActionHolder
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -64,7 +64,7 @@ class TemplateScreenViewModelEventHandler(
     }
 
     private suspend fun handleScreenLeaving(
-        owner: LifecycleOwner
+        @Suppress("UNUSED_PARAMETER") owner: LifecycleOwner
     ): EventProcessingResult {
         stateHolder.publishDefaultInitialState()
 

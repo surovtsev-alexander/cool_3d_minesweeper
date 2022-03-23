@@ -2,8 +2,8 @@ package com.surovtsev.gamescreen.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
-import com.surovtsev.core.viewmodel.FiniteStateMachineFactory
-import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent
@@ -76,7 +76,6 @@ object GameScreenModule {
     fun provideGameScreenFiniteStateMachine(
         finiteStateMachineFactory: FiniteStateMachineFactory,
         eventHandler: EventHandlerImp,
-        restartableCoroutineScopeComponent: RestartableCoroutineScopeComponent,
     ): FiniteStateMachine {
         return finiteStateMachineFactory(
             eventHandler,

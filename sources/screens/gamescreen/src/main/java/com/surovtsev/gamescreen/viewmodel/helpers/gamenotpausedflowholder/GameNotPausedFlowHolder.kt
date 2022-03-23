@@ -1,6 +1,6 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.gamenotpausedflowholder
 
-import com.surovtsev.core.viewmodel.ScreenStateFlow
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNotPausedFlow
 import com.surovtsev.gamescreen.dagger.GameScreenScope

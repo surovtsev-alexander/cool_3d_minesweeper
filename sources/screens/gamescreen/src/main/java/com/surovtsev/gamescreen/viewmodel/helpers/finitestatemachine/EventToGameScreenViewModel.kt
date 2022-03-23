@@ -1,6 +1,6 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
-import com.surovtsev.core.viewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 
 sealed class EventToGameScreenViewModel(
     override val setLoadingStateBeforeProcessing: Boolean = true,

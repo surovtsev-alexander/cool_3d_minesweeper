@@ -2,7 +2,7 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.viewmodel.ScreenData
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
 

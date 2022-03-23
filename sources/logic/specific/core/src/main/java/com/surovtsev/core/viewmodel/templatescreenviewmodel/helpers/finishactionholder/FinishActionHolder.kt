@@ -1,4 +1,4 @@
-package com.surovtsev.core.viewmodel.helpers
+package com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.finishactionholder
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,7 +1,7 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.core.viewmodel.EventToViewModel
+import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -65,7 +65,7 @@ class EventHandlerImp @Inject constructor(
     private var uiGameControlsFlows: UIGameControlsFlows? = null
 
     private suspend fun handleScreenLeaving(
-        owner: LifecycleOwner
+        @Suppress("UNUSED_PARAMETER") owner: LifecycleOwner
     ): EventProcessingResult {
         with(eventHandlerParameters) {
             restartableCoroutineScopeComponent

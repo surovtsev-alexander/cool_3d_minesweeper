@@ -18,8 +18,8 @@ import logcat.logcat
 
 
 class MainScreenViewModel @AssistedInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
-    @Assisted context: Context,
+    @Assisted @Suppress("UNUSED_PARAMETER") savedStateHandle: SavedStateHandle,
+    @Assisted @Suppress("UNUSED_PARAMETER") context: Context,
     @Assisted appComponentEntryPoint: AppComponentEntryPoint,
 ):
     ViewModel(),

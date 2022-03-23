@@ -1,4 +1,4 @@
-package com.surovtsev.core.viewmodel
+package com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog
 
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.state.State

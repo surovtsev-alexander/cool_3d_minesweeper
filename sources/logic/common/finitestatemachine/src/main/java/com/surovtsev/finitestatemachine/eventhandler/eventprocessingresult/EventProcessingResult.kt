@@ -4,7 +4,7 @@ import com.surovtsev.finitestatemachine.event.Event
 
 sealed interface EventProcessingResult {
     class Error(
-        message: String,
+        @Suppress("UNUSED_PARAMETER") message: String,
     ) : EventProcessingResult
 
     class Ok(

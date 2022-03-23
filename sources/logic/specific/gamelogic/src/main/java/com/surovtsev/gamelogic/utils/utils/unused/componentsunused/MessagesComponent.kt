@@ -48,7 +48,9 @@ class MessagesComponent: ScrollView {
         fullScroll(FOCUS_DOWN)
     }
 
-    fun addMessageUI(message: String) {
+    fun addMessageUI(
+        @Suppress("UNUSED_PARAMETER") message: String
+    ) {
 //        doAsync {
 //            uiThread {
 //                addMessage(message)
