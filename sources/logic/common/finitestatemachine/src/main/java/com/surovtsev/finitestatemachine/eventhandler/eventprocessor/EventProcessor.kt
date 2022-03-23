@@ -1,3 +1,7 @@
 package com.surovtsev.finitestatemachine.eventhandler.eventprocessor
 
-typealias EventProcessor = suspend () -> EventProcessingResult
+
+data class EventProcessor(
+    val action: EventProcessorAction,
+    val priority: EventProcessorPriority = EventProcessorPriority.NORMAL
+)

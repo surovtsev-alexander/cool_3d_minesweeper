@@ -4,7 +4,8 @@ import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessorPriority
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -33,6 +34,11 @@ class EventProcessorHelper(
         event: Event
     ) {
         processingMutex.withLock {
+            if (logConfig.logLevel.isGreaterThan2()) {
+                logcat { "processEvent; state before processing: ${stateHolder.state.value}" }
+            }
+
+
             if (logConfig.logLevel.isGreaterThan1()) {
                 logcat { "processEvent: $event" }
             }
@@ -72,6 +78,11 @@ class EventProcessorHelper(
                             "$eventProcessorHelperResult"
                 }
             }
+
+            if (logConfig.logLevel.isGreaterThan2()) {
+                logcat { "processEvent; state after processing: ${stateHolder.state.value}" }
+            }
+
         }
     }
 
@@ -102,7 +113,6 @@ class EventProcessorHelper(
                 firstError.message
             )
         }
-
 
         // step 4. Changing events.
         // Change CloseEvent with CloseAndFinishEvent, for example.
@@ -137,7 +147,8 @@ class EventProcessorHelper(
 
         // step 6. Processing results.
         val eventProcessingResults = calculateEventProcessingResults(
-            eventHandlingResults
+            eventHandlingResults,
+            logConfig,
         )
 
         if (logConfig.logLevel.isGreaterThan3()) {
@@ -197,15 +208,29 @@ class EventProcessorHelper(
     }
 
     private suspend fun calculateEventProcessingResults(
-        eventHandlingResults: List<EventHandlingResult>
+        eventHandlingResults: List<EventHandlingResult>,
+        logConfig: LogConfig,
     ): List<EventProcessingResult?> {
-        return eventHandlingResults.map {
-            if (it is EventHandlingResult.Process) {
-                it.eventProcessor.invoke()
-            } else {
-                null
+        val eventProcessorsCount = eventHandlingResults.size
+
+        val res = Array<EventProcessingResult?>(eventProcessorsCount) { null }
+
+        for (priority in EventProcessorPriority.values()) {
+            if (logConfig.logLevel.isGreaterThan2()) {
+                logcat { "calculateEventProcessingResults for: $priority" }
+            }
+            for (i in 0 until eventProcessorsCount) {
+                val eventHandlingResult = eventHandlingResults[i]
+
+                (eventHandlingResult as? EventHandlingResult.Process)?.let {
+                    if (it.eventProcessor.priority == priority) {
+                        res[i] = it.eventProcessor.action.invoke()
+                    }
+                }
             }
         }
+
+        return res.toList()
     }
 
     private suspend fun pushNewEventsIfRequired(

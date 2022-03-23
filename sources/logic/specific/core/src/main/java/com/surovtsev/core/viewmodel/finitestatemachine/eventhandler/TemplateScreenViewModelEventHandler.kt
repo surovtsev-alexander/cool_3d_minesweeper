@@ -7,7 +7,9 @@ import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toLastPriorityEventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 import com.surovtsev.finitestatemachine.state.description.Description
@@ -44,9 +46,13 @@ class TemplateScreenViewModelEventHandler(
 
         val eventProcessor = when(event) {
             is EventToViewModel.CloseError          -> ::closeError
+                .toNormalPriorityEventProcessor()
             is EventToViewModel.CloseErrorAndFinish -> ::closeErrorAndFinish
+                .toNormalPriorityEventProcessor()
             is EventToViewModel.Finish              -> ::finish
+                .toNormalPriorityEventProcessor()
             is EventToViewModel.HandleScreenLeaving -> suspend { handleScreenLeaving(event.owner) }
+                .toLastPriorityEventProcessor()
             else                                    -> null
         }
 

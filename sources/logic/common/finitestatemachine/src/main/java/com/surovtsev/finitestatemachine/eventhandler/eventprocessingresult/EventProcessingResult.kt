@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.eventhandler.eventprocessor
+package com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult
 
 import com.surovtsev.finitestatemachine.event.Event
 

@@ -5,7 +5,8 @@ import com.surovtsev.core.viewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.state.description.Description
@@ -28,7 +29,7 @@ class EventHandlerImp @Inject constructor(
         event: Event,
         state: State
     ): EventHandlingResult {
-        val eventProcessor = when (event) {
+        val eventProcessorAction = when (event) {
             is EventToViewModel.HandleScreenLeaving                      -> suspend { handleScreenLeaving(event.owner) }
             is EventToViewModel.Init                                     -> suspend { newGame(true) }
             is EventToGameScreenViewModel.NewGame                        -> suspend { newGame(false) }
@@ -45,7 +46,7 @@ class EventHandlerImp @Inject constructor(
         }
 
         return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
-            eventProcessor
+            eventProcessorAction.toNormalPriorityEventProcessor()
         )
     }
 

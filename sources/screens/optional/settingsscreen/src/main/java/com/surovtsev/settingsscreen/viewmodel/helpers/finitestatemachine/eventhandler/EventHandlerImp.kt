@@ -8,7 +8,8 @@ import com.surovtsev.core.viewmodel.ScreenData
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
@@ -24,7 +25,7 @@ class EventHandlerImp @Inject constructor(
         event: Event,
         state: State
     ): EventHandlingResult {
-        val eventProcessor = when (event) {
+        val eventProcessorAction = when (event) {
             is EventToViewModel.Init                                 -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
             is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
@@ -36,7 +37,7 @@ class EventHandlerImp @Inject constructor(
         }
         
         return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
-            eventProcessor
+            eventProcessorAction.toNormalPriorityEventProcessor()
         )
     }
 

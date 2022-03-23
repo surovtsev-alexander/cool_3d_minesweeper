@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.core.viewmodel.finitestatemachine.eventhandler.TemplateScreenViewModelEventHandler
 import com.surovtsev.core.viewmodel.helpers.FinishActionHolder
 import com.surovtsev.finitestatemachine.FiniteStateMachine
+import com.surovtsev.finitestatemachine.config.LogConfig
+import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
@@ -39,7 +41,9 @@ abstract class TemplateScreenViewModel:
                 templateScreenViewModelEventHandler,
                 eventHandler,
             ),
-            subscriptionsHolder,
+            logConfig = LogConfig(
+                LogLevel.LOG_LEVEL_1,
+            )
         )
     }
 

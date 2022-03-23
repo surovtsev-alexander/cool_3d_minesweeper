@@ -1,19 +1,23 @@
-package com.surovtsev.finitestatemachine.eventhandler.eventprocessor
+package com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp
 
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
 import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
 import com.surovtsev.finitestatemachine.helpers.PausedStateHolder
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 
 class EventHandlerImp(
     private val stateHolder: StateHolder,
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val fsmQueueHolder: FSMQueueHolder,
+    private val customCoroutineScope: CustomCoroutineScope,
 ): EventHandler {
     override fun handleEvent(
         event: Event,
@@ -26,7 +30,9 @@ class EventHandlerImp(
             else                -> null
         }
 
-        return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(eventProcessor)
+        return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
+            eventProcessor.toNormalPriorityEventProcessor()
+        )
     }
 
     private suspend fun toDefault(
@@ -34,6 +40,8 @@ class EventHandlerImp(
         pauseAction()
 
         fsmQueueHolder.emptyQueue()
+
+        customCoroutineScope.restart()
 
         stateHolder.publishDefaultInitialState()
 
