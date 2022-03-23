@@ -12,6 +12,16 @@ interface SettingsDao  {
 
     companion object {
         const val settingsTableName = Settings.TableName.name
+
+        private val dataToPrepopulate = arrayOf(
+            12 to 20,
+            10 to 20,
+            8 to 16,
+            5 to 12,
+            12 to 30,
+            12 to 25,
+            10 to 18,
+        )
     }
 
     @Query("SELECT * FROM $settingsTableName")
@@ -61,4 +71,17 @@ interface SettingsDao  {
         zCount: Int,
         bombsPercentage: Int,
     ): Settings?
+
+    fun prepopulate() {
+        dataToPrepopulate.forEach {
+            this.insert(
+                Settings(
+                    Settings.SettingsData(
+                        it.first,
+                        it.second
+                    )
+                )
+            )
+        }
+    }
 }

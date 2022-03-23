@@ -70,30 +70,9 @@ class EventHandlerImp @Inject constructor(
         settingsDao: SettingsDao
     ) {
         val needToPrepopulate = settingsDao.getCount() == 0
-        if (!needToPrepopulate) {
-            return
-        }
 
-        // TODO: 01.01.2022 move to SettingsDao
-        val dataToPrepopulate = arrayOf(
-            12 to 20,
-            10 to 20,
-            8  to 16,
-            5  to 12,
-            12 to 30,
-            12 to 25,
-            10 to 18,
-        )
-
-        dataToPrepopulate.forEach {
-            settingsDao.insert(
-                Settings(
-                    Settings.SettingsData(
-                        it.first,
-                        it.second
-                    )
-                )
-            )
+        if (needToPrepopulate) {
+            settingsDao.prepopulate()
         }
     }
 
