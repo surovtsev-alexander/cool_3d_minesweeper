@@ -27,7 +27,7 @@ object Versions {
     }
 
     object Kotlin {
-        const val kotlin = "1.6.0"
+        const val kotlin = "1.6.20-RC2"
         const val coroutines = "1.6.0-RC2"
     }
 
@@ -38,12 +38,12 @@ object Versions {
     }
 
     object AndroidX {
-        const val appCompat = "1.4.0"
+        const val appCompat = "1.4.1"
         const val compose = "1.1.0-rc01"
         const val composeNavigation = "2.4.0-rc01"
         const val coreCtx = "1.7.0"
         const val espresso = "3.4.0"
-        const val material = "1.4.0"
+        const val material = "1.5.0"
         const val navigation = "2.3.5"
         const val room = "2.4.0"
         const val splashScreen = "1.0.0-beta01"

@@ -4,6 +4,7 @@ object ProjectModules {
     object Logic {
         object Common {
             const val finiteStateMachine = ":finitestatemachine"
+            const val templateViewModel = ":templateviewmodel"
             const val timeSpan = ":timespan"
             const val touchListener = ":touchlistener"
             const val utils = ":utils"

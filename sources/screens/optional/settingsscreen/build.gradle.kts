@@ -43,6 +43,7 @@ dependencies {
             ProjectModules.Logic.Common.utils,
             ProjectModules.Logic.Common.RestartableCoroutineScope.restartableCoroutineScope,
             ProjectModules.Logic.Common.RestartableCoroutineScope.subscriptionsHolder,
+            ProjectModules.Logic.Common.templateViewModel,
             ProjectModules.Logic.Specific.core,
         )
     )
@@ -59,7 +60,7 @@ dependencies {
     commonComposeDependencies()
 
     implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     implementation("androidx.compose.ui:ui-tooling:${Versions.AndroidX.compose}")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 

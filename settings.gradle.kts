@@ -1,4 +1,3 @@
-rootProject.name = "cool_3d_minesweeper"
 
 /// region [action]: declare project modules tree
 projectDir(
@@ -12,6 +11,7 @@ projectDir(
            Folders.common,
            listOf(
                Modules.finiteStateMachine,
+               Modules.templateViewModel,
                Modules.timeSpan,
                Modules.touchListener,
                Modules.utils,
@@ -78,6 +78,7 @@ object Modules {
     const val restartableCoroutineScope = ":restartablecoroutinescope"
     const val settingsScreen = ":settingsscreen"
     const val subscriptionsHolder = ":subscriptionsholder"
+    const val templateViewModel = ":templateviewmodel"
     const val timeSpan = ":timespan"
     const val touchListener = ":touchlistener"
     const val utils = ":utils"
