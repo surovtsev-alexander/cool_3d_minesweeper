@@ -27,7 +27,7 @@ object Versions {
     }
 
     object Kotlin {
-        const val kotlin = "1.6.20-RC2"
+        const val kotlin = "1.6.0"
         const val coroutines = "1.6.0-RC2"
     }
 
