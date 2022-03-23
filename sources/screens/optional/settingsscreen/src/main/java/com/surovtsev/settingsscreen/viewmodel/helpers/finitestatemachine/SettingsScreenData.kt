@@ -2,11 +2,11 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
 
-sealed interface SettingsScreenData: ScreenData.UserData {
+sealed interface SettingsScreenData: ViewModelData.UserData {
 
     open class SettingsLoaded(
         val settingsList: SettingsList,

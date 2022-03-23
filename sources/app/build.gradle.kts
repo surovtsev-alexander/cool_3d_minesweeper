@@ -45,6 +45,7 @@ dependencies {
 
     includeProjectModules(
         arrayOf(
+            ProjectModules.Logic.Common.templateViewModel,
             ProjectModules.Logic.Common.utils,
             ProjectModules.Logic.Specific.core,
             ProjectModules.Screens.mainScreen,

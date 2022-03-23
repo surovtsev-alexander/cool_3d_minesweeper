@@ -2,8 +2,8 @@ package com.surovtsev.gamescreen.dagger
 
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.components.GameScreenEntryPoint
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.templateviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.dagger.DaggerGameComponent

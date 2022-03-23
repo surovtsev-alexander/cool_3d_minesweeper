@@ -1,22 +1,22 @@
-package com.surovtsev.core.viewmodel.templatescreenviewmodel
+package com.surovtsev.templateviewmodel
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventhandler.TemplateScreenViewModelEventHandler
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.finishactionholder.FinishActionHolder
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.templateviewmodel.finitestatemachine.eventhandler.TemplateViewModelEventHandler
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.templateviewmodel.helpers.finishactionholder.FinishActionHolder
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelper
 import com.surovtsev.utils.coroutines.ViewModelCoroutineScopeHelperImpl
 
-abstract class TemplateScreenViewModel:
+abstract class TemplateViewModel:
     ViewModel(),
     ErrorDialogPlacer,
     ViewModelCoroutineScopeHelper by ViewModelCoroutineScopeHelperImpl(),
@@ -28,7 +28,7 @@ abstract class TemplateScreenViewModel:
     override val screenStateFlow: ScreenStateFlow
         get() = stateHolder.state
 
-    private val templateScreenViewModelEventHandler = TemplateScreenViewModelEventHandler(
+    private val templateViewModelEventHandler = TemplateViewModelEventHandler(
         stateHolder,
         finishActionHolder,
     )
@@ -39,7 +39,7 @@ abstract class TemplateScreenViewModel:
         return FiniteStateMachine(
             stateHolder,
             listOf(
-                templateScreenViewModelEventHandler,
+                templateViewModelEventHandler,
                 userEventHandler,
             ),
             logConfig = LogConfig(

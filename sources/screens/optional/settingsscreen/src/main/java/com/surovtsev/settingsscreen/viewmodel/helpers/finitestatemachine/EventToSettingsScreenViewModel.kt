@@ -1,7 +1,7 @@
 package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 
 sealed class EventToSettingsScreenViewModel(
 ): EventToViewModel.UserEvent() {

@@ -3,8 +3,8 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventh
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -167,7 +167,7 @@ class EventHandlerImp @Inject constructor(
         return EventProcessingResult.Ok()
     }
 
-    private suspend inline fun <reified T: ScreenData> doActionIfStateIsChildIs(
+    private suspend inline fun <reified T: ViewModelData> doActionIfStateIsChildIs(
         errorMessage: String, action: (screenData: T) -> Unit
     ) {
         val stateHolder = eventHandlerParameters.stateHolder

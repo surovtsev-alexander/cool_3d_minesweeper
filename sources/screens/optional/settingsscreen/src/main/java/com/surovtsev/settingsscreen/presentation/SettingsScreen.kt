@@ -23,10 +23,10 @@ import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.PlaceErrorDialog
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel

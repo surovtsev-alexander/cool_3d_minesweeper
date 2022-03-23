@@ -1,4 +1,4 @@
-package com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel
+package com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel
 
 import androidx.lifecycle.LifecycleOwner
 import com.surovtsev.finitestatemachine.event.Event

@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.TemplateScreenViewModel
+import com.surovtsev.templateviewmodel.TemplateViewModel
 import com.surovtsev.rankingscreen.dagger.DaggerRankingScreenComponent
 import com.surovtsev.rankingscreen.dagger.RankingScreenComponent
 import dagger.assisted.Assisted
@@ -18,7 +18,7 @@ class RankingScreenViewModel @AssistedInject constructor(
     @Suppress("UNUSED_PARAMETER") @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel()
+    TemplateViewModel()
 //    RequestPermissionsResultReceiver,
 {
     @AssistedFactory

@@ -26,9 +26,9 @@ import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.PlaceErrorDialog
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel

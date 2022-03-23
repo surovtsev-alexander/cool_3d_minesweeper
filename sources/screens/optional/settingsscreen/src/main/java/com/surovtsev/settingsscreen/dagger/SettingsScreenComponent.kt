@@ -3,7 +3,7 @@ package com.surovtsev.settingsscreen.dagger
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
+import com.surovtsev.templateviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent

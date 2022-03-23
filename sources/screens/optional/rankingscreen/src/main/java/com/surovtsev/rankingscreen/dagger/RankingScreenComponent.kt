@@ -5,7 +5,7 @@ import com.surovtsev.core.helpers.RankingListHelper
 import com.surovtsev.core.room.dao.RankingDao
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.savecontroller.SaveController
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.typealiases.FiniteStateMachineFactory
+import com.surovtsev.templateviewmodel.helpers.typealiases.FiniteStateMachineFactory
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp

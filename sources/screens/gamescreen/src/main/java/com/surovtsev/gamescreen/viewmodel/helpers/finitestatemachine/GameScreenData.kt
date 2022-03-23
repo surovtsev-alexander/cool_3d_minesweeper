@@ -1,9 +1,9 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine
 
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 
-sealed class GameScreenData: ScreenData.UserData {
+sealed class GameScreenData: ViewModelData.UserData {
     open fun rootScreenData(): GameScreenData = this
 
     class GameInProgress(

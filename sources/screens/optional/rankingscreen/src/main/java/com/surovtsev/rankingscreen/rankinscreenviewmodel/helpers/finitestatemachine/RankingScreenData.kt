@@ -5,10 +5,10 @@ import com.surovtsev.core.helpers.sorting.DirectionOfSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.dao.WinsCountMap
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.screendata.ScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
-sealed interface RankingScreenData: ScreenData.UserData {
+sealed interface RankingScreenData: ViewModelData.UserData {
 
     open class SettingsListIsLoaded(
         val settingsList: SettingsList,

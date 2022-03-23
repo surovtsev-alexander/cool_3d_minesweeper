@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.TemplateScreenViewModel
+import com.surovtsev.templateviewmodel.TemplateViewModel
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamescreen.dagger.DaggerGameScreenComponent
 import com.surovtsev.gamescreen.dagger.GameScreenComponent
@@ -25,7 +25,7 @@ class GameScreenViewModel @AssistedInject constructor(
     @Suppress("UNUSED_PARAMETER") @Assisted context: Context,
     @Assisted private val appComponentEntryPoint: AppComponentEntryPoint,
 ):
-    TemplateScreenViewModel(),
+    TemplateViewModel(),
     DefaultLifecycleObserver
 {
     @AssistedFactory
@@ -52,14 +52,14 @@ class GameScreenViewModel @AssistedInject constructor(
     private var gLSurfaceView: GLSurfaceView? = null
 
     override fun onCreate(owner: LifecycleOwner) {
-        super<TemplateScreenViewModel>.onCreate(owner)
+        super<TemplateViewModel>.onCreate(owner)
         gameScreenComponent
             .restartableCoroutineScopeComponent
             .subscriberImp.restart()
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        super<TemplateScreenViewModel>.onResume(owner)
+        super<TemplateViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
 
         if (stateHolder.state.value.data is GameScreenData.GameMenu) {
@@ -70,7 +70,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     override fun onPause(owner: LifecycleOwner) {
-        super<TemplateScreenViewModel>.onPause(owner)
+        super<TemplateViewModel>.onPause(owner)
         gLSurfaceView?.onPause()
 
         gameScreenComponent.gameComponent.minesweeper.eventHandler.handleEventWithBlocking(
@@ -85,7 +85,7 @@ class GameScreenViewModel @AssistedInject constructor(
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
-        super<TemplateScreenViewModel>.onDestroy(owner)
+        super<TemplateViewModel>.onDestroy(owner)
 
         gLSurfaceView = null
     }

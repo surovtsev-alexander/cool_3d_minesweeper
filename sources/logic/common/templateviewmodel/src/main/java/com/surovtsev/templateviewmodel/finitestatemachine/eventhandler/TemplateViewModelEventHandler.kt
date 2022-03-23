@@ -1,9 +1,6 @@
-package com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventhandler
+package com.surovtsev.templateviewmodel.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.CloseErrorEvent
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.finishactionholder.FinishActionHolder
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -14,8 +11,11 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.CloseErrorEvent
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.helpers.finishactionholder.FinishActionHolder
 
-class TemplateScreenViewModelEventHandler(
+class TemplateViewModelEventHandler(
     private val stateHolder: StateHolder,
     private val finishActionHolder: FinishActionHolder,
     ): EventHandler {

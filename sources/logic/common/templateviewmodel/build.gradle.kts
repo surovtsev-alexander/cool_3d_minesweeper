@@ -15,13 +15,16 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.AndroidX.compose
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -33,10 +36,15 @@ android {
 }
 
 dependencies {
-    includeProjectModule(
-        ProjectModules.Logic.Common.finiteStateMachine
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Logic.Common.finiteStateMachine,
+            ProjectModules.Logic.Common.utils,
+        )
     )
 
     defaultDependencies()
     testDependencies()
+
+    commonComposeDependencies()
 }

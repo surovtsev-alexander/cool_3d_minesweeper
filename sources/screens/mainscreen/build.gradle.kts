@@ -39,8 +39,10 @@ android {
 }
 
 dependencies {
-    includeProjectModule(
-        ProjectModules.Logic.Specific.core
+    includeProjectModules(
+        arrayOf(
+            ProjectModules.Logic.Specific.core,
+        )
     )
 
     defaultDependencies()
