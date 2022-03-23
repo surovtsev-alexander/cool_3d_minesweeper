@@ -67,7 +67,7 @@ fun RankingControls(
     errorDialogPlacer: ErrorDialogPlacer,
 ) {
     MinesweeperTheme {
-        errorDialogPlacer.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog(GrayBackground)
 
         Box(
             modifier = Modifier

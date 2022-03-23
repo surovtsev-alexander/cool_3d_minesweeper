@@ -65,7 +65,8 @@ fun SettingsControls(
 ) {
     MinesweeperTheme {
 
-        errorDialogPlacer.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog(GrayBackground)
+
         Box(
             Modifier.background(GrayBackground)
         ) {

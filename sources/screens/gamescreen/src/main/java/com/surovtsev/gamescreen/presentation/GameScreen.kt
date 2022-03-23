@@ -25,6 +25,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.surovtsev.core.interaction.BombsLeftFlow
+import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.core.viewmodel.templatescreenviewmodel.helpers.errordialog.ErrorDialogPlacer
@@ -92,7 +93,7 @@ fun GameScreenControls(
 ) {
     MinesweeperTheme {
 
-        errorDialogPlacer.PlaceErrorDialog()
+        errorDialogPlacer.PlaceErrorDialog(GrayBackground)
 
         GameView(
             screenStateFlow,
