@@ -13,17 +13,21 @@ class MoveHandlerImp @Inject constructor(
 ):
     MoveHandler
 {
-    override fun rotateBetweenProjections(prev: Vec2, curr: Vec2) {
+    override fun rotate(prev: Vec2, curr: Vec2) {
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
-        val nPrev = cameraInfoHelper.normalizedDisplayCoordinates(prev)
-        val nCurr = cameraInfoHelper.normalizedDisplayCoordinates(curr)
-
-        val prevFar = cameraInfoHelper.calcFarByProj(nPrev)
-        val currFar = cameraInfoHelper.calcFarByProj(nCurr)
-
-
-        val rotation = MatrixHelper.calcRotMatrix(prevFar, currFar)
+        val farRawCalculator = { proj: Vec2 ->
+            cameraInfoHelper.calcFarByProj(
+                cameraInfoHelper.normalizedDisplayCoordinates(
+                    proj
+                )
+            )
+        }
+        
+        val rotation = MatrixHelper.calcRotMatrix(
+            farRawCalculator(prev),
+            farRawCalculator(curr)
+        )
 
         cameraInfoHelper.multiplyRotationMatrix(rotation)
     }
@@ -32,11 +36,11 @@ class MoveHandlerImp @Inject constructor(
         cameraInfoHelperHolder.cameraInfoHelperFlow.value?.scale(factor)
     }
 
-    override fun move(proj1: Vec2, proj2: Vec2) {
+    override fun move(prev: Vec2, curr: Vec2) {
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
-        val nP1 = cameraInfoHelper.normalizedDisplayCoordinates(proj1)
-        val nP2 = cameraInfoHelper.normalizedDisplayCoordinates(proj2)
+        val nP1 = cameraInfoHelper.normalizedDisplayCoordinates(prev)
+        val nP2 = cameraInfoHelper.normalizedDisplayCoordinates(curr)
 
         val p1Near = cameraInfoHelper.calcNearWorldPoint(nP1)
         val p2Near = cameraInfoHelper.calcNearWorldPoint(nP2)

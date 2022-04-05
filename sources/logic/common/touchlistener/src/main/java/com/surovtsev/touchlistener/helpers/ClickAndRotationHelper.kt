@@ -56,7 +56,7 @@ class ClickAndRotationHelper @Inject constructor(
                         val p = prev
                         val c = curr
                         override fun run() {
-                            handlersHolder.moveHandler?.rotateBetweenProjections(
+                            handlersHolder.moveHandler?.rotate(
                                 p, c
                             )
                         }
