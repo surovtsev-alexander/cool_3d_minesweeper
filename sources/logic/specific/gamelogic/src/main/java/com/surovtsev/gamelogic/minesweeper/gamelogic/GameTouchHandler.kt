@@ -27,6 +27,7 @@ class GameTouchHandler(
 
     private val gameStatusHolder = gameState.gameStatusHolder
     private val cubeSkin = gameState.cubeInfo.cubeSkin
+    private val gameConfig = gameState.gameConfig
 
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
@@ -37,13 +38,14 @@ class GameTouchHandler(
 
         if (gameStatusHolder.isGameNotStarted()) {
             val bombsList = BombPlacer.placeBombs(
+                gameConfig,
                 cubeSkin,
                 pointedCell.index,
-                gameState.gameConfig.bombsCount
+                gameConfig.bombsCount
             )
             gameStatusHolder.setBombsLeft(bombsList.size)
 
-            NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
+            NeighboursCalculator.fillNeighbours(gameState.gameConfig, cubeSkin, bombsList)
             gameStatusHolder.setGameStatus(GameStatus.BombsPlaced)
         }
 
@@ -77,7 +79,7 @@ class GameTouchHandler(
     }
 
     fun storeSelectedBombs() {
-        cubeSkin.iterateCubes { cellIndex ->
+        gameConfig.cellsRange.iterate { cellIndex ->
             do {
                 val p = cubeSkin.getPointedCell(cellIndex)
                 val s = p.skin
@@ -89,7 +91,7 @@ class GameTouchHandler(
     }
 
     fun collectOpenedNotEmptyBorders() {
-        val cellRange = cubeSkin.cellsRange
+        val cellsRange = gameConfig.cellsRange
 
         val sliceClearer = { r: CellsRange ->
             when (inspectSlice((r))) {
@@ -123,9 +125,9 @@ class GameTouchHandler(
             sliceIterator(r.reversed())
         }
 
-        sliceBothDirectionsIterator(cellRange.xRange) { v -> cellRange.copy(xRange = v..v) }
-        sliceBothDirectionsIterator(cellRange.yRange) { v -> cellRange.copy(yRange = v..v) }
-        sliceBothDirectionsIterator(cellRange.zRange) { v -> cellRange.copy(zRange = v..v) }
+        sliceBothDirectionsIterator(cellsRange.xRange) { v -> cellsRange.copy(xRange = v..v) }
+        sliceBothDirectionsIterator(cellsRange.yRange) { v -> cellsRange.copy(yRange = v..v) }
+        sliceBothDirectionsIterator(cellsRange.zRange) { v -> cellsRange.copy(zRange = v..v) }
     }
 
     private fun emptyCube(pointedCell: PointedCell) {
@@ -154,7 +156,7 @@ class GameTouchHandler(
             }
 
             NeighboursCalculator.iterateNeighbours(
-                cubeSkin, pointedCell.index, action)
+                gameState.gameConfig, cubeSkin, pointedCell.index, action)
 
             openNeighbours(pointedCell)
 
@@ -208,7 +210,6 @@ class GameTouchHandler(
         var hasClosedCells = false
         var hasOpenedCells = false
 
-        val counts = cubeSkin.counts
         for (x in cellsRange.xRange) {
             for (y in cellsRange.yRange) {
                 for (z in cellsRange.zRange) {
@@ -217,7 +218,7 @@ class GameTouchHandler(
                             x,
                             y,
                             z,
-                            counts
+                            cellsRange.counts
                         )
                     val c = cubeSkin.getPointedCell(p)
                     val s = c.skin
@@ -289,7 +290,7 @@ class GameTouchHandler(
         }
         for (i in 0 until 3) {
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    cubeSkin, pointedCell.index, i
+                    gameState.gameConfig, cubeSkin, pointedCell.index, i
                 )) {
                 continue
             }
@@ -297,7 +298,7 @@ class GameTouchHandler(
             val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
 
             val neighbours = NeighboursCalculator.getNeighbours(
-                cubeSkin, pointedCell.index, i)
+                gameState.gameConfig, cubeSkin, pointedCell.index, i)
 
             val flagged = neighbours.count { it.skin.isFlagged() }
 
@@ -323,13 +324,13 @@ class GameTouchHandler(
             }
 
             if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    cubeSkin, position, i
+                    gameState.gameConfig, cubeSkin, position, i
                 )) {
                 continue
             }
 
             val neighbours = NeighboursCalculator.getNeighbours(
-                cubeSkin, position, i)
+                gameState.gameConfig, cubeSkin, position, i)
 
             for (n in neighbours) {
                 val p = n.index
@@ -373,7 +374,7 @@ class GameTouchHandler(
 
             for (i in 0 until 3) {
                 val neighbours = NeighboursCalculator.getNeighbours(
-                    cubeSkin, pointedCell.index, i
+                    gameState.gameConfig, cubeSkin, pointedCell.index, i
                 )
 
                 for (n in neighbours) {

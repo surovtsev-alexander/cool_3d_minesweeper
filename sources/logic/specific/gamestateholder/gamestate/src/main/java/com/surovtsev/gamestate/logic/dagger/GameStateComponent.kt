@@ -67,6 +67,7 @@ object GameStateModule {
             )
 
             save.cubeSkinToSave.applySavedData(
+                gameConfig,
                 res.cubeInfo.cubeSkin,
                 res.gameStatusHolder
             )
@@ -81,7 +82,7 @@ object GameStateModule {
         gameConfig: GameConfig
     ): CubeSkin {
         return CubeSkin(
-            gameConfig
+            gameConfig.cellsRange
         )
     }
 

@@ -22,6 +22,11 @@ data class GameConfig(
 
     val cellsCount = counts[0] * counts[1] * counts[2]
 
+    val cellsRange =
+        CellsRange(
+            counts
+        )
+
     val bombsCount =
         max(
             1,

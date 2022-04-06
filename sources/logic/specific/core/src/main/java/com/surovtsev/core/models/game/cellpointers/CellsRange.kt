@@ -25,7 +25,7 @@ data class CellsRange(
         )
     )
 
-    fun iterate(action: (CellIndex) -> Unit) {
+    fun iterate(action: (cellIndex: CellIndex) -> Unit) {
         for (x in xRange) {
             for (y in yRange) {
                 for (z in zRange) {
@@ -41,6 +41,22 @@ data class CellsRange(
             }
         }
     }
+
+    fun <T> create3DList(action: (cellIndex: CellIndex) -> T): List<List<List<T>>> =
+        xRange.map { x ->
+            yRange.map { y ->
+                zRange.map { z ->
+                    action(
+                        CellIndex(
+                            x,
+                            y,
+                            z,
+                            counts
+                        )
+                    )
+                }
+            }
+        }
 
     override fun toString() = "$xRange $yRange $zRange"
 }

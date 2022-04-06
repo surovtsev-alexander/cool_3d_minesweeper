@@ -3,6 +3,7 @@ package com.surovtsev.gamestate.logic.models.game.save.helpers
 import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.CellIndex
+import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.core.models.game.skin.cube.cell.CellSkin
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
@@ -59,17 +60,20 @@ class CubeSkinToSave(
             fun isOpened() = !isFlagged && !isClosed &&  !isEmpty
         }
 
-        fun createObject(cubeSkin: CubeSkin): CubeSkinToSave {
-            val cellCount = cubeSkin.cellCount
+        fun createObject(
+            gameConfig: GameConfig,
+            cubeSkin: CubeSkin
+        ): CubeSkinToSave {
+            val cellsCount = gameConfig.cellsCount
 
-            val resArr = { CharArray(cellCount) }
+            val resArr = { CharArray(cellsCount) }
 
             val bombs = resArr()
             val flaggedClosedEmpty = resArr()
 
 
             val skins = cubeSkin.skins
-            cubeSkin.iterateCubes { cellIndex ->
+            gameConfig.cellsRange.iterate { cellIndex ->
                 val skin = cellIndex.getValue(skins)
                 val id = cellIndex.id
 
@@ -86,15 +90,17 @@ class CubeSkinToSave(
     }
 
     fun applySavedData(
+        gameConfig: GameConfig,
         cubeSkin: CubeSkin,
         gameStatusHolder: GameStatusHolder,
     ) {
+        val cellsRange = gameConfig.cellsRange
 
         val bombsList = mutableListOf<CellIndex>()
 
         var openedBombCount = 0
         val skins = cubeSkin.skins
-        cubeSkin.iterateCubes { cellIndex ->
+        cellsRange.iterate { cellIndex ->
             val skin = cellIndex.getValue(skins)
             val id = cellIndex.id
 
@@ -115,10 +121,10 @@ class CubeSkinToSave(
             }
         }
 
-        NeighboursCalculator.fillNeighbours(cubeSkin, bombsList)
+        NeighboursCalculator.fillNeighbours(gameConfig, cubeSkin, bombsList)
 
         val closedBombs = bombsList.count() - openedBombCount
-        cubeSkin.iterateCubes { cellIndex ->
+        cellsRange.iterate { cellIndex ->
             val skin = cellIndex.getValue(skins)
             val id = cellIndex.id
 

@@ -5,7 +5,6 @@ import android.opengl.GLES20.*
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.PointedCell
-import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamelogic.R
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.helpers.CubeViewDataHelper
@@ -13,6 +12,7 @@ import com.surovtsev.gamelogic.models.gles.programs.CubeGLESProgram
 import com.surovtsev.gamelogic.utils.gles.model.buffers.VertexArray
 import com.surovtsev.gamelogic.utils.utils.gles.OpenGLModel
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
+import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.gamestateholder.GameStateHolder
 import com.surovtsev.utils.gles.helpers.TextureHelper
 import javax.inject.Inject
@@ -97,16 +97,17 @@ class CubeOpenGLModel @Inject constructor(
         }
     }
 
-    fun updateTexture(cubeSkin: CubeSkin) {
-        val cubesCount = cubeSkin.cellCount
+    fun updateTexture(gameState: GameState) {
+        val gameConfig = gameState.gameConfig
+        val cellsCount = gameConfig.cellsCount
 
         val emptyCubes =
-            FloatArray(cubeIndexesCount * cubesCount) { 0f }
+            FloatArray(cubeIndexesCount * cellsCount) { 0f }
         val textureCoordinates =
-            FloatArray(textureIndexesCount * cubesCount)
+            FloatArray(textureIndexesCount * cellsCount)
 
-        val skins = cubeSkin.skins
-        cubeSkin.iterateCubes { cellIndex ->
+        val skins = gameState.cubeInfo.cubeSkin.skins
+        gameConfig.cellsRange.iterate { cellIndex ->
             val skin = cellIndex.getValue(skins)
             val id = cellIndex.id
 

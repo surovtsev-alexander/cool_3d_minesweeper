@@ -22,7 +22,7 @@ class Save(
                 gameState.gameConfig,
                 CameraInfoToSave.createObject(gameState.cameraInfo),
                 GameLogicToSave.createObject(gameState, asyncTimeSpan),
-                CubeSkinToSave.createObject(gameState.cubeInfo.cubeSkin)
+                CubeSkinToSave.createObject(gameState.gameConfig, gameState.cubeInfo.cubeSkin)
             )
         }
     }

@@ -30,7 +30,7 @@ class IntersectionCalculator @Inject constructor(
         val candidateCubes =
             mutableListOf<Pair<Float, PointedCellWithSpaceBorder>>()
 
-        cubeSkin.iterateCubes { cellIndex: CellIndex ->
+        gameState.gameConfig.cellsRange.iterate { cellIndex: CellIndex ->
             do {
                 val skin = cellIndex.getValue(skins)
 

@@ -4,21 +4,24 @@ import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.CellsRange
 import com.surovtsev.core.models.game.cellpointers.PairCellRange
 import com.surovtsev.core.models.game.cellpointers.PointedCell
+import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.utils.math.MyMath
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 
+// TODO: Transform to class
 object NeighboursCalculator {
     @Suppress("unused")
     fun iterateAllNeighbours(
+        gameConfig: GameConfig,
         cubeSkin: CubeSkin,
         cellIndex: CellIndex,
         action: (PointedCell) -> Unit
     ) {
         val range = PairCellRange(
             cellIndex,
-            cubeSkin.counts
+            gameConfig.counts
         ).getCellRange(
             Vec3bool(x = false, y = false, z = false)
         )
@@ -60,13 +63,18 @@ object NeighboursCalculator {
         }
     }
 
-    fun getNeighbours(cubeSkin: CubeSkin, cellIndex: CellIndex, dim: Int): List<PointedCell> {
+    fun getNeighbours(
+        gameConfig: GameConfig,
+        cubeSkin: CubeSkin,
+        cellIndex: CellIndex,
+        dim: Int
+    ): List<PointedCell> {
         val res = mutableListOf<PointedCell>()
 
         val pairCellRange =
             PairCellRange(
                 cellIndex,
-                cubeSkin.counts
+                gameConfig.counts
             )
 
         iterate(
@@ -89,6 +97,7 @@ object NeighboursCalculator {
     )
 
     fun iterateNeighbours(
+        gameConfig: GameConfig,
         cubeSkin: CubeSkin,
         cellIndex: CellIndex,
         action: (PointedCell, Int) -> Unit
@@ -96,7 +105,7 @@ object NeighboursCalculator {
         val pairCellRange =
             PairCellRange(
                 cellIndex,
-                cubeSkin.counts
+                gameConfig.counts
             )
 
         for (i in 0 until 3) {
@@ -110,7 +119,11 @@ object NeighboursCalculator {
         }
     }
 
-    fun fillNeighbours(cubeSkin: CubeSkin, bombsList: List<CellIndex>) {
+    fun fillNeighbours(
+        gameConfig: GameConfig,
+        cubeSkin: CubeSkin,
+        bombsList: List<CellIndex>
+    ) {
         val fl = { c: PointedCell, i: Int ->
                 c.skin.neighbourBombs[i] += 1
         }
@@ -121,6 +134,7 @@ object NeighboursCalculator {
                 continue
             }
             iterateNeighbours(
+                gameConfig,
                 cubeSkin,
                 b,
                 fl
@@ -129,13 +143,14 @@ object NeighboursCalculator {
     }
 
     fun hasPosEmptyNeighbours(
+        gameConfig: GameConfig,
         cubeSkin: CubeSkin,
         cellIndex: CellIndex,
         direction: Int
     ): Boolean {
         val r = MyMath.Rays[direction]
         val cellIndexVec = cellIndex.getVec()
-        val counts = cubeSkin.counts
+        val counts = gameConfig.counts
 
         fun testPoint(p: Vec3i): Boolean {
 
@@ -165,8 +180,13 @@ object NeighboursCalculator {
     }
 
     @Suppress("unused")
-    fun bombRemoved(cubeSkin: CubeSkin, index: CellIndex) {
+    fun bombRemoved(
+        gameConfig: GameConfig,
+        cubeSkin: CubeSkin,
+        index: CellIndex
+    ) {
         iterateNeighbours(
+            gameConfig,
             cubeSkin,
             index) { c, i -> c.skin.neighbourBombs[i]-- }
     }

@@ -106,7 +106,7 @@ class CubeCoordinates(
             val cellSpace = gameConfig.cellSpace
             val halfGaps = gaps / 2
 
-            CubeSkin.iterateCubes(counts) { position ->
+            gameConfig.cellsRange.iterate { position ->
                 val id = position.id
                 val startCoordinatesPos = cubeCoordinatesCount * id
                 val startIndexesPos = cubeIndexesCount * id
