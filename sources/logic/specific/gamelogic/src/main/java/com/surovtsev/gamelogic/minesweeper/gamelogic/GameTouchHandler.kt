@@ -27,7 +27,7 @@ class GameTouchHandler(
     private val gameStatusHolder = gameState.gameStatusHolder
     private val cubeSkin = gameState.cubeInfo.cubeSkin
     private val gameConfig = gameState.gameConfig
-    private val neighboursCalculator = gameState.neighboursCalculator
+    private val neighboursCalculator = gameState.cubeInfo.neighboursCalculator
 
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index

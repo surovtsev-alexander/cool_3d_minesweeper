@@ -54,12 +54,10 @@ object GameStateModule {
         cameraInfo: CameraInfo,
         gameStatusHolder: GameStatusHolder,
         save: Save?,
-        neighboursCalculator: NeighboursCalculator,
     ): GameState {
         val res = GameState(
             gameConfig,
             cubeInfo,
-            neighboursCalculator,
             cameraInfo,
             gameStatusHolder,
         )
@@ -71,9 +69,8 @@ object GameStateModule {
 
             save.cubeSkinToSave.applySavedData(
                 gameConfig,
-                res.cubeInfo.cubeSkin,
+                res.cubeInfo,
                 res.gameStatusHolder,
-                res.neighboursCalculator,
             )
         }
 

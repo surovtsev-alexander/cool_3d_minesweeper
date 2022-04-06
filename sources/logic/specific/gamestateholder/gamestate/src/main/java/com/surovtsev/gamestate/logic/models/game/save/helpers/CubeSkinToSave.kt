@@ -6,6 +6,7 @@ import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.core.models.game.skin.cube.cell.CellSkin
+import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 
 class CubeSkinToSave(
@@ -91,16 +92,15 @@ class CubeSkinToSave(
 
     fun applySavedData(
         gameConfig: GameConfig,
-        cubeSkin: CubeSkin,
+        cubeInfo: CubeInfo,
         gameStatusHolder: GameStatusHolder,
-        neighboursCalculator: NeighboursCalculator,
     ) {
         val cellsRange = gameConfig.cellsRange
 
         val bombsList = mutableListOf<CellIndex>()
 
         var openedBombCount = 0
-        val skins = cubeSkin.skins
+        val skins = cubeInfo.cubeSkin.skins
         cellsRange.iterate { cellIndex ->
             val skin = cellIndex.getValue(skins)
             val id = cellIndex.id
@@ -122,7 +122,7 @@ class CubeSkinToSave(
             }
         }
 
-        neighboursCalculator.fillNeighbours(bombsList)
+        cubeInfo.neighboursCalculator.fillNeighbours(bombsList)
 
         val closedBombs = bombsList.count() - openedBombCount
         cellsRange.iterate { cellIndex ->

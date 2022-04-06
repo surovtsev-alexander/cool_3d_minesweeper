@@ -11,7 +11,6 @@ import com.surovtsev.utils.math.camerainfo.CameraInfo
 class GameState(
     val gameConfig: GameConfig,
     val cubeInfo: CubeInfo,
-    val neighboursCalculator: NeighboursCalculator,
     val cameraInfo: CameraInfo,
     val gameStatusHolder: GameStatusHolder,
 ) {
