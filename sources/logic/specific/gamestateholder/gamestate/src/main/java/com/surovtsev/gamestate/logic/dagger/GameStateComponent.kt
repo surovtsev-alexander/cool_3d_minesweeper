@@ -10,6 +10,7 @@ import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamestate.logic.helpers.GameConfigFactory
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
 import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.save.Save
@@ -96,6 +97,11 @@ object GameStateModule {
         cubeSkin,
     )
 
+    @GameStateScope
+    @Provides
+    fun provideAABBTree(
+        cubeSpaceBorder: CubeSpaceBorder
+    ) = AABBTree(cubeSpaceBorder)
 
     @GameStateScope
     @Provides

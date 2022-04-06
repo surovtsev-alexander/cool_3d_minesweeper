@@ -1,6 +1,5 @@
 package com.surovtsev.gamelogic.minesweeper.helpers
 
-import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.gamelogic.dagger.GameScope

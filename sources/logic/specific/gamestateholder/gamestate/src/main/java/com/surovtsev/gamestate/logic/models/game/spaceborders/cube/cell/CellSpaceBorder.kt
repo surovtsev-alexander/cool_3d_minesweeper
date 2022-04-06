@@ -3,18 +3,44 @@ package com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell
 import com.surovtsev.core.models.gles.pointer.PointerDescriptor
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.edge.EdgeSpaceBorder
 import glm_.vec3.Vec3
+import logcat.logcat
 
 class CellSpaceBorder(
-    val center: Vec3,
-    halfSpace: Vec3
+    leftDownNearPoint: Vec3,
+    rightUpFarPoint: Vec3,
+    val center: Vec3 = (leftDownNearPoint + rightUpFarPoint) / 2,
 ) {
-    private val leftDownNearPoint = center - halfSpace
-    private val rightUpFarPoint = center + halfSpace
+    override fun toString(): String {
+        return "${mainDiagonalPoints[0]}; ${mainDiagonalPoints[1]}"
+    }
 
-    val twoDiagonalPoints = listOf(
+    companion object {
+        fun createByCenterAndHalfSpace(
+            center: Vec3,
+            halfSpace: Vec3
+        ): CellSpaceBorder {
+            assert(halfSpace.x > 0)
+            assert(halfSpace.y > 0)
+            assert(halfSpace.z > 0)
+
+            logcat { "center: $center; halfSpace: $halfSpace" }
+
+            return CellSpaceBorder(
+                center - halfSpace,
+                center + halfSpace,
+                center,
+            )
+        }
+    }
+
+    val mainDiagonalPoints: List<Vec3> = listOf(
         leftDownNearPoint,
         rightUpFarPoint
     )
+
+    init {
+        logcat { this.toString() }
+    }
 
     private val edgeSpaces: Array<EdgeSpaceBorder>
 

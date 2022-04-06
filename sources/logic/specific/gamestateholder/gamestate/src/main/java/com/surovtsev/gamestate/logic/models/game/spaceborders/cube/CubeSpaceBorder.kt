@@ -29,10 +29,11 @@ class CubeSpaceBorder @Inject constructor(
         val halfSpace = gameConfig.halfCellSpace
 
         cells = cellsRange.create3DList { cellIndex ->
-            CellSpaceBorder(
-                centers[cellIndex.id],
-                halfSpace
-            )
+            CellSpaceBorder
+                .createByCenterAndHalfSpace(
+                    centers[cellIndex.id],
+                    halfSpace
+                )
         }
         cellsWithIndexes = cellsRange
             .createObjWithCellIndexList(cells)

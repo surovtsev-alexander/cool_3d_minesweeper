@@ -58,7 +58,6 @@ class CubeOpenGLModel @Inject constructor(
         isEmptyArray.allocateBuffer(cubeViewDataHelper.isEmpty)
         textureCoordinatesArray.allocateBuffer(cubeViewDataHelper.textureCoordinates)
 
-
         cubeGLESProgram.prepareProgram()
         setTexture()
     }
