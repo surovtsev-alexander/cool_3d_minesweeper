@@ -39,10 +39,10 @@ class CubeSkin constructor(
         }
     }
 
-    val skins: Array<Array<Array<CellSkin>>> =
-        Array(counts[0]) {
-            Array(counts[1]) {
-                Array(counts[2]) {
+    val skins: List<List<List<CellSkin>>> =
+        List(counts[0]) {
+            List(counts[1]) {
+                List(counts[2]) {
                     CellSkin()
                 }
             }

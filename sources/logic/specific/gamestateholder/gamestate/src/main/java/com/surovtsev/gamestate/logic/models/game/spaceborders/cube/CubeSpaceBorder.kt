@@ -12,7 +12,7 @@ class CubeSpaceBorder @Inject constructor(
     gameConfig: GameConfig,
     cubeCoordinates: CubeCoordinates,
 ) {
-    val cells: Array<Array<Array<CellSpaceBorder>>>
+    val cells: List<List<List<CellSpaceBorder>>>
 
     val squaredCellSphereRadius: Float
 
@@ -24,9 +24,9 @@ class CubeSpaceBorder @Inject constructor(
         val halfSpace = gameConfig.halfCellSpace
 
         val counts = gameConfig.counts
-        cells = Array(counts[0]) { x ->
-            Array(counts[1]) { y ->
-                Array(counts[2]) { z ->
+        cells = List(counts[0]) { x ->
+            List(counts[1]) { y ->
+                List(counts[2]) { z ->
                     CellSpaceBorder(
                         centers[CellIndex.calcId(counts, x, y, z)],
                         halfSpace

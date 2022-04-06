@@ -36,7 +36,7 @@ class CellIndex(
             )
         }
 
-        fun <T> getValue(arr: Array<Array<Array<T>>>, pos: Vec3i) =
+        fun <T> getValue(arr: List<List<List<T>>>, pos: Vec3i) =
             arr[pos[0]][pos[1]][pos[2]]
 
     }
@@ -55,7 +55,7 @@ class CellIndex(
 
     fun getVec() = Vec3i(x, y, z)
 
-    fun <T> getValue(arr: Array<Array<Array<T>>>): T = arr[x][y][z]
+    fun <T> getValue(arr: List<List<List<T>>>): T = arr[x][y][z]
 
     override fun toString() = getVec().toString()
 }
