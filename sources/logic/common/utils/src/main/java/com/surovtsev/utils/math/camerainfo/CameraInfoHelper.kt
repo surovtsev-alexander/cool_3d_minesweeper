@@ -16,18 +16,21 @@ class CameraInfoHelper(
     UpdatableImp()
 {
     companion object {
-        fun maxWithOneToAvoidDivisionByZero(
+        private fun maxWithOneToAvoidDivisionByZero(
             x: Float
         ): Float {
             return max(1f, x)
         }
+
+        fun convertScreenSideToFloat(side: Int): Float =
+            maxWithOneToAvoidDivisionByZero(side.toFloat())
     }
 
     private val zNear: Float = 2f
     private val zFar: Float = 20f
 
-    private var displayWidthF = maxWithOneToAvoidDivisionByZero(screenResolution[0].toFloat())
-    private var displayHeightF = maxWithOneToAvoidDivisionByZero(screenResolution[1].toFloat())
+    private val displayWidthF = convertScreenSideToFloat(screenResolution[0])
+    private val displayHeightF = convertScreenSideToFloat(screenResolution[1])
 
     init {
         glm.perspective(
