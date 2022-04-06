@@ -1,7 +1,7 @@
 package com.surovtsev.core.models.game.skin.cube
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellRange
+import com.surovtsev.core.models.game.cellpointers.CellsRange
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.cell.CellSkin
@@ -12,8 +12,8 @@ class CubeSkin constructor(
 ) {
     val counts = gameConfig.counts
 
-    val cellRange =
-        CellRange(
+    val cellsRange =
+        CellsRange(
             counts
         )
 

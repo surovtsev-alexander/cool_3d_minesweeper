@@ -3,7 +3,7 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic
 import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellRange
+import com.surovtsev.core.models.game.cellpointers.CellsRange
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombPlacer
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
@@ -89,9 +89,9 @@ class GameTouchHandler(
     }
 
     fun collectOpenedNotEmptyBorders() {
-        val cellRange = cubeSkin.cellRange
+        val cellRange = cubeSkin.cellsRange
 
-        val sliceClearer = { r: CellRange ->
+        val sliceClearer = { r: CellsRange ->
             when (inspectSlice((r))) {
                 SliceDescription.HAS_CLOSED_CELLS -> {
                     true
@@ -106,7 +106,7 @@ class GameTouchHandler(
             }
         }
 
-        val sliceBothDirectionsIterator = { r: IntRange, c: (Int) -> CellRange ->
+        val sliceBothDirectionsIterator = { r: IntRange, c: (Int) -> CellsRange ->
 
             val sliceIterator = { p: IntProgression ->
                 for (v in p) {
@@ -194,8 +194,8 @@ class GameTouchHandler(
         HAS_CLOSED_CELLS,
     }
 
-    private fun emptySlice(cellRange: CellRange) {
-        cellRange.iterate(cubeSkin.counts) {
+    private fun emptySlice(cellsRange: CellsRange) {
+        cellsRange.iterate {
             val c = cubeSkin.getPointedCell(it)
             val s = c.skin
             if (!s.isEmpty()) {
@@ -204,14 +204,14 @@ class GameTouchHandler(
         }
     }
 
-    private fun inspectSlice(cellRange: CellRange): SliceDescription {
+    private fun inspectSlice(cellsRange: CellsRange): SliceDescription {
         var hasClosedCells = false
         var hasOpenedCells = false
 
         val counts = cubeSkin.counts
-        for (x in cellRange.xRange) {
-            for (y in cellRange.yRange) {
-                for (z in cellRange.zRange) {
+        for (x in cellsRange.xRange) {
+            for (y in cellsRange.yRange) {
+                for (z in cellsRange.zRange) {
                     val p =
                         CellIndex(
                             x,

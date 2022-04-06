@@ -89,16 +89,16 @@ class CubeCoordinates(
             val counts = gameConfig.counts
             val dimensions = gameConfig.space
             val gaps = gameConfig.gaps
-            val cubesCount = gameConfig.cubesCount
+            val cellsCount = gameConfig.cellsCount
             val cubeCoordinatesCount = coordinatesTemplateArray.size
             val cubeIndexesCount = indexesArray.size
-            val coordinatesCount = cubeCoordinatesCount * cubesCount
-            val indexesCount = cubeIndexesCount * cubesCount
+            val coordinatesCount = cubeCoordinatesCount * cellsCount
+            val indexesCount = cubeIndexesCount * cellsCount
 
             val trianglesCoordinates = FloatArray(coordinatesCount)
             val indexes = IntArray(indexesCount)
 
-            val centers = Array(cubesCount) { Vec3() }
+            val centers = Array(cellsCount) { Vec3() }
 
             val cubesHalfDims = dimensions / 2
             val cellSpaceWithGaps = gameConfig.cellSpaceWithGaps

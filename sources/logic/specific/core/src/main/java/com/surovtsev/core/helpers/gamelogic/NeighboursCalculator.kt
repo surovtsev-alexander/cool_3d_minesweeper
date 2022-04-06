@@ -1,7 +1,7 @@
 package com.surovtsev.core.helpers.gamelogic
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellRange
+import com.surovtsev.core.models.game.cellpointers.CellsRange
 import com.surovtsev.core.models.game.cellpointers.PairCellRange
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
@@ -40,13 +40,11 @@ object NeighboursCalculator {
     private fun iterate(
         cubeSkin: CubeSkin,
         cellIndex: CellIndex,
-        range: CellRange,
+        range: CellsRange,
         action: (PointedCell, Int) -> Unit, i: Int
     ) {
-        val counts = cubeSkin.counts
-
         val cellIndexVec = cellIndex.getVec()
-        range.iterate(counts) {
+        range.iterate {
             do {
                 if (it.getVec() == cellIndexVec) {
                     break

@@ -2,7 +2,8 @@ package com.surovtsev.core.models.game.cellpointers
 
 import glm_.vec3.Vec3i
 
-data class CellRange(
+data class CellsRange(
+    val counts: Vec3i,
     val xRange: IntRange,
     val yRange: IntRange,
     val zRange: IntRange
@@ -12,6 +13,7 @@ data class CellRange(
     }
 
     constructor(counts: Vec3i): this(
+        counts,
         getIntRange(
             counts[0]
         ),
@@ -23,7 +25,7 @@ data class CellRange(
         )
     )
 
-    fun iterate(counts: Vec3i, action: (CellIndex) -> Unit) {
+    fun iterate(action: (CellIndex) -> Unit) {
         for (x in xRange) {
             for (y in yRange) {
                 for (z in zRange) {

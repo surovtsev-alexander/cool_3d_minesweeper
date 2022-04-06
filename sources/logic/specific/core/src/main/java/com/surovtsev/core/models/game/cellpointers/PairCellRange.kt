@@ -1,7 +1,5 @@
 package com.surovtsev.core.models.game.cellpointers
 
-import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellRange
 import glm_.vec3.Vec3bool
 import glm_.vec3.Vec3i
 import kotlin.math.max
@@ -15,11 +13,13 @@ fun getPairDimRange(pos: Int, dim: Int): PairDimRange =
 
 
 data class PairCellRange(
+    private val counts: Vec3i,
     val xRange: PairDimRange,
     val yRange: PairDimRange,
     val zRange: PairDimRange
 ) {
     constructor(idx: CellIndex, counts: Vec3i): this(
+        counts,
         getPairDimRange(
             idx.x,
             counts[0]
@@ -39,7 +39,8 @@ data class PairCellRange(
     }
 
     fun getCellRange(flags: Vec3bool) =
-        CellRange(
+        CellsRange(
+            counts,
             selectRange(
                 xRange,
                 flags[0]

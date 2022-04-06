@@ -1,5 +1,6 @@
 package com.surovtsev.core.models.game.config
 
+import com.surovtsev.core.models.game.cellpointers.CellsRange
 import com.surovtsev.core.room.entities.Settings
 import glm_.vec3.Vec3
 import glm_.vec3.Vec3i
@@ -19,15 +20,15 @@ data class GameConfig(
         assert(bombsRate < 1)
     }
 
-    val cubesCount = counts[0] * counts[1] * counts[2]
+    val cellsCount = counts[0] * counts[1] * counts[2]
 
     val bombsCount =
         max(
             1,
             min(
-                cubesCount - 2,
+                cellsCount - 2,
                 ceil(
-                    (cubesCount * bombsRate)
+                    (cellsCount * bombsRate)
                 ).toInt()
             )
         )
