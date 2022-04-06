@@ -39,14 +39,15 @@ class MoveHandlerImp @Inject constructor(
     override fun move(prev: Vec2, curr: Vec2) {
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
-        val nP1 = cameraInfoHelper.normalizedDisplayCoordinates(prev)
-        val nP2 = cameraInfoHelper.normalizedDisplayCoordinates(curr)
+        val nearWorldCalculator = { proj: Vec2 ->
+            cameraInfoHelper.calcNearWorldPoint(
+                cameraInfoHelper.normalizedDisplayCoordinates(
+                    proj
+                )
+            )
+        }
 
-        val p1Near = cameraInfoHelper.calcNearWorldPoint(nP1)
-        val p2Near = cameraInfoHelper.calcNearWorldPoint(nP2)
-
-        val diff = p2Near - p1Near
-
+        val diff = nearWorldCalculator(curr) - nearWorldCalculator(prev)
 
         cameraInfoHelper.translate(diff)
     }
