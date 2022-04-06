@@ -4,7 +4,6 @@ import com.surovtsev.core.models.game.cellpointers.ObjWithCellIndexList
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.SplitType
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import glm_.vec3.Vec3
-import logcat.logcat
 
 
 typealias SelectedCells = ObjWithCellIndexList<CellSpaceBorder>
@@ -16,7 +15,6 @@ interface Node {
             spaceCoordinates: CellSpaceBorder = calculateSpaceCoordinates(selectedCells),
             prevSplitType: SplitType = SplitType.Z,
         ): Node {
-            logcat { "createNode. spaceCoordinates: $spaceCoordinates; prevSplitType: $prevSplitType selectedCells: $selectedCells;" }
 
             val selectedCellsCount = selectedCells.count()
 

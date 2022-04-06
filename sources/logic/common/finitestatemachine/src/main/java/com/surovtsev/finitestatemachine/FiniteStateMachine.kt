@@ -10,8 +10,6 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import logcat.logcat

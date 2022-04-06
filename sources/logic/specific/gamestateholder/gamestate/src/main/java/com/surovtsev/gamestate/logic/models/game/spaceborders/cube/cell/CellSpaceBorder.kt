@@ -3,7 +3,6 @@ package com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell
 import com.surovtsev.core.models.gles.pointer.PointerDescriptor
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.edge.EdgeSpaceBorder
 import glm_.vec3.Vec3
-import logcat.logcat
 
 class CellSpaceBorder(
     leftDownNearPoint: Vec3,
@@ -23,8 +22,6 @@ class CellSpaceBorder(
             assert(halfSpace.y > 0)
             assert(halfSpace.z > 0)
 
-            logcat { "center: $center; halfSpace: $halfSpace" }
-
             return CellSpaceBorder(
                 center - halfSpace,
                 center + halfSpace,
@@ -37,10 +34,6 @@ class CellSpaceBorder(
         leftDownNearPoint,
         rightUpFarPoint
     )
-
-    init {
-        logcat { this.toString() }
-    }
 
     private val edgeSpaces: Array<EdgeSpaceBorder>
 

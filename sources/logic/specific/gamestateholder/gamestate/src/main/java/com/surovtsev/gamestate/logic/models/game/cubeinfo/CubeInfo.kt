@@ -6,18 +6,13 @@ import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamestate.logic.dagger.GameStateScope
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
-import logcat.logcat
 import javax.inject.Inject
 
 @GameStateScope
-class CubeInfo @Inject constructor(
+data class CubeInfo @Inject constructor(
     val cubeCoordinates: CubeCoordinates,
     val cubeSkin: CubeSkin,
     val cubeSpaceBorder: CubeSpaceBorder,
     val neighboursCalculator: NeighboursCalculator,
     val aabbTree: AABBTree,
-) {
-    init {
-        logcat { aabbTree.toString() }
-    }
-}
+)
