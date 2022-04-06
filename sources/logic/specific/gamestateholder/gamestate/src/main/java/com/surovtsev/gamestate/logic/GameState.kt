@@ -1,5 +1,6 @@
 package com.surovtsev.gamestate.logic
 
+import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
@@ -10,6 +11,7 @@ import com.surovtsev.utils.math.camerainfo.CameraInfo
 class GameState(
     val gameConfig: GameConfig,
     val cubeInfo: CubeInfo,
+    val neighboursCalculator: NeighboursCalculator,
     val cameraInfo: CameraInfo,
     val gameStatusHolder: GameStatusHolder,
 ) {

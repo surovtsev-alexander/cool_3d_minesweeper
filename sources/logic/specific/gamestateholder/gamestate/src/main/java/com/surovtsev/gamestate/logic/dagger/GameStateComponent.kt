@@ -6,6 +6,7 @@ import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
+import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamestate.logic.helpers.GameConfigFactory
@@ -53,10 +54,12 @@ object GameStateModule {
         cameraInfo: CameraInfo,
         gameStatusHolder: GameStatusHolder,
         save: Save?,
+        neighboursCalculator: NeighboursCalculator,
     ): GameState {
         val res = GameState(
             gameConfig,
             cubeInfo,
+            neighboursCalculator,
             cameraInfo,
             gameStatusHolder,
         )
@@ -69,7 +72,8 @@ object GameStateModule {
             save.cubeSkinToSave.applySavedData(
                 gameConfig,
                 res.cubeInfo.cubeSkin,
-                res.gameStatusHolder
+                res.gameStatusHolder,
+                res.neighboursCalculator,
             )
         }
 
@@ -85,6 +89,16 @@ object GameStateModule {
             gameConfig.cellsRange
         )
     }
+
+    @GameStateScope
+    @Provides
+    fun provideNeighboursCalculator(
+        gameConfig: GameConfig,
+        cubeSkin: CubeSkin,
+    ): NeighboursCalculator = NeighboursCalculator(
+        gameConfig,
+        cubeSkin,
+    )
 
 
     @GameStateScope

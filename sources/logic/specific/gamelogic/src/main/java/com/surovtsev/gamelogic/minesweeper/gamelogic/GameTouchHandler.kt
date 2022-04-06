@@ -1,6 +1,5 @@
 package com.surovtsev.gamelogic.minesweeper.gamelogic
 
-import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.CellsRange
@@ -28,6 +27,7 @@ class GameTouchHandler(
     private val gameStatusHolder = gameState.gameStatusHolder
     private val cubeSkin = gameState.cubeInfo.cubeSkin
     private val gameConfig = gameState.gameConfig
+    private val neighboursCalculator = gameState.neighboursCalculator
 
     fun touchCell(touchType: TouchType, pointedCell: PointedCell, currTime: Long) {
         val position = pointedCell.index
@@ -45,7 +45,7 @@ class GameTouchHandler(
             )
             gameStatusHolder.setBombsLeft(bombsList.size)
 
-            NeighboursCalculator.fillNeighbours(gameState.gameConfig, cubeSkin, bombsList)
+            neighboursCalculator.fillNeighbours(bombsList)
             gameStatusHolder.setGameStatus(GameStatus.BombsPlaced)
         }
 
@@ -155,8 +155,7 @@ class GameTouchHandler(
                 } while (false)
             }
 
-            NeighboursCalculator.iterateNeighbours(
-                gameState.gameConfig, cubeSkin, pointedCell.index, action)
+            neighboursCalculator.iterateNeighbours(pointedCell.index, action)
 
             openNeighbours(pointedCell)
 
@@ -289,16 +288,13 @@ class GameTouchHandler(
             return
         }
         for (i in 0 until 3) {
-            if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    gameState.gameConfig, cubeSkin, pointedCell.index, i
-                )) {
+            if (!neighboursCalculator.hasPosEmptyNeighbours(pointedCell.index, i)) {
                 continue
             }
 
             val cubeNbhBombs = pointedCell.skin.neighbourBombs[i]
 
-            val neighbours = NeighboursCalculator.getNeighbours(
-                gameState.gameConfig, cubeSkin, pointedCell.index, i)
+            val neighbours = neighboursCalculator.getNeighbours(pointedCell.index, i)
 
             val flagged = neighbours.count { it.skin.isFlagged() }
 
@@ -323,14 +319,11 @@ class GameTouchHandler(
                 continue
             }
 
-            if (!NeighboursCalculator.hasPosEmptyNeighbours(
-                    gameState.gameConfig, cubeSkin, position, i
-                )) {
+            if (!neighboursCalculator.hasPosEmptyNeighbours(position, i)) {
                 continue
             }
 
-            val neighbours = NeighboursCalculator.getNeighbours(
-                gameState.gameConfig, cubeSkin, position, i)
+            val neighbours = neighboursCalculator.getNeighbours(position, i)
 
             for (n in neighbours) {
                 val p = n.index
@@ -373,9 +366,7 @@ class GameTouchHandler(
             setCubeTexture(pointedCell, TextureCoordinatesHelper.TextureType.FLAGGED)
 
             for (i in 0 until 3) {
-                val neighbours = NeighboursCalculator.getNeighbours(
-                    gameState.gameConfig, cubeSkin, pointedCell.index, i
-                )
+                val neighbours = neighboursCalculator.getNeighbours(pointedCell.index, i)
 
                 for (n in neighbours) {
                     if (n.skin.isOpenedNumber()) {

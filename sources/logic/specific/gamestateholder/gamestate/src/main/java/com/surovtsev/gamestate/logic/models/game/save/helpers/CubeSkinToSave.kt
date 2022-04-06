@@ -93,6 +93,7 @@ class CubeSkinToSave(
         gameConfig: GameConfig,
         cubeSkin: CubeSkin,
         gameStatusHolder: GameStatusHolder,
+        neighboursCalculator: NeighboursCalculator,
     ) {
         val cellsRange = gameConfig.cellsRange
 
@@ -121,7 +122,7 @@ class CubeSkinToSave(
             }
         }
 
-        NeighboursCalculator.fillNeighbours(gameConfig, cubeSkin, bombsList)
+        neighboursCalculator.fillNeighbours(bombsList)
 
         val closedBombs = bombsList.count() - openedBombCount
         cellsRange.iterate { cellIndex ->
