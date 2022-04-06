@@ -9,7 +9,7 @@ import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamestate.logic.helpers.GameConfigFactory
-import com.surovtsev.gamestate.logic.models.game.gameobjectsholder.CubeInfo
+import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.save.Save
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder

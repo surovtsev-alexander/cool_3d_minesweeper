@@ -2,7 +2,7 @@ package com.surovtsev.gamestate.logic
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.logic.models.game.gameobjectsholder.CubeInfo
+import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import com.surovtsev.utils.math.camerainfo.CameraInfo

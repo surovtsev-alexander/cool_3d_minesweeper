@@ -8,21 +8,19 @@ class CellSpaceBorder(
     val center: Vec3,
     halfSpace: Vec3
 ) {
-    private val up: EdgeSpaceBorder
-    private val down: EdgeSpaceBorder
-    private val left: EdgeSpaceBorder
-    private val right: EdgeSpaceBorder
-    private val near: EdgeSpaceBorder
-    private val far: EdgeSpaceBorder
+    private val leftDownNearPoint = center - halfSpace
+    private val rightUpFarPoint = center + halfSpace
+
+    val twoDiagonalPoints = listOf(
+        leftDownNearPoint,
+        rightUpFarPoint
+    )
 
     private val edgeSpaces: Array<EdgeSpaceBorder>
 
     init {
-        val p1 = center - halfSpace
-        val p2 = center + halfSpace
-
-        val (x1, y1, z1) = p1
-        val (x2, y2, z2) = p2
+        val (x1, y1, z1) = leftDownNearPoint
+        val (x2, y2, z2) = rightUpFarPoint
 
         val a = Vec3(x1, y2, z1)
         val b = Vec3(x1, y2, z2)
@@ -34,42 +32,42 @@ class CellSpaceBorder(
         val g = Vec3(x2, y1, z2)
         val h = Vec3(x2, y1, z1)
 
-        up =
+        val up =
             EdgeSpaceBorder(
                 a,
                 b,
                 c,
                 d
             )
-        down =
+        val down =
             EdgeSpaceBorder(
                 e,
                 f,
                 g,
                 h
             )
-        left =
+        val left =
             EdgeSpaceBorder(
                 a,
                 b,
                 f,
                 e
             )
-        right =
+        val right =
             EdgeSpaceBorder(
                 d,
                 c,
                 g,
                 h
             )
-        near =
+        val near =
             EdgeSpaceBorder(
                 a,
                 d,
                 h,
                 e
             )
-        far =
+        val far =
             EdgeSpaceBorder(
                 b,
                 c,

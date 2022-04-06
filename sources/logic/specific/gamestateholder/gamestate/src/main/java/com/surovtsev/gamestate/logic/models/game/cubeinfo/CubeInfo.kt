@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.logic.models.game.gameobjectsholder
+package com.surovtsev.gamestate.logic.models.game.cubeinfo
 
 import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
