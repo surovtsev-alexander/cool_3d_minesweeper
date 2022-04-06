@@ -17,9 +17,11 @@ class IntersectionCalculator @Inject constructor(
     fun getCell(): PointedCell? {
         val gameState = gameStateHolder.gameStateFlow.value ?: return null
 
-        val cubeSkin = gameState.cubeInfo.cubeSkin
+        val cubeInfo = gameState.cubeInfo
+
+        val cubeSkin = cubeInfo.cubeSkin
         val skins = cubeSkin.skins
-        val cubeSpaceBorder = gameState.cubeSpaceBorder
+        val cubeSpaceBorder = cubeInfo.cubeSpaceBorder
         val borders = cubeSpaceBorder.cells
         val squaredCubeSphereRadius = cubeSpaceBorder.squaredCellSphereRadius
 

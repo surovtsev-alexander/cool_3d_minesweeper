@@ -12,7 +12,6 @@ class GameState(
     val cubeInfo: CubeInfo,
     val cameraInfo: CameraInfo,
     val gameStatusHolder: GameStatusHolder,
-    val cubeSpaceBorder: CubeSpaceBorder,
 ) {
     val cubesToOpen = mutableListOf<CellIndex>()
     val cubesToRemove = mutableListOf<CellIndex>()

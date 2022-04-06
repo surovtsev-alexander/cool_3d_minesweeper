@@ -52,7 +52,6 @@ object GameStateModule {
         cubeInfo: CubeInfo,
         cameraInfo: CameraInfo,
         gameStatusHolder: GameStatusHolder,
-        cubeSpaceBorder: CubeSpaceBorder,
         save: Save?,
     ): GameState {
         val res = GameState(
@@ -60,7 +59,6 @@ object GameStateModule {
             cubeInfo,
             cameraInfo,
             gameStatusHolder,
-            cubeSpaceBorder,
         )
 
         if (save != null) {
