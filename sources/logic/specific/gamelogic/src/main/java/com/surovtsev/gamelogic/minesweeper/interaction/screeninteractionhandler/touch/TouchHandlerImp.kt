@@ -24,8 +24,8 @@ class TouchHandlerImp @Inject constructor(
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
         val proj = cameraInfoHelper.normalizedDisplayCoordinates(point)
-        pointer.near = cameraInfoHelper.calcNearByProj(proj)
-        pointer.far = cameraInfoHelper.calcFarByProj(proj)
+        pointer.near = cameraInfoHelper.calcNearRawByProj(proj)
+        pointer.far = cameraInfoHelper.calcFarRawByProj(proj)
         pointer.touchType = touchType
 
         update()

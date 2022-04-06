@@ -52,17 +52,17 @@ class CameraInfoHelper(
         Vec2(x, y)
     }
 
-    fun calcNearByProj(proj: Vec2) = calcPointByProj(-1f)(proj)
-    fun calcFarByProj(proj: Vec2) = calcPointByProj(1f)(proj)
+    fun calcNearRawByProj(proj: Vec2) = calcRawPointByProj(-1f)(proj)
+    fun calcFarRawByProj(proj: Vec2) = calcRawPointByProj(1f)(proj)
 
-    private fun calcPointByProj(z: Float): (Vec2) -> Vec3 {
+    private fun calcRawPointByProj(z: Float): (Vec2) -> Vec3 {
         return fun(proj: Vec2): Vec3 = MatrixHelper.multMat4Vec3(
             cameraInfo.invMVP,
             Vec3(proj, z)
         )
     }
 
-    fun calcNearWorldPoint(proj: Vec2) = MatrixHelper.multMat4Vec3(
+    fun calcNearWorldPointByProj(proj: Vec2) = MatrixHelper.multMat4Vec3(
         cameraInfo.invProjectionMatrix,
         Vec3(proj, -1)
     )

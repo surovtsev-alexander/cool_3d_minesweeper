@@ -17,7 +17,7 @@ class MoveHandlerImp @Inject constructor(
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
         val farRawCalculator = { proj: Vec2 ->
-            cameraInfoHelper.calcFarByProj(
+            cameraInfoHelper.calcFarRawByProj(
                 cameraInfoHelper.normalizedDisplayCoordinates(
                     proj
                 )
@@ -40,7 +40,7 @@ class MoveHandlerImp @Inject constructor(
         val cameraInfoHelper = cameraInfoHelperHolder.cameraInfoHelperFlow.value ?: return
 
         val nearWorldCalculator = { proj: Vec2 ->
-            cameraInfoHelper.calcNearWorldPoint(
+            cameraInfoHelper.calcNearWorldPointByProj(
                 cameraInfoHelper.normalizedDisplayCoordinates(
                     proj
                 )
