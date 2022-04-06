@@ -79,14 +79,10 @@ class GameTouchHandler(
     }
 
     fun storeSelectedBombs() {
-        gameConfig.cellsRange.iterate { cellIndex ->
-            do {
-                val p = cubeSkin.getPointedCell(cellIndex)
-                val s = p.skin
-                if (s.isFlagged()) {
-                    gameState.cubesToRemove.add(cellIndex)
-                }
-            } while (false)
+        cubeSkin.skinsWithIndexes.forEach { (skin, cellIndex) ->
+            if (skin.isFlagged()) {
+                gameState.cubesToRemove.add(cellIndex)
+            }
         }
     }
 

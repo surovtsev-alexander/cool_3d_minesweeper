@@ -72,10 +72,7 @@ class CubeSkinToSave(
             val bombs = resArr()
             val flaggedClosedEmpty = resArr()
 
-
-            val skins = cubeSkin.skins
-            gameConfig.cellsRange.iterate { cellIndex ->
-                val skin = cellIndex.getValue(skins)
+            cubeSkin.skinsWithIndexes.forEach { (skin, cellIndex) ->
                 val id = cellIndex.id
 
                 val skinSaverHelper = SkinSaverHelper.createObject(skin)
@@ -91,18 +88,16 @@ class CubeSkinToSave(
     }
 
     fun applySavedData(
-        gameConfig: GameConfig,
         cubeInfo: CubeInfo,
         gameStatusHolder: GameStatusHolder,
     ) {
-        val cellsRange = gameConfig.cellsRange
+        val skinsWithIndexes = cubeInfo.cubeSkin.skinsWithIndexes
 
         val bombsList = mutableListOf<CellIndex>()
 
         var openedBombCount = 0
-        val skins = cubeInfo.cubeSkin.skins
-        cellsRange.iterate { cellIndex ->
-            val skin = cellIndex.getValue(skins)
+
+        skinsWithIndexes.forEach { (skin, cellIndex) ->
             val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(
@@ -125,8 +120,8 @@ class CubeSkinToSave(
         cubeInfo.neighboursCalculator.fillNeighbours(bombsList)
 
         val closedBombs = bombsList.count() - openedBombCount
-        cellsRange.iterate { cellIndex ->
-            val skin = cellIndex.getValue(skins)
+
+        skinsWithIndexes.forEach { (skin, cellIndex) ->
             val id = cellIndex.id
 
             val skinSaverHelper = SkinSaverHelper.createObject(

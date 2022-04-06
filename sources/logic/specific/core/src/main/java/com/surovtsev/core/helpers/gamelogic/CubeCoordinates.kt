@@ -1,7 +1,6 @@
 package com.surovtsev.core.helpers.gamelogic
 
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import glm_.vec3.Vec3
 
 class CubeCoordinates(
@@ -86,7 +85,6 @@ class CubeCoordinates(
             val indexesArray =
                 invExtendedIndexedArray
 
-            val counts = gameConfig.counts
             val dimensions = gameConfig.space
             val gaps = gameConfig.gaps
             val cellsCount = gameConfig.cellsCount

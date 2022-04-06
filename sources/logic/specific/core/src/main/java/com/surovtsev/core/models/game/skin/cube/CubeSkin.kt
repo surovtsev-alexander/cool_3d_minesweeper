@@ -10,6 +10,8 @@ class CubeSkin constructor(
 ) {
     val skins: List<List<List<CellSkin>>> = cellsRange.create3DList { CellSkin() }
 
+    val skinsWithIndexes = cellsRange.createObjWithCellIndexList(skins)
+
     fun getPointedCell(p: CellIndex) =
         PointedCell(
             p,

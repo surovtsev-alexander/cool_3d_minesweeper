@@ -106,9 +106,7 @@ class CubeOpenGLModel @Inject constructor(
         val textureCoordinates =
             FloatArray(textureIndexesCount * cellsCount)
 
-        val skins = gameState.cubeInfo.cubeSkin.skins
-        gameConfig.cellsRange.iterate { cellIndex ->
-            val skin = cellIndex.getValue(skins)
+        gameState.cubeInfo.cubeSkin.skinsWithIndexes.forEach { (skin, cellIndex) ->
             val id = cellIndex.id
 
             if (skin.isEmpty()) {

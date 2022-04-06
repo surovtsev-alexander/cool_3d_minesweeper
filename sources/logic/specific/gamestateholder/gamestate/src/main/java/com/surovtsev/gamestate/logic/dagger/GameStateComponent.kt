@@ -68,7 +68,6 @@ object GameStateModule {
             )
 
             save.cubeSkinToSave.applySavedData(
-                gameConfig,
                 res.cubeInfo,
                 res.gameStatusHolder,
             )

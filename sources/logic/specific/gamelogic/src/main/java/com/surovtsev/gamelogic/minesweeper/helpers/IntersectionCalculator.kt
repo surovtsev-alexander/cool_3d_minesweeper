@@ -19,8 +19,6 @@ class IntersectionCalculator @Inject constructor(
 
         val cubeInfo = gameState.cubeInfo
 
-        val cubeSkin = cubeInfo.cubeSkin
-        val skins = cubeSkin.skins
         val cubeSpaceBorder = cubeInfo.cubeSpaceBorder
         val borders = cubeSpaceBorder.cells
         val squaredCubeSphereRadius = cubeSpaceBorder.squaredCellSphereRadius
@@ -30,10 +28,8 @@ class IntersectionCalculator @Inject constructor(
         val candidateCubes =
             mutableListOf<Pair<Float, PointedCellWithSpaceBorder>>()
 
-        gameState.gameConfig.cellsRange.iterate { cellIndex: CellIndex ->
+        cubeInfo.cubeSkin.skinsWithIndexes.forEach { (skin, cellIndex) ->
             do {
-                val skin = cellIndex.getValue(skins)
-
                 if (skin.isEmpty()) {
                     continue
                 }

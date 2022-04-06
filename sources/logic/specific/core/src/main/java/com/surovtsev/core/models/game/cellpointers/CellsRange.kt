@@ -2,6 +2,11 @@ package com.surovtsev.core.models.game.cellpointers
 
 import glm_.vec3.Vec3i
 
+typealias My3DList<T> = List<List<List<T>>>
+
+// Flatten version of My3DList with CellIndex for each element
+typealias ObjWithCellIndexList<T> = List<Pair<T, CellIndex>>
+
 data class CellsRange(
     val counts: Vec3i,
     val xRange: IntRange,
@@ -42,7 +47,7 @@ data class CellsRange(
         }
     }
 
-    fun <T> create3DList(action: (cellIndex: CellIndex) -> T): List<List<List<T>>> =
+    fun <T> create3DList(action: (cellIndex: CellIndex) -> T): My3DList<T> =
         xRange.map { x ->
             yRange.map { y ->
                 zRange.map { z ->
@@ -57,6 +62,13 @@ data class CellsRange(
                 }
             }
         }
+
+    fun <T> createObjWithCellIndexList(
+        arr: My3DList<T>
+    ): ObjWithCellIndexList<T> =
+        create3DList { cellIndex ->
+            cellIndex.getValue(arr) to cellIndex
+        }.flatten().flatten()
 
     override fun toString() = "$xRange $yRange $zRange"
 }
