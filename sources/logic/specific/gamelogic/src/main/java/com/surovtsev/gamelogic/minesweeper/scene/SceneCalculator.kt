@@ -11,6 +11,7 @@ import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
+import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -88,6 +89,9 @@ class SceneCalculator @Inject constructor(
 
         if (clicked) {
             val cell = intersectionCalculator.getCell()
+            val cellAlt = intersectionCalculator.getCellAlt()
+
+            logcat { "cell: $cell; cellAlt: $cellAlt"}
             if (cell != null) {
                 gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }

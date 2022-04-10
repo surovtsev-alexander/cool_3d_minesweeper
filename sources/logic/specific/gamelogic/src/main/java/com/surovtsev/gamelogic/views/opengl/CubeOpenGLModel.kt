@@ -48,7 +48,7 @@ class CubeOpenGLModel @Inject constructor(
             TextureHelper.deleteTexture(textureId)
             textureId = -1
         }
-        textureId = TextureHelper.loadTexture(context, R.drawable.skin)
+        textureId = TextureHelper.loadTexture(context, R.drawable.skin_downscaled)
 
         val cubeViewDataHelper = CubeViewDataHelper.createObject(
             cubeCoordinates

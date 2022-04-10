@@ -4,8 +4,8 @@ import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 
 class Leaf(
-    private val cellSpaceBorder: CellSpaceBorder,
-    private val cellIndex: CellIndex,
+    val cellSpaceBorder: CellSpaceBorder,
+    val cellIndex: CellIndex,
 ): Node {
 
     constructor(
