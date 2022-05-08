@@ -10,26 +10,24 @@ enum class SplitType(
     Y(1),
     Z(2);
 
-    fun getCyclicRangeStartsFromThis(): List<SplitType> {
-        val nodeIndexes = SplitType.values()
+    companion object {
+        val values = values()
+        val valuesSize = values.size
 
-        val selectedIndexes =
-            (ordinal until nodeIndexes.size) + (0 until ordinal)
+        val cyclicRangeStartsFromKey =
+            values().associate {
+                it to it.run {
+                    ((ordinal until valuesSize) + (0 until ordinal)).map { values[it] }
+                }
+            }
 
-        return selectedIndexes.map { nodeIndexes[it] }
-    }
-
-    fun getNext(): SplitType {
-        val nodeIndexes = SplitType.values()
-
-        val incOrdinal = ordinal + 1
-
-        return if (incOrdinal >= nodeIndexes.size) {
-            nodeIndexes[0]
-        } else {
-            nodeIndexes[incOrdinal]
+        val nextSplitTypeByKey = values.associate {
+            it to values[(it.ordinal + 1).mod(valuesSize)]
         }
     }
+
+    fun cyclicRangeStartsFromThis() =  cyclicRangeStartsFromKey[this]!!
+    fun next() = nextSplitTypeByKey[this]!!
 }
 
 

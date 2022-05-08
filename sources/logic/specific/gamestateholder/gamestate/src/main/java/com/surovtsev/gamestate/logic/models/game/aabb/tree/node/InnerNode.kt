@@ -28,8 +28,8 @@ class InnerNode(
     }
 
     init {
-        val firstCurrNodeSplit = prevSplitType.getNext()
-        val nodeSplits = firstCurrNodeSplit.getCyclicRangeStartsFromThis()
+        val firstCurrNodeSplit = prevSplitType.next()
+        val nodeSplits = firstCurrNodeSplit.cyclicRangeStartsFromThis()
 
         val splitsWithType = nodeSplits
             .asSequence()

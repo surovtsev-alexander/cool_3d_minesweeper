@@ -19,9 +19,27 @@ class CellIndex(
 
     companion object {
         fun calcId(counts: Vec3i, x: Int, y: Int, z: Int) =
+            z + counts[2] * (y + counts[1] * x)
+
+        fun calcIdZYX(counts: Vec3i, x: Int, y: Int, z: Int) =
             x + counts[0] * (y + counts[1] * z)
 
         fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
+            val countY = counts[1]
+            val countZ = counts[2]
+            val z = cellIndex % countZ
+            val yx = (cellIndex - z) / countZ
+            val y = yx % countY
+            val x = (yx - y) / countY
+            CellIndex(
+                x,
+                y,
+                z,
+                counts
+            )
+        }
+
+        fun getIndexCalculatorZYX(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
             val countX = counts[0]
             val countY = counts[1]
             val x = cellIndex % countX

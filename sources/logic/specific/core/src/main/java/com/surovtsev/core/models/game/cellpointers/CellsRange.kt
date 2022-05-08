@@ -7,6 +7,7 @@ typealias My3DList<T> = List<List<List<T>>>
 // Flatten version of My3DList with CellIndex for each element
 typealias ObjWithCellIndexList<T> = List<Pair<T, CellIndex>>
 
+// TODO: rename to Range3D
 data class CellsRange(
     val counts: Vec3i,
     val xRange: IntRange,
@@ -70,5 +71,13 @@ data class CellsRange(
             cellIndex.getValue(arr) to cellIndex
         }.flatten().flatten()
 
+    fun <T> toFlattenList(
+        arr: My3DList<T>
+    ): List<T> =
+        arr.flatten().flatten()
+
     override fun toString() = "$xRange $yRange $zRange"
 }
+
+// TODO: Move to a separate file
+fun Vec3i.cellsCount() = this.x * this.y * this.z
