@@ -21,8 +21,8 @@ class CellIndex(
         fun calcId(counts: Vec3i, x: Int, y: Int, z: Int) =
             z + counts[2] * (y + counts[1] * x)
 
-        fun calcIdZYX(counts: Vec3i, x: Int, y: Int, z: Int) =
-            x + counts[0] * (y + counts[1] * z)
+//        fun calcIdZYX(counts: Vec3i, x: Int, y: Int, z: Int) =
+//            x + counts[0] * (y + counts[1] * z)
 
         fun getIndexCalculator(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
             val countY = counts[1]
@@ -39,20 +39,20 @@ class CellIndex(
             )
         }
 
-        fun getIndexCalculatorZYX(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
-            val countX = counts[0]
-            val countY = counts[1]
-            val x = cellIndex % countX
-            val yz = (cellIndex - x) / countX
-            val y = yz % countY
-            val z = (yz - y) / countY
-            CellIndex(
-                x,
-                y,
-                z,
-                counts
-            )
-        }
+//        fun getIndexCalculatorZYX(counts: Vec3i): (Int) -> CellIndex =  { cellIndex ->
+//            val countX = counts[0]
+//            val countY = counts[1]
+//            val x = cellIndex % countX
+//            val yz = (cellIndex - x) / countX
+//            val y = yz % countY
+//            val z = (yz - y) / countY
+//            CellIndex(
+//                x,
+//                y,
+//                z,
+//                counts
+//            )
+//        }
 
         fun <T> getValue(arr: List<List<List<T>>>, pos: Vec3i) =
             arr[pos[0]][pos[1]][pos[2]]

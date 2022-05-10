@@ -9,7 +9,6 @@ import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamestate.logic.helpers.GameConfigFactory
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
 import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
@@ -130,7 +129,7 @@ object GameStateModule {
         saveController: SaveController
     ): GameConfig {
         return save?.gameConfig
-            ?: GameConfigFactory.createGameConfig(
+            ?: GameConfig(
                 saveController.loadSettingDataOrDefault()
             )
     }
