@@ -201,14 +201,14 @@ class IntersectionCalculator @Inject constructor(
             }
 
 
-            intersectionCalculationCount++
-            val isIntersects = spaceBorder.testIntersection(pointerDescriptor)
-
-//            logcat { "currNode.spaceBorder: $spaceBorder; isIntersects: $isIntersects" }
-
-            if (!isIntersects) {
-                continue
-            }
+//            intersectionCalculationCount++
+//            val isIntersects = spaceBorder.testIntersection(pointerDescriptor)
+//
+////            logcat { "currNode.spaceBorder: $spaceBorder; isIntersects: $isIntersects" }
+//
+//            if (!isIntersects) {
+//                continue
+//            }
 
             when (currNode) {
                 is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf -> {
@@ -249,6 +249,8 @@ class IntersectionCalculator @Inject constructor(
         logcat { "sortedCandidates alt: $sortedCandidates" }
         logcat { "alt alt: intersectionCalculationCount: $intersectionCalculationCount; projectionCalculationCount: $projectionCalculationCount; checkCalculator: $checkCalculator; skipped: $skipped" }
 
-        return sortedCandidates.getOrNull(0)?.second
+        return sortedCandidates.firstOrNull {
+            it.second.spaceBorder.testIntersection(pointerDescriptor)
+        }?.second
     }
 }
