@@ -1,5 +1,6 @@
 package com.surovtsev.gamelogic.minesweeper.scene
 
+import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
@@ -14,6 +15,7 @@ import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupF
 import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.system.measureTimeMillis
 
 @GameScope
 class SceneCalculator @Inject constructor(
@@ -88,11 +90,23 @@ class SceneCalculator @Inject constructor(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            val cell = intersectionCalculator.getCell()
-            val cellAlt = intersectionCalculator.getCellAlt()
-            val cellAltAlt = intersectionCalculator.getCellAltAlt()
+            val cell: PointedCell?
+            val cellAlt: PointedCell?
+            val cellAltAlt: PointedCell?
+
+
+            val t1 = measureTimeMillis {
+                cell = intersectionCalculator.getCell()
+            }
+            val t2 = measureTimeMillis {
+                cellAlt = intersectionCalculator.getCellAlt()
+            }
+            val t3 = measureTimeMillis {
+                cellAltAlt = intersectionCalculator.getCellAltAlt()
+            }
 
             logcat { "cell: $cell; cellAlt: $cellAlt; cellAltAlt: $cellAltAlt"}
+            logcat { "t1: $t1; t2: $t2; t3: $t3" }
             if (cell != null) {
                 gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }
