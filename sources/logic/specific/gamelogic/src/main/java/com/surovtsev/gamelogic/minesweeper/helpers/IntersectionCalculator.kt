@@ -158,4 +158,78 @@ class IntersectionCalculator @Inject constructor(
 
         return sortedCandidates.getOrNull(0)?.second
     }
+
+    fun getCellAltAlt(): PointedCell? {
+        val gameState = gameStateHolder.gameStateFlow.value ?: return null
+
+        val cubeInfo = gameState.cubeInfo
+
+        val nodesToTest = LinkedList<com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Node>()
+        nodesToTest.add(cubeInfo.aabbTreeAlt.root)
+
+        val pointerDescriptor = pointer.getPointerDescriptor()
+
+        val candidateCubes = LinkedList<Pair<Float, PointedCellWithSpaceBorder>>()
+
+        val squaredCubeSphereRadius = cubeInfo.cubeSpaceBorder.squaredCellSphereRadius
+        val skins = cubeInfo.cubeSkin.skins
+
+        var intersectionCalculationCount = 0
+        var projectionCalculationCount = 0
+
+        do {
+//            logcat { "nodesToTest.count: ${nodesToTest.count()}" }
+
+            val currNode = nodesToTest.poll() ?: break
+
+            val spaceBorder = currNode.cellSpaceBorder
+
+            intersectionCalculationCount++
+            val isIntersects = spaceBorder.testIntersection(pointerDescriptor)
+
+//            logcat { "currNode.spaceBorder: $spaceBorder; isIntersects: $isIntersects" }
+
+            if (isIntersects) {
+                when (currNode) {
+                    is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf -> {
+                        do {
+                            val cellIndex = currNode.cellIndex
+                            val skin = cellIndex.getValue(skins)
+                            val cellSpaceBorder = currNode.cellSpaceBorder
+
+                            if (skin.isEmpty()) {
+                                break
+                            }
+
+                            projectionCalculationCount++
+                            val center = cellSpaceBorder.center
+                            val projection = pointerDescriptor.calcProjection(center)
+                            val squaredDistance = (center - projection).length2()
+
+                            if (squaredDistance <= squaredCubeSphereRadius) {
+                                val fromNear = (pointerDescriptor.near - projection).length()
+
+                                candidateCubes.add(
+                                    fromNear to PointedCellWithSpaceBorder(
+                                        cellIndex, skin, cellSpaceBorder
+                                    )
+                                )
+                            }
+                        } while (false)
+                    }
+                    is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode -> {
+                        nodesToTest.add(currNode.left)
+                        nodesToTest.add(currNode.right)
+                    }
+                }
+            }
+        } while (true)
+
+        val sortedCandidates = candidateCubes.sortedBy { it.first }
+
+        logcat { "sortedCandidates alt: $sortedCandidates" }
+        logcat { "alt alt: intersectionCalculationCount: $intersectionCalculationCount; projectionCalculationCount: $projectionCalculationCount" }
+
+        return sortedCandidates.getOrNull(0)?.second
+    }
 }

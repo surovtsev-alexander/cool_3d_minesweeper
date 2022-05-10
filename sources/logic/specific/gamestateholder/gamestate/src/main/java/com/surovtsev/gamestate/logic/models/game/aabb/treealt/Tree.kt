@@ -9,6 +9,8 @@ import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Node
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import glm_.vec3.Vec3i
 
+typealias AABBTreeAlt = Tree
+
 class Tree(
     gameConfig: GameConfig,
     cubeSpaceBorder: CubeSpaceBorder,

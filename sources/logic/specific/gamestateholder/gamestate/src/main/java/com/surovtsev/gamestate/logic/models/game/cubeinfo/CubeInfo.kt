@@ -9,6 +9,7 @@ import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.InnerNode
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Leaf
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Node
+import com.surovtsev.gamestate.logic.models.game.aabb.treealt.AABBTreeAlt
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import logcat.logcat
 import java.util.LinkedList
@@ -22,6 +23,7 @@ data class CubeInfo @Inject constructor(
     val cubeSpaceBorder: CubeSpaceBorder,
     val neighboursCalculator: NeighboursCalculator,
     val aabbTree: AABBTree,
+    val aabbTreeAlt: AABBTreeAlt,
 
     val gameConfig: GameConfig,
 ) {

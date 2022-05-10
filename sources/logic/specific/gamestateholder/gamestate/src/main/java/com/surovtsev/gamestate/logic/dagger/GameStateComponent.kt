@@ -10,6 +10,7 @@ import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
 import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
+import com.surovtsev.gamestate.logic.models.game.aabb.treealt.AABBTreeAlt
 import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.save.Save
@@ -19,6 +20,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlin.system.measureTimeMillis
 
 @GameStateScope
 @Component(
@@ -100,7 +102,33 @@ object GameStateModule {
     @Provides
     fun provideAABBTree(
         cubeSpaceBorder: CubeSpaceBorder
-    ) = AABBTree(cubeSpaceBorder)
+    ): AABBTree {
+        val res: AABBTree
+        val calculationTime = measureTimeMillis {
+            res = AABBTree(cubeSpaceBorder)
+        }
+        println("provideAABBTree; calculationTime: $calculationTime")
+        return res
+    }
+
+    @GameStateScope
+    @Provides
+    fun provideAABBTreeAlt(
+        gameConfig: GameConfig,
+        cubeSpaceBorder: CubeSpaceBorder,
+    ): AABBTreeAlt {
+        val res: AABBTreeAlt
+
+        val calculationTime = measureTimeMillis {
+            res = AABBTreeAlt(
+                gameConfig,
+                cubeSpaceBorder,
+            )
+        }
+
+        println("provideAABBTreeAlt; calculationTime: $calculationTime")
+        return res
+    }
 
     @GameStateScope
     @Provides

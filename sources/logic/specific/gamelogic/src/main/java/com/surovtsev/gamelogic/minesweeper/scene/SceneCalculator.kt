@@ -90,8 +90,9 @@ class SceneCalculator @Inject constructor(
         if (clicked) {
             val cell = intersectionCalculator.getCell()
             val cellAlt = intersectionCalculator.getCellAlt()
+            val cellAltAlt = intersectionCalculator.getCellAltAlt()
 
-            logcat { "cell: $cell; cellAlt: $cellAlt"}
+            logcat { "cell: $cell; cellAlt: $cellAlt; cellAltAlt: $cellAltAlt"}
             if (cell != null) {
                 gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }
