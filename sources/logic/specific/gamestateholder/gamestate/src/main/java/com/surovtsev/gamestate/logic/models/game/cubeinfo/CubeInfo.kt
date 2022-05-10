@@ -22,38 +22,7 @@ data class CubeInfo @Inject constructor(
     val cubeSkin: CubeSkin,
     val cubeSpaceBorder: CubeSpaceBorder,
     val neighboursCalculator: NeighboursCalculator,
-    val aabbTree: AABBTree,
     val aabbTreeAlt: AABBTreeAlt,
 
     val gameConfig: GameConfig,
-) {
-    init {
-        // TODO: remove
-
-        val queue = LinkedList<Pair<Node, Int>>()
-        val leaves = LinkedList<Pair<Node, Int>>()
-
-        var pNode =  aabbTree.root to 1
-        var maxDepth = 1
-
-        do {
-            when (val node = pNode.first) {
-                is Leaf -> leaves.add(pNode)
-                is InnerNode -> {
-                    val currDepth = pNode.second + 1
-                    node.children.first.map { queue.add(it to currDepth) }
-
-                    maxDepth = max(maxDepth, currDepth)
-                }
-                else -> throw IllegalArgumentException("illegal node type")
-            }
-
-            pNode = queue.poll() ?: break
-        } while (true)
-
-        val cellsCount = gameConfig.cellsCount
-        val leavesCount = leaves.count()
-
-        logcat { "cellsCount: $cellsCount; leavesCount: $leavesCount; maxDepth: $maxDepth" }
-    }
-}
+)

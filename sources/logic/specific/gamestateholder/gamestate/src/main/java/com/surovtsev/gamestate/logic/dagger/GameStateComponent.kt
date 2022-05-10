@@ -100,19 +100,6 @@ object GameStateModule {
 
     @GameStateScope
     @Provides
-    fun provideAABBTree(
-        cubeSpaceBorder: CubeSpaceBorder
-    ): AABBTree {
-        val res: AABBTree
-        val calculationTime = measureTimeMillis {
-            res = AABBTree(cubeSpaceBorder)
-        }
-        println("provideAABBTree; calculationTime: $calculationTime")
-        return res
-    }
-
-    @GameStateScope
-    @Provides
     fun provideAABBTreeAlt(
         gameConfig: GameConfig,
         cubeSpaceBorder: CubeSpaceBorder,

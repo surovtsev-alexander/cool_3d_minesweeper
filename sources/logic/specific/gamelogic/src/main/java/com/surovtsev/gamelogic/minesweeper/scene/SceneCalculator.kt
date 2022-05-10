@@ -12,10 +12,8 @@ import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.Companion.PointerEnabledName
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder
-import logcat.logcat
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.system.measureTimeMillis
 
 @GameScope
 class SceneCalculator @Inject constructor(
@@ -90,23 +88,8 @@ class SceneCalculator @Inject constructor(
         gameTouchHandler.removeCubes()
 
         if (clicked) {
-            val cell: PointedCell?
-            val cellAlt: PointedCell?
-            val cellAltAlt: PointedCell?
+            val cell: PointedCell? = intersectionCalculator.getCell()
 
-
-            val t1 = measureTimeMillis {
-                cell = intersectionCalculator.getCell()
-            }
-            val t2 = measureTimeMillis {
-                cellAlt = intersectionCalculator.getCellAlt()
-            }
-            val t3 = measureTimeMillis {
-                cellAltAlt = intersectionCalculator.getCellAltAlt()
-            }
-
-            logcat { "cell: $cell; cellAlt: $cellAlt; cellAltAlt: $cellAltAlt"}
-            logcat { "t1: $t1; t2: $t2; t3: $t3" }
             if (cell != null) {
                 gameTouchHandler.touchCell(pointer.touchType, cell, timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.value)
             }
