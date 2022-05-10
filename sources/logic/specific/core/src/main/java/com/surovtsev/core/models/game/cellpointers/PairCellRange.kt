@@ -39,7 +39,7 @@ data class PairCellRange(
     }
 
     fun getCellRange(flags: Vec3bool) =
-        CellsRange(
+        Range3D(
             counts,
             selectRange(
                 xRange,

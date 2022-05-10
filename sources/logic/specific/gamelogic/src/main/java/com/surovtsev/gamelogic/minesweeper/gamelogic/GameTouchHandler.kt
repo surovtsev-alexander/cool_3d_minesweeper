@@ -2,7 +2,7 @@ package com.surovtsev.gamelogic.minesweeper.gamelogic
 
 import com.surovtsev.core.helpers.gamelogic.TextureCoordinatesHelper
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellsRange
+import com.surovtsev.core.models.game.cellpointers.Range3D
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.gamelogic.minesweeper.gamelogic.helpers.BombPlacer
 import com.surovtsev.gamelogic.models.game.interaction.GameControls
@@ -89,7 +89,7 @@ class GameTouchHandler(
     fun collectOpenedNotEmptyBorders() {
         val cellsRange = gameConfig.cellsRange
 
-        val sliceClearer = { r: CellsRange ->
+        val sliceClearer = { r: Range3D ->
             when (inspectSlice((r))) {
                 SliceDescription.HAS_CLOSED_CELLS -> {
                     true
@@ -104,7 +104,7 @@ class GameTouchHandler(
             }
         }
 
-        val sliceBothDirectionsIterator = { r: IntRange, c: (Int) -> CellsRange ->
+        val sliceBothDirectionsIterator = { r: IntRange, c: (Int) -> Range3D ->
 
             val sliceIterator = { p: IntProgression ->
                 for (v in p) {
@@ -191,7 +191,7 @@ class GameTouchHandler(
         HAS_CLOSED_CELLS,
     }
 
-    private fun emptySlice(cellsRange: CellsRange) {
+    private fun emptySlice(cellsRange: Range3D) {
         cellsRange.iterate {
             val c = cubeSkin.getPointedCell(it)
             val s = c.skin
@@ -201,7 +201,7 @@ class GameTouchHandler(
         }
     }
 
-    private fun inspectSlice(cellsRange: CellsRange): SliceDescription {
+    private fun inspectSlice(cellsRange: Range3D): SliceDescription {
         var hasClosedCells = false
         var hasOpenedCells = false
 

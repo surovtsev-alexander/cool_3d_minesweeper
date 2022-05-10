@@ -8,7 +8,7 @@ typealias My3DList<T> = List<List<List<T>>>
 typealias ObjWithCellIndexList<T> = List<Pair<T, CellIndex>>
 
 // TODO: rename to Range3D
-data class CellsRange(
+data class Range3D(
     val counts: Vec3i,
     val xRange: IntRange,
     val yRange: IntRange,

@@ -1,6 +1,6 @@
 package com.surovtsev.core.models.game.config
 
-import com.surovtsev.core.models.game.cellpointers.CellsRange
+import com.surovtsev.core.models.game.cellpointers.Range3D
 import com.surovtsev.core.models.game.cellpointers.cellsCount
 import com.surovtsev.core.room.entities.Settings
 import glm_.vec3.Vec3
@@ -24,7 +24,7 @@ data class GameConfig(
     val cellsCount = counts.cellsCount()
 
     val cellsRange =
-        CellsRange(
+        Range3D(
             counts
         )
 

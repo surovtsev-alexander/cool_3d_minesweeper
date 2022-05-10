@@ -1,7 +1,7 @@
 package com.surovtsev.core.helpers.gamelogic
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
-import com.surovtsev.core.models.game.cellpointers.CellsRange
+import com.surovtsev.core.models.game.cellpointers.Range3D
 import com.surovtsev.core.models.game.cellpointers.PairCellRange
 import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.game.config.GameConfig
@@ -41,11 +41,11 @@ class NeighboursCalculator(
 
     private fun iterate(
         cellIndex: CellIndex,
-        range: CellsRange,
+        cellRange: Range3D,
         action: (PointedCell, Int) -> Unit, i: Int
     ) {
         val cellIndexVec = cellIndex.getVec()
-        range.iterate {
+        cellRange.iterate {
             do {
                 if (it.getVec() == cellIndexVec) {
                     break
