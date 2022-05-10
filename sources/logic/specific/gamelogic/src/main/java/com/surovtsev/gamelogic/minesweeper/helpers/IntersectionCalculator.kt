@@ -116,38 +116,39 @@ class IntersectionCalculator @Inject constructor(
             intersectionCalculationCount++
             val isIntersects = spaceBorder.testIntersection(pointerDescriptor)
 
+            if (!isIntersects) {
+                continue
+            }
 //            logcat { "currNode.spaceBorder: $spaceBorder; isIntersects: $isIntersects" }
 
-            if (isIntersects) {
-                when (currNode) {
-                    is Leaf -> {
-                        do {
-                            val cellIndex = currNode.cellIndex
-                            val skin = cellIndex.getValue(skins)
-                            val cellSpaceBorder = currNode.cellSpaceBorder
+            when (currNode) {
+                is Leaf -> {
+                    do {
+                        val cellIndex = currNode.cellIndex
+                        val skin = cellIndex.getValue(skins)
+                        val cellSpaceBorder = currNode.cellSpaceBorder
 
-                            if (skin.isEmpty()) {
-                                break
-                            }
+                        if (skin.isEmpty()) {
+                            break
+                        }
 
-                            projectionCalculationCount++
-                            val center = cellSpaceBorder.center
-                            val projection = pointerDescriptor.calcProjection(center)
-                            val squaredDistance = (center - projection).length2()
+                        projectionCalculationCount++
+                        val center = cellSpaceBorder.center
+                        val projection = pointerDescriptor.calcProjection(center)
+                        val squaredDistance = (center - projection).length2()
 
-                            if (squaredDistance <= squaredCubeSphereRadius) {
-                                val fromNear = (pointerDescriptor.near - projection).length()
+                        if (squaredDistance <= squaredCubeSphereRadius) {
+                            val fromNear = (pointerDescriptor.near - projection).length()
 
-                                candidateCubes.add(
-                                    fromNear to PointedCellWithSpaceBorder(
-                                        cellIndex, skin, cellSpaceBorder
-                                    )
+                            candidateCubes.add(
+                                fromNear to PointedCellWithSpaceBorder(
+                                    cellIndex, skin, cellSpaceBorder
                                 )
-                            }
-                        } while (false)
-                    }
-                    is InnerNode -> nodesToTest.addAll(currNode.children.first)
+                            )
+                        }
+                    } while (false)
                 }
+                is InnerNode -> nodesToTest.addAll(currNode.children.first)
             }
         } while (true)
 
@@ -189,38 +190,40 @@ class IntersectionCalculator @Inject constructor(
 
 //            logcat { "currNode.spaceBorder: $spaceBorder; isIntersects: $isIntersects" }
 
-            if (isIntersects) {
-                when (currNode) {
-                    is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf -> {
-                        do {
-                            val cellIndex = currNode.cellIndex
-                            val skin = cellIndex.getValue(skins)
-                            val cellSpaceBorder = currNode.cellSpaceBorder
+            if (!isIntersects) {
+                continue
+            }
 
-                            if (skin.isEmpty()) {
-                                break
-                            }
+            when (currNode) {
+                is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf -> {
+                    do {
+                        val cellIndex = currNode.cellIndex
+                        val skin = cellIndex.getValue(skins)
+                        val cellSpaceBorder = currNode.cellSpaceBorder
 
-                            projectionCalculationCount++
-                            val center = cellSpaceBorder.center
-                            val projection = pointerDescriptor.calcProjection(center)
-                            val squaredDistance = (center - projection).length2()
+                        if (skin.isEmpty()) {
+                            break
+                        }
 
-                            if (squaredDistance <= squaredCubeSphereRadius) {
-                                val fromNear = (pointerDescriptor.near - projection).length()
+                        projectionCalculationCount++
+                        val center = cellSpaceBorder.center
+                        val projection = pointerDescriptor.calcProjection(center)
+                        val squaredDistance = (center - projection).length2()
 
-                                candidateCubes.add(
-                                    fromNear to PointedCellWithSpaceBorder(
-                                        cellIndex, skin, cellSpaceBorder
-                                    )
+                        if (squaredDistance <= squaredCubeSphereRadius) {
+                            val fromNear = (pointerDescriptor.near - projection).length()
+
+                            candidateCubes.add(
+                                fromNear to PointedCellWithSpaceBorder(
+                                    cellIndex, skin, cellSpaceBorder
                                 )
-                            }
-                        } while (false)
-                    }
-                    is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode -> {
-                        nodesToTest.add(currNode.left)
-                        nodesToTest.add(currNode.right)
-                    }
+                            )
+                        }
+                    } while (false)
+                }
+                is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode -> {
+                    nodesToTest.add(currNode.left)
+                    nodesToTest.add(currNode.right)
                 }
             }
         } while (true)
