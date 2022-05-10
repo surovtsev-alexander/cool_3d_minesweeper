@@ -177,6 +177,8 @@ class IntersectionCalculator @Inject constructor(
 
         var intersectionCalculationCount = 0
         var projectionCalculationCount = 0
+        var checkCalculator = 0
+        var skipped = 0
 
         do {
 //            logcat { "nodesToTest.count: ${nodesToTest.count()}" }
@@ -184,6 +186,20 @@ class IntersectionCalculator @Inject constructor(
             val currNode = nodesToTest.poll() ?: break
 
             val spaceBorder = currNode.cellSpaceBorder
+
+
+            val center1 = spaceBorder.center
+
+
+            checkCalculator++
+            val projection1 = pointerDescriptor.calcProjection(center1)
+            val squaredDistance1 = (center1 - projection1).length2()
+
+            if (squaredDistance1 > spaceBorder.squaredSphereRadius) {
+                skipped++
+                continue
+            }
+
 
             intersectionCalculationCount++
             val isIntersects = spaceBorder.testIntersection(pointerDescriptor)
@@ -231,7 +247,7 @@ class IntersectionCalculator @Inject constructor(
         val sortedCandidates = candidateCubes.sortedBy { it.first }
 
         logcat { "sortedCandidates alt: $sortedCandidates" }
-        logcat { "alt alt: intersectionCalculationCount: $intersectionCalculationCount; projectionCalculationCount: $projectionCalculationCount" }
+        logcat { "alt alt: intersectionCalculationCount: $intersectionCalculationCount; projectionCalculationCount: $projectionCalculationCount; checkCalculator: $checkCalculator; skipped: $skipped" }
 
         return sortedCandidates.getOrNull(0)?.second
     }

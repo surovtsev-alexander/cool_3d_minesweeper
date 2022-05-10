@@ -30,6 +30,8 @@ class CellSpaceBorder(
         }
     }
 
+    val squaredSphereRadius = (center - leftDownNearPoint).length2()
+
     val mainDiagonalPoints: List<Vec3> = listOf(
         leftDownNearPoint,
         rightUpFarPoint
