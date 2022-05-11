@@ -4,12 +4,7 @@ import com.surovtsev.core.models.game.cellpointers.PointedCell
 import com.surovtsev.core.models.gles.pointer.Pointer
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamelogic.models.game.cellpointers.PointedCellWithSpaceBorder
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.InnerNode
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Leaf
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Node
 import com.surovtsev.gamestateholder.GameStateHolder
-import logcat.logcat
-import java.lang.IllegalArgumentException
 import java.util.*
 import javax.inject.Inject
 
@@ -93,7 +88,6 @@ class IntersectionCalculator @Inject constructor(
         val squaredCubeSphereRadius = cubeInfo.cubeSpaceBorder.squaredCellSphereRadius
         val skins = cubeInfo.cubeSkin.skins
 
-        var intersectionCalculationCount = 0
         var projectionCalculationCount = 0
         var checkCalculator = 0
         var skipped = 0
