@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers
+package com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers
 
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import glm_.vec3.Vec3
@@ -11,8 +11,8 @@ enum class SplitType(
     Z(2);
 
     companion object {
-        val values = values()
-        val valuesSize = values.size
+        private val values = values()
+        private val valuesSize = values.size
 
         val cyclicRangeStartsFromKey =
             values().associate {

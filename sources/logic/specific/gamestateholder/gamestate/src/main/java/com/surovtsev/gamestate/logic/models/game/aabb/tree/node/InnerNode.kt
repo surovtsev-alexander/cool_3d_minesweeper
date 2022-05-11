@@ -1,8 +1,8 @@
 package com.surovtsev.gamestate.logic.models.game.aabb.tree.node
 
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.SplitSpaces
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.SplitType
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.split
+import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers.SplitSpaces
+import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers.SplitType
+import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers.split
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import glm_.vec3.Vec3
 

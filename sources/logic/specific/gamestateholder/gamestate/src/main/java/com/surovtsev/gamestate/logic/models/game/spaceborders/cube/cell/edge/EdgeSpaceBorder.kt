@@ -2,6 +2,7 @@ package com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.edge
 
 import com.surovtsev.core.models.gles.pointer.PointerDescriptor
 import com.surovtsev.utils.math.MyMath
+import glm_.glm
 import glm_.vec3.Vec3
 import glm_.vec4.Vec4
 import kotlin.math.sqrt
@@ -13,7 +14,7 @@ data class EdgeSpaceBorder(
     val p4: Vec3
 ) {
     private val plane: Vec4
-    val space: Float
+    private val spaceArea: Float
 
     init {
         val (ax, ay, az) = p1
@@ -27,29 +28,25 @@ data class EdgeSpaceBorder(
 
         plane = Vec4(a, b, c, d)
 
-        space = (p1 - p2).length() * (p1 - p4).length()
+        spaceArea = (p1 - p2).length() * (p1 - p4).length()
     }
 
     companion object {
-        fun dot(a: Vec4, b: Vec4): Float {
-            return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]
-        }
+        private fun distance(p1: Vec3, p2: Vec3) = (p1 - p2).length()
 
-        private fun dist(p1: Vec3, p2: Vec3) = (p1 - p2).length()
-
-        fun space(p1: Vec3, p2: Vec3, p3: Vec3): Float {
+        fun triangleSpaceArea(p1: Vec3, p2: Vec3, p3: Vec3): Float {
             val a =
-                dist(
+                distance(
                     p1,
                     p2
                 )
             val b =
-                dist(
+                distance(
                     p2,
                     p3
                 )
             val c =
-                dist(
+                distance(
                     p3,
                     p1
                 )
@@ -67,12 +64,12 @@ data class EdgeSpaceBorder(
         val n = pointerDescriptor.n
 
         val denominator =
-            dot(
+            glm.dot(
                 Vec4(n, 0),
                 plane
             )
         val numerator =
-            dot(
+            glm.dot(
                 Vec4(x1, 1),
                 plane
             )
@@ -85,25 +82,25 @@ data class EdgeSpaceBorder(
     }
 
     private fun isIn(p: Vec3): Boolean {
-        val ss = space(
+        val ss = triangleSpaceArea(
             p1,
             p2,
             p
-        ) + space(
+        ) + triangleSpaceArea(
             p2,
             p3,
             p
-        ) + space(
+        ) + triangleSpaceArea(
             p3,
             p4,
             p
-        ) + space(
+        ) + triangleSpaceArea(
             p4,
             p1,
             p
         )
 
-        return MyMath.isZero(ss - space)
+        return MyMath.isZero(ss - spaceArea)
     }
 
     fun testIntersection(pointerDescriptor: PointerDescriptor): Boolean {

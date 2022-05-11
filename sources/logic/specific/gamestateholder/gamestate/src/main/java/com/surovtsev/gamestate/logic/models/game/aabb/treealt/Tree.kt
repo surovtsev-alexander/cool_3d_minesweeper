@@ -2,7 +2,6 @@ package com.surovtsev.gamestate.logic.models.game.aabb.treealt
 
 import com.surovtsev.core.models.game.cellpointers.*
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.SplitType
 import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode
 import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf
 import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Node
@@ -22,8 +21,6 @@ class Tree(
         val entireCellsCounts = entireCellsRange.counts
 
         assert(entireCellsCounts.cellsCount() >= 1)
-
-        cubeSpaceBorder.cellsWithIndexes
 
         val leaves = cubeSpaceBorder.cellsWithIndexes.map {
             Leaf(it.second, it.first)
@@ -61,6 +58,19 @@ class Tree(
     }
 
     companion object {
+        private fun getNextSplit(
+            nodesRange: Range3D,
+            firstSplitCandidate: SplitType,
+        ): SplitType? {
+            val splits = firstSplitCandidate.cyclicRangeStartsFromThis()
+
+            val nodesCount = nodesRange.counts
+
+            return splits.firstOrNull {
+                nodesCount[it.ordinal] > 1
+            }
+        }
+
         fun mergeCellsRange(
             currNodesRange: Range3D,
             splitType: SplitType,
@@ -87,16 +97,16 @@ class Tree(
 
             val resLength = newNodesRange.counts.cellsCount()
 
-            val newXYZCalculator = CellIndex.getIndexCalculator(
+            val newCellIndexCalculator = CellIndex.getIndexCalculator(
                 newNodesRange.counts
             )
 
             val currNodesCounts = currNodesRange.counts
 
             return (0 until resLength).map { i ->
-                val newXYZ = newXYZCalculator(i)
+                val newCellIndex = newCellIndexCalculator(i)
 
-                val left = newXYZ.getVec()
+                val left = newCellIndex.getVec()
                 left[splitIdx] *= 2
 
                 val right = Vec3i(left)
@@ -112,19 +122,6 @@ class Tree(
                         currNodes[CellIndex(right, currNodesCounts).id]
                     )
                 }
-            }
-        }
-
-        private fun getNextSplit(
-            nodesRange: Range3D,
-            firstSplitCandidate: SplitType,
-        ): SplitType? {
-            val splits = firstSplitCandidate.cyclicRangeStartsFromThis()
-
-            val nodesCount = nodesRange.counts
-
-            return splits.firstOrNull {
-                nodesCount[it.ordinal] > 1
             }
         }
     }
