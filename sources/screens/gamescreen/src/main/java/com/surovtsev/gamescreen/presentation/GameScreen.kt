@@ -181,10 +181,16 @@ fun FPSLabel(
     val screenState by screenStateFlow.collectAsState()
     val screenData = screenState.data
 
-    val text = if (screenData !is GameScreenData.GameInProgress) {
+    if (screenData !is GameScreenData) {
+        return
+    }
+
+    val gameInProgress = screenData.rootScreenData() as? GameScreenData.GameInProgress
+
+    val text = if (gameInProgress == null) {
         "--"
     } else {
-        val fps = screenData.uiGameControls.fpsFlow.collectAsState(0f).value
+        val fps = gameInProgress.uiGameControls.fpsFlow.collectAsState(0f).value
         fps.toInt().toString().padStart(4)
     }
 
