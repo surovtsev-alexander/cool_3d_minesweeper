@@ -78,8 +78,8 @@ class IntersectionCalculator @Inject constructor(
 
         val cubeInfo = gameState.cubeInfo
 
-        val nodesToTest = LinkedList<com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Node>()
-        nodesToTest.add(cubeInfo.aabbTreeAlt.root)
+        val nodesToTest = LinkedList<com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Node>()
+        nodesToTest.add(cubeInfo.aabbTree.root)
 
         val pointerDescriptor = pointer.getPointerDescriptor()
 
@@ -112,7 +112,7 @@ class IntersectionCalculator @Inject constructor(
             }
 
             when (currNode) {
-                is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf -> {
+                is com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Leaf -> {
                     do {
                         val cellIndex = currNode.cellIndex
                         val skin = cellIndex.getValue(skins)
@@ -138,7 +138,7 @@ class IntersectionCalculator @Inject constructor(
                         }
                     } while (false)
                 }
-                is com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode -> {
+                is com.surovtsev.gamestate.logic.models.game.aabb.tree.node.InnerNode -> {
                     nodesToTest.add(currNode.left)
                     nodesToTest.add(currNode.right)
                 }

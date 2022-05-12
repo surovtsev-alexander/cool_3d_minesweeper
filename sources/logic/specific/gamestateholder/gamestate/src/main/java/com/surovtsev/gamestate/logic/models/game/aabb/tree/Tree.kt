@@ -1,17 +1,17 @@
-package com.surovtsev.gamestate.logic.models.game.aabb.treealt
+package com.surovtsev.gamestate.logic.models.game.aabb.tree
 
 import com.surovtsev.core.models.game.cellpointers.CellIndex
 import com.surovtsev.core.models.game.cellpointers.Range3D
 import com.surovtsev.core.models.game.cellpointers.cellsCount
 import com.surovtsev.core.models.game.config.GameConfig
-import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.InnerNode
-import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Leaf
-import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.Node
-import com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers.SplitType
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.InnerNode
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Leaf
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.Node
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers.SplitType
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.CubeSpaceBorder
 import glm_.vec3.Vec3i
 
-typealias AABBTreeAlt = Tree
+typealias AABBTree = Tree
 
 class Tree(
     gameConfig: GameConfig,

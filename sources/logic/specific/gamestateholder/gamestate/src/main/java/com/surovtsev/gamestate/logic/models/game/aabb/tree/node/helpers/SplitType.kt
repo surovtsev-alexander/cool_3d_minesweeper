@@ -1,4 +1,4 @@
-package com.surovtsev.gamestate.logic.models.game.aabb.treealt.node.helpers
+package com.surovtsev.gamestate.logic.models.game.aabb.tree.node.helpers
 
 import com.surovtsev.gamestate.logic.models.game.spaceborders.cube.cell.CellSpaceBorder
 import glm_.vec3.Vec3

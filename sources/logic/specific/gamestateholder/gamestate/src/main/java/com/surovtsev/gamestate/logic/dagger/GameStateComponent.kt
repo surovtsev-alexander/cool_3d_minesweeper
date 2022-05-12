@@ -9,7 +9,7 @@ import com.surovtsev.core.helpers.gamelogic.CubeCoordinates
 import com.surovtsev.core.helpers.gamelogic.NeighboursCalculator
 import com.surovtsev.core.models.game.config.GameConfig
 import com.surovtsev.core.models.game.skin.cube.CubeSkin
-import com.surovtsev.gamestate.logic.models.game.aabb.treealt.AABBTreeAlt
+import com.surovtsev.gamestate.logic.models.game.aabb.tree.AABBTree
 import com.surovtsev.gamestate.logic.models.game.cubeinfo.CubeInfo
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.save.Save
@@ -99,20 +99,20 @@ object GameStateModule {
 
     @GameStateScope
     @Provides
-    fun provideAABBTreeAlt(
+    fun provideAABBTree(
         gameConfig: GameConfig,
         cubeSpaceBorder: CubeSpaceBorder,
-    ): AABBTreeAlt {
-        val res: AABBTreeAlt
+    ): AABBTree {
+        val res: AABBTree
 
         val calculationTime = measureTimeMillis {
-            res = AABBTreeAlt(
+            res = AABBTree(
                 gameConfig,
                 cubeSpaceBorder,
             )
         }
 
-        println("provideAABBTreeAlt; calculationTime: $calculationTime")
+        println("provideAABBTree; calculationTime: $calculationTime")
         return res
     }
 
