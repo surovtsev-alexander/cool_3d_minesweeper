@@ -4,13 +4,14 @@ import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
-import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
+import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toLastPriorityEventProcessor
 import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
 import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
 import com.surovtsev.finitestatemachine.helpers.PausedStateHolder
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
+import kotlinx.coroutines.delay
 
 typealias RestartFSMAction = (beforeStartAction: BeforeStartAction) -> Unit
 
@@ -33,12 +34,13 @@ class EventHandlerImp(
         }
 
         return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
-            eventProcessor.toNormalPriorityEventProcessor()
+            eventProcessor.toLastPriorityEventProcessor()
         )
     }
 
     private suspend fun toDefault(
     ): EventProcessingResult {
+        // restart coroutines scope
         restartFSMAction.invoke {
             pauseAction()
 
@@ -49,10 +51,15 @@ class EventHandlerImp(
             resumeAction()
         }
 
-        // coroutine is restarted, so this code is should never be executed
+        // add suspending point to
+        delay(1)
+
+        // coroutine scope is restarted,
+        // so continuation after suspending point is should not be scheduled
+        // and this code is should never be executed
         assert(false)
 
-        return EventProcessingResult.Restarted
+        return EventProcessingResult.Ok()
     }
 
     private suspend fun pause(

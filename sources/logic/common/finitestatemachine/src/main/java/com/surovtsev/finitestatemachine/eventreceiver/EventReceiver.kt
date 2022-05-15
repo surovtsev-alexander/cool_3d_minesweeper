@@ -1,4 +1,4 @@
-package com.surovtsev.finitestatemachine.interfaces
+package com.surovtsev.finitestatemachine.eventreceiver
 
 import com.surovtsev.finitestatemachine.event.Event
 

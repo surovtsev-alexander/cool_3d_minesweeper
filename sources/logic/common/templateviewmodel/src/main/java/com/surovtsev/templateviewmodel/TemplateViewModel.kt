@@ -43,14 +43,14 @@ abstract class TemplateViewModel:
                 userEventHandler,
             ),
             logConfig = LogConfig(
-                LogLevel.LOG_LEVEL_1,
+                LogLevel.LOG_LEVEL_3,
             )
         )
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        finiteStateMachine.receiveEvent(
+        finiteStateMachine.eventReceiver.receiveEvent(
             EventToViewModel.HandleScreenLeaving(owner)
         )
     }

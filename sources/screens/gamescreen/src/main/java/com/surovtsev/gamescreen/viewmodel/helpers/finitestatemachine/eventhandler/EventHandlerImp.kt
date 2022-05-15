@@ -18,6 +18,7 @@ import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
+import logcat.logcat
 import javax.inject.Inject
 
 @GameScreenScope
@@ -82,6 +83,7 @@ class EventHandlerImp @Inject constructor(
                     EventToMinesweeper.SetGameStateToNull
                 )
         }
+        logcat { "handleScreenLeaving" }
 
         return EventProcessingResult.Ok()
     }

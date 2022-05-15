@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
+import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 
 @Composable
@@ -76,7 +76,7 @@ fun ErrorDialogPlacer.PlaceErrorDialog(
     @Suppress("UNCHECKED_CAST")
     ErrorDialog(
         screenStateFlow = screenStateFlow,
-        eventReceiver = finiteStateMachine as EventReceiver,
+        eventReceiver = finiteStateMachine.eventReceiver as EventReceiver,
         backgroundColor = backgroundColor,
     )
 }

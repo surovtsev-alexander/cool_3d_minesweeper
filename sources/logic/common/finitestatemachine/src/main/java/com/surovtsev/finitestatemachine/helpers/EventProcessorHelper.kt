@@ -6,7 +6,9 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessorPriority
+import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import logcat.logcat
@@ -30,8 +32,12 @@ class EventProcessorHelper(
         FSM_INTERNAL_ERROR_001("FSM_INTERNAL_ERROR_001");
     }
 
+    /**
+     * @param eventReceiver - it is used to pushing new events
+     */
     suspend fun processEvent(
-        event: Event
+        event: Event,
+        eventReceiver: EventReceiver,
     ) {
         val action = suspend {
             if (logConfig.logLevel.isGreaterThan2()) {
@@ -50,7 +56,7 @@ class EventProcessorHelper(
             while (attemptsToProcess < EVENT_PROCESSING_CHANGES) {
                 attemptsToProcess++
 
-                eventProcessorHelperResult = tryToProcessEvent(eventToProcess)
+                eventProcessorHelperResult = tryToProcessEvent(eventToProcess, eventReceiver)
 
                 when (eventProcessorHelperResult) {
                     is EventProcessorHelperResult.Skipped -> {
@@ -93,8 +99,12 @@ class EventProcessorHelper(
         }
     }
 
+    /**
+     * @param eventReceiver - it is used to pushing new events
+     */
     private suspend fun tryToProcessEvent(
-        event: Event
+        event: Event,
+        eventReceiver: EventReceiver,
     ): EventProcessorHelperResult {
         if (logConfig.logLevel.isGreaterThan2()) {
             logcat { "tryToProcessEvent: $event" }
@@ -164,8 +174,9 @@ class EventProcessorHelper(
 
 
         // step 7. Pushing new events.
-        pushNewEventsIfRequired(
-            eventProcessingResults
+        pushNewEvents(
+            eventProcessingResults,
+            eventReceiver
         )
 
         return EventProcessorHelperResult.Processed
@@ -241,23 +252,24 @@ class EventProcessorHelper(
         return res.toList()
     }
 
-    private suspend fun pushNewEventsIfRequired(
-        eventProcessingResults: List<EventProcessingResult?>
+    private suspend fun pushNewEvents(
+        eventProcessingResults: List<EventProcessingResult?>,
+        eventReceiver: EventReceiver,
     ) {
-        val hasRestartedResult = eventProcessingResults
-            .filterIsInstance<EventProcessingResult.Restarted>()
-            .count() > 0
-
-        if (hasRestartedResult) {
-            return
-        }
-
         eventProcessingResults
             .filterIsInstance<EventProcessingResult.Ok>()
             .map {
                 it.newEventToPush?.let { eventToPush ->
+
+                    // add suspending point to optimization.
+                    // See toDefault method in
+                    // com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp.EventHandlerImp
+                    delay(1)
+
                     logcat { "eventToPush: $eventToPush" }
-                    fsmQueueHolder.pushEvent(eventToPush)
+                    eventReceiver.receiveEvent(
+                        eventToPush
+                    )
                 }
             }
     }

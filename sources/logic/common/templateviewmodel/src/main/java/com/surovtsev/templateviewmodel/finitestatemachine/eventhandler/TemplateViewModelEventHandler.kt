@@ -66,9 +66,9 @@ class TemplateViewModelEventHandler(
     private suspend fun handleScreenLeaving(
         @Suppress("UNUSED_PARAMETER") owner: LifecycleOwner
     ): EventProcessingResult {
-        stateHolder.publishDefaultInitialState()
-
-        return EventProcessingResult.Ok()
+        return EventProcessingResult.Ok(
+            Event.ToDefault
+        )
     }
 
     private suspend fun closeError(): EventProcessingResult {

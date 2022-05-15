@@ -2,12 +2,11 @@ package com.surovtsev.finitestatemachine
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
-import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp.EventHandlerImp
+import com.surovtsev.finitestatemachine.eventreceiver.EventReceiverImp
 import com.surovtsev.finitestatemachine.helpers.*
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
@@ -21,7 +20,7 @@ class FiniteStateMachine(
     val stateHolder: StateHolder,
     userEventHandlers: EventHandlers,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-): EventReceiver, Subscription {
+): Subscription {
 
     private val restartableCoroutineScope = DaggerRestartableCoroutineScopeComponent
         .create()
@@ -59,6 +58,14 @@ class FiniteStateMachine(
         queueHolder,
     )
 
+    val eventReceiver = EventReceiverImp(
+        logConfig,
+        fsmProcessingTrigger,
+        eventProcessorHelper,
+        queueHolder,
+        customCoroutineScope,
+    )
+
     init {
         SubscriptionsHolderComponentFactoryHolderImp
             .createAndSubscribe(
@@ -78,6 +85,9 @@ class FiniteStateMachine(
     private fun restartFSM(
         beforeStartAction: BeforeStartAction
     ) {
+        if (logConfig.logLevel.isGreaterThan1()) {
+            logcat { "restarting fsm" }
+        }
         restartableCoroutineScope
             .subscriberImp
             .restart(beforeStartAction)
@@ -98,31 +108,7 @@ class FiniteStateMachine(
                 continue
             }
 
-            eventProcessorHelper.processEvent(event)
+            eventProcessorHelper.processEvent(event, eventReceiver)
         } while (true)
-    }
-
-    override fun receiveEvent(
-        event: Event
-    ) {
-        if (logConfig.logLevel.isGreaterThan0()) {
-            logcat { "receiveEvent: $event" }
-        }
-
-        if (event.doNotPushToQueue) {
-            if (fsmProcessingTrigger.isBusy()) {
-                if (logConfig.logLevel.isGreaterThan0()) {
-                    logcat { "doNotPushToQueue and skipIfBusy are true in event; FSM is Busy; skipping: $event" }
-                }
-                return
-            }
-            customCoroutineScope.launch {
-                eventProcessorHelper.processEvent(event)
-            }
-        } else {
-            customCoroutineScope.launch {
-                queueHolder.pushEvent(event)
-            }
-        }
     }
 }

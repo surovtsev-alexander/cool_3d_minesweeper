@@ -63,7 +63,7 @@ class GameScreenViewModel @AssistedInject constructor(
         gLSurfaceView?.onResume()
 
         if (stateHolder.state.value.data is GameScreenData.GameMenu) {
-            finiteStateMachine.receiveEvent(
+            finiteStateMachine.eventReceiver.receiveEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
         }
@@ -78,7 +78,7 @@ class GameScreenViewModel @AssistedInject constructor(
         )
 
         if (stateHolder.state.value.data !is GameScreenData.GameMenu) {
-            finiteStateMachine.receiveEvent(
+            finiteStateMachine.eventReceiver.receiveEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )
         }

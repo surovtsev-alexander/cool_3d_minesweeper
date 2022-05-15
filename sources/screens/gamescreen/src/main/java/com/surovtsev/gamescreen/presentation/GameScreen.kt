@@ -31,7 +31,7 @@ import com.surovtsev.core.ui.theme.Teal200
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
 import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
+import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
@@ -58,7 +58,7 @@ fun GameScreen(
         return
     }
 
-    val eventReceiver = viewModel.finiteStateMachine as EventReceiver
+    val eventReceiver = viewModel.finiteStateMachine.eventReceiver as EventReceiver
 
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =

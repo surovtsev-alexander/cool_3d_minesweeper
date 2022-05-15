@@ -27,7 +27,7 @@ import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.Event
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
 import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
-import com.surovtsev.finitestatemachine.interfaces.EventReceiver
+import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
@@ -40,7 +40,7 @@ fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    val eventReceiver = viewModel.finiteStateMachine as EventReceiver
+    val eventReceiver = viewModel.finiteStateMachine.eventReceiver as EventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction = {
             navController.navigateUp()

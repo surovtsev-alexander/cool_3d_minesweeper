@@ -10,7 +10,9 @@ sealed interface EventToViewModel: Event.UserEvent {
     object CloseErrorAndFinish: EventToViewModelImp(), CloseErrorEvent
     class HandleScreenLeaving(
         val owner: LifecycleOwner
-    ): EventToViewModelImp()
+    ): EventToViewModelImp(
+        doNotWaitEndOfProcessing = true,
+    )
 
     abstract class UserEvent: EventToViewModelImp()
 
