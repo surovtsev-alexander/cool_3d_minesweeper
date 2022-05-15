@@ -46,10 +46,7 @@ fun RankingScreen(
         {
             navController.navigateUp()
         }
-        viewModel.restartFSM(
-            EventToRankingScreenViewModel
-                .LoadData()
-        )
+        viewModel.restartFSM()
     }
 
     RankingControls(

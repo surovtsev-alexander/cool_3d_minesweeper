@@ -44,9 +44,7 @@ fun SettingsScreen(
         viewModel.finishActionHolder.finishAction = {
             navController.navigateUp()
         }
-        viewModel.restartFSM(
-            EventToSettingsScreenViewModel.TriggerInitialization()
-        )
+        viewModel.restartFSM()
     }
 
     SettingsControls(

@@ -5,12 +5,6 @@ import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.Event
 
 sealed class EventToSettingsScreenViewModel(
 ): EventToViewModel.UserEvent() {
-
-    companion object {
-        @Suppress("FunctionName")
-        fun TriggerInitialization() = EventToViewModel.Init
-    }
-
     object LoadSettingsList: EventToSettingsScreenViewModel()
 
     object LoadSelectedSettings: EventToSettingsScreenViewModel()

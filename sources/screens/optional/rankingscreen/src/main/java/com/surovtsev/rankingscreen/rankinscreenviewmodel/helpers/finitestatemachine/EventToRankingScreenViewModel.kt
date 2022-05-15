@@ -4,11 +4,6 @@ import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 
 sealed class EventToRankingScreenViewModel: EventToViewModel.UserEvent() {
-    companion object {
-        @Suppress("FunctionName")
-        fun LoadData() = EventToViewModel.Init
-    }
-
     class FilterList(
         val selectedSettingsId: Long
     ): EventToRankingScreenViewModel()
