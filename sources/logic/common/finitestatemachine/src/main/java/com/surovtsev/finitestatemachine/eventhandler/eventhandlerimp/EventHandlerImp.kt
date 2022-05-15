@@ -10,13 +10,16 @@ import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
 import com.surovtsev.finitestatemachine.helpers.PausedStateHolder
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
+
+typealias RestartFSMAction = (beforeStartAction: BeforeStartAction) -> Unit
 
 class EventHandlerImp(
     private val stateHolder: StateHolder,
     private val pausedStateHolder: PausedStateHolder,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val fsmQueueHolder: FSMQueueHolder,
+    private val restartFSMAction: RestartFSMAction,
 ): EventHandler {
     override fun handleEvent(
         event: Event,
@@ -36,13 +39,18 @@ class EventHandlerImp(
 
     private suspend fun toDefault(
     ): EventProcessingResult {
-        pauseAction()
+        restartFSMAction.invoke {
+            pauseAction()
 
-        fsmQueueHolder.emptyQueue()
+            fsmQueueHolder.emptyQueue()
 
-        stateHolder.publishDefaultInitialState()
+            stateHolder.publishDefaultInitialState()
 
-        resumeAction()
+            resumeAction()
+        }
+
+        // coroutine is restarted, so this code is should never be executed
+        assert(false)
 
         return EventProcessingResult.Restarted
     }

@@ -1,5 +1,6 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
 
+import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
@@ -31,8 +32,12 @@ class SubscriberImp(
         )
     }
 
-    fun restart() {
-        customCoroutineScope.restart()
+    fun restart(
+        beforeStartAction: BeforeStartAction? = null
+    ) {
+        customCoroutineScope.restart(
+            beforeStartAction
+        )
 
         subscriptionsHolderMap.map { (_, subscriptionsHolder) ->
             initSubscriptionHolder(

@@ -33,7 +33,7 @@ class EventProcessorHelper(
     suspend fun processEvent(
         event: Event
     ) {
-        processingMutex.withLock {
+        val action = suspend {
             if (logConfig.logLevel.isGreaterThan2()) {
                 logcat { "processEvent; state before processing: ${stateHolder.state.value}" }
             }
@@ -82,7 +82,14 @@ class EventProcessorHelper(
             if (logConfig.logLevel.isGreaterThan2()) {
                 logcat { "processEvent; state after processing: ${stateHolder.state.value}" }
             }
+        }
 
+        if (event.doNotWaitEndOfProcessing) {
+            action.invoke()
+        } else {
+            processingMutex.withLock {
+                action.invoke()
+            }
         }
     }
 
@@ -164,6 +171,7 @@ class EventProcessorHelper(
         return EventProcessorHelperResult.Processed
     }
 
+    // TODO: rename
     private sealed interface EventProcessorHelperResult {
         object Skipped: EventProcessorHelperResult
         object Processed: EventProcessorHelperResult

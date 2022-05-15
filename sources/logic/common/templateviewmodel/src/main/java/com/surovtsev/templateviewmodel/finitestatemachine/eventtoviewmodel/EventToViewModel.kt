@@ -19,6 +19,7 @@ sealed interface EventToViewModel: Event.UserEvent {
         override val doNotPushToQueue: Boolean = false,
         override val pushToHead: Boolean = false,
         override val setLoadingStateBeforeProcessing: Boolean = true,
+        override val doNotWaitEndOfProcessing: Boolean = false,
     ): EventToViewModel
 }
 

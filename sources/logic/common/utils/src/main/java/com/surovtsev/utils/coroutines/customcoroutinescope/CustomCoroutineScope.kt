@@ -4,6 +4,8 @@ import com.surovtsev.utils.statehelpers.OnOffSwitchImp
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
+typealias BeforeStartAction = suspend () -> Unit
+
 class CustomCoroutineScope(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ): CoroutineScope, OnOffSwitchImp(true) {
@@ -28,9 +30,14 @@ class CustomCoroutineScope(
         // with 'cancel(cause: CancellationException).
     }
 
-    fun restart() {
+    fun restart(
+        beforeStartAction: BeforeStartAction?
+    ) {
         if (isOn()) {
             turnOff()
+        }
+        runBlocking {
+            beforeStartAction?.invoke()
         }
         turnOn()
     }

@@ -9,21 +9,27 @@ import com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp.EventHandle
 import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.interfaces.EventReceiver
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
+import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
+import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import kotlinx.coroutines.launch
 import logcat.logcat
-
 
 class FiniteStateMachine(
     val stateHolder: StateHolder,
     userEventHandlers: EventHandlers,
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
-): EventReceiver {
-    companion object {
-        val uiDispatcher = Dispatchers.Main
-        val ioDispatcher = Dispatchers.IO
-    }
+): EventReceiver, Subscription {
+
+    private val restartableCoroutineScope = DaggerRestartableCoroutineScopeComponent
+        .create()
+
+    private val customCoroutineScope: CustomCoroutineScope
+        get() {
+            return restartableCoroutineScope.customCoroutineScope
+        }
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp()
     private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp()
@@ -36,16 +42,12 @@ class FiniteStateMachine(
         logConfig,
     )
 
-    private val customCoroutineScope = CustomCoroutineScope(
-        Dispatchers.IO
-    )
-
-
     private val baseEventHandler: EventHandler = EventHandlerImp(
         stateHolder,
         pausedStateHolder,
         fsmProcessingTrigger,
         queueHolder,
+        ::restartFSM,
     )
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers
@@ -58,9 +60,27 @@ class FiniteStateMachine(
     )
 
     init {
+        SubscriptionsHolderComponentFactoryHolderImp
+            .createAndSubscribe(
+                restartableCoroutineScope,
+                "FiniteStateMachine"
+            )
+            .subscriptionsHolder
+            .addSubscription(this)
+    }
+
+    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
         customCoroutineScope.launch {
             handlingEventsLoop()
         }
+    }
+
+    private fun restartFSM(
+        beforeStartAction: BeforeStartAction
+    ) {
+        restartableCoroutineScope
+            .subscriberImp
+            .restart(beforeStartAction)
     }
 
     private suspend fun handlingEventsLoop() {
@@ -96,11 +116,11 @@ class FiniteStateMachine(
                 }
                 return
             }
-            customCoroutineScope.launch(ioDispatcher) {
+            customCoroutineScope.launch {
                 eventProcessorHelper.processEvent(event)
             }
         } else {
-            customCoroutineScope.launch(ioDispatcher) {
+            customCoroutineScope.launch {
                 queueHolder.pushEvent(event)
             }
         }

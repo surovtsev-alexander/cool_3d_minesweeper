@@ -32,8 +32,12 @@ android {
 
 dependencies {
 
-    includeProjectModule(
-        ProjectModules.Logic.Common.utils
+    includeProjectModules(
+        listOf(
+            ProjectModules.Logic.Common.RestartableCoroutineScope.restartableCoroutineScope,
+            ProjectModules.Logic.Common.RestartableCoroutineScope.subscriptionsHolder,
+            ProjectModules.Logic.Common.utils
+        )
     )
 
     defaultDependencies()

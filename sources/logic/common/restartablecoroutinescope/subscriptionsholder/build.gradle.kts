@@ -31,10 +31,8 @@ android {
 }
 
 dependencies {
-    includeProjectModules(
-        listOf(
-                ProjectModules.Logic.Common.utils,
-        )
+    includeProjectModule(
+        ProjectModules.Logic.Common.utils,
     )
 
     defaultDependencies()
