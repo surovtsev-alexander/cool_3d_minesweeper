@@ -8,9 +8,12 @@ uniform sampler2D u_textureUnit;
 
 void main()
 {
+    /*
+    // it is decreases rendering speed
     if (isEmpty > 0.0) {
         discard;
     }
+    */
 
     vec4 frag_color;
 
