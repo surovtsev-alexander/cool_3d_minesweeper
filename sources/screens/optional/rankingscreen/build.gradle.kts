@@ -41,7 +41,7 @@ android {
 dependencies {
 
     includeProjectModules(
-        arrayOf(
+        listOf(
             ProjectModules.Logic.Common.finiteStateMachine,
             ProjectModules.Logic.Common.RestartableCoroutineScope.restartableCoroutineScope,
             ProjectModules.Logic.Common.RestartableCoroutineScope.subscriptionsHolder,

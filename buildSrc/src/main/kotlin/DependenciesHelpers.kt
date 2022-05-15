@@ -2,7 +2,7 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.initialization.dsl.ScriptHandler
 
 fun DependencyHandler.includeProjectModules(
-    modules: Array<String>
+    modules: List<String>
 ) {
     modules.map {
         includeProjectModule(it)

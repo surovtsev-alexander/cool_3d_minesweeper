@@ -32,7 +32,7 @@ android {
 
 dependencies {
     includeProjectModules(
-        arrayOf(
+        listOf(
             ProjectModules.Logic.Specific.core,
             ProjectModules.Logic.Specific.GameStateHolder.gameState,
         )

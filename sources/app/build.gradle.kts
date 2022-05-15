@@ -44,7 +44,7 @@ android {
 dependencies {
 
     includeProjectModules(
-        arrayOf(
+        listOf(
             ProjectModules.Logic.Common.templateViewModel,
             ProjectModules.Logic.Common.utils,
             ProjectModules.Logic.Specific.core,

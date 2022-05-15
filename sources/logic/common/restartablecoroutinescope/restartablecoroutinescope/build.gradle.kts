@@ -32,7 +32,7 @@ android {
 
 dependencies {
     includeProjectModules(
-        arrayOf(
+        listOf(
             ProjectModules.Logic.Common.utils,
         )
     )

@@ -40,7 +40,7 @@ android {
 
 dependencies {
     includeProjectModules(
-        arrayOf(
+        listOf(
             ProjectModules.Logic.Specific.core,
         )
     )
