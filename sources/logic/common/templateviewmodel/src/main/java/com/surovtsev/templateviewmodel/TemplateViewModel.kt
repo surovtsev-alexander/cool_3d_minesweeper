@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.surovtsev.finitestatemachine.FiniteStateMachine
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.templateviewmodel.finitestatemachine.eventhandler.TemplateViewModelEventHandler
@@ -53,5 +54,15 @@ abstract class TemplateViewModel:
         finiteStateMachine.eventReceiver.receiveEvent(
             EventToViewModel.HandleScreenLeaving(owner)
         )
+    }
+
+    fun restartFSM(
+        startingEvent: Event
+    ) {
+        launchOnIOThread {
+            finiteStateMachine.restartFSM(
+                startingEvent
+            )
+        }
     }
 }

@@ -13,21 +13,24 @@ import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import kotlinx.coroutines.delay
 
-typealias RestartFSMAction = (beforeStartAction: BeforeStartAction) -> Unit
+typealias RestartFSMAction = (startingEvent: Event) -> Unit
+typealias StopFSM = () -> Unit
+typealias PauseAction = () -> Unit
+typealias ResumeAction = () -> Unit
 
 class EventHandlerImp(
-    private val stateHolder: StateHolder,
-    private val pausedStateHolder: PausedStateHolder,
-    private val fsmProcessingTrigger: FsmProcessingTrigger,
-    private val fsmQueueHolder: FSMQueueHolder,
     private val restartFSMAction: RestartFSMAction,
+    private val stopFSM: StopFSM,
+    private val pauseAction: PauseAction,
+    private val resumeAction: ResumeAction,
 ): EventHandler {
     override fun handleEvent(
         event: Event,
         state: State,
     ): EventHandlingResult {
         val eventProcessor = when (event) {
-            is Event.ToDefault  -> ::toDefault
+            is Event.TurnOff    -> ::turnOff
+            is Event.Restart    -> suspend { restart(event.startingEvent) }
             is Event.Pause      -> ::pause
             is Event.Resume     -> ::resume
             else                -> null
@@ -38,18 +41,21 @@ class EventHandlerImp(
         )
     }
 
-    private suspend fun toDefault(
+    private suspend fun turnOff(
+    ): EventProcessingResult {
+        stopFSM()
+
+        // see toDefault()
+        delay(1)
+
+        return EventProcessingResult.Ok()
+    }
+
+    private suspend fun restart(
+        startingEvent: Event
     ): EventProcessingResult {
         // restart coroutines scope
-        restartFSMAction.invoke {
-            pauseAction()
-
-            fsmQueueHolder.emptyQueue()
-
-            stateHolder.publishDefaultInitialState()
-
-            resumeAction()
-        }
+        restartFSMAction(startingEvent)
 
         // add suspending point to
         delay(1)
@@ -75,16 +81,4 @@ class EventHandlerImp(
 
         return EventProcessingResult.Ok()
     }
-
-    // region [auxiliary functions]
-    private suspend fun pauseAction() {
-        pausedStateHolder.pause()
-    }
-
-    private suspend fun resumeAction() {
-        pausedStateHolder.resume()
-
-        fsmProcessingTrigger.kickFSM()
-    }
-    // endregion [auxiliary functions]
 }

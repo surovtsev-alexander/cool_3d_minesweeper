@@ -1,10 +1,13 @@
 package com.surovtsev.utils.statehelpers
 
-interface OnOffSwitch {
+interface IsOn {
+    fun isOn(): Boolean
+}
+
+interface OnOffSwitch: IsOn {
     fun turnOn()
     fun turnOff()
 
-    fun isOn(): Boolean
 }
 
 open class OnOffSwitchImp(

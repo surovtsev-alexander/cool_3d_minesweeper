@@ -67,7 +67,7 @@ class TemplateViewModelEventHandler(
         @Suppress("UNUSED_PARAMETER") owner: LifecycleOwner
     ): EventProcessingResult {
         return EventProcessingResult.Ok(
-            Event.ToDefault
+            Event.TurnOff
         )
     }
 

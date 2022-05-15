@@ -2,7 +2,7 @@ package com.surovtsev.finitestatemachine
 
 import com.surovtsev.finitestatemachine.config.LogConfig
 import com.surovtsev.finitestatemachine.config.LogLevel
-import com.surovtsev.finitestatemachine.eventhandler.EventHandler
+import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlers
 import com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp.EventHandlerImp
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiverImp
@@ -10,7 +10,6 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import kotlinx.coroutines.launch
@@ -41,12 +40,11 @@ class FiniteStateMachine(
         logConfig,
     )
 
-    private val baseEventHandler: EventHandler = EventHandlerImp(
-        stateHolder,
-        pausedStateHolder,
-        fsmProcessingTrigger,
-        queueHolder,
+    private val baseEventHandler = EventHandlerImp(
         ::restartFSM,
+        ::stop,
+        ::pause,
+        ::resume,
     )
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers
@@ -82,16 +80,46 @@ class FiniteStateMachine(
         }
     }
 
-    private fun restartFSM(
-        beforeStartAction: BeforeStartAction
+    fun restartFSM(
+        startingEvent: Event,
     ) {
         if (logConfig.logLevel.isGreaterThan1()) {
             logcat { "restarting fsm" }
         }
         restartableCoroutineScope
             .subscriberImp
-            .restart(beforeStartAction)
+            .restart {
+                pause()
+
+                queueHolder.emptyQueue()
+
+                stateHolder.publishDefaultInitialState()
+
+                queueHolder.pushEvent(
+                    startingEvent
+                )
+
+                resume()
+            }
     }
+
+    private fun stop() {
+        logcat { "stopping fsm" }
+        restartableCoroutineScope
+            .subscriberImp
+            .stop()
+    }
+
+    private fun pause() {
+        pausedStateHolder.pause()
+    }
+
+    private fun resume() {
+        pausedStateHolder.resume()
+
+        fsmProcessingTrigger.kickFSM()
+    }
+
 
     private suspend fun handlingEventsLoop() {
         val funcName = "handlingEventsLoop"

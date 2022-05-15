@@ -23,16 +23,16 @@ import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.LightBlue
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.PrimaryColor1
-import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
-import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingUIControl
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.utils.compose.components.CustomSliderWithCaption
 
 @Composable
@@ -40,19 +40,18 @@ fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
     navController: NavController
 ) {
-    val eventReceiver = viewModel.finiteStateMachine.eventReceiver as EventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction = {
             navController.navigateUp()
         }
-        eventReceiver.receiveEvent(
+        viewModel.restartFSM(
             EventToSettingsScreenViewModel.TriggerInitialization()
         )
     }
 
     SettingsControls(
         viewModel.screenStateFlow,
-        eventReceiver,
+        viewModel.finiteStateMachine.eventReceiver,
         viewModel as ErrorDialogPlacer,
     )
 }

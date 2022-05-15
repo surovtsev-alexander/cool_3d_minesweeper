@@ -1,7 +1,12 @@
 package com.surovtsev.finitestatemachine.event
 
 sealed interface Event {
-    object ToDefault: EventImp(
+    object TurnOff: EventImp(
+        EventMode.DoNotWaitEndOfProcessing
+    )
+    class Restart(
+        val startingEvent: Event,
+    ): EventImp(
         EventMode.DoNotWaitEndOfProcessing,
     )
     object Pause: PauseResumeEvent()

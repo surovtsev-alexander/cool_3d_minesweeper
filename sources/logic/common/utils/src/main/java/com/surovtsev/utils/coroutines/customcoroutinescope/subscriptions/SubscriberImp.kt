@@ -4,10 +4,15 @@ import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
+import com.surovtsev.utils.statehelpers.IsOn
 
 class SubscriberImp(
     private val customCoroutineScope: CustomCoroutineScope
-): Subscriber {
+):
+    Subscriber,
+    IsOn by customCoroutineScope
+{
+
     private val subscriptionsHolderMap: MutableMap<String, SubscriptionsHolder> =
         mapOf<String, SubscriptionsHolder>().toMutableMap()
 

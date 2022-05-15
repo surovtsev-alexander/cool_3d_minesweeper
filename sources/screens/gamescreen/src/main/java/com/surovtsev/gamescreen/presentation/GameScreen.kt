@@ -28,9 +28,6 @@ import com.surovtsev.core.interaction.BombsLeftFlow
 import com.surovtsev.core.ui.theme.GrayBackground
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.core.ui.theme.Teal200
-import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
-import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
@@ -38,6 +35,9 @@ import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.gamescreen.viewmodel.helpers.typealiases.GLSurfaceViewCreated
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.utils.gles.helpers.OpenGLInfoHelper
 import com.surovtsev.utils.time.elapsedformatter.ElapsedFormatter
 import com.surovtsev.utils.timers.async.TimeSpanFlow
@@ -58,14 +58,12 @@ fun GameScreen(
         return
     }
 
-    val eventReceiver = viewModel.finiteStateMachine.eventReceiver as EventReceiver
-
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
-            {
-                navController.navigateUp()
-            }
-        eventReceiver.receiveEvent(
+        {
+            navController.navigateUp()
+        }
+        viewModel.restartFSM(
             if (loadGame) {
                 EventToGameScreenViewModel.LoadGame()
             } else {
@@ -76,7 +74,7 @@ fun GameScreen(
 
     GameScreenControls(
         viewModel.screenStateFlow,
-        eventReceiver,
+        viewModel.finiteStateMachine.eventReceiver,
         context,
         viewModel::initGLSurfaceView,
         viewModel as ErrorDialogPlacer,

@@ -26,14 +26,14 @@ import com.surovtsev.core.helpers.RankingListWithPlaces
 import com.surovtsev.core.helpers.sorting.*
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.ui.theme.*
-import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
-import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
-import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
+import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
+import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
+import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
 @Composable
@@ -41,13 +41,12 @@ fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
 ) {
-    val eventReceiver = viewModel.finiteStateMachine.eventReceiver as EventReceiver
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
-            {
-                navController.navigateUp()
-            }
-        eventReceiver.receiveEvent(
+        {
+            navController.navigateUp()
+        }
+        viewModel.restartFSM(
             EventToRankingScreenViewModel
                 .LoadData()
         )
@@ -55,7 +54,7 @@ fun RankingScreen(
 
     RankingControls(
         viewModel.screenStateFlow,
-        eventReceiver,
+        viewModel.finiteStateMachine.eventReceiver,
         viewModel as ErrorDialogPlacer,
     )
 }
