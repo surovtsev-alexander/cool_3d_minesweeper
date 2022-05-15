@@ -90,7 +90,7 @@ class EventProcessorHelper(
             }
         }
 
-        if (event.doNotWaitEndOfProcessing) {
+        if (event.eventMode is Event.EventMode.DoNotWaitEndOfProcessing) {
             action.invoke()
         } else {
             processingMutex.withLock {
@@ -157,7 +157,7 @@ class EventProcessorHelper(
 
         // step 5. Setting loading state before processing.
         // Setting new state is up to user in processing results step (6).
-        if (event.setLoadingStateBeforeProcessing) {
+        if (event.eventMode.setLoadingStateBeforeProcessing) {
             stateHolder.publishLoadingState()
         }
 

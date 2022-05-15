@@ -26,10 +26,12 @@ class EventReceiverImp(
             logcat { "receiveEvent: $event" }
         }
 
-        if (event.doNotPushToQueue) {
-            if (!event.doNotWaitEndOfProcessing && fsmProcessingTrigger.isBusy()) {
+        val eventMode = event.eventMode
+
+        if (eventMode.doNotPushToQueue) {
+            if ((eventMode !is Event.EventMode.DoNotWaitEndOfProcessing) && fsmProcessingTrigger.isBusy()) {
                 if (logConfig.logLevel.isGreaterThan0()) {
-                    logcat { "doNotPushToQueue and skipIfBusy are true in event; FSM is Busy; skipping: $event" }
+                    logcat { "doNotPushToQueue is true in event; FSM is Busy; skipping: $event" }
                 }
                 return
             }

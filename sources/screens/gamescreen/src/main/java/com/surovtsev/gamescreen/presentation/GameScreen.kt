@@ -351,8 +351,8 @@ fun ControlButtons(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val buttons = listOf(
-            "1" to EventToGameScreenViewModel.RemoveFlaggedBombs,
-            "2" to EventToGameScreenViewModel.RemoveOpenedSlices,
+            "1" to EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.RemoveFlaggedBombs,
+            "2" to EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.RemoveOpenedSlices,
         )
         buttons.map { (buttonCaption, event) ->
             Button(
@@ -383,7 +383,7 @@ fun ControlCheckBox(
 
     val toggleFlaggingAction = {
         eventReceiver.receiveEvent(
-            EventToGameScreenViewModel.ToggleFlagging
+            EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.ToggleFlagging
         )
     }
 

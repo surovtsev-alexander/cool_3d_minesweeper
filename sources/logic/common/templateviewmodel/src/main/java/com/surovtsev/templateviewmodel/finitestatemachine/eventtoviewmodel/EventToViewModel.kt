@@ -11,17 +11,17 @@ sealed interface EventToViewModel: Event.UserEvent {
     class HandleScreenLeaving(
         val owner: LifecycleOwner
     ): EventToViewModelImp(
-        doNotWaitEndOfProcessing = true,
+        eventMode = Event.EventMode.DoNotWaitEndOfProcessing,
     )
 
     abstract class UserEvent: EventToViewModelImp()
 
 
     abstract class EventToViewModelImp(
-        override val doNotPushToQueue: Boolean = false,
-        override val pushToHead: Boolean = false,
-        override val setLoadingStateBeforeProcessing: Boolean = true,
-        override val doNotWaitEndOfProcessing: Boolean = false,
+        override val eventMode: Event.EventMode = Event.EventMode.Normal(
+            setLoadingStateBeforeProcessing = true,
+            pushToHead = false,
+        ),
     ): EventToViewModel
 }
 

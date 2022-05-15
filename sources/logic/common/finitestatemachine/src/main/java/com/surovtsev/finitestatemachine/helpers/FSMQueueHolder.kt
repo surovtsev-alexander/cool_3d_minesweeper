@@ -58,8 +58,10 @@ class FSMQueueHolder(
     suspend fun pushEvent(
         event: Event
     ) {
+        assert(!event.eventMode.doNotPushToQueue)
+
         queueMutex.withLock {
-            val posToPush = if (!event.pushToHead) {
+            val posToPush = if (!event.eventMode.pushToHead) {
                 eventsQueue.size
             } else {
                 when (event) {

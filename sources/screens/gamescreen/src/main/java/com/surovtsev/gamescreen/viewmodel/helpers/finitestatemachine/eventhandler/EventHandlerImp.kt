@@ -39,9 +39,12 @@ class EventHandlerImp @Inject constructor(
             is EventToGameScreenViewModel.SetIdleState                   -> ::setIdleState
             is EventToGameScreenViewModel.CloseGameMenu                  -> suspend { closeGameMenu() }
             is EventToGameScreenViewModel.GoToMainMenu                   -> ::goToMainMenu
-            is EventToGameScreenViewModel.RemoveFlaggedBombs             -> ::removeFlaggedBombs
-            is EventToGameScreenViewModel.RemoveOpenedSlices             -> ::removeOpenedSlices
-            is EventToGameScreenViewModel.ToggleFlagging                 -> ::toggleFlagging
+            is EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.RemoveFlaggedBombs
+                                                                         -> ::removeFlaggedBombs
+            is EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.RemoveOpenedSlices
+                                                                         -> ::removeOpenedSlices
+            is EventToGameScreenViewModel.EventWithoutSettingLoadingStateBeforeProcessing.ToggleFlagging
+                                                                         -> ::toggleFlagging
             is EventToGameScreenViewModel.CloseGameStatusDialog          -> ::closeGameStatusDialog
             else                                                         -> null
         }
