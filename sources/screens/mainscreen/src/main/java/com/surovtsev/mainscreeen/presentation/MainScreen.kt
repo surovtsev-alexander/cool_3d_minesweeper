@@ -50,7 +50,7 @@ fun MainScreeControls(
                     .fillMaxWidth(0.8f)
                     .fillMaxHeight(0.5f)
             ) {
-                val buttonPairs = arrayOf(
+                val buttonPairs = listOf(
                     MainScreenViewModel.ButtonNames.NewGame to MainScreenViewModel.ButtonNames.LoadGame,
                     MainScreenViewModel.ButtonNames.Ranking to MainScreenViewModel.ButtonNames.Settings
                 )
@@ -105,7 +105,7 @@ fun TwoButtonsInRow(
     buttonsInfo: ButtonsInfo,
 ) {
     rowScope.apply {
-        arrayOf(
+        listOf(
             firstButtonName,
             secondButtonName
         ).map { buttonName ->

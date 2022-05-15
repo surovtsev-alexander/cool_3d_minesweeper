@@ -216,7 +216,7 @@ fun GameMenu(
         return
     }
 
-    val mainMenuButtons = arrayOf(
+    val mainMenuButtons = listOf(
         "new game" to EventToGameScreenViewModel.NewGame,
         "main menu" to EventToGameScreenViewModel.GoToMainMenu,
     )
@@ -350,7 +350,7 @@ fun ControlButtons(
             .fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val buttons = arrayOf(
+        val buttons = listOf(
             "1" to EventToGameScreenViewModel.RemoveFlaggedBombs,
             "2" to EventToGameScreenViewModel.RemoveOpenedSlices,
         )

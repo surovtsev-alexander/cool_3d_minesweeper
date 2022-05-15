@@ -335,7 +335,7 @@ fun ApplySettingsButtons(
             .fillMaxWidth(fraction = 0.75f),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        val buttons = arrayOf(
+        val buttons = listOf(
             "ok" to EventToSettingsScreenViewModel.ApplySettings,
             "back" to EventToViewModel.Finish
         )

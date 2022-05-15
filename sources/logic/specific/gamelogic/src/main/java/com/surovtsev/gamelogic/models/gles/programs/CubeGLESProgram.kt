@@ -30,7 +30,7 @@ open class CubeGLESProgram @Inject constructor(
     val aTextureCoordinates = Attribute(aTextureCoordinatesName)
     val mUTextureLocation = Uniform(uTextureUnitName)
 
-    override val fields = arrayOf(
+    override val fields = listOf(
         aPosition,
         aIsEmpty,
         aTextureCoordinates,

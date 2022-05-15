@@ -26,7 +26,7 @@ abstract class GLESProgram (
 
     private val uMVP = Uniform(uMVPName)
 
-    abstract val fields: Array<GLESField>
+    abstract val fields: List<GLESField>
 
     fun prepareProgram() {
         loadProgram()

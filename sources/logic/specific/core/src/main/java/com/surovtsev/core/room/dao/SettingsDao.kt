@@ -13,7 +13,7 @@ interface SettingsDao  {
     companion object {
         const val settingsTableName = Settings.TableName.name
 
-        private val dataToPrepopulate = arrayOf(
+        private val dataToPrepopulate = listOf(
             12 to 20,
             10 to 20,
             8 to 16,

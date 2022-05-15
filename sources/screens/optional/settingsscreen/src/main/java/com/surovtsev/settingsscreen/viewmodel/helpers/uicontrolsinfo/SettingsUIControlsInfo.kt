@@ -17,7 +17,7 @@ class SettingsUIControlsInfo {
         )
     }
 
-    val info = arrayOf(
+    val info = listOf(
         SettingUIControl(
             "x",
             dimensionCellCount,

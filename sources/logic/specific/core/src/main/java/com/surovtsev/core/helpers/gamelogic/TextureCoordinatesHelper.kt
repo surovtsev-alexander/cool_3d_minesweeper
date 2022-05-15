@@ -7,7 +7,7 @@ import glm_.vec2.Vec2i
 import glm_.vec3.Vec3i
 
 object TextureCoordinatesHelper {
-    val textureToSquareTemplateCoordinates = floatArrayOf(
+    val textureToSquareTemplateCoordinates = listOf(
         0f, 1f,
         1f, 0f,
         0f, 0f,

@@ -85,7 +85,7 @@ class NeighboursCalculator(
         return res
     }
 
-    private val rangeFlags = arrayOf(
+    private val rangeFlags = listOf(
         Vec3bool(x = true, y = false, z = false),
         Vec3bool(x = false, y = true, z = false),
         Vec3bool(x = false, y = false, z = true)

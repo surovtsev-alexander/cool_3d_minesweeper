@@ -37,7 +37,7 @@ class CellSpaceBorder(
         rightUpFarPoint
     )
 
-    private val edgeSpaces: Array<EdgeSpaceBorder>
+    private val edgeSpaces: List<EdgeSpaceBorder>
 
     init {
         val (x1, y1, z1) = leftDownNearPoint
@@ -96,7 +96,7 @@ class CellSpaceBorder(
                 f
             )
 
-        edgeSpaces = arrayOf(
+        edgeSpaces = listOf(
             up, down, left, right, near, far
         )
     }

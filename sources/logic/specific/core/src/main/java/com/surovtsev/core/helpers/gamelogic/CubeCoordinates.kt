@@ -9,7 +9,7 @@ class CubeCoordinates(
     val centers: Array<Vec3>
 ) {
     companion object {
-        private val coordinatesTemplateArray = intArrayOf(
+        private val coordinatesTemplateArray = listOf(
             -1,  1,  1, // A
             -1,  1, -1, // B
             1,  1, -1, // C
@@ -42,7 +42,7 @@ class CubeCoordinates(
                 , indexesTemplateArray[it + 1]
                 , indexesTemplateArray[it + 2]).asIterable() }.toShortArray()
         */
-        private val extendedIndexesTemplateArray = intArrayOf(
+        private val extendedIndexesTemplateArray = listOf(
             1, 2, 0, // top
             0, 2, 3,
 

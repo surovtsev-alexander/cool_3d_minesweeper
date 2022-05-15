@@ -29,7 +29,7 @@ open class PointerGLESProgram @Inject constructor(
     private val mUColor = Uniform(uColorName)
     val mLineWidth = 10f
 
-    override val fields = arrayOf(
+    override val fields = listOf(
         mAPosition,
         mUPointSize,
         mUColor,

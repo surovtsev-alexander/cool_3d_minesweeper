@@ -14,7 +14,7 @@ object MyMath {
     private val YRay = Vec3(0f, 1f, 0f)
     private val ZRay = Vec3(0f, 0f, 1f)
 
-    val Rays = arrayOf(
+    val Rays = listOf(
         XRay,
         YRay,
         ZRay
