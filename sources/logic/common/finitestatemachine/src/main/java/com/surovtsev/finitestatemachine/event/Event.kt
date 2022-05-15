@@ -26,26 +26,23 @@ sealed interface Event {
 
     sealed interface EventMode {
         val setLoadingStateBeforeProcessing: Boolean
-        val pushToHead: Boolean
         val doNotPushToQueue: Boolean
 
         class Normal(
             override val setLoadingStateBeforeProcessing: Boolean = true,
-            override val pushToHead: Boolean = false,
+            val pushToHead: Boolean = false,
         ): EventMode {
             override val doNotPushToQueue: Boolean = false
         }
 
         class DoNotPushToQueue(
             override val setLoadingStateBeforeProcessing: Boolean = false,
-            override val pushToHead: Boolean = false,
         ): EventMode {
             override val doNotPushToQueue: Boolean = true
         }
 
         object DoNotWaitEndOfProcessing: EventMode {
             override val setLoadingStateBeforeProcessing: Boolean = false
-            override val pushToHead: Boolean = false
             override val doNotPushToQueue: Boolean = true
         }
     }
