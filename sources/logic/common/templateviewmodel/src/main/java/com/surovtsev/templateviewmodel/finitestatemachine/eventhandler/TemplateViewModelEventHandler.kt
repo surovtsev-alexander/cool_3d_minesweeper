@@ -20,6 +20,8 @@ class TemplateViewModelEventHandler(
     private val finishActionHolder: FinishActionHolder,
     ): EventHandler {
 
+    override val transitions: List<EventHandler.Transition> = emptyList()
+
     override fun handleEvent(
         event: Event,
         state: State

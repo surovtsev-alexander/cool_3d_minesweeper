@@ -9,4 +9,13 @@ interface EventHandler {
         event: Event,
         state: State
     ): EventHandlingResult
+
+    // TODO: populate in childs and add usage
+    val transitions: List<Transition>
+
+    data class Transition(
+        val initialState: State,
+        val event: Event,
+        val resultStates: State,
+    )
 }

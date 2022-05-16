@@ -21,6 +21,8 @@ class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
 ): EventHandler {
 
+    override val transitions: List<EventHandler.Transition> = emptyList()
+
     override fun handleEvent(
         event: Event,
         state: State

@@ -24,6 +24,9 @@ class EventHandlerImp(
     private val pauseAction: PauseAction,
     private val resumeAction: ResumeAction,
 ): EventHandler {
+
+    override val transitions: List<EventHandler.Transition> = emptyList()
+
     override fun handleEvent(
         event: Event,
         state: State,
