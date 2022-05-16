@@ -90,7 +90,11 @@ class TemplateViewModelEventHandler(
     }
 
     private suspend fun closeErrorAction() {
-        stateHolder.publishIdleState()
+        stateHolder.let {
+            it.publishNewState(
+                it.toIdleState()
+            )
+        }
     }
 
     private suspend fun invokeFinishAction() {

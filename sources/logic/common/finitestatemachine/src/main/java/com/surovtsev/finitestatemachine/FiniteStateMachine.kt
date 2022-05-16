@@ -93,7 +93,7 @@ class FiniteStateMachine(
 
                 queueHolder.emptyQueue()
 
-                stateHolder.publishDefaultInitialState()
+                stateHolder.pushInitialState()
 
                 queueHolder.pushEvent(
                     startingEvent

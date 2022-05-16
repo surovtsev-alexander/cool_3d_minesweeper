@@ -71,9 +71,13 @@ class EventHandlerImp @Inject constructor(
             )
         }
 
-        eventHandlerParameters.stateHolder.publishIdleState(
-            settingsListIsLoaded
-        )
+        eventHandlerParameters.stateHolder.let {
+            it.publishNewState(
+                it.toIdleState(
+                    settingsListIsLoaded
+                )
+            )
+        }
 
         return settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
@@ -102,18 +106,26 @@ class EventHandlerImp @Inject constructor(
         val rankingScreenData = stateHolder.data
 
         if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileFilteringRankingListFactory(2)
-            )
-        } else {
-            // Do not set state to IDLE in order to avoid blinking loading ui attributes.
-            stateHolder.publishIdleState(
-                RankingScreenData.RankingListIsPrepared(
-                    rankingScreenData,
-                    selectedSettingsId,
-                    rankingListWithPlaces
+            stateHolder.let {
+                it.publishNewState(
+                    it.toErrorState(
+                        ErrorMessages.errorWhileFilteringRankingListFactory(2)
+                    )
                 )
-            )
+            }
+        } else {
+            // Do not set state to IDLE if you want to avoid blinking loading ui attributes.
+            stateHolder.let {
+                it.publishNewState(
+                    it.toIdleState(
+                        RankingScreenData.RankingListIsPrepared(
+                            rankingScreenData,
+                            selectedSettingsId,
+                            rankingListWithPlaces,
+                        )
+                    )
+                )
+            }
         }
 
         return EventProcessingResult.Ok(
@@ -133,9 +145,13 @@ class EventHandlerImp @Inject constructor(
         val rankingScreenData = stateHolder.state.value.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            stateHolder.publishErrorState(
-                ErrorMessages.errorWhileSortingListFactory(1)
-            )
+            stateHolder.let {
+                it.publishNewState(
+                    it.toErrorState(
+                        ErrorMessages.errorWhileFilteringRankingListFactory(1)
+                    )
+                )
+            }
 
             return EventProcessingResult.Ok()
         }
@@ -170,14 +186,18 @@ class EventHandlerImp @Inject constructor(
                 }
             }.toMap()
 
-        stateHolder.publishIdleState(
-            RankingScreenData.RankingListIsSorted(
-                rankingScreenData,
-                rankingTableSortParameters,
-                sortedData,
-                directionOfSortableColumns
+        stateHolder.let {
+            it.publishNewState(
+                it.toIdleState(
+                    RankingScreenData.RankingListIsSorted(
+                        rankingScreenData,
+                        rankingTableSortParameters,
+                        sortedData,
+                        directionOfSortableColumns,
+                    )
+                )
             )
-        )
+        }
         return EventProcessingResult.Ok()
     }
 

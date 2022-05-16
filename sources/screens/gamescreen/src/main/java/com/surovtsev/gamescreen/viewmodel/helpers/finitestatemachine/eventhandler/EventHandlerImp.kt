@@ -10,6 +10,7 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPrio
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.state.description.Description
+import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
@@ -110,7 +111,7 @@ class EventHandlerImp @Inject constructor(
                 Errors.GAME_IS_IN_PROGRESS.message,
                 true
             ) {
-                stateHolder.publishDefaultInitialState()
+                stateHolder.pushInitialState()
             }
 
 
@@ -147,11 +148,15 @@ class EventHandlerImp @Inject constructor(
 
             setFlagging(loadGame)
 
-            stateHolder.publishIdleState(
-                GameScreenData.GameInProgress(
-                    uiGameControlsFlows!!
+            stateHolder.let {
+                it.publishNewState(
+                    it.toIdleState(
+                        GameScreenData.GameInProgress(
+                            uiGameControlsFlows!!
+                        )
+                    )
                 )
-            )
+            }
         }
         return EventProcessingResult.Ok()
     }
@@ -176,8 +181,10 @@ class EventHandlerImp @Inject constructor(
             }
 
             stateHolder.publishNewState(
-                newDescription,
-                newScreenData,
+                StateHolder.createState(
+                    newDescription,
+                    newScreenData,
+                )
             )
         }
         return EventProcessingResult.Ok()
@@ -185,7 +192,11 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun setIdleState(
     ): EventProcessingResult {
-        eventHandlerParameters.stateHolder.publishIdleState()
+        eventHandlerParameters.stateHolder.let {
+            it.publishNewState(
+                it.toIdleState()
+            )
+        }
         return EventProcessingResult.Ok()
     }
 
@@ -259,16 +270,24 @@ class EventHandlerImp @Inject constructor(
         val stateHolder = eventHandlerParameters.stateHolder
 
         if (prevData == null) {
-            stateHolder.publishErrorState(
-                Errors.CRITICAL_ERROR_RELOADING.message,
-                Data.NoData,
-            )
+            stateHolder.let {
+                it.publishNewState(
+                    it.toErrorState(
+                        Errors.CRITICAL_ERROR_RELOADING.message,
+                        Data.NoData
+                    )
+                )
+            }
             return
         }
 
-        stateHolder.publishIdleState(
-            prevData
-        )
+        stateHolder.let {
+            it.publishNewState(
+                it.toIdleState(
+                    prevData
+                )
+            )
+        }
     }
 
     private suspend fun doActionIfDataIsCorrect(
@@ -294,7 +313,13 @@ class EventHandlerImp @Inject constructor(
             }
 
             if (!silent) {
-                stateHolder.publishErrorState(messageToShow)
+                stateHolder.let {
+                    it.publishNewState(
+                        it.toErrorState(
+                            messageToShow
+                        )
+                    )
+                }
             }
         } while (false)
     }

@@ -12,13 +12,21 @@ import kotlinx.coroutines.withContext
 
 class StateHolder(
     private val publishStateInUIThread: Boolean = false,
-    initialState: State = defaultInitialState
+    val initialState: State = defaultInitialState
 ) {
 
     companion object {
         val defaultInitialState = State(
             Description.Idle,
             Data.NoData,
+        )
+
+        fun createState(
+            newDescription: Description,
+            newData: Data,
+        ) = State(
+            newDescription,
+            newData,
         )
     }
 
@@ -31,53 +39,35 @@ class StateHolder(
     val data: Data
         get() = state.value.data
 
-    suspend fun publishDefaultInitialState() {
-        publishNewState(defaultInitialState)
+    suspend fun pushInitialState() {
+        publishNewState(initialState)
     }
 
-    suspend fun publishLoadingState(
+    fun toLoadingState(
         newData: Data = data
-    ) {
-        publishNewState(
-            Description.Loading,
-            newData
-        )
-    }
+    ) = createState(
+        Description.Loading,
+        newData,
+    )
 
-    suspend fun publishErrorState(
+    fun toErrorState(
         message: String,
         newData: Data = data
-    ) {
-        publishNewState(
-            Description.Error(
-                message
-            ),
-            newData
-        )
-    }
+    ) = createState(
+        Description.Error(
+            message
+        ),
+        newData,
+    )
 
-    suspend fun publishIdleState(
-        newData: Data = data
-    ) {
-        publishNewState(
-            Description.Idle,
-            newData,
-        )
-    }
+    fun toIdleState(
+        newData: Data = data,
+    ) = createState(
+        Description.Idle,
+        newData
+    )
 
     suspend fun publishNewState(
-        newDescription: Description,
-        newData: Data,
-    ) {
-        publishNewState(
-            State(
-                newDescription,
-                newData
-            )
-        )
-    }
-
-    private suspend fun publishNewState(
         state: State
     ) {
         val publishingAction = {

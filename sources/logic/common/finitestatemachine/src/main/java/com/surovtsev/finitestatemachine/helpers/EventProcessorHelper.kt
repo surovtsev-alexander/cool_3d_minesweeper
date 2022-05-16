@@ -66,10 +66,13 @@ class EventProcessorHelper(
                         break
                     }
                     is EventProcessorHelperResult.Error -> {
-                        stateHolder
-                            .publishErrorState(
-                                eventProcessorHelperResult.message
+                        stateHolder.let {
+                            it.publishNewState(
+                                it.toErrorState(
+                                    eventProcessorHelperResult.message
+                                )
                             )
+                        }
                         break
                     }
                     is EventProcessorHelperResult.ChangeWith -> {
@@ -158,7 +161,11 @@ class EventProcessorHelper(
         // step 5. Setting loading state before processing.
         // Setting new state is up to user in processing results step (6).
         if (event.eventMode.setLoadingStateBeforeProcessing) {
-            stateHolder.publishLoadingState()
+            stateHolder.let {
+                it.publishNewState(
+                    it.toLoadingState()
+                )
+            }
         }
 
 
