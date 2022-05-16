@@ -44,7 +44,7 @@ abstract class TemplateViewModel:
                 userEventHandler,
             ),
             logConfig = LogConfig(
-                LogLevel.LOG_LEVEL_3,
+                LogLevel.LOG_LEVEL_0,
             )
         )
     }
