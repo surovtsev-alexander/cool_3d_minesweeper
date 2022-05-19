@@ -3,18 +3,17 @@ package com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemac
 import com.surovtsev.core.helpers.sorting.DefaultRankingTableSortParameters
 import com.surovtsev.core.helpers.sorting.DefaultSortDirectionForSortableColumns
 import com.surovtsev.core.helpers.sorting.RankingTableSortParameters
-import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.toError
 import com.surovtsev.finitestatemachine.state.toIdle
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.timespan.dagger.TimeSpanComponent
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import kotlinx.coroutines.delay
@@ -106,28 +105,26 @@ class EventHandlerImp @Inject constructor(
         val state = eventHandlerParameters.fsmStateFlow.value
         val rankingScreenData = state.data
 
-        val newState = if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            // TODO: fixme
-            state.toError(
+        return if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+            EventProcessingResult.Error(
                 ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE if you want to avoid blinking loading ui attributes.
-            state.toIdle(
+            val newState = state.toIdle(
                 RankingScreenData.RankingListIsPrepared(
                     rankingScreenData,
                     selectedSettingsId,
                     rankingListWithPlaces,
                 )
             )
+            EventProcessingResult.Ok(
+                EventToRankingScreenViewModel.SortList(
+                    DefaultRankingTableSortParameters
+                ),
+                newState = newState
+            )
         }
-
-        return EventProcessingResult.Ok(
-            EventToRankingScreenViewModel.SortList(
-                DefaultRankingTableSortParameters
-            ),
-            newState = newState
-        )
     }
 
     private suspend fun sortList(
@@ -140,13 +137,8 @@ class EventHandlerImp @Inject constructor(
         val rankingScreenData = state.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            // TODO: fixme
-            val newState = state.toError(
+            return EventProcessingResult.Error(
                 ErrorMessages.errorWhileFilteringRankingListFactory(1)
-            )
-
-            return EventProcessingResult.Ok(
-                newState = newState
             )
         }
 
