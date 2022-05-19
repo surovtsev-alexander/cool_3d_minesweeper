@@ -93,14 +93,12 @@ class FiniteStateMachine(
     ) = internalLowLevelCommandsHandler.restart(startingEvent)
 
     private suspend fun handlingEventsLoop() {
-        val funcName = "handlingEventsLoop"
-
         do {
             val event = queueHolder.pollEvent()
 
             if (event == null) {
                 if (logConfig.logLevel.isGreaterThan3()) {
-                    logcat { "$funcName; wait for trigger processing" }
+                    logcat { "handlingEventsLoop; wait for trigger processing" }
                 }
                 fsmProcessingTrigger.waitForTriggerProcessing()
                 processingWaiter.processingHasStarted()
