@@ -36,7 +36,7 @@ class EventHandlerImp(
     ): EventProcessingResult {
         internalLowLevelCommandsHandler.stop()
 
-        // see toDefault()
+        // See restart()
         delay(1)
 
         return EventProcessingResult.Ok()
@@ -45,13 +45,13 @@ class EventHandlerImp(
     private suspend fun restart(
         startingEvent: Event
     ): EventProcessingResult {
-        // restart coroutines scope
+        // Restart coroutines scope.
         internalLowLevelCommandsHandler.restart(startingEvent)
 
-        // add suspending point to
+        // Add suspending point.
         delay(1)
 
-        // coroutine scope is restarted,
+        // Coroutine scope is restarted,
         // so continuation after suspending point is should not be scheduled
         // and this code is should never be executed
         assert(false)

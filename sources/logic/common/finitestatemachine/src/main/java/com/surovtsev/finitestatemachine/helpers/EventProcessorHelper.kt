@@ -302,8 +302,8 @@ class EventProcessorHelper(
             .map {
                 it.newEventToPush?.let { eventToPush ->
 
-                    // add suspending point to optimization.
-                    // See toDefault method in
+                    // Add suspending point to optimization.
+                    // See restart method in
                     // com.surovtsev.finitestatemachine.eventhandler.eventhandlerimp.EventHandlerImp
                     delay(1)
 
