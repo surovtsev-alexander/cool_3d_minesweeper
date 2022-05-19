@@ -62,7 +62,7 @@ class GameScreenViewModel @AssistedInject constructor(
         super<TemplateViewModel>.onResume(owner)
         gLSurfaceView?.onResume()
 
-        if (stateHolder.state.value.data is GameScreenData.GameMenu) {
+        if (screenStateFlow.value.data is GameScreenData.GameMenu) {
             finiteStateMachine.eventReceiver.receiveEvent(
                 EventToGameScreenViewModel.SetIdleState
             )
@@ -77,7 +77,7 @@ class GameScreenViewModel @AssistedInject constructor(
             EventToMinesweeper.SaveGame
         )
 
-        if (stateHolder.state.value.data !is GameScreenData.GameMenu) {
+        if (screenStateFlow.value.data !is GameScreenData.GameMenu) {
             finiteStateMachine.eventReceiver.receiveEvent(
                 EventToGameScreenViewModel.OpenGameMenuAndSetLoadingState
             )

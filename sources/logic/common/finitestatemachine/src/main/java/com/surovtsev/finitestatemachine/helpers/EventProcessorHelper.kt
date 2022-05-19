@@ -8,6 +8,8 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessorPriority
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.toErrorState
+import com.surovtsev.finitestatemachine.state.toLoadingState
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
@@ -43,7 +45,7 @@ class EventProcessorHelper(
     ) {
         val action = suspend {
             if (logConfig.logLevel.isGreaterThan2()) {
-                logcat { "processEvent; state before processing: ${stateHolder.state.value}" }
+                logcat { "processEvent; state before processing: ${stateHolder.fsmStateFlow.value}" }
             }
 
 
@@ -70,7 +72,7 @@ class EventProcessorHelper(
                     is EventProcessorHelperResult.Error -> {
                         stateHolder.let {
                             it.publishNewState(
-                                it.toErrorState(
+                                it.fsmStateFlow.value.toErrorState(
                                     eventProcessorHelperResult.message
                                 )
                             )
@@ -91,7 +93,7 @@ class EventProcessorHelper(
             }
 
             if (logConfig.logLevel.isGreaterThan2()) {
-                logcat { "processEvent; state after processing: ${stateHolder.state.value}" }
+                logcat { "processEvent; state after processing: ${stateHolder.fsmStateFlow.value}" }
             }
         }
 
@@ -165,7 +167,7 @@ class EventProcessorHelper(
         if (event.eventMode.setLoadingStateBeforeProcessing) {
             stateHolder.let {
                 it.publishNewState(
-                    it.toLoadingState()
+                    it.fsmStateFlow.value.toLoadingState()
                 )
             }
         }
@@ -213,7 +215,6 @@ class EventProcessorHelper(
         return EventProcessorHelperResult.Processed
     }
 
-    // TODO: rename
     private sealed interface EventProcessorHelperResult {
         object Skipped: EventProcessorHelperResult
         object Processed: EventProcessorHelperResult
@@ -230,7 +231,7 @@ class EventProcessorHelper(
         event: Event,
     ): List<EventHandlingResult> {
         return eventHandlers.map {
-            it.handleEvent(event, stateHolder.state.value)
+            it.handleEvent(event, stateHolder.fsmStateFlow.value)
         }
     }
 

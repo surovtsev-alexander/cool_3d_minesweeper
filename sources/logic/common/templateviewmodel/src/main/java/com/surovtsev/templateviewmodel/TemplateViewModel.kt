@@ -27,10 +27,10 @@ abstract class TemplateViewModel:
 
     protected val stateHolder: StateHolder = StateHolder(true)
     override val screenStateFlow: ScreenStateFlow
-        get() = stateHolder.state
+        get() = stateHolder.fsmStateFlow
 
     private val templateViewModelEventHandler = TemplateViewModelEventHandler(
-        stateHolder,
+        screenStateFlow,
         finishActionHolder,
     )
 

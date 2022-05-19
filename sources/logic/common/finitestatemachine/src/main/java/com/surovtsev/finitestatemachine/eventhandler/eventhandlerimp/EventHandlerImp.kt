@@ -5,12 +5,7 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toLastPriorityEventProcessor
-import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
-import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
-import com.surovtsev.finitestatemachine.helpers.PausedStateHolder
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
 import kotlinx.coroutines.delay
 
 typealias RestartFSMAction = (startingEvent: Event) -> Unit

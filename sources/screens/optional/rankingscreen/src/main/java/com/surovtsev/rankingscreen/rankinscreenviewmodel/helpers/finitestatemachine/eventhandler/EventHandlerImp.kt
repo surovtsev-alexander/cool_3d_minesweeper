@@ -10,6 +10,8 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.toErrorState
+import com.surovtsev.finitestatemachine.state.toIdleState
 import com.surovtsev.rankingscreen.dagger.RankingScreenScope
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.EventToRankingScreenViewModel
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemachine.RankingScreenData
@@ -71,7 +73,7 @@ class EventHandlerImp @Inject constructor(
             )
         }
 
-        val newState = eventHandlerParameters.stateHolder.toIdleState(
+        val newState = eventHandlerParameters.fsmStateFlow.value.toIdleState(
             settingsListIsLoaded
         )
 
@@ -101,16 +103,17 @@ class EventHandlerImp @Inject constructor(
                     selectedSettingsId
                 )
 
-        val stateHolder = eventHandlerParameters.stateHolder
-        val rankingScreenData = stateHolder.data
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val rankingScreenData = state.data
 
         val newState = if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            stateHolder.toErrorState(
+            // TODO: fixme
+            state.toErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(2)
             )
         } else {
             // Do not set state to IDLE if you want to avoid blinking loading ui attributes.
-            stateHolder.toIdleState(
+            state.toIdleState(
                 RankingScreenData.RankingListIsPrepared(
                     rankingScreenData,
                     selectedSettingsId,
@@ -133,11 +136,12 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         val currTimeSpanComponent = eventHandlerParameters.timeSpanComponent
 
-        val stateHolder = eventHandlerParameters.stateHolder
-        val rankingScreenData = stateHolder.state.value.data
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val rankingScreenData = state.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            val newState = stateHolder.toErrorState(
+            // TODO: fixme
+            val newState = state.toErrorState(
                 ErrorMessages.errorWhileFilteringRankingListFactory(1)
             )
 
@@ -176,7 +180,7 @@ class EventHandlerImp @Inject constructor(
                 }
             }.toMap()
 
-        val newState = stateHolder.toIdleState(
+        val newState = state.toIdleState(
             RankingScreenData.RankingListIsSorted(
                 rankingScreenData,
                 rankingTableSortParameters,

@@ -71,4 +71,10 @@ object SettingsScreenModule {
         return DaggerRestartableCoroutineScopeComponent
             .create()
     }
+
+    @SettingsScreenScope
+    @Provides
+    fun provideFSMStateFlow(
+        stateHolder: StateHolder
+    ) = stateHolder.fsmStateFlow
 }

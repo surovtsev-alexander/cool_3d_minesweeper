@@ -10,13 +10,14 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPrio
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 import com.surovtsev.finitestatemachine.state.description.Description
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.finitestatemachine.state.toIdleState
+import com.surovtsev.finitestatemachine.stateholder.FSMStateFlow
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.CloseErrorEvent
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.helpers.finishactionholder.FinishActionHolder
 
 class TemplateViewModelEventHandler(
-    private val stateHolder: StateHolder,
+    private val fsmStateFlow: FSMStateFlow,
     private val finishActionHolder: FinishActionHolder,
     ): EventHandler {
 
@@ -90,7 +91,7 @@ class TemplateViewModelEventHandler(
     private suspend fun closeErrorEventProcessingResult(
     ): EventProcessingResult {
         return EventProcessingResult.Ok(
-            newState = stateHolder.toIdleState()
+            newState = fsmStateFlow.value.toIdleState()
         )
     }
 

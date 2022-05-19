@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 
 
+typealias FSMStateFlow = StateFlow<State>
+
 class StateHolder(
     private val publishStateInUIThread: Boolean = false,
     val initialState: State = defaultInitialState
@@ -20,58 +22,26 @@ class StateHolder(
             Description.Idle,
             Data.NoData,
         )
-
-        fun createState(
-            newDescription: Description,
-            newData: Data,
-        ) = State(
-            newDescription,
-            newData,
-        )
     }
 
-    private val _state: MutableStateFlow<State> = MutableStateFlow(
+    private val _mutableFSMStateFlow: MutableStateFlow<State> = MutableStateFlow(
         initialState
     )
 
-    val state: StateFlow<State> = _state.asStateFlow()
+    val fsmStateFlow: FSMStateFlow = _mutableFSMStateFlow.asStateFlow()
 
     val data: Data
-        get() = state.value.data
+        get() = fsmStateFlow.value.data
 
     suspend fun pushInitialState() {
         publishNewState(initialState)
     }
 
-    fun toLoadingState(
-        newData: Data = data
-    ) = createState(
-        Description.Loading,
-        newData,
-    )
-
-    fun toErrorState(
-        message: String,
-        newData: Data = data
-    ) = createState(
-        Description.Error(
-            message
-        ),
-        newData,
-    )
-
-    fun toIdleState(
-        newData: Data = data,
-    ) = createState(
-        Description.Idle,
-        newData
-    )
-
     suspend fun publishNewState(
         state: State
     ) {
         val publishingAction = {
-            _state.value = state
+            _mutableFSMStateFlow.value = state
         }
 
         if (publishStateInUIThread) {

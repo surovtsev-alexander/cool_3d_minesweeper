@@ -1,7 +1,6 @@
 package com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.eventhandler
 
 import androidx.lifecycle.LifecycleOwner
-import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -9,7 +8,7 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.description.Description
-import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.finitestatemachine.state.toIdleState
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
@@ -18,6 +17,7 @@ import com.surovtsev.gamelogic.models.game.interaction.GameControlsImp
 import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.EventToGameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import logcat.logcat
 import javax.inject.Inject
 
@@ -96,8 +96,8 @@ class EventHandlerImp @Inject constructor(
     private suspend fun newGame(
         loadGame: Boolean
     ): EventProcessingResult {
-        val stateHolder = eventHandlerParameters.stateHolder
-        val gameScreeData = stateHolder.data as? GameScreenData
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val gameScreeData = state.data as? GameScreenData
 
         if (gameScreeData is GameScreenData.GameMenu) {
             return unstackState(
@@ -144,7 +144,7 @@ class EventHandlerImp @Inject constructor(
 
             setFlagging(loadGame)
 
-            stateHolder.toIdleState(
+            state.toIdleState(
                 GameScreenData.GameInProgress(
                     uiGameControlsFlows!!
                 )
@@ -158,8 +158,8 @@ class EventHandlerImp @Inject constructor(
     private suspend fun openGameMenu(
         setLoadingState: Boolean = false
     ): EventProcessingResult {
-        val stateHolder = eventHandlerParameters.stateHolder
-        val gameScreenData = stateHolder.data as? GameScreenData
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val gameScreenData = state.data as? GameScreenData
 
         return if (gameScreenData == null) {
             EventProcessingResult.Error(
@@ -180,7 +180,7 @@ class EventHandlerImp @Inject constructor(
                 Description.Idle
             }
 
-            val newState = StateHolder.createState(
+            val newState = State(
                 newDescription,
                 newScreenData,
             )
@@ -193,15 +193,15 @@ class EventHandlerImp @Inject constructor(
     private suspend fun setIdleState(
     ): EventProcessingResult {
         return EventProcessingResult.Ok(
-            newState = eventHandlerParameters.stateHolder.toIdleState()
+            newState = eventHandlerParameters.fsmStateFlow.value.toIdleState()
         )
     }
 
     private suspend fun closeGameMenu(
         silent: Boolean = false
     ): EventProcessingResult {
-        val stateHolder = eventHandlerParameters.stateHolder
-        val gameScreenData = stateHolder.data as? GameScreenData
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val gameScreenData = state.data as? GameScreenData
 
         return if (gameScreenData == null) {
             return EventProcessingResult.Error(
@@ -272,7 +272,7 @@ class EventHandlerImp @Inject constructor(
     ): EventProcessingResult {
         val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
 
-        val stateHolder = eventHandlerParameters.stateHolder
+        val state = eventHandlerParameters.fsmStateFlow.value
 
         return if (prevData == null) {
             EventProcessingResult.Error(
@@ -281,7 +281,7 @@ class EventHandlerImp @Inject constructor(
         } else {
             EventProcessingResult.Ok(
                 newEventToPush,
-                stateHolder.toIdleState(
+                state.toIdleState(
                     prevData
                 )
             )
@@ -291,8 +291,8 @@ class EventHandlerImp @Inject constructor(
     private suspend fun skipIfGameIsNotInProgress(
         action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
     ): EventProcessingResult {
-        val stateHolder = eventHandlerParameters.stateHolder
-        val gameScreenData = stateHolder.data as? GameScreenData
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val gameScreenData = state.data as? GameScreenData
 
         if (gameScreenData is GameScreenData.GameInProgress) {
             action(gameScreenData)

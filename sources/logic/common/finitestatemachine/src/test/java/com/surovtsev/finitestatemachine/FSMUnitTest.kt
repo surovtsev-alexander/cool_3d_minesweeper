@@ -68,7 +68,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.stateHolder.state.value.description is Description.Idle)
+        assert(fsm.stateHolder.fsmStateFlow.value.description is Description.Idle)
     }
 
     @Test
@@ -92,7 +92,7 @@ class FSMUnitTest {
         }
 
         // assert
-        assert(fsm.stateHolder.state.value.description is Description.Idle)
+        assert(fsm.stateHolder.fsmStateFlow.value.description is Description.Idle)
     }
 
     @Test
@@ -104,6 +104,6 @@ class FSMUnitTest {
 
 
         // assert
-        assert(fsm.stateHolder.state.value.description is Description.Idle)
+        assert(fsm.stateHolder.fsmStateFlow.value.description is Description.Idle)
     }
 }

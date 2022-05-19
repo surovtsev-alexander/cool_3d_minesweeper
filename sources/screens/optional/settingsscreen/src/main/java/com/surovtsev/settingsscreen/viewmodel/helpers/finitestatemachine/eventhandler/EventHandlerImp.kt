@@ -11,6 +11,8 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
+import com.surovtsev.finitestatemachine.state.toIdleState
+import com.surovtsev.finitestatemachine.state.toLoadingState
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
@@ -57,7 +59,7 @@ class EventHandlerImp @Inject constructor(
     private suspend fun loadSettingsList(): EventProcessingResult {
         val settingsList = eventHandlerParameters.settingsDao.getAll()
 
-        val newState = eventHandlerParameters.stateHolder.toLoadingState(
+        val newState = eventHandlerParameters.fsmStateFlow.value.toLoadingState(
             SettingsScreenData.SettingsLoaded(
                 settingsList
             )
@@ -87,7 +89,7 @@ class EventHandlerImp @Inject constructor(
             "error while updating settings"
         ) { screenData ->
             EventProcessingResult.Ok(
-                newState = eventHandlerParameters.stateHolder.toIdleState(
+                newState = eventHandlerParameters.fsmStateFlow.value.toIdleState(
                     SettingsScreenData.SettingsDataIsSelected(
                         screenData,
                         settingsData,
@@ -157,7 +159,7 @@ class EventHandlerImp @Inject constructor(
             "internal error: can not select settings"
         ) { screenData ->
             EventProcessingResult.Ok(
-                newState = eventHandlerParameters.stateHolder.toIdleState(
+                newState = eventHandlerParameters.fsmStateFlow.value.toIdleState(
                     SettingsScreenData.SettingsIsSelected(
                         screenData,
                         settings,
@@ -170,8 +172,8 @@ class EventHandlerImp @Inject constructor(
     private inline fun <reified T: ViewModelData> calculateEventResultProcessingIsState(
         errorMessage: String, action: (screenData: T) -> EventProcessingResult
     ): EventProcessingResult {
-        val stateHolder = eventHandlerParameters.stateHolder
-        val screenData = stateHolder.state.value.data
+        val state = eventHandlerParameters.fsmStateFlow.value
+        val screenData = state.data
 
         return if (screenData !is T) {
             EventProcessingResult.Error(

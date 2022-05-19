@@ -1,10 +1,9 @@
 package com.surovtsev.templateviewmodel.helpers.errordialog
 
 import com.surovtsev.finitestatemachine.FiniteStateMachine
-import com.surovtsev.finitestatemachine.state.State
-import kotlinx.coroutines.flow.StateFlow
+import com.surovtsev.finitestatemachine.stateholder.FSMStateFlow
 
-typealias ScreenStateFlow = StateFlow<State>
+typealias ScreenStateFlow = FSMStateFlow
 
 
 interface ErrorDialogPlacer {
