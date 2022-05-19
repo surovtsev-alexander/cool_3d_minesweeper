@@ -10,6 +10,6 @@ sealed interface EventProcessingResult {
 
     class Ok(
         val newEventToPush: Event? = null,
-        val setState: State? = null,
+        val newState: State? = null,
     ) : EventProcessingResult
 }

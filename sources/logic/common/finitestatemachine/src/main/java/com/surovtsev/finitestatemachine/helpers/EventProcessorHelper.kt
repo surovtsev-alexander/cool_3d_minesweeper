@@ -7,6 +7,7 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessorPriority
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
+import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
@@ -29,7 +30,8 @@ class EventProcessorHelper(
     enum class Errors(
         val message: String
     ) {
-        FSM_INTERNAL_ERROR_001("FSM_INTERNAL_ERROR_001");
+        FSM_INTERNAL_ERROR_001("FSM_INTERNAL_ERROR_001"),
+        FSM_INTERNAL_ERROR_002("FSM_INTERNAL_ERROR_002");
     }
 
     /**
@@ -179,8 +181,30 @@ class EventProcessorHelper(
             logcat { "eventProcessingResults: $eventProcessingResults" }
         }
 
+        // step 7. Updating state
+        // Extract list of proposed states from the eventProcessingResults.
+        // Continue processing if there is no proposed state.
+        // Update state and continue processing if there is only one proposed state.
+        // Return error if there are more than one proposed states.
+        val proposedStates = extractProposedStates(
+            eventProcessingResults
+        )
 
-        // step 7. Pushing new events.
+        when (proposedStates.count()) {
+            0 -> { }
+            1 -> {
+                stateHolder.publishNewState(
+                    proposedStates[0]
+                )
+            }
+            else -> {
+                return EventProcessorHelperResult.Error(
+                    Errors.FSM_INTERNAL_ERROR_002.message
+                )
+            }
+        }
+
+        // step 8. Pushing new events.
         pushNewEvents(
             eventProcessingResults,
             eventReceiver
@@ -257,6 +281,15 @@ class EventProcessorHelper(
         }
 
         return res.toList()
+    }
+
+    private fun extractProposedStates(
+        eventProcessingResults: List<EventProcessingResult?>
+    ): List<State> {
+        return eventProcessingResults
+            .filterIsInstance<EventProcessingResult.Ok>()
+            .map { it.newState }
+            .filterNotNull()
     }
 
     private suspend fun pushNewEvents(

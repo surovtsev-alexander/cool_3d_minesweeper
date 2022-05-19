@@ -57,18 +57,15 @@ class EventHandlerImp @Inject constructor(
     private suspend fun loadSettingsList(): EventProcessingResult {
         val settingsList = eventHandlerParameters.settingsDao.getAll()
 
-        eventHandlerParameters.stateHolder.let {
-            it.publishNewState(
-                it.toLoadingState(
-                    SettingsScreenData.SettingsLoaded(
-                        settingsList
-                    )
-                )
+        val newState = eventHandlerParameters.stateHolder.toLoadingState(
+            SettingsScreenData.SettingsLoaded(
+                settingsList
             )
-        }
+        )
 
         return EventProcessingResult.Ok(
-            EventToSettingsScreenViewModel.LoadSelectedSettings
+            EventToSettingsScreenViewModel.LoadSelectedSettings,
+            newState
         )
     }
 
@@ -86,27 +83,24 @@ class EventHandlerImp @Inject constructor(
         settingsData: Settings.SettingsData,
         fromSlider: Boolean
     ): EventProcessingResult {
-        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
         ) { screenData ->
-            eventHandlerParameters.stateHolder.let {
-                it.publishNewState(
-                    it.toIdleState(
-                        SettingsScreenData.SettingsDataIsSelected(
-                            screenData,
-                            settingsData,
-                            fromSlider
-                        )
+            EventProcessingResult.Ok(
+                newState = eventHandlerParameters.stateHolder.toIdleState(
+                    SettingsScreenData.SettingsDataIsSelected(
+                        screenData,
+                        settingsData,
+                        fromSlider
                     )
                 )
-            }
+            )
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun applySettings(
     ): EventProcessingResult {
-        doActionIfStateIsChildIs<SettingsScreenData.SettingsDataIsSelected>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsDataIsSelected>(
             "error while applying settings"
         ) { screenData ->
             val settingsData = screenData.settingsData
@@ -123,27 +117,24 @@ class EventHandlerImp @Inject constructor(
                 settingsData
             )
 
-            return EventProcessingResult.Ok(
+            EventProcessingResult.Ok(
                 EventToViewModel.Finish
             )
         }
-
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun deleteSettings(
         settingsId: Long
     ): EventProcessingResult {
-        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
             "error while deleting settings"
         ) {
             eventHandlerParameters.settingsDao.delete(settingsId)
 
-            return@deleteSettings EventProcessingResult.Ok(
+            EventProcessingResult.Ok(
                 EventToSettingsScreenViewModel.LoadSettingsList
             )
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun loadSelectedSettings(): EventProcessingResult {
@@ -156,45 +147,36 @@ class EventHandlerImp @Inject constructor(
             selectedSettingsData
         )?: Settings(selectedSettingsData, -1)
 
-        rememberSettings(selectedSettings)
-
-        return EventProcessingResult.Ok()
+        return rememberSettings(selectedSettings)
     }
 
     private suspend fun rememberSettings(
         settings: Settings,
     ): EventProcessingResult {
-        doActionIfStateIsChildIs<SettingsScreenData.SettingsLoaded>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
             "internal error: can not select settings"
         ) { screenData ->
-            eventHandlerParameters.stateHolder.let {
-                it.publishNewState(
-                    it.toIdleState(
-                        SettingsScreenData.SettingsIsSelected(
-                            screenData,
-                            settings,
-                        )
+            EventProcessingResult.Ok(
+                newState = eventHandlerParameters.stateHolder.toIdleState(
+                    SettingsScreenData.SettingsIsSelected(
+                        screenData,
+                        settings,
                     )
                 )
-            }
+            )
         }
-        return EventProcessingResult.Ok()
     }
 
-    private suspend inline fun <reified T: ViewModelData> doActionIfStateIsChildIs(
-        errorMessage: String, action: (screenData: T) -> Unit
-    ) {
+    private inline fun <reified T: ViewModelData> calculateEventResultProcessingIsState(
+        errorMessage: String, action: (screenData: T) -> EventProcessingResult
+    ): EventProcessingResult {
         val stateHolder = eventHandlerParameters.stateHolder
         val screenData = stateHolder.state.value.data
 
-        if (screenData !is T) {
-            stateHolder.let {
-                it.publishNewState(
-                    it.toErrorState(
-                        errorMessage
-                    )
-                )
-            }
+        return if (screenData !is T) {
+            EventProcessingResult.Error(
+                errorMessage
+            )
         } else {
             action.invoke(screenData)
         }

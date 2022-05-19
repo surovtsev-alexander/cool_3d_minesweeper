@@ -74,14 +74,12 @@ class TemplateViewModelEventHandler(
     }
 
     private suspend fun closeError(): EventProcessingResult {
-        closeErrorAction()
-        return EventProcessingResult.Ok()
+        return closeErrorEventProcessingResult()
     }
 
     private suspend fun closeErrorAndFinish(): EventProcessingResult {
-        closeErrorAction()
         invokeFinishAction()
-        return EventProcessingResult.Ok()
+        return closeErrorEventProcessingResult()
     }
 
     private suspend fun finish(): EventProcessingResult {
@@ -89,12 +87,11 @@ class TemplateViewModelEventHandler(
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun closeErrorAction() {
-        stateHolder.let {
-            it.publishNewState(
-                it.toIdleState()
-            )
-        }
+    private suspend fun closeErrorEventProcessingResult(
+    ): EventProcessingResult {
+        return EventProcessingResult.Ok(
+            newState = stateHolder.toIdleState()
+        )
     }
 
     private suspend fun invokeFinishAction() {

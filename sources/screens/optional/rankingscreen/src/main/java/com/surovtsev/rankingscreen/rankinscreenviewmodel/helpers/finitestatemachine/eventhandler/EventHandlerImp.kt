@@ -71,23 +71,22 @@ class EventHandlerImp @Inject constructor(
             )
         }
 
-        eventHandlerParameters.stateHolder.let {
-            it.publishNewState(
-                it.toIdleState(
-                    settingsListIsLoaded
-                )
-            )
-        }
+        val newState = eventHandlerParameters.stateHolder.toIdleState(
+            settingsListIsLoaded
+        )
 
         return settingsDao.getBySettingsData(
             saveController.loadSettingDataOrDefault()
         ).let {
             if (it != null) {
                 EventProcessingResult.Ok(
-                    EventToRankingScreenViewModel.FilterList(it.id)
+                    EventToRankingScreenViewModel.FilterList(it.id),
+                    newState = newState
                 )
             } else {
-                EventProcessingResult.Ok()
+                EventProcessingResult.Ok(
+                    newState = newState
+                )
             }
         }
     }
@@ -105,33 +104,26 @@ class EventHandlerImp @Inject constructor(
         val stateHolder = eventHandlerParameters.stateHolder
         val rankingScreenData = stateHolder.data
 
-        if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
-            stateHolder.let {
-                it.publishNewState(
-                    it.toErrorState(
-                        ErrorMessages.errorWhileFilteringRankingListFactory(2)
-                    )
-                )
-            }
+        val newState = if (rankingScreenData !is RankingScreenData.SettingsListIsLoaded) {
+            stateHolder.toErrorState(
+                ErrorMessages.errorWhileFilteringRankingListFactory(2)
+            )
         } else {
             // Do not set state to IDLE if you want to avoid blinking loading ui attributes.
-            stateHolder.let {
-                it.publishNewState(
-                    it.toIdleState(
-                        RankingScreenData.RankingListIsPrepared(
-                            rankingScreenData,
-                            selectedSettingsId,
-                            rankingListWithPlaces,
-                        )
-                    )
+            stateHolder.toIdleState(
+                RankingScreenData.RankingListIsPrepared(
+                    rankingScreenData,
+                    selectedSettingsId,
+                    rankingListWithPlaces,
                 )
-            }
+            )
         }
 
         return EventProcessingResult.Ok(
             EventToRankingScreenViewModel.SortList(
                 DefaultRankingTableSortParameters
-            )
+            ),
+            newState = newState
         )
     }
 
@@ -145,15 +137,13 @@ class EventHandlerImp @Inject constructor(
         val rankingScreenData = stateHolder.state.value.data
 
         if (rankingScreenData !is RankingScreenData.RankingListIsPrepared) {
-            stateHolder.let {
-                it.publishNewState(
-                    it.toErrorState(
-                        ErrorMessages.errorWhileFilteringRankingListFactory(1)
-                    )
-                )
-            }
+            val newState = stateHolder.toErrorState(
+                ErrorMessages.errorWhileFilteringRankingListFactory(1)
+            )
 
-            return EventProcessingResult.Ok()
+            return EventProcessingResult.Ok(
+                newState = newState
+            )
         }
 
         val filteredRankingList = rankingScreenData.rankingListWithPlaces
@@ -186,19 +176,17 @@ class EventHandlerImp @Inject constructor(
                 }
             }.toMap()
 
-        stateHolder.let {
-            it.publishNewState(
-                it.toIdleState(
-                    RankingScreenData.RankingListIsSorted(
-                        rankingScreenData,
-                        rankingTableSortParameters,
-                        sortedData,
-                        directionOfSortableColumns,
-                    )
-                )
+        val newState = stateHolder.toIdleState(
+            RankingScreenData.RankingListIsSorted(
+                rankingScreenData,
+                rankingTableSortParameters,
+                sortedData,
+                directionOfSortableColumns,
             )
-        }
-        return EventProcessingResult.Ok()
+        )
+        return EventProcessingResult.Ok(
+            newState = newState
+        )
     }
 
     private suspend fun<T> doActionWithDelayUpToDefaultMinimal(
