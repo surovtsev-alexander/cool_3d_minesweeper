@@ -32,7 +32,7 @@ class FiniteStateMachine(
         }
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp()
-    private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTriggerImp()
+    private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTrigger()
     private val pausedStateHolder: PausedStateHolder = PausedStateHolder()
 
     val queueHolder = FSMQueueHolder(

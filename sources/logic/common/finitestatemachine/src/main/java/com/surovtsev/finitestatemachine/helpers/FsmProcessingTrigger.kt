@@ -1,17 +1,12 @@
 package com.surovtsev.finitestatemachine.helpers
 
-interface FsmProcessingTrigger {
-    fun isBusy(): Boolean
-    fun triggerProcessing()
-    suspend fun waitForTriggerProcessing()
+
+class FsmProcessingTrigger: MyMutex() {
+    fun isBusy(): Boolean = !isLocked()
+
+    private fun triggerProcessing() = safeUnlock()
+
+    suspend fun waitForTriggerProcessing() = lock()
 
     fun kickFSM() = triggerProcessing()
-}
-
-class FsmProcessingTriggerImp: FsmProcessingTrigger, MyMutex() {
-    override fun isBusy(): Boolean = !isLocked()
-
-    override fun triggerProcessing() = safeUnlock()
-
-    override suspend fun waitForTriggerProcessing() = lock()
 }
