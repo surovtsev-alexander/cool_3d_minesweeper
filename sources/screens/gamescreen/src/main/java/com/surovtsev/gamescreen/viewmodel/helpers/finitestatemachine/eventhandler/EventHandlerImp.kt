@@ -97,24 +97,21 @@ class EventHandlerImp @Inject constructor(
     private suspend fun newGame(
         loadGame: Boolean
     ): EventProcessingResult {
-        doActionIfDataIsCorrect(
-            { it is GameScreenData.GameMenu },
-            Errors.MAIN_MENU_IS_NOT_OPENED.message,
-            true
-        ) { gameScreenData ->
-            tryUnstackState(gameScreenData)
+        val stateHolder = eventHandlerParameters.stateHolder
+        val gameScreeData = stateHolder.data as? GameScreenData
+
+        if (gameScreeData is GameScreenData.GameMenu) {
+            return unstackState(
+                gameScreeData,
+                newEventToPush = if (loadGame) {
+                    EventToGameScreenViewModel.LoadGame()
+                } else {
+                    EventToGameScreenViewModel.NewGame
+                }
+            )
         }
 
-        with(eventHandlerParameters) {
-            doActionIfDataIsCorrect(
-                { it is GameScreenData.GameInProgress },
-                Errors.GAME_IS_IN_PROGRESS.message,
-                true
-            ) {
-                stateHolder.pushInitialState()
-            }
-
-
+        val newState = with(eventHandlerParameters) {
             timeSpanComponent
                 .manuallyUpdatableTimeAfterDeviceStartupFlowHolder
                 .tick()
@@ -148,17 +145,15 @@ class EventHandlerImp @Inject constructor(
 
             setFlagging(loadGame)
 
-            stateHolder.let {
-                it.publishNewState(
-                    it.toIdleState(
-                        GameScreenData.GameInProgress(
-                            uiGameControlsFlows!!
-                        )
-                    )
+            stateHolder.toIdleState(
+                GameScreenData.GameInProgress(
+                    uiGameControlsFlows!!
                 )
-            }
+            )
         }
-        return EventProcessingResult.Ok()
+        return EventProcessingResult.Ok(
+            newState = newState
+        )
     }
 
     private suspend fun openGameMenu(
@@ -208,7 +203,7 @@ class EventHandlerImp @Inject constructor(
             Errors.MAIN_MENU_IS_NOT_OPENED.message,
             silent
         ) { gameScreenData ->
-            tryUnstackState(gameScreenData)
+            unstackState(gameScreenData)
         }
         return EventProcessingResult.Ok()
     }
@@ -262,28 +257,22 @@ class EventHandlerImp @Inject constructor(
         return EventProcessingResult.Ok()
     }
 
-    private suspend fun tryUnstackState(
-        gameScreenData: GameScreenData
-    ) {
+    private suspend fun unstackState(
+        gameScreenData: GameScreenData,
+        newEventToPush: Event? = null,
+    ): EventProcessingResult {
         val prevData = (gameScreenData as? GameScreenData.HasPrevData)?.prevData
 
         val stateHolder = eventHandlerParameters.stateHolder
 
-        if (prevData == null) {
-            stateHolder.let {
-                it.publishNewState(
-                    it.toErrorState(
-                        Errors.CRITICAL_ERROR_RELOADING.message,
-                        Data.NoData
-                    )
-                )
-            }
-            return
-        }
-
-        stateHolder.let {
-            it.publishNewState(
-                it.toIdleState(
+        return if (prevData == null) {
+            EventProcessingResult.Error(
+                Errors.CRITICAL_ERROR_RELOADING.message,
+            )
+        } else {
+            EventProcessingResult.Ok(
+                newEventToPush,
+                stateHolder.toIdleState(
                     prevData
                 )
             )
