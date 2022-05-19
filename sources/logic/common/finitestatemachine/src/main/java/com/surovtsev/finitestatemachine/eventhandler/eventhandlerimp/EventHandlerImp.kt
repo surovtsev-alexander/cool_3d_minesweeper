@@ -5,19 +5,12 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toLastPriorityEventProcessor
+import com.surovtsev.finitestatemachine.helpers.InternalLowLevelCommandsHandler
 import com.surovtsev.finitestatemachine.state.State
 import kotlinx.coroutines.delay
 
-typealias RestartFSMAction = (startingEvent: Event) -> Unit
-typealias StopFSM = () -> Unit
-typealias PauseAction = () -> Unit
-typealias ResumeAction = () -> Unit
-
 class EventHandlerImp(
-    private val restartFSMAction: RestartFSMAction,
-    private val stopFSM: StopFSM,
-    private val pauseAction: PauseAction,
-    private val resumeAction: ResumeAction,
+    private val internalLowLevelCommandsHandler: InternalLowLevelCommandsHandler,
 ): EventHandler {
 
     override val transitions: List<EventHandler.Transition> = emptyList()
@@ -41,7 +34,7 @@ class EventHandlerImp(
 
     private suspend fun turnOff(
     ): EventProcessingResult {
-        stopFSM()
+        internalLowLevelCommandsHandler.stop()
 
         // see toDefault()
         delay(1)
@@ -53,7 +46,7 @@ class EventHandlerImp(
         startingEvent: Event
     ): EventProcessingResult {
         // restart coroutines scope
-        restartFSMAction(startingEvent)
+        internalLowLevelCommandsHandler.restart(startingEvent)
 
         // add suspending point to
         delay(1)
@@ -68,14 +61,14 @@ class EventHandlerImp(
 
     private suspend fun pause(
     ): EventProcessingResult {
-        pauseAction()
+        internalLowLevelCommandsHandler.pause()
 
         return EventProcessingResult.Ok()
     }
 
     private suspend fun resume(
     ): EventProcessingResult {
-        resumeAction()
+        internalLowLevelCommandsHandler.resume()
 
         return EventProcessingResult.Ok()
     }

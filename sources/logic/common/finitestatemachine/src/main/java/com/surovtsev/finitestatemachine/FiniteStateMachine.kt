@@ -12,6 +12,7 @@ import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutine
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
 import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
+import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import kotlinx.coroutines.launch
 import logcat.logcat
 
@@ -21,12 +22,13 @@ class FiniteStateMachine(
     private val logConfig: LogConfig = LogConfig(logLevel = LogLevel.LOG_LEVEL_1),
 ): Subscription {
 
-    private val restartableCoroutineScope = DaggerRestartableCoroutineScopeComponent
-        .create()
+    private val restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint =
+        DaggerRestartableCoroutineScopeComponent
+            .create()
 
     private val customCoroutineScope: CustomCoroutineScope
         get() {
-            return restartableCoroutineScope.customCoroutineScope
+            return restartableCoroutineScopeEntryPoint.customCoroutineScope
         }
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp()
@@ -40,11 +42,17 @@ class FiniteStateMachine(
         logConfig,
     )
 
+    private val internalLowLevelCommandsHandler = InternalLowLevelCommandsHandler(
+        restartableCoroutineScopeEntryPoint,
+        queueHolder,
+        stateHolder,
+        pausedStateHolder,
+        fsmProcessingTrigger,
+        logConfig,
+    )
+
     private val baseEventHandler = EventHandlerImp(
-        ::restartFSM,
-        ::stop,
-        ::pause,
-        ::resume,
+        internalLowLevelCommandsHandler
     )
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers
@@ -67,7 +75,7 @@ class FiniteStateMachine(
     init {
         SubscriptionsHolderComponentFactoryHolderImp
             .createAndSubscribe(
-                restartableCoroutineScope,
+                restartableCoroutineScopeEntryPoint,
                 "FiniteStateMachine"
             )
             .subscriptionsHolder
@@ -80,46 +88,9 @@ class FiniteStateMachine(
         }
     }
 
-    fun restartFSM(
-        startingEvent: Event,
-    ) {
-        if (logConfig.logLevel.isGreaterThan1()) {
-            logcat { "restarting fsm" }
-        }
-        restartableCoroutineScope
-            .subscriberImp
-            .restart {
-                pause()
-
-                queueHolder.emptyQueue()
-
-                stateHolder.pushInitialState()
-
-                queueHolder.pushEvent(
-                    startingEvent
-                )
-
-                resume()
-            }
-    }
-
-    private fun stop() {
-        logcat { "stopping fsm" }
-        restartableCoroutineScope
-            .subscriberImp
-            .stop()
-    }
-
-    private fun pause() {
-        pausedStateHolder.pause()
-    }
-
-    private fun resume() {
-        pausedStateHolder.resume()
-
-        fsmProcessingTrigger.kickFSM()
-    }
-
+    fun forceRestart(
+        startingEvent: Event
+    ) = internalLowLevelCommandsHandler.restart(startingEvent)
 
     private suspend fun handlingEventsLoop() {
         val funcName = "handlingEventsLoop"

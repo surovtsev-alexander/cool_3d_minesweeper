@@ -60,7 +60,7 @@ abstract class TemplateViewModel:
         startingEvent: Event = EventToViewModel.Init,
     ) {
         launchOnIOThread {
-            finiteStateMachine.restartFSM(
+            finiteStateMachine.forceRestart(
                 startingEvent
             )
         }
