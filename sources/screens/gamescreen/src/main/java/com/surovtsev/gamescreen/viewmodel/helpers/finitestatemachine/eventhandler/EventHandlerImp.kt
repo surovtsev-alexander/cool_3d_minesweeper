@@ -8,7 +8,6 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.data.Data
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
@@ -159,15 +158,21 @@ class EventHandlerImp @Inject constructor(
     private suspend fun openGameMenu(
         setLoadingState: Boolean = false
     ): EventProcessingResult {
-        doActionIfDataIsCorrect(
-            { it !is GameScreenData.GameMenu },
-            Errors.CAN_NOT_OPEN_MENU_TWICE_SEQUENTIALLY.message
-        ) { gameScreenData ->
+        val stateHolder = eventHandlerParameters.stateHolder
+        val gameScreenData = stateHolder.data as? GameScreenData
+
+        return if (gameScreenData == null) {
+            EventProcessingResult.Error(
+                Errors.INTERNAL_SETTINGS_SCREEN_ERROR_001.message
+            )
+        } else if (gameScreenData is GameScreenData.GameMenu) {
+            EventProcessingResult.Error(
+                Errors.CAN_NOT_OPEN_MENU_TWICE_SEQUENTIALLY.message
+            )
+        } else {
             val newScreenData = GameScreenData.GameMenu(
                 gameScreenData
             )
-
-            val stateHolder = eventHandlerParameters.stateHolder
 
             val newDescription = if (setLoadingState) {
                 Description.Loading
@@ -175,37 +180,44 @@ class EventHandlerImp @Inject constructor(
                 Description.Idle
             }
 
-            stateHolder.publishNewState(
-                StateHolder.createState(
-                    newDescription,
-                    newScreenData,
-                )
+            val newState = StateHolder.createState(
+                newDescription,
+                newScreenData,
+            )
+            EventProcessingResult.Ok(
+                newState = newState
             )
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun setIdleState(
     ): EventProcessingResult {
-        eventHandlerParameters.stateHolder.let {
-            it.publishNewState(
-                it.toIdleState()
-            )
-        }
-        return EventProcessingResult.Ok()
+        return EventProcessingResult.Ok(
+            newState = eventHandlerParameters.stateHolder.toIdleState()
+        )
     }
 
     private suspend fun closeGameMenu(
         silent: Boolean = false
     ): EventProcessingResult {
-        doActionIfDataIsCorrect(
-            { it is GameScreenData.GameMenu },
-            Errors.MAIN_MENU_IS_NOT_OPENED.message,
-            silent
-        ) { gameScreenData ->
+        val stateHolder = eventHandlerParameters.stateHolder
+        val gameScreenData = stateHolder.data as? GameScreenData
+
+        return if (gameScreenData == null) {
+            return EventProcessingResult.Error(
+                Errors.INTERNAL_SETTINGS_SCREEN_ERROR_001.message
+            )
+        } else if (gameScreenData is GameScreenData.GameMenu) {
             unstackState(gameScreenData)
+        } else {
+            if (silent) {
+                EventProcessingResult.Ok()
+            } else {
+                EventProcessingResult.Error(
+                    Errors.MAIN_MENU_IS_NOT_OPENED.message
+                )
+            }
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun goToMainMenu(
@@ -316,24 +328,11 @@ class EventHandlerImp @Inject constructor(
     private suspend fun skipIfGameIsNotInProgress(
         action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
     ) {
-        doActionIfDataIsChildOf(
-            Errors.GAME_IS_NOT_IN_PROGRESS.message,
-            true,
-            action
-        )
-        setIdleState()
-    }
+        val stateHolder = eventHandlerParameters.stateHolder
+        val gameScreenData = stateHolder.data as? GameScreenData
 
-    private suspend inline fun <reified T: GameScreenData> doActionIfDataIsChildOf(
-        errorMessage: String,
-        silent: Boolean = false,
-        noinline action: suspend (gameScreenData: T) -> Unit
-    ) {
-        doActionIfDataIsCorrect(
-            { it is T },
-            errorMessage,
-            silent = silent,
-            { gameScreenData -> action.invoke(gameScreenData as T)  }
-        )
+        if (gameScreenData is GameScreenData.GameInProgress) {
+            action(gameScreenData)
+        }
     }
 }
