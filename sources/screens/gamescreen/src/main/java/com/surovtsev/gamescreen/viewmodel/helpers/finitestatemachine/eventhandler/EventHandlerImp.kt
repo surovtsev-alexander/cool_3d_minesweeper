@@ -230,30 +230,27 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun removeFlaggedBombs(
     ): EventProcessingResult {
-        skipIfGameIsNotInProgress {
+        return skipIfGameIsNotInProgress {
             gameControlsImp?.removeFlaggedCells = true
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun removeOpenedSlices(
     ): EventProcessingResult {
-        skipIfGameIsNotInProgress {
+        return skipIfGameIsNotInProgress {
             gameControlsImp?.removeOpenedSlices = true
         }
-        return EventProcessingResult.Ok()
     }
 
     private suspend fun toggleFlagging(
     ): EventProcessingResult {
-        skipIfGameIsNotInProgress {
+        return skipIfGameIsNotInProgress {
             gameControlsImp?.let {
                 setFlagging(
                     !it.flagging
                 )
             }
         }
-        return EventProcessingResult.Ok()
     }
 
     private fun setFlagging(
@@ -291,48 +288,15 @@ class EventHandlerImp @Inject constructor(
         }
     }
 
-    private suspend fun doActionIfDataIsCorrect(
-        isDataCorrect: (gameScreeData: GameScreenData) -> Boolean,
-        errorMessage: String,
-        silent: Boolean = false,
-        action: suspend (gameScreenData: GameScreenData) -> Unit
-    ) {
-        val stateHolder = eventHandlerParameters.stateHolder
-
-        val gameScreenData = stateHolder.data as? GameScreenData
-
-        do {
-            val messageToShow = if (gameScreenData == null) {
-                Errors.INTERNAL_SETTINGS_SCREEN_ERROR_001.message
-            } else if (!isDataCorrect(gameScreenData)) {
-                errorMessage
-            } else {
-                action.invoke(
-                    gameScreenData
-                )
-                break
-            }
-
-            if (!silent) {
-                stateHolder.let {
-                    it.publishNewState(
-                        it.toErrorState(
-                            messageToShow
-                        )
-                    )
-                }
-            }
-        } while (false)
-    }
-
     private suspend fun skipIfGameIsNotInProgress(
         action: suspend (gameInProgress: GameScreenData.GameInProgress) -> Unit
-    ) {
+    ): EventProcessingResult {
         val stateHolder = eventHandlerParameters.stateHolder
         val gameScreenData = stateHolder.data as? GameScreenData
 
         if (gameScreenData is GameScreenData.GameInProgress) {
             action(gameScreenData)
         }
+        return EventProcessingResult.Ok()
     }
 }
