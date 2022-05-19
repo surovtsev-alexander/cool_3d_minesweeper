@@ -8,14 +8,14 @@ data class State(
     val data: Data
 )
 
-fun State.toLoadingState(
+fun State.toLoading(
     newData: Data = data
 ) = State(
     Description.Loading,
     newData,
 )
 
-fun State.toErrorState(
+fun State.toError(
     message: String,
     newData: Data = data
 ) = State(
@@ -25,7 +25,7 @@ fun State.toErrorState(
     newData,
 )
 
-fun State.toIdleState(
+fun State.toIdle(
     newData: Data = data,
 ) = State(
     Description.Idle,

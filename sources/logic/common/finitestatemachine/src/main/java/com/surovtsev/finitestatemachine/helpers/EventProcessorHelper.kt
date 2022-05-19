@@ -8,8 +8,8 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.EventProcessorPriority
 import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.toErrorState
-import com.surovtsev.finitestatemachine.state.toLoadingState
+import com.surovtsev.finitestatemachine.state.toError
+import com.surovtsev.finitestatemachine.state.toLoading
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
@@ -72,7 +72,7 @@ class EventProcessorHelper(
                     is EventProcessorHelperResult.Error -> {
                         stateHolder.let {
                             it.publishNewState(
-                                it.fsmStateFlow.value.toErrorState(
+                                it.fsmStateFlow.value.toError(
                                     eventProcessorHelperResult.message
                                 )
                             )
@@ -167,7 +167,7 @@ class EventProcessorHelper(
         if (event.eventMode.setLoadingStateBeforeProcessing) {
             stateHolder.let {
                 it.publishNewState(
-                    it.fsmStateFlow.value.toLoadingState()
+                    it.fsmStateFlow.value.toLoading()
                 )
             }
         }

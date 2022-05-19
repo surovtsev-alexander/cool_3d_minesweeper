@@ -11,8 +11,8 @@ import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.EventProcessingResult
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
-import com.surovtsev.finitestatemachine.state.toIdleState
-import com.surovtsev.finitestatemachine.state.toLoadingState
+import com.surovtsev.finitestatemachine.state.toIdle
+import com.surovtsev.finitestatemachine.state.toLoading
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
@@ -59,7 +59,7 @@ class EventHandlerImp @Inject constructor(
     private suspend fun loadSettingsList(): EventProcessingResult {
         val settingsList = eventHandlerParameters.settingsDao.getAll()
 
-        val newState = eventHandlerParameters.fsmStateFlow.value.toLoadingState(
+        val newState = eventHandlerParameters.fsmStateFlow.value.toLoading(
             SettingsScreenData.SettingsLoaded(
                 settingsList
             )
@@ -89,7 +89,7 @@ class EventHandlerImp @Inject constructor(
             "error while updating settings"
         ) { screenData ->
             EventProcessingResult.Ok(
-                newState = eventHandlerParameters.fsmStateFlow.value.toIdleState(
+                newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
                     SettingsScreenData.SettingsDataIsSelected(
                         screenData,
                         settingsData,
@@ -159,7 +159,7 @@ class EventHandlerImp @Inject constructor(
             "internal error: can not select settings"
         ) { screenData ->
             EventProcessingResult.Ok(
-                newState = eventHandlerParameters.fsmStateFlow.value.toIdleState(
+                newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
                     SettingsScreenData.SettingsIsSelected(
                         screenData,
                         settings,

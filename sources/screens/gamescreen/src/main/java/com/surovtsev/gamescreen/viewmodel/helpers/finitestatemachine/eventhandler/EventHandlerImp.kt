@@ -8,7 +8,7 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.description.Description
-import com.surovtsev.finitestatemachine.state.toIdleState
+import com.surovtsev.finitestatemachine.state.toIdle
 import com.surovtsev.gamelogic.minesweeper.interaction.eventhandler.EventToMinesweeper
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsFlows
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableFlows
@@ -144,7 +144,7 @@ class EventHandlerImp @Inject constructor(
 
             setFlagging(loadGame)
 
-            state.toIdleState(
+            state.toIdle(
                 GameScreenData.GameInProgress(
                     uiGameControlsFlows!!
                 )
@@ -193,7 +193,7 @@ class EventHandlerImp @Inject constructor(
     private suspend fun setIdleState(
     ): EventProcessingResult {
         return EventProcessingResult.Ok(
-            newState = eventHandlerParameters.fsmStateFlow.value.toIdleState()
+            newState = eventHandlerParameters.fsmStateFlow.value.toIdle()
         )
     }
 
@@ -281,7 +281,7 @@ class EventHandlerImp @Inject constructor(
         } else {
             EventProcessingResult.Ok(
                 newEventToPush,
-                state.toIdleState(
+                state.toIdle(
                     prevData
                 )
             )
