@@ -6,9 +6,9 @@ import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNo
 import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest

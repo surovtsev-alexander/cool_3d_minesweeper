@@ -1,7 +1,7 @@
 package com.surovtsev.timespan.dagger
 
 import com.surovtsev.core.dagger.components.TimeSpanComponentEntryPoint
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.timers.async.AsyncTimeSpan
 import com.surovtsev.utils.timers.async.ManuallyUpdatableTimeAfterDeviceStartupFlowHolder

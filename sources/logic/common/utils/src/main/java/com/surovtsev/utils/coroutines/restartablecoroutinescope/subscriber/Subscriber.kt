@@ -1,6 +1,6 @@
-package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
+package com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriber
 
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolderWithName
 
 interface Subscriber {
     fun addSubscriptionHolder(

@@ -1,8 +1,8 @@
 package com.surovtsev.utils.timers.common
 
-import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

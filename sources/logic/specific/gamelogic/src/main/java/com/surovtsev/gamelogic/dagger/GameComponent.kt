@@ -23,7 +23,7 @@ import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel.
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.gamestateholder.GameStateHolder
 import com.surovtsev.gamestateholder.dagger.DaggerGameStateHolderComponent
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import com.surovtsev.utils.gles.renderer.OpenGLEventsHandler

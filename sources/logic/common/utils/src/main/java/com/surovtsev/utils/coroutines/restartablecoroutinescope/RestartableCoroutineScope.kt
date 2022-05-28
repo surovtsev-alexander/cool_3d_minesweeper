@@ -1,4 +1,4 @@
-package com.surovtsev.utils.coroutines.customcoroutinescope
+package com.surovtsev.utils.coroutines.restartablecoroutinescope
 
 import com.surovtsev.utils.statehelpers.OnOffSwitchImp
 import kotlinx.coroutines.*

@@ -1,4 +1,4 @@
-package com.surovtsev.utils.coroutines.customcoroutinescope.subscription
+package com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder
 
 data class SubscriptionsHolderWithName(
     val subscriptionsHolder: SubscriptionsHolder,

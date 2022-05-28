@@ -1,8 +1,8 @@
 package com.surovtsev.subscriptionsholder.dagger
 
-import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolderWithName
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import com.surovtsev.utils.dagger.components.SubscriptionsHolderEntryPoint
 import dagger.BindsInstance
