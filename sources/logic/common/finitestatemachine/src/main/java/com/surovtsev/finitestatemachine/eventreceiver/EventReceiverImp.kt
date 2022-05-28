@@ -5,18 +5,16 @@ import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.helpers.EventProcessorHelper
 import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
 import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import kotlinx.coroutines.launch
 import logcat.logcat
-
-typealias customCoroutineScopeCalculator = () -> CustomCoroutineScope
 
 class EventReceiverImp(
     private val logConfig: LogConfig,
     private val fsmProcessingTrigger: FsmProcessingTrigger,
     private val eventProcessorHelper: EventProcessorHelper,
     private val queueHolder: FSMQueueHolder,
-    private val customCoroutineScope: CustomCoroutineScope,
+    private val restartableCoroutineScope: RestartableCoroutineScope,
 ): EventReceiver {
 
     override fun receiveEvent(
@@ -35,11 +33,11 @@ class EventReceiverImp(
                 }
                 return
             }
-            customCoroutineScope.launch {
+            restartableCoroutineScope.launch {
                 eventProcessorHelper.processEvent(event, this@EventReceiverImp)
             }
         } else {
-            customCoroutineScope.launch {
+            restartableCoroutineScope.launch {
                 queueHolder.pushEvent(event)
             }
         }

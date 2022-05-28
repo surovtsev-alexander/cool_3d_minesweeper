@@ -1,6 +1,6 @@
 package com.surovtsev.restartablecoroutinescope.dagger
 
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.Subscriber
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions.SubscriberImp
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
@@ -27,8 +27,8 @@ object RestartableCoroutineScopeModule {
     @RestartableCoroutineScopeDaggerScope
     @Provides
     fun provideCustomCoroutineScope(
-    ): CustomCoroutineScope {
-        return CustomCoroutineScope(
+    ): RestartableCoroutineScope {
+        return RestartableCoroutineScope(
             Dispatchers.IO
         )
     }
@@ -36,10 +36,10 @@ object RestartableCoroutineScopeModule {
     @RestartableCoroutineScopeDaggerScope
     @Provides
     fun provideSubscriberImp(
-        customCoroutineScope: CustomCoroutineScope,
+        restartableCoroutineScope: RestartableCoroutineScope,
     ): SubscriberImp {
         return SubscriberImp(
-            customCoroutineScope
+            restartableCoroutineScope
         )
     }
 }

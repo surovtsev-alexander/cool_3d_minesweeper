@@ -6,7 +6,7 @@ import com.surovtsev.gamelogic.minesweeper.interaction.gameinprogressflow.GameNo
 import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class GameStatusHolderBridge @Inject constructor(
     private val gameStateHolder: GameStateHolder,
     private val gameNotPausedFlow: GameNotPausedFlow,
-    private val customCoroutineScope: CustomCoroutineScope,
+    private val restartableCoroutineScope: RestartableCoroutineScope,
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
     private val _bombsLeftFlow = MutableStateFlow(0)
@@ -34,8 +34,8 @@ class GameStatusHolderBridge @Inject constructor(
         subscriptionsHolder.addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
                 gameStatusHolderBridgeHelper?.stop()
                 gameStatusHolderBridgeHelper = if (it == null) {
@@ -59,7 +59,7 @@ class GameStatusHolderBridge @Inject constructor(
             gameNotPausedFlow,
             _bombsLeftFlow,
             _gameStatusWithElapsedFlow,
-            customCoroutineScope,
+            restartableCoroutineScope,
         )
     }
 }

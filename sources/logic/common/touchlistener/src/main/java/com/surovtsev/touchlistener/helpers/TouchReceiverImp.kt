@@ -5,7 +5,7 @@ import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
@@ -27,8 +27,8 @@ class TouchReceiverImp @Inject constructor(
             .addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             timeAfterDeviceStartupFlowHolder.timeAfterDeviceStartupFlow.collectLatest {
                 tick(it)
             }

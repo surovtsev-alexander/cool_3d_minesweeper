@@ -4,7 +4,7 @@ import com.surovtsev.gamelogic.models.game.interaction.GameControls
 import com.surovtsev.gamelogic.utils.utils.gles.TextureUpdater
 import com.surovtsev.gamestate.logic.GameState
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,8 +26,8 @@ class GameLogic(
         subscriptionsHolder.addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
                 _gameTouchHandlerFlow.value = if (it == null) {
                     null

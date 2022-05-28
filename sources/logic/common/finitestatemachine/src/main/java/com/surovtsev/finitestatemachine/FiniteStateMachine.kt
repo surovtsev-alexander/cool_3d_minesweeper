@@ -10,7 +10,7 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import kotlinx.coroutines.launch
@@ -25,11 +25,6 @@ class FiniteStateMachine(
     private val restartableCoroutineScopeEntryPoint: RestartableCoroutineScopeEntryPoint =
         DaggerRestartableCoroutineScopeComponent
             .create()
-
-    private val customCoroutineScope: CustomCoroutineScope
-        get() {
-            return restartableCoroutineScopeEntryPoint.customCoroutineScope
-        }
 
     private val processingWaiter: ProcessingWaiter = ProcessingWaiterImp()
     private val fsmProcessingTrigger: FsmProcessingTrigger = FsmProcessingTrigger()
@@ -69,7 +64,7 @@ class FiniteStateMachine(
         fsmProcessingTrigger,
         eventProcessorHelper,
         queueHolder,
-        customCoroutineScope,
+        restartableCoroutineScopeEntryPoint.restartableCoroutineScope,
     )
 
     init {
@@ -82,8 +77,8 @@ class FiniteStateMachine(
             .addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             handlingEventsLoop()
         }
     }

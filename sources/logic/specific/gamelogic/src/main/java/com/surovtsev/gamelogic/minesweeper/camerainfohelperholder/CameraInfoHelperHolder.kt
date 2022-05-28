@@ -2,7 +2,7 @@ package com.surovtsev.gamelogic.minesweeper.camerainfohelperholder
 
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.gles.renderer.ScreenResolution
@@ -30,8 +30,8 @@ class CameraInfoHelperHolder @Inject constructor(
         subscriptionsHolder.addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             gameStateHolder.gameStateFlow.combine(
                 screenResolutionFlow
             ) { gameState, screenResolution ->

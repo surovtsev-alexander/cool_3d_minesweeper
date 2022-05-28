@@ -6,7 +6,7 @@ import kotlin.coroutines.CoroutineContext
 
 typealias BeforeStartAction = suspend () -> Unit
 
-class CustomCoroutineScope(
+class RestartableCoroutineScope(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ): CoroutineScope, OnOffSwitchImp(true) {
 

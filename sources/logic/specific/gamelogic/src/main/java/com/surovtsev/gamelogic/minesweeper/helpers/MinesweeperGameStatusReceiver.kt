@@ -16,7 +16,7 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableF
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
@@ -41,8 +41,8 @@ class MinesweeperGameStatusReceiver @Inject constructor(
         subscriptionsHolder.addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             gameStatusHolderBridge.gameStatusWithElapsedFlow.collectLatest {
                 it?.let {
                     gameStatusUpdated(

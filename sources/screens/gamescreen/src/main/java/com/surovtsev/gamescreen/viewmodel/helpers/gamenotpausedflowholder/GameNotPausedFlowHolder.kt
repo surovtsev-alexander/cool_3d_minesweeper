@@ -7,7 +7,7 @@ import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -35,17 +35,17 @@ class GameNotPausedFlowHolder @Inject constructor(
         ).subscriptionsHolder.addSubscription(this)
     }
 
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
         val gameNotPausedFlowLocal = runBlocking {
             screenStateFlow.map { screenState ->
                 screenState.description is Description.Idle &&
                         screenState.data is GameScreenData.GameInProgress
             }.stateIn(
-                customCoroutineScope
+                restartableCoroutineScope
             )
         }
 
-        customCoroutineScope.launch {
+        restartableCoroutineScope.launch {
             gameNotPausedFlowLocal.collectLatest {
                 _gameNotPausedFlow.value = it
             }

@@ -1,16 +1,16 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope.subscriptions
 
 import com.surovtsev.utils.coroutines.customcoroutinescope.BeforeStartAction
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolderWithName
 import com.surovtsev.utils.statehelpers.IsOn
 
 class SubscriberImp(
-    private val customCoroutineScope: CustomCoroutineScope
+    private val restartableCoroutineScope: RestartableCoroutineScope
 ):
     Subscriber,
-    IsOn by customCoroutineScope
+    IsOn by restartableCoroutineScope
 {
 
     private val subscriptionsHolderMap: MutableMap<String, SubscriptionsHolder> =
@@ -40,7 +40,7 @@ class SubscriberImp(
     fun restart(
         beforeStartAction: BeforeStartAction? = null
     ) {
-        customCoroutineScope.restart(
+        restartableCoroutineScope.restart(
             beforeStartAction
         )
 
@@ -52,14 +52,14 @@ class SubscriberImp(
     }
 
     fun stop() {
-        customCoroutineScope.turnOff()
+        restartableCoroutineScope.turnOff()
     }
 
     private fun initSubscriptionHolder(
         subscriptionsHolder: SubscriptionsHolder
     ) {
         subscriptionsHolder.initSubscriptions(
-            customCoroutineScope
+            restartableCoroutineScope
         )
     }
 }

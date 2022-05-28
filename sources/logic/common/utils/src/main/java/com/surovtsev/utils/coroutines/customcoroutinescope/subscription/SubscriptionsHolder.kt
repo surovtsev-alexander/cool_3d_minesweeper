@@ -1,13 +1,13 @@
 package com.surovtsev.utils.coroutines.customcoroutinescope.subscription
 
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 
 
 class SubscriptionsHolder(
-    private val customCoroutineScope: CustomCoroutineScope
+    private val restartableCoroutineScope: RestartableCoroutineScope
 ) {
-    val coroutineScope = customCoroutineScope as CoroutineScope
+    val coroutineScope = restartableCoroutineScope as CoroutineScope
 
     private val subscriptions: MutableList<Subscription> =
         emptyList<Subscription>().toMutableList()
@@ -18,15 +18,15 @@ class SubscriptionsHolder(
         subscriptions += subscription
 
         subscription.initSubscription(
-            customCoroutineScope
+            restartableCoroutineScope
         )
     }
 
     fun initSubscriptions(
-        customCoroutineScope: CustomCoroutineScope
+        restartableCoroutineScope: RestartableCoroutineScope
     ) {
         subscriptions.map {
-            it.initSubscription(customCoroutineScope)
+            it.initSubscription(restartableCoroutineScope)
         }
     }
 }

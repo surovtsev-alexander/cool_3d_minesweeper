@@ -5,7 +5,7 @@ import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.Subscription
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +23,8 @@ class GameViewsHolder @Inject constructor(
 
     subscriptionsHolder: SubscriptionsHolder,
 ): Subscription {
-    override fun initSubscription(customCoroutineScope: CustomCoroutineScope) {
-        customCoroutineScope.launch {
+    override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {
+        restartableCoroutineScope.launch {
             gameStateHolder.gameStateFlow.collectLatest {
                 withContext(Dispatchers.Main) {
                     processedActions.flush()

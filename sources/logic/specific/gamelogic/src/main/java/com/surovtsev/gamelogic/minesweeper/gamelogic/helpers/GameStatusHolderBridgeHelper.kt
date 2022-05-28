@@ -5,7 +5,7 @@ import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,12 +17,12 @@ class GameStatusHolderBridgeHelper(
     private val gameNotPausedFlow: GameNotPausedFlow,
     private val bombsLeftFlow: MutableStateFlow<Int>,
     private val gameStatusWithElapsedFlow: MutableStateFlow<GameStatusWithElapsedForGameConfig?>,
-    customCoroutineScope: CustomCoroutineScope,
+    restartableCoroutineScope: RestartableCoroutineScope,
 ) {
     private var jobs: MutableList<Job> = emptyList<Job>().toMutableList()
 
     init {
-        jobs += customCoroutineScope.launch {
+        jobs += restartableCoroutineScope.launch {
              gameNotPausedFlow.combine(
                 gameStatusHolder.gameStatusWithElapsedFlow
             ) { gameNotPaused: Boolean, (_, gameStatus: GameStatus, _) ->
@@ -38,13 +38,13 @@ class GameStatusHolderBridgeHelper(
             }
         }
 
-        jobs += customCoroutineScope.launch {
+        jobs += restartableCoroutineScope.launch {
             gameStatusHolder.bombsLeftFlow.collectLatest {
                 bombsLeftFlow.value = it
             }
         }
 
-        jobs += customCoroutineScope.launch {
+        jobs += restartableCoroutineScope.launch {
             gameStatusHolder.gameStatusWithElapsedFlow.collectLatest {
                 gameStatusWithElapsedFlow.value = it
             }

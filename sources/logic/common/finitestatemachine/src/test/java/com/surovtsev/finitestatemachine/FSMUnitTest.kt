@@ -6,7 +6,7 @@ import com.surovtsev.finitestatemachine.mock.TestEvent
 import com.surovtsev.finitestatemachine.mock.TestEventHandler
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.utils.coroutines.customcoroutinescope.CustomCoroutineScope
+import com.surovtsev.utils.coroutines.customcoroutinescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.customcoroutinescope.subscription.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -27,7 +27,7 @@ class FSMUnitTest {
         logLevel = LogLevel.LOG_LEVEL_4
     )
 
-    private var coroutineScope: CustomCoroutineScope? = null
+    private var restartableScope: RestartableCoroutineScope? = null
     private var fsm: FiniteStateMachine? = null
 
     companion object {
@@ -40,7 +40,7 @@ class FSMUnitTest {
 
     @Before
     fun setup() {
-        coroutineScope = CustomCoroutineScope(dispatcher = Dispatchers.IO).also {
+        restartableScope = RestartableCoroutineScope(dispatcher = Dispatchers.IO).also {
             val stateHolder = StateHolder(false)
             fsm = FiniteStateMachine(
                 stateHolder,
