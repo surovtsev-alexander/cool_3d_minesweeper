@@ -100,7 +100,7 @@ class MainActivity: MainActivity() {
                         }
                     ),
                     enterTransition = navAnimHelper.concreteEnterSliding.fromTop,
-                    exitTransition = navAnimHelper.concreteExitException.toTop,
+                    exitTransition = navAnimHelper.concreteExitSliding.toTop,
                 ) { entry ->
                     val viewModel: GameScreenViewModel by viewModels {
                         SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
@@ -122,7 +122,7 @@ class MainActivity: MainActivity() {
                 composable(
                     route = Screen.RankingScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromLeft,
-                    exitTransition = navAnimHelper.concreteExitException.toLeft
+                    exitTransition = navAnimHelper.concreteExitSliding.toLeft
                 ) { entry ->
                     val viewModel: RankingScreenViewModel by viewModels {
                         SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
@@ -140,7 +140,7 @@ class MainActivity: MainActivity() {
                 composable(
                     route = Screen.SettingsScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromRight,
-                    exitTransition = navAnimHelper.concreteExitException.toRight,
+                    exitTransition = navAnimHelper.concreteExitSliding.toRight,
                 ) { entry ->
                     val viewModel: SettingsScreenViewModel by viewModels {
                         SavedStateViewModelFactory(savedStateRegistryOwner) { stateHandler ->
@@ -158,7 +158,7 @@ class MainActivity: MainActivity() {
                 composable(
                     route = Screen.HelpScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromBottom,
-                    exitTransition = navAnimHelper.concreteExitException.toBottom,
+                    exitTransition = navAnimHelper.concreteExitSliding.toBottom,
                 ) { entry ->
                     val viewModel: HelpScreenViewModel =
                         HelpScreenViewModel()

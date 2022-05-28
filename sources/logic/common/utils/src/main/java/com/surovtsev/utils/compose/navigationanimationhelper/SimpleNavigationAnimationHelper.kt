@@ -39,7 +39,7 @@ class SimpleNavigationAnimationHelper(
     }
 
     val concreteEnterSliding = ConcreteEnterSliding()
-    val concreteExitException = ConcreteExitSliding()
+    val concreteExitSliding = ConcreteExitSliding()
 
     inner class EnterSliding {
         fun horizontally(initialOffsetX: Int) =
