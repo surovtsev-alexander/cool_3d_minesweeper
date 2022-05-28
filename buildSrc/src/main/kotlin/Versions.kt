@@ -12,7 +12,7 @@ object Versions {
 
     object Library {
         private const val major = 1 // change when you make incompatible API changes
-        private const val minor = 3 // change when you add functionality in a backward-compatible manner
+        private const val minor = 4 // change when you add functionality in a backward-compatible manner
         private const val build = 0 // change when you make backward-compatible bug fixes
 
         const val versionCode = (major * 100 + minor) * 100 + build
