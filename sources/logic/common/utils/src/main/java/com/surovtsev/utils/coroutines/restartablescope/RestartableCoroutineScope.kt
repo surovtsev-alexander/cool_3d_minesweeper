@@ -7,11 +7,12 @@ import kotlin.coroutines.CoroutineContext
 typealias BeforeStartAction = suspend () -> Unit
 
 class RestartableCoroutineScope(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ): CoroutineScope, OnOffSwitchImp(true) {
 
     private var parentJob: CompletableJob = Job()
 
+    fun createSupervisorJob() = SupervisorJob(parentJob)
 
     override val coroutineContext: CoroutineContext
         get() = dispatcher + parentJob

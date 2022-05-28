@@ -3,8 +3,6 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventh
 import com.surovtsev.core.room.dao.SettingsDao
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.core.savecontroller.SaveTypes
-import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
-import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.eventhandler.EventHandler
 import com.surovtsev.finitestatemachine.eventhandler.EventHandlingResult
@@ -16,6 +14,8 @@ import com.surovtsev.finitestatemachine.state.toLoading
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
+import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import javax.inject.Inject
 
 @SettingsScreenScope
@@ -60,7 +60,7 @@ class EventHandlerImp @Inject constructor(
         val settingsList = eventHandlerParameters.settingsDao.getAll()
 
         val newState = eventHandlerParameters.fsmStateFlow.value.toLoading(
-            SettingsScreenData.SettingsLoaded(
+            SettingsScreenData.SettingsLoadedData(
                 settingsList
             )
         )

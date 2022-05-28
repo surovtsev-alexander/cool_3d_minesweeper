@@ -10,6 +10,7 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
+import com.surovtsev.utils.coroutines.customsupervisorscope.CustomSupervisedScope
 import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
 import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
@@ -52,11 +53,13 @@ class FiniteStateMachine(
 
     private val eventHandlers = listOf(baseEventHandler) + userEventHandlers
 
+    private val customSupervisedScope = CustomSupervisedScope()
+
     private val eventProcessorHelper = EventProcessorHelper(
         logConfig,
         stateHolder,
         eventHandlers,
-        queueHolder,
+        customSupervisedScope,
     )
 
     val eventReceiver = EventReceiverImp(
@@ -74,7 +77,10 @@ class FiniteStateMachine(
                 "FiniteStateMachine"
             )
             .subscriptionsHolder
-            .addSubscription(this)
+            .run {
+                this.addSubscription(customSupervisedScope)
+                this.addSubscription(this@FiniteStateMachine)
+            }
     }
 
     override fun initSubscription(restartableCoroutineScope: RestartableCoroutineScope) {

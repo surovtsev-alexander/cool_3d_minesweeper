@@ -11,9 +11,11 @@ import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.toError
 import com.surovtsev.finitestatemachine.state.toLoading
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
+import com.surovtsev.utils.coroutines.customsupervisorscope.CustomSupervisedScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import logcat.logcat
 
 
@@ -21,7 +23,7 @@ class EventProcessorHelper(
     private val logConfig: LogConfig,
     private val stateHolder: StateHolder,
     private val eventHandlers: EventHandlers,
-    private val fsmQueueHolder: FSMQueueHolder,
+    private val customSupervisedScope: CustomSupervisedScope,
 ) {
     private val processingMutex = Mutex(locked = false)
 
@@ -33,7 +35,8 @@ class EventProcessorHelper(
         val message: String
     ) {
         FSM_INTERNAL_ERROR_001("FSM_INTERNAL_ERROR_001"),
-        FSM_INTERNAL_ERROR_002("FSM_INTERNAL_ERROR_002");
+        FSM_INTERNAL_ERROR_002("FSM_INTERNAL_ERROR_002"),
+        FSM_INTERNAL_ERROR_003("FSM_INTERNAL_ERROR_003");
     }
 
     /**
@@ -57,7 +60,7 @@ class EventProcessorHelper(
             var eventToProcess = event
             var eventProcessorHelperResult: EventProcessorHelperResult? = null
 
-            while (attemptsToProcess < EVENT_PROCESSING_CHANGES) {
+            while (attemptsToProcess <= EVENT_PROCESSING_CHANGES) {
                 attemptsToProcess++
 
                 eventProcessorHelperResult = tryToProcessEvent(eventToProcess, eventReceiver)
@@ -174,10 +177,19 @@ class EventProcessorHelper(
 
 
         // step 6. Processing results.
-        val eventProcessingResults = calculateEventProcessingResults(
-            eventHandlingResults,
-            logConfig,
-        )
+        val eventProcessingResults: List<EventProcessingResult?> = try {
+            withContext(customSupervisedScope.coroutineContext) {
+                calculateEventProcessingResults(
+                    eventHandlingResults,
+                    logConfig,
+                )
+            }
+        } catch (e: Throwable) {
+            return EventProcessorHelperResult.Error(
+                e.message?:"${Errors.FSM_INTERNAL_ERROR_003.message}: ${e.javaClass.name}"
+            )
+        }
+
 
         if (logConfig.logLevel.isGreaterThan3()) {
             logcat { "eventProcessingResults: $eventProcessingResults" }

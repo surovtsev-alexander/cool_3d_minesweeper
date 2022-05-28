@@ -22,7 +22,7 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class FSMUnitTest {
-
+/*
     private val testLogConfig = LogConfig(
         logLevel = LogLevel.LOG_LEVEL_4
     )
@@ -106,4 +106,5 @@ class FSMUnitTest {
         // assert
         assert(fsm.stateHolder.fsmStateFlow.value.description is Description.Idle)
     }
+ */
 }

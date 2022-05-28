@@ -29,7 +29,7 @@ object RestartableCoroutineScopeModule {
     fun provideCustomCoroutineScope(
     ): RestartableCoroutineScope {
         return RestartableCoroutineScope(
-            Dispatchers.IO
+            Dispatchers.Default
         )
     }
 

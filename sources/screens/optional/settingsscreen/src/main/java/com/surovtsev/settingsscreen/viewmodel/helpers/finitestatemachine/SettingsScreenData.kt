@@ -8,17 +8,21 @@ import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 
 sealed interface SettingsScreenData: ViewModelData.UserData {
 
-    open class SettingsLoaded(
-        val settingsList: SettingsList,
-    ): SettingsScreenData, InitializationIsNotFinished
+    interface SettingsLoaded: SettingsScreenData {
+        val settingsList: SettingsList
+    };
+
+    open class SettingsLoadedData(
+        override val settingsList: SettingsList,
+    ): SettingsLoaded, InitializationIsNotFinished
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
         val settingsData: Settings.SettingsData,
         val fromSlider: Boolean
-    ): SettingsLoaded(
-        settingsLoaded.settingsList
-    )
+    ): SettingsLoaded {
+        override val settingsList: SettingsList = settingsLoaded.settingsList
+    }
 
     open class SettingsIsSelected(
         settingsDataIsSelected: SettingsDataIsSelected,
