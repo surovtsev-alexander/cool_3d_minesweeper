@@ -7,8 +7,8 @@ import com.surovtsev.gamescreen.dagger.GameScreenScope
 import com.surovtsev.gamescreen.viewmodel.helpers.finitestatemachine.GameScreenData
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

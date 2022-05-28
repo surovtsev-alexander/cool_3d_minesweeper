@@ -1,6 +1,6 @@
 package com.surovtsev.utils.timers.fpscalculator
 
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
 import com.surovtsev.utils.timers.common.DelayedStateFlowHolder
 

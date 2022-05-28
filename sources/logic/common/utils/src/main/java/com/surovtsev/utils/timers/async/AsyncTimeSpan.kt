@@ -1,8 +1,8 @@
 package com.surovtsev.utils.timers.async
 
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.statehelpers.OnOffSwitch
 import com.surovtsev.utils.statehelpers.OnOffSwitchImp
 import kotlinx.coroutines.flow.MutableStateFlow

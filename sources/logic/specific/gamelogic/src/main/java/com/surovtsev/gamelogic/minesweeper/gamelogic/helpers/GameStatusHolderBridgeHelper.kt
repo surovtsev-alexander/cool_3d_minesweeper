@@ -5,7 +5,7 @@ import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHolder
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusWithElapsedForGameConfig
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest

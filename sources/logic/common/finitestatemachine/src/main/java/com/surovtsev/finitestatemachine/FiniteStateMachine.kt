@@ -10,8 +10,8 @@ import com.surovtsev.finitestatemachine.helpers.*
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.subscriptionsholder.helpers.factory.SubscriptionsHolderComponentFactoryHolderImp
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
 import com.surovtsev.utils.dagger.components.RestartableCoroutineScopeEntryPoint
 import kotlinx.coroutines.launch
 import logcat.logcat

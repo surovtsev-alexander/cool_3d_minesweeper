@@ -2,9 +2,9 @@ package com.surovtsev.gamelogic.minesweeper.camerainfohelperholder
 
 import com.surovtsev.gamelogic.dagger.GameScope
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.gles.renderer.ScreenResolution
 import com.surovtsev.utils.gles.renderer.ScreenResolutionFlow
 import com.surovtsev.utils.math.camerainfo.CameraInfo

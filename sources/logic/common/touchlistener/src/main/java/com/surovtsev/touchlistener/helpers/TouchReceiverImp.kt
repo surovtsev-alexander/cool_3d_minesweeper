@@ -5,9 +5,9 @@ import com.surovtsev.touchlistener.helpers.holders.HandlersHolder
 import com.surovtsev.touchlistener.helpers.holders.MovementHolder
 import com.surovtsev.touchlistener.helpers.receivers.TouchReceiver
 import com.surovtsev.utils.androidview.interaction.TouchType
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.timers.async.TimeAfterDeviceStartupFlowHolder
 import glm_.vec2.Vec2
 import kotlinx.coroutines.flow.collectLatest

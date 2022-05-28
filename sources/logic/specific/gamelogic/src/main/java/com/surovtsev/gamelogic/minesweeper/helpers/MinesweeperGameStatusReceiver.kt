@@ -16,9 +16,9 @@ import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameControlsMutableF
 import com.surovtsev.gamelogic.minesweeper.interaction.ui.UIGameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatus
 import com.surovtsev.gamestate.logic.models.game.gamestatus.GameStatusHelper
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest

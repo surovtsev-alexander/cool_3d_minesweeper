@@ -5,7 +5,7 @@ import com.surovtsev.finitestatemachine.event.Event
 import com.surovtsev.finitestatemachine.helpers.EventProcessorHelper
 import com.surovtsev.finitestatemachine.helpers.FSMQueueHolder
 import com.surovtsev.finitestatemachine.helpers.FsmProcessingTrigger
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
 import kotlinx.coroutines.launch
 import logcat.logcat
 

@@ -1,8 +1,8 @@
 package com.surovtsev.utils.dagger.components
 
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriber.Subscriber
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriber.SubscriberImp
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriber.Subscriber
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriber.SubscriberImp
 
 interface RestartableCoroutineScopeEntryPoint {
     val restartableCoroutineScope: RestartableCoroutineScope

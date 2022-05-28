@@ -6,8 +6,8 @@ import com.surovtsev.finitestatemachine.mock.TestEvent
 import com.surovtsev.finitestatemachine.mock.TestEventHandler
 import com.surovtsev.finitestatemachine.state.description.Description
 import com.surovtsev.finitestatemachine.stateholder.StateHolder
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import logcat.LogcatLogger

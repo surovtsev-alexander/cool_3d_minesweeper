@@ -1,9 +1,9 @@
-package com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriber
+package com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriber
 
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.BeforeStartAction
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolderWithName
+import com.surovtsev.utils.coroutines.restartablescope.BeforeStartAction
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolderWithName
 import com.surovtsev.utils.statehelpers.IsOn
 
 class SubscriberImp(

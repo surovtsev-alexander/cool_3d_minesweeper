@@ -1,8 +1,7 @@
-package com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder
+package com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder
 
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import kotlinx.coroutines.CoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
 
 
 class SubscriptionsHolder(

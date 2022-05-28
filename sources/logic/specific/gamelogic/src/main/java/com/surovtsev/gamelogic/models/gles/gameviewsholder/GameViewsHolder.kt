@@ -5,9 +5,9 @@ import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelp
 import com.surovtsev.gamelogic.utils.utils.gles.view.pointer.PointerOpenGLModel
 import com.surovtsev.gamelogic.views.opengl.CubeOpenGLModel
 import com.surovtsev.gamestateholder.GameStateHolder
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.RestartableCoroutineScope
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscription.Subscription
-import com.surovtsev.utils.coroutines.restartablecoroutinescope.subscriptionsholder.SubscriptionsHolder
+import com.surovtsev.utils.coroutines.restartablescope.RestartableCoroutineScope
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscription.Subscription
+import com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriptionsholder.SubscriptionsHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
