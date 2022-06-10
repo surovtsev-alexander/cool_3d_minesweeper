@@ -74,4 +74,6 @@ dependencies {
     commonComposeDependencies()
 
     daggerDependencies()
+
+    exoPlayerDependency()
 }

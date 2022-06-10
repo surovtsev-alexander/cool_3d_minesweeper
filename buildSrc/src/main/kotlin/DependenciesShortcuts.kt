@@ -73,3 +73,7 @@ fun DependencyHandler.splashScreenDependency() {
 fun DependencyHandler.leakCanaryDependency() {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.Utils.leakCanary}")
 }
+
+fun DependencyHandler.exoPlayerDependency() {
+    implementation("com.google.android.exoplayer:exoplayer:${Versions.Utils.exoPlayer}")
+}

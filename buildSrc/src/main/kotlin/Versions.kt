@@ -55,5 +55,6 @@ object Versions {
         const val logcat = "0.1"
         const val navigationAnimation = "0.21.4-beta"
         const val threetenabp = "1.3.1"
+        const val exoPlayer = "2.17.1"
     }
 }

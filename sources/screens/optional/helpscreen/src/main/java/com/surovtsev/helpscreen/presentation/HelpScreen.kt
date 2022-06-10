@@ -25,8 +25,22 @@ SOFTWARE.
 
 package com.surovtsev.helpscreen.presentation
 
-import androidx.compose.material.Text
+import android.net.Uri
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayerLibraryInfo
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
+import com.google.android.exoplayer2.ui.StyledPlayerView
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.surovtsev.core.ui.theme.MinesweeperTheme
 import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
 
@@ -39,11 +53,53 @@ fun HelpScreen(
 
 @Composable
 fun HelpScreenControls(
-    @Suppress("UNUSED_PARAMETER") viewModel: HelpScreenViewModel
+    viewModel: HelpScreenViewModel
 ) {
     MinesweeperTheme {
-        Text(
-            "help screen"
-        )
+        Row(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TutorialVideoPlayer(
+                viewModel = viewModel
+            )
+        }
     }
+}
+
+@Composable
+fun TutorialVideoPlayer(
+    viewModel: HelpScreenViewModel
+) {
+    val context = LocalContext.current
+
+    val exoPlayer = remember(context) {
+        ExoPlayer.Builder(context).build()
+    }
+
+    val dataSourceFactory = DefaultDataSource
+        .Factory(context)
+    val source = ProgressiveMediaSource
+        .Factory(dataSourceFactory)
+        .createMediaSource(
+            MediaItem.fromUri(
+                Uri.parse(
+                    HelpScreenViewModel
+                        .TutorialVideoFile
+                        .calculateUrl(context)
+                )
+            )
+        )
+    exoPlayer.setMediaSource(source)
+    exoPlayer.prepare()
+
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = { context ->
+            StyledPlayerView(context).apply {
+                player = exoPlayer
+                resizeMode = RESIZE_MODE_FIT
+                exoPlayer.playWhenReady = true
+            }
+        }
+    )
 }
