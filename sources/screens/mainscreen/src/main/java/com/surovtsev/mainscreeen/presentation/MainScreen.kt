@@ -109,7 +109,7 @@ fun MainScreeControls(
                     ) {
                         SingleButton(
                             hasSave,
-                            MainScreenViewModel.ButtonNames.Help,
+                            MainScreenViewModel.ButtonNames.VideoTutorial,
                             navController,
                             buttonsInfo,
                         )

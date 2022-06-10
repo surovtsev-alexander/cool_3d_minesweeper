@@ -77,7 +77,7 @@ dependencies {
             ProjectModules.Screens.gameScreen,
             ProjectModules.Screens.Optional.rankingScreen,
             ProjectModules.Screens.Optional.settingsScreen,
-            ProjectModules.Screens.Optional.helpScreen,
+            ProjectModules.Screens.Optional.videoTutorialScreen,
         )
     )
 

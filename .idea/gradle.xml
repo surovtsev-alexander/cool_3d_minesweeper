@@ -26,9 +26,9 @@
             <option value="$PROJECT_DIR$/sources/logic/specific/gamestateholder/gamestateholder" />
             <option value="$PROJECT_DIR$/sources/screens/gamescreen" />
             <option value="$PROJECT_DIR$/sources/screens/mainscreen" />
-            <option value="$PROJECT_DIR$/sources/screens/optional/helpscreen" />
             <option value="$PROJECT_DIR$/sources/screens/optional/rankingscreen" />
             <option value="$PROJECT_DIR$/sources/screens/optional/settingsscreen" />
+            <option value="$PROJECT_DIR$/sources/screens/optional/videotutorialscreen" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,4 +1,4 @@
-package com.surovtsev.helpscreen
+package com.surovtsev.videotutorialscreen
 
 import org.junit.Test
 

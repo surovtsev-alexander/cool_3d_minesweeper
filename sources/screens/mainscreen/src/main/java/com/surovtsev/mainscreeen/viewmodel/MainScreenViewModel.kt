@@ -57,11 +57,11 @@ class MainScreenViewModel @AssistedInject constructor(
     val hasSave: StateFlow<Boolean> = _hasSave.asStateFlow()
 
     object ButtonNames {
-        const val NewGame   = "new game"
-        const val LoadGame  = "load game"
-        const val Ranking   = "ranking"
-        const val Settings  = "settings"
-        const val Help      = "help"
+        const val NewGame       = "new game"
+        const val LoadGame      = "load game"
+        const val Ranking       = "ranking"
+        const val Settings      = "settings"
+        const val VideoTutorial = "video tutorial"
     }
 
     val buttonsInfo: ButtonsInfo

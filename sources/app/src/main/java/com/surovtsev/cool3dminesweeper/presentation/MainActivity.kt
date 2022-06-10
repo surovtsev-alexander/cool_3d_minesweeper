@@ -47,8 +47,8 @@ import com.surovtsev.core.presentation.Screen
 import com.surovtsev.gamescreen.presentation.GameScreen
 import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.LoadGameParameterName
-import com.surovtsev.helpscreen.presentation.HelpScreen
-import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
+import com.surovtsev.videotutorialscreen.presentation.VideoTutorialScreen
+import com.surovtsev.videotutorialscreen.viewmodel.VideoTutorialScreenViewModel
 import com.surovtsev.rankingscreen.presentation.RankingScreen
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settingsscreen.presentation.SettingsScreen
@@ -181,14 +181,13 @@ class MainActivity: MainActivity() {
                     )
                 }
                 composable(
-                    route = Screen.HelpScreen.route,
+                    route = Screen.VideoTutorialScreen.route,
                     enterTransition = navAnimHelper.concreteEnterSliding.fromBottom,
                     exitTransition = navAnimHelper.concreteExitSliding.toBottom,
                 ) { entry ->
-                    val viewModel: HelpScreenViewModel =
-                        HelpScreenViewModel()
+                    val viewModel = VideoTutorialScreenViewModel()
                     entry.lifecycle.addObserver(viewModel)
-                    HelpScreen(viewModel)
+                    VideoTutorialScreen(viewModel)
                 }
             }
         }

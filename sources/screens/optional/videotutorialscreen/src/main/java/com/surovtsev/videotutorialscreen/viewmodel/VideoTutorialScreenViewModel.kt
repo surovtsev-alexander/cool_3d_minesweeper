@@ -23,19 +23,19 @@ SOFTWARE.
  */
 
 
-package com.surovtsev.helpscreen.viewmodel
+package com.surovtsev.videotutorialscreen.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
-import com.surovtsev.helpscreen.R
+import com.surovtsev.videotutorialscreen.R
 import javax.inject.Inject
 
-class HelpScreenViewModel @Inject constructor(
+class VideoTutorialScreenViewModel @Inject constructor(
 ): ViewModel(), LifecycleObserver {
 
     object TutorialVideoFile {
-        val resourceId = R.raw.video_tutorial
+        private val resourceId = R.raw.video_tutorial
 
         fun calculateUrl(
             context: Context

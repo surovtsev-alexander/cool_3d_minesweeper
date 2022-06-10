@@ -29,18 +29,18 @@ sealed class Screen(
     val route: String
 ) {
     companion object {
-        const val MainScreenName        = "main_screen"
-        const val GameScreenName        = "game_screen"
-        const val RankingScreenName     = "ranking_screen"
-        const val SettingsScreenName    = "settings_screen"
-        const val HelpScreenName        = "help_screen"
+        const val MainScreenName            = "main_screen"
+        const val GameScreenName            = "game_screen"
+        const val RankingScreenName         = "ranking_screen"
+        const val SettingsScreenName        = "settings_screen"
+        const val VideoTutorialScreenName   = "video_tutorial_screen"
     }
 
-    object MainScreen:      Screen(MainScreenName)
-    object GameScreen:      Screen(GameScreenName)
-    object RankingScreen:   Screen(RankingScreenName)
-    object SettingsScreen:  Screen(SettingsScreenName)
-    object HelpScreen:      Screen(HelpScreenName)
+    object MainScreen:          Screen(MainScreenName)
+    object GameScreen:          Screen(GameScreenName)
+    object RankingScreen:       Screen(RankingScreenName)
+    object SettingsScreen:      Screen(SettingsScreenName)
+    object VideoTutorialScreen: Screen(VideoTutorialScreenName)
 
     fun withArgs(vararg args: String): String {
         return buildString {

@@ -88,11 +88,11 @@ object MainScreenModule {
             Screen.SettingsScreen
         )
 
-    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.Help)]
+    @[IntoMap StringKey(MainScreenViewModel.ButtonNames.VideoTutorial)]
     @MainScreenScope
     @Provides
     fun provideHelpButtonInfo() =
         MainScreenButtonInfo(
-            Screen.HelpScreen
+            Screen.VideoTutorialScreen
         )
 }

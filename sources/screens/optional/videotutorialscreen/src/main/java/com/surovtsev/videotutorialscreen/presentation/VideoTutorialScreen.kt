@@ -23,37 +23,35 @@ SOFTWARE.
  */
 
 
-package com.surovtsev.helpscreen.presentation
+package com.surovtsev.videotutorialscreen.presentation
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ExoPlayerLibraryInfo
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.surovtsev.core.ui.theme.MinesweeperTheme
-import com.surovtsev.helpscreen.viewmodel.HelpScreenViewModel
+import com.surovtsev.videotutorialscreen.viewmodel.VideoTutorialScreenViewModel
 
 @Composable
-fun HelpScreen(
-    viewModel: HelpScreenViewModel
+fun VideoTutorialScreen(
+    viewModel: VideoTutorialScreenViewModel
 ) {
-    HelpScreenControls(viewModel)
+    VideoTutorialScreenControls(viewModel)
 }
 
 @Composable
-fun HelpScreenControls(
-    viewModel: HelpScreenViewModel
+fun VideoTutorialScreenControls(
+    viewModel: VideoTutorialScreenViewModel
 ) {
     MinesweeperTheme {
         Row(
@@ -68,7 +66,7 @@ fun HelpScreenControls(
 
 @Composable
 fun TutorialVideoPlayer(
-    viewModel: HelpScreenViewModel
+    viewModel: VideoTutorialScreenViewModel
 ) {
     val context = LocalContext.current
 
@@ -83,7 +81,7 @@ fun TutorialVideoPlayer(
         .createMediaSource(
             MediaItem.fromUri(
                 Uri.parse(
-                    HelpScreenViewModel
+                    VideoTutorialScreenViewModel
                         .TutorialVideoFile
                         .calculateUrl(context)
                 )

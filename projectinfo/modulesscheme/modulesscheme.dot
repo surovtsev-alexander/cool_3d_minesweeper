@@ -55,7 +55,7 @@ digraph G {
         subgraph cluster_7 {
             label="optional";
 
-            HelpScreen;
+            VideoTutorialScreen;
             RankingScreen;
             SettingsScreen;
         };
@@ -67,7 +67,7 @@ digraph G {
     App -> GameScreen;
     App -> RankingScreen;
     App -> SettingsScreen;
-    App -> HelpScreen;
+    App -> VideoTutorialScreen;
 
 //    Core -> Utils;
 //    Core -> FiniteStateMachine;
@@ -86,7 +86,7 @@ digraph G {
 //    TouchListener -> Core;
 //    TouchListener -> Utils;
 
-//    HelpScreen -> Core;
+//    VideoTutorialScreen -> Core;
 
 //    RankingScreen -> Core;
 //    RankingScreen -> Utils;

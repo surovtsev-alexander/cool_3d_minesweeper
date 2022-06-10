@@ -77,7 +77,7 @@ projectDir(
         subfolder(
             Folders.optional,
             listOf(
-                Modules.helpScreen,
+                Modules.videoTutorialScreen,
                 Modules.rankingScreen,
                 Modules.settingsScreen,
             ),
@@ -92,7 +92,7 @@ object Modules {
     const val app = ":app"
     const val core = ":core"
     const val finiteStateMachine = ":finitestatemachine"
-    const val helpScreen = ":helpscreen"
+    const val videoTutorialScreen = ":videotutorialscreen"
     const val gameLogic = ":gamelogic"
     const val gameScreen = ":gamescreen"
     const val gameState = ":gamestate"

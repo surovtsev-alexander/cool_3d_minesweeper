@@ -33,7 +33,7 @@ object ProjectModules {
         object Optional {
             const val rankingScreen = ":rankingscreen"
             const val settingsScreen = ":settingsscreen"
-            const val helpScreen = ":helpscreen"
+            const val videoTutorialScreen = ":videotutorialscreen"
         }
     }
 
