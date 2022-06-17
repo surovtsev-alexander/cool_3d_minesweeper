@@ -51,7 +51,7 @@ See `TouchListener` class in 'com.surovtsev.touchlistener' package.
     - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
     - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
 - navigation (see 'com/surovtsev/cool3dminesweeper/presentation/`MainActivity`') in app module with animation `val navAnimHelper = SimpleNavigationAnimationHelper(...)`;
-- splash screen (see `onCreate` method in 'com.surovtsev.cool3dminesweeper.presentation`MainActivity`' and 'themes.xml' in 'sources/app/src/main/res/values');
+- splash screen (see `onCreate` method in 'com.surovtsev.cool3dminesweeper.presentation/`MainActivity`' and 'themes.xml' in 'sources/app/src/main/res/values');
 - screens:
     - Main;
     - Game;
