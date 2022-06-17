@@ -28,6 +28,7 @@ package com.surovtsev.cool3dminesweeper.presentation
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,25 +40,22 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.surovtsev.cool3dminesweeper.app.appComponent
-import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
-import com.surovtsev.mainscreeen.presentation.MainScreen
-import com.surovtsev.core.mainactivity.MainActivity
-import com.surovtsev.core.mainactivity.requestpermissionsresultreceiver.RequestPermissionsResult
 import com.surovtsev.core.presentation.Screen
 import com.surovtsev.gamescreen.presentation.GameScreen
 import com.surovtsev.gamescreen.viewmodel.GameScreenViewModel
 import com.surovtsev.gamescreen.viewmodel.LoadGameParameterName
-import com.surovtsev.videotutorialscreen.presentation.VideoTutorialScreen
-import com.surovtsev.videotutorialscreen.viewmodel.VideoTutorialScreenViewModel
+import com.surovtsev.mainscreeen.presentation.MainScreen
+import com.surovtsev.mainscreeen.viewmodel.MainScreenViewModel
 import com.surovtsev.rankingscreen.presentation.RankingScreen
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settingsscreen.presentation.SettingsScreen
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
 import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
-import logcat.logcat
+import com.surovtsev.videotutorialscreen.presentation.VideoTutorialScreen
+import com.surovtsev.videotutorialscreen.viewmodel.VideoTutorialScreenViewModel
 
-class MainActivity: MainActivity() {
+class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,26 +189,5 @@ class MainActivity: MainActivity() {
                 }
             }
         }
-    }
-
-
-    // TODO: 22.02.2022 remove
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        /* TODO: refactor obsolete request permissions code */
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        requestPermissionsResultReceiver?.handleRequestPermissionsResult(
-            RequestPermissionsResult(
-                requestCode,
-                permissions,
-                grantResults
-            )
-        )
-
-        logcat { "onRequestPermissionsResult. requestCode: $requestCode, permissions: $permissions, grantResults: $grantResults" }
     }
 }
