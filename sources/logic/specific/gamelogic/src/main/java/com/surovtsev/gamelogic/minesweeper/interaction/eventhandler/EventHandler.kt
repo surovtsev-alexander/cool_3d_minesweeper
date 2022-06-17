@@ -28,7 +28,6 @@ package com.surovtsev.gamelogic.minesweeper.interaction.eventhandler
 import com.surovtsev.core.savecontroller.SaveController
 import com.surovtsev.core.savecontroller.SaveTypes
 import com.surovtsev.gamelogic.dagger.GameScope
-import com.surovtsev.gamelogic.minesweeper.camerainfohelperholder.CameraInfoHelperHolder
 import com.surovtsev.gamelogic.minesweeper.scene.SceneCalculator
 import com.surovtsev.gamestate.logic.models.game.save.Save
 import com.surovtsev.gamestateholder.GameStateHolder
@@ -44,7 +43,6 @@ class EventHandler @Inject constructor(
     private val saveController: SaveController,
     private val gameStateHolder: GameStateHolder,
     private val asyncTimeSpan: AsyncTimeSpan,
-    private val cameraInfoHelperHolder: CameraInfoHelperHolder,
 ) {
     private val mutex = Mutex()
 
