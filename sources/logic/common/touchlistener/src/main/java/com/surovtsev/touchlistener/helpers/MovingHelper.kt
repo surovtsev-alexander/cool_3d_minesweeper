@@ -14,7 +14,7 @@ class MovingHelper @Inject constructor(
     private var prevCenter: Vec2
 ): TouchHelper() {
 
-    override fun onTouch(event: MotionEvent) {
+    override fun onTouch(event: MotionEvent): TouchResult {
         val pointerCount = event.pointerCount
         val points = (0 until pointerCount).map {
             getVec(event, it)
@@ -30,5 +30,7 @@ class MovingHelper @Inject constructor(
         }
 
         prevCenter = currCenter
+
+        return TouchResult.None
     }
 }

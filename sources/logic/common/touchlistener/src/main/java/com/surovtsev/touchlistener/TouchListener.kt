@@ -1,5 +1,6 @@
 package com.surovtsev.touchlistener
 
+import android.annotation.SuppressLint
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.View
@@ -37,6 +38,7 @@ class TouchListener @Inject constructor(
         handlersHolderImp.moveHandler = moveHandler
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     fun connectToGLSurfaceView(
         gLSurfaceView: GLSurfaceView
     ) {
@@ -72,7 +74,9 @@ class TouchListener @Inject constructor(
             currTouchHelper.update()
         }
 
-        currTouchHelper.onTouch(event)
+        if (currTouchHelper.onTouch(event) == TouchHelper.TouchResult.NeedToPerformClick) {
+            v?.performClick()
+        }
 
         return true
     }

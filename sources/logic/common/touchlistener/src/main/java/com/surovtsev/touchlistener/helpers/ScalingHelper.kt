@@ -20,7 +20,7 @@ class ScalingHelper @Inject constructor(
         const val PrevDistance = "prevDistance"
     }
 
-    override fun onTouch(event: MotionEvent) {
+    override fun onTouch(event: MotionEvent): TouchResult {
         val needToBeInitialized = getAndRelease()
 
         val a = getVec(event, 0)
@@ -39,5 +39,7 @@ class ScalingHelper @Inject constructor(
 
         prevDistance = distance
         prevCenter = center
+
+        return TouchResult.None
     }
 }

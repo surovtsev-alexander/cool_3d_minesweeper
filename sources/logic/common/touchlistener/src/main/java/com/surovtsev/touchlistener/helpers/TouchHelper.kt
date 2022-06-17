@@ -5,7 +5,12 @@ import com.surovtsev.utils.statehelpers.UpdatableImp
 import glm_.vec2.Vec2
 
 abstract class TouchHelper:  UpdatableImp() {
-    abstract fun onTouch(event: MotionEvent)
+    enum class TouchResult {
+        None,
+        NeedToPerformClick
+    }
+
+    abstract fun onTouch(event: MotionEvent): TouchResult
 
     companion object {
         const val PrevCenter = "prevCenter"

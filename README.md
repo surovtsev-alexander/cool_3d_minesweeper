@@ -32,13 +32,13 @@ See `projectDir` and `ParentDirHolder.subfolder` routines in './settings.gradle.
 - Finite state machine aggregates restartable coroutine scope (`restartableCoroutineScopeEntryPoint` field in 'com/surovtsev/finitestatemachine/`FiniteStateMachine`');
 
 ### RestartableCoroutineScope
-Look at `restart` method in `SubscriberImp` (com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriber).
+Look at `restart` method in `SubscriberImp` ('com.surovtsev.utils.coroutines.restartablescope.subscribing.subscriber').
 
 ### AABBTree
 See `Tree` class in com.surovtsev.gamestate.logic.models.game.aabb.tree package.
 
 ### Custom TouchListener
-See 'touchlistener' module in 'sources/logic/common/touchlistener' folder.
+See `TouchListener` class in 'com.surovtsev.touchlistener' package.
 
 ### OpenGL ES
 - Shaders are located at 'sources/logic/specific/gamelogic/src/main/res/raw' folder;

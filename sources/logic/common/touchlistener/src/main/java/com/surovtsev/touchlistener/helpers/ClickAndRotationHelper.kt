@@ -37,7 +37,7 @@ class ClickAndRotationHelper @Inject constructor(
 
     override fun getMovement(): Float = movement
 
-    override fun onTouch(event: MotionEvent) {
+    override fun onTouch(event: MotionEvent): TouchResult {
         val curr = getVec(event)
 
         when (event.action) {
@@ -71,9 +71,13 @@ class ClickAndRotationHelper @Inject constructor(
                 if (downed) {
                     touchReceiver.up()
                     downed = false
+
+                    return TouchResult.NeedToPerformClick
                 }
             }
         }
+
+        return TouchResult.None
     }
 
     override fun release() {
