@@ -239,14 +239,17 @@ fun GameMenu(
         return
     }
 
+    val closeGameMenuEvent = EventToGameScreenViewModel.CloseGameMenu
+
     val mainMenuButtons = listOf(
+        "resume" to closeGameMenuEvent,
         "new game" to EventToGameScreenViewModel.NewGame,
         "main menu" to EventToGameScreenViewModel.GoToMainMenu,
     )
 
     val closeAction: () -> Unit = {
         eventReceiver.receiveEvent(
-            EventToGameScreenViewModel.CloseGameMenu
+            closeGameMenuEvent
         )
     }
 
@@ -256,7 +259,7 @@ fun GameMenu(
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.8f)
-                .fillMaxHeight(0.5f),
+                .fillMaxHeight(0.8f),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Column(
