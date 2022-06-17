@@ -5,12 +5,12 @@
 -- [Technologies](#technologies)
 -- [Features](#features)
 
----
+----
 
 ## Description
 3D minesweeper game is inspired by "Dig Mines" (com.kittoworks.digmines3d).
 
----
+----
 
 ## Technologies
 - dagger2;
@@ -18,7 +18,7 @@
 - openGL ES;
 - ROOM.
 
----
+----
 
 ## Features
 
@@ -49,11 +49,11 @@ See 'touchlistener' module in 'sources/logic/common/touchlistener' folder.
 ### Compose
 - navigation (see 'com/surovtsev/cool3dminesweeper/presentation/`MainActivity`') in app module with animation `val navAnimHelper = SimpleNavigationAnimationHelper(...)`;
 - screens:
-  - Main;
-  - Game;
-  - Ranking;
-  - Settings;
-  - Video tutorial;
+    - Main;
+    - Game;
+    - Ranking;
+    - Settings;
+    - Video tutorial;
 - `ErrorDialogPlacer`:
-  - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
-  - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
+    - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
+    - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
