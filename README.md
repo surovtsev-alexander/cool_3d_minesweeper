@@ -1,9 +1,9 @@
 # Cool 3D Minesweeper
 
 ### Table of contents
--- [Description](#description)
--- [Technologies](#technologies)
--- [Features](#features)
+- [Description](#description)
+- [Technologies](#technologies)
+- [Features](#features)
 
 ----
 
