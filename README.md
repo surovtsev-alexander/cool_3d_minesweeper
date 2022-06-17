@@ -47,16 +47,17 @@ See `TouchListener` class in 'com.surovtsev.touchlistener' package.
 - See `tick` method in `EventHandler` class ('com.surovtsev.gamelogic.minesweeper.interaction.eventhandler').
 
 ### Compose
+- `ErrorDialogPlacer`:
+    - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
+    - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
 - navigation (see 'com/surovtsev/cool3dminesweeper/presentation/`MainActivity`') in app module with animation `val navAnimHelper = SimpleNavigationAnimationHelper(...)`;
+- splash screen (see `onCreate` method in 'com.surovtsev.cool3dminesweeper.presentation`MainActivity`' and 'themes.xml' in 'sources/app/src/main/res/values');
 - screens:
     - Main;
     - Game;
     - Ranking;
     - Settings;
     - Video tutorial;
-- `ErrorDialogPlacer`:
-    - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
-    - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
 
 ### Room database
 See 'sources/logic/specific/core/main/java/com/surovtsev/core/room' folder.
