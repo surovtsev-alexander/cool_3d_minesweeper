@@ -13,10 +13,10 @@
 ----
 
 ## Technologies
-- dagger2;
-- compose;
-- openGL ES;
-- ROOM.
+- Dagger 2;
+- OpenGL ES;
+- Compose;
+- Room.
 
 ----
 
@@ -57,3 +57,6 @@ See `TouchListener` class in 'com.surovtsev.touchlistener' package.
 - `ErrorDialogPlacer`:
     - Look at `GameScreenControls` method in 'GameScreen.kt' ('com.surovtsev.gamescreen.presentation');
     - See `ErrorDialog` method in 'ErrorDialog.kt' ('com.surovtsev.templateviewmodel.helpers.errordialog').
+
+### Room database
+See 'sources/logic/specific/core/main/java/com/surovtsev/core/room' folder.
