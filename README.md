@@ -10,7 +10,7 @@
 ## Description
 3D minesweeper game is inspired by "Dig Mines" (com.kittoworks.digmines3d).
 
-![](sources/screens/optional/videotutorialscreen/src/main/res/raw/video_tutorial.mp4)
+![](./sources/screens/optional/videotutorialscreen/src/main/res/raw/video_tutorial.mp4)
 ----
 
 ## Technologies
