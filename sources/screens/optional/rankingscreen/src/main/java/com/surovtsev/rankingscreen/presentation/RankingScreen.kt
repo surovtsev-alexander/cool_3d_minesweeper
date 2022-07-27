@@ -36,6 +36,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -59,12 +60,15 @@ import com.surovtsev.rankingscreen.rankinscreenviewmodel.helpers.finitestatemach
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
 import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
+import com.surovtsev.utils.compose.components.scrollbar.LazyListScrollbarContext
+import com.surovtsev.utils.compose.components.scrollbar.ScrollBar
 import com.surovtsev.utils.time.localdatetimehelper.LocalDateTimeHelper
 
 @Composable
 fun RankingScreen(
     viewModel: RankingScreenViewModel,
     navController: NavController,
+    dipCoefficient: Float,
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction =
@@ -78,6 +82,7 @@ fun RankingScreen(
         viewModel.screenStateFlow,
         viewModel.finiteStateMachine.eventReceiver,
         viewModel as ErrorDialogPlacer,
+        dipCoefficient,
     )
 }
 
@@ -86,6 +91,7 @@ fun RankingControls(
     screenStateFlow: ScreenStateFlow,
     eventReceiver: EventReceiver,
     errorDialogPlacer: ErrorDialogPlacer,
+    dipCoefficient: Float,
 ) {
     MinesweeperTheme {
         errorDialogPlacer.PlaceErrorDialog(GrayBackground)
@@ -117,7 +123,8 @@ fun RankingControls(
                 ) {
                     RankingList(
                         screenStateFlow,
-                        eventReceiver
+                        eventReceiver,
+                        dipCoefficient,
                     )
                 }
 //            Row(
@@ -247,7 +254,8 @@ fun SettingsDataItem(
 @Composable
 fun RankingList(
     screenStateFlow: ScreenStateFlow,
-    eventReceiver: EventReceiver
+    eventReceiver: EventReceiver,
+    dipCoefficient: Float,
 ) {
     val rankingScreenState = screenStateFlow.collectAsState().value
 
@@ -290,10 +298,33 @@ fun RankingList(
                     )
                 }
             }
-            LazyColumn {
-                items(listWithPlaces.withIndex().toList()) { item ->
-                    RankingDataItem(item)
+            val lazyListScrollbarContext = LazyListScrollbarContext(
+                rememberLazyListState(),
+                dipCoefficient,
+            ).apply {
+                updateElementsCount(listWithPlaces.count())
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            ) {
+                LazyColumn(
+                    modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                    state = lazyListScrollbarContext.lazyListState,
+                ) {
+                    items(listWithPlaces.withIndex().toList()) { item ->
+                        RankingDataItem(item)
+                    }
                 }
+
+                ScrollBar(
+                    modifier = Modifier,
+                    lazyListScrollbarContext,
+                )
             }
         }
     }

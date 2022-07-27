@@ -50,6 +50,7 @@ import com.surovtsev.rankingscreen.presentation.RankingScreen
 import com.surovtsev.rankingscreen.rankinscreenviewmodel.RankingScreenViewModel
 import com.surovtsev.settingsscreen.presentation.SettingsScreen
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
+import com.surovtsev.utils.compose.components.scrollbar.UIHelper
 import com.surovtsev.utils.compose.navigationanimationhelper.SimpleNavigationAnimationHelper
 import com.surovtsev.utils.dagger.savedstateviewmodelfactory.SavedStateViewModelFactory
 import com.surovtsev.videotutorialscreen.presentation.VideoTutorialScreen
@@ -74,6 +75,8 @@ class MainActivity: AppCompatActivity() {
         val metrics = applicationContext.resources.displayMetrics
         val activityWidth = metrics.widthPixels
         val activityHeight = metrics.heightPixels
+
+        val dipCoefficient = UIHelper.calculateDIPCoefficient(resources.displayMetrics)
 
         setContent {
             val navAnimHelper = SimpleNavigationAnimationHelper(
@@ -157,7 +160,8 @@ class MainActivity: AppCompatActivity() {
                     entry.lifecycle.addObserver(viewModel)
                     RankingScreen(
                         viewModel,
-                        navController
+                        navController,
+                        dipCoefficient,
                     )
                 }
                 composable(
