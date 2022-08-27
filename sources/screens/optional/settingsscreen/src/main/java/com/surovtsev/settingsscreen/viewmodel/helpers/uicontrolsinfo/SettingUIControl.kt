@@ -26,7 +26,9 @@ SOFTWARE.
 package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo
 
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.utils.compose.components.SliderPositionMutableStateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+
+typealias SliderPositionMutableStateFlow = MutableStateFlow<Int>
 
 typealias ValueCalculator = (settingsData: Settings.SettingsData) -> Int
 typealias SettingsDataCalculator = (settingsData: Settings.SettingsData, newValue: Int) -> Settings.SettingsData

@@ -59,7 +59,7 @@ class EventHandlerImp @Inject constructor(
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
             is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
             is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(event.settings) }
-            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData, event.fromSlider) }
+            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
             else                                                     -> null
@@ -108,7 +108,6 @@ class EventHandlerImp @Inject constructor(
 
     private suspend fun rememberSettingsData(
         settingsData: Settings.SettingsData,
-        fromSlider: Boolean
     ): EventProcessingResult {
         return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
             "error while updating settings"
@@ -117,8 +116,7 @@ class EventHandlerImp @Inject constructor(
                 newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
                     SettingsScreenData.SettingsDataIsSelected(
                         screenData,
-                        settingsData,
-                        fromSlider
+                        settingsData
                     )
                 )
             )

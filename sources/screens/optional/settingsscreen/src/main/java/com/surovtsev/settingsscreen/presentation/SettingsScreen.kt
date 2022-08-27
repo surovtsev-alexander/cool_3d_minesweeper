@@ -25,7 +25,6 @@ SOFTWARE.
 
 package com.surovtsev.settingsscreen.presentation
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -52,7 +51,6 @@ import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingUIControl
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
@@ -279,80 +277,29 @@ fun Controls(
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
         return
     }
+    val settingsData = screenData.settingsData
 
     val settingsUIInfo by remember { mutableStateOf(SettingsUIControlsInfo()) }
 
-    settingsUIInfo.info.map { settingUIControl ->
-        BindViewModelAndUI(
-            screenData = screenData,
-            eventReceiver = eventReceiver,
-            settingsUIControl = settingUIControl
-        )
-    }
-
     LazyColumn {
         items(settingsUIInfo.info) { settingUIControl ->
-            val currentPosition by settingUIControl.sliderPositionMutableStateFlow.collectAsState()
+            val currentPosition = settingUIControl.valueCalculator(settingsData)
             IntSliderWithCaption(
                 position = currentPosition,
-                onChange = { settingUIControl.sliderPositionMutableStateFlow.value = it },
+                onChange = {
+                    eventReceiver.receiveEvent(
+                        EventToSettingsScreenViewModel.RememberSettingsData(
+                            settingUIControl.settingsDataCalculator(
+                                settingsData, it
+                            )
+                        )
+                    )
+                },
                 borders = settingUIControl.borders,
                 lineColor = PrimaryColor1,
                 backgroundColor = LightBlue,
             )
-//            CustomSliderWithCaption(
-//                name = settingUIControl.title,
-//                borders = settingUIControl.borders,
-//                sliderPositionMutableStateFlow = settingUIControl.sliderPositionMutableStateFlow,
-//                backgroundColor = LightBlue,
-//                lineColor = PrimaryColor1,
-//            )
         }
-    }
-}
-
-@SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun BindViewModelAndUI(
-    screenData: SettingsScreenData.SettingsDataIsSelected,
-    eventReceiver: EventReceiver,
-    settingsUIControl: SettingUIControl
-) {
-    val settingsData = screenData.settingsData
-
-    val uiValue = settingsUIControl.sliderPositionMutableStateFlow.collectAsState().value
-    val viewModelValue = settingsUIControl.valueCalculator(settingsData)
-
-    var prevUIValue by remember { mutableStateOf(-1) }
-    var prevViewModelValue by remember { mutableStateOf(-1) }
-
-    val uiAndViewModelValuesSame = uiValue == viewModelValue
-
-    val uiUpdated = uiValue != prevUIValue
-    val viewModelValueUpdated = viewModelValue != prevViewModelValue
-
-    val fromUI = screenData.fromSlider
-
-    if (viewModelValueUpdated) {
-        prevViewModelValue = viewModelValue
-        if (!fromUI && !uiAndViewModelValuesSame) {
-            settingsUIControl.sliderPositionMutableStateFlow.value = viewModelValue
-            prevUIValue = viewModelValue
-        }
-    } else if (uiUpdated) {
-        prevUIValue = uiValue
-
-        val rememberSettingsAction = { updatedSettingsData: Settings.SettingsData ->
-            eventReceiver.receiveEvent(
-                EventToSettingsScreenViewModel.RememberSettingsData(
-                    updatedSettingsData, fromSlider = true
-                )
-            )
-        }
-
-        rememberSettingsAction(
-            settingsUIControl.settingsDataCalculator(settingsData, uiValue)
-        )
     }
 }
 

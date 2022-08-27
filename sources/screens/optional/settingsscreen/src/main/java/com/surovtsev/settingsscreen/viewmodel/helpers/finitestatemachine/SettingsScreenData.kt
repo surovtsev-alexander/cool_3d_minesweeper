@@ -44,7 +44,6 @@ sealed interface SettingsScreenData: ViewModelData.UserData {
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
         val settingsData: Settings.SettingsData,
-        val fromSlider: Boolean
     ): SettingsLoaded {
         override val settingsList: SettingsList = settingsLoaded.settingsList
     }
@@ -55,7 +54,6 @@ sealed interface SettingsScreenData: ViewModelData.UserData {
     ): SettingsDataIsSelected(
         settingsDataIsSelected,
         settingsDataIsSelected.settingsData,
-        settingsDataIsSelected.fromSlider
     ) {
         constructor(
             settingsLoaded: SettingsLoaded,
@@ -63,8 +61,7 @@ sealed interface SettingsScreenData: ViewModelData.UserData {
         ): this(
             SettingsDataIsSelected(
                 settingsLoaded,
-                settings.settingsData,
-                false
+                settings.settingsData
             ),
             settings.id
         )

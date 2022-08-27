@@ -40,7 +40,6 @@ sealed class EventToSettingsScreenViewModel(
 
     data class RememberSettingsData(
         val settingsData: Settings.SettingsData,
-        val fromSlider: Boolean = false
     ): EventToSettingsScreenViewModel()
 
     data class DeleteSettings(
