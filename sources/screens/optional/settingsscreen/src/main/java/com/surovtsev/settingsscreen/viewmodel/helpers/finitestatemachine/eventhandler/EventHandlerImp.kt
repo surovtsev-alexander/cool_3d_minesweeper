@@ -41,6 +41,11 @@ import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventTo
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SettingsScreenScope
@@ -49,6 +54,8 @@ class EventHandlerImp @Inject constructor(
 ): EventHandler {
 
     override val transitions: List<EventHandler.Transition> = emptyList()
+
+    private var updateSelectedIdxJob: Job? = null
 
     override fun handleEvent(
         event: Event,
@@ -61,6 +68,7 @@ class EventHandlerImp @Inject constructor(
             is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
+            is EventToViewModel.HandleScreenLeaving                  -> ::handleScreenLeaving
             else                                                     -> null
         }
         
@@ -69,8 +77,40 @@ class EventHandlerImp @Inject constructor(
         )
     }
 
+    private suspend fun startUpdatingSelectedIdx() {
+        stopUpdatingState()
+
+        updateSelectedIdxJob = Job().apply {
+            CoroutineScope(this + Dispatchers.IO).launch {
+                eventHandlerParameters.fsmStateFlow.collectLatest { state ->
+                    val data = state.data
+                    if (data is SettingsScreenData.SettingsDataIsSelected) {
+                        data.uiControls.settingsDataFlow.collectLatest { settingsData ->
+                            val settingsList = data.settingsList
+
+                            val id =
+                                settingsList.firstOrNull { it == Settings(settingsData) }?.id ?: -1
+
+                            data.selectedSettingsId.value = id
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun stopUpdatingState() {
+        updateSelectedIdxJob?.cancel()
+    }
+
+    private suspend fun handleScreenLeaving(): EventProcessingResult {
+        stopUpdatingState()
+        return EventProcessingResult.Ok()
+    }
 
     private suspend fun triggerInitialization(): EventProcessingResult {
+        startUpdatingSelectedIdx()
+
         prepopulateSettingsTableWithDefaultValues(
             eventHandlerParameters.settingsDao
         )
@@ -127,7 +167,7 @@ class EventHandlerImp @Inject constructor(
         return calculateEventResultProcessingIsState<SettingsScreenData.SettingsDataIsSelected>(
             "error while applying settings"
         ) { screenData ->
-            val settingsData = screenData.uiControls.getSettingsData()
+            val settingsData = screenData.uiControls.calculateCurrentSettingsData()
 
             val settingsDao = eventHandlerParameters.settingsDao
             val saveController = eventHandlerParameters.saveController

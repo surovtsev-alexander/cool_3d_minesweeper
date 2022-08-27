@@ -51,7 +51,7 @@ class SettingsUIControlsInfo {
         }
     }
 
-    fun getSettingsData(): Settings.SettingsData {
+    fun calculateCurrentSettingsData(): Settings.SettingsData {
         var res = Settings.SettingsData()
 
         info.map {

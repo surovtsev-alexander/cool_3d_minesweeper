@@ -63,27 +63,4 @@ class SettingsScreenViewModel @AssistedInject constructor(
     override val finiteStateMachine =
         settingsScreenComponent
             .finiteStateMachine
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateState()
-        }
-    }
-
-    private suspend fun updateState() {
-        val state = finiteStateMachine.stateHolder
-
-        state.fsmStateFlow.collectLatest {
-            val data = state.data
-            if (data is SettingsScreenData.SettingsDataIsSelected) {
-                data.uiControls.settingsDataFlow.collectLatest { settingsData ->
-                    val settingsList = data.settingsList
-
-                    val id = settingsList.firstOrNull { it == Settings(settingsData) }?.id ?: -1
-
-                    data.selectedSettingsId.value = id
-                }
-            }
-        }
-    }
 }
