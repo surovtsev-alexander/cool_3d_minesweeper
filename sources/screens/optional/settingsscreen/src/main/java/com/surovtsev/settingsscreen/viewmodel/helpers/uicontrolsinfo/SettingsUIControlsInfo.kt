@@ -50,15 +50,11 @@ class SettingsUIControlsInfo {
         }
     }
 
-    // TODO: refactor
     fun getSettingsData(): Settings.SettingsData {
         var res = Settings.SettingsData()
 
         info.map {
-            res = it.settingsDataCalculator(
-                res,
-                it.sliderPositionMutableStateFlow.value
-            )
+            res = it.updateSettingsData(res)
         }
         return res
     }
@@ -106,7 +102,7 @@ class SettingsUIControlsInfo {
             MutableStateFlow(0),
             { it.bombsPercentage },
             { settingsData, newValue ->
-                settingsData.copy( bombsPercentage = newValue )
+                settingsData.copy(bombsPercentage = newValue)
             }
         )
     )

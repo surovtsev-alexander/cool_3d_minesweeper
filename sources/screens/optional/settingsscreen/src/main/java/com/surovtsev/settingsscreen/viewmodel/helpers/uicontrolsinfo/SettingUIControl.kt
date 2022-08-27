@@ -39,4 +39,13 @@ data class SettingUIControl(
     val sliderPositionMutableStateFlow: SliderPositionMutableStateFlow,
     val valueCalculator: ValueCalculator,
     val settingsDataCalculator: SettingsDataCalculator
-)
+) {
+    fun updateSettingsData(
+        settingsData: Settings.SettingsData
+    ): Settings.SettingsData {
+        return settingsDataCalculator(
+            settingsData,
+            sliderPositionMutableStateFlow.value
+        )
+    }
+}
