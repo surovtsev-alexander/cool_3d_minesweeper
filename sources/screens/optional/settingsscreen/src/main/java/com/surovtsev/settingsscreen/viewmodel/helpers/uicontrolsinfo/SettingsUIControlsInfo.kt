@@ -42,6 +42,14 @@ class SettingsUIControlsInfo {
         )
     }
 
+    fun updateInfo(
+        settingsData: Settings.SettingsData
+    ) {
+        info.map {
+            it.sliderPositionMutableStateFlow.value = it.valueCalculator(settingsData)
+        }
+    }
+
     val info = listOf(
         SettingUIControl(
             "x",

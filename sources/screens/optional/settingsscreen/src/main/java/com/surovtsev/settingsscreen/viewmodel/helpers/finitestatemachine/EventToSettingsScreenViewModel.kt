@@ -34,10 +34,6 @@ sealed class EventToSettingsScreenViewModel(
 
     object LoadSelectedSettings: EventToSettingsScreenViewModel()
 
-    data class RememberSettings(
-        val settings: Settings
-    ): EventToSettingsScreenViewModel()
-
     data class RememberSettingsData(
         val settingsData: Settings.SettingsData,
     ): EventToSettingsScreenViewModel()

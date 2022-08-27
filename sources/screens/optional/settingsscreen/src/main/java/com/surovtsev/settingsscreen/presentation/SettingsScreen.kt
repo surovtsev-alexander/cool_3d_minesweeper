@@ -175,8 +175,8 @@ fun SettingsList(
                 val itemId = item.id
                 val modifier = Modifier.clickable {
                     eventReceiver.receiveEvent(
-                        EventToSettingsScreenViewModel.RememberSettings(
-                            item
+                        EventToSettingsScreenViewModel.RememberSettingsData(
+                            item.settingsData
                         )
                     )
                 }.let {

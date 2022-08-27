@@ -27,8 +27,8 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
+import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 
 
 sealed interface SettingsScreenData: ViewModelData.UserData {

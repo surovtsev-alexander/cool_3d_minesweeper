@@ -58,7 +58,6 @@ class EventHandlerImp @Inject constructor(
             is EventToViewModel.Init                                 -> ::triggerInitialization
             is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
             is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
-            is EventToSettingsScreenViewModel.RememberSettings       -> suspend { rememberSettings(event.settings) }
             is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData) }
             is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
             is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
@@ -172,24 +171,7 @@ class EventHandlerImp @Inject constructor(
             selectedSettingsData
         )?: Settings(selectedSettingsData, -1)
 
-        return rememberSettings(selectedSettings)
-    }
-
-    private suspend fun rememberSettings(
-        settings: Settings,
-    ): EventProcessingResult {
-        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
-            "internal error: can not select settings"
-        ) { screenData ->
-            EventProcessingResult.Ok(
-                newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
-                    SettingsScreenData.SettingsIsSelected(
-                        screenData,
-                        settings,
-                    )
-                )
-            )
-        }
+        return rememberSettingsData(selectedSettings.settingsData)
     }
 
     private inline fun <reified T: ViewModelData> calculateEventResultProcessingIsState(
