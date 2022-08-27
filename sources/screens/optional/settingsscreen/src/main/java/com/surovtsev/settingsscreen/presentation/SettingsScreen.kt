@@ -35,7 +35,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +54,6 @@ import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
-import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
@@ -142,6 +144,13 @@ fun SettingsList(
     eventReceiver: EventReceiver
 ) {
     val screenState = screenStateFlow.collectAsState().value
+    val screenData = screenState.data
+
+    val selectedSettingsId = if (screenData is SettingsScreenData.SettingsDataIsSelected) {
+        screenData.selectedSettingsId.collectAsState().value
+    } else {
+        -1
+    }
 
     Column(
         Modifier
@@ -165,7 +174,6 @@ fun SettingsList(
             )
         }
         LazyColumn {
-            val screenData = screenState.data
             val settingsList = if (screenData is SettingsScreenData.SettingsLoaded) {
                 screenData.settingsList
             } else {
@@ -181,9 +189,7 @@ fun SettingsList(
                         )
                     )
                 }.let {
-                    // TODO: add back
-                    if (false
-                    ) {
+                    if (itemId == selectedSettingsId) {
                         it.background(LightBlue)
                     } else {
                         it

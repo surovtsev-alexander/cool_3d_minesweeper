@@ -28,13 +28,19 @@ package com.surovtsev.settingsscreen.viewmodel
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.templateviewmodel.TemplateViewModel
+import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
+import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
+import com.surovtsev.templateviewmodel.TemplateViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted @Suppress("UNUSED_PARAMETER") savedStateHandle: SavedStateHandle,
@@ -57,4 +63,26 @@ class SettingsScreenViewModel @AssistedInject constructor(
     override val finiteStateMachine =
         settingsScreenComponent
             .finiteStateMachine
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateState()
+        }
+    }
+
+    private suspend fun updateState() {
+        val state = finiteStateMachine.stateHolder
+
+        state.fsmStateFlow.collectLatest {
+            val data = state.data
+            if (data is SettingsScreenData.SettingsDataIsSelected) {
+                val uiSettingsData = data.uiControls.getSettingsData()
+                val settingsList = data.settingsList
+
+                val id = settingsList.firstOrNull { it == Settings(uiSettingsData) } ?.id ?: -1
+
+                data.selectedSettingsId.value = id
+            }
+        }
+    }
 }

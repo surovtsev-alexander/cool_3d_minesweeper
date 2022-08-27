@@ -10,7 +10,7 @@ interface EventHandler {
         state: State
     ): EventHandlingResult
 
-    // TODO: populate in childs and add usage
+    // TODO: populate in children and add usage
     val transitions: List<Transition>
 
     data class Transition(

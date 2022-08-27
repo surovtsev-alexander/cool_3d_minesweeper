@@ -30,6 +30,7 @@ import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
 import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 sealed interface SettingsScreenData: ViewModelData.UserData {
@@ -50,28 +51,10 @@ sealed interface SettingsScreenData: ViewModelData.UserData {
 
         val uiControls = SettingsUIControlsInfo()
 
+        val selectedSettingsId = MutableStateFlow(-1L)
+
         init {
             uiControls.updateInfo(settingsData)
         }
     }
-
-    // TODO: add back
-//    open class SettingsIsSelected(
-//        settingsDataIsSelected: SettingsDataIsSelected,
-//        val settingsId: Long,
-//    ): SettingsDataIsSelected(
-//        settingsDataIsSelected,
-//        settingsDataIsSelected.settingsData,
-//    ) {
-//        constructor(
-//            settingsLoaded: SettingsLoaded,
-//            settings: Settings,
-//        ): this(
-//            SettingsDataIsSelected(
-//                settingsLoaded,
-//                settings.settingsData
-//            ),
-//            settings.id
-//        )
-//    }
 }
