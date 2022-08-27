@@ -76,12 +76,13 @@ class SettingsScreenViewModel @AssistedInject constructor(
         state.fsmStateFlow.collectLatest {
             val data = state.data
             if (data is SettingsScreenData.SettingsDataIsSelected) {
-                val uiSettingsData = data.uiControls.getSettingsData()
-                val settingsList = data.settingsList
+                data.uiControls.settingsDataFlow.collectLatest { settingsData ->
+                    val settingsList = data.settingsList
 
-                val id = settingsList.firstOrNull { it == Settings(uiSettingsData) } ?.id ?: -1
+                    val id = settingsList.firstOrNull { it == Settings(settingsData) }?.id ?: -1
 
-                data.selectedSettingsId.value = id
+                    data.selectedSettingsId.value = id
+                }
             }
         }
     }

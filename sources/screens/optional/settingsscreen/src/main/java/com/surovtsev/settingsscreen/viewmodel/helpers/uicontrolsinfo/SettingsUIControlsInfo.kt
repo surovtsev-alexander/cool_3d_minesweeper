@@ -27,6 +27,7 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo
 
 import com.surovtsev.core.room.entities.Settings
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 
 
 class SettingsUIControlsInfo {
@@ -59,51 +60,73 @@ class SettingsUIControlsInfo {
         return res
     }
 
-    val info = listOf(
-        SettingUIControl(
-            "x",
-            dimensionCellCount,
-            MutableStateFlow(0),
-            { it.dimensions.x },
-            { settingsData, newValue ->
-                updateDimensions(
-                    settingsData,
-                    settingsData.dimensions.copy(x = newValue)
-                )
-            }
-        ),
-        SettingUIControl(
-            "y",
-            dimensionCellCount,
-            MutableStateFlow(0),
-            { it.dimensions.y },
-            { settingsData, newValue ->
-                updateDimensions(
-                    settingsData,
-                    settingsData.dimensions.copy(y = newValue)
-                )
-            }
-        ),
-        SettingUIControl(
-            "z",
-            dimensionCellCount,
-            MutableStateFlow(0),
-            { it.dimensions.z },
-            { settingsData, newValue ->
-                updateDimensions(
-                    settingsData,
-                    settingsData.dimensions.copy(z = newValue)
-                )
-            }
-        ),
-        SettingUIControl(
-            "bombs %",
-            bombsPercentageBorders,
-            MutableStateFlow(0),
-            { it.bombsPercentage },
-            { settingsData, newValue ->
-                settingsData.copy(bombsPercentage = newValue)
-            }
-        )
+    private val xUIInfo = SettingUIControl(
+        "x",
+        dimensionCellCount,
+        MutableStateFlow(0),
+        { it.dimensions.x },
+        { settingsData, newValue ->
+            updateDimensions(
+                settingsData,
+                settingsData.dimensions.copy(x = newValue)
+            )
+        }
     )
+
+    val yUIInfo = SettingUIControl(
+        "y",
+        dimensionCellCount,
+        MutableStateFlow(0),
+        { it.dimensions.y },
+        { settingsData, newValue ->
+            updateDimensions(
+                settingsData,
+                settingsData.dimensions.copy(y = newValue)
+            )
+        }
+    )
+
+    val zUIInfo = SettingUIControl(
+        "z",
+        dimensionCellCount,
+        MutableStateFlow(0),
+        { it.dimensions.z },
+        { settingsData, newValue ->
+            updateDimensions(
+                settingsData,
+                settingsData.dimensions.copy(z = newValue)
+            )
+        }
+    )
+
+    val bombsPercentageUIInfo = SettingUIControl(
+        "bombs %",
+        bombsPercentageBorders,
+        MutableStateFlow(0),
+        { it.bombsPercentage },
+        { settingsData, newValue ->
+            settingsData.copy(bombsPercentage = newValue)
+        }
+    )
+
+    val info = listOf(
+        xUIInfo,
+        yUIInfo,
+        zUIInfo,
+        bombsPercentageUIInfo
+    )
+
+    val settingsDataFlow = combine(
+        xUIInfo.sliderPositionMutableStateFlow,
+        yUIInfo.sliderPositionMutableStateFlow,
+        zUIInfo.sliderPositionMutableStateFlow,
+        bombsPercentageUIInfo.sliderPositionMutableStateFlow
+    ) { x, y, z, bombsPercentage ->
+        Settings.SettingsData(
+            Settings.SettingsData.Dimensions(
+                x, y, z,
+            ),
+            bombsPercentage
+        )
+    }
 }
