@@ -127,7 +127,7 @@ class EventHandlerImp @Inject constructor(
         return calculateEventResultProcessingIsState<SettingsScreenData.SettingsDataIsSelected>(
             "error while applying settings"
         ) { screenData ->
-            val settingsData = screenData.settingsData
+            val settingsData = screenData.uiControls.getSettingsData()
 
             val settingsDao = eventHandlerParameters.settingsDao
             val saveController = eventHandlerParameters.saveController

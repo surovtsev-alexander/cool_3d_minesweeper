@@ -50,6 +50,19 @@ class SettingsUIControlsInfo {
         }
     }
 
+    // TODO: refactor
+    fun getSettingsData(): Settings.SettingsData {
+        var res = Settings.SettingsData()
+
+        info.map {
+            res = it.settingsDataCalculator(
+                res,
+                it.sliderPositionMutableStateFlow.value
+            )
+        }
+        return res
+    }
+
     val info = listOf(
         SettingUIControl(
             "x",

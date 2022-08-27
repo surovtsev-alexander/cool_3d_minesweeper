@@ -28,6 +28,7 @@ package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 import com.surovtsev.core.room.dao.SettingsList
 import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 
 
@@ -43,27 +44,34 @@ sealed interface SettingsScreenData: ViewModelData.UserData {
 
     open class SettingsDataIsSelected(
         settingsLoaded: SettingsLoaded,
-        val settingsData: Settings.SettingsData,
+        settingsData: Settings.SettingsData,
     ): SettingsLoaded {
         override val settingsList: SettingsList = settingsLoaded.settingsList
+
+        val uiControls = SettingsUIControlsInfo()
+
+        init {
+            uiControls.updateInfo(settingsData)
+        }
     }
 
-    open class SettingsIsSelected(
-        settingsDataIsSelected: SettingsDataIsSelected,
-        val settingsId: Long,
-    ): SettingsDataIsSelected(
-        settingsDataIsSelected,
-        settingsDataIsSelected.settingsData,
-    ) {
-        constructor(
-            settingsLoaded: SettingsLoaded,
-            settings: Settings,
-        ): this(
-            SettingsDataIsSelected(
-                settingsLoaded,
-                settings.settingsData
-            ),
-            settings.id
-        )
-    }
+    // TODO: add back
+//    open class SettingsIsSelected(
+//        settingsDataIsSelected: SettingsDataIsSelected,
+//        val settingsId: Long,
+//    ): SettingsDataIsSelected(
+//        settingsDataIsSelected,
+//        settingsDataIsSelected.settingsData,
+//    ) {
+//        constructor(
+//            settingsLoaded: SettingsLoaded,
+//            settings: Settings,
+//        ): this(
+//            SettingsDataIsSelected(
+//                settingsLoaded,
+//                settings.settingsData
+//            ),
+//            settings.id
+//        )
+//    }
 }

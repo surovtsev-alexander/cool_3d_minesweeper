@@ -161,7 +161,8 @@ fun SettingsList(
             )
             Box(
                 modifier = Modifier
-                    .weight(2f))
+                    .weight(2f)
+            )
         }
         LazyColumn {
             val screenData = screenState.data
@@ -180,15 +181,15 @@ fun SettingsList(
                         )
                     )
                 }.let {
-                    if (screenData is SettingsScreenData.SettingsIsSelected &&
-                        screenData.settingsId == itemId
+                    // TODO: add back
+                    if (false
                     ) {
                         it.background(LightBlue)
                     } else {
                         it
                     }
                 }
-                Box (
+                Box(
                     modifier
                 ) {
                     SettingsDataItem(eventReceiver, item)
@@ -277,25 +278,17 @@ fun Controls(
     if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
         return
     }
-    val settingsData = screenData.settingsData
-
-    val settingsUIInfo by remember { mutableStateOf(SettingsUIControlsInfo()) }
+    val uiControls = screenData.uiControls
 
     LazyColumn {
-        items(settingsUIInfo.info) { settingUIControl ->
-            val currentPosition = settingUIControl.valueCalculator(settingsData)
+        items(uiControls.info) { control ->
+            val currentPosition by control.sliderPositionMutableStateFlow.collectAsState()
             IntSliderWithCaption(
                 position = currentPosition,
                 onChange = {
-                    eventReceiver.receiveEvent(
-                        EventToSettingsScreenViewModel.RememberSettingsData(
-                            settingUIControl.settingsDataCalculator(
-                                settingsData, it
-                            )
-                        )
-                    )
+                    control.sliderPositionMutableStateFlow.value = it
                 },
-                borders = settingUIControl.borders,
+                borders = control.borders,
                 lineColor = PrimaryColor1,
                 backgroundColor = LightBlue,
             )
