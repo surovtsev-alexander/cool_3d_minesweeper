@@ -58,7 +58,7 @@ import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.Event
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
 import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
-import com.surovtsev.utils.compose.components.intslider.IntSliderWithCaption
+import com.surovtsev.utils.compose.components.intslider.IntSlider
 
 @Composable
 fun SettingsScreen(
@@ -289,7 +289,7 @@ fun Controls(
     LazyColumn {
         items(uiControls.info) { control ->
             val currentPosition by control.sliderPositionMutableStateFlow.collectAsState()
-            IntSliderWithCaption(
+            IntSlider(
                 position = currentPosition,
                 onChange = {
                     control.sliderPositionMutableStateFlow.value = it
@@ -297,6 +297,7 @@ fun Controls(
                 borders = control.borders,
                 lineColor = PrimaryColor1,
                 backgroundColor = LightBlue,
+                name = control.title,
             )
         }
     }

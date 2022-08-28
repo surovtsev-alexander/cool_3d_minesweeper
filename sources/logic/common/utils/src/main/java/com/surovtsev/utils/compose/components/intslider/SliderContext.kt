@@ -25,104 +25,134 @@ SOFTWARE.
 
 package com.surovtsev.utils.compose.components.intslider
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
+typealias IntSliderOnChange = (newValue: Int) -> Unit
+
 class SliderContext(
-    val borders: IntRange,
-    private val width: Int,
-    private var position: Int,
+    coroutineScope: CoroutineScope,
 ) {
-    private val bordersFirst = borders.first
-    private val bordersLast = borders.last
+    private val ioScope = CoroutineScope(coroutineScope.coroutineContext + Dispatchers.IO)
+    private val _progress = MutableSharedFlow<Float>()
+    private val _sliderPosition = MutableStateFlow(0)
+    private val _lineWidthRate = MutableStateFlow(0f)
+    private val sliderActionsFlow = MutableSharedFlow<Float>(0)
+    private var slidingJob: Job? = null
 
-    var prevDelta = 0f
-        private set
+    /* region public fields and methods */
+    val onChange = MutableStateFlow<IntSliderOnChange?>(null)
+    val borders = MutableStateFlow(IntRange(0, 1))
+    val layoutWidth = MutableStateFlow(0)
+    val isScrollInProgress = MutableStateFlow(false)
 
-    private val bordersWidth = bordersLast - bordersFirst
-    private val deltaToPosCoefficient =
-        if (width == 0 || bordersWidth == 0) 1f else bordersWidth.toFloat() / width
+    val progress = _progress.asSharedFlow()
+    val sliderPosition = _sliderPosition.asStateFlow()
+    val lineWidthRate = _lineWidthRate.asStateFlow()
 
-    suspend fun loop() {
-
-    }
-
-    fun erasePrevDelta() {
-        prevDelta = 0f
-        updateLineWidthRate()
+    fun stopJob() {
+        slidingJob?.cancel()
+        slidingJob = null
     }
 
     fun setPosition(newPosition: Int) {
-        if (isScrollInProgress) {
+        if (isScrollInProgress.value) {
             return
         }
-        if (newPosition != position) {
-            prevDelta = 0f
-            position = newPosition
-            updateLineWidthRate()
+        ioScope.launch {
+            _progress.emit(
+                calculateProgressByPosition(
+                    borders.value,
+                    newPosition,
+                )
+            )
         }
     }
 
-    private val _lineWidthRate = MutableStateFlow(0f)
-    val lineWidthRate = _lineWidthRate.asStateFlow()
+    suspend fun slideAlt(
+        delta: Float,
+    ) {
+        if (abs(delta) < 0.1f) {
+            return
+        }
+        sliderActionsFlow.emit(delta)
+    }
+    /* endregion public fields and methods */
 
-    private fun updateLineWidthRate() {
-        _lineWidthRate.value = ((position - bordersFirst).toFloat() / (bordersLast - bordersFirst)) + prevDelta / (if (width == 0) 1 else width)
+    private val bordersFirst = borders.map { it.first }
+    private val bordersLast = borders.map {  it.last }
+    private val bordersWidth = combine(bordersFirst, bordersLast) { first, last ->
+        last - first
+    }
+    private val deltaOffset = combine(sliderPosition, bordersFirst, bordersWidth, progress) { sliderPosition, borderFirst, borderWidth, progress ->
+        val expectedProgress = (sliderPosition - borderFirst).toFloat() / borderWidth
+        expectedProgress - progress
     }
 
     init {
-        updateLineWidthRate()
+        val j = Job()
+
+        slidingJob = j
+
+        val ioScope = CoroutineScope(ioScope.coroutineContext + j + Dispatchers.IO)
+        collectActions(ioScope)
     }
 
-    var isScrollInProgress = false
+    private fun calculateProgressByPosition(
+        borders: IntRange,
+        position: Int
+    ): Float {
+        return ((position - borders.first).toFloat() / (borders.last - borders.first))
+            .coerceAtLeast(0f)
+            .coerceAtMost(1f)
+    }
 
-
-    fun slide(
-        delta: Float,
-        onChange: IntSliderOnChange,
+    private fun collectActions(
+        coroutineScope: CoroutineScope,
     ) {
-        prevDelta += delta
-
-        if (prevDelta < 0) {
-            val dx = (position - bordersFirst).coerceAtLeast(0)
-            val availableDelta = -1 * dx / deltaToPosCoefficient
-
-            prevDelta = prevDelta.coerceAtLeast(availableDelta)
-        } else if (prevDelta > 0) {
-            val dx = (bordersLast - position).coerceAtLeast(0)
-            val availableDelta = dx / deltaToPosCoefficient
-
-            prevDelta = prevDelta.coerceAtMost(availableDelta)
+        coroutineScope.launch {
+            borders.collect { borders ->
+                _progress.emit(calculateProgressByPosition(borders, sliderPosition.value))
+            }
         }
 
-        val rawDiffPos = prevDelta * deltaToPosCoefficient
-
-        val diffPos = rawDiffPos.roundToInt()
-
-        prevDelta -= diffPos / deltaToPosCoefficient
-
-        val newPosition = Math.min(
-            Math.max(
-                position + diffPos,
-                bordersFirst
-            ),
-            bordersLast
-        )
-
-        if (newPosition == bordersFirst && prevDelta < 0) {
-            prevDelta = 0f
+        coroutineScope.launch {
+            progress.collect { progress ->
+                val borders = borders.value
+                _sliderPosition.value = borders.first + (progress * (borders.last - borders.first)).roundToInt()
+            }
         }
 
-        if (newPosition == bordersLast && prevDelta > 0) {
-            prevDelta = 0f
+        coroutineScope.launch {
+            combine(deltaOffset, layoutWidth) { deltaOffset, layoutWidth ->
+                _lineWidthRate.value = deltaOffset * layoutWidth
+            }.collect()
         }
 
+        coroutineScope.launch {
+            val progressState = progress.stateIn(coroutineScope)
+            sliderActionsFlow.collect { slide ->
+                val progress = progressState.value
+                val layoutWidth = layoutWidth.value
+                val newProgress = progress + (if (layoutWidth == 0 ) 0f else slide / layoutWidth)
 
-        if (newPosition != position) {
-            position = newPosition
-            onChange(newPosition)
+                _progress.emit(
+                    newProgress
+                        .coerceAtLeast(0f)
+                        .coerceAtMost(1f)
+                )
+            }
         }
-        updateLineWidthRate()
+
+        coroutineScope.launch {
+            combine(onChange, sliderPosition) { onChange, sliderPosition ->
+                onChange?.invoke(sliderPosition)
+            }.collect()
+        }
     }
 }

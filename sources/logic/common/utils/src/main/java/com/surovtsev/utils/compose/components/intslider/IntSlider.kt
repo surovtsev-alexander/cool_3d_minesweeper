@@ -39,12 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
-
-typealias IntSliderOnChange = (newValue: Int) -> Unit
 
 fun IntRange.toMathString(): String =
     "[${this.first}; ${this.last}]"
@@ -55,115 +53,117 @@ object IntSliderConstants {
 }
 
 @Composable
-fun IntSliderWithCaption(
-    position: Int,
-    onChange: IntSliderOnChange,
-    borders: IntRange,
-    lineColor: Color = IntSliderConstants.lineColor,
-    backgroundColor: Color = IntSliderConstants.backgroundColor,
-    name: String = "",
-) {
-    Column {
-        Row {
-            Text(
-                name,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth(0.33f)
-            )
-            Text(
-                position.toString(),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.5f)
-            )
-            Text(
-                borders.toMathString(),
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        IntSlider(
-            position,
-            onChange,
-            borders,
-            lineColor,
-            backgroundColor,
-        )
-    }
-}
-
-@Composable
 fun IntSlider(
     position: Int,
     onChange: IntSliderOnChange,
     borders: IntRange,
     lineColor: Color = IntSliderConstants.lineColor,
     backgroundColor: Color = IntSliderConstants.backgroundColor,
+    name: String? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-    var width by remember { mutableStateOf(0) }
-    var sliderContextVar: SliderContext by remember{ mutableStateOf(SliderContext(borders, width, position)) }
-
-    LaunchedEffect(key1 = borders, key2 = width) {
-        sliderContextVar = SliderContext(borders, width, position)
-    }
-
-    val sliderContext = sliderContextVar
-
-    LaunchedEffect(key1 = position) {
-        sliderContext.setPosition(position)
-    }
-
-    val scrollableState = rememberScrollableState { delta ->
-        sliderContext.slide(
-            delta,
-            onChange
-        )
-        delta
-    }
-
-    sliderContext.isScrollInProgress = scrollableState.isScrollInProgress
-
-    if (!scrollableState.isScrollInProgress) {
-        coroutineScope.launch {
-            val prevDelta = sliderContext.prevDelta
-            if (abs(prevDelta) > 1f) {
-                scrollableState.scrollBy(
-                    -1 * prevDelta
-                )
-            } else {
-                sliderContext.erasePrevDelta()
-            }
+    val sliderContext: SliderContext by remember{ mutableStateOf(SliderContext(coroutineScope).apply {
+        this.borders.value = borders
+        this.onChange.value = onChange
+        setPosition(position)
+    }) }
+    DisposableEffect(sliderContext) {
+        onDispose {
+            sliderContext.stopJob()
         }
     }
 
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(30.dp)
-            .border(1.dp, Color.Black)
-            .background(backgroundColor)
-            .onGloballyPositioned { coordinates ->
-                width = coordinates.size.width
-            }
-            .scrollable(
-                orientation = Orientation.Horizontal,
-                state = scrollableState
+
+    Column {
+        if (name != null) {
+            SliderCaption(
+                name = name,
+                sliderContext = sliderContext,
             )
-    ) {
-        SliderLine(
-            sliderContext.lineWidthRate,
-            lineColor
+        }
+
+        LaunchedEffect(key1 = borders, key2 = position, key3 = onChange) {
+            sliderContext.borders.value = borders
+            sliderContext.setPosition(position)
+            sliderContext.onChange.value = onChange
+        }
+
+
+        val scrollableState = rememberScrollableState { delta ->
+            coroutineScope.launch(Dispatchers.IO) {
+                sliderContext.slideAlt(delta)
+            }
+            delta
+        }
+
+        val isScrollInProgress = scrollableState.isScrollInProgress
+        val screenOffset by sliderContext.lineWidthRate.collectAsState()
+        LaunchedEffect(key1 = isScrollInProgress, key2 = screenOffset) {
+            sliderContext.isScrollInProgress.value = isScrollInProgress
+
+            if (isScrollInProgress) {
+                return@LaunchedEffect
+            }
+
+            coroutineScope.launch {
+                scrollableState.scrollBy(screenOffset)
+            }
+        }
+
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(30.dp)
+                .border(1.dp, Color.Black)
+                .background(backgroundColor)
+                .onGloballyPositioned { coordinates ->
+                    sliderContext.layoutWidth.value = coordinates.size.width
+                }
+                .scrollable(
+                    orientation = Orientation.Horizontal,
+                    state = scrollableState
+                )
+        ) {
+            SliderLine(
+                sliderContext.progress,
+                lineColor
+            )
+        }
+    }
+}
+
+@Composable
+fun SliderCaption(
+    name: String,
+    sliderContext: SliderContext,
+) {
+    val position by sliderContext.sliderPosition.collectAsState()
+    val borders by sliderContext.borders.collectAsState()
+    Row {
+        Text(
+            name,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth(0.33f)
+        )
+        Text(
+            position.toString(),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(0.5f)
+        )
+        Text(
+            borders.toMathString(),
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
 @Composable
 fun SliderLine(
-    lineWidthRate: StateFlow<Float>,
+    lineWidthRate: Flow<Float>,
     lineColor: Color,
 ) {
-    val widthRate by lineWidthRate.collectAsState()
+    val widthRate by lineWidthRate.collectAsState(initial = 0f)
     Box(
         modifier = Modifier
             .fillMaxHeight()
