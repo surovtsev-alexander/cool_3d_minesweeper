@@ -34,6 +34,8 @@ import com.surovtsev.finitestatemachine.stateholder.StateHolder
 import com.surovtsev.restartablecoroutinescope.dagger.DaggerRestartableCoroutineScopeComponent
 import com.surovtsev.restartablecoroutinescope.dagger.RestartableCoroutineScopeComponent
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.eventhandler.EventHandlerImp
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.UIControlsInfo
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.slidersinfo.SlidersInfo
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -54,6 +56,7 @@ interface SettingsScreenComponent {
     val saveController: SaveController
 
     val finiteStateMachine: FiniteStateMachine
+    val uiControlsInfo: UIControlsInfo
 
     @Component.Builder
     interface Builder {

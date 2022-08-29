@@ -26,35 +26,12 @@ SOFTWARE.
 package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
 
 import com.surovtsev.core.room.dao.SettingsList
-import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.finitestatemachine.state.data.InitializationIsNotFinished
-import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.SettingsUIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
-import kotlinx.coroutines.flow.MutableStateFlow
 
 
 sealed interface SettingsScreenData: ViewModelData.UserData {
 
-    interface SettingsLoaded: SettingsScreenData {
-        val settingsList: SettingsList
-    };
-
-    open class SettingsLoadedData(
-        override val settingsList: SettingsList,
-    ): SettingsLoaded, InitializationIsNotFinished
-
-    open class SettingsDataIsSelected(
-        settingsLoaded: SettingsLoaded,
-        settingsData: Settings.SettingsData,
-    ): SettingsLoaded {
-        override val settingsList: SettingsList = settingsLoaded.settingsList
-
-        val uiControls = SettingsUIControlsInfo()
-
-        val selectedSettingsId = MutableStateFlow(-1L)
-
-        init {
-            uiControls.updateInfo(settingsData)
-        }
-    }
+    open class Initialized(
+        val settingsList: SettingsList,
+    ): SettingsScreenData
 }

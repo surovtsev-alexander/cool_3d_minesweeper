@@ -23,16 +23,21 @@ SOFTWARE.
  */
 
 
-package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo
+package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.slidersinfo
 
 import com.surovtsev.core.room.entities.Settings
+import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import javax.inject.Inject
 
 
-class SettingsUIControlsInfo {
-    private val dimensionCellCount = 3..25
-    private val bombsPercentageBorders = 10..40
+@SettingsScreenScope
+class SlidersInfo @Inject constructor() {
+    companion object {
+        private val dimensionCellCount = 3..25
+        private val bombsPercentageBorders = 10..40
+    }
 
     private fun updateDimensions(
         settingsData: Settings.SettingsData,
@@ -47,7 +52,7 @@ class SettingsUIControlsInfo {
         settingsData: Settings.SettingsData
     ) {
         info.map {
-            it.sliderPositionMutableStateFlow.value = it.valueCalculator(settingsData)
+            it.position.value = it.valueCalculator(settingsData)
         }
     }
 
@@ -60,7 +65,7 @@ class SettingsUIControlsInfo {
         return res
     }
 
-    private val xUIInfo = SettingUIControl(
+    private val xUIInfo = SliderInfo(
         "x",
         dimensionCellCount,
         MutableStateFlow(0),
@@ -73,7 +78,7 @@ class SettingsUIControlsInfo {
         }
     )
 
-    val yUIInfo = SettingUIControl(
+    val yUIInfo = SliderInfo(
         "y",
         dimensionCellCount,
         MutableStateFlow(0),
@@ -86,7 +91,7 @@ class SettingsUIControlsInfo {
         }
     )
 
-    val zUIInfo = SettingUIControl(
+    val zUIInfo = SliderInfo(
         "z",
         dimensionCellCount,
         MutableStateFlow(0),
@@ -99,7 +104,7 @@ class SettingsUIControlsInfo {
         }
     )
 
-    val bombsPercentageUIInfo = SettingUIControl(
+    val bombsPercentageUIInfo = SliderInfo(
         "bombs %",
         bombsPercentageBorders,
         MutableStateFlow(0),
@@ -117,10 +122,10 @@ class SettingsUIControlsInfo {
     )
 
     val settingsDataFlow = combine(
-        xUIInfo.sliderPositionMutableStateFlow,
-        yUIInfo.sliderPositionMutableStateFlow,
-        zUIInfo.sliderPositionMutableStateFlow,
-        bombsPercentageUIInfo.sliderPositionMutableStateFlow
+        xUIInfo.position,
+        yUIInfo.position,
+        zUIInfo.position,
+        bombsPercentageUIInfo.position
     ) { x, y, z, bombsPercentage ->
         Settings.SettingsData(
             Settings.SettingsData.Dimensions(

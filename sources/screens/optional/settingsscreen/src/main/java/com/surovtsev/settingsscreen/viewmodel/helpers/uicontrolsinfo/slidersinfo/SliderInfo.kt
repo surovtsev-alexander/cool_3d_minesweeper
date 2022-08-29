@@ -23,18 +23,29 @@ SOFTWARE.
  */
 
 
-package com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine
+package com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.slidersinfo
 
 import com.surovtsev.core.room.entities.Settings
-import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
-sealed class EventToSettingsScreenViewModel(
-): EventToViewModel.UserEvent() {
-    object Initialize: EventToSettingsScreenViewModel()
+typealias SliderPositionMutableStateFlow = MutableStateFlow<Int>
 
-    data class DeleteSettings(
-        val settingsId: Long
-    ): EventToSettingsScreenViewModel()
+typealias ValueCalculator = (settingsData: Settings.SettingsData) -> Int
+typealias SettingsDataCalculator = (settingsData: Settings.SettingsData, newValue: Int) -> Settings.SettingsData
 
-    object ApplySettings: EventToSettingsScreenViewModel()
+data class SliderInfo(
+    val title: String,
+    val borders: IntRange,
+    val position: SliderPositionMutableStateFlow,
+    val valueCalculator: ValueCalculator,
+    val settingsDataCalculator: SettingsDataCalculator
+) {
+    fun updateSettingsData(
+        settingsData: Settings.SettingsData
+    ): Settings.SettingsData {
+        return settingsDataCalculator(
+            settingsData,
+            position.value
+        )
+    }
 }

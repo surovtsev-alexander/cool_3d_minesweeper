@@ -38,7 +38,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,6 +53,8 @@ import com.surovtsev.finitestatemachine.eventreceiver.EventReceiver
 import com.surovtsev.settingsscreen.viewmodel.SettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.UIControlsInfo
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.slidersinfo.SlidersInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
@@ -74,6 +75,7 @@ fun SettingsScreen(
 
     SettingsControls(
         viewModel.screenStateFlow,
+        viewModel.uiControlsInfo,
         viewModel.finiteStateMachine.eventReceiver,
         viewModel as ErrorDialogPlacer,
     )
@@ -82,6 +84,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsControls(
     screenStateFlow: ScreenStateFlow,
+    uiControlsInfo: UIControlsInfo,
     eventReceiver: EventReceiver,
     errorDialogPlacer: ErrorDialogPlacer,
 ) {
@@ -103,6 +106,7 @@ fun SettingsControls(
                 ) {
                     SettingsList(
                         screenStateFlow,
+                        uiControlsInfo,
                         eventReceiver
                     )
                 }
@@ -117,6 +121,7 @@ fun SettingsControls(
                 Column {
                     Controls(
                         screenStateFlow,
+                        uiControlsInfo.slidersInfo,
                         eventReceiver
                     )
                 }
@@ -141,16 +146,13 @@ fun SettingsControls(
 @Composable
 fun SettingsList(
     screenStateFlow: ScreenStateFlow,
+    uiControlsInfo: UIControlsInfo,
     eventReceiver: EventReceiver
 ) {
     val screenState = screenStateFlow.collectAsState().value
     val screenData = screenState.data
 
-    val selectedSettingsId = if (screenData is SettingsScreenData.SettingsDataIsSelected) {
-        screenData.selectedSettingsId.collectAsState().value
-    } else {
-        -1
-    }
+    val selectedSettingsId = uiControlsInfo.selectedSettingsId.collectAsState().value
 
     Column(
         Modifier
@@ -174,7 +176,7 @@ fun SettingsList(
             )
         }
         LazyColumn {
-            val settingsList = if (screenData is SettingsScreenData.SettingsLoaded) {
+            val settingsList = if (screenData is SettingsScreenData.Initialized) {
                 screenData.settingsList
             } else {
                 emptyList()
@@ -183,11 +185,7 @@ fun SettingsList(
             items(settingsList) { item: Settings ->
                 val itemId = item.id
                 val modifier = Modifier.clickable {
-                    eventReceiver.receiveEvent(
-                        EventToSettingsScreenViewModel.RememberSettingsData(
-                            item.settingsData
-                        )
-                    )
+                    uiControlsInfo.slidersInfo.updateInfo(item.settingsData)
                 }.let {
                     if (itemId == selectedSettingsId) {
                         it.background(LightBlue)
@@ -276,23 +274,23 @@ fun SettingsDataItem(
 @Composable
 fun Controls(
     screenStateFlow: ScreenStateFlow,
+    slidersInfo: SlidersInfo,
     eventReceiver: EventReceiver
 ) {
     val screenState = screenStateFlow.collectAsState().value
     val screenData = screenState.data
 
-    if (screenData !is SettingsScreenData.SettingsDataIsSelected) {
+    if (screenData !is SettingsScreenData.Initialized) {
         return
     }
-    val uiControls = screenData.uiControls
 
     LazyColumn {
-        items(uiControls.info) { control ->
-            val currentPosition by control.sliderPositionMutableStateFlow.collectAsState()
+        items(slidersInfo.info) { control ->
+            val currentPosition = control.position.collectAsState().value
             IntSlider(
                 position = currentPosition,
                 onChange = {
-                    control.sliderPositionMutableStateFlow.value = it
+                    control.position.value = it
                 },
                 borders = control.borders,
                 lineColor = PrimaryColor1,

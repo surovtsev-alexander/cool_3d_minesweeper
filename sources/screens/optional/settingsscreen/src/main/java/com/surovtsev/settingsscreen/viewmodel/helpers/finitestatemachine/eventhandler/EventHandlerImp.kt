@@ -35,22 +35,25 @@ import com.surovtsev.finitestatemachine.eventhandler.eventprocessingresult.Event
 import com.surovtsev.finitestatemachine.eventhandler.eventprocessor.toNormalPriorityEventProcessor
 import com.surovtsev.finitestatemachine.state.State
 import com.surovtsev.finitestatemachine.state.toIdle
-import com.surovtsev.finitestatemachine.state.toLoading
 import com.surovtsev.settingsscreen.dagger.SettingsScreenScope
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.EventToSettingsScreenViewModel
 import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
+import com.surovtsev.settingsscreen.viewmodel.helpers.uicontrolsinfo.UIControlsInfo
 import com.surovtsev.templateviewmodel.finitestatemachine.eventtoviewmodel.EventToViewModel
 import com.surovtsev.templateviewmodel.finitestatemachine.screendata.ViewModelData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @SettingsScreenScope
 class EventHandlerImp @Inject constructor(
     private val eventHandlerParameters: EventHandlerParameters,
+    private val uiControlsInfo: UIControlsInfo,
 ): EventHandler {
 
     override val transitions: List<EventHandler.Transition> = emptyList()
@@ -62,14 +65,12 @@ class EventHandlerImp @Inject constructor(
         state: State
     ): EventHandlingResult {
         val eventProcessorAction = when (event) {
-            is EventToViewModel.Init                                 -> ::triggerInitialization
-            is EventToSettingsScreenViewModel.LoadSettingsList       -> ::loadSettingsList
-            is EventToSettingsScreenViewModel.LoadSelectedSettings   -> ::loadSelectedSettings
-            is EventToSettingsScreenViewModel.RememberSettingsData   -> suspend { rememberSettingsData(event.settingsData) }
-            is EventToSettingsScreenViewModel.ApplySettings          -> ::applySettings
-            is EventToSettingsScreenViewModel.DeleteSettings         -> suspend { deleteSettings(event.settingsId) }
-            is EventToViewModel.HandleScreenLeaving                  -> ::handleScreenLeaving
-            else                                                     -> null
+            is EventToViewModel.Init                            -> ::triggerInitialization
+            is EventToSettingsScreenViewModel.Initialize        -> ::initialize
+            is EventToSettingsScreenViewModel.ApplySettings     -> ::applySettings
+            is EventToSettingsScreenViewModel.DeleteSettings    -> suspend { deleteSettings(event.settingsId) }
+            is EventToViewModel.HandleScreenLeaving             -> ::handleScreenLeaving
+            else                                                -> null
         }
         
         return EventHandlingResult.GeneratorHelper.processOrSkipIfNull(
@@ -77,24 +78,26 @@ class EventHandlerImp @Inject constructor(
         )
     }
 
-    private suspend fun startUpdatingSelectedIdx() {
+    private fun startUpdatingSelectedIdx() {
         stopUpdatingState()
 
         updateSelectedIdxJob = Job().apply {
             CoroutineScope(this + Dispatchers.IO).launch {
-                eventHandlerParameters.fsmStateFlow.collectLatest { state ->
-                    val data = state.data
-                    if (data is SettingsScreenData.SettingsDataIsSelected) {
-                        data.uiControls.settingsDataFlow.collectLatest { settingsData ->
-                            val settingsList = data.settingsList
+                combine(
+                    eventHandlerParameters.fsmStateFlow,
+                    uiControlsInfo.slidersInfo.settingsDataFlow
+                ) { state, uiSettingData ->
+                    val stateData = state.data
+                    uiControlsInfo.selectedSettingsId.value =
+                        if (stateData !is SettingsScreenData.Initialized) {
+                            -1
+                        } else {
+                            val settingsList = stateData.settingsList
 
-                            val id =
-                                settingsList.firstOrNull { it == Settings(settingsData) }?.id ?: -1
+                            settingsList.firstOrNull { it == Settings(uiSettingData) }?.id ?: -1
 
-                            data.selectedSettingsId.value = id
                         }
-                    }
-                }
+                }.collectLatest { }
             }
         }
     }
@@ -116,22 +119,24 @@ class EventHandlerImp @Inject constructor(
         )
 
         return EventProcessingResult.Ok(
-            EventToSettingsScreenViewModel.LoadSettingsList
+            EventToSettingsScreenViewModel.Initialize
         )
     }
 
-    private suspend fun loadSettingsList(): EventProcessingResult {
+    private suspend fun initialize(): EventProcessingResult {
         val settingsList = eventHandlerParameters.settingsDao.getAll()
+        val selectedSettingsData = eventHandlerParameters.saveController.loadSettingDataOrDefault()
 
-        val newState = eventHandlerParameters.fsmStateFlow.value.toLoading(
-            SettingsScreenData.SettingsLoadedData(
+        uiControlsInfo.slidersInfo.updateInfo(selectedSettingsData)
+
+        val newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
+            SettingsScreenData.Initialized(
                 settingsList
             )
         )
 
         return EventProcessingResult.Ok(
-            EventToSettingsScreenViewModel.LoadSelectedSettings,
-            newState
+            newState = newState,
         )
     }
 
@@ -145,29 +150,15 @@ class EventHandlerImp @Inject constructor(
         }
     }
 
-    private suspend fun rememberSettingsData(
-        settingsData: Settings.SettingsData,
-    ): EventProcessingResult {
-        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
-            "error while updating settings"
-        ) { screenData ->
-            EventProcessingResult.Ok(
-                newState = eventHandlerParameters.fsmStateFlow.value.toIdle(
-                    SettingsScreenData.SettingsDataIsSelected(
-                        screenData,
-                        settingsData
-                    )
-                )
-            )
-        }
-    }
 
     private suspend fun applySettings(
     ): EventProcessingResult {
-        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsDataIsSelected>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.Initialized>(
             "error while applying settings"
         ) { screenData ->
-            val settingsData = screenData.uiControls.calculateCurrentSettingsData()
+            val settingsData = uiControlsInfo.slidersInfo.calculateCurrentSettingsData()
+
+            logcat { "applySettings: $settingsData" }
 
             val settingsDao = eventHandlerParameters.settingsDao
             val saveController = eventHandlerParameters.saveController
@@ -190,28 +181,15 @@ class EventHandlerImp @Inject constructor(
     private suspend fun deleteSettings(
         settingsId: Long
     ): EventProcessingResult {
-        return calculateEventResultProcessingIsState<SettingsScreenData.SettingsLoaded>(
+        return calculateEventResultProcessingIsState<SettingsScreenData.Initialized>(
             "error while deleting settings"
         ) {
             eventHandlerParameters.settingsDao.delete(settingsId)
 
             EventProcessingResult.Ok(
-                EventToSettingsScreenViewModel.LoadSettingsList
+                EventToSettingsScreenViewModel.Initialize
             )
         }
-    }
-
-    private suspend fun loadSelectedSettings(): EventProcessingResult {
-        val saveController = eventHandlerParameters.saveController
-        val settingsDao = eventHandlerParameters.settingsDao
-
-        val selectedSettingsData = saveController.loadSettingDataOrDefault()
-
-        val selectedSettings = settingsDao.getBySettingsData(
-            selectedSettingsData
-        )?: Settings(selectedSettingsData, -1)
-
-        return rememberSettingsData(selectedSettings.settingsData)
     }
 
     private inline fun <reified T: ViewModelData> calculateEventResultProcessingIsState(

@@ -28,19 +28,13 @@ package com.surovtsev.settingsscreen.viewmodel
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.surovtsev.core.dagger.components.AppComponentEntryPoint
 import com.surovtsev.core.dagger.viewmodelassistedfactory.ViewModelAssistedFactory
-import com.surovtsev.core.room.entities.Settings
 import com.surovtsev.settingsscreen.dagger.DaggerSettingsScreenComponent
-import com.surovtsev.settingsscreen.viewmodel.helpers.finitestatemachine.SettingsScreenData
 import com.surovtsev.templateviewmodel.TemplateViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class SettingsScreenViewModel @AssistedInject constructor(
     @Assisted @Suppress("UNUSED_PARAMETER") savedStateHandle: SavedStateHandle,
@@ -63,4 +57,8 @@ class SettingsScreenViewModel @AssistedInject constructor(
     override val finiteStateMachine =
         settingsScreenComponent
             .finiteStateMachine
+
+    val uiControlsInfo =
+        settingsScreenComponent
+            .uiControlsInfo
 }
