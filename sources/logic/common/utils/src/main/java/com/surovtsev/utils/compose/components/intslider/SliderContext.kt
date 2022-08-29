@@ -136,7 +136,6 @@ class SliderContext(
 
         coroutineScope.launch {
             val progressState = progress.stateIn(coroutineScope)
-            _progress.emit(0f)
 
             sliderActionsFlow.collect { slide ->
                 val progress = progressState.value
