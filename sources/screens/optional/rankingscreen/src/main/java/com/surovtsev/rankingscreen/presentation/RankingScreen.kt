@@ -188,17 +188,17 @@ fun SettingsList(
                 Text(
                     "counts",
                     Modifier.weight(1f),
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Start,
                 )
                 Text(
                     "bombs %",
                     Modifier.weight(1f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.End,
                 )
                 Text(
                     "wins",
                     Modifier.weight(1f),
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
                 )
                 Spacer(modifier = Modifier.width(lazyListScrollbarContext.widthDp))
             }
@@ -256,17 +256,17 @@ fun SettingsDataItem(
         Text(
             counts.toString(),
             Modifier.weight(1f),
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
         )
         Text(
             settingsData.bombsPercentage.toString(),
             Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.End,
         )
         Text(
             winsCount.toString(),
             Modifier.weight(1f),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
         )
     }
 }
