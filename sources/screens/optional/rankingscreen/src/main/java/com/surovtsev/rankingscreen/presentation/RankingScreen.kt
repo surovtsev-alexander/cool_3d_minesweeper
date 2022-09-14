@@ -205,7 +205,6 @@ fun SettingsList(
             Row {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .weight(1f),
                     state = lazyListScrollbarContext.lazyListState,
                 ) {
@@ -331,11 +330,7 @@ fun RankingList(
                 }
                 Spacer(modifier = Modifier.width(lazyListScrollbarContext.widthDp))
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-            ) {
+            Row {
                 LazyColumn(
                     modifier =
                     Modifier
