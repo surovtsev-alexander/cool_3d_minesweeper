@@ -294,10 +294,15 @@ fun RankingList(
         directionOfSortableColumns = rankingScreenData.directionOfSortableColumns
     }
 
-    val columnsWidth = mapOf(
-        RankingTableColumn.IdTableColumn to 0.2f,
-        RankingTableColumn.SortableTableColumn.DateTableColumn to 0.5f,
-        RankingTableColumn.SortableTableColumn.SolvingTimeTableColumn to 1f
+    data class TitleColumnInfo(
+        val columnType: RankingTableColumn,
+        val widthWeight: Float,
+        val textAlign: TextAlign = TextAlign.End,
+    )
+    val titleColumnsInfo = listOf(
+        TitleColumnInfo(RankingTableColumn.IdTableColumn, 1f, TextAlign.Start),
+        TitleColumnInfo(RankingTableColumn.SortableTableColumn.DateTableColumn, 3f),
+        TitleColumnInfo(RankingTableColumn.SortableTableColumn.SolvingTimeTableColumn, 2f)
     )
 
     Box (
@@ -307,22 +312,24 @@ fun RankingList(
             .padding(horizontal = 1.dp),
     ) {
         Column {
-            Row {
-                for ((columnType, modifierWidth) in columnsWidth) {
-                    RankingListColumnTitle(
-                        eventReceiver,
-                        columnType,
-                        modifierWidth,
-                        tableSortParameters,
-                        directionOfSortableColumns
-                    )
-                }
-            }
             val lazyListScrollbarContext = LazyListScrollbarContext(
                 rememberLazyListState(),
                 dipCoefficient,
             ).apply {
                 updateElementsCount(listWithPlaces.count())
+            }
+            Row {
+                for (tCI in titleColumnsInfo) {
+                    RankingListColumnTitle(
+                        Modifier.weight(tCI.widthWeight),
+                        eventReceiver,
+                        tCI.columnType,
+                        tableSortParameters,
+                        directionOfSortableColumns,
+                        tCI.textAlign,
+                    )
+                }
+                Spacer(modifier = Modifier.width(lazyListScrollbarContext.widthDp))
             }
             Row(
                 modifier = Modifier
@@ -352,18 +359,20 @@ fun RankingList(
 
 @Composable
 fun RankingListColumnTitle(
+    modifier: Modifier,
     eventReceiver: EventReceiver,
     tableColumnType: RankingTableColumn,
-    modifierWidth: Float,
     rankingTableSortParameters: RankingTableSortParameters,
     directionOfSortableColumns: DirectionOfSortableColumns,
+    textAlign: TextAlign,
 ) {
     Row (
-        Modifier.fillMaxWidth(modifierWidth),
+        modifier,
     ) {
         Text(
             tableColumnType.columnName,
-            modifier = Modifier.fillMaxWidth(0.5f),
+            modifier = Modifier.weight(1f),
+            textAlign = textAlign,
         )
         if (tableColumnType is RankingTableColumn.SortableTableColumn) {
             val isColumnSelected = rankingTableSortParameters.rankingTableColumn == tableColumnType
@@ -423,7 +432,7 @@ fun RankingDataItem(
         ) {
             Text(
                 (indexedRankingData.index + 1).toString(),
-                Modifier.fillMaxWidth(0.2f),
+                Modifier.weight(1f),
                 textAlign = TextAlign.Start
             )
             Text(
@@ -432,12 +441,12 @@ fun RankingDataItem(
                     .toString()
                     .replace('T', ' ')
                     .split('.')[0],
-                Modifier.fillMaxWidth(0.5f),
-                textAlign = TextAlign.Left
+                Modifier.weight(3f),
+                textAlign = TextAlign.End
             )
             Text(
                 elapsedAndPlaceString,
-                Modifier.fillMaxWidth(),
+                Modifier.weight(2f),
                 textAlign = TextAlign.End
             )
         }
