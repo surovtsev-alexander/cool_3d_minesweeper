@@ -199,7 +199,6 @@ fun SettingsList(
         Row {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .weight(1f),
                 state = lazyListScrollbarContext.lazyListState
             ) {
@@ -257,7 +256,6 @@ fun SettingsDataItem(
         }
         Column(
             modifier = Modifier
-                .fillMaxHeight()
                 .weight(4f),
             verticalArrangement = Arrangement.Center,
         ) {
@@ -270,7 +268,6 @@ fun SettingsDataItem(
         }
         Column(
             modifier = Modifier
-                .fillMaxHeight()
                 .weight(2f),
             verticalArrangement = Arrangement.Center,
         ) {
