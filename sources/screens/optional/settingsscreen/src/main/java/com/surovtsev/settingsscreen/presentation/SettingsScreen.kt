@@ -32,6 +32,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -60,11 +61,14 @@ import com.surovtsev.templateviewmodel.helpers.errordialog.ErrorDialogPlacer
 import com.surovtsev.templateviewmodel.helpers.errordialog.PlaceErrorDialog
 import com.surovtsev.templateviewmodel.helpers.errordialog.ScreenStateFlow
 import com.surovtsev.utils.compose.components.intslider.IntSlider
+import com.surovtsev.utils.compose.components.scrollbar.LazyListScrollbarContext
+import com.surovtsev.utils.compose.components.scrollbar.ScrollBar
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsScreenViewModel,
-    navController: NavController
+    navController: NavController,
+    dipCoefficient: Float,
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.finishActionHolder.finishAction = {
@@ -78,6 +82,7 @@ fun SettingsScreen(
         viewModel.uiControlsInfo,
         viewModel.finiteStateMachine.eventReceiver,
         viewModel as ErrorDialogPlacer,
+        dipCoefficient,
     )
 }
 
@@ -87,6 +92,7 @@ fun SettingsControls(
     uiControlsInfo: UIControlsInfo,
     eventReceiver: EventReceiver,
     errorDialogPlacer: ErrorDialogPlacer,
+    dipCoefficient: Float,
 ) {
     MinesweeperTheme {
 
@@ -107,7 +113,8 @@ fun SettingsControls(
                     SettingsList(
                         screenStateFlow,
                         uiControlsInfo,
-                        eventReceiver
+                        eventReceiver,
+                        dipCoefficient,
                     )
                 }
 
@@ -147,18 +154,31 @@ fun SettingsControls(
 fun SettingsList(
     screenStateFlow: ScreenStateFlow,
     uiControlsInfo: UIControlsInfo,
-    eventReceiver: EventReceiver
+    eventReceiver: EventReceiver,
+    dipCoefficient: Float,
 ) {
     val screenState = screenStateFlow.collectAsState().value
     val screenData = screenState.data
 
     val selectedSettingsId = uiControlsInfo.selectedSettingsId.collectAsState().value
 
+    val settingsList = if (screenData is SettingsScreenData.Initialized) {
+        screenData.settingsList
+    } else {
+        emptyList()
+    }
+
     Column(
         Modifier
             .fillMaxSize()
             .background(GrayBackground),
     ) {
+        val lazyListScrollbarContext = LazyListScrollbarContext(
+            rememberLazyListState(),
+            dipCoefficient,
+        ).apply {
+            updateElementsCount(settingsList.count())
+        }
         Row {
             Text(
                 "counts",
@@ -174,31 +194,37 @@ fun SettingsList(
                 modifier = Modifier
                     .weight(2f)
             )
+            Spacer(modifier = Modifier.width(lazyListScrollbarContext.widthDp))
         }
-        LazyColumn {
-            val settingsList = if (screenData is SettingsScreenData.Initialized) {
-                screenData.settingsList
-            } else {
-                emptyList()
-            }
-
-            items(settingsList) { item: Settings ->
-                val itemId = item.id
-                val modifier = Modifier.clickable {
-                    uiControlsInfo.slidersInfo.updateInfo(item.settingsData)
-                }.let {
-                    if (itemId == selectedSettingsId) {
-                        it.background(LightBlue)
-                    } else {
-                        it
+        Row {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                state = lazyListScrollbarContext.lazyListState
+            ) {
+                items(settingsList) { item: Settings ->
+                    val itemId = item.id
+                    val modifier = Modifier.clickable {
+                        uiControlsInfo.slidersInfo.updateInfo(item.settingsData)
+                    }.let {
+                        if (itemId == selectedSettingsId) {
+                            it.background(LightBlue)
+                        } else {
+                            it
+                        }
+                    }
+                    Box(
+                        modifier
+                    ) {
+                        SettingsDataItem(eventReceiver, item)
                     }
                 }
-                Box(
-                    modifier
-                ) {
-                    SettingsDataItem(eventReceiver, item)
-                }
             }
+            ScrollBar(
+                modifier = Modifier,
+                lazyListScrollableContext = lazyListScrollbarContext
+            )
         }
     }
 }

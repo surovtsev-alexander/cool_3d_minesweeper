@@ -179,7 +179,8 @@ class MainActivity: AppCompatActivity() {
                     entry.lifecycle.addObserver(viewModel)
                     SettingsScreen(
                         viewModel,
-                        navController
+                        navController,
+                        dipCoefficient,
                     )
                 }
                 composable(
