@@ -111,7 +111,8 @@ fun RankingControls(
                 ) {
                     SettingsList(
                         screenStateFlow,
-                        eventReceiver
+                        eventReceiver,
+                        dipCoefficient,
                     )
                 }
                 Divider(
@@ -148,7 +149,8 @@ fun RankingControls(
 @Composable
 fun SettingsList(
     screenStateFlow: ScreenStateFlow,
-    eventReceiver: EventReceiver
+    eventReceiver: EventReceiver,
+    dipCoefficient: Float,
 ) {
     val rankingScreenState = screenStateFlow.collectAsState().value
 
@@ -176,48 +178,66 @@ fun SettingsList(
         Column(
             Modifier.fillMaxSize()
         ) {
+            val lazyListScrollbarContext = LazyListScrollbarContext(
+                rememberLazyListState(),
+                dipCoefficient,
+            ).apply {
+                updateElementsCount(settingsList.count())
+            }
             Row {
                 Text(
                     "counts",
-                    Modifier.fillMaxWidth(0.33f),
+                    Modifier.weight(1f),
                     textAlign = TextAlign.Start
                 )
                 Text(
                     "bombs %",
-                    Modifier.fillMaxWidth(0.5f),
+                    Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
                 Text(
                     "wins",
-                    Modifier.fillMaxWidth(1f),
+                    Modifier.weight(1f),
                     textAlign = TextAlign.End
                 )
+                Spacer(modifier = Modifier.width(lazyListScrollbarContext.widthDp))
             }
-            LazyColumn {
-                items(settingsList) { item ->
-                    val itemId = item.id
-                    val winsCount = winsCountMap[itemId] ?: 0
-                    if (selectedSettingsId == itemId) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    LightBlue
-                                )
-                        ) {
-                            SettingsDataItem(item.settingsData, winsCount)
-                        }
-                    } else {
-                        Box (
+            Row {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    state = lazyListScrollbarContext.lazyListState,
+                ) {
+                    items(settingsList) { item ->
+                        val itemId = item.id
+                        val winsCount = winsCountMap[itemId] ?: 0
+                        if (selectedSettingsId == itemId) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        LightBlue
+                                    )
+                            ) {
+                                SettingsDataItem(item.settingsData, winsCount)
+                            }
+                        } else {
+                            Box(
                                 modifier = Modifier.clickable {
                                     eventReceiver.receiveEvent(
                                         EventToRankingScreenViewModel.FilterList(itemId)
                                     )
                                 }
-                        ) {
-                            SettingsDataItem(item.settingsData, winsCount)
+                            ) {
+                                SettingsDataItem(item.settingsData, winsCount)
+                            }
                         }
                     }
                 }
+                ScrollBar(
+                    modifier = Modifier,
+                    lazyListScrollbarContext
+                )
             }
         }
     }
@@ -235,17 +255,17 @@ fun SettingsDataItem(
         val counts = settingsData.dimensions.toVec3i()
         Text(
             counts.toString(),
-            Modifier.fillMaxWidth(0.33f),
+            Modifier.weight(1f),
             textAlign = TextAlign.Start
         )
         Text(
             settingsData.bombsPercentage.toString(),
-            Modifier.fillMaxWidth(0.5f),
+            Modifier.weight(1f),
             textAlign = TextAlign.Center
         )
         Text(
             winsCount.toString(),
-            Modifier.fillMaxWidth(1f),
+            Modifier.weight(1f),
             textAlign = TextAlign.End
         )
     }
