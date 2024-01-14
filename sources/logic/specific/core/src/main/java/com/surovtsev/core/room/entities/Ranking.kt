@@ -26,7 +26,6 @@ SOFTWARE.
 package com.surovtsev.core.room.entities
 
 import androidx.room.*
-import androidx.room.ForeignKey.CASCADE
 
 @Entity(
     foreignKeys = [
@@ -34,7 +33,7 @@ import androidx.room.ForeignKey.CASCADE
             entity = Settings::class,
             parentColumns = arrayOf(Settings.ColumnNames.id),
             childColumns = arrayOf(Ranking.RankingData.ColumnNames.settingsId),
-            onDelete = CASCADE
+            onDelete = ForeignKey.CASCADE
         )
     ],
     tableName = Ranking.TableName.name

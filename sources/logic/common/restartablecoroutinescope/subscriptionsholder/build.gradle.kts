@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
+    namespace = "com.surovtsev.subscriptionsholder"
     compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
         minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

@@ -12,9 +12,8 @@ import java.lang.Float.max
 class CameraInfoHelper(
     val cameraInfo: CameraInfo,
     screenResolution: ScreenResolution,
-):
-    UpdatableImp()
-{
+) :
+    UpdatableImp() {
     companion object {
         private fun maxWithOneToAvoidDivisionByZero(
             x: Float
@@ -34,10 +33,10 @@ class CameraInfoHelper(
 
     init {
         glm.perspective(
-            cameraInfo.projectionMatrix,
             45f,
             displayWidthF / displayHeightF,
-            zNear, zFar
+            zNear, zFar,
+            cameraInfo.projectionMatrix
         )
         cameraInfo.invProjectionMatrix = cameraInfo.projectionMatrix.inverse()
 

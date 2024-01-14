@@ -38,7 +38,7 @@ class CameraInfo {
     }
 
     fun multiplyRotationMatrix(m: Mat4) {
-        rotMatrix *= m
+        rotMatrix = rotMatrix * m
         rotMatrix.inverse(invRotMatrix)
     }
 

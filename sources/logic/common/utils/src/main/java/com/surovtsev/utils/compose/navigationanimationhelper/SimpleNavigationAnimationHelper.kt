@@ -43,7 +43,7 @@ class SimpleNavigationAnimationHelper(
 
     inner class EnterSliding {
         fun horizontally(initialOffsetX: Int) =
-            { _: AnimatedContentScope<NavBackStackEntry> ->
+            { _: AnimatedContentTransitionScope<NavBackStackEntry> ->
                 slideInHorizontally(
                     initialOffsetX = { initialOffsetX },
                     animationSpec = slidingTween
@@ -51,7 +51,7 @@ class SimpleNavigationAnimationHelper(
             }
 
         fun vertically(initialOffsetY: Int) =
-            { _: AnimatedContentScope<NavBackStackEntry> ->
+            { _: AnimatedContentTransitionScope<NavBackStackEntry> ->
                 slideInVertically(
                     initialOffsetY = { initialOffsetY },
                     animationSpec = slidingTween
@@ -61,7 +61,7 @@ class SimpleNavigationAnimationHelper(
 
     inner class ExitSliding {
         fun horizontally(targetOffsetX: Int) =
-            { _: AnimatedContentScope<NavBackStackEntry> ->
+            { _: AnimatedContentTransitionScope<NavBackStackEntry> ->
                 slideOutHorizontally(
                     targetOffsetX = { targetOffsetX },
                     animationSpec = slidingTween
@@ -69,7 +69,7 @@ class SimpleNavigationAnimationHelper(
             }
 
         fun vertically(targetOffsetY: Int) =
-            { _: AnimatedContentScope<NavBackStackEntry> ->
+            { _: AnimatedContentTransitionScope<NavBackStackEntry> ->
                 slideOutVertically(
                     targetOffsetY = { targetOffsetY },
                     animationSpec = slidingTween

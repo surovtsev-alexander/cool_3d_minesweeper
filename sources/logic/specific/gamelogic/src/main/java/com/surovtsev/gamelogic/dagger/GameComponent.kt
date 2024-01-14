@@ -237,4 +237,3 @@ object SceneSettingsModule {
     @Named(PointerEnabledName)
     fun providePointerEnabled() = false
 }
-

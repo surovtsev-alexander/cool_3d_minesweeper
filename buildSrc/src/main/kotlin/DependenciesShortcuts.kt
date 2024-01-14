@@ -24,7 +24,7 @@ fun DependencyHandler.threetenabpDependency() {
 }
 
 fun DependencyHandler.glmDependency() {
-    implementation("com.github.kotlin-graphics:glm:${Versions.Utils.glm}")
+    implementation("io.github.kotlin-graphics:glm:${Versions.Utils.glm}")
 }
 
 fun DependencyHandler.gsonDependency() {

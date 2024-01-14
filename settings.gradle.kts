@@ -24,9 +24,29 @@ SOFTWARE.
 
 
 /// region [action]: declare project modules tree
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "cool_3d_minesweeper"
+
 projectDir(
     Folders.root,
-    listOf(Modules.app),
+    listOf(
+        Modules.app
+    ),
 ) {
     subfolder(
         Folders.logic,

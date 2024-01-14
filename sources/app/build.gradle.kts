@@ -30,13 +30,13 @@ plugins {
 }
 
 android {
+    namespace = "com.surovtsev.cool3dminesweeper"
     compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
         applicationId = Versions.Application.id
 
         minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
         versionCode = Versions.Library.versionCode
         versionName = Versions.Library.versionName
 

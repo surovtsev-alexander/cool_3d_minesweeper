@@ -30,20 +30,23 @@ plugins {
 }
 
 android {
+    namespace = "com.surovtsev.core"
     compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
         minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 

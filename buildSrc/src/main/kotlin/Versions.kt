@@ -5,9 +5,8 @@ object Versions {
     }
 
     object Sdk {
-        const val compileSdk = 31
-        const val targetSdk = 31
-        const val minSdk = 26
+        const val compileSdk = 34
+        const val minSdk = 28
     }
 
     object Library {
@@ -19,16 +18,16 @@ object Versions {
         const val versionName = "$major.$minor.$build"
     }
 
-    const val dagger = "2.40.3"
-    const val gradle = "7.0.4"
+    const val dagger = "2.50"
+    const val gradle = "8.2.0"
 
     object Google {
         const val gson = "2.8.9"
     }
 
     object Kotlin {
-        const val kotlin = "1.6.0"
-        const val coroutines = "1.6.0-RC2"
+        const val kotlin = "1.9.22"
+        const val coroutines = "1.7.3"
     }
 
 
@@ -38,23 +37,23 @@ object Versions {
     }
 
     object AndroidX {
-        const val appCompat = "1.4.1"
-        const val compose = "1.1.0-rc01"
-        const val composeNavigation = "2.4.0-rc01"
-        const val coreCtx = "1.7.0"
+        const val appCompat = "1.6.1"
+        const val compose = "1.5.4"
+        const val composeNavigation = "2.7.6"
+        const val coreCtx = "1.12.0"
         const val espresso = "3.4.0"
-        const val material = "1.5.0"
-        const val navigation = "2.3.5"
-        const val room = "2.4.0"
+        const val material = "1.11.0"
+        const val navigation = "2.7.6"
+        const val room = "2.6.1"
         const val splashScreen = "1.0.0-beta01"
     }
 
     object Utils {
-        const val glm = "v1.0.1"
+        const val glm = "0.9.9.1-12"
         const val leakCanary = "2.7"
         const val logcat = "0.1"
-        const val navigationAnimation = "0.21.4-beta"
+        const val navigationAnimation = "0.32.0"
         const val threetenabp = "1.3.1"
-        const val exoPlayer = "2.17.1"
+        const val exoPlayer = "2.19.1"
     }
 }

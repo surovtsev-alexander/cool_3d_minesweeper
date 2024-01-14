@@ -86,7 +86,7 @@ abstract class GLESProgram (
         GLES20.glUniformMatrix4fv(
             uMVP.location, 1,
             false,
-            mvpMatrix.to(mvpBuffer!!, 0).array()
+            mvpMatrix.to(mvpBuffer!!.array(), 0)
             , 0
         )
     }

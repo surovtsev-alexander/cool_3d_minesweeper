@@ -30,11 +30,11 @@ plugins {
 }
 
 android {
+    namespace = "com.surovtsev.gamestateholder"
     compileSdk = Versions.Sdk.compileSdk
 
     defaultConfig {
         minSdk = Versions.Sdk.minSdk
-        targetSdk = Versions.Sdk.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -43,7 +43,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -58,6 +61,7 @@ android {
 dependencies {
     includeProjectModules(
         listOf(
+            ProjectModules.Logic.Common.utils,
             ProjectModules.Logic.Specific.core,
             ProjectModules.Logic.Specific.GameStateHolder.gameState,
         )
